@@ -17,15 +17,11 @@ const ObservationEventListElementComponent = (props: Props) => {
   const dateBegin = props.observationEvent.gatheringEvent.dateBegin
   const dateEnd = props.observationEvent.gatheringEvent.dateEnd
   const observationCount = props.observationEvent.gatherings[0].units.length
-  const observationZone = props.observationEvent.gatherings[0].locality
 
   return (
     <TouchableOpacity style={Cs.observationEventListItemContainer} onPress={props.onPress}>
       <View style={Ts.observationEventListElement}>
         <Text>{parseDateForUI(dateBegin)} - {parseDateForUI(dateEnd)}</Text>
-        <Text style={Ts.indentedText}>
-          {t('zoneInList') + `: ${observationZone ? observationZone : t('no zone')}`}
-        </Text>
         <Text style={Ts.indentedText}>
           {t('observationsInList') + ': ' + observationCount + ' ' + (observationCount === 1 ? t('piece') : t('pieces'))}
         </Text>

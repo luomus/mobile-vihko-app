@@ -1,9 +1,7 @@
 import React from 'react'
 import MapView, { Marker, Region, UrlTile } from 'react-native-maps'
 import { mapUrl as urlTemplate } from '../config/urls'
-import { convertGC2FC, convertPointToLatLng } from '../converters/geoJSONConverters'
-import Geojson from 'react-native-typescript-geojson'
-import { GeometryCollection } from 'geojson'
+import { convertPointToLatLng } from '../converters/geoJSONConverters'
 import Cs from '../styles/ContainerStyles'
 import Cl from '../styles/Colors'
 
@@ -33,25 +31,6 @@ const MiniMapComponent = (props: Props) => {
     )
   }
 
-  const zoneOverlay = () => {
-    const geometry: GeometryCollection = props.event.gatherings[0].geometry
-
-    if (geometry !== undefined) {
-
-      return (
-        <Geojson
-          geojson = {convertGC2FC(geometry)}
-          fillColor = '#f002'
-          pinColor = '#f00'
-          strokeColor = '#f00'
-          strokeWidth = {4}
-        />
-      )
-    } else {
-      return null
-    }
-  }
-
   const region: Region = {
     'latitude': props.observation.unitGathering.geometry.coordinates[1],
     'latitudeDelta': 0.00300000000000000,
@@ -68,7 +47,6 @@ const MiniMapComponent = (props: Props) => {
       style = {Cs.observationInfoMapContainer}
     >
       {tileOverlay()}
-      {zoneOverlay()}
       {observationLocationOverlay()}
     </MapView>
   )

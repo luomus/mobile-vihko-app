@@ -26,7 +26,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import Cs from '../styles/ContainerStyles'
 import Os from '../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
-import { EditingType, ObservationZonesType } from '../stores/map/types'
+import { EditingType } from '../stores/map/types'
 import { ObservationEventType } from '../stores/observation/types'
 import { mapUrl as urlTemplate } from '../config/urls'
 import MessageComponent from './MessageComponent'
@@ -46,13 +46,12 @@ interface RootState {
   centered: boolean,
   maptype: 'topographic' | 'satellite',
   editing: EditingType,
-  observationZone: ObservationZonesType,
   observationId: Record<string, any>,
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationEvent, centered, maptype, editing, observationZone, observationId } = state
-  return { position, path, region, observation, observationEvent, centered, maptype, editing, observationZone, observationId }
+  const { position, path, region, observation, observationEvent, centered, maptype, editing, observationId } = state
+  return { position, path, region, observation, observationEvent, centered, maptype, editing, observationId }
 }
 
 const mapDispatchToProps = {
@@ -306,26 +305,6 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  //draws observation zone to map
-  const zoneOverlay = () => {
-    let zone = props.observationZone.zones.find(z =>
-      props.observationZone.currentZoneId !== 'empty' &&
-      z.id === props.observationZone.currentZoneId &&
-      z.geometry !== null
-    )
-
-    return (zone ?
-      <Geojson
-        geojson = {convertGC2FC(zone.geometry)}
-        fillColor = "#f002"
-        pinColor = "#f00"
-        strokeColor = "#f00"
-        strokeWidth = {1}
-      />
-      : null
-    )
-  }
-
   //if topomap is selected draws its tiles on map
   const tileOverlay = () => (props.maptype === 'topographic' ?
     <UrlTile
@@ -405,7 +384,6 @@ const MapComponent = (props: Props) => {
           {targetOverlay()}
           {pathOverlay()}
           {tileOverlay()}
-          {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>
         <View

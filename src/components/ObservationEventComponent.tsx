@@ -154,7 +154,6 @@ const ObservationEventComponent = (props: Props) => {
             <View style={Cs.eventTextContainer}>
               <Text>{t('dateBegin')}: {parseDateForUI(event.gatheringEvent.dateBegin)}</Text>
               <Text>{t('dateEnd')}: {parseDateForUI(event.gatheringEvent.dateEnd)}</Text>
-              <Text>{t('zone')}: {event.gatherings[0].locality ? event.gatherings[0].locality : t('no zone')}</Text>
             </View>
             <View style={Cs.eventButtonsContainer}>
               <Button

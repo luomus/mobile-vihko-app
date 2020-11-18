@@ -9,7 +9,6 @@ import {
 } from './observation/reducers'
 import {
   regionReducer,
-  observationZoneReducer,
   centeringReducer,
   maptypeReducer,
   editingReducer
@@ -30,8 +29,7 @@ const appReducer = combineReducers({
   observationId: observationIdReducer,
   editing: editingReducer,
   credentials: credentialsReducer,
-  message: messageReducer,
-  observationZone: observationZoneReducer
+  message: messageReducer
 })
 
 const rootReducer = (state: any, action: any) => {

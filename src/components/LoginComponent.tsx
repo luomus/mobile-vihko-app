@@ -3,7 +3,6 @@ import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../controllers/userController'
 import { connect, ConnectedProps } from 'react-redux'
-import { initObservationZones } from '../stores/map/actions'
 import { initSchema, initObservationEvents } from '../stores/observation/actions'
 import { setCredentials, loginUser, logoutUser, initLocalCredentials } from '../stores/user/actions'
 import { setMessageState, clearMessageState } from '../stores/message/actions'
@@ -35,7 +34,6 @@ const mapDispatchToProps = {
   setCredentials,
   loginUser,
   logoutUser,
-  initObservationZones,
   setMessageState,
   clearMessageState,
   resetReducer,
@@ -119,18 +117,6 @@ const LoginComponent = (props: Props) => {
   }
 
   const initializeApp = async () => {
-    try {
-      await props.initObservationZones()
-    } catch (error) {
-      if (error.severity === 'fatal') {
-        showFatalError(`${t('critical error')}:\n ${error.message}`)
-        setLoggingIn(false)
-        return
-      } else {
-        showError(error.message)
-      }
-    }
-
     try {
       await props.initObservationEvents()
     } catch (error) {

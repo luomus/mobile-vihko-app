@@ -16,11 +16,8 @@ import {
   clearObservationLocation,
 } from '../stores/observation/actions'
 import {
-  setCurrentObservationZone,
-  clearCurrentObservationZone,
   toggleCentered,
-  clearRegion,
-  initObservationZones
+  clearRegion
 } from '../stores/map/actions'
 import { setMessageState } from '../stores/message/actions'
 import {
@@ -39,7 +36,6 @@ import { setDateForDocument } from '../utilities/dateHelper'
 import Colors from '../styles/Colors'
 import { SchemaType, ObservationEventType } from '../stores/observation/types'
 import { CredentialsType } from '../stores/user/types'
-import { ObservationZonesType, ZoneType } from '../stores/map/types'
 import { lineStringConstructor } from '../converters/geoJSONConverters'
 import { parseSchemaToNewObject } from '../parsers/SchemaObjectParser'
 import i18n from '../language/i18n'
@@ -64,13 +60,12 @@ interface RootState {
   observationEvent: ObservationEventType,
   schema: SchemaType,
   credentials: CredentialsType,
-  observationZone: ObservationZonesType,
   centered: boolean
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, observationEvent, schema, credentials, observationZone, centered } = state
-  return { position, path, observing, observation, observationEvent, schema, credentials, observationZone, centered }
+  const { position, path, observing, observation, observationEvent, schema, credentials, centered } = state
+  return { position, path, observing, observation, observationEvent, schema, credentials, centered }
 }
 
 const mapDispatchToProps = {
@@ -79,16 +74,13 @@ const mapDispatchToProps = {
   clearPath,
   updateLocation,
   clearLocation,
-  setCurrentObservationZone,
-  clearCurrentObservationZone,
   toggleObserving,
   newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
   setMessageState,
   clearRegion,
-  toggleCentered,
-  initObservationZones
+  toggleCentered
 }
 
 const connector = connect(
@@ -118,15 +110,7 @@ const HomeComponent = (props: Props) => {
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
-    //set first zone in array as selected zone to avoid undefined values
-    if (props.observationZone.currentZoneId === '' && props.observationZone.zones.length >> 0) {
-      props.setCurrentObservationZone(props.observationZone?.zones[0].id)
-    }
-  }, [props.observationZone])
-
-  useEffect(() => {
     if (props.observationEvent.events.length > 0 && !props.observationEvent.events[props.observationEvent.events.length - 1].gatheringEvent.dateEnd) {
-      props.setCurrentObservationZone(getLastZoneId())
       props.toggleObserving()
       setUnfinishedEvent(true)
     }
@@ -166,7 +150,6 @@ const HomeComponent = (props: Props) => {
   }, [pressCounter])
 
   useEffect(() => {
-    createZonesList()
     changeLinkPage()
   }, [i18n.language])
 
@@ -205,40 +188,11 @@ const HomeComponent = (props: Props) => {
     BackHandler.exitApp()
   }
 
-  const createZonesList = () => {
-    if (props.observationZone.zones.length <= 0) {
-      return <Picker.Item key={undefined} label={''} value={undefined} />
-    } else {
-      return props.observationZone.zones.map((region: BasicObject) =>
-        <Picker.Item key={region.id} label={region.name === '' ? i18n.t('choose observation zone') : region.name} value={region.id} />
-      )
-    }
-  }
-
-  const refreshZonesList = async () => {
-    try {
-      setLoading(true)
-      await props.initObservationZones()
-    } catch (error) {
-      showError(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const beginObservationEvent = async (zoneUsed: boolean) => {
+  const beginObservationEvent = async () => {
     const userId = props.credentials?.user?.id
 
-    const region: ZoneType | undefined = props.observationZone.zones.find((region: BasicObject) => {
-      return region.id === props.observationZone.currentZoneId
-    })
-
-    if (!userId || (zoneUsed && !region)) {
+    if (!userId) {
       return
-    }
-
-    if (!zoneUsed) {
-      props.setCurrentObservationZone('empty')
     }
 
     const lang = i18n.language
@@ -250,16 +204,6 @@ const HomeComponent = (props: Props) => {
     set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], setDateForDocument())
 
     let observationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema)
-
-    const setGeometry = () => {
-      set(observationEvent, ['gatherings', '0', 'geometry'], region?.geometry)
-      set(observationEvent, ['gatherings', '0', 'locality'], region?.name)
-      set(observationEvent, ['namedPlaceID'], region?.id)
-    }
-
-    if (zoneUsed) {
-      setGeometry()
-    }
 
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
@@ -382,38 +326,11 @@ const HomeComponent = (props: Props) => {
     }
   }
 
-  const getCurrentZoneName = () => {
-    if (props.observationEvent.events[props.observationEvent.events.length - 1]?.gatherings[0].locality) {
-      const zone = props.observationZone.zones.find((zone: Record<string, any>) => {
-        return zone.id === props.observationZone.currentZoneId
-      })
-
-      return zone ? zone.name : ''
-    }
-
-    return t('no zone')
-  }
-
-  const getLastZoneId = () => {
-    const zone = props.observationZone.zones.find((zone: Record<string, any>) => {
-      return zone.name === props.observationEvent.events?.[props.observationEvent.events.length - 1].gatherings[0].locality
-    })
-
-    return zone ? zone.id : ''
-  }
-
   const stopObserving = () => {
     props.setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
       onOk: () => finishObservationEvent()
-    })
-  }
-
-  const showError = (error: string) => {
-    props.setMessageState({
-      type: 'err',
-      messageContent: error
     })
   }
 
@@ -464,59 +381,9 @@ const HomeComponent = (props: Props) => {
                 </Text>
               </View>
               <View style={{ height: 10 }}></View>
-              {props.observing ? null :
+              {props.observing ?
                 <View style={Cs.observationEventContainer}>
-                  <Text style={Ts.observationEventTitle}>
-                    {t('new observation event without zone')}
-                  </Text>
-                  <View style={Cs.buttonContainer}>
-                    <Button
-                      containerStyle={Cs.beginButtonContainer}
-                      buttonStyle={{ backgroundColor: Colors.positiveColor }}
-                      title={t('beginObservation')}
-                      iconRight={true}
-                      icon={<Icon name='play-arrow' type='material-icons' color={'white'} size={22} />}
-                      onPress={() => beginObservationEvent(false)}
-                    />
-                  </View>
-                </View>
-              }
-              <View style={{ height: 10 }}></View>
-              <View style={Cs.observationEventContainer}>
-                <Text style={Ts.observationEventTitle}>
-                  {!props.observing ?
-                    t('new observation event with zone') :
-                    unfishedEvent ?
-                      t('interrupted observation event') :
-                      t('event')
-                  }
-                </Text>
-                {props.observing ?
-                  <Text style={Ts.zoneText}>
-                    {t('observation zone')}: {getCurrentZoneName()}
-                  </Text>
-                  :
-                  <View>
-                    <Text style={Ts.zoneText}>{t('observation zone')}</Text>
-                    <View style={Cs.observationZonesPickerAndButtonContainer}>
-                      <View style={Cs.observationZonesPickerContainer}>
-                        <Picker
-                          selectedValue={props.observationZone.currentZoneId}
-                          onValueChange={(itemValue: string) => {
-                            props.setCurrentObservationZone(itemValue)
-                          }}>
-                          {createZonesList()}
-                        </Picker>
-                      </View>
-                      <Button
-                        buttonStyle={Bs.refreshButton}
-                        icon={<Icon name='refresh' type='material-community' color='white' size={26} />}
-                        onPress={() => refreshZonesList()}
-                      />
-                    </View>
-                  </View>
-                }
-                {props.observing ?
+                  <Text style={Ts.observationEventTitle}>{t('interrupted observation event')}</Text>
                   <View style={Cs.buttonContainer}>
                     <Button
                       containerStyle={Cs.continueButtonContainer}
@@ -535,22 +402,24 @@ const HomeComponent = (props: Props) => {
                       onPress={() => stopObserving()}
                     />
                   </View>
-                  :
+                </View>
+                :
+                <View style={Cs.observationEventContainer}>
+                  <Text style={Ts.observationEventTitle}>
+                    {t('new observation event without zone')}
+                  </Text>
                   <View style={Cs.buttonContainer}>
                     <Button
                       containerStyle={Cs.beginButtonContainer}
                       buttonStyle={{ backgroundColor: Colors.positiveColor }}
-                      disabled={props.observationZone.currentZoneId === 'empty'}
-                      disabledStyle={{ backgroundColor: Colors.unavailableButton }}
-                      disabledTitleStyle={{ color: 'gray' }}
                       title={t('beginObservation')}
                       iconRight={true}
-                      icon={<Icon name='play-arrow' type='material-icons' color={props.observationZone.currentZoneId === 'empty' ? 'gray' : 'white'} size={22} />}
-                      onPress={() => beginObservationEvent(true)}
+                      icon={<Icon name='play-arrow' type='material-icons' color={'white'} size={22} />}
+                      onPress={() => beginObservationEvent()}
                     />
                   </View>
-                }
-              </View>
+                </View>
+              }
               <View style={{ height: 10 }}></View>
               <View style={Cs.observationEventListContainer}>
                 <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>

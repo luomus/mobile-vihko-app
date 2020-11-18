@@ -25,9 +25,6 @@ export const InfoPageComponent = () => {
         <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(privacyPolicy)}>
           {`${t('privacy policy')}\n\n`}
         </Text>
-        <Text>
-          {t('infotext')}
-        </Text>
       </Text>
     </View>
   )

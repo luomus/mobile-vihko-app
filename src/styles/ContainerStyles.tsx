@@ -315,16 +315,6 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  observationZonesPickerContainer: {
-    alignSelf: 'center',
-    width: '80%',
-    borderColor: Colors.darkBlueInputBorder,
-    borderWidth: 1,
-  },
-  observationZonesPickerAndButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
   versionContainer: {
     alignItems: 'stretch',
     justifyContent: 'flex-end',

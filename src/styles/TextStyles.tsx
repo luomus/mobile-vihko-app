@@ -33,9 +33,6 @@ const TextStyles = StyleSheet.create({
     padding: 10,
     fontWeight: 'bold'
   },
-  zoneText: {
-    paddingLeft: 20
-  },
   observationEventListElement: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
