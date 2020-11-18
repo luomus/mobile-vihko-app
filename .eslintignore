@@ -1,0 +1,12 @@
+babel.config.js
+assets/
+.circleci/
+.expo/
+.expo-shared/
+docs/
+node_modules/
+LICENSE
+README.md
+__tests__/
+.gitignore
+**/*.json

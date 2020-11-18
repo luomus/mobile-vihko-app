@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Liituri",
+    "slug": "Liituri",
+    "privacy": "public",
+    "platforms": [
+      "android"
+    ],
+    "version": "1.4.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.luomus.lolife",
+      "buildNumber": "1.0.0",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "org.luomus.lolife",
+      "versionCode": 6,
+      "config": {
+        "googleMaps": {
+          "apiKey": ""
+        }
+      }
+    }
+  }
+}
