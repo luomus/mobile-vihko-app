@@ -1,7 +1,7 @@
 import axios from 'axios'
 import i18n from '../language/i18n'
 import * as FileSystem from 'expo-file-system'
-import { postImageUrl, postImageMetadataUrl } from '../config/urls'
+import { postImageUrl, accessToken } from '../config/urls'
 import { CredentialsType, UserType } from '../stores/user/types'
 
 const JPEG_EXTENSIONS = ['jpeg', 'jpg']
@@ -82,9 +82,15 @@ const getMaxFileSizeAsString = () => {
 }
 
 export const saveMedias = async (uris: string[], credentials: CredentialsType) => {
-  let imgUrl = postImageUrl.replace('$TOKEN', credentials.token)
-  let metaUrl = postImageMetadataUrl.replace('$TOKEN', credentials.token)
   let images = null
+  const params = {
+    'personToken': credentials.token,
+    'access_token': accessToken    
+  }
+  const headers = {
+    'accept': 'application/json',
+    'content-type': 'application/json'
+  }
 
   try {
     images = await processImages(uris)
@@ -115,7 +121,7 @@ export const saveMedias = async (uris: string[], credentials: CredentialsType) =
     throw new Error(`${i18n.t('oversized image')} ${getMaxFileSizeAsString()}.`)
   } else {
     try {
-      res = await axios.post(imgUrl, formDataBody)
+      res = await axios.post(postImageUrl, formDataBody, { params })
     } catch (error) {
       throw new Error(`${i18n.t('image post failure')} ${'status code'}${error.response.status}.`)
     }
@@ -130,13 +136,11 @@ export const saveMedias = async (uris: string[], credentials: CredentialsType) =
 
       try {
         res = await axios.post(
-          metaUrl.replace('$TEMPID', tempId),
+          postImageUrl + '/' + tempId,
           JSON.stringify(metadata),
           {
-            headers: {
-              'accept': 'application/json',
-              'content-type': 'application/json'
-            }
+            params, 
+            headers
           }
         )
       } catch (error) {

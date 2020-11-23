@@ -1,18 +1,23 @@
 import axios from 'axios'
-import { getLoginUrl, pollLoginUrl, getUserUrl } from '../config/urls'
+import { getLoginUrl, pollLoginUrl, getUserUrl, accessToken } from '../config/urls'
 import { CredentialsType } from '../stores/user/types'
 
 export const getTempTokenAndLoginUrl = async () => {
-  const url = getLoginUrl
-  const result = await axios.get(url)
+  const params = {
+    'access_token': accessToken
+  }
+  const result = await axios.get(getLoginUrl, { params })
 
   return result.data
 }
 
 export const postTmpToken = async (tmpToken: string) => {
-  const url = pollLoginUrl.replace('$TEMPTOKEN', tmpToken)
+  const params = {
+    'tmpToken': tmpToken,
+    'access_token': accessToken
+  }
   try {
-    const result = await axios.post(url)
+    const result = await axios.post(pollLoginUrl, null, { params })
     //successfully received the token
     return result.data
   } catch (error) {
@@ -22,8 +27,10 @@ export const postTmpToken = async (tmpToken: string) => {
 }
 
 export const getUserByPersonToken = async (personToken: string) => {
-  const url = getUserUrl.replace('$TOKEN', personToken)
-  const fetchResult = await axios.get(url)
+  const params = {
+    'access_token': accessToken
+  }
+  const fetchResult = await axios.get(getUserUrl + '/' + personToken, { params })
   return fetchResult.data
 }
 

@@ -1,8 +1,7 @@
 import ApolloClient, { gql } from 'apollo-boost'
 import axios from 'axios'
 import i18n from '../language/i18n'
-import { graphqlUrl, postDocumentUrl } from '../config/urls'
-import { accessToken } from '../config/urls'
+import { graphqlUrl, postDocumentUrl, accessToken } from '../config/urls'
 import { CredentialsType } from '../stores/user/types'
 
 interface BasicObject {
@@ -27,7 +26,7 @@ export const getSchemas = async (language: string) => {
   const client = setClient(language)
   const query = gql`
     query {
-      form(id: "MHL.45") {
+      form(id: "JX.519") {
         schema
         uiSchema
       }
@@ -46,7 +45,11 @@ export const postObservationEvent = async (observationEvent: BasicObject, creden
     throw new Error(`${i18n.t('credentials missing')}`)
   }
 
-  let url = postDocumentUrl.replace('$TOKEN', credentials.token)
-
-  await axios.post(url, observationEvent)
+  const params = {
+    personToken: credentials.token,
+    access_token: accessToken,
+    validationErrorFormat: 'remote'
+  } 
+  
+  await axios.post(postDocumentUrl, observationEvent, { params })
 }

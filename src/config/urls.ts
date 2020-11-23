@@ -3,20 +3,26 @@ export const accessToken = 'OIL8AEzGrFMDvhUmOxzLlbZhW71VEFkQF739VdR1cZxiNNldURZo
 
 //mapurl
 export const mapUrl = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
+
+//api root url
+const apiRoot = 'https://apitest.laji.fi/v0'
+
 //graphql url
-export const graphqlUrl           = 'https://apitest.laji.fi/v0/graphql'
+export const graphqlUrl           = `${apiRoot}/graphql`
 
 //documents url
-export const postDocumentUrl      = `https://apitest.laji.fi/v0/documents?personToken=$TOKEN&access_token=${accessToken}&validationErrorFormat=remote`
+export const postDocumentUrl      = `${apiRoot}/documents`
 
 //image urls
-export const postImageUrl         = `https://apitest.laji.fi/v0/images?personToken=$TOKEN&access_token=${accessToken}`
-export const postImageMetadataUrl = `https://apitest.laji.fi/v0/images/$TEMPID?personToken=$TOKEN&access_token=${accessToken}`
+export const postImageUrl         = `${apiRoot}/images`
+
+//taxon autocomplete urls
+export const autocompleteTaxonUrl = `${apiRoot}/autocomplete/taxon`
 
 //login urls
-export const getLoginUrl          = `https://apitest.laji.fi/v0/login?access_token=${accessToken}`
-export const pollLoginUrl         = `https://apitest.laji.fi/v0/login/check?tmpToken=$TEMPTOKEN&access_token=${accessToken}`
-export const getUserUrl           = `https://apitest.laji.fi/v0/person/$TOKEN?access_token=${accessToken}`
+export const getLoginUrl          = `${apiRoot}/login`
+export const pollLoginUrl         = `${apiRoot}/login/check`
+export const getUserUrl           = `${apiRoot}/person/`
 
 //privacy policy
 export const privacyPolicyEn      = 'https://laji.fi/about/848'
