@@ -138,8 +138,6 @@ const ObservationComponent = (props: Props) => {
 
     set(defaultObject, ['unitGathering', 'geometry'], props.observation)
 
-    console.log(props.observationId)
-
     //edit observations
     if (props.observationId) {
       //flying squirrel edit observation
