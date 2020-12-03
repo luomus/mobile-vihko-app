@@ -5,7 +5,7 @@ import { View, TouchableHighlight, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationObject } from 'expo-location'
 import { LineString, Point } from 'geojson'
-import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../converters/geoJSONConverters'
+import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import {
   setObservationLocation,

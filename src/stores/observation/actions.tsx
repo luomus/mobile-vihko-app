@@ -63,7 +63,7 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
       }
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx initObservationEvents()', 
+        location: '/stores/observation/actions.tsx initObservationEvents()',
         error: error
       })
       return Promise.reject({
@@ -86,7 +86,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType)
       await netStatusChecker()
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()', 
+        location: '/stores/observation/actions.tsx uploadObservationEvent()',
         error: error.response.data.error
       })
       return Promise.reject({
@@ -107,7 +107,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType)
             newImages = await saveMedias(unit.images, credentials)
           } catch (error) {
             log.error({
-              location: '/stores/observation/actions.tsx uploadObservationEvent()', 
+              location: '/stores/observation/actions.tsx uploadObservationEvent()',
               error: error
             })
             return Promise.reject({
@@ -139,7 +139,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType)
 
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()', 
+        location: '/stores/observation/actions.tsx uploadObservationEvent()',
         error: 'Image error'
       })
       return Promise.reject({
@@ -152,7 +152,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType)
       await postObservationEvent(event, credentials)
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()', 
+        location: '/stores/observation/actions.tsx uploadObservationEvent()',
         error: error.response.data.error
       })
       return Promise.reject({
@@ -180,7 +180,7 @@ export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<
       await storageController.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx newObservationEvent()', 
+        location: '/stores/observation/actions.tsx newObservationEvent()',
         error: error
       })
       return Promise.reject({
@@ -209,7 +209,7 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
       await storageController.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx replaceObservationEventById()', 
+        location: '/stores/observation/actions.tsx replaceObservationEventById()',
         error: error
       })
       return Promise.reject({
@@ -238,7 +238,7 @@ export const deleteObservationEvent = (eventId: string ): ThunkAction<Promise<an
       await storageController.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx deleteObservationEvent()', 
+        location: '/stores/observation/actions.tsx deleteObservationEvent()',
         error: error
       })
       return Promise.reject({
@@ -275,7 +275,7 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: LineSt
       await storageController.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx newObservation()', 
+        location: '/stores/observation/actions.tsx newObservation()',
         error: error
       })
       return Promise.reject({
@@ -344,7 +344,7 @@ export const replaceLocationById = (geometry: Geometry, eventId: string, unitId:
       await storageController.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx replaceLocationById()', 
+        location: '/stores/observation/actions.tsx replaceLocationById()',
         error: error
       })
       return Promise.reject({
@@ -381,7 +381,7 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
       await storageController.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx replaceObservationById()', 
+        location: '/stores/observation/actions.tsx replaceObservationById()',
         error: error
       })
       return Promise.reject({
@@ -395,7 +395,7 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
   }
 }
 
-export const initSchema = (): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
+export const initSchema = (useUiSchema: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async dispatch => {
     let languages: string[] = ['fi', 'en', 'sv']
     let schemas: Record<string, any> = {
@@ -455,7 +455,7 @@ export const initSchema = (): ThunkAction<Promise<void>, any, void, observationA
             }`
           }
           log.error({
-            location: '/stores/observation/actions.tsx initSchema()', 
+            location: '/stores/observation/actions.tsx initSchema()',
             error: locError,
             details: 'While fetching ' + lang + ' from AsyncStorage.'
           })
@@ -468,17 +468,21 @@ export const initSchema = (): ThunkAction<Promise<void>, any, void, observationA
 
       //schema was found try to parse necessary parameters and values for input creation from it
       if (tempSchemas) {
-        const uiSchemaParams = parseUiSchemaToObservations(tempSchemas.uiSchema)
+        let uiSchemaParams
 
-        //if parsing fails warn user that language is unusable
-        if (!uiSchemaParams) {
-          errors.push({
-            severity: 'high',
-            message: i18n.t(`could not parse ${lang} uiSchema to input`)
-          })
+        if (useUiSchema) {
+          uiSchemaParams = parseUiSchemaToObservations(tempSchemas.uiSchema)
 
-          errorFatal[lang] = true
-          continue
+          //if parsing fails warn user that language is unusable
+          if (!uiSchemaParams) {
+            errors.push({
+              severity: 'high',
+              message: i18n.t(`could not parse ${lang} uiSchema to input`)
+            })
+
+            errorFatal[lang] = true
+            continue
+          }
         }
 
         //try to store schema to internal storage for use as backup, if schemas are from server (i.e. first try-catch has not set any error),
@@ -492,7 +496,7 @@ export const initSchema = (): ThunkAction<Promise<void>, any, void, observationA
               message: i18n.t(`${lang} schema save to async failed`)
             }
             log.error({
-              location: '/stores/observation/actions.tsx initSchema()', 
+              location: '/stores/observation/actions.tsx initSchema()',
               error: error,
               details: 'While saving ' + lang + ' to AsyncStorage.'
             })
@@ -503,9 +507,15 @@ export const initSchema = (): ThunkAction<Promise<void>, any, void, observationA
           errors.push(langError)
         }
 
-        schemas[lang] = {
-          schema: tempSchemas.schema,
-          uiSchemaParams: uiSchemaParams
+        if (useUiSchema) {
+          schemas[lang] = {
+            schema: tempSchemas.schema,
+            uiSchemaParams: uiSchemaParams
+          }
+        } else {
+          schemas[lang] = {
+            schema: tempSchemas.schema,
+          }
         }
       }
     }

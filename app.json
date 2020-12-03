@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Liituri",
-    "slug": "Liituri",
+    "name": "Mobile-Vihko",
+    "slug": "Mobile-Vihko",
     "privacy": "public",
     "platforms": [
       "android"
     ],
-    "version": "1.4.1",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,12 +21,12 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.luomus.lolife",
+      "bundleIdentifier": "com.luomus.mobi",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
-      "package": "org.luomus.lolife",
+      "package": "org.luomus.mobi",
       "versionCode": 6,
       "config": {
         "googleMaps": {

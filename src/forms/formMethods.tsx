@@ -1,45 +1,37 @@
-import {
-  observationEventFields,
-} from '../config/fields'
 import Form from './Form'
-import { SchemaType } from '../stores/observation/types'
-import { omit } from 'lodash'
 
 //called in component to initalize to ane of the forms
 export const initForm = (
   setForm: Function,
   defaults: any,
-  rules: Record<string, any> | null,
+  rules: Record<string, any> | null = null,
   register: Function,
   setValue: Function,
   watch: Function,
   errors: Object,
   unregister: Function,
-  schemas: SchemaType,
+  schema: Record<string, any> | null = null,
+  fieldScopes: Record<string, any> | null = null,
+  fields: string[] | null = null,
+  overrideFields: Record<string, any> | null = null,
+  lang: string
 ) => {
-  let schemaObject: Record<string, any> | null = {}
-  let unitFieldScopes: Record<string, any> | null = null
 
-  if (!rules) {
-    schemaObject['properties'] = omit(schemas.schema?.properties, 'gatherings.items.properties.units')
-  } else {
-    schemaObject = schemas.schema?.properties?.gatherings?.items?.properties?.units
-    unitFieldScopes = schemas.uiSchemaParams?.unitFieldScopes
-  }
-
-  if (!schemaObject) {
+  if (!schema) {
     setForm(null)
-  } else if (rules && !unitFieldScopes) {
+  } else if (rules && !fieldScopes) {
+    setForm(null)
+  } else if (!rules && !fields) {
     setForm(null)
   }
 
   if (!rules) {
-    setForm(Form(register, setValue, watch, errors, unregister, defaults, observationEventFields, null, schemaObject))
+    setForm(Form(register, setValue, watch, errors, unregister, defaults, fields, null, schema, overrideFields, lang))
   } else {
-    const fieldScope = Object.keys(unitFieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key: string) => {
+    const fieldScope = Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key: string) => {
       const matches = new RegExp(rules.regexp).test(key)
       if (rules.complement ? !matches : matches) {
-        return unitFieldScopes[rules.field][key]
+        return fieldScopes[rules.field][key]
       } else {
         return foundObject
       }
@@ -52,6 +44,6 @@ export const initForm = (
     const fields = fieldScope?.fields.concat(['images'])
     const blacklist = fieldScope?.blacklist
 
-    setForm(Form(register, setValue, watch, errors, unregister, defaults, fields, blacklist, schemaObject))
+    setForm(Form(register, setValue, watch, errors, unregister, defaults, fields, blacklist, schema, overrideFields, lang))
   }
 }

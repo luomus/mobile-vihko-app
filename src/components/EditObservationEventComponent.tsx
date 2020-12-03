@@ -7,13 +7,14 @@ import { replaceObservationEventById, clearObservationId } from '../stores/obser
 import { setMessageState, clearMessageState } from '../stores/message/actions'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
-import { set, merge } from 'lodash'
+import { set, merge, omit } from 'lodash'
 import MessageComponent from './MessageComponent'
 import { ObservationEventType, SchemaType } from '../stores/observation/types'
 import { initForm } from '../forms/formMethods'
 import i18n from '../language/i18n'
 import ActivityComponent from './ActivityComponent'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
+import { observationEventFields } from '../config/fields'
 
 interface BasicObject {
   [key: string]: any
@@ -74,9 +75,10 @@ const EditObservationEventComponent = (props: Props) => {
 
   const onUninitalizedForm = () => {
     if (event) {
-      //set the form
       const lang = i18n.language
-      initForm(setForm, event, null, register, setValue, watch, errors, unregister, props.schema.schemas[lang])
+      let schema = omit(props.schema.schemas[lang]?.schema?.properties, 'gatherings.items.properties.units')
+      //set the form
+      initForm(setForm, event, null, register, setValue, watch, errors, unregister, schema, null, observationEventFields, null, lang)
     }
   }
 

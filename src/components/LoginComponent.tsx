@@ -124,7 +124,7 @@ const LoginComponent = (props: Props) => {
     }
 
     try {
-      await props.initSchema()
+      await props.initSchema(false)
     } catch (errors) {
       if (errors[errors.length - 1].severity === 'fatal') {
         errors.forEach((error: Record<string, any>, index: number) => {

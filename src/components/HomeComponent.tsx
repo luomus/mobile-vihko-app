@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Picker, ScrollView, BackHandler, Linking } from 'react-native'
+import { View, Text, ScrollView, BackHandler, Linking } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'

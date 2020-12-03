@@ -21,6 +21,7 @@ import { setEditing } from '../stores/map/actions'
 import { EditingType } from '../stores/map/types'
 import { lineStringConstructor } from '../converters/geoJSONConverters'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
+import { JX519Fields, overrideJX519Fields } from '../config/fields'
 
 interface RootState {
   observation: Point,
@@ -74,28 +75,28 @@ const ObservationComponent = (props: Props) => {
   const [observation, setObservation] = useState<Record<string, any> | undefined>(undefined)
 
   useEffect(() => {
-
     //initialize only when editing observations
-    if (!props.rules) {
+    if (props.observationId) {
       init()
     }
 
     //cleanup when component unmounts, ensures that if navigator back-button
-    //is used observationLocation and editing-flags are returned to defaults
-    if (!props.fromMap) {
-      return () => {
+    //is used observationLocation, observationId and editing-flags are returned 
+    //to defaults
+    return () => {
+      if (!props.fromMap) {
         props.clearObservationLocation()
         props.setEditing({
           started: false,
           locChanged: false
         })
       }
+      props.clearObservationId()
     }
   }, [])
 
   //initialization (only for editing observations)
   const init = () => {
-
     //clone events from reducer for modification
     const searchedEvent = props.observationEvent.events.find(event => {
       return event.id === props.observationId.eventId
@@ -120,26 +121,48 @@ const ObservationComponent = (props: Props) => {
   }
 
   const onUninitializedForm = () => {
-    if (props.rules) {
-      let defaultObject: Record<string, any> = {}
+    //if editing observation but observation not yet extracted from observation event
+    if (props.observationId && !observation) {
+      return
+    }
 
-      if (props.defaults) {
-        Object.keys(props.defaults).forEach(key => {
-          set(defaultObject, key.split('_'), props.defaults?.[key])
-        })
+    let schema = props.schema.schemas[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
+    let fieldScopes = props.schema.schemas[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
+    let defaultObject: Record<string, any> = {}
+
+    if (props.defaults) {
+      Object.keys(props.defaults).forEach(key => {
+        set(defaultObject, key.split('_'), props.defaults?.[key])
+      })
+    }
+
+    set(defaultObject, ['unitGathering', 'geometry'], props.observation)
+
+    console.log(props.observationId)
+
+    //edit observations
+    if (props.observationId) {
+      //flying squirrel edit observation
+      if (observation?.rules) {
+        initForm(setForm, observation, observation.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
+      //trip form new observation
+      } else if (observation) {
+        initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
       }
-
-      set(defaultObject, ['unitGathering', 'geometry'], props.observation)
-      initForm(setForm, defaultObject, props.rules, register, setValue, watch, errors, unregister, props.schema.schemas[lang])
+    //new observations
     } else {
-      if (observation) {
-        initForm(setForm, observation, observation.rules, register, setValue, watch, errors, unregister, props.schema.schemas[lang])
-      }
+      //flying squirrel new observation
+      if (props.rules) {
+        initForm(setForm, defaultObject, props.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
+      //trip form edit observation
+      } else (
+        initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
+      )
     }
   }
 
   const onSubmit = async (data: { [key: string]: any }) => {
-    if (props.rules) {
+    if (!observation) {
       createNewObservation(data)
     } else {
       updateObservation(data)
@@ -153,7 +176,10 @@ const ObservationComponent = (props: Props) => {
 
     //add id and rules in use internally, destroyed before sending
     set(newUnit, 'id', `observation_${uuid.v4()}`)
-    set(newUnit, 'rules', props.rules)
+
+    if (props.rules) {
+      set(newUnit, 'rules', props.rules)
+    }
 
     Object.keys(data).forEach(key => {
       set(newUnit, key.split('_'), data[key])
@@ -258,9 +284,9 @@ const ObservationComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.observationContainer}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='always'>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
-          {(!props.fromMap && !props.rules) ?
+          {(!props.fromMap && props.observationId) ?
             <View style={Cs.buttonContainer}>
               <ButtonElement
                 buttonStyle={{}}

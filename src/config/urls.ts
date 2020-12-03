@@ -16,8 +16,8 @@ export const postDocumentUrl      = `${apiRoot}/documents`
 //image urls
 export const postImageUrl         = `${apiRoot}/images`
 
-//taxon autocomplete urls
-export const autocompleteTaxonUrl = `${apiRoot}/autocomplete/taxon`
+//autocomplete urls
+export const autocompleteUrl = `${apiRoot}/autocomplete/`
 
 //login urls
 export const getLoginUrl          = `${apiRoot}/login`

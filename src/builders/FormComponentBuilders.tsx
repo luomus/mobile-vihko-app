@@ -8,6 +8,27 @@ import FormDatePickerComponent from '../components/FormDatePickerComponent'
 import FormSwitchComponent from '../components/FormSwitchComponent'
 import uuid from 'react-native-uuid'
 import FormHiddenComponent from '../components/FormHiddenComponent'
+import FormAutocompleteComponent, { AutocompleteParams } from '../components/FormAutocompleteComponent'
+
+
+export const createAutocompleteField = (
+  title: string,
+  objectTitle: string,
+  defaultValue: string,
+  register: Function,
+  setValue: Function,
+  watch: Function,
+  unregister: Function,
+  autocompleteParams: AutocompleteParams,
+  lang: string,
+) => {
+
+  return <FormAutocompleteComponent
+    key={objectTitle} title={title} defaultValue={defaultValue} register={register}
+    setValue={setValue} watch={watch} unregister={unregister}
+    autocompleteParams={autocompleteParams} lang={lang}
+  />
+}
 
 //creates a Picker component with PickerItems and takes JSON schema item label as parameter
 export const createPicker = (

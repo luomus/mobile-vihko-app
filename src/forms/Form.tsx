@@ -1,4 +1,4 @@
-import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker } from '../builders/FormComponentBuilders'
+import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField } from '../builders/FormComponentBuilders'
 import { get } from 'lodash'
 import { parseObjectForFieldParams } from '../parsers/SchemaToInputParser'
 
@@ -12,6 +12,8 @@ const Form = (
   fields: string[],
   blacklist: Record<string, any> | null,
   schema: Record<string, any> | null,
+  overrideFields: Record<string, any> | null,
+  lang: string,
 ) => {
   let toReturn: any[] = []
 
@@ -80,6 +82,15 @@ const Form = (
 
     if (defaultObject) {
       fieldDefaultValue = defaultObject
+    }
+
+    //if current path corresponds to any of the override fields, handle the special case
+    if (overrideFields && Object.keys(overrideFields).includes(path)) {
+      switch (overrideFields[path].field) {
+        case 'autocomplete':
+          toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, register, setValue, watch, unregister, overrideFields[path].params, lang))
+          return
+      }
     }
 
     if (fieldIsEnum && blacklist) {

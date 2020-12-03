@@ -6,3 +6,27 @@ export const observationEventFields = [
   'gatherings_0_notes',
   'keywords',
 ]
+
+export const JX519Fields = [
+  'identifications_0_taxon',
+  'count',
+  'atlasCode',
+  'notes',
+  'images'
+]
+
+//special cases that must be handled differently than schema parsing usually does
+export const overrideJX519Fields = {
+  'identifications_0_taxon': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      valueField: 'identifications_0_taxon',
+      transform: {
+        'key': 'unitFact_autocompleteSelectedTaxonID',
+        'value': 'identifications_0_taxon',
+        'payload_informalTaxonGroups': 'informalTaxonGroups'
+      }
+    }
+  }
+}

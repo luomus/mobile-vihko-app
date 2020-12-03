@@ -49,12 +49,21 @@ const ObservationButtonsComponent = (props: Props) => {
     let lang = i18n.language
     const unitGroups = props.schema.schemas[lang]?.uiSchemaParams?.unitGroups
 
-    return unitGroups?.map((observation: Record<string, any>) =>
-      createButton(observation.button.label.toUpperCase(),
-        Bs.observationButton,
-        () => props.confirmationButton(observation.rules, observation.button.default)
+    if (unitGroups) {
+      return unitGroups?.map((observation: Record<string, any>) =>
+        createButton(
+          observation.button.label.toUpperCase(),
+          Bs.observationButton,
+          () => props.confirmationButton(observation.rules, observation.button.default)
+        )
       )
-    )
+    } else {
+      return createButton(
+        t('add new observation').toUpperCase(),
+        Bs.observationButton,
+        () => props.confirmationButton()
+      )
+    }
   }
 
   const observationButtons = () => {
