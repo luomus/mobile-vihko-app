@@ -14,6 +14,7 @@ import {
   newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
+  setObservationId
 } from '../stores/observation/actions'
 import {
   toggleCentered,
@@ -80,7 +81,8 @@ const mapDispatchToProps = {
   clearObservationLocation,
   setMessageState,
   clearRegion,
-  toggleCentered
+  toggleCentered,
+  setObservationId
 }
 
 const connector = connect(
@@ -94,6 +96,7 @@ type Props = PropsFromRedux & {
   onLogout: () => void,
   onPressMap: () => void,
   onPressObservationEvent: (id: string) => void,
+  onFinishObservationEvent: () => void,
   obsStopped: boolean,
   navigation: any,
 }
@@ -283,6 +286,12 @@ const HomeComponent = (props: Props) => {
     setUnfinishedEvent(false)
     let event = clone(props.observationEvent.events?.[props.observationEvent.events.length - 1])
 
+    //stores event id into redux so that EditObservationEventComponent knows which event is being finished
+    props.setObservationId({
+      eventId: event.id,
+      unitId: null
+    })
+
     if (event) {
       const oldGathering = event.gatheringEvent
       event.gatheringEvent = {
@@ -324,6 +333,8 @@ const HomeComponent = (props: Props) => {
     if (!unfishedEvent) {
       stopLocationAsync()
     }
+
+    props.onFinishObservationEvent()
   }
 
   const stopObserving = () => {

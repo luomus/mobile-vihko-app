@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
+import { useBackHandler } from '@react-native-community/hooks'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Bs from '../styles/ButtonStyles'
@@ -55,6 +56,7 @@ type Props = PropsFromRedux & {
   onPressHome: () => void,
   onPressObservation: () => void,
   onPressObservationEvent: () => void,
+  isFocused: () => boolean
 }
 
 const ObservationEventComponent = (props: Props) => {
@@ -137,6 +139,15 @@ const ObservationEventComponent = (props: Props) => {
 
     setSending(false)
   }
+
+  //override back button to point to home screen in all cases
+  useBackHandler(() => {
+    if (props.isFocused() ) {
+      props.onPressHome()
+      return true
+    }
+    return false
+  })
 
   if (!event || !observations) {
     return (
