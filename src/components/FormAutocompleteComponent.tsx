@@ -8,6 +8,7 @@ import Colors from '../styles/Colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { get } from 'lodash'
 import { Canceler } from 'axios'
+import uuid from 'react-native-uuid'
 
 export interface AutocompleteParams {
   target: string,
@@ -36,19 +37,23 @@ const FormAutocompleteComponent = (props: Props) => {
   const { target, valueField, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
 
-  /**
   useEffect(() => {
     let allFound = true
+    const transformKeys = Object.keys(transform)
+    const registeredFields = Object.keys(props.watch())
 
-    Object.keys(transform).forEach(key => {
+    transformKeys.forEach(key => {
       if (transform[key] === valueField && props.defaultValue === '') {
         allFound = false
-      } else {
-        null
+      } else if (transform[key] !== valueField && !registeredFields.includes(transform[key])) {
+        allFound = false
       }
     })
+
+    if (allFound) {
+      setSelected(true)
+    }
   }, [])
-  */
 
   const wipeOldSelection = () => {
     Object.keys(transform).forEach(key => {
@@ -83,9 +88,9 @@ const FormAutocompleteComponent = (props: Props) => {
     try {
       setLoading(true)
 
-      let res = await getTaxonAutocomplete(target, text, props.lang, cancel)
+      let res = await getTaxonAutocomplete(target, text.toLowerCase(), props.lang, cancel)
 
-      setOptions(res.result)
+      setOptions(removeDuplicates(res.result))
       setOldQuery(res.query)
 
       if (res.result[0]?.payload?.matchType === 'exactMatches') {
@@ -101,7 +106,11 @@ const FormAutocompleteComponent = (props: Props) => {
     }
   }
 
-  console.log(options.map(option => option.value))
+  const removeDuplicates = (options: Record<string, any>[]) => {
+    return options.filter((outer, index) => {
+      return options.findIndex(inner => outer.key === inner.key) === index
+    })
+  }
 
   const onSelection = (item: Record<string, any>) => {
     setQuery(item.value)
@@ -128,7 +137,7 @@ const FormAutocompleteComponent = (props: Props) => {
       if (startIndex === 0 && isScientific) {
         const cappedQuery = query.charAt(0).toUpperCase() + query.slice(1)
 
-        text.push(<Text key={name} style={{ fontWeight: 'bold' }}>{cappedQuery}</Text>)
+        text.push(<Text style={{ fontWeight: 'bold' }}>{cappedQuery}</Text>)
       } else if (startIndex === 0) {
         text.push(<Text style={{ fontWeight: 'bold' }}>{query}</Text>)
       } else {
