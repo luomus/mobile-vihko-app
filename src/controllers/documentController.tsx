@@ -49,7 +49,7 @@ export const postObservationEvent = async (observationEvent: BasicObject, creden
     personToken: credentials.token,
     access_token: accessToken,
     validationErrorFormat: 'remote'
-  } 
-  
+  }
+
   await axios.post(postDocumentUrl, observationEvent, { params })
 }

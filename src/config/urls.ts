@@ -16,8 +16,11 @@ export const postDocumentUrl      = `${apiRoot}/documents`
 //image urls
 export const postImageUrl         = `${apiRoot}/images`
 
-//autocomplete urls
+//autocomplete url
 export const autocompleteUrl = `${apiRoot}/autocomplete/`
+
+//locality url
+export const localityUrl = `${apiRoot}/coordinates/location`
 
 //login urls
 export const getLoginUrl          = `${apiRoot}/login`

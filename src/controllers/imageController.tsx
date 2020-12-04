@@ -85,7 +85,7 @@ export const saveMedias = async (uris: string[], credentials: CredentialsType) =
   let images = null
   const params = {
     'personToken': credentials.token,
-    'access_token': accessToken    
+    'access_token': accessToken
   }
   const headers = {
     'accept': 'application/json',

@@ -14,6 +14,7 @@ import {
   deleteObservation,
 } from '../stores/observation/actions'
 import { setMessageState, clearMessageState } from '../stores/message/actions'
+import i18n from '../language/i18n'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
 import MessageComponent from './MessageComponent'
@@ -126,7 +127,7 @@ const ObservationEventComponent = (props: Props) => {
   const sendObservationEvent = async () => {
     setSending(true)
     try {
-      await props.uploadObservationEvent(event?.id, props.credentials)
+      await props.uploadObservationEvent(event?.id, props.credentials, i18n.language)
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error) {

@@ -4,6 +4,7 @@ import axios, { Canceler } from 'axios'
 const CancelToken = axios.CancelToken
 
 export const getTaxonAutocomplete = async (target: string, q: string, lang: string, cancel: undefined | Canceler) => {
+
   const params = {
     'q': q,
     'lang': lang,
@@ -12,6 +13,7 @@ export const getTaxonAutocomplete = async (target: string, q: string, lang: stri
     'matchType': 'exact,partial',
     'access_token': accessToken
   }
+
   const headers = {
     'Accept': 'application/json'
   }

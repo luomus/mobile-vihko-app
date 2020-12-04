@@ -1,6 +1,5 @@
-import { Point, Geometry, LineString  } from 'geojson'
+import { Point, Geometry, LineString } from 'geojson'
 import { ThunkAction } from 'redux-thunk'
-import storageController from '../../controllers/storageController'
 import { clone, cloneDeep } from 'lodash'
 import i18n from 'i18next'
 import {
@@ -15,6 +14,8 @@ import {
   SET_SCHEMA,
 } from './types'
 import { getSchemas, postObservationEvent } from '../../controllers/documentController'
+import { getLocalityDetails } from '../../controllers/localityController'
+import storageController from '../../controllers/storageController'
 import { CredentialsType } from '../user/types'
 import { parseUiSchemaToObservations } from '../../parsers/UiSchemaParser'
 import { saveMedias } from '../../controllers/imageController'
@@ -53,7 +54,49 @@ export const eventPathUpdate = (store: Store, lineStringPath: LineString | null)
   }
 }
 
-export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, observationActionTypes>  => {
+export const defineLocality = async (geometry: LineString, lang: string): Promise<Record<string, string>> => {
+
+  let localityDetails
+
+  try {
+    localityDetails = await getLocalityDetails(geometry, lang)
+  } catch (error) {
+    log.error({
+      location: '/stores/observation/actions.tsx defineLocality()',
+      error: error.response.data.error
+    })
+    return Promise.reject({
+      severity: 'low',
+      message: `${i18n.t('locality failure')} ${error.message}`
+    })
+  }
+
+  let biologicalProvince: string = ''
+  let municipality: string = ''
+
+  localityDetails.result.results.forEach((result: Object) => {
+    if (result.types[0] === 'biogeographicalProvince') {
+      if (biologicalProvince === '') {
+        biologicalProvince = result.formatted_address
+      } else {
+        biologicalProvince = biologicalProvince + ', ' + result.formatted_address
+      }
+    } else if (result.types[0] === 'municipality') {
+      if (municipality === '') {
+        municipality = result.formatted_address
+      } else {
+        municipality = municipality + ', ' + result.formatted_address
+      }
+    }
+  })
+
+  return {
+    biologicalProvince: biologicalProvince,
+    municipality: municipality
+  }
+}
+
+export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async dispatch => {
     try {
       const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
@@ -74,7 +117,7 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
   }
 }
 
-export const uploadObservationEvent = (id: string, credentials: CredentialsType): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
+export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
 
@@ -94,6 +137,12 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType)
         message: `${i18n.t('post failure')} ${error.message}`
       })
     }
+
+    //fill in the locality details
+    const localityDetails = await defineLocality(event.gatherings[1].geometry, lang)
+
+    event.gatherings[0].biologicalProvince = localityDetails.biologicalProvince
+    event.gatherings[0].municipality = localityDetails.municipality
 
     //for each observation in observation event try to send images to server
     //using saveMedias, and clean out local properties
@@ -229,8 +278,8 @@ export const replaceObservationEvents = (events: Record<string, any>[]): observa
   payload: events
 })
 
-export const deleteObservationEvent = (eventId: string ): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState)  => {
+export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+  return async (dispatch, getState) => {
     const { observationEvent } = getState()
     const newEvents = observationEvent.events.filter((event: Record<string, any>) => event.id !== eventId)
 
@@ -412,7 +461,7 @@ export const initSchema = (useUiSchema: boolean): ThunkAction<Promise<void>, any
     //try to load schemas from server, else case if error try to load schemas
     //from internal storage
     let errors: Record<string, any>[] = []
-    let errorFatal:  Record<string, boolean> = {
+    let errorFatal: Record<string, boolean> = {
       fi: false,
       en: false,
       sv: false
