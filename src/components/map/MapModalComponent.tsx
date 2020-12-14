@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'react-native-elements'
 import Modal from 'react-native-modal'
 import { connect, ConnectedProps } from 'react-redux'
-import Bs from '../styles/ButtonStyles'
+import Bs from '../../styles/ButtonStyles'
 import { useTranslation } from 'react-i18next'
 
 interface RootState {

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
-import { View, TouchableHighlight, Text } from 'react-native'
+import { View, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationObject } from 'expo-location'
 import { LineString, Point } from 'geojson'
-import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../converters/geoJSONConverters'
+import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import {
   setObservationLocation,
@@ -13,25 +13,27 @@ import {
   clearObservationLocation,
   setObservationId,
   deleteObservation
-} from '../stores/observation/actions'
+} from '../../stores/observation/actions'
 import {
   setRegion,
   toggleCentered,
   toggleMaptype,
   setEditing,
-} from '../stores/map/actions'
-import { setMessageState } from '../stores/message/actions'
-import Colors from '../styles/Colors'
+} from '../../stores/map/actions'
+import { setMessageState } from '../../stores/message/actions'
+import Colors from '../../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
-import Cs from '../styles/ContainerStyles'
-import Os from '../styles/OtherStyles'
-import ObservationButtonsComponent from './ObservationButtonsComponent'
-import { EditingType } from '../stores/map/types'
-import { ObservationEventType } from '../stores/observation/types'
-import { mapUrl as urlTemplate } from '../config/urls'
-import MessageComponent from './MessageComponent'
+import Cs from '../../styles/ContainerStyles'
+import Os from '../../styles/OtherStyles'
+import ObservationButtonsComponent from './../ObservationButtonsComponent'
+import GpsBarComponent from './GpsBarComponent'
+import { EditingType } from '../../stores/map/types'
+import { ObservationEventType } from '../../stores/observation/types'
+import { mapUrl as urlTemplate } from '../../config/urls'
+import MessageComponent from './../MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
+
 
 interface BasicObject {
   [key: string]: any
@@ -357,13 +359,7 @@ const MapComponent = (props: Props) => {
 
   return (
     <>
-      <View style={Cs.gpsStatusBar}>
-        <View style={Cs.gpsBarLeft}>
-          <Icon name='fiber-manual-record' color='red' size={30}/>
-          <Text style={{ color: 'white' }}>{t('gps recording on')}</Text>
-        </View>
-        <Icon name='stop' color='red' size={30} onPress={() => stopObserving()}/>
-      </View>
+      <GpsBarComponent stopObserving={stopObserving} />
       <View style = {Cs.mapContainer}>
         <MapView
           ref = {map => {mapView = map}}

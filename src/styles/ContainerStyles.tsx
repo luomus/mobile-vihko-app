@@ -315,6 +315,12 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  gpsBarRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#2979ae'
+  },
   versionContainer: {
     alignItems: 'stretch',
     justifyContent: 'flex-end',

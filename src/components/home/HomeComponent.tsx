@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, BackHandler, Linking } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
-import UserInfoComponent from './UserInfoComponent'
-import ObservationEventListComponent from './ObservationEventListElementComponent'
+import { View, Text, ScrollView, BackHandler } from 'react-native'
+import UserInfoComponent from '../UserInfoComponent'
+import ObservationEventListComponent from '../ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
-import Cs from '../styles/ContainerStyles'
-import Ts from '../styles/TextStyles'
-import Bs from '../styles/ButtonStyles'
+import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
 import { LocationObject } from 'expo-location'
 import { LatLng } from 'react-native-maps'
 import {
@@ -15,39 +13,40 @@ import {
   replaceObservationEventById,
   clearObservationLocation,
   setObservationId
-} from '../stores/observation/actions'
+} from '../../stores/observation/actions'
 import {
   toggleCentered,
   clearRegion
-} from '../stores/map/actions'
-import { setMessageState } from '../stores/message/actions'
+} from '../../stores/map/actions'
+import { setMessageState } from '../../stores/message/actions'
 import {
   updateLocation,
   clearLocation,
   appendPath,
   setPath,
   clearPath,
-} from '../stores/position/actions'
+} from '../../stores/position/actions'
 import { connect, ConnectedProps } from 'react-redux'
-import { watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
+import { watchLocationAsync, stopLocationAsync } from '../../geolocation/geolocation'
 import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'
-import { setDateForDocument } from '../utilities/dateHelper'
-import Colors from '../styles/Colors'
-import { SchemaType, ObservationEventType } from '../stores/observation/types'
-import { CredentialsType } from '../stores/user/types'
-import { lineStringConstructor } from '../converters/geoJSONConverters'
-import { parseSchemaToNewObject } from '../parsers/SchemaObjectParser'
-import i18n from '../language/i18n'
-import MessageComponent from './MessageComponent'
+import { setDateForDocument } from '../../utilities/dateHelper'
+import { SchemaType, ObservationEventType } from '../../stores/observation/types'
+import { CredentialsType } from '../../stores/user/types'
+import { lineStringConstructor } from '../../converters/geoJSONConverters'
+import { parseSchemaToNewObject } from '../../parsers/SchemaObjectParser'
+import i18n from '../../language/i18n'
+import MessageComponent from '../MessageComponent'
 import { withNavigation } from 'react-navigation'
-import ActivityComponent from './ActivityComponent'
-import AppJSON from '../../app.json'
-import { createGeometry } from '../utilities/geometryCreator'
-import storageController from '../controllers/storageController'
-import { log } from '../utilities/logger'
-import { lajiFI, lajiSV, lajiEN } from '../config/urls'
+import ActivityComponent from '../ActivityComponent'
+import AppJSON from '../../../app.json'
+import { createGeometry } from '../../utilities/geometryCreator'
+import storageController from '../../controllers/storageController'
+import { log } from '../../utilities/logger'
+import { HomeIntroductionComponent } from './HomeIntroductionComponent'
+import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
+import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
 
 interface BasicObject {
   [key: string]: any
@@ -104,9 +103,8 @@ type Props = PropsFromRedux & {
 const HomeComponent = (props: Props) => {
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
-  const [unfishedEvent, setUnfinishedEvent] = useState<boolean>(false)
+  const [unfinishedEvent, setUnfinishedEvent] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const [link, setLink] = useState<string>('')
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
   let focusListener: any
@@ -151,10 +149,6 @@ const HomeComponent = (props: Props) => {
 
     logHandler()
   }, [pressCounter])
-
-  useEffect(() => {
-    changeLinkPage()
-  }, [i18n.language])
 
   const loadObservationEvents = () => {
     const events: Array<Element> = []
@@ -247,7 +241,7 @@ const HomeComponent = (props: Props) => {
   }
 
   const continueObservationEvent = async () => {
-    if (!unfishedEvent) {
+    if (!unfinishedEvent) {
       props.onPressMap()
       return
     }
@@ -300,7 +294,7 @@ const HomeComponent = (props: Props) => {
       }
 
       const lineStringpPath = lineStringConstructor(props.path)
-      if (lineStringpPath && !unfishedEvent) {
+      if (lineStringpPath && !unfinishedEvent) {
         event.gatherings[1] = {
           geometry: lineStringpPath
         }
@@ -330,7 +324,7 @@ const HomeComponent = (props: Props) => {
 
     props.toggleObserving()
     props.clearObservationLocation()
-    if (!unfishedEvent) {
+    if (!unfinishedEvent) {
       stopLocationAsync()
     }
 
@@ -343,16 +337,6 @@ const HomeComponent = (props: Props) => {
       messageContent: t('stop observing'),
       onOk: () => finishObservationEvent()
     })
-  }
-
-  const changeLinkPage = () => {
-    if (i18n.language === 'fi') {
-      setLink(lajiFI)
-    } else if (i18n.language === 'sv') {
-      setLink(lajiSV)
-    } else (
-      setLink(lajiEN)
-    )
   }
 
   const clipboardConfirmation = (logs: any[] | null) => {
@@ -383,53 +367,12 @@ const HomeComponent = (props: Props) => {
           <View style={{ justifyContent: 'flex-start' }}>
             <UserInfoComponent onLogout={props.onLogout} />
             <View style={Cs.homeContainer}>
-              <View style={Cs.homeInfoContainer}>
-                <Text style={Ts.linkToLajiText}>
-                  {`${t('observations are stored in')} `}
-                  <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(link)}>
-                    {`${t('to laji.fi database')}`}
-                  </Text>
-                </Text>
-              </View>
+              <HomeIntroductionComponent />
               <View style={{ height: 10 }}></View>
               {props.observing ?
-                <View style={Cs.observationEventContainer}>
-                  <Text style={Ts.observationEventTitle}>{t('interrupted observation event')}</Text>
-                  <View style={Cs.buttonContainer}>
-                    <Button
-                      containerStyle={Cs.continueButtonContainer}
-                      buttonStyle={Bs.continueButton}
-                      title={unfishedEvent ? t('continue unfinished') : t('continue')}
-                      iconRight={true}
-                      icon={<Icon name='map-outline' type='material-community' color='white' size={22} />}
-                      onPress={() => continueObservationEvent()}
-                    />
-                    <Button
-                      containerStyle={Cs.endButtonContainer}
-                      buttonStyle={Bs.endButton}
-                      title={t('cancelObservation')}
-                      iconRight={true}
-                      icon={<Icon name='stop' type='material-icons' color='white' size={22} />}
-                      onPress={() => stopObserving()}
-                    />
-                  </View>
-                </View>
+                <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
                 :
-                <View style={Cs.observationEventContainer}>
-                  <Text style={Ts.observationEventTitle}>
-                    {t('new observation event without zone')}
-                  </Text>
-                  <View style={Cs.buttonContainer}>
-                    <Button
-                      containerStyle={Cs.beginButtonContainer}
-                      buttonStyle={{ backgroundColor: Colors.positiveColor }}
-                      title={t('beginObservation')}
-                      iconRight={true}
-                      icon={<Icon name='play-arrow' type='material-icons' color={'white'} size={22} />}
-                      onPress={() => beginObservationEvent()}
-                    />
-                  </View>
-                </View>
+                <NewEventWithoutZoneComponent beginObservationEvent={beginObservationEvent} />
               }
               <View style={{ height: 10 }}></View>
               <View style={Cs.observationEventListContainer}>

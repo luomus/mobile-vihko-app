@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 import { View } from 'react-native'
-import MapComponent from '../components/MapComponent'
+import MapComponent from '../components/map/MapComponent'
 import Colors from '../styles/Colors'
 import Cs from '../styles/ContainerStyles'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'

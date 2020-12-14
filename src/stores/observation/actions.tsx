@@ -1,4 +1,4 @@
-import { Point, Geometry, LineString } from 'geojson'
+import { Point, Geometry, LineString, Polygon } from 'geojson'
 import { ThunkAction } from 'redux-thunk'
 import { clone, cloneDeep } from 'lodash'
 import i18n from 'i18next'
@@ -20,8 +20,10 @@ import { CredentialsType } from '../user/types'
 import { parseUiSchemaToObservations } from '../../parsers/UiSchemaParser'
 import { saveMedias } from '../../controllers/imageController'
 import { netStatusChecker } from '../../utilities/netStatusCheck'
+import { overlapsFinland, centerOfBoundingBox } from '../../utilities/geometryCreator'
 import { Store } from 'redux'
 import { log } from '../../utilities/logger'
+import { getLocalityDetailsFromGoogleAPI } from '../../controllers/localityController'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -54,7 +56,7 @@ export const eventPathUpdate = (store: Store, lineStringPath: LineString | null)
   }
 }
 
-export const defineLocality = async (geometry: LineString, lang: string): Promise<Record<string, string>> => {
+export const defineLocalityInFinland = async (geometry: Polygon | Point, lang: string): Promise<Record<string, string>> => {
 
   let localityDetails
 
@@ -62,7 +64,7 @@ export const defineLocality = async (geometry: LineString, lang: string): Promis
     localityDetails = await getLocalityDetails(geometry, lang)
   } catch (error) {
     log.error({
-      location: '/stores/observation/actions.tsx defineLocality()',
+      location: '/stores/observation/actions.tsx defineLocalityInFinland()',
       error: error.response.data.error
     })
     return Promise.reject({
@@ -71,10 +73,17 @@ export const defineLocality = async (geometry: LineString, lang: string): Promis
     })
   }
 
+  if (localityDetails.result.status === 'ZERO_RESULTS') {
+    return {
+      status: 'fail'
+    }
+  }
+
   let biologicalProvince: string = ''
+  let country: string = i18n.t('finland')
   let municipality: string = ''
 
-  localityDetails.result.results.forEach((result: Object) => {
+  localityDetails.result.results.forEach((result: Record<string, any>) => {
     if (result.types[0] === 'biogeographicalProvince') {
       if (biologicalProvince === '') {
         biologicalProvince = result.formatted_address
@@ -92,7 +101,61 @@ export const defineLocality = async (geometry: LineString, lang: string): Promis
 
   return {
     biologicalProvince: biologicalProvince,
-    municipality: municipality
+    country: country,
+    municipality: municipality,
+  }
+}
+
+export const defineLocalityAbroad = async (geometry: Point, lang: string): Promise<Record<string, string>> => {
+
+  let localityDetails
+
+  try {
+    const response = await getLocalityDetailsFromGoogleAPI(geometry, lang)
+    localityDetails = response.data.results
+  } catch (error) {
+    log.error({
+      location: '/stores/observation/actions.tsx defineLocalityAbroad()',
+      error: error.response.data.error
+    })
+    return Promise.reject({
+      severity: 'low',
+      message: `${i18n.t('locality failure')} ${error.message}`
+    })
+  }
+
+  let administrativeProvinceArray: Array<string> = []
+  let countryArray: Array<string> = []
+  let municipalityArray: Array<string> = []
+
+  localityDetails.forEach((point: Record<string, any>) => {
+    point.address_components.forEach((component: Record<string, any>) => {
+      component.types.forEach((type: string) => {
+        if (type === 'administrative_area_level_1') {
+          if (!administrativeProvinceArray.includes(component.long_name)) {
+            administrativeProvinceArray.push(component.long_name)
+          }
+        } else if (type === 'country') {
+          if (!countryArray.includes(component.long_name)) {
+            countryArray.push(component.long_name)
+          }
+        } else if (type === 'administrative_area_level_2' || type === 'administrative_area_level_3') {
+          if (!municipalityArray.includes(component.long_name)) {
+            municipalityArray.push(component.long_name)
+          }
+        }
+      })
+    })
+  })
+
+  let administrativeProvince: string = administrativeProvinceArray.join(', ')
+  let country: string = countryArray.join(', ')
+  let municipality: string = municipalityArray.join(', ')
+
+  return {
+    administrativeProvince: administrativeProvince,
+    country: country,
+    municipality: municipality,
   }
 }
 
@@ -138,11 +201,31 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       })
     }
 
-    //fill in the locality details
-    const localityDetails = await defineLocality(event.gatherings[1].geometry, lang)
+    const fetchForeign = async () => {
+      const center = centerOfBoundingBox(event.gatherings[0].geometry)
+      const localityDetails = await defineLocalityAbroad(center, lang)
 
-    event.gatherings[0].biologicalProvince = localityDetails.biologicalProvince
-    event.gatherings[0].municipality = localityDetails.municipality
+      event.gatherings[0].administrativeProvince = localityDetails.administrativeProvince
+      event.gatherings[0].country = localityDetails.country
+      event.gatherings[0].municipality = localityDetails.municipality
+    }
+
+    //fill in the locality details
+    if (overlapsFinland(event.gatherings[0].geometry)) {
+      const localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang)
+
+      if (localityDetails.status) {
+        await fetchForeign()
+      } else {
+
+        event.gatherings[0].biologicalProvince = localityDetails.biologicalProvince
+        event.gatherings[0].country = localityDetails.country
+        event.gatherings[0].municipality = localityDetails.municipality
+      }
+
+    } else {
+      await fetchForeign()
+    }
 
     //for each observation in observation event try to send images to server
     //using saveMedias, and clean out local properties
@@ -488,7 +571,7 @@ export const initSchema = (useUiSchema: boolean): ThunkAction<Promise<void>, any
             message: `${i18n.t(`error loading ${lang} schemas from server`)} ${netError.message
               ? netError.message
               : i18n.t('status code') + netError.response.status
-            }`
+              }`
           }
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',
@@ -501,7 +584,7 @@ export const initSchema = (useUiSchema: boolean): ThunkAction<Promise<void>, any
             message: `${i18n.t(`error loading ${lang} schemas from server and internal`)} ${netError.message
               ? netError.message
               : i18n.t('status code') + netError.response.status
-            }`
+              }`
           }
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',

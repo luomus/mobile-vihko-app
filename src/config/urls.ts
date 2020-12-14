@@ -35,3 +35,6 @@ export const privacyPolicyFi      = 'https://laji.fi/about/713'
 export const lajiFI = 'https://laji.fi/observation/list'
 export const lajiSV = 'https://laji.fi/sv/observation/list'
 export const lajiEN = 'https://laji.fi/en/observation/list'
+
+//google geocoding api url
+export const googleGeocodingAPIURL = 'https://maps.googleapis.com/maps/api/geocode/json'

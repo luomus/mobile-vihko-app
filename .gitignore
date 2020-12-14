@@ -12,6 +12,7 @@ npm-debug.*
 web-build/
 web-report/
 coverage/
+**/keys.ts
 
 # macOS
 .DS_Store

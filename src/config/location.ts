@@ -17,3 +17,6 @@ export const PATH_MIN_X_INTERVALL = 30
 
 //number of updates before path is added to observation event and saved to async
 export const PATH_BACKUP_INTERVALL = 10
+
+//boundaries of finland
+export const FINLAND_BOUNDS = [[36.783, 71.348], [15.316, 56.311]]
