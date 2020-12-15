@@ -180,6 +180,22 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
   }
 }
 
+
+const defineRecordBasis = (event: Record<string, any>): Record<string, any> => {
+
+  let modifiedEvent: Record<string, any> = event
+
+  modifiedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
+    if (unit.images.length > 0) {
+      unit.recordBasis = 'MY.recordBasisHumanObservationPhoto'
+    } else {
+      unit.recordBasis = 'MY.recordBasisHumanObservation'
+    }
+  })
+
+  return modifiedEvent
+}
+
 export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
@@ -200,6 +216,9 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
         message: `${i18n.t('post failure')} ${error.message}`
       })
     }
+
+    //define record basis for each unit, depending on whether the unit has images attached
+    event = defineRecordBasis(event)
 
     const fetchForeign = async () => {
       const center = centerOfBoundingBox(event.gatherings[0].geometry)

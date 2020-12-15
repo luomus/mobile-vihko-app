@@ -204,7 +204,7 @@ const HomeComponent = (props: Props) => {
 
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
-      formID: 'MHL.45',
+      formID: 'JX.519',
       ...observationEvent
     }
 
@@ -279,6 +279,8 @@ const HomeComponent = (props: Props) => {
   const finishObservationEvent = async () => {
     setUnfinishedEvent(false)
     let event = clone(props.observationEvent.events?.[props.observationEvent.events.length - 1])
+
+    console.log(event)
 
     //stores event id into redux so that EditObservationEventComponent knows which event is being finished
     props.setObservationId({
