@@ -1,9 +1,8 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest -u",
@@ -28,6 +27,8 @@
     "expo-image-picker": "~9.1.1",
     "expo-location": "~9.0.0",
     "expo-permissions": "~9.3.0",
+    "expo-splash-screen": "~0.6.2",
+    "expo-status-bar": "~1.0.2",
     "expo-task-manager": "~8.5.0",
     "form-data": "^3.0.0",
     "geojson": "^0.5.0",
@@ -42,7 +43,7 @@
     "react-hook-form": "^4.9.6",
     "react-i18next": "^11.3.1",
     "react-moment": "^0.9.7",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
+    "react-native": "~0.63.3",
     "react-native-autocomplete-input": "^4.2.0",
     "react-native-elements": "1.2.7",
     "react-native-gesture-handler": "~1.7.0",
@@ -53,6 +54,7 @@
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
     "react-native-typescript-geojson": "0.0.4",
+    "react-native-unimodules": "~0.11.0",
     "react-native-uuid": "^1.4.9",
     "react-native-web": "~0.13.7",
     "react-native-webview": "10.7.0",
@@ -65,6 +67,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "babel-jest": "~25.2.6",
+    "jest": "~25.2.6",
+    "react-test-renderer": "^16.12.0",
     "@types/jest": "^25.1.2",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
@@ -75,7 +80,6 @@
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.18.0",
     "jest-expo": "^39.0.0",
-    "react-test-renderer": "^16.12.0",
     "typescript": "~3.9.2"
   },
   "jest": {
@@ -93,5 +97,7 @@
       "!**/jest.setup.js"
     ]
   },
-  "private": true
+  "private": true,
+  "name": "mobile-vihko-app",
+  "version": "1.0.0"
 }
