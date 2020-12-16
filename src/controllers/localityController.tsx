@@ -1,9 +1,9 @@
 import { accessToken, localityUrl, googleGeocodingAPIURL } from '../config/urls'
 import axios from 'axios'
-import { Polygon, Point } from 'geojson'
+import { LineString, Point } from 'geojson'
 import { geocodingAPIKey } from '../config/keys'
 
-export const getLocalityDetails = async (geometry: Polygon | Point, lang: string) => {
+export const getLocalityDetailsFromLajiApi = async (geometry: LineString | Point, lang: string) => {
 
   const params = {
     'lang': lang,

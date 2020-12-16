@@ -41,7 +41,7 @@ import MessageComponent from '../MessageComponent'
 import { withNavigation } from 'react-navigation'
 import ActivityComponent from '../ActivityComponent'
 import AppJSON from '../../../app.json'
-import { createGeometry } from '../../utilities/geometryCreator'
+import { createUnitBoundingBox } from '../../utilities/geometryCreator'
 import storageController from '../../controllers/storageController'
 import { log } from '../../utilities/logger'
 import { HomeIntroductionComponent } from './HomeIntroductionComponent'
@@ -268,7 +268,7 @@ const HomeComponent = (props: Props) => {
     props.clearRegion()
 
     //set old path if exists
-    const path = props.observationEvent.events?.[props.observationEvent.events.length - 1].gatherings[1]?.geometry.coordinates
+    const path = props.observationEvent.events?.[props.observationEvent.events.length - 1].gatherings[0]?.geometry.coordinates
     if (path) {
       props.setPath(path)
     }
@@ -279,8 +279,6 @@ const HomeComponent = (props: Props) => {
   const finishObservationEvent = async () => {
     setUnfinishedEvent(false)
     let event = clone(props.observationEvent.events?.[props.observationEvent.events.length - 1])
-
-    console.log(event)
 
     //stores event id into redux so that EditObservationEventComponent knows which event is being finished
     props.setObservationId({
@@ -295,15 +293,13 @@ const HomeComponent = (props: Props) => {
         dateEnd: setDateForDocument()
       }
 
-      const lineStringpPath = lineStringConstructor(props.path)
-      if (lineStringpPath && !unfinishedEvent) {
-        event.gatherings[1] = {
-          geometry: lineStringpPath
-        }
+      const lineStringPath = lineStringConstructor(props.path)
+      if (lineStringPath && !unfinishedEvent) {
+        event.gatherings[0].geometry = lineStringPath
       }
 
       if (!event.gatherings[0].geometry) {
-        const geometry = createGeometry(event)
+        const geometry = createUnitBoundingBox(event)
 
         if (geometry) {
           event.gatherings[0].geometry = geometry

@@ -38,8 +38,8 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
     const indLast = observationEvent.events.length - 1
 
     if (
-      !observationEvent.events[indLast].gatherings[1] ||
-      path.length - observationEvent?.events[indLast]?.gatherings[1]?.geometry?.coordinates?.length >= PATH_BACKUP_INTERVALL
+      !observationEvent.events[indLast].gatherings[0].geometry ||
+      path.length - observationEvent?.events[indLast]?.gatherings[0]?.geometry?.coordinates?.length >= PATH_BACKUP_INTERVALL
     ) {
       eventPathUpdate(store, lineStringConstructor(path))
     }
