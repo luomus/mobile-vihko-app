@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { getTaxonAutocomplete } from '../controllers/autocompleteController'
@@ -6,9 +6,8 @@ import Autocomplete from 'react-native-autocomplete-input'
 import Cs from '../styles/ContainerStyles'
 import Colors from '../styles/Colors'
 import { TextInput } from 'react-native-gesture-handler'
-import { get } from 'lodash'
+import { get, debounce } from 'lodash'
 import { Canceler } from 'axios'
-import uuid from 'react-native-uuid'
 
 export interface AutocompleteParams {
   target: string,
@@ -68,27 +67,14 @@ const FormAutocompleteComponent = (props: Props) => {
     })
   }
 
-  const onQueryChange = async (text: string) => {
-    if (cancel) {
-      cancel()
-    }
-
-    if (selected) {
-      wipeOldSelection()
-      props.register({ name: valueField })
-      setSelected(false)
-    }
-
-    setQuery(text)
-    setHideResult(false)
-
-    props.setValue(valueField, text)
-
-
+  const queryAutocomplete = async (query: string) => {
     try {
-      setLoading(true)
+      //fire request cancel if last is still unning to avoid getting responses in wrong order
+      if (cancel) {
+        cancel()
+      }
 
-      let res = await getTaxonAutocomplete(target, text.toLowerCase(), props.lang, cancel)
+      let res = await getTaxonAutocomplete(target, query.toLowerCase(), props.lang, cancel)
 
       setOptions(removeDuplicates(res.result))
       setOldQuery(res.query)
@@ -104,6 +90,26 @@ const FormAutocompleteComponent = (props: Props) => {
     } finally {
       setLoading(false)
     }
+  }
+
+  //use debounce to avoid calling autocomplete-api to lower the update frequency on fast typing
+  const debouncedQuery = useCallback(debounce(queryAutocomplete, 500), [])
+
+  const onQueryChange = async (text: string) => {
+    setLoading(true)
+
+    if (selected) {
+      wipeOldSelection()
+      props.register({ name: valueField })
+      setSelected(false)
+    }
+
+    setQuery(text)
+    setHideResult(false)
+
+    props.setValue(valueField, text)
+
+    debouncedQuery(text)
   }
 
   const removeDuplicates = (options: Record<string, any>[]) => {
@@ -156,14 +162,12 @@ const FormAutocompleteComponent = (props: Props) => {
       return (
         <View>
           <Text style={{ fontStyle: 'italic' }}>{addBolding(item?.value, oldQuery, true)}</Text>
-          <Text>{`(${item?.payload?.taxonRankId})`}</Text>
         </View>
       )
     } else {
       return (
         <View>
           <Text>{addBolding(item?.value, oldQuery, false)}{' - '}<Text style={{ fontStyle: 'italic' }}>{item?.payload?.scientificName}</Text></Text>
-          <Text>{`(${item?.payload?.taxonRankId})`}</Text>
         </View>
       )
     }
