@@ -283,7 +283,6 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView keyboardShouldPersistTaps='always'>
-          <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           {(!props.fromMap && props.observationId) ?
             <View style={Cs.buttonContainer}>
               <ButtonElement

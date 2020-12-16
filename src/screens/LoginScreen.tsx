@@ -15,7 +15,7 @@ type Props  = {
 
 export default class LoginScreen extends Component<NavigationStackScreenProps<Props>>  {
   static navigationOptions = ({ screenProps, navigation }: any) => ({
-    title: screenProps.t('mobile app'),
+    title: screenProps.t('mobile vihko'),
     headerStyle: {
       backgroundColor: Colors.headerBackground
     },
