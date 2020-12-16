@@ -1,5 +1,5 @@
 //task name for background location tracking
-export const LOCATION_BACKGROUND_TASK = 'backgroundLocationHandler'
+export const LOCATION_BACKGROUND_TASK = 'mobileVihkoBackgroundLocationHandler'
 
 //gps-accuracy for location, scale 1-6 (5 highest GPS-based, 6 uses other sensors)
 export const LOCATION_ACCURACY = 5

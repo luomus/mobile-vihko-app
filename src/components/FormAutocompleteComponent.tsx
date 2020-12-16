@@ -60,10 +60,22 @@ const FormAutocompleteComponent = (props: Props) => {
     })
   }
 
+  const mapInformalTaxonGroups = (informalTaxonGroups: Record<string, any>) => {
+    return informalTaxonGroups.map((group: any) => {
+      return typeof group === 'string' ? group : group.id
+    })
+  }
+
   const addSelectionToForm = (item: Record<string, any>) => {
+
     Object.keys(transform).forEach(key => {
       props.register({ name: transform[key] })
-      props.setValue(transform[key], get(item, key.split('_')))
+
+      if (key.includes('informalTaxonGroup')) {
+        props.setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))))
+      } else {
+        props.setValue(transform[key], get(item, key.split('_')))
+      }
     })
   }
 
