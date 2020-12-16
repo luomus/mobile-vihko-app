@@ -27,7 +27,7 @@
     },
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 6,
+      "versionCode": 1,
       "config": {
         "googleMaps": {
           "apiKey": ""
