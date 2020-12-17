@@ -1,6 +1,6 @@
 import React from 'react'
 import i18n from '../language/i18n'
-import SchemaObjectComponent from '../components/SchemaObjectComponent'
+import SchemaObjectComponent from '../components/observationEvent/SchemaObjectComponent'
 import { parsePathForFieldParams } from './SchemaToInputParser'
 import { get, set } from 'lodash'
 
