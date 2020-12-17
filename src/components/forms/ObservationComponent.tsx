@@ -126,8 +126,8 @@ const ObservationComponent = (props: Props) => {
       return
     }
 
-    let schema = props.schema.schemas[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
-    let fieldScopes = props.schema.schemas[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
+    let schema = props.schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
+    let fieldScopes = props.schema[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
     let defaultObject: Record<string, any> = {}
 
     if (props.defaults) {
@@ -184,7 +184,7 @@ const ObservationComponent = (props: Props) => {
     })
 
     //set correct color for obseration, if available
-    let color = props.schema.schemas[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
+    let color = props.schema[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
       const field: string = unitColor.rules.field
       if (newUnit[field]) {
         return new RegExp(unitColor.rules.regexp).test(newUnit[unitColor.rules.field])

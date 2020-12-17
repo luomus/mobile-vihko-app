@@ -47,7 +47,7 @@ const ObservationButtonsComponent = (props: Props) => {
 
   const createButtonList = () => {
     let lang = i18n.language
-    const unitGroups = props.schema.schemas[lang]?.uiSchemaParams?.unitGroups
+    const unitGroups = props.schema[lang]?.uiSchemaParams?.unitGroups
 
     if (unitGroups) {
       return unitGroups?.map((observation: Record<string, any>) =>

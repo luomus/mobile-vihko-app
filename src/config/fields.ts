@@ -44,3 +44,5 @@ export const overrideJX519Fields = {
     }
   }
 }
+
+export const availableForms = ['JX.652', 'JX.519']

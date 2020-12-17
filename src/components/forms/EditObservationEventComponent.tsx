@@ -76,7 +76,7 @@ const EditObservationEventComponent = (props: Props) => {
   const onUninitalizedForm = () => {
     if (event) {
       const lang = i18n.language
-      let schema = omit(props.schema.schemas[lang]?.schema?.properties, 'gatherings.items.properties.units')
+      let schema = omit(props.schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
       initForm(setForm, event, null, register, setValue, watch, errors, unregister, schema, null, JX519ObservationEventFields, null, lang)
     }

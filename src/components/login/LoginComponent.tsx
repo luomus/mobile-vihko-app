@@ -18,6 +18,7 @@ import MessageComponent from '../general/MessageComponent'
 import { netStatusChecker } from '../../utilities/netStatusCheck'
 import AppJSON from '../../../app.json'
 import { log } from '../../utilities/logger'
+import { availableForms } from '../../config/fields'
 
 interface RootState {
   credentials: CredentialsType,
@@ -123,26 +124,28 @@ const LoginComponent = (props: Props) => {
       showError(error.message)
     }
 
-    try {
-      await props.initSchema(false)
-    } catch (errors) {
-      if (errors[errors.length - 1].severity === 'fatal') {
-        errors.forEach((error: Record<string, any>, index: number) => {
-          if (index === errors.length - 1) {
-            showFatalError(`${t('critical error')}:\n ${error.message}`)
-          } else {
-            showError(error.message)
-          }
-        })
-        setLoggingIn(false)
-        return
+    availableForms.forEach(async formId => {
+      try {
+        await props.initSchema(false, formId)
+      } catch (errors) {
+        if (errors[errors.length - 1].severity === 'fatal') {
+          errors.forEach((error: Record<string, any>, index: number) => {
+            if (index === errors.length - 1) {
+              showFatalError(`${t('critical error')}:\n ${error.message}`)
+            } else {
+              showError(error.message)
+            }
+          })
+          setLoggingIn(false)
+          return
 
-      } else {
-        errors.forEach((error: Record<string, any>) => {
-          showError(error.message)
-        })
+        } else {
+          errors.forEach((error: Record<string, any>) => {
+            showError(error.message)
+          })
+        }
       }
-    }
+    })
 
     props.onSuccessfulLogin()
     setLoggingIn(false)

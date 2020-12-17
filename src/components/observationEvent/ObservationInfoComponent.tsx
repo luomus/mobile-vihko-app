@@ -35,8 +35,8 @@ const ObservationInfoComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const lang = i18n.language
-  const schema = props.schema.schemas[lang]?.schema?.properties?.gatherings?.items?.properties?.units
-  const fieldScopes = props.schema.schemas[lang]?.uiSchemaParams?.unitFieldScopes
+  const schema = props.schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units
+  const fieldScopes = props.schema[lang]?.uiSchemaParams?.unitFieldScopes
 
   if (!schema) {
     return null

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, BackHandler } from 'react-native'
+import MaterialTabs from 'react-native-material-tabs'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 import { LocationObject } from 'expo-location'
 import { LatLng } from 'react-native-maps'
 import {
@@ -12,7 +14,8 @@ import {
   newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
-  setObservationId
+  setObservationId,
+  switchSchema
 } from '../../stores/observation/actions'
 import {
   toggleCentered,
@@ -47,6 +50,7 @@ import { log } from '../../utilities/logger'
 import { HomeIntroductionComponent } from './HomeIntroductionComponent'
 import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
 import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
+import { availableForms } from '../../config/fields'
 
 interface BasicObject {
   [key: string]: any
@@ -81,7 +85,8 @@ const mapDispatchToProps = {
   setMessageState,
   clearRegion,
   toggleCentered,
-  setObservationId
+  setObservationId,
+  switchSchema,
 }
 
 const connector = connect(
@@ -105,6 +110,7 @@ const HomeComponent = (props: Props) => {
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
   const [unfinishedEvent, setUnfinishedEvent] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [selectedTab, setSelectedTab] = useState<number>(0)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
   let focusListener: any
@@ -119,7 +125,7 @@ const HomeComponent = (props: Props) => {
 
   useEffect(() => {
     loadObservationEvents()
-  }, [props.observationEvent, props.observing])
+  }, [props.observationEvent, props.observing, props.schema])
 
   useEffect(() => {
     focusListener = props.navigation.addListener('willFocus', ({ action }) => {
@@ -157,8 +163,9 @@ const HomeComponent = (props: Props) => {
       if (props.observing && index === indexLast) {
         return
       }
-
-      events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
+      if (event.formId === props.schema.formId) {
+        events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
+      }
     })
 
     setObservationEvents(events)
@@ -193,7 +200,7 @@ const HomeComponent = (props: Props) => {
     }
 
     const lang = i18n.language
-    let schema = props.schema.schemas[lang].schema
+    let schema = props.schema[lang].schema
 
     let observationEventDefaults = {}
     set(observationEventDefaults, 'editors', [userId])
@@ -204,7 +211,7 @@ const HomeComponent = (props: Props) => {
 
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
-      formID: 'JX.519',
+      formID: props.schema.formId,
       ...observationEvent
     }
 
@@ -354,6 +361,12 @@ const HomeComponent = (props: Props) => {
     }
   }
 
+  const switchSelectedForm = async (ind: number) => {
+    await props.switchSchema(availableForms[ind])
+    setSelectedTab(ind)
+    console.log(props.schema['fi'])
+  }
+
   if (loading) {
     return (
       <ActivityComponent text={'loading'} />
@@ -362,6 +375,14 @@ const HomeComponent = (props: Props) => {
     return (
       <>
         <ScrollView contentContainerStyle={Cs.outerVersionContainer}>
+          <MaterialTabs
+            items={availableForms}
+            selectedIndex={selectedTab}
+            onChange={switchSelectedForm}
+            barColor={Colors.headerBackground}
+            indicatorColor="whitesmoke"
+            activeTextColor="white"
+          />
           <View style={{ justifyContent: 'flex-start' }}>
             <UserInfoComponent onLogout={props.onLogout} />
             <View style={Cs.homeContainer}>
