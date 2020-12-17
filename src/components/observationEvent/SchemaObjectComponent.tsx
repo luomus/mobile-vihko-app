@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import Cs from '../styles/ContainerStyles'
-import Ts from '../styles/TextStyles'
+import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
 
 interface Props {
   title: string,

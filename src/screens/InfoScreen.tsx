@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import Colors from '../styles/Colors'
-import { InfoPageComponent } from '../components/InfoPageComponent'
+import { InfoPageComponent } from '../components/infoPage/InfoPageComponent'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Bs from '../styles/ButtonStyles'

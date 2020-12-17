@@ -1,14 +1,14 @@
 import React from 'react'
-import FormInputComponent from '../components/FormInputComponent'
-import FormImagePickerComponent from '../components/FormImagePickerComponent'
-import FormArrayComponent from '../components/FormArrayComponent'
-import FormPickerItemComponent from '../components/FormPickerItemComponent'
-import FormPickerComponent from '../components/FormPickerComponent'
-import FormDatePickerComponent from '../components/FormDatePickerComponent'
-import FormSwitchComponent from '../components/FormSwitchComponent'
+import FormInputComponent from '../components/formComponents/FormInputComponent'
+import FormImagePickerComponent from '../components/formComponents/FormImagePickerComponent'
+import FormArrayComponent from '../components/formComponents/FormArrayComponent'
+import FormPickerItemComponent from '../components/formComponents/FormPickerItemComponent'
+import FormPickerComponent from '../components/formComponents/FormPickerComponent'
+import FormDatePickerComponent from '../components/formComponents/FormDatePickerComponent'
+import FormSwitchComponent from '../components/formComponents/FormSwitchComponent'
 import uuid from 'react-native-uuid'
-import FormHiddenComponent from '../components/FormHiddenComponent'
-import FormAutocompleteComponent, { AutocompleteParams } from '../components/FormAutocompleteComponent'
+import FormHiddenComponent from '../components/formComponents/FormHiddenComponent'
+import FormAutocompleteComponent, { AutocompleteParams } from '../components/formComponents/FormAutocompleteComponent'
 
 
 export const createAutocompleteField = (

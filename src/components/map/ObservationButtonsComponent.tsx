@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import { Button } from 'react-native-elements'
-import Cs from '../styles/ContainerStyles'
-import Bs from '../styles/ButtonStyles'
+import Cs from '../../styles/ContainerStyles'
+import Bs from '../../styles/ButtonStyles'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { SchemaType } from '../stores/observation/types'
-import i18n from '../language/i18n'
+import { SchemaType } from '../../stores/observation/types'
+import i18n from '../../language/i18n'
 
 interface RootState {
   schema: SchemaType

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
-import Os from '../styles/OtherStyles'
-import Cs from '../styles/ContainerStyles'
+import Os from '../../styles/OtherStyles'
+import Cs from '../../styles/ContainerStyles'
 
 interface Props {
   title: string,

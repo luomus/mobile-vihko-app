@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Switch } from 'react-native'
-import Cs from '../styles/ContainerStyles'
-import Colors from '../styles/Colors'
+import Cs from '../../styles/ContainerStyles'
+import Colors from '../../styles/Colors'
 
 interface Props {
   title: string,

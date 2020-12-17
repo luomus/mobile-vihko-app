@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
-import { createInputElement } from '../builders/FormComponentBuilders'
-import Cs from '../styles/ContainerStyles'
-import Colors from '../styles/Colors'
+import { createInputElement } from '../../builders/FormComponentBuilders'
+import Cs from '../../styles/ContainerStyles'
+import Colors from '../../styles/Colors'
 
 interface Props {
   title: string,

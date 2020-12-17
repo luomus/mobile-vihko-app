@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
-import ObservationComponent from '../components/ObservationComponent'
+import ObservationComponent from '../components/forms/ObservationComponent'
 import Colors from '../styles/Colors'
 import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'

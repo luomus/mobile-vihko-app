@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Colors from '../styles/Colors'
-import WebViewComponent from '../components/WebViewComponent'
+import WebViewComponent from '../components/login/WebViewComponent'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
 type Props  = {

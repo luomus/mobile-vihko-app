@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, Picker } from 'react-native'
-import Cs from '../styles/ContainerStyles'
+import Cs from '../../styles/ContainerStyles'
 
 interface Props {
   title: string,

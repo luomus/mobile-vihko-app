@@ -1,9 +1,9 @@
 import React from 'react'
 import { Linking, Text, View } from 'react-native'
-import { privacyPolicyEn, privacyPolicyFi } from '../config/urls'
+import { privacyPolicyEn, privacyPolicyFi } from '../../config/urls'
 import { useTranslation } from 'react-i18next'
-import Cs from '../styles/ContainerStyles'
-import Ts from '../styles/TextStyles'
+import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
 
 export const InfoPageComponent = () => {
   const { t, i18n } = useTranslation()

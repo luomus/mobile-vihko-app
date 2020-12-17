@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Colors from '../styles/Colors'
-import ObservationEventComponent from '../components/ObservationEventComponent'
+import ObservationEventComponent from '../components/observationEvent/ObservationEventComponent'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 import { View } from 'react-native'
 import { Icon } from 'react-native-elements'

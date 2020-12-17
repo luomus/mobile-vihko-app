@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
-import Os from '../styles/OtherStyles'
+import Os from '../../styles/OtherStyles'
 
 interface Props {
   objectTitle: string,

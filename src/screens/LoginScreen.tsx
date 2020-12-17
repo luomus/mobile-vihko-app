@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Colors from '../styles/Colors'
-import LoginComponent from '../components/LoginComponent'
+import LoginComponent from '../components/login/LoginComponent'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 import { NavigationActions, StackActions } from 'react-navigation'
 import Cs from '../styles/ContainerStyles'

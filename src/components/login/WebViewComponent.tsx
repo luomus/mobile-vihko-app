@@ -1,7 +1,7 @@
 import React from 'react'
 import WebView from 'react-native-webview'
 import { connect, ConnectedProps } from 'react-redux'
-import { CredentialsType } from '../stores/user/types'
+import { CredentialsType } from '../../stores/user/types'
 import { useBackHandler } from '@react-native-community/hooks'
 
 

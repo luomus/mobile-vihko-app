@@ -1,8 +1,8 @@
 import React from 'react'
 import { Dimensions, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements'
-import Cs from '../styles/ContainerStyles'
-import Cl from '../styles/Colors'
+import Cs from '../../styles/ContainerStyles'
+import Cl from '../../styles/Colors'
 
 type Props = {
   onPress: () => void

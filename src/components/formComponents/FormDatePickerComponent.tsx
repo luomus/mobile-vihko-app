@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
-import Os from '../styles/OtherStyles'
-import Cs from '../styles/ContainerStyles'
+import Os from '../../styles/OtherStyles'
+import Cs from '../../styles/ContainerStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../utilities/dateHelper'
-import Colors from '../styles/Colors'
+import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../utilities/dateHelper'
+import Colors from '../../styles/Colors'
 
 interface Props {
   title: string,

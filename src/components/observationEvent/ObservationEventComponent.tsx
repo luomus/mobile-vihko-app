@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import { useBackHandler } from '@react-native-community/hooks'
-import Cs from '../styles/ContainerStyles'
-import Ts from '../styles/TextStyles'
-import Bs from '../styles/ButtonStyles'
+import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
+import Bs from '../../styles/ButtonStyles'
 import { connect, ConnectedProps } from 'react-redux'
 import {
   replaceObservationEvents,
@@ -12,16 +12,16 @@ import {
   uploadObservationEvent,
   deleteObservationEvent,
   deleteObservation,
-} from '../stores/observation/actions'
-import { setMessageState, clearMessageState } from '../stores/message/actions'
-import i18n from '../language/i18n'
+} from '../../stores/observation/actions'
+import { setMessageState, clearMessageState } from '../../stores/message/actions'
+import i18n from '../../language/i18n'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
-import MessageComponent from './MessageComponent'
-import { parseDateForUI } from '../utilities/dateHelper'
-import { CredentialsType } from '../stores/user/types'
-import { ObservationEventType } from '../stores/observation/types'
-import ActivityComponent from './ActivityComponent'
+import MessageComponent from '../general/MessageComponent'
+import { parseDateForUI } from '../../utilities/dateHelper'
+import { CredentialsType } from '../../stores/user/types'
+import { ObservationEventType } from '../../stores/observation/types'
+import ActivityComponent from '../general/ActivityComponent'
 
 interface RootState {
   observationEvent: ObservationEventType,

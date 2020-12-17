@@ -1,8 +1,8 @@
 import React from 'react'
 import { Text, View, ActivityIndicator } from 'react-native'
-import Cs from '../styles/ContainerStyles'
-import Ts from '../styles/TextStyles'
-import Colors from '../styles/Colors'
+import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 import { useTranslation } from 'react-i18next'
 import MessageComponent from './MessageComponent'
 type Props = {

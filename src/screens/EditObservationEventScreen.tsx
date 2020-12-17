@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import EditObservationEventComponent from '../components/EditObservationEventComponent'
+import EditObservationEventComponent from '../components/forms/EditObservationEventComponent'
 import Colors from '../styles/Colors'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 import { Icon } from 'react-native-elements'

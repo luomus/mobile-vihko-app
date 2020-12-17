@@ -1,9 +1,9 @@
 import React from 'react'
 import MapView, { Marker, Region, UrlTile } from 'react-native-maps'
-import { mapUrl as urlTemplate } from '../config/urls'
-import { convertPointToLatLng } from '../converters/geoJSONConverters'
-import Cs from '../styles/ContainerStyles'
-import Cl from '../styles/Colors'
+import { mapUrl as urlTemplate } from '../../config/urls'
+import { convertPointToLatLng } from '../../converters/geoJSONConverters'
+import Cs from '../../styles/ContainerStyles'
+import Cl from '../../styles/Colors'
 
 interface Props {
   observation: Record<string, any>,

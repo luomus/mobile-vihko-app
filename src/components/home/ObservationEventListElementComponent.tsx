@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
-import Ts from '../styles/TextStyles'
+import Ts from '../../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
-import { parseDateForUI } from '../utilities/dateHelper'
+import { parseDateForUI } from '../../utilities/dateHelper'
 import { Icon } from 'react-native-elements'
-import Cs from '../styles/ContainerStyles'
+import Cs from '../../styles/ContainerStyles'
 
 interface Props {
   observationEvent: Record<string, any>,
