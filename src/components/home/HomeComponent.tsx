@@ -121,6 +121,12 @@ const HomeComponent = (props: Props) => {
       props.toggleObserving()
       setUnfinishedEvent(true)
     }
+
+    const initTab = async () => {
+      await props.switchSchema(availableForms[0])
+    }
+
+    initTab()
   }, [])
 
   useEffect(() => {
@@ -163,7 +169,7 @@ const HomeComponent = (props: Props) => {
       if (props.observing && index === indexLast) {
         return
       }
-      if (event.formId === props.schema.formId) {
+      if (event.formID === props.schema.formID) {
         events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
       }
     })
@@ -211,7 +217,7 @@ const HomeComponent = (props: Props) => {
 
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
-      formID: props.schema.formId,
+      formID: props.schema.formID,
       ...observationEvent
     }
 
@@ -333,7 +339,9 @@ const HomeComponent = (props: Props) => {
       stopLocationAsync()
     }
 
-    props.onFinishObservationEvent()
+    if (event.formID === 'JX.519') {
+      props.onFinishObservationEvent()
+    }
   }
 
   const stopObserving = () => {
@@ -362,9 +370,10 @@ const HomeComponent = (props: Props) => {
   }
 
   const switchSelectedForm = async (ind: number) => {
-    await props.switchSchema(availableForms[ind])
-    setSelectedTab(ind)
-    console.log(props.schema['fi'])
+    if (!props.observing) {
+      await props.switchSchema(availableForms[ind])
+      setSelectedTab(ind)
+    }
   }
 
   if (loading) {
@@ -375,38 +384,44 @@ const HomeComponent = (props: Props) => {
     return (
       <>
         <ScrollView contentContainerStyle={Cs.outerVersionContainer}>
-          <MaterialTabs
-            items={availableForms}
-            selectedIndex={selectedTab}
-            onChange={switchSelectedForm}
-            barColor={Colors.headerBackground}
-            indicatorColor="whitesmoke"
-            activeTextColor="white"
-          />
-          <View style={{ justifyContent: 'flex-start' }}>
-            <UserInfoComponent onLogout={props.onLogout} />
-            <View style={Cs.homeContainer}>
-              <HomeIntroductionComponent />
-              <View style={{ height: 10 }}></View>
-              {props.observing ?
-                <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
-                :
-                <NewEventWithoutZoneComponent beginObservationEvent={beginObservationEvent} />
-              }
-              <View style={{ height: 10 }}></View>
-              <View style={Cs.observationEventListContainer}>
-                <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
-                {observationEvents}
-              </View>
-              <View style={{ height: 10 }}></View>
+          <View style={Cs.homeScrollContainer}>
+            <View>
+              <MaterialTabs
+                items={[t('trip report form'), t('fungi atlas')]}
+                selectedIndex={selectedTab}
+                onChange={switchSelectedForm}
+                barColor={Colors.blueBackground}
+                indicatorColor="black"
+                activeTextColor="black"
+                inactiveTextColor="grey"
+              />
             </View>
-          </View>
-          <View style={Cs.versionContainer}>
-            <Text
-              style={Ts.alignedRightText}
-              onPress={() => setPressCounter(pressCounter + 1)}>
-              {t('version')} {AppJSON.expo.version}
-            </Text>
+            <View style={{ height: 10 }}></View>
+            <View style={{ justifyContent: 'flex-start' }}>
+              <UserInfoComponent onLogout={props.onLogout} />
+              <View style={Cs.homeContainer}>
+                <HomeIntroductionComponent />
+                <View style={{ height: 10 }}></View>
+                {props.observing ?
+                  <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
+                  :
+                  <NewEventWithoutZoneComponent beginObservationEvent={beginObservationEvent} />
+                }
+                <View style={{ height: 10 }}></View>
+                <View style={Cs.observationEventListContainer}>
+                  <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
+                  {observationEvents}
+                </View>
+                <View style={{ height: 10 }}></View>
+              </View>
+            </View>
+            <View style={Cs.versionContainer}>
+              <Text
+                style={Ts.alignedRightText}
+                onPress={() => setPressCounter(pressCounter + 1)}>
+                {t('version')} {AppJSON.expo.version}
+              </Text>
+            </View>
           </View>
         </ScrollView>
         <MessageComponent />

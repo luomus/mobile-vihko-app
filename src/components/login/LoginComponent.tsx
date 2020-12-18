@@ -124,7 +124,7 @@ const LoginComponent = (props: Props) => {
       showError(error.message)
     }
 
-    availableForms.forEach(async formId => {
+    await Promise.all(availableForms.map(async formId => {
       try {
         await props.initSchema(false, formId)
       } catch (errors) {
@@ -146,6 +146,7 @@ const LoginComponent = (props: Props) => {
         }
       }
     })
+    )
 
     props.onSuccessfulLogin()
     setLoggingIn(false)
@@ -162,7 +163,7 @@ const LoginComponent = (props: Props) => {
       setLoggingIn(false)
     } catch (error) {
       log.error({
-        location: '/components/LoginComponent.tsx login()', 
+        location: '/components/LoginComponent.tsx login()',
         error: error.response.data.error
       })
       setLoggingIn(false)

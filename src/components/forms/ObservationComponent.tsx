@@ -21,7 +21,7 @@ import { setEditing } from '../../stores/map/actions'
 import { EditingType } from '../../stores/map/types'
 import { lineStringConstructor } from '../../converters/geoJSONConverters'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
-import { JX519Fields, overrideJX519Fields } from '../../config/fields'
+import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields } from '../../config/fields'
 
 interface RootState {
   observation: Point,
@@ -143,19 +143,23 @@ const ObservationComponent = (props: Props) => {
       //flying squirrel edit observation
       if (observation?.rules) {
         initForm(setForm, observation, observation.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
-      //trip form new observation
-      } else if (observation) {
+        //trip form new observation
+      } else if (props.schema.formID === 'JX.519') {
         initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
+      } else if (props.schema.formID === 'JX.652') {
+        initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX652Fields, overrideJX652Fields, lang)
       }
-    //new observations
+      //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
         initForm(setForm, defaultObject, props.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
-      //trip form edit observation
-      } else (
+        //trip form edit observation
+      } else if (props.schema.formID === 'JX.519') {
         initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
-      )
+      } else if (props.schema.formID === 'JX.652') {
+        initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX652Fields, overrideJX652Fields, lang)
+      }
     }
   }
 

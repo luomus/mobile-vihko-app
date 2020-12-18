@@ -720,7 +720,7 @@ export const switchSchema = (formId: string): ThunkAction<Promise<void>, any, vo
     let languages: string[] = ['Fi', 'En', 'Sv']
 
     let schemas: Record<string, any> = {
-      formId: formId,
+      formID: formId,
       fi: null,
       en: null,
       sv: null

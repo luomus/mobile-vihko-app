@@ -329,6 +329,9 @@ const ContainerStyles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
     flexDirection: 'column'
+  },
+  homeScrollContainer: {
+    flexDirection: 'column'
   }
 })
 

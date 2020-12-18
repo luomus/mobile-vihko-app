@@ -52,7 +52,35 @@ const FormAutocompleteComponent = (props: Props) => {
     if (allFound) {
       setSelected(true)
     }
+
+    if (RegExp(/MX.*/).test(props.defaultValue)) {
+      initAutocompleteOnMCode(props.defaultValue)
+    }
   }, [])
+
+  const initAutocompleteOnMCode = async (query: string) => {
+    try {
+      setLoading(true)
+
+      let res = await getTaxonAutocomplete(target, query.toLowerCase(), props.lang, cancel)
+
+      if (res.result[0]?.payload?.matchType === 'exactMatches') {
+        const payload = res.result[0].payload
+        setSelected(true)
+
+        if (payload?.vernacularName) {
+          setQuery(payload.vernacularName)
+        } else {
+          setQuery(payload.scientificName)
+        }
+      }
+
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const wipeOldSelection = () => {
     Object.keys(transform).forEach(key => {
