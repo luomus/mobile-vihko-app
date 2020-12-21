@@ -332,6 +332,14 @@ const ContainerStyles = StyleSheet.create({
   },
   homeScrollContainer: {
     flexDirection: 'column'
+  },
+  sendEventModalContainer: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.white
+  },
+  iconStretchContainer: {
+    borderWidth: 150
   }
 })
 

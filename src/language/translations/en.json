@@ -109,6 +109,8 @@
   "select language": "Select language",
   "send": "SEND",
   "send observation event to server?": "Are you sure you want to send this observation event to the server?",
+  "send private": "SEND PRIVATELY",
+  "send public": "SEND PUBLICLY",
   "sending": "Sending...",
   "species": "Species",
   "status code": "status code: ",

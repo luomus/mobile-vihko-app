@@ -205,7 +205,7 @@ const defineRecordBasis = (event: Record<string, any>): Record<string, any> => {
   return modifiedEvent
 }
 
-export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
+export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
 
@@ -224,6 +224,11 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
         severity: 'low',
         message: `${i18n.t('post failure')} ${error.message}`
       })
+    }
+
+    //define whether the event will be released publicly or privately
+    if (!isPublic) {
+      event.publicityRestrictions = 'MZ.publicityRestrictionsPrivate'
     }
 
     //define record basis for each unit, depending on whether the unit has images attached

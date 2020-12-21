@@ -109,6 +109,8 @@
   "select language": "Valitse kieli",
   "send": "LÄHETÄ",
   "send observation event to server?": "Haluatko varmasti tallentaa tämän havaintotapahtuman Lajitietokeskukseen?",
+  "send private": "LÄHETÄ YKSITYISENÄ",
+  "send public": "LÄHETÄ JULKISENA",
   "sending": "Lähetetään...",
   "species": "Laji",
   "status code": "virhekoodi:",
