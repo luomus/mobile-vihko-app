@@ -73,7 +73,7 @@ export const overrideJX652Fields = {
     params: {
       target: 'taxon',
       filters: {
-        informalTaxonGroups: 'MVL.233, MVL.321'
+        informalTaxonGroup: 'MVL.233,MVL.321'
       },
       valueField: 'identifications_0_taxon',
       transform: {

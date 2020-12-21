@@ -7,7 +7,8 @@ import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { get, debounce } from 'lodash'
-import { Canceler } from 'axios'
+import { Canceler, CancelToken } from 'axios'
+import uuid from 'react-native-uuid'
 
 export interface AutocompleteParams {
   target: string,
@@ -33,7 +34,7 @@ const FormAutocompleteComponent = (props: Props) => {
   const [hideResult, setHideResult] = useState<boolean>(true)
   const [selected, setSelected] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const { target, valueField, transform } = props.autocompleteParams
+  const { target, filters, valueField, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
 
   useEffect(() => {
@@ -108,13 +109,17 @@ const FormAutocompleteComponent = (props: Props) => {
   }
 
   const queryAutocomplete = async (query: string) => {
+    const setCancelToken = (c: Canceler) => {
+      cancel = c
+    }
+
     try {
       //fire request cancel if last is still unning to avoid getting responses in wrong order
       if (cancel) {
         cancel()
       }
 
-      let res = await getTaxonAutocomplete(target, query.toLowerCase(), props.lang, cancel)
+      let res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, setCancelToken)
 
       setOptions(removeDuplicates(res.result))
       setOldQuery(res.query)
@@ -183,16 +188,16 @@ const FormAutocompleteComponent = (props: Props) => {
       if (startIndex === 0 && isScientific) {
         const cappedQuery = query.charAt(0).toUpperCase() + query.slice(1)
 
-        text.push(<Text style={{ fontWeight: 'bold' }}>{cappedQuery}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold' }}>{cappedQuery}</Text>)
       } else if (startIndex === 0) {
-        text.push(<Text style={{ fontWeight: 'bold' }}>{query}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold' }}>{query}</Text>)
       } else {
-        text.push(<Text>{name.slice(0, startIndex)}</Text>)
-        text.push(<Text style={{ fontWeight: 'bold' }}>{query}</Text>)
+        text.push(<Text key={uuid.v1()}>{name.slice(0, startIndex)}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold' }}>{query}</Text>)
       }
 
       if (endIndex !== name.length - 1) {
-        text.push(<Text>{name.slice(endIndex)}</Text>)
+        text.push(<Text key={uuid.v1()}>{name.slice(endIndex)}</Text>)
       }
 
       return text

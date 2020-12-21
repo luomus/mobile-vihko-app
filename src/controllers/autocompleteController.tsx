@@ -3,15 +3,21 @@ import axios, { Canceler } from 'axios'
 
 const CancelToken = axios.CancelToken
 
-export const getTaxonAutocomplete = async (target: string, q: string, lang: string, cancel: undefined | Canceler) => {
-
-  const params = {
+export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any>, lang: string, setCancelToken: (c: Canceler) => void) => {
+  let params = {
     'q': q,
     'lang': lang,
     'limit': 5,
     'includePayload': true,
     'matchType': 'exact,partial',
     'access_token': accessToken
+  }
+
+  if (filters) {
+    params = {
+      ...filters,
+      ...params,
+    }
   }
 
   const headers = {
@@ -21,9 +27,7 @@ export const getTaxonAutocomplete = async (target: string, q: string, lang: stri
   const result = await axios.get(autocompleteUrl + target, {
     params,
     headers,
-    cancelToken: new CancelToken((c) => {
-      cancel = c
-    }),
+    cancelToken: new CancelToken((c) => setCancelToken(c)),
   })
 
   return {
