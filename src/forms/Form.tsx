@@ -1,4 +1,4 @@
-import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField } from '../builders/FormComponentBuilders'
+import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker } from '../builders/FormComponentBuilders'
 import { get } from 'lodash'
 import { parseObjectForFieldParams } from '../parsers/SchemaToInputParser'
 
@@ -86,9 +86,13 @@ const Form = (
 
     //if current path corresponds to any of the override fields, handle the special case
     if (overrideFields && Object.keys(overrideFields).includes(path)) {
+      console.log(path)
       switch (overrideFields[path].field) {
         case 'autocomplete':
           toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, register, setValue, watch, unregister, overrideFields[path].params, lang))
+          return
+        case 'imagesKeywords':
+          toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, register, setValue, overrideFields[path].params, lang))
           return
       }
     }

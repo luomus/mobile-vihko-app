@@ -73,14 +73,23 @@ const ObservationInfoComponent = (props: Props) => {
             </View>
           </View>
           <ScrollView horizontal={true} style={Cs.observationInfoImageContainer}>
-            {props.observation.images.map((uri: string) => (
-              <View style={{ paddingRight: 5 }} key={uri}>
-                <Image
-                  source={{ uri: uri }}
-                  style={{ width: 100, height: 100 }}
-                />
-              </View>
-            ))}
+            {props.observation.images.map((image: any) => {
+              let uri = ''
+              if (typeof image === 'object') {
+                uri = image.uri
+              } else {
+                uri = image
+              }
+
+              return (
+                <View style={{ paddingRight: 5 }} key={uri}>
+                  <Image
+                    source={{ uri: uri }}
+                    style={{ width: 100, height: 100 }}
+                  />
+                </View>
+              )
+            })}
           </ScrollView>
         </View>
         : null

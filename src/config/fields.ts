@@ -92,6 +92,27 @@ export const overrideJX652Fields = {
         'key': 'substrateSpecies'
       }
     }
+  },
+  'images': {
+    field: 'imagesKeywords',
+    params: {
+      keywords: [
+        'species',
+        'habitat',
+      ],
+      fi: [
+        'laji',
+        'kasvupaikka',
+      ],
+      sv: [
+        'arter',
+        'livsmiljö',
+      ],
+      en: [
+        'species',
+        'habitat',
+      ]
+    }
   }
 }
 

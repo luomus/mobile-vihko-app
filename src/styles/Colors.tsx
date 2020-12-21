@@ -5,6 +5,7 @@ export default {
   neutralColor: '#1D76B2',
   positiveColor: '#5CB85C',
   negativeColor: '#D9534F',
+  privateColor: '#F0AD4E',
   neutralButton: '#1D76B2',
   positiveButton: '#5CB85C',
   negativeButton: '#D9534F',

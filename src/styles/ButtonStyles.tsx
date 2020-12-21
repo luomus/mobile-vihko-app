@@ -79,7 +79,7 @@ const ButtonStyles = StyleSheet.create({
     margin: 2
   },
   sendEventModalNeutralButton: {
-    backgroundColor: Colors.neutralButton,
+    backgroundColor: Colors.privateColor,
     width: '60%',
     alignSelf: 'center',
     margin: 2

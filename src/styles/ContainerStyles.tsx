@@ -252,7 +252,8 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   singleImageContainer: {
-    padding: 5
+    padding: 5,
+    marginRight: 5
   },
   removeIconContainer: {
     position: 'absolute',
@@ -340,6 +341,12 @@ const ContainerStyles = StyleSheet.create({
   },
   iconStretchContainer: {
     borderWidth: 150
+  },
+  keywordSingleImageContainer: {
+    padding: 5,
+    borderColor: 'grey',
+    borderWidth: 1,
+    marginRight: 5
   }
 })
 

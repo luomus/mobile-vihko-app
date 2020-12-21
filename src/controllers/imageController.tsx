@@ -81,8 +81,8 @@ const getMaxFileSizeAsString = () => {
   return maxSize + ' Mt'
 }
 
-export const saveMedias = async (uris: string[], credentials: CredentialsType) => {
-  let images = null
+export const saveMedias = async (images: any, credentials: CredentialsType) => {
+  let imageFiles = null
   const params = {
     'personToken': credentials.token,
     'access_token': accessToken
@@ -92,8 +92,18 @@ export const saveMedias = async (uris: string[], credentials: CredentialsType) =
     'content-type': 'application/json'
   }
 
+  let uris: string[] = []
+  let keywords: string[] = []
+
+  if (typeof images?.[0] === 'object') {
+    uris = images.map((image: Record<string, any>) => image.uri)
+    keywords = images.map((image: Record<string, any>) => image.keywords)
+  } else {
+    uris = images
+  }
+
   try {
-    images = await processImages(uris)
+    imageFiles = await processImages(uris)
   } catch (error) {
     throw new Error('error processing images before sending')
   }
@@ -103,7 +113,7 @@ export const saveMedias = async (uris: string[], credentials: CredentialsType) =
 
   const formDataBody = new FormData()
 
-  images.forEach(image => {
+  imageFiles.forEach(image => {
     if (!ALLOWED_FILE_TYPES.includes(image.type)) {
       invalidFile = true
     } else if (image.size > MAX_FILE_SIZE) {
@@ -127,19 +137,32 @@ export const saveMedias = async (uris: string[], credentials: CredentialsType) =
     }
   }
 
-  const metadata = getDefaultMetadata(credentials.user)
+  const defaultMetadata = getDefaultMetadata(credentials.user)
 
   //for each tempid in response send metadata and store the received permanent ID
   try {
-    const idArr: string[] = await Promise.all(res.data.map(async (tempImage: BasicObject) => {
+    const idArr: string[] = await Promise.all(res.data.map(async (tempImage: BasicObject, index: number) => {
       const tempId = tempImage.id
+      const keyword: string = keywords[index]
+      let metadata
+
+      if (keywords) {
+        metadata = {
+          ...defaultMetadata,
+          keyword: [
+            keyword
+          ]
+        }
+      } else {
+        metadata = defaultMetadata
+      }
 
       try {
         res = await axios.post(
           postImageUrl + '/' + tempId,
           JSON.stringify(metadata),
           {
-            params, 
+            params,
             headers
           }
         )
