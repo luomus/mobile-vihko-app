@@ -24,7 +24,8 @@ interface Props {
   watch: Function,
   unregister: Function,
   autocompleteParams: AutocompleteParams,
-  lang: string
+  lang: string,
+  index: number,
 }
 
 const FormAutocompleteComponent = (props: Props) => {
@@ -63,7 +64,7 @@ const FormAutocompleteComponent = (props: Props) => {
     try {
       setLoading(true)
 
-      let res = await getTaxonAutocomplete(target, query.toLowerCase(), props.lang, cancel)
+      let res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, setCancelToken)
 
       if (res.result[0]?.payload?.matchType === 'exactMatches') {
         const payload = res.result[0].payload
@@ -108,11 +109,11 @@ const FormAutocompleteComponent = (props: Props) => {
     })
   }
 
-  const queryAutocomplete = async (query: string) => {
-    const setCancelToken = (c: Canceler) => {
-      cancel = c
-    }
+  const setCancelToken = (c: Canceler) => {
+    cancel = c
+  }
 
+  const queryAutocomplete = async (query: string) => {
     try {
       //fire request cancel if last is still unning to avoid getting responses in wrong order
       if (cancel) {
@@ -250,7 +251,7 @@ const FormAutocompleteComponent = (props: Props) => {
       <Text>{props.title}</Text>
       <View style={{ paddingBottom: 35 }}>
         <Autocomplete
-          containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: 1 }}
+          containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: props.index }}
           data={options}
           onFocus={onFocus}
           onBlur={onBlur}

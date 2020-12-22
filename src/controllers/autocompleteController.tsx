@@ -3,7 +3,7 @@ import axios, { Canceler } from 'axios'
 
 const CancelToken = axios.CancelToken
 
-export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any>, lang: string, setCancelToken: (c: Canceler) => void) => {
+export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any> | null, lang: string, setCancelToken: (c: Canceler) => void) => {
   let params = {
     'q': q,
     'lang': lang,
