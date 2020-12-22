@@ -65,8 +65,8 @@ export default class MapScreen extends Component<NavigationStackScreenProps<Prop
     return (
       <MapComponent
         onPressHome={(obsStopped: boolean) => navigate('Home', { obsStopped })}
-        onPressObservation={(rules: Record<string, any>, defaults: Record<string, any>) =>
-          navigate('Observation', { rules, defaults })}
+        onPressObservation={(isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) =>
+          navigate('Observation', { isNew, rules, defaults })}
         onPressEditing={(fromMap?: boolean) => navigate('Observation', { fromMap })}
       >
         <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />

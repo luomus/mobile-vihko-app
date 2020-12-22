@@ -77,7 +77,7 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPressHome: (obsStopped: boolean) => void,
-  onPressObservation: (rules: Record<string, any>, defaults: Record<string, any>) => void,
+  onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean) => void,
   children?: ReactChild
 }

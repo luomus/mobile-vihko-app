@@ -42,9 +42,8 @@ export default class ObservationScreen extends Component<NavigationStackScreenPr
 
   static navigationOptions = ({ screenProps, navigation }: any) => {
     const { params = {} } = navigation.state
-
     return {
-      title: screenProps.t(navigation.state.params?.rules ? 'add observation' : 'edit observation'),
+      title: screenProps.t(navigation.state.params?.isNew ? 'add observation' : 'edit observation'),
       headerStyle: {
         backgroundColor: Colors.headerBackground
       },
@@ -62,7 +61,7 @@ export default class ObservationScreen extends Component<NavigationStackScreenPr
     const { navigate } = this.props.navigation
     //handles situation where fromMap can purposefully be undefined
     let fromMap = false
-    if (this.props.navigation.state.params && this.props.navigation.state.params.fromMap) {
+    if (this.props.navigation?.state?.params?.fromMap) {
       fromMap = true
     }
 

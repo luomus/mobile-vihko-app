@@ -58,6 +58,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   toObservationEvent: (id: string) => void,
   toMap: () => void,
+  isNew?: boolean,
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
   fromMap?: boolean,
