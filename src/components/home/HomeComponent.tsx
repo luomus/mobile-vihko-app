@@ -118,13 +118,23 @@ const HomeComponent = (props: Props) => {
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
-    if (props.observationEvent.events.length > 0 && !props.observationEvent.events[props.observationEvent.events.length - 1].gatheringEvent.dateEnd) {
+    const length = props.observationEvent.events.length
+    const isUnfinished = length && !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+
+    if (isUnfinished) {
       props.toggleObserving()
       setUnfinishedEvent(true)
     }
 
     const initTab = async () => {
-      await props.switchSchema(availableForms[0])
+      if (isUnfinished) {
+        const formID = props.observationEvent.events[length - 1].formID
+
+        setSelectedTab(availableForms.findIndex(form => form === formID))
+        await props.switchSchema(formID)
+      } else {
+        await props.switchSchema(availableForms[0])
+      }
     }
 
     initTab()
@@ -294,12 +304,6 @@ const HomeComponent = (props: Props) => {
     setUnfinishedEvent(false)
     let event = clone(props.observationEvent.events?.[props.observationEvent.events.length - 1])
 
-    //stores event id into redux so that EditObservationEventComponent knows which event is being finished
-    props.setObservationId({
-      eventId: event.id,
-      unitId: null
-    })
-
     if (event) {
       const oldGathering = event.gatheringEvent
       event.gatheringEvent = {
@@ -341,6 +345,12 @@ const HomeComponent = (props: Props) => {
     }
 
     if (event.formID === 'JX.519') {
+      //stores event id into redux so that EditObservationEventComponent knows which event is being finished
+      props.setObservationId({
+        eventId: event.id,
+        unitId: null
+      })
+
       props.onFinishObservationEvent()
     }
   }
@@ -371,7 +381,7 @@ const HomeComponent = (props: Props) => {
   }
 
   const switchSelectedForm = async (ind: number) => {
-    if (!props.observing) {
+    if (!props.observing && !unfinishedEvent) {
       await props.switchSchema(availableForms[ind])
       setSelectedTab(ind)
     }
