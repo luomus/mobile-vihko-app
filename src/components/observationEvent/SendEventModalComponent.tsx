@@ -12,7 +12,7 @@ type Props = {
   sendObservationEvent: (isPublic: boolean) => Promise<void>
 }
 
-const sendEventModalComponent = (props: Props) => {
+const SendEventModalComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
@@ -33,7 +33,6 @@ const sendEventModalComponent = (props: Props) => {
           title={t('send private')}
           buttonStyle={Bs.sendEventModalNeutralButton}
           icon={<Icon type={'material-community'} name={'security'} color={'white'} />}
-          iconContainerStyle={Cs.iconStretchContainer}
           iconRight={true}
           onPress={ () => {props.sendObservationEvent(false)} }
         />
@@ -41,7 +40,6 @@ const sendEventModalComponent = (props: Props) => {
           title={t('cancel')}
           buttonStyle={Bs.sendEventModalNegativeButton}
           icon={<Icon type={'material-community'} name={'close'} color={'white'} />}
-          iconContainerStyle={Cs.iconStretchContainer}
           iconRight={true}
           onPress={() => { props.setModalVisibility(false) }}
         />
@@ -50,4 +48,4 @@ const sendEventModalComponent = (props: Props) => {
   )
 }
 
-export default sendEventModalComponent
+export default SendEventModalComponent
