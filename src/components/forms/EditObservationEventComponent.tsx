@@ -139,7 +139,6 @@ const EditObservationEventComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
-          <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.formContainer}>
             {form}
           </View>

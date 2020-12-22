@@ -3,8 +3,12 @@ import { get } from 'lodash'
 //receives a path to element in observation or observation event object, an attempts to locate it from schema,
 //jumping over properties- and items-keys
 export const parsePathForFieldParams = (inputObject: Record<string, any>, path: Array<string>) => {
+
   const target = path.reduce((outputObject: Record<string, any>, key: string) => {
-    if (!outputObject[key] && outputObject['items']) {
+
+    if (key === '0') {
+      return get(outputObject, ['items', 'properties'], null)
+    } else if (!outputObject[key] && outputObject['items']) {
       return get(outputObject, ['items', 'properties', key], null)
     } else if (!outputObject[key] && outputObject['properties']) {
       return get(outputObject, ['properties', key], null)
@@ -27,7 +31,7 @@ export const parseObjectForFieldParams = (inputObject: Record<string, any>) => {
   let defaultValue: string = ''
 
   const formEnumDict = (enumKey: string[], enumNames: string[]) => {
-    let dict: { [key: string]: any} = {}
+    let dict: { [key: string]: any } = {}
     enumKey.forEach((k: string, index: number) => {
       dict[k] = enumNames[index]
     })

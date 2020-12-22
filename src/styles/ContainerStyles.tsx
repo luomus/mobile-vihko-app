@@ -166,10 +166,10 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   observationPropertyTitle: {
-    width: '40%',
+    width: '45%',
   },
   observationPropertyValue: {
-    width: '60%',
+    width: '55%',
     paddingLeft: 10
   },
   observationInfoContainer: {
