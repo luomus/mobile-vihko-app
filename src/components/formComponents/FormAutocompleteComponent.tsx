@@ -188,16 +188,16 @@ const FormAutocompleteComponent = (props: Props) => {
       if (startIndex === 0 && isScientific) {
         const cappedQuery = query.charAt(0).toUpperCase() + query.slice(1)
 
-        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold' }}>{cappedQuery}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{cappedQuery}</Text>)
       } else if (startIndex === 0) {
-        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold' }}>{query}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{query}</Text>)
       } else {
-        text.push(<Text key={uuid.v1()}>{name.slice(0, startIndex)}</Text>)
-        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold' }}>{query}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontSize: 15 }}>{name.slice(0, startIndex)}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{query}</Text>)
       }
 
       if (endIndex !== name.length - 1) {
-        text.push(<Text key={uuid.v1()}>{name.slice(endIndex)}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontSize: 15 }}>{name.slice(endIndex)}</Text>)
       }
 
       return text
@@ -205,14 +205,14 @@ const FormAutocompleteComponent = (props: Props) => {
 
     if (item?.payload?.nameType === 'MX.scientificName') {
       return (
-        <View>
-          <Text style={{ fontStyle: 'italic' }}>{addBolding(item?.value, oldQuery, true)}</Text>
+        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
+          <Text style={{ fontStyle: 'italic', fontSize: 15 }}>{addBolding(item?.value, oldQuery, true)}</Text>
         </View>
       )
     } else {
       return (
-        <View>
-          <Text>{addBolding(item?.value, oldQuery, false)}{' - '}<Text style={{ fontStyle: 'italic' }}>{item?.payload?.scientificName}</Text></Text>
+        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
+          <Text>{addBolding(item?.value, oldQuery, false)}{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
         </View>
       )
     }
