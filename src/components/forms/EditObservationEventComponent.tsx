@@ -53,7 +53,7 @@ type Props = PropsFromRedux & {
 const EditObservationEventComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
   const [ event, setEvent ] = useState<Record<string, any> | undefined>(undefined)
-  const [ form, setForm ] = useState<Array<Element | undefined>>()
+  const [ form, setForm ] = useState<Array<Element> | undefined>(undefined)
   const [ saving, setSaving ] = useState<boolean>(false)
   //for react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
@@ -64,6 +64,7 @@ const EditObservationEventComponent = (props: Props) => {
 
     return () => {
       props.clearObservationId()
+      setForm(undefined)
     }
   }, [])
 
@@ -110,7 +111,11 @@ const EditObservationEventComponent = (props: Props) => {
         props.setMessageState({
           type: 'msg',
           messageContent: t('changes saved'),
-          onOk: () => props.onPress(event.id)
+          onOk: () => {
+            props.onPress(event.id)
+            props.clearObservationId()
+            setForm(undefined)
+          }
         })
       } catch (error) {
         props.setMessageState({
