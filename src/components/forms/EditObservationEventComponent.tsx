@@ -61,6 +61,10 @@ const EditObservationEventComponent = (props: Props) => {
 
   useEffect(() => {
     init()
+
+    return () => {
+      props.clearObservationId()
+    }
   }, [])
 
   const init = () => {

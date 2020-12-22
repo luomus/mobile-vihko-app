@@ -575,7 +575,7 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
   return async dispatch => {
     let languages: string[] = ['fi', 'en', 'sv']
     let schemas: Record<string, any> = {
-      formId: formId,
+      formID: formId,
       fi: null,
       en: null,
       sv: null
