@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactChild } from 'react'
 import { View, Text, ScrollView, BackHandler } from 'react-native'
 import MaterialTabs from 'react-native-material-tabs'
 import UserInfoComponent from './UserInfoComponent'
@@ -103,6 +103,7 @@ type Props = PropsFromRedux & {
   onFinishObservationEvent: () => void,
   obsStopped: boolean,
   navigation: any,
+  children?: ReactChild
 }
 
 const HomeComponent = (props: Props) => {
@@ -424,6 +425,7 @@ const HomeComponent = (props: Props) => {
             </View>
           </View>
         </ScrollView>
+        {props.children}
         <MessageComponent />
       </>
     )

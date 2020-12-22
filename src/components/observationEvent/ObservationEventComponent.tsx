@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ReactChild } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -58,7 +58,8 @@ type Props = PropsFromRedux & {
   onPressHome: () => void,
   onPressObservation: () => void,
   onPressObservationEvent: () => void,
-  isFocused: () => boolean
+  isFocused: () => boolean,
+  children?: ReactChild
 }
 
 const ObservationEventComponent = (props: Props) => {
@@ -224,6 +225,7 @@ const ObservationEventComponent = (props: Props) => {
               <View style={{ padding: 5 }}></View>
             </View>
           )}
+          {props.children}
           <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility} sendObservationEvent={sendObservationEvent}/>
           <MessageComponent />
         </ScrollView>

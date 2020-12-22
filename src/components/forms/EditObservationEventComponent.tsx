@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactChild } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
@@ -46,7 +46,8 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  onPress: (id: string) => void
+  onPress: (id: string) => void,
+  children?: ReactChild
 }
 
 const EditObservationEventComponent = (props: Props) => {
@@ -138,6 +139,7 @@ const EditObservationEventComponent = (props: Props) => {
         <View style={Cs.formSaveButtonContainer}>
           <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)}/>
         </View>
+        {props.children}
       </View>
     )
   }

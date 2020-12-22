@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import React, { useState, useEffect, ReactChild } from 'react'
+import { View, ScrollView } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +9,6 @@ import { replaceObservationEvents, newObservation, clearObservationLocation, rep
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import MessageComponent from '../general/MessageComponent'
 import Cs from '../../styles/ContainerStyles'
-import Ts from '../../styles/TextStyles'
 import { ObservationEventType, SchemaType } from '../../stores/observation/types'
 import { initForm } from '../../forms/formMethods'
 import { set, clone } from 'lodash'
@@ -61,7 +60,8 @@ type Props = PropsFromRedux & {
   toMap: () => void,
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
-  fromMap?: boolean
+  fromMap?: boolean,
+  children?: ReactChild
 }
 
 const ObservationComponent = (props: Props) => {
@@ -304,6 +304,7 @@ const ObservationComponent = (props: Props) => {
             {form}
           </View>
         </ScrollView>
+        {props.children}
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
           <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)} />
