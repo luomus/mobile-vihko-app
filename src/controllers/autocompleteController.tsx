@@ -24,14 +24,22 @@ export const getTaxonAutocomplete = async (target: string, q: string, filters: R
     'Accept': 'application/json'
   }
 
-  const result = await axios.get(autocompleteUrl + target, {
-    params,
-    headers,
-    cancelToken: new CancelToken((c) => setCancelToken(c)),
-  })
+  try {
+    const result = await axios.get(autocompleteUrl + target, {
+      params,
+      headers,
+      cancelToken: new CancelToken((c) => setCancelToken(c)),
+    })
 
-  return {
-    query: q,
-    result: result.data
+    return {
+      query: q,
+      result: result.data
+    }
+  } catch (error) {
+    if (axios.isCancel(error)) {
+      throw { isCanceled: true }
+    } else {
+      throw error
+    }
   }
 }

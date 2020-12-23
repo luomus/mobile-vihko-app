@@ -7,11 +7,12 @@ import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { get, debounce } from 'lodash'
-import { Canceler, CancelToken } from 'axios'
+import { Canceler } from 'axios'
 import uuid from 'react-native-uuid'
 
 export interface AutocompleteParams {
   target: string,
+  filters: Record<string, any> | null,
   valueField: string,
   transform: Record<string, string>
 }
@@ -35,8 +36,11 @@ const FormAutocompleteComponent = (props: Props) => {
   const [hideResult, setHideResult] = useState<boolean>(true)
   const [selected, setSelected] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>('')
+
   const { target, filters, valueField, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
+  let timeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
     let allFound = true
@@ -60,6 +64,16 @@ const FormAutocompleteComponent = (props: Props) => {
     }
   }, [])
 
+  const setErrorMessage = (message: string) => {
+    if (timeout) {
+      clearTimeout(timeout)
+    }
+
+    setError(message)
+
+    timeout = setTimeout(() => setError(''), 10000)
+  }
+
   const initAutocompleteOnMCode = async (query: string) => {
     try {
       setLoading(true)
@@ -78,7 +92,9 @@ const FormAutocompleteComponent = (props: Props) => {
       }
 
     } catch (err) {
-      console.log(err)
+      if (!err.isCanceled) {
+        setErrorMessage('Autocomplete network error!')
+      }
     } finally {
       setLoading(false)
     }
@@ -132,7 +148,9 @@ const FormAutocompleteComponent = (props: Props) => {
 
       cancel = undefined
     } catch (err) {
-      console.log(err)
+      if (!err.isCanceled) {
+        setErrorMessage('Autocomplete network error!')
+      }
     } finally {
       setLoading(false)
     }
@@ -197,7 +215,7 @@ const FormAutocompleteComponent = (props: Props) => {
         text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{query}</Text>)
       }
 
-      if (endIndex !== name.length - 1) {
+      if (endIndex !== name.length) {
         text.push(<Text key={uuid.v1()} style={{ fontSize: 15 }}>{name.slice(endIndex)}</Text>)
       }
 
@@ -249,6 +267,11 @@ const FormAutocompleteComponent = (props: Props) => {
   return (
     <View style={Cs.containerWithJustPadding}>
       <Text>{props.title}</Text>
+      {
+        error !== '' ?
+          <Text style={{ color: Colors.negativeColor }}>{error}</Text> :
+          null
+      }
       <View style={{ paddingBottom: 35 }}>
         <Autocomplete
           containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: props.index }}
