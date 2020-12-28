@@ -56,7 +56,6 @@ export const eventPathUpdate = (store: Store, lineStringPath: LineString | null)
 //if observation event was made in finland, this function will be called
 //and it processes the localities fetched from laji-api
 export const defineLocalityInFinland = async (geometry: LineString | Point, lang: string): Promise<Record<string, string>> => {
-
   let localityDetails
 
   //call the controller to fetch from Laji API
@@ -205,6 +204,32 @@ const defineRecordBasis = (event: Record<string, any>): Record<string, any> => {
   return modifiedEvent
 }
 
+const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<number>>): Array<Array<number>> => {
+  let uniqueCoordinates: Array<Array<number>> = []
+
+  //loop through each point in path's LineString
+  lineStringCoordinates.forEach((point: Array<number>) => {
+    let noDuplicates: boolean = true
+    //use same decimals for all coordinates
+    const coord0: number = Number(point[0].toFixed(5))
+    const coord1: number = Number(point[1].toFixed(5))
+    //check that the point isn't a duplicate of any of the unique coordinates
+    uniqueCoordinates.forEach((uniquePoint: Array<number>) => {
+      const uniqueCoord0: number = Number(uniquePoint[0].toFixed(5))
+      const uniqueCoord1: number = Number(uniquePoint[1].toFixed(5))
+      if (coord0 === uniqueCoord0 && coord1 === uniqueCoord1) {
+        noDuplicates = false
+      }
+    })
+    //if no duplicates were found, push the point to be a unique coordinate
+    if (noDuplicates) {
+      uniqueCoordinates.push(point)
+    }
+  })
+
+  return uniqueCoordinates
+}
+
 export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
@@ -233,6 +258,9 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
 
     //define record basis for each unit, depending on whether the unit has images attached
     event = defineRecordBasis(event)
+
+    //remove duplicates from path
+    event.gatherings[0].geometry.coordinates = removeDuplicatesFromPath(event.gatherings[0].geometry.coordinates)
 
     //calls the helper function for fetching and processing locality details for finnish events
     const fetchFinland = async () => {
