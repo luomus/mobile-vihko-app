@@ -1,6 +1,7 @@
 import React from 'react'
 import FormInputComponent from '../components/formComponents/FormInputComponent'
 import FormImagePickerComponent from '../components/formComponents/FormImagePickerComponent'
+import FormImageKeywordPickerComponent from '../components/formComponents/FormImagePickerKeywordComponent'
 import FormArrayComponent from '../components/formComponents/FormArrayComponent'
 import FormPickerItemComponent from '../components/formComponents/FormPickerItemComponent'
 import FormPickerComponent from '../components/formComponents/FormPickerComponent'
@@ -21,12 +22,13 @@ export const createAutocompleteField = (
   unregister: Function,
   autocompleteParams: AutocompleteParams,
   lang: string,
+  index: number,
 ) => {
 
   return <FormAutocompleteComponent
     key={objectTitle} title={title} defaultValue={defaultValue} register={register}
     setValue={setValue} watch={watch} unregister={unregister}
-    autocompleteParams={autocompleteParams} lang={lang}
+    autocompleteParams={autocompleteParams} lang={lang} index={index}
   />
 }
 
@@ -63,7 +65,7 @@ export const createHidden = (
 ) => {
   return <FormHiddenComponent
     key={objectTitle}
-    objectTitle={objectTitle}
+    objectTitle ={objectTitle}
     defaultValue={defaultValue}
     register={register}
     setValue={setValue}
@@ -84,6 +86,27 @@ export const createImagePicker = (
     defaultValue={defaultValue}
     register={register}
     setValue={setValue}
+  />
+}
+
+export const createImageKeywordPicker = (
+  title: string,
+  objectTitle: string,
+  defaultValue: Array<Record<string, any>>,
+  register: Function,
+  setValue: Function,
+  params: any,
+  lang: string,
+) => {
+  return <FormImageKeywordPickerComponent
+    key={objectTitle}
+    title={title}
+    params={params}
+    objectTitle={objectTitle}
+    defaultValue={defaultValue}
+    register={register}
+    setValue={setValue}
+    lang={lang}
   />
 }
 

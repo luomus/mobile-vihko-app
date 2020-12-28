@@ -22,16 +22,17 @@ const setClient = (language: string) => {
   })
 }
 
-export const getSchemas = async (language: string) => {
+export const getSchemas = async (language: string, formId: string) => {
   const client = setClient(language)
   const query = gql`
     query {
-      form(id: "JX.519") {
+      form(id: "${formId}") {
         schema
         uiSchema
       }
     }
   `
+
   const response = await client.query({ query })
   if (response.data) {
     return response.data.form

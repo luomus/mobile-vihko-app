@@ -14,8 +14,6 @@ import {
 } from './types'
 
 const initSchemaState: SchemaType = {
-  error: null,
-  loading: false,
   fi: null,
   en: null,
   sv: null,

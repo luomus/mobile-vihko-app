@@ -25,6 +25,7 @@ export const JX519Fields = [
   'identifications_0_taxon',
   'count',
   'atlasCode',
+  'taxonConfidence',
   'notes',
   'images'
 ]
@@ -44,3 +45,76 @@ export const overrideJX519Fields = {
     }
   }
 }
+
+export const JX652ObservationEventFields = [
+  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_dateEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_notes',
+  'keywords',
+]
+
+export const JX652Fields = [
+  'identifications_0_taxon',
+  'substrateSpecies',
+  'substrateNotes',
+  'taxonConfidence',
+  'notes',
+  'images'
+]
+
+//special cases that must be handled differently than schema parsing usually does
+export const overrideJX652Fields = {
+  'identifications_0_taxon': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      filters: {
+        informalTaxonGroup: 'MVL.233,MVL.321'
+      },
+      valueField: 'identifications_0_taxon',
+      transform: {
+        'key': 'unitFact_autocompleteSelectedTaxonID',
+        'value': 'identifications_0_taxon',
+        'payload_informalTaxonGroups': 'informalTaxonGroups'
+      }
+    }
+  },
+  'substrateSpecies': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      valueField: 'substrateSpecies',
+      transform: {
+        'key': 'substrateSpecies'
+      }
+    }
+  },
+  'images': {
+    field: 'imagesKeywords',
+    params: {
+      keywords: [
+        'species',
+        'habitat',
+      ],
+      fi: [
+        'laji',
+        'kasvupaikka',
+      ],
+      sv: [
+        'arter',
+        'livsmiljö',
+      ],
+      en: [
+        'species',
+        'habitat',
+      ]
+    }
+  }
+}
+
+
+export const availableForms = ['JX.519', 'JX.652']

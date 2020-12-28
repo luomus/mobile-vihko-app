@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactChild } from 'react'
 import { View, Text, ScrollView, BackHandler } from 'react-native'
+import MaterialTabs from 'react-native-material-tabs'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 import { LocationObject } from 'expo-location'
 import { LatLng } from 'react-native-maps'
 import {
@@ -12,7 +14,8 @@ import {
   newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
-  setObservationId
+  setObservationId,
+  switchSchema
 } from '../../stores/observation/actions'
 import {
   toggleCentered,
@@ -47,6 +50,7 @@ import { log } from '../../utilities/logger'
 import { HomeIntroductionComponent } from './HomeIntroductionComponent'
 import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
 import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
+import { availableForms } from '../../config/fields'
 
 interface BasicObject {
   [key: string]: any
@@ -81,7 +85,8 @@ const mapDispatchToProps = {
   setMessageState,
   clearRegion,
   toggleCentered,
-  setObservationId
+  setObservationId,
+  switchSchema,
 }
 
 const connector = connect(
@@ -98,6 +103,7 @@ type Props = PropsFromRedux & {
   onFinishObservationEvent: () => void,
   obsStopped: boolean,
   navigation: any,
+  children?: ReactChild
 }
 
 const HomeComponent = (props: Props) => {
@@ -105,21 +111,38 @@ const HomeComponent = (props: Props) => {
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
   const [unfinishedEvent, setUnfinishedEvent] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [selectedTab, setSelectedTab] = useState<number>(0)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
   let focusListener: any
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
-    if (props.observationEvent.events.length > 0 && !props.observationEvent.events[props.observationEvent.events.length - 1].gatheringEvent.dateEnd) {
+    const length = props.observationEvent.events.length
+    const isUnfinished = length && !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+
+    if (isUnfinished) {
       props.toggleObserving()
       setUnfinishedEvent(true)
     }
+
+    const initTab = async () => {
+      if (isUnfinished) {
+        const formID = props.observationEvent.events[length - 1].formID
+
+        setSelectedTab(availableForms.findIndex(form => form === formID))
+        await props.switchSchema(formID)
+      } else {
+        await props.switchSchema(availableForms[0])
+      }
+    }
+
+    initTab()
   }, [])
 
   useEffect(() => {
     loadObservationEvents()
-  }, [props.observationEvent, props.observing])
+  }, [props.observationEvent, props.observing, props.schema])
 
   useEffect(() => {
     focusListener = props.navigation.addListener('willFocus', ({ action }) => {
@@ -157,8 +180,9 @@ const HomeComponent = (props: Props) => {
       if (props.observing && index === indexLast) {
         return
       }
-
-      events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
+      if (event.formID === props.schema.formID) {
+        events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
+      }
     })
 
     setObservationEvents(events)
@@ -193,7 +217,7 @@ const HomeComponent = (props: Props) => {
     }
 
     const lang = i18n.language
-    let schema = props.schema.schemas[lang].schema
+    let schema = props.schema[lang].schema
 
     let observationEventDefaults = {}
     set(observationEventDefaults, 'editors', [userId])
@@ -204,7 +228,7 @@ const HomeComponent = (props: Props) => {
 
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
-      formID: 'JX.519',
+      formID: props.schema.formID,
       ...observationEvent
     }
 
@@ -280,12 +304,6 @@ const HomeComponent = (props: Props) => {
     setUnfinishedEvent(false)
     let event = clone(props.observationEvent.events?.[props.observationEvent.events.length - 1])
 
-    //stores event id into redux so that EditObservationEventComponent knows which event is being finished
-    props.setObservationId({
-      eventId: event.id,
-      unitId: null
-    })
-
     if (event) {
       const oldGathering = event.gatheringEvent
       event.gatheringEvent = {
@@ -326,7 +344,15 @@ const HomeComponent = (props: Props) => {
       stopLocationAsync()
     }
 
-    props.onFinishObservationEvent()
+    if (event.formID === 'JX.519') {
+      //stores event id into redux so that EditObservationEventComponent knows which event is being finished
+      props.setObservationId({
+        eventId: event.id,
+        unitId: null
+      })
+
+      props.onFinishObservationEvent()
+    }
   }
 
   const stopObserving = () => {
@@ -354,6 +380,13 @@ const HomeComponent = (props: Props) => {
     }
   }
 
+  const switchSelectedForm = async (ind: number) => {
+    if (!props.observing && !unfinishedEvent) {
+      await props.switchSchema(availableForms[ind])
+      setSelectedTab(ind)
+    }
+  }
+
   if (loading) {
     return (
       <ActivityComponent text={'loading'} />
@@ -362,32 +395,47 @@ const HomeComponent = (props: Props) => {
     return (
       <>
         <ScrollView contentContainerStyle={Cs.outerVersionContainer}>
-          <View style={{ justifyContent: 'flex-start' }}>
-            <UserInfoComponent onLogout={props.onLogout} />
-            <View style={Cs.homeContainer}>
-              <HomeIntroductionComponent />
-              <View style={{ height: 10 }}></View>
-              {props.observing ?
-                <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
-                :
-                <NewEventWithoutZoneComponent beginObservationEvent={beginObservationEvent} />
-              }
-              <View style={{ height: 10 }}></View>
-              <View style={Cs.observationEventListContainer}>
-                <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
-                {observationEvents}
+          <View style={Cs.homeScrollContainer}>
+            <View>
+              <MaterialTabs
+                items={[t('trip report form'), t('fungi atlas')]}
+                selectedIndex={selectedTab}
+                onChange={switchSelectedForm}
+                barColor={Colors.blueBackground}
+                indicatorColor="black"
+                activeTextColor="black"
+                inactiveTextColor="grey"
+              />
+            </View>
+            <View style={{ height: 10 }}></View>
+            <View style={{ justifyContent: 'flex-start' }}>
+              <UserInfoComponent onLogout={props.onLogout} />
+              <View style={Cs.homeContainer}>
+                <HomeIntroductionComponent />
+                <View style={{ height: 10 }}></View>
+                {props.observing ?
+                  <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
+                  :
+                  <NewEventWithoutZoneComponent beginObservationEvent={beginObservationEvent} />
+                }
+                <View style={{ height: 10 }}></View>
+                <View style={Cs.observationEventListContainer}>
+                  <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
+                  {observationEvents}
+                </View>
+                <View style={{ height: 10 }}></View>
               </View>
-              <View style={{ height: 10 }}></View>
+            </View>
+            <View style={Cs.versionContainer}>
+              <Text
+                style={Ts.alignedRightText}
+                onPress={() => setPressCounter(pressCounter + 1)}>
+                {t('version')} {AppJSON.expo.version}
+              </Text>
             </View>
           </View>
-          <View style={Cs.versionContainer}>
-            <Text
-              style={Ts.alignedRightText}
-              onPress={() => setPressCounter(pressCounter + 1)}>
-              {t('version')} {AppJSON.expo.version}
-            </Text>
-          </View>
         </ScrollView>
+        {props.children}
         <MessageComponent />
       </>
     )

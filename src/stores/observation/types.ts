@@ -16,8 +16,7 @@ export const SET_OBSERVATION_ID = 'SET_OBSERVATION_ID'
 export const CLEAR_OBSERVATION_ID = 'CLEAR_OBSERVATION_ID'
 
 export interface SchemaType extends Record<string, any> {
-  error: string | null,
-  loading: boolean,
+  formID: string,
   fi: Record<string, any> | null,
   sv: Record<string, any> | null,
   en: Record<string, any> | null,

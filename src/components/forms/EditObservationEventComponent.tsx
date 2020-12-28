@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactChild } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
@@ -14,7 +14,7 @@ import { initForm } from '../../forms/formMethods'
 import i18n from '../../language/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
-import { JX519ObservationEventFields } from '../../config/fields'
+import { JX519ObservationEventFields, JX652ObservationEventFields } from '../../config/fields'
 
 interface BasicObject {
   [key: string]: any
@@ -46,13 +46,14 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  onPress: (id: string) => void
+  onPress: (id: string) => void,
+  children?: ReactChild
 }
 
 const EditObservationEventComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
   const [ event, setEvent ] = useState<Record<string, any> | undefined>(undefined)
-  const [ form, setForm ] = useState<Array<Element | undefined>>()
+  const [ form, setForm ] = useState<Array<Element> | undefined>(undefined)
   const [ saving, setSaving ] = useState<boolean>(false)
   //for react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
@@ -60,6 +61,11 @@ const EditObservationEventComponent = (props: Props) => {
 
   useEffect(() => {
     init()
+
+    return () => {
+      props.clearObservationId()
+      setForm(undefined)
+    }
   }, [])
 
   const init = () => {
@@ -76,9 +82,13 @@ const EditObservationEventComponent = (props: Props) => {
   const onUninitalizedForm = () => {
     if (event) {
       const lang = i18n.language
-      let schema = omit(props.schema.schemas[lang]?.schema?.properties, 'gatherings.items.properties.units')
+      let schema = omit(props.schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
-      initForm(setForm, event, null, register, setValue, watch, errors, unregister, schema, null, JX519ObservationEventFields, null, lang)
+      if (props.schema.formID === 'JX.519') {
+        initForm(setForm, event, null, register, setValue, watch, errors, unregister, schema, null, JX519ObservationEventFields, null, lang)
+      } else if (props.schema.formID === 'JX.652') {
+        initForm(setForm, event, null, register, setValue, watch, errors, unregister, schema, null, JX652ObservationEventFields, null, lang)
+      }
     }
   }
 
@@ -101,7 +111,11 @@ const EditObservationEventComponent = (props: Props) => {
         props.setMessageState({
           type: 'msg',
           messageContent: t('changes saved'),
-          onOk: () => props.onPress(event.id)
+          onOk: () => {
+            props.onPress(event.id)
+            props.clearObservationId()
+            setForm(undefined)
+          }
         })
       } catch (error) {
         props.setMessageState({
@@ -125,7 +139,6 @@ const EditObservationEventComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
-          <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.formContainer}>
             {form}
           </View>
@@ -134,6 +147,7 @@ const EditObservationEventComponent = (props: Props) => {
         <View style={Cs.formSaveButtonContainer}>
           <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)}/>
         </View>
+        {props.children}
       </View>
     )
   }

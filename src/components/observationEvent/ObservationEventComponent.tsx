@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ReactChild } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -17,6 +17,7 @@ import { setMessageState, clearMessageState } from '../../stores/message/actions
 import i18n from '../../language/i18n'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
+import SendEventModalComponent from './SendEventModalComponent'
 import MessageComponent from '../general/MessageComponent'
 import { parseDateForUI } from '../../utilities/dateHelper'
 import { CredentialsType } from '../../stores/user/types'
@@ -57,7 +58,8 @@ type Props = PropsFromRedux & {
   onPressHome: () => void,
   onPressObservation: () => void,
   onPressObservationEvent: () => void,
-  isFocused: () => boolean
+  isFocused: () => boolean,
+  children?: ReactChild
 }
 
 const ObservationEventComponent = (props: Props) => {
@@ -65,6 +67,7 @@ const ObservationEventComponent = (props: Props) => {
   const event: Record<string, any> | null = props.observationEvent.events.find(e => e.id === props.id) || null
   const observations: Record<string, any>[] = event?.gatherings[0]?.units || null
   const [sending, setSending] = useState<boolean>(false)
+  const [modalVisibility, setModalVisibility] = useState<boolean>(false)
 
   const showMessage = (content: string) => {
     props.setMessageState({
@@ -114,20 +117,11 @@ const ObservationEventComponent = (props: Props) => {
     }
   }
 
-  const showSendObservationEvent = () => {
-    props.setMessageState({
-      type: 'conf',
-      messageContent: t('send observation event to server?'),
-      okLabel: t('send'),
-      cancelLabel: t('cancel'),
-      onOk: () => sendObservationEvent()
-    })
-  }
-
-  const sendObservationEvent = async () => {
+  const sendObservationEvent = async (isPublic: boolean) => {
+    setModalVisibility(false)
     setSending(true)
     try {
-      await props.uploadObservationEvent(event?.id, props.credentials, i18n.language)
+      await props.uploadObservationEvent(event?.id, props.credentials, i18n.language, isPublic)
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error) {
@@ -184,7 +178,7 @@ const ObservationEventComponent = (props: Props) => {
               <Button
                 buttonStyle={Bs.sendEventButton}
                 icon={<Icon name='send' type='material-icons' color='white' size={22} />}
-                onPress={() => showSendObservationEvent()}
+                onPress={() => setModalVisibility(true)}
               />
               <Button
                 buttonStyle={Bs.removeEventButton}
@@ -231,6 +225,8 @@ const ObservationEventComponent = (props: Props) => {
               <View style={{ padding: 5 }}></View>
             </View>
           )}
+          {props.children}
+          <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility} sendObservationEvent={sendObservationEvent}/>
           <MessageComponent />
         </ScrollView>
       </View>

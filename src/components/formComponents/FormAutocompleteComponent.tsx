@@ -8,9 +8,11 @@ import Colors from '../../styles/Colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { get, debounce } from 'lodash'
 import { Canceler } from 'axios'
+import uuid from 'react-native-uuid'
 
 export interface AutocompleteParams {
   target: string,
+  filters: Record<string, any> | null,
   valueField: string,
   transform: Record<string, string>
 }
@@ -23,7 +25,8 @@ interface Props {
   watch: Function,
   unregister: Function,
   autocompleteParams: AutocompleteParams,
-  lang: string
+  lang: string,
+  index: number,
 }
 
 const FormAutocompleteComponent = (props: Props) => {
@@ -33,8 +36,11 @@ const FormAutocompleteComponent = (props: Props) => {
   const [hideResult, setHideResult] = useState<boolean>(true)
   const [selected, setSelected] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const { target, valueField, transform } = props.autocompleteParams
+  const [error, setError] = useState<string>('')
+
+  const { target, filters, valueField, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
+  let timeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
     let allFound = true
@@ -52,7 +58,47 @@ const FormAutocompleteComponent = (props: Props) => {
     if (allFound) {
       setSelected(true)
     }
+
+    if (RegExp(/MX.*/).test(props.defaultValue)) {
+      initAutocompleteOnMCode(props.defaultValue)
+    }
   }, [])
+
+  const setErrorMessage = (message: string) => {
+    if (timeout) {
+      clearTimeout(timeout)
+    }
+
+    setError(message)
+
+    timeout = setTimeout(() => setError(''), 10000)
+  }
+
+  const initAutocompleteOnMCode = async (query: string) => {
+    try {
+      setLoading(true)
+
+      let res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, setCancelToken)
+
+      if (res.result[0]?.payload?.matchType === 'exactMatches') {
+        const payload = res.result[0].payload
+        setSelected(true)
+
+        if (payload?.vernacularName) {
+          setQuery(payload.vernacularName)
+        } else {
+          setQuery(payload.scientificName)
+        }
+      }
+
+    } catch (err) {
+      if (!err.isCanceled) {
+        setErrorMessage('Autocomplete network error!')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const wipeOldSelection = () => {
     Object.keys(transform).forEach(key => {
@@ -79,6 +125,10 @@ const FormAutocompleteComponent = (props: Props) => {
     })
   }
 
+  const setCancelToken = (c: Canceler) => {
+    cancel = c
+  }
+
   const queryAutocomplete = async (query: string) => {
     try {
       //fire request cancel if last is still unning to avoid getting responses in wrong order
@@ -86,7 +136,7 @@ const FormAutocompleteComponent = (props: Props) => {
         cancel()
       }
 
-      let res = await getTaxonAutocomplete(target, query.toLowerCase(), props.lang, cancel)
+      let res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, setCancelToken)
 
       setOptions(removeDuplicates(res.result))
       setOldQuery(res.query)
@@ -98,7 +148,9 @@ const FormAutocompleteComponent = (props: Props) => {
 
       cancel = undefined
     } catch (err) {
-      console.log(err)
+      if (!err.isCanceled) {
+        setErrorMessage('Autocomplete network error!')
+      }
     } finally {
       setLoading(false)
     }
@@ -155,16 +207,16 @@ const FormAutocompleteComponent = (props: Props) => {
       if (startIndex === 0 && isScientific) {
         const cappedQuery = query.charAt(0).toUpperCase() + query.slice(1)
 
-        text.push(<Text style={{ fontWeight: 'bold' }}>{cappedQuery}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{cappedQuery}</Text>)
       } else if (startIndex === 0) {
-        text.push(<Text style={{ fontWeight: 'bold' }}>{query}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{query}</Text>)
       } else {
-        text.push(<Text>{name.slice(0, startIndex)}</Text>)
-        text.push(<Text style={{ fontWeight: 'bold' }}>{query}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontSize: 15 }}>{name.slice(0, startIndex)}</Text>)
+        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{query}</Text>)
       }
 
-      if (endIndex !== name.length - 1) {
-        text.push(<Text>{name.slice(endIndex)}</Text>)
+      if (endIndex !== name.length) {
+        text.push(<Text key={uuid.v1()} style={{ fontSize: 15 }}>{name.slice(endIndex)}</Text>)
       }
 
       return text
@@ -172,14 +224,14 @@ const FormAutocompleteComponent = (props: Props) => {
 
     if (item?.payload?.nameType === 'MX.scientificName') {
       return (
-        <View>
-          <Text style={{ fontStyle: 'italic' }}>{addBolding(item?.value, oldQuery, true)}</Text>
+        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
+          <Text style={{ fontStyle: 'italic', fontSize: 15 }}>{addBolding(item?.value, oldQuery, true)}</Text>
         </View>
       )
     } else {
       return (
-        <View>
-          <Text>{addBolding(item?.value, oldQuery, false)}{' - '}<Text style={{ fontStyle: 'italic' }}>{item?.payload?.scientificName}</Text></Text>
+        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
+          <Text>{addBolding(item?.value, oldQuery, false)}{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
         </View>
       )
     }
@@ -215,9 +267,14 @@ const FormAutocompleteComponent = (props: Props) => {
   return (
     <View style={Cs.containerWithJustPadding}>
       <Text>{props.title}</Text>
+      {
+        error !== '' ?
+          <Text style={{ color: Colors.negativeColor }}>{error}</Text> :
+          null
+      }
       <View style={{ paddingBottom: 35 }}>
         <Autocomplete
-          containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: 1 }}
+          containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: props.index }}
           data={options}
           onFocus={onFocus}
           onBlur={onBlur}

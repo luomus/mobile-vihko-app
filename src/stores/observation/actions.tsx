@@ -205,7 +205,7 @@ const defineRecordBasis = (event: Record<string, any>): Record<string, any> => {
   return modifiedEvent
 }
 
-export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
+export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
 
@@ -224,6 +224,11 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
         severity: 'low',
         message: `${i18n.t('post failure')} ${error.message}`
       })
+    }
+
+    //define whether the event will be released publicly or privately
+    if (!isPublic) {
+      event.publicityRestrictions = 'MZ.publicityRestrictionsPrivate'
     }
 
     //define record basis for each unit, depending on whether the unit has images attached
@@ -566,18 +571,19 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
   }
 }
 
-export const initSchema = (useUiSchema: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
+export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async dispatch => {
     let languages: string[] = ['fi', 'en', 'sv']
     let schemas: Record<string, any> = {
-      'fi': null,
-      'en': null,
-      'sv': null
+      formID: formId,
+      fi: null,
+      en: null,
+      sv: null
     }
     let storageKeys: Record<string, string> = {
-      fi: 'schemaFi',
-      en: 'schemaEn',
-      sv: 'schemaSv'
+      fi: `${formId}Fi`,
+      en: `${formId}En`,
+      sv: `${formId}Sv`
     }
 
     //try to load schemas from server, else case if error try to load schemas
@@ -597,7 +603,7 @@ export const initSchema = (useUiSchema: boolean): ThunkAction<Promise<void>, any
       try {
         //check network status and try loading schema and uiSchema from server
         await netStatusChecker()
-        tempSchemas = await getSchemas(lang)
+        tempSchemas = await getSchemas(lang, formId)
       } catch (netError) {
         try {
           //try loading schema from internal storage, if success inform user
@@ -704,13 +710,33 @@ export const initSchema = (useUiSchema: boolean): ThunkAction<Promise<void>, any
     }
 
     //schema and field parameters to correct language choice
-    dispatch(setSchema({ schemas }))
+    dispatch(setSchema(schemas))
 
     //if non-fatal errors present reject and send errors
     if (errors.length > 0) {
       return Promise.reject(errors)
     }
     return Promise.resolve()
+  }
+}
+
+export const switchSchema = (formId: string): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
+  return async dispatch => {
+    let languages: string[] = ['Fi', 'En', 'Sv']
+
+    let schemas: Record<string, any> = {
+      formID: formId,
+      fi: null,
+      en: null,
+      sv: null
+    }
+
+    for (let lang of languages) {
+      schemas[lang.toLowerCase()] = await storageController.fetch(`${formId}${lang}`)
+    }
+
+    dispatch(setSchema(schemas))
+    Promise.resolve()
   }
 }
 

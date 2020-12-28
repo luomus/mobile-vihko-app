@@ -7,6 +7,7 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import { SchemaType } from '../../stores/observation/types'
 import MiniMapComponent from './MiniMapComponent'
+import { JX519Fields, JX652Fields } from '../../config/fields'
 import i18n from '../../language/i18n'
 
 interface RootState {
@@ -35,31 +36,19 @@ const ObservationInfoComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const lang = i18n.language
-  const schema = props.schema.schemas[lang]?.schema?.properties?.gatherings?.items?.properties?.units
-  const fieldScopes = props.schema.schemas[lang]?.uiSchemaParams?.unitFieldScopes
+  const schema = props.schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units
 
   if (!schema) {
     return null
   }
 
-  const getFields = () => {
-    const rules = props.observation.rules
+  let fields: string[] | null = null
 
-    if (!rules || !fieldScopes) {
-      return null
-    }
-
-    return Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key) => {
-      const matches = new RegExp(rules.regexp).test(key)
-      if (rules.complement ? !matches : matches) {
-        return fieldScopes[rules.field][key]
-      } else {
-        return foundObject
-      }
-    }, null)?.fields
+  if (props.event.formID === 'JX.519') {
+    fields = JX519Fields
+  } else if (props.event.formID === 'JX.652') {
+    fields = JX652Fields
   }
-
-  const fields = getFields()
 
   return (
     <View style={Cs.observationInfoContainer}>
@@ -73,14 +62,23 @@ const ObservationInfoComponent = (props: Props) => {
             </View>
           </View>
           <ScrollView horizontal={true} style={Cs.observationInfoImageContainer}>
-            {props.observation.images.map((uri: string) => (
-              <View style={{ paddingRight: 5 }} key={uri}>
-                <Image
-                  source={{ uri: uri }}
-                  style={{ width: 100, height: 100 }}
-                />
-              </View>
-            ))}
+            {props.observation.images.map((image: any) => {
+              let uri = ''
+              if (typeof image === 'object') {
+                uri = image.uri
+              } else {
+                uri = image
+              }
+
+              return (
+                <View style={{ paddingRight: 5 }} key={uri}>
+                  <Image
+                    source={{ uri: uri }}
+                    style={{ width: 100, height: 100 }}
+                  />
+                </View>
+              )
+            })}
           </ScrollView>
         </View>
         : null

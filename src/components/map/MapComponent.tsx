@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactChild } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
 import { View, TouchableHighlight } from 'react-native'
@@ -77,8 +77,9 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPressHome: (obsStopped: boolean) => void,
-  onPressObservation: (rules: Record<string, any>, defaults: Record<string, any>) => void,
+  onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean) => void,
+  children?: ReactChild
 }
 
 const MapComponent = (props: Props) => {
@@ -418,6 +419,7 @@ const MapComponent = (props: Props) => {
               />
           : null
         }
+        {props.children}
         <MapModalComponent shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
           cancelObservation={cancelObservation} isVisible={modalVisibility} onBackButtonPress={() => {setModalVisibility(false)}}/>
         <MessageComponent/>

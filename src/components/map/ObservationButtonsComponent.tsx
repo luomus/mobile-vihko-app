@@ -24,7 +24,7 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  confirmationButton: (rules?: Record<string, any>, defaults?: Record<string, any>) => void,
+  confirmationButton: (isNew?: boolean, rules?: Record<string, any>, defaults?: Record<string, any>) => void,
   cancelButton: () => void,
   mode: string
 }
@@ -47,21 +47,21 @@ const ObservationButtonsComponent = (props: Props) => {
 
   const createButtonList = () => {
     let lang = i18n.language
-    const unitGroups = props.schema.schemas[lang]?.uiSchemaParams?.unitGroups
+    const unitGroups = props.schema[lang]?.uiSchemaParams?.unitGroups
 
     if (unitGroups) {
       return unitGroups?.map((observation: Record<string, any>) =>
         createButton(
           observation.button.label.toUpperCase(),
           Bs.observationButton,
-          () => props.confirmationButton(observation.rules, observation.button.default)
+          () => props.confirmationButton(true, observation.rules, observation.button.default)
         )
       )
     } else {
       return createButton(
         t('add new observation').toUpperCase(),
         Bs.observationButton,
-        () => props.confirmationButton()
+        () => props.confirmationButton(true)
       )
     }
   }

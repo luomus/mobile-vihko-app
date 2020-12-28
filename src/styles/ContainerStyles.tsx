@@ -166,10 +166,10 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   observationPropertyTitle: {
-    width: '40%',
+    width: '45%',
   },
   observationPropertyValue: {
-    width: '60%',
+    width: '55%',
     paddingLeft: 10
   },
   observationInfoContainer: {
@@ -252,7 +252,8 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   singleImageContainer: {
-    padding: 5
+    padding: 5,
+    marginRight: 5
   },
   removeIconContainer: {
     position: 'absolute',
@@ -329,6 +330,29 @@ const ContainerStyles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
     flexDirection: 'column'
+  },
+  instructionContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingBottom: 5,
+    width: '95%'
+  },
+  homeScrollContainer: {
+    flexDirection: 'column'
+  },
+  sendEventModalContainer: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.white
+  },
+  iconStretchContainer: {
+    borderWidth: 150
+  },
+  keywordSingleImageContainer: {
+    padding: 5,
+    borderColor: 'grey',
+    borderWidth: 1,
+    marginRight: 5
   }
 })
 

@@ -1,4 +1,4 @@
-import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField } from '../builders/FormComponentBuilders'
+import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker } from '../builders/FormComponentBuilders'
 import { get } from 'lodash'
 import { parseObjectForFieldParams } from '../parsers/SchemaToInputParser'
 
@@ -70,7 +70,7 @@ const Form = (
       toReturn.push(createHidden(path, defaultObject, register, setValue))
       return
     }
-
+    const index = fields.length - fields.findIndex(field => field === path)
     const fieldTitle: string =  get(fieldParams, 'title') === '' ? path : get(fieldParams, 'title')
     const fieldIsArray: boolean = fieldParams.isArray
     const fieldTypeOfArray: string = fieldParams.typeOfArray
@@ -88,7 +88,10 @@ const Form = (
     if (overrideFields && Object.keys(overrideFields).includes(path)) {
       switch (overrideFields[path].field) {
         case 'autocomplete':
-          toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, register, setValue, watch, unregister, overrideFields[path].params, lang))
+          toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, register, setValue, watch, unregister, overrideFields[path].params, lang, index))
+          return
+        case 'imagesKeywords':
+          toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, register, setValue, overrideFields[path].params, lang))
           return
       }
     }

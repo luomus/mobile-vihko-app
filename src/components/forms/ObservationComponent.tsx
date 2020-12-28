@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import React, { useState, useEffect, ReactChild } from 'react'
+import { View, ScrollView } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +9,6 @@ import { replaceObservationEvents, newObservation, clearObservationLocation, rep
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import MessageComponent from '../general/MessageComponent'
 import Cs from '../../styles/ContainerStyles'
-import Ts from '../../styles/TextStyles'
 import { ObservationEventType, SchemaType } from '../../stores/observation/types'
 import { initForm } from '../../forms/formMethods'
 import { set, clone } from 'lodash'
@@ -21,7 +20,7 @@ import { setEditing } from '../../stores/map/actions'
 import { EditingType } from '../../stores/map/types'
 import { lineStringConstructor } from '../../converters/geoJSONConverters'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
-import { JX519Fields, overrideJX519Fields } from '../../config/fields'
+import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields } from '../../config/fields'
 
 interface RootState {
   observation: Point,
@@ -59,9 +58,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   toObservationEvent: (id: string) => void,
   toMap: () => void,
+  isNew?: boolean,
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
-  fromMap?: boolean
+  fromMap?: boolean,
+  children?: ReactChild
 }
 
 const ObservationComponent = (props: Props) => {
@@ -126,8 +127,8 @@ const ObservationComponent = (props: Props) => {
       return
     }
 
-    let schema = props.schema.schemas[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
-    let fieldScopes = props.schema.schemas[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
+    let schema = props.schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
+    let fieldScopes = props.schema[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
     let defaultObject: Record<string, any> = {}
 
     if (props.defaults) {
@@ -143,19 +144,23 @@ const ObservationComponent = (props: Props) => {
       //flying squirrel edit observation
       if (observation?.rules) {
         initForm(setForm, observation, observation.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
-      //trip form new observation
-      } else if (observation) {
+        //trip form new observation
+      } else if (props.schema.formID === 'JX.519') {
         initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
+      } else if (props.schema.formID === 'JX.652') {
+        initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX652Fields, overrideJX652Fields, lang)
       }
-    //new observations
+      //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
         initForm(setForm, defaultObject, props.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
-      //trip form edit observation
-      } else (
+        //trip form edit observation
+      } else if (props.schema.formID === 'JX.519') {
         initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
-      )
+      } else if (props.schema.formID === 'JX.652') {
+        initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX652Fields, overrideJX652Fields, lang)
+      }
     }
   }
 
@@ -184,7 +189,7 @@ const ObservationComponent = (props: Props) => {
     })
 
     //set correct color for obseration, if available
-    let color = props.schema.schemas[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
+    let color = props.schema[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
       const field: string = unitColor.rules.field
       if (newUnit[field]) {
         return new RegExp(unitColor.rules.regexp).test(newUnit[unitColor.rules.field])
@@ -300,6 +305,7 @@ const ObservationComponent = (props: Props) => {
             {form}
           </View>
         </ScrollView>
+        {props.children}
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
           <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)} />

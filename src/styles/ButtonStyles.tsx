@@ -71,6 +71,27 @@ const ButtonStyles = StyleSheet.create({
   refreshButton: {
     backgroundColor: Colors.neutralButton,
     marginLeft: 10
+  },
+  sendEventModalPositiveButton: {
+    backgroundColor: Colors.positiveButton,
+    width: '65%',
+    alignSelf: 'center',
+    justifyContent: 'space-between',
+    margin: 2
+  },
+  sendEventModalNeutralButton: {
+    backgroundColor: Colors.privateColor,
+    width: '65%',
+    alignSelf: 'center',
+    justifyContent: 'space-between',
+    margin: 2
+  },
+  sendEventModalNegativeButton: {
+    backgroundColor: Colors.negativeButton,
+    width: '65%',
+    alignSelf: 'center',
+    justifyContent: 'space-between',
+    margin: 2
   }
 })
 
