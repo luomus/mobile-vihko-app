@@ -2,6 +2,8 @@
   "add new observation": "LISÄÄ HAVAINTO",
   "add observation": "Lisää havainto",
   "beginObservation": "ALOITA",
+  "beginObservationFungiAtlas": "ALOITA SIENILOMAKE",
+  "beginObservationTripForm": "ALOITA RETKILOMAKE",
   "cancel": "PERUUTA",
   "cancelObservation": "LOPETA",
   "center": "Keskitä",

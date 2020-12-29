@@ -417,7 +417,7 @@ const HomeComponent = (props: Props) => {
                 {props.observing ?
                   <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
                   :
-                  <NewEventWithoutZoneComponent onBeginObservationEvent={onBeginObservationEvent} />
+                  <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={onBeginObservationEvent} />
                 }
                 <View style={{ height: 10 }}></View>
                 <View style={Cs.observationEventListContainer}>
