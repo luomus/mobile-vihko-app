@@ -14,15 +14,15 @@ import {
   SET_SCHEMA,
 } from './types'
 import { getSchemas, postObservationEvent } from '../../controllers/documentController'
-import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../../controllers/localityController'
 import storageController from '../../controllers/storageController'
 import { CredentialsType } from '../user/types'
 import { parseUiSchemaToObservations } from '../../parsers/UiSchemaParser'
 import { saveMedias } from '../../controllers/imageController'
 import { netStatusChecker } from '../../utilities/netStatusCheck'
-import { overlapsFinland, centerOfBoundingBox, createCombinedGeometry } from '../../utilities/geometryCreator'
+import { overlapsFinland } from '../../utilities/geometryCreator'
 import { Store } from 'redux'
 import { log } from '../../utilities/logger'
+import { definePublicity, defineRecordBasis, removeDuplicatesFromPath, fetchFinland, fetchForeign } from './helpers'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -35,6 +35,20 @@ export const clearObservationLocation = (): observationActionTypes => ({
 
 export const toggleObserving = (): observationActionTypes => ({
   type: TOGGLE_OBSERVING
+})
+
+export const setSchema = (schemas: Record<string, any>): observationActionTypes => ({
+  type: SET_SCHEMA,
+  payload: schemas
+})
+
+export const setObservationId = (id: Record<string, any>): observationActionTypes => ({
+  type: SET_OBSERVATION_ID,
+  payload: id
+})
+
+export const clearObservationId = (): observationActionTypes => ({
+  type: CLEAR_OBSERVATION_ID
 })
 
 export const eventPathUpdate = (store: Store, lineStringPath: LineString | null): void => {
@@ -50,120 +64,6 @@ export const eventPathUpdate = (store: Store, lineStringPath: LineString | null)
 
     storageController.save('observationEvents', newEvents)
     store.dispatch(replaceObservationEvents(newEvents))
-  }
-}
-
-//if observation event was made in finland, this function will be called
-//and it processes the localities fetched from laji-api
-export const defineLocalityInFinland = async (geometry: LineString | Point, lang: string): Promise<Record<string, string>> => {
-  let localityDetails
-
-  //call the controller to fetch from Laji API
-  try {
-    localityDetails = await getLocalityDetailsFromLajiApi(geometry, lang)
-  } catch (error) {
-    log.error({
-      location: '/stores/observation/actions.tsx defineLocalityInFinland()',
-      error: error.response.data.error
-    })
-    return Promise.reject({
-      severity: 'low',
-      message: `${i18n.t('locality failure')} ${error.message}`
-    })
-  }
-
-  //if no response, return status: 'fail' so it can be handled in uploadObservationEvent -action
-  if (localityDetails.result.status === 'ZERO_RESULTS') {
-    return {
-      status: 'fail'
-    }
-  }
-
-  //store list of provinces and municipalities in string variables
-  let biologicalProvince: string = ''
-  let country: string = i18n.t('finland') //because country is always finland here, just use the translation
-  let municipality: string = ''
-
-  //loop through results and add provinces and municipalities to the list, separated by commas
-  localityDetails.result.results.forEach((result: Record<string, any>) => {
-    if (result.types[0] === 'biogeographicalProvince') {
-      if (biologicalProvince === '') {
-        biologicalProvince = result.formatted_address
-      } else {
-        biologicalProvince = biologicalProvince + ', ' + result.formatted_address
-      }
-    } else if (result.types[0] === 'municipality') {
-      if (municipality === '') {
-        municipality = result.formatted_address
-      } else {
-        municipality = municipality + ', ' + result.formatted_address
-      }
-    }
-  })
-
-  return {
-    biologicalProvince: biologicalProvince,
-    country: country,
-    municipality: municipality,
-  }
-}
-
-//if observation event was made in a foreign country, this function will be called
-//and it processes the localities fetched from google geocoding api
-export const defineLocalityForeign = async (geometry: Point, lang: string): Promise<Record<string, string>> => {
-
-  let localityDetails
-
-  //call the controller to fetch from Google Geocoding API
-  try {
-    const response = await getLocalityDetailsFromGoogleAPI(geometry, lang)
-    localityDetails = response.data.results
-  } catch (error) {
-    log.error({
-      location: '/stores/observation/actions.tsx defineLocalityForeign()',
-      error: error.response.data.error
-    })
-    return Promise.reject({
-      severity: 'low',
-      message: `${i18n.t('locality failure')} ${error.message}`
-    })
-  }
-
-  //store list of provinces, countries and municipalities in string arrays
-  let administrativeProvinceArray: Array<string> = []
-  let countryArray: Array<string> = []
-  let municipalityArray: Array<string> = []
-
-  //loop through results and add provinces, countries and municipalities to the arrays, without duplicates
-  localityDetails.forEach((point: Record<string, any>) => {
-    point.address_components.forEach((component: Record<string, any>) => {
-      component.types.forEach((type: string) => {
-        if (type === 'administrative_area_level_1') {
-          if (!administrativeProvinceArray.includes(component.long_name)) {
-            administrativeProvinceArray.push(component.long_name)
-          }
-        } else if (type === 'country') {
-          if (!countryArray.includes(component.long_name)) {
-            countryArray.push(component.long_name)
-          }
-        } else if (type === 'administrative_area_level_2' || type === 'administrative_area_level_3') {
-          if (!municipalityArray.includes(component.long_name)) {
-            municipalityArray.push(component.long_name)
-          }
-        }
-      })
-    })
-  })
-
-  //form strings separated by commas from the arrays
-  let administrativeProvince: string = administrativeProvinceArray.join(', ')
-  let country: string = countryArray.join(', ')
-  let municipality: string = municipalityArray.join(', ')
-
-  return {
-    administrativeProvince: administrativeProvince,
-    country: country,
-    municipality: municipality,
   }
 }
 
@@ -188,48 +88,6 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
   }
 }
 
-//define record basis for each unit, depending on whether the unit has images attached
-const defineRecordBasis = (event: Record<string, any>): Record<string, any> => {
-
-  let modifiedEvent: Record<string, any> = event
-
-  modifiedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
-    if (unit.images.length > 0) {
-      unit.recordBasis = 'MY.recordBasisHumanObservationPhoto'
-    } else {
-      unit.recordBasis = 'MY.recordBasisHumanObservation'
-    }
-  })
-
-  return modifiedEvent
-}
-
-const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<number>>): Array<Array<number>> => {
-  let uniqueCoordinates: Array<Array<number>> = []
-
-  //loop through each point in path's LineString
-  lineStringCoordinates.forEach((point: Array<number>) => {
-    let noDuplicates: boolean = true
-    //use same decimals for all coordinates
-    const coord0: number = Number(point[0].toFixed(5))
-    const coord1: number = Number(point[1].toFixed(5))
-    //check that the point isn't a duplicate of any of the unique coordinates
-    uniqueCoordinates.forEach((uniquePoint: Array<number>) => {
-      const uniqueCoord0: number = Number(uniquePoint[0].toFixed(5))
-      const uniqueCoord1: number = Number(uniquePoint[1].toFixed(5))
-      if (coord0 === uniqueCoord0 && coord1 === uniqueCoord1) {
-        noDuplicates = false
-      }
-    })
-    //if no duplicates were found, push the point to be a unique coordinate
-    if (noDuplicates) {
-      uniqueCoordinates.push(point)
-    }
-  })
-
-  return uniqueCoordinates
-}
-
 export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
@@ -252,9 +110,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     }
 
     //define whether the event will be released publicly or privately
-    if (!isPublic) {
-      event.publicityRestrictions = 'MZ.publicityRestrictionsPrivate'
-    }
+    event = definePublicity(event, isPublic)
 
     //define record basis for each unit, depending on whether the unit has images attached
     event = defineRecordBasis(event)
@@ -262,43 +118,11 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     //remove duplicates from path
     event.gatherings[0].geometry.coordinates = removeDuplicatesFromPath(event.gatherings[0].geometry.coordinates)
 
-    //calls the helper function for fetching and processing locality details for finnish events
-    const fetchFinland = async () => {
-      const localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang)
-
-      //if it turns out that country wasn't finland, fetch foreign
-      if (localityDetails.status === 'fail') {
-        await fetchForeign(event)
-      } else {
-        //inserts the fetched values to the event
-        event.gatherings[0].biologicalProvince = localityDetails.biologicalProvince
-        event.gatherings[0].country = localityDetails.country
-        event.gatherings[0].municipality = localityDetails.municipality
-      }
-    }
-
-    //calls the helper function for fetching and processing locality details for foreign country events
-    const fetchForeign = async () => {
-      const boundingBox: Polygon | Point | null = createCombinedGeometry(event)
-
-      //can't fetch foreign, unless there's a geometry for the event
-      if (!boundingBox) { return }
-
-      //foreign country details are fetched based on the center point of combined bounding box
-      const center = centerOfBoundingBox(boundingBox)
-      const localityDetails = await defineLocalityForeign(center, lang)
-
-      //inserts the fetched values to the event
-      event.gatherings[0].administrativeProvince = localityDetails.administrativeProvince
-      event.gatherings[0].country = localityDetails.country
-      event.gatherings[0].municipality = localityDetails.municipality
-    }
-
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
     if (overlapsFinland(event.gatherings[0].geometry)) {
-      await fetchFinland()
+      await fetchFinland(event, lang)
     } else {
-      await fetchForeign()
+      await fetchForeign(event, lang)
     }
 
     // //for each observation in observation event try to send images to server
@@ -767,17 +591,3 @@ export const switchSchema = (formId: string): ThunkAction<Promise<void>, any, vo
     Promise.resolve()
   }
 }
-
-export const setSchema = (schemas: Record<string, any>): observationActionTypes => ({
-  type: SET_SCHEMA,
-  payload: schemas
-})
-
-export const setObservationId = (id: Record<string, any>): observationActionTypes => ({
-  type: SET_OBSERVATION_ID,
-  payload: id
-})
-
-export const clearObservationId = (): observationActionTypes => ({
-  type: CLEAR_OBSERVATION_ID
-})
