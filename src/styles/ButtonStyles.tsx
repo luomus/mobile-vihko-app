@@ -77,21 +77,21 @@ const ButtonStyles = StyleSheet.create({
     width: '65%',
     alignSelf: 'center',
     justifyContent: 'space-between',
-    margin: 2
+    margin: 10
   },
   sendEventModalNeutralButton: {
     backgroundColor: Colors.privateColor,
     width: '65%',
     alignSelf: 'center',
     justifyContent: 'space-between',
-    margin: 2
+    margin: 10
   },
   sendEventModalNegativeButton: {
     backgroundColor: Colors.negativeButton,
     width: '65%',
     alignSelf: 'center',
     justifyContent: 'space-between',
-    margin: 2
+    margin: 10
   }
 })
 
