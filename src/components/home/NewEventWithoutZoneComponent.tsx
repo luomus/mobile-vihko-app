@@ -7,7 +7,7 @@ import Colors from '../../styles/Colors'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
-  beginObservationEvent: (zoneUsed: boolean) => void
+  onBeginObservationEvent: (zoneUsed: boolean) => void
 }
 
 const NewEventWithoutZoneComponent = (props: Props) => {
@@ -26,7 +26,7 @@ const NewEventWithoutZoneComponent = (props: Props) => {
           title={t('beginObservation')}
           iconRight={true}
           icon={<Icon name='play-arrow' type='material-icons' color={'white'} size={22} />}
-          onPress={() => props.beginObservationEvent(false)}
+          onPress={() => props.onBeginObservationEvent(false)}
         />
       </View>
     </View>

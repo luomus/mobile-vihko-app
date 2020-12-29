@@ -17,6 +17,7 @@ const initSchemaState: SchemaType = {
   fi: null,
   en: null,
   sv: null,
+  formID: ''
 }
 
 const initObsEventState: ObservationEventType = {

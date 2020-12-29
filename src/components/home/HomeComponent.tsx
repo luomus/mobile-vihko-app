@@ -209,7 +209,8 @@ const HomeComponent = (props: Props) => {
     BackHandler.exitApp()
   }
 
-  const beginObservationEvent = async () => {
+  const onBeginObservationEvent = async () => {
+
     const userId = props.credentials?.user?.id
 
     if (!userId) {
@@ -416,7 +417,7 @@ const HomeComponent = (props: Props) => {
                 {props.observing ?
                   <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
                   :
-                  <NewEventWithoutZoneComponent beginObservationEvent={beginObservationEvent} />
+                  <NewEventWithoutZoneComponent onBeginObservationEvent={onBeginObservationEvent} />
                 }
                 <View style={{ height: 10 }}></View>
                 <View style={Cs.observationEventListContainer}>
