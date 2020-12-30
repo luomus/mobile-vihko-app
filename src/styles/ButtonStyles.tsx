@@ -58,13 +58,13 @@ const ButtonStyles = StyleSheet.create({
   },
   mapModalPositiveButton: {
     backgroundColor: Colors.neutralColor,
-    width: '30%',
+    width: '45%',
     alignSelf: 'center',
     margin: 2
   },
   mapModalNegativeButton: {
     backgroundColor: Colors.negativeColor,
-    width: '30%',
+    width: '45%',
     alignSelf: 'center',
     margin: 2
   },

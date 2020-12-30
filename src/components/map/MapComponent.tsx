@@ -12,6 +12,7 @@ import {
   replaceLocationById,
   clearObservationLocation,
   setObservationId,
+  clearObservationId,
   deleteObservation
 } from '../../stores/observation/actions'
 import {
@@ -32,6 +33,7 @@ import { ObservationEventType } from '../../stores/observation/types'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
+import { listOfHaversineNeighbors } from '../../utilities/haversineFormula'
 import { Icon } from 'react-native-elements'
 
 
@@ -65,6 +67,7 @@ const mapDispatchToProps = {
   toggleMaptype,
   setEditing,
   setObservationId,
+  clearObservationId,
   setMessageState,
   deleteObservation
 }
@@ -87,6 +90,7 @@ const MapComponent = (props: Props) => {
   const [ mapLoaded, setMapLoaded ] = useState(false)
   const [ observationButtonsState, setObservationButtonsState ] = useState('')
   const [ modalVisibility, setModalVisibility ] = useState(false)
+  const [ observationOptions, setObservationOptions ] = useState<Record<string, any>[]>([])
 
   const onMapLoaded = () => {
     setMapLoaded(true)
@@ -243,6 +247,20 @@ const MapComponent = (props: Props) => {
     props.onPressEditing(true)
   }
 
+  //preparations for opening the edit observation modal
+  const openModal = (units: Array<Record<string, any>>, unitId: string): void => {
+    //gets the list of nearby observations and saves them to a state, so they can be rendered in the modal
+    const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, props.region, unitId)
+    setObservationOptions(haversineNeighbors)
+    setModalVisibility(true)
+  }
+
+  //preparations for closing the edit modal
+  const closeModal = (): void => {
+    setModalVisibility(false)
+    props.clearObservationId()
+  }
+
   //is used to update location for old observation in the
   //observationEvent as a result of dragging observation marker
   const updateObservationLocation = async (coordinates: LatLng, eventId: string, unitId: string) => {
@@ -351,7 +369,7 @@ const MapComponent = (props: Props) => {
           onPress = {() => {
             props.setObservationId({ eventId, unitId })
             stopCentering()
-            setModalVisibility(true)
+            openModal(units, unitId)
           }}
         />
       )
@@ -420,8 +438,10 @@ const MapComponent = (props: Props) => {
           : null
         }
         {props.children}
-        <MapModalComponent shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
-          cancelObservation={cancelObservation} isVisible={modalVisibility} onBackButtonPress={() => {setModalVisibility(false)}}/>
+        <MapModalComponent
+          shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
+          cancelObservation={cancelObservation} isVisible={modalVisibility}
+          onBackButtonPress={closeModal} observationOptions={observationOptions} />
         <MessageComponent/>
       </View>
     </>
