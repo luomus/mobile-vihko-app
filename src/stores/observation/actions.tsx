@@ -1,8 +1,7 @@
 import { Point, Geometry, LineString } from 'geojson'
 import { Store } from 'redux'
 import { ThunkAction } from 'redux-thunk'
-import uuid from 'react-native-uuid'
-import { clone, cloneDeep, set } from 'lodash'
+import { clone, cloneDeep } from 'lodash'
 import i18n from 'i18next'
 import {
   observationActionTypes,
@@ -18,16 +17,12 @@ import {
 import { getSchemas, postObservationEvent } from '../../controllers/documentController'
 import storageController from '../../controllers/storageController'
 import { CredentialsType } from '../user/types'
-import { updateLocation } from '../position/actions'
 import { parseUiSchemaToObservations } from '../../parsers/UiSchemaParser'
 import { saveMedias } from '../../controllers/imageController'
 import { netStatusChecker } from '../../utilities/netStatusCheck'
 import { overlapsFinland } from '../../utilities/geometryCreator'
 import { log } from '../../utilities/logger'
 import { definePublicity, defineRecordBasis, removeDuplicatesFromPath, fetchFinland, fetchForeign } from './helpers'
-import { setDateForDocument } from '../../utilities/dateHelper'
-import { parseSchemaToNewObject } from '../../parsers/SchemaObjectParser'
-import { watchLocationAsync } from '../../geolocation/geolocation'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -470,10 +465,10 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
           //warn user of using internally stored schema
           langError = {
             severity: 'low',
-            message: `${i18n.t(`error loading ${lang} schemas from server`)} ${netError.message
+            message: `${netError.message
               ? netError.message
               : i18n.t('status code') + netError.response.status
-              }`
+            } ${i18n.t(`error loading ${lang} schema from server`)}`
           }
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',
@@ -483,10 +478,10 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
         } catch (locError) {
           langError = {
             severity: 'high',
-            message: `${i18n.t(`error loading ${lang} schemas from server and internal`)} ${netError.message
+            message: `${netError.message
               ? netError.message
               : i18n.t('status code') + netError.response.status
-              }`
+            } ${i18n.t(`error loading ${lang} schema from server and internal`)}`
           }
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',

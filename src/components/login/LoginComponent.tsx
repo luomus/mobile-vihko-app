@@ -105,7 +105,7 @@ const LoginComponent = (props: Props) => {
           await props.loginUser(tempToken)
         } catch (error) {
           if (error.severity === 'fatal') {
-            showFatalError(`${t('critical error')}:\n ${error.message}`)
+            showFatalError(`${t('critical error')}:\n${error.message}`)
             setLoggingIn(false)
             return
           } else {
@@ -131,7 +131,7 @@ const LoginComponent = (props: Props) => {
         if (errors[errors.length - 1].severity === 'fatal') {
           errors.forEach((error: Record<string, any>, index: number) => {
             if (index === errors.length - 1) {
-              showFatalError(`${t('critical error')}:\n ${error.message}`)
+              showFatalError(`${t('critical error')}:\n${error.message}`)
             } else {
               showError(error.message)
             }
@@ -167,7 +167,7 @@ const LoginComponent = (props: Props) => {
         error: error.response.data.error
       })
       setLoggingIn(false)
-      showFatalError(`${t('critical error')}:\n ${t('getting temp token failed with')} ${error.message ? error.message : i18n.t('status code') + error.response.status}`)
+      showFatalError(`${t('critical error')}:\n${t('getting temp token failed with')} ${error.message ? error.message : i18n.t('status code') + error.response.status}`)
     }
   }
 
