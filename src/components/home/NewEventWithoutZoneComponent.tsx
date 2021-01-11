@@ -7,12 +7,23 @@ import Colors from '../../styles/Colors'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
-  beginObservationEvent: (zoneUsed: boolean) => void
+  selectedTab: number,
+  onBeginObservationEvent: (zoneUsed: boolean) => void
 }
 
 const NewEventWithoutZoneComponent = (props: Props) => {
 
   const { t } = useTranslation()
+
+  const beginText = (): string => {
+    if (props.selectedTab === 0) {
+      return (t('beginObservationTripForm'))
+    } else if (props.selectedTab === 1) {
+      return (t('beginObservationFungiAtlas'))
+    } else {
+      return (t('beginObservation'))
+    }
+  }
 
   return (
     <View style={Cs.observationEventContainer}>
@@ -23,10 +34,10 @@ const NewEventWithoutZoneComponent = (props: Props) => {
         <Button
           containerStyle={Cs.beginButtonContainer}
           buttonStyle={{ backgroundColor: Colors.positiveColor }}
-          title={t('beginObservation')}
+          title={beginText()}
           iconRight={true}
           icon={<Icon name='play-arrow' type='material-icons' color={'white'} size={22} />}
-          onPress={() => props.beginObservationEvent(false)}
+          onPress={() => props.onBeginObservationEvent(false)}
         />
       </View>
     </View>

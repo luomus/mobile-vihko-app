@@ -62,6 +62,12 @@ const TextStyles = StyleSheet.create({
   linkToLajiText: {
     fontSize: 14,
     fontWeight: 'bold'
+  },
+  centeredBold: {
+    fontSize: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginBottom: 5
   }
 })
 

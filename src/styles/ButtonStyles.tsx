@@ -58,13 +58,13 @@ const ButtonStyles = StyleSheet.create({
   },
   mapModalPositiveButton: {
     backgroundColor: Colors.neutralColor,
-    width: '30%',
+    width: '45%',
     alignSelf: 'center',
     margin: 2
   },
   mapModalNegativeButton: {
     backgroundColor: Colors.negativeColor,
-    width: '30%',
+    width: '45%',
     alignSelf: 'center',
     margin: 2
   },
@@ -77,21 +77,21 @@ const ButtonStyles = StyleSheet.create({
     width: '65%',
     alignSelf: 'center',
     justifyContent: 'space-between',
-    margin: 2
+    margin: 10
   },
   sendEventModalNeutralButton: {
     backgroundColor: Colors.privateColor,
     width: '65%',
     alignSelf: 'center',
     justifyContent: 'space-between',
-    margin: 2
+    margin: 10
   },
   sendEventModalNegativeButton: {
     backgroundColor: Colors.negativeButton,
     width: '65%',
     alignSelf: 'center',
     justifyContent: 'space-between',
-    margin: 2
+    margin: 10
   }
 })
 

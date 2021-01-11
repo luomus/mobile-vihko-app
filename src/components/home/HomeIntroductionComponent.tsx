@@ -28,11 +28,7 @@ export const HomeIntroductionComponent = () => {
   return (
     <View style={Cs.homeInfoContainer}>
       <Text style={Ts.linkToLajiText}>
-        {t('instructions.intro') + ' '}
-        {t('observations are stored in')}
-        <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(link)}>
-          {' ' + t('to laji.fi database')}
-        </Text>
+        {t('instructions.mobilevihko.intro') + ' '}
       </Text>
     </View>
   )

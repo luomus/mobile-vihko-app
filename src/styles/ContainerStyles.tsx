@@ -353,6 +353,21 @@ const ContainerStyles = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 1,
     marginRight: 5
+  },
+  mapModalContainer: {
+    alignSelf: 'center',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.white,
+    width: '90%',
+    maxHeight: '75%'
+  },
+  mapModalItemContainer: {
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'black',
+    margin: 5
   }
 })
 
