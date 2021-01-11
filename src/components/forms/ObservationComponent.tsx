@@ -82,7 +82,7 @@ const ObservationComponent = (props: Props) => {
     }
 
     //cleanup when component unmounts, ensures that if navigator back-button
-    //is used observationLocation, observationId and editing-flags are returned 
+    //is used observationLocation, observationId and editing-flags are returned
     //to defaults
     return () => {
       if (!props.fromMap) {

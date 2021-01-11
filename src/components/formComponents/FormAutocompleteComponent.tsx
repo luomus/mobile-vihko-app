@@ -9,11 +9,13 @@ import { TextInput } from 'react-native-gesture-handler'
 import { get, debounce } from 'lodash'
 import { Canceler } from 'axios'
 import uuid from 'react-native-uuid'
+import { ErrorMessage } from '@hookform/error-message'
 
 export interface AutocompleteParams {
   target: string,
   filters: Record<string, any> | null,
   valueField: string,
+  validation?: Record<string, any>,
   transform: Record<string, string>
 }
 
@@ -24,6 +26,7 @@ interface Props {
   setValue: Function,
   watch: Function,
   unregister: Function,
+  errors: Record<string, any>,
   autocompleteParams: AutocompleteParams,
   lang: string,
   index: number,
@@ -38,7 +41,7 @@ const FormAutocompleteComponent = (props: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
-  const { target, filters, valueField, transform } = props.autocompleteParams
+  const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
   let timeout: NodeJS.Timeout | undefined
 
@@ -46,6 +49,9 @@ const FormAutocompleteComponent = (props: Props) => {
     let allFound = true
     const transformKeys = Object.keys(transform)
     const registeredFields = Object.keys(props.watch())
+
+    registerField(valueField)
+    props.setValue(valueField, props.defaultValue, { shouldValidate: true })
 
     transformKeys.forEach(key => {
       if (transform[key] === valueField && props.defaultValue === '') {
@@ -112,15 +118,22 @@ const FormAutocompleteComponent = (props: Props) => {
     })
   }
 
-  const addSelectionToForm = (item: Record<string, any>) => {
+  const registerField = (name: string) => {
+    if (validation && name === valueField) {
+      props.register(name, validation)
+    } else {
+      props.register(name)
+    }
+  }
 
+  const addSelectionToForm = (item: Record<string, any>) => {
     Object.keys(transform).forEach(key => {
-      props.register({ name: transform[key] })
+      registerField(transform[key])
 
       if (key.includes('informalTaxonGroup')) {
-        props.setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))))
+        props.setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))), { shouldValidate: true })
       } else {
-        props.setValue(transform[key], get(item, key.split('_')))
+        props.setValue(transform[key], get(item, key.split('_')), { shouldValidate: true })
       }
     })
   }
@@ -164,14 +177,14 @@ const FormAutocompleteComponent = (props: Props) => {
 
     if (selected) {
       wipeOldSelection()
-      props.register({ name: valueField })
+      registerField(valueField)
       setSelected(false)
     }
 
     setQuery(text)
     setHideResult(false)
 
-    props.setValue(valueField, text)
+    props.setValue(valueField, text, { shouldValidate: true })
 
     debouncedQuery(text)
   }
@@ -272,6 +285,11 @@ const FormAutocompleteComponent = (props: Props) => {
           <Text style={{ color: Colors.negativeColor }}>{error}</Text> :
           null
       }
+      <ErrorMessage
+        errors={props.errors}
+        name={valueField}
+        render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{message}</Text>}
+      />
       <View style={{ paddingBottom: 35 }}>
         <Autocomplete
           containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: props.index }}
