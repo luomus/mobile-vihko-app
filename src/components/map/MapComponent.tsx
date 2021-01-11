@@ -390,6 +390,7 @@ const MapComponent = (props: Props) => {
           maxZoomLevel = {18.9}
           minZoomLevel = {5}
           mapType = {props.maptype === 'topographic' ? 'none' : props.maptype}
+          pitchEnabled = {false}
           rotateEnabled = {false}
           moveOnMarkerPress = {false}
           style = {Cs.mapViewStyle}
