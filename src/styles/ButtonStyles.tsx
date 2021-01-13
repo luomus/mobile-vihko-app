@@ -47,6 +47,10 @@ const ButtonStyles = StyleSheet.create({
   observationButton: {
     backgroundColor: Colors.neutralColor
   },
+  observationNeighborsButton: {
+    backgroundColor: Colors.neutralColor,
+    justifyContent: 'flex-start'
+  },
   basicNegativeButton: {
     backgroundColor: Colors.negativeButton
   },
@@ -74,21 +78,21 @@ const ButtonStyles = StyleSheet.create({
   },
   sendEventModalPositiveButton: {
     backgroundColor: Colors.positiveButton,
-    width: '65%',
+    width: '75%',
     alignSelf: 'center',
     justifyContent: 'space-between',
     margin: 10
   },
   sendEventModalNeutralButton: {
     backgroundColor: Colors.privateColor,
-    width: '65%',
+    width: '75%',
     alignSelf: 'center',
     justifyContent: 'space-between',
     margin: 10
   },
   sendEventModalNegativeButton: {
     backgroundColor: Colors.negativeButton,
-    width: '65%',
+    width: '75%',
     alignSelf: 'center',
     justifyContent: 'space-between',
     margin: 10
