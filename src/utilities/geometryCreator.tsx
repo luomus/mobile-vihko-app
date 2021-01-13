@@ -61,7 +61,15 @@ const calculateBoundingBoxBoundaries = (coordinates: Array<Array<number>>): Reco
 
 //this is called in HomeComponent, if there was no path geometry
 //creates a bounding box from unit geometries
-export const createUnitBoundingBox = (event: Record<string, any>): Polygon => {
+export const createUnitBoundingBox = (event: Record<string, any>): Polygon | Point => {
+
+  //return a point, in case there's only one observation
+  if (event.gatherings[0].units.length === 1) {
+    return {
+      type: 'Point',
+      coordinates: event.gatherings[0].units[0].unitGathering.geometry.coordinates
+    }
+  }
 
   //makes an array of unit coordinates
   const points: Array<Array<number>> = event.gatherings[0].units.map((unit: Record<string, any>) => {

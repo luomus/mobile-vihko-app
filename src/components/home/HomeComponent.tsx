@@ -14,6 +14,7 @@ import {
   newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
+  removeDuplicatesFromPath,
   setObservationId,
   switchSchema
 } from '../../stores/observation/actions'
@@ -317,7 +318,10 @@ const HomeComponent = (props: Props) => {
         event.gatherings[0].geometry = lineStringPath
       }
 
-      if (!event.gatherings[0].geometry) {
+      //remove duplicates from path
+      if (event.gatherings[0].geometry) { event.gatherings[0].geometry.coordinates = removeDuplicatesFromPath(event.gatherings[0].geometry.coordinates) }
+
+      if (!event.gatherings[0].geometry || event.gatherings[0].geometry.coordinates.length < 2) {
         const geometry = createUnitBoundingBox(event)
 
         if (geometry) {

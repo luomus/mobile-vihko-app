@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next'
 import { ObservationEventType } from '../../stores/observation/types'
 import { SchemaType } from '../../stores/observation/types'
 import { listOfHaversineNeighbors } from '../../utilities/haversineFormula'
-import i18n from '../../language/i18n'
 
 interface BasicObject {
   [key: string]: any
