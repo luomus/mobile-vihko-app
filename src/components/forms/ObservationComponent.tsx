@@ -5,7 +5,8 @@ import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import { LocationObject } from 'expo-location'
-import { replaceObservationEvents, newObservation, clearObservationLocation, replaceObservationById, clearObservationId, setObservationLocation } from '../../stores/observation/actions'
+import { replaceObservationEvents, newObservation, clearObservationLocation, replaceObservationById, clearObservationId, 
+  deleteObservation, setObservationLocation } from '../../stores/observation/actions'
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import MessageComponent from '../general/MessageComponent'
 import Cs from '../../styles/ContainerStyles'
@@ -21,6 +22,7 @@ import { EditingType } from '../../stores/map/types'
 import { lineStringConstructor } from '../../converters/geoJSONConverters'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
 import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields } from '../../config/fields'
+import Colors from '../../styles/Colors'
 
 interface RootState {
   observation: Point,
@@ -46,7 +48,8 @@ const mapDispatchToProps = {
   replaceObservationById,
   clearObservationId,
   setEditing,
-  setObservationLocation,
+  deleteObservation,
+  setObservationLocation
 }
 
 const connector = connect(
@@ -275,12 +278,12 @@ const ObservationComponent = (props: Props) => {
         locChanged: false,
         originalSourcePage: ''
       })
-      setSaving(false)
     } catch (error) {
       props.setMessageState({
         type: 'err',
         messageContent: error.message
       })
+    } finally {
       setSaving(false)
     }
   }
@@ -295,6 +298,32 @@ const ObservationComponent = (props: Props) => {
         originalSourcePage: props.editing.originalSourcePage
       })
       props.toMap()
+    }
+  }
+
+  const handleRemove = async () => {
+    setSaving(true)
+    try {
+      await props.deleteObservation(props.observationId.eventId, props.observationId.unitId)
+      props.clearObservationId()
+
+      if (props.editing.originalSourcePage === 'MapComponent') {
+        props.toMap()
+      } else if (props.editing.originalSourcePage === 'ObservationEventComponent') {
+        props.toObservationEvent(props.observationId.eventId)
+      }
+      props.setEditing({
+        started: false,
+        locChanged: false,
+        originalSourcePage: ''
+      })
+    } catch (error) {
+      props.setMessageState({
+        type: 'err',
+        messageContent: error.message
+      })
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -320,6 +349,19 @@ const ObservationComponent = (props: Props) => {
                 iconRight={true}
                 icon={<Icon name='edit-location' type='material-icons' color='white' size={22} />}
                 onPress={() => handleChangeToMap()}
+              />
+            </View>
+            : null
+          }
+          {props.observationId ?
+            <View style={Cs.buttonContainer}>
+              <ButtonElement
+                buttonStyle={{ backgroundColor: Colors.negativeButton }}
+                disabled={saving}
+                title={t('delete')}
+                iconRight={true}
+                icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
+                onPress={() => handleRemove()}
               />
             </View>
             : null

@@ -247,7 +247,6 @@ const MapComponent = (props: Props) => {
       eventId,
       unitId
     })
-    console.log('shift')
     props.onPressEditing(true, 'MapComponent')
   }
 
