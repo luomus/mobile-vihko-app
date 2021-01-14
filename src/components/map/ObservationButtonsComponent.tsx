@@ -34,7 +34,7 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  confirmationButton: (isNew?: boolean, rules?: Record<string, any>, defaults?: Record<string, any>) => void,
+  confirmationButton: (isNew?: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   cancelButton: () => void,
   mode: string,
   openModal: (units: Array<Record<string, any>>, eventId: string) => void,

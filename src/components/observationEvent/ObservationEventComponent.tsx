@@ -56,7 +56,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   id: string,
   onPressHome: () => void,
-  onPressObservation: () => void,
+  onPressObservation: (sourcePage?: string) => void,
   onPressObservationEvent: () => void,
   isFocused: () => boolean,
   children?: ReactChild
@@ -206,7 +206,7 @@ const ObservationEventComponent = (props: Props) => {
                         unitId: observation.id
                       }
                       props.setObservationId(id)
-                      props.onPressObservation()
+                      props.onPressObservation('ObservationEventComponent')
                     }}
                   />
                 }

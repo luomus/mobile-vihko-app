@@ -14,7 +14,8 @@ const initRegionState = {
 
 const initEditingState: EditingType = {
   started: false,
-  locChanged: false
+  locChanged: false,
+  originalSourcePage: ''
 }
 
 const regionReducer = (state: Region = initRegionState, action: mapActionTypes) => {

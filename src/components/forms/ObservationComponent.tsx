@@ -62,6 +62,7 @@ type Props = PropsFromRedux & {
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
   fromMap?: boolean,
+  sourcePage?: string,
   children?: ReactChild
 }
 
@@ -81,6 +82,15 @@ const ObservationComponent = (props: Props) => {
       init()
     }
 
+    //checks if we are coming from MapComponent or ObservationEventComponent
+    if (props.sourcePage) {
+      props.setEditing({
+        started: false,
+        locChanged: false,
+        originalSourcePage: props.sourcePage
+      })
+    }
+
     //cleanup when component unmounts, ensures that if navigator back-button
     //is used observationLocation, observationId and editing-flags are returned
     //to defaults
@@ -89,10 +99,11 @@ const ObservationComponent = (props: Props) => {
         props.clearObservationLocation()
         props.setEditing({
           started: false,
-          locChanged: false
+          locChanged: false,
+          originalSourcePage: props.editing.originalSourcePage
         })
+        props.clearObservationId()
       }
-      props.clearObservationId()
     }
   }, [])
 
@@ -239,7 +250,8 @@ const ObservationComponent = (props: Props) => {
       props.clearObservationLocation()
       props.setEditing({
         started: false,
-        locChanged: false
+        locChanged: false,
+        originalSourcePage: props.editing.originalSourcePage
       })
     }
 
@@ -252,7 +264,17 @@ const ObservationComponent = (props: Props) => {
     try {
       await props.replaceObservationById(editedUnit, props.observationId.eventId, props.observationId.unitId)
       props.clearObservationId()
-      props.fromMap ? props.toMap() : props.toObservationEvent(props.observationId.eventId)
+
+      if (props.editing.originalSourcePage === 'MapComponent') {
+        props.toMap()
+      } else if (props.editing.originalSourcePage === 'ObservationEventComponent') {
+        props.toObservationEvent(props.observationId.eventId)
+      }
+      props.setEditing({
+        started: false,
+        locChanged: false,
+        originalSourcePage: ''
+      })
       setSaving(false)
     } catch (error) {
       props.setMessageState({
@@ -269,7 +291,8 @@ const ObservationComponent = (props: Props) => {
       props.setObservationLocation(observation.unitGathering.geometry)
       props.setEditing({
         started: true,
-        locChanged: false
+        locChanged: false,
+        originalSourcePage: props.editing.originalSourcePage
       })
       props.toMap()
     }
@@ -288,7 +311,7 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView keyboardShouldPersistTaps='always'>
-          {(!props.fromMap && props.observationId) ?
+          {props.observationId ?
             <View style={Cs.buttonContainer}>
               <ButtonElement
                 buttonStyle={{}}

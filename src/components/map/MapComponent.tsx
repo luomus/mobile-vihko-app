@@ -79,7 +79,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPressHome: (obsStopped: boolean) => void,
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
-  onPressEditing: (fromMap?: boolean) => void,
+  onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
   children?: ReactChild
 }
 
@@ -110,7 +110,7 @@ const MapComponent = (props: Props) => {
         longitudeDelta: 0.01000000000000000
       })
     }
-  }, [])
+  }, [props.editing])
 
   useEffect(() => {
     if (props.editing.started) {
@@ -118,7 +118,7 @@ const MapComponent = (props: Props) => {
     } else {
       setObservationButtonsState('newObservation')
     }
-  }, [])
+  }, [props.editing])
 
   //reference for mapView
   let mapView: MapView | null = null
@@ -190,7 +190,8 @@ const MapComponent = (props: Props) => {
   const submitEdit = () => {
     props.setEditing({
       started: true,
-      locChanged: true
+      locChanged: true,
+      originalSourcePage: props.editing.originalSourcePage
     })
     props.onPressEditing()
   }
@@ -222,7 +223,8 @@ const MapComponent = (props: Props) => {
   const cancelEdit = () => {
     props.setEditing({
       started: false,
-      locChanged: false
+      locChanged: false,
+      originalSourcePage: props.editing.originalSourcePage
     })
     props.onPressEditing()
   }
@@ -245,7 +247,8 @@ const MapComponent = (props: Props) => {
       eventId,
       unitId
     })
-    props.onPressEditing(true)
+    console.log('shift')
+    props.onPressEditing(true, 'MapComponent')
   }
 
   //preparations for opening the edit observation modal

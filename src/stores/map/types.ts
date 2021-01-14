@@ -9,6 +9,7 @@ export const SET_EDITING = 'SET_EDITING'
 export interface EditingType {
   started: boolean,
   locChanged: boolean,
+  originalSourcePage: string
 }
 
 interface setRegion {

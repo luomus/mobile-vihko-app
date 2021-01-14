@@ -64,7 +64,7 @@ export default class ObservationEventScreen extends Component<NavigationStackScr
       <ObservationEventComponent
         id={this.props.navigation.state.params?.id}
         onPressHome={() => { this.props.navigation.navigate('Home') }}
-        onPressObservation={() => { this.props.navigation.navigate('Observation') }}
+        onPressObservation={(sourcePage?: string) => { this.props.navigation.navigate('Observation', { sourcePage }) }}
         onPressObservationEvent={() => { this.props.navigation.navigate('EditObservationEvent') }}
         isFocused={() => isFocused()}
       >

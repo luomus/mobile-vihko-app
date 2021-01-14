@@ -72,6 +72,7 @@ export default class ObservationScreen extends Component<NavigationStackScreenPr
         rules={this.props.navigation.state.params?.rules}
         defaults={this.props.navigation.state.params?.defaults}
         fromMap={fromMap}
+        sourcePage={this.props.navigation?.state?.params?.sourcePage}
       >
         <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
       </ObservationComponent>
