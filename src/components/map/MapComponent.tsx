@@ -33,7 +33,6 @@ import { ObservationEventType } from '../../stores/observation/types'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
-import { listOfHaversineNeighbors } from '../../utilities/haversineFormula'
 import { Icon } from 'react-native-elements'
 
 interface BasicObject {
@@ -80,11 +79,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPressHome: (obsStopped: boolean) => void,
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
-<<<<<<< HEAD
   onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
-=======
-  onPressEditing: (fromMap?: boolean) => void,
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   children?: ReactChild
 }
 
@@ -256,19 +251,12 @@ const MapComponent = (props: Props) => {
   }
 
   //preparations for opening the edit observation modal
-<<<<<<< HEAD
   const openModal = (units: Array<Record<string, any>>, eventId: string): void => {
     props.setObservationId({ eventId: eventId, unitId: null })
     cancelObservation()
     stopCentering()
     //gets the list of nearby observations and saves them to a state, so they can be rendered in the modal
     setObservationOptions(units)
-=======
-  const openModal = (units: Array<Record<string, any>>, unitId: string): void => {
-    //gets the list of nearby observations and saves them to a state, so they can be rendered in the modal
-    const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, props.region, unitId)
-    setObservationOptions(haversineNeighbors)
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
     setModalVisibility(true)
   }
 
@@ -276,22 +264,6 @@ const MapComponent = (props: Props) => {
   const closeModal = (): void => {
     setModalVisibility(false)
     props.clearObservationId()
-<<<<<<< HEAD
-=======
-  }
-
-  //is used to update location for old observation in the
-  //observationEvent as a result of dragging observation marker
-  const updateObservationLocation = async (coordinates: LatLng, eventId: string, unitId: string) => {
-    try {
-      await props.replaceLocationById(convertLatLngToPoint(coordinates), eventId, unitId)
-    } catch (error) {
-      props.setMessageState({
-        type: 'err',
-        messageContent: error.message
-      })
-    }
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   }
 
   //draws user position to map
@@ -383,14 +355,6 @@ const MapComponent = (props: Props) => {
           coordinate = {coordinate}
           pinColor = {color}
           zIndex = {3}
-<<<<<<< HEAD
-=======
-          onPress = {() => {
-            props.setObservationId({ eventId, unitId })
-            stopCentering()
-            openModal(units, unitId)
-          }}
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
         />
       )
     })

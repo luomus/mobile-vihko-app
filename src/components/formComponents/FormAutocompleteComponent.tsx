@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { useTranslation } from 'react-i18next'
 import { getTaxonAutocomplete } from '../../controllers/autocompleteController'
 import Autocomplete from 'react-native-autocomplete-input'
 import Cs from '../../styles/ContainerStyles'
@@ -9,19 +10,13 @@ import { TextInput } from 'react-native-gesture-handler'
 import { get, debounce } from 'lodash'
 import { Canceler } from 'axios'
 import uuid from 'react-native-uuid'
-<<<<<<< HEAD
 import { ErrorMessage } from '@hookform/error-message'
-=======
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 
 export interface AutocompleteParams {
   target: string,
   filters: Record<string, any> | null,
   valueField: string,
-<<<<<<< HEAD
   validation?: Record<string, any>,
-=======
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   transform: Record<string, string>
 }
 
@@ -32,10 +27,7 @@ interface Props {
   setValue: Function,
   watch: Function,
   unregister: Function,
-<<<<<<< HEAD
   errors: Record<string, any>,
-=======
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   autocompleteParams: AutocompleteParams,
   lang: string,
   index: number,
@@ -50,11 +42,9 @@ const FormAutocompleteComponent = (props: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
-<<<<<<< HEAD
+  const { t } = useTranslation()
+
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
-=======
-  const { target, filters, valueField, transform } = props.autocompleteParams
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   let cancel: Canceler | undefined
   let timeout: NodeJS.Timeout | undefined
 
@@ -63,12 +53,9 @@ const FormAutocompleteComponent = (props: Props) => {
     const transformKeys = Object.keys(transform)
     const registeredFields = Object.keys(props.watch())
 
-<<<<<<< HEAD
     registerField(valueField)
     props.setValue(valueField, props.defaultValue, { shouldValidate: true })
 
-=======
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
     transformKeys.forEach(key => {
       if (transform[key] === valueField && props.defaultValue === '') {
         allFound = false
@@ -92,7 +79,7 @@ const FormAutocompleteComponent = (props: Props) => {
     }
 
     setError(message)
-
+    console.log(message)
     timeout = setTimeout(() => setError(''), 10000)
   }
 
@@ -134,7 +121,6 @@ const FormAutocompleteComponent = (props: Props) => {
     })
   }
 
-<<<<<<< HEAD
   const registerField = (name: string) => {
     if (validation && name === valueField) {
       props.register(name, validation)
@@ -151,17 +137,6 @@ const FormAutocompleteComponent = (props: Props) => {
         props.setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))), { shouldValidate: true })
       } else {
         props.setValue(transform[key], get(item, key.split('_')), { shouldValidate: true })
-=======
-  const addSelectionToForm = (item: Record<string, any>) => {
-
-    Object.keys(transform).forEach(key => {
-      props.register({ name: transform[key] })
-
-      if (key.includes('informalTaxonGroup')) {
-        props.setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))))
-      } else {
-        props.setValue(transform[key], get(item, key.split('_')))
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
       }
     })
   }
@@ -190,7 +165,7 @@ const FormAutocompleteComponent = (props: Props) => {
       cancel = undefined
     } catch (err) {
       if (!err.isCanceled) {
-        setErrorMessage('Autocomplete network error!')
+        setErrorMessage(t('autocomplete network error'))
       }
     } finally {
       setLoading(false)
@@ -205,22 +180,14 @@ const FormAutocompleteComponent = (props: Props) => {
 
     if (selected) {
       wipeOldSelection()
-<<<<<<< HEAD
       registerField(valueField)
-=======
-      props.register({ name: valueField })
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
       setSelected(false)
     }
 
     setQuery(text)
     setHideResult(false)
 
-<<<<<<< HEAD
     props.setValue(valueField, text, { shouldValidate: true })
-=======
-    props.setValue(valueField, text)
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 
     debouncedQuery(text)
   }
@@ -286,6 +253,11 @@ const FormAutocompleteComponent = (props: Props) => {
     }
   }
 
+  const errorMessageTranslation = (errorMessage: string): Element => {
+    const errorTranslation = t(errorMessage)
+    return <Text style={{ color: Colors.negativeColor }}>{errorTranslation}</Text>
+  }
+
   const renderTextInput = (
     onFocus: () => void,
     onBlur: () => void,
@@ -303,7 +275,7 @@ const FormAutocompleteComponent = (props: Props) => {
         </TextInput>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           {loading ?
-            <ActivityIndicator size={25} color={Colors.neutralColor}/>
+            <ActivityIndicator size={25} color={Colors.neutralColor} />
             : selected ?
               <Icon iconStyle={{ padding: 5, color: Colors.positiveColor }} name='done' type='material-icons' size={25} />
               : <Icon iconStyle={{ padding: 5, color: Colors.neutralColor }} name='warning' type='material-icons' size={25} />
@@ -316,19 +288,11 @@ const FormAutocompleteComponent = (props: Props) => {
   return (
     <View style={Cs.containerWithJustPadding}>
       <Text>{props.title}</Text>
-      {
-        error !== '' ?
-          <Text style={{ color: Colors.negativeColor }}>{error}</Text> :
-          null
-      }
-<<<<<<< HEAD
       <ErrorMessage
         errors={props.errors}
         name={valueField}
-        render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{message}</Text>}
+        render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{errorMessageTranslation(message)}</Text>}
       />
-=======
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
       <View style={{ paddingBottom: 35 }}>
         <Autocomplete
           containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: props.index }}

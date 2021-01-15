@@ -40,11 +40,11 @@ export const overrideJX519Fields = {
       validation: {
         required: {
           value: true,
-          message: 'Can\'t be empty.'
+          message: 'must not be empty'
         },
         minLength: {
-          value: 3,
-          message: 'Must be longer than 3 letters.'
+          value: 2,
+          message: 'must be at least 2 letters'
         },
       },
       transform: {

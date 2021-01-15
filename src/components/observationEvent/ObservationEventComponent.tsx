@@ -56,11 +56,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   id: string,
   onPressHome: () => void,
-<<<<<<< HEAD
   onPressObservation: (sourcePage?: string) => void,
-=======
-  onPressObservation: () => void,
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   onPressObservationEvent: () => void,
   isFocused: () => boolean,
   children?: ReactChild
@@ -210,11 +206,7 @@ const ObservationEventComponent = (props: Props) => {
                         unitId: observation.id
                       }
                       props.setObservationId(id)
-<<<<<<< HEAD
                       props.onPressObservation('ObservationEventComponent')
-=======
-                      props.onPressObservation()
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
                     }}
                   />
                 }

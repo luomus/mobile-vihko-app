@@ -1,6 +1,7 @@
 {
   "add new observation": "LISÄÄ HAVAINTO",
   "add observation": "Lisää havainto",
+  "autocomplete network error": "Automaattisessa hakukentässä tapahtui verkkovirhe.",
   "beginObservation": "ALOITA",
   "beginObservationFungiAtlas": "ALOITA SIENILOMAKE",
   "beginObservationTripForm": "ALOITA RETKILOMAKE",
@@ -80,6 +81,8 @@
   "metadata post failure": "Tallennus epäonnistui, kuvien metadatan tallennus epäonnistui,",
   "mobile app": "Liituri",
   "mobile vihko": "Mobiili-Vihko",
+  "must be at least 2 letters": "Lajin nimen on oltava vähintään 2 merkkiä.",
+  "must not be empty": "Lajin nimi ei saa olla tyhjä.",
   "new observation event with zone": "Uusi havaintotapahtuma aiemmin perustetulla havainnointialueella",
   "new observation event without zone": "Uusi havaintotapahtuma",
   "no": "EI",

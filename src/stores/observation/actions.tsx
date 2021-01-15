@@ -22,11 +22,7 @@ import { saveMedias } from '../../controllers/imageController'
 import { netStatusChecker } from '../../utilities/netStatusCheck'
 import { overlapsFinland } from '../../utilities/geometryCreator'
 import { log } from '../../utilities/logger'
-<<<<<<< HEAD
 import { definePublicity, defineRecordBasis, fetchFinland, fetchForeign } from './helpers'
-=======
-import { definePublicity, defineRecordBasis, removeDuplicatesFromPath, fetchFinland, fetchForeign } from './helpers'
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -71,7 +67,6 @@ export const eventPathUpdate = (store: Store, lineStringPath: LineString | null)
   }
 }
 
-<<<<<<< HEAD
 export const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<number>>): Array<Array<number>> => {
   let uniqueCoordinates: Array<Array<number>> = []
 
@@ -98,8 +93,6 @@ export const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<numb
   return uniqueCoordinates
 }
 
-=======
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async dispatch => {
     try {
@@ -148,12 +141,6 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     //define record basis for each unit, depending on whether the unit has images attached
     event = defineRecordBasis(event)
 
-<<<<<<< HEAD
-=======
-    //remove duplicates from path
-    event.gatherings[0].geometry.coordinates = removeDuplicatesFromPath(event.gatherings[0].geometry.coordinates)
-
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
     if (overlapsFinland(event.gatherings[0].geometry)) {
       await fetchFinland(event, lang)

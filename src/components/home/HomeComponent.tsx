@@ -14,10 +14,7 @@ import {
   newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
-<<<<<<< HEAD
   removeDuplicatesFromPath,
-=======
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   setObservationId,
   switchSchema
 } from '../../stores/observation/actions'

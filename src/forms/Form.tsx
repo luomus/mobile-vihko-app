@@ -88,11 +88,7 @@ const Form = (
     if (overrideFields && Object.keys(overrideFields).includes(path)) {
       switch (overrideFields[path].field) {
         case 'autocomplete':
-<<<<<<< HEAD
           toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, register, setValue, watch, unregister, errors, overrideFields[path].params, lang, index))
-=======
-          toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, register, setValue, watch, unregister, overrideFields[path].params, lang, index))
->>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
           return
         case 'imagesKeywords':
           toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, register, setValue, overrideFields[path].params, lang))
