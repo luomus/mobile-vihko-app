@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { useTranslation } from 'react-i18next'
 import { getTaxonAutocomplete } from '../../controllers/autocompleteController'
 import Autocomplete from 'react-native-autocomplete-input'
 import Cs from '../../styles/ContainerStyles'
@@ -41,6 +42,8 @@ const FormAutocompleteComponent = (props: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
+  const { t } = useTranslation()
+
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
   let timeout: NodeJS.Timeout | undefined
@@ -76,7 +79,7 @@ const FormAutocompleteComponent = (props: Props) => {
     }
 
     setError(message)
-
+    console.log(message)
     timeout = setTimeout(() => setError(''), 10000)
   }
 
@@ -162,7 +165,7 @@ const FormAutocompleteComponent = (props: Props) => {
       cancel = undefined
     } catch (err) {
       if (!err.isCanceled) {
-        setErrorMessage('Autocomplete network error!')
+        setErrorMessage(t('autocomplete network error'))
       }
     } finally {
       setLoading(false)
@@ -250,6 +253,11 @@ const FormAutocompleteComponent = (props: Props) => {
     }
   }
 
+  const errorMessageTranslation = (errorMessage: string): Element => {
+    const errorTranslation = t(errorMessage)
+    return <Text style={{ color: Colors.negativeColor }}>{errorTranslation}</Text>
+  }
+
   const renderTextInput = (
     onFocus: () => void,
     onBlur: () => void,
@@ -267,7 +275,7 @@ const FormAutocompleteComponent = (props: Props) => {
         </TextInput>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           {loading ?
-            <ActivityIndicator size={25} color={Colors.neutralColor}/>
+            <ActivityIndicator size={25} color={Colors.neutralColor} />
             : selected ?
               <Icon iconStyle={{ padding: 5, color: Colors.positiveColor }} name='done' type='material-icons' size={25} />
               : <Icon iconStyle={{ padding: 5, color: Colors.neutralColor }} name='warning' type='material-icons' size={25} />
@@ -280,15 +288,10 @@ const FormAutocompleteComponent = (props: Props) => {
   return (
     <View style={Cs.containerWithJustPadding}>
       <Text>{props.title}</Text>
-      {
-        error !== '' ?
-          <Text style={{ color: Colors.negativeColor }}>{error}</Text> :
-          null
-      }
       <ErrorMessage
         errors={props.errors}
         name={valueField}
-        render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{message}</Text>}
+        render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{errorMessageTranslation(message)}</Text>}
       />
       <View style={{ paddingBottom: 35 }}>
         <Autocomplete

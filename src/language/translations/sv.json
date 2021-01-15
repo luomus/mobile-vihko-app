@@ -1,6 +1,7 @@
 {
   "add new observation": "LÄGG TILL OBSERVATION",
   "add observation": "Ny observation",
+  "autocomplete network error": "Autoslutförande kunde inte laddar arter från Internet.",
   "beginObservation": "BÖRJA",
   "beginObservationFungiAtlas": "BÖRJA SVAMPATLAS",
   "beginObservationTripForm": "BÖRJA FÄLTBESÖK",
@@ -80,6 +81,8 @@
   "metadata post failure": "Skickande misslyckades, skickande av bild metadata misslyckades,",
   "mobile app": "Liituri",
   "mobile vihko": "Mobil-Vihko",
+  "must be at least 2 letters": "Arter namn måste vara minst 2 bokstav.",
+  "must not be empty": "Arter namn måste inte vara tom.",
   "new observation event with zone": "Ny observationstransaktion i en tidigare etablerad observationsplats",
   "new observation event without zone": "Ny observationstransaktion",
   "no": "NEJ",

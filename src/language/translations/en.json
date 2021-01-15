@@ -1,6 +1,7 @@
 {
   "add new observation": "ADD OBSERVATION",
   "add observation": "Add observation",
+  "autocomplete network error": "Network error happened for autocomplete field.",
   "beginObservation": "START",
   "beginObservationFungiAtlas": "START FUNGI-ATLAS",
   "beginObservationTripForm": "START TRIP-FORM",
@@ -80,6 +81,8 @@
   "metadata post failure": "Sending failed, posting image metadata failed,",
   "mobile app": "Liituri",
   "mobile vihko": "Mobile-Vihko",
+  "must be at least 2 letters": "Taxon name must be at least 2 letters.",
+  "must not be empty": "Taxon name must not be empty.",
   "new observation event with zone": "New observation event within prestored location",
   "new observation event without zone": "New observation event",
   "no": "NO",
