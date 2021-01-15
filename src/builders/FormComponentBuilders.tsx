@@ -20,6 +20,7 @@ export const createAutocompleteField = (
   setValue: Function,
   watch: Function,
   unregister: Function,
+  errors: Object,
   autocompleteParams: AutocompleteParams,
   lang: string,
   index: number,
@@ -27,7 +28,11 @@ export const createAutocompleteField = (
 
   return <FormAutocompleteComponent
     key={objectTitle} title={title} defaultValue={defaultValue} register={register}
+<<<<<<< HEAD
+    setValue={setValue} watch={watch} unregister={unregister} errors={errors}
+=======
     setValue={setValue} watch={watch} unregister={unregister}
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
     autocompleteParams={autocompleteParams} lang={lang} index={index}
   />
 }

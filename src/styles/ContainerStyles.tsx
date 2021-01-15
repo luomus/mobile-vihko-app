@@ -134,16 +134,21 @@ const ContainerStyles = StyleSheet.create({
   observationTypeButtonsContainer: {
     position: 'absolute',
     width: '98%',
-    bottom: '1%',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    bottom: '1%'
   },
   observationTypeButton: {
     padding: 5,
   },
-  observationTypeButtonsColumn: {
-    alignSelf: 'flex-end',
+  observationTypeColumnsContainer: {
+    flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  observationTypeButtonsColumnLeft: {
+    alignSelf: 'flex-start',
+    width: '50%'
+  },
+  observationTypeButtonsColumnRight: {
+    alignSelf: 'flex-end'
   },
   observationAddModal: {
     padding: 10,

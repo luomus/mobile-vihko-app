@@ -1,11 +1,22 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
+<<<<<<< HEAD
+import { useBackHandler } from '@react-native-community/hooks'
+=======
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import { LocationObject } from 'expo-location'
+<<<<<<< HEAD
+import {
+  replaceObservationEvents, newObservation, clearObservationLocation, replaceObservationById, clearObservationId,
+  deleteObservation, setObservationLocation
+} from '../../stores/observation/actions'
+=======
 import { replaceObservationEvents, newObservation, clearObservationLocation, replaceObservationById, clearObservationId, setObservationLocation } from '../../stores/observation/actions'
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import MessageComponent from '../general/MessageComponent'
 import Cs from '../../styles/ContainerStyles'
@@ -21,6 +32,10 @@ import { EditingType } from '../../stores/map/types'
 import { lineStringConstructor } from '../../converters/geoJSONConverters'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
 import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields } from '../../config/fields'
+<<<<<<< HEAD
+import Colors from '../../styles/Colors'
+=======
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 
 interface RootState {
   observation: Point,
@@ -46,7 +61,12 @@ const mapDispatchToProps = {
   replaceObservationById,
   clearObservationId,
   setEditing,
+<<<<<<< HEAD
+  deleteObservation,
+  setObservationLocation
+=======
   setObservationLocation,
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 }
 
 const connector = connect(
@@ -62,7 +82,13 @@ type Props = PropsFromRedux & {
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
   fromMap?: boolean,
+<<<<<<< HEAD
+  sourcePage?: string,
+  children?: ReactChild,
+  isFocused: () => boolean
+=======
   children?: ReactChild
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 }
 
 const ObservationComponent = (props: Props) => {
@@ -76,11 +102,36 @@ const ObservationComponent = (props: Props) => {
   const [observation, setObservation] = useState<Record<string, any> | undefined>(undefined)
 
   useEffect(() => {
+<<<<<<< HEAD
+    console.log('useeffect ', props.fromMap, ' ', props.editing, ' ', props.observationId, ' ', props.sourcePage)
+=======
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
     //initialize only when editing observations
     if (props.observationId) {
       init()
     }
 
+<<<<<<< HEAD
+    //checks if we are coming from MapComponent or ObservationEventComponent
+    if (props.sourcePage && !props.editing.started) {
+      props.setEditing({
+        started: false,
+        locChanged: false,
+        originalSourcePage: props.sourcePage
+      })
+    }
+  }, [])
+
+  useBackHandler(() => {
+    if (props.isFocused()) {
+      cleanUp()
+      return true
+    }
+
+    return false
+  })
+
+=======
     //cleanup when component unmounts, ensures that if navigator back-button
     //is used observationLocation, observationId and editing-flags are returned 
     //to defaults
@@ -96,6 +147,7 @@ const ObservationComponent = (props: Props) => {
     }
   }, [])
 
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   //initialization (only for editing observations)
   const init = () => {
     //clone events from reducer for modification
@@ -239,7 +291,12 @@ const ObservationComponent = (props: Props) => {
       props.clearObservationLocation()
       props.setEditing({
         started: false,
+<<<<<<< HEAD
+        locChanged: false,
+        originalSourcePage: props.editing.originalSourcePage
+=======
         locChanged: false
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
       })
     }
 
@@ -252,13 +309,35 @@ const ObservationComponent = (props: Props) => {
     try {
       await props.replaceObservationById(editedUnit, props.observationId.eventId, props.observationId.unitId)
       props.clearObservationId()
+<<<<<<< HEAD
+
+      if (props.editing.originalSourcePage === 'MapComponent') {
+        props.toMap()
+      } else if (props.editing.originalSourcePage === 'ObservationEventComponent') {
+        props.toObservationEvent(props.observationId.eventId)
+      }
+
+      props.setEditing({
+        started: false,
+        locChanged: false,
+        originalSourcePage: ''
+      })
+
+      props.clearObservationId()
+
+=======
       props.fromMap ? props.toMap() : props.toObservationEvent(props.observationId.eventId)
       setSaving(false)
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
     } catch (error) {
       props.setMessageState({
         type: 'err',
         messageContent: error.message
       })
+<<<<<<< HEAD
+    } finally {
+=======
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
       setSaving(false)
     }
   }
@@ -269,12 +348,60 @@ const ObservationComponent = (props: Props) => {
       props.setObservationLocation(observation.unitGathering.geometry)
       props.setEditing({
         started: true,
+<<<<<<< HEAD
+        locChanged: false,
+        originalSourcePage: props.editing.originalSourcePage
+=======
         locChanged: false
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
       })
       props.toMap()
     }
   }
 
+<<<<<<< HEAD
+  const handleRemove = async () => {
+    setSaving(true)
+    try {
+      await props.deleteObservation(props.observationId.eventId, props.observationId.unitId)
+      props.clearObservationId()
+
+      if (props.editing.originalSourcePage === 'MapComponent') {
+        props.toMap()
+      } else if (props.editing.originalSourcePage === 'ObservationEventComponent') {
+        props.toObservationEvent(props.observationId.eventId)
+      }
+      props.setEditing({
+        started: false,
+        locChanged: false,
+        originalSourcePage: ''
+      })
+    } catch (error) {
+      props.setMessageState({
+        type: 'err',
+        messageContent: error.message
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const cleanUp = () => {
+    //cleanup when component unmounts, ensures that if navigator back-button
+    //is used observationLocation, observationId and editing-flags are returned
+    //to defaults
+    console.log('cleanup', props.fromMap)
+    props.clearObservationLocation()
+    props.setEditing({
+      started: false,
+      locChanged: false,
+      originalSourcePage: props.editing.originalSourcePage
+    })
+    props.clearObservationId()
+  }
+
+=======
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   if (saving) {
     return (
       <ActivityComponent text={'saving'} />
@@ -288,7 +415,11 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView keyboardShouldPersistTaps='always'>
+<<<<<<< HEAD
+          {props.observationId ?
+=======
           {(!props.fromMap && props.observationId) ?
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
             <View style={Cs.buttonContainer}>
               <ButtonElement
                 buttonStyle={{}}
@@ -301,6 +432,22 @@ const ObservationComponent = (props: Props) => {
             </View>
             : null
           }
+<<<<<<< HEAD
+          {props.observationId ?
+            <View style={Cs.buttonContainer}>
+              <ButtonElement
+                buttonStyle={{ backgroundColor: Colors.negativeButton }}
+                disabled={saving}
+                title={t('delete')}
+                iconRight={true}
+                icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
+                onPress={() => handleRemove()}
+              />
+            </View>
+            : null
+          }
+=======
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
           <View style={Cs.formContainer}>
             {form}
           </View>

@@ -36,7 +36,6 @@ import MapModalComponent from './MapModalComponent'
 import { listOfHaversineNeighbors } from '../../utilities/haversineFormula'
 import { Icon } from 'react-native-elements'
 
-
 interface BasicObject {
   [key: string]: any
 }
@@ -81,7 +80,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPressHome: (obsStopped: boolean) => void,
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
+<<<<<<< HEAD
+  onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
+=======
   onPressEditing: (fromMap?: boolean) => void,
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   children?: ReactChild
 }
 
@@ -112,7 +115,7 @@ const MapComponent = (props: Props) => {
         longitudeDelta: 0.01000000000000000
       })
     }
-  }, [])
+  }, [props.editing])
 
   useEffect(() => {
     if (props.editing.started) {
@@ -120,7 +123,7 @@ const MapComponent = (props: Props) => {
     } else {
       setObservationButtonsState('newObservation')
     }
-  }, [])
+  }, [props.editing])
 
   //reference for mapView
   let mapView: MapView | null = null
@@ -192,7 +195,8 @@ const MapComponent = (props: Props) => {
   const submitEdit = () => {
     props.setEditing({
       started: true,
-      locChanged: true
+      locChanged: true,
+      originalSourcePage: props.editing.originalSourcePage
     })
     props.onPressEditing()
   }
@@ -215,6 +219,8 @@ const MapComponent = (props: Props) => {
         type: 'err',
         messageContent: error.message
       })
+    } finally {
+      props.clearObservationId()
     }
   }
 
@@ -222,7 +228,8 @@ const MapComponent = (props: Props) => {
   const cancelEdit = () => {
     props.setEditing({
       started: false,
-      locChanged: false
+      locChanged: false,
+      originalSourcePage: props.editing.originalSourcePage
     })
     props.onPressEditing()
   }
@@ -240,18 +247,28 @@ const MapComponent = (props: Props) => {
   //from map, enabling return to correct screen when editing is finished
   const shiftToEditPage = (eventId: string, unitId: string) => {
     setModalVisibility(false)
+    cancelObservation()
     props.setObservationId({
       eventId,
       unitId
     })
-    props.onPressEditing(true)
+    props.onPressEditing(true, 'MapComponent')
   }
 
   //preparations for opening the edit observation modal
+<<<<<<< HEAD
+  const openModal = (units: Array<Record<string, any>>, eventId: string): void => {
+    props.setObservationId({ eventId: eventId, unitId: null })
+    cancelObservation()
+    stopCentering()
+    //gets the list of nearby observations and saves them to a state, so they can be rendered in the modal
+    setObservationOptions(units)
+=======
   const openModal = (units: Array<Record<string, any>>, unitId: string): void => {
     //gets the list of nearby observations and saves them to a state, so they can be rendered in the modal
     const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, props.region, unitId)
     setObservationOptions(haversineNeighbors)
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
     setModalVisibility(true)
   }
 
@@ -259,6 +276,8 @@ const MapComponent = (props: Props) => {
   const closeModal = (): void => {
     setModalVisibility(false)
     props.clearObservationId()
+<<<<<<< HEAD
+=======
   }
 
   //is used to update location for old observation in the
@@ -272,6 +291,7 @@ const MapComponent = (props: Props) => {
         messageContent: error.message
       })
     }
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   }
 
   //draws user position to map
@@ -345,7 +365,6 @@ const MapComponent = (props: Props) => {
       return null
     }
 
-    const eventId: string = props.observationEvent.events?.[props.observationEvent.events.length - 1].id
     const units: BasicObject[] = props.observationEvent.events?.[props.observationEvent.events.length - 1]
       .gatherings[0].units
 
@@ -361,16 +380,17 @@ const MapComponent = (props: Props) => {
       return (
         <Marker
           key={unitId}
-          draggable = {true}
           coordinate = {coordinate}
           pinColor = {color}
-          onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, eventId, unitId)}
           zIndex = {3}
+<<<<<<< HEAD
+=======
           onPress = {() => {
             props.setObservationId({ eventId, unitId })
             stopCentering()
             openModal(units, unitId)
           }}
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
         />
       )
     })
@@ -390,6 +410,7 @@ const MapComponent = (props: Props) => {
           maxZoomLevel = {18.9}
           minZoomLevel = {5}
           mapType = {props.maptype === 'topographic' ? 'none' : props.maptype}
+          pitchEnabled = {false}
           rotateEnabled = {false}
           moveOnMarkerPress = {false}
           style = {Cs.mapViewStyle}
@@ -427,6 +448,8 @@ const MapComponent = (props: Props) => {
               confirmationButton={props.onPressObservation}
               cancelButton={cancelObservation}
               mode={observationButtonsState}
+              openModal={openModal}
+              shiftToEditPage={shiftToEditPage}
             />
             ||
             observationButtonsState === 'changeLocation' &&
@@ -434,6 +457,8 @@ const MapComponent = (props: Props) => {
                 confirmationButton={submitEdit}
                 cancelButton={cancelEdit}
                 mode={observationButtonsState}
+                openModal={openModal}
+                shiftToEditPage={shiftToEditPage}
               />
           : null
         }

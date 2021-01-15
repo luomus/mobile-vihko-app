@@ -37,6 +37,16 @@ export const overrideJX519Fields = {
     params: {
       target: 'taxon',
       valueField: 'identifications_0_taxon',
+      validation: {
+        required: {
+          value: true,
+          message: 'Can\'t be empty.'
+        },
+        minLength: {
+          value: 3,
+          message: 'Must be longer than 3 letters.'
+        },
+      },
       transform: {
         'key': 'unitFact_autocompleteSelectedTaxonID',
         'value': 'identifications_0_taxon',

@@ -14,6 +14,10 @@ import {
   newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
+<<<<<<< HEAD
+  removeDuplicatesFromPath,
+=======
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
   setObservationId,
   switchSchema
 } from '../../stores/observation/actions'
@@ -312,17 +316,27 @@ const HomeComponent = (props: Props) => {
         dateEnd: setDateForDocument()
       }
 
-      const lineStringPath = lineStringConstructor(props.path)
-      if (lineStringPath && !unfinishedEvent) {
-        event.gatherings[0].geometry = lineStringPath
-      }
-
-      if (!event.gatherings[0].geometry) {
+      const setBoundingBoxGeometry = () => {
         const geometry = createUnitBoundingBox(event)
 
         if (geometry) {
           event.gatherings[0].geometry = geometry
         }
+      }
+
+      let lineStringPath = lineStringConstructor(props.path)
+
+      if (lineStringPath && !unfinishedEvent) {
+        //remove duplicates from path
+        lineStringPath.coordinates = removeDuplicatesFromPath(lineStringPath.coordinates)
+
+        if (lineStringPath.coordinates.length >= 2) {
+          event.gatherings[0].geometry = lineStringPath
+        } else {
+          setBoundingBoxGeometry()
+        }
+      } else if (!unfinishedEvent) {
+        setBoundingBoxGeometry()
       }
 
       props.clearPath()

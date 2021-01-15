@@ -31,6 +31,8 @@ export const defineRecordBasis = (event: Record<string, any>): Record<string, an
   return modifiedEvent
 }
 
+<<<<<<< HEAD
+=======
 export const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<number>>): Array<Array<number>> => {
   let uniqueCoordinates: Array<Array<number>> = []
 
@@ -57,6 +59,7 @@ export const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<numb
   return uniqueCoordinates
 }
 
+>>>>>>> 22f3c0825d5920c71a9b87594b42df21415e0e17
 //calls the helper function for fetching and processing locality details for finnish events
 export const fetchFinland = async (event: Record<string, any>, lang: string) => {
   const localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang)
