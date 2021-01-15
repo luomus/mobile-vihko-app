@@ -313,20 +313,27 @@ const HomeComponent = (props: Props) => {
         dateEnd: setDateForDocument()
       }
 
-      const lineStringPath = lineStringConstructor(props.path)
-      if (lineStringPath && !unfinishedEvent) {
-        event.gatherings[0].geometry = lineStringPath
-      }
-
-      //remove duplicates from path
-      if (event.gatherings[0].geometry) { event.gatherings[0].geometry.coordinates = removeDuplicatesFromPath(event.gatherings[0].geometry.coordinates) }
-
-      if (!event.gatherings[0].geometry || event.gatherings[0].geometry.coordinates.length < 2) {
+      const setBoundingBoxGeometry = () => {
         const geometry = createUnitBoundingBox(event)
 
         if (geometry) {
           event.gatherings[0].geometry = geometry
         }
+      }
+
+      let lineStringPath = lineStringConstructor(props.path)
+
+      if (lineStringPath && !unfinishedEvent) {
+        //remove duplicates from path
+        lineStringPath.coordinates = removeDuplicatesFromPath(lineStringPath.coordinates)
+
+        if (lineStringPath.coordinates.length >= 2) {
+          event.gatherings[0].geometry = lineStringPath
+        } else {
+          setBoundingBoxGeometry()
+        }
+      } else if (!unfinishedEvent) {
+        setBoundingBoxGeometry()
       }
 
       props.clearPath()

@@ -1,12 +1,15 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
+import { useBackHandler } from '@react-native-community/hooks'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import { LocationObject } from 'expo-location'
-import { replaceObservationEvents, newObservation, clearObservationLocation, replaceObservationById, clearObservationId, 
-  deleteObservation, setObservationLocation } from '../../stores/observation/actions'
+import {
+  replaceObservationEvents, newObservation, clearObservationLocation, replaceObservationById, clearObservationId,
+  deleteObservation, setObservationLocation
+} from '../../stores/observation/actions'
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import MessageComponent from '../general/MessageComponent'
 import Cs from '../../styles/ContainerStyles'
@@ -66,7 +69,8 @@ type Props = PropsFromRedux & {
   defaults?: Record<string, any>,
   fromMap?: boolean,
   sourcePage?: string,
-  children?: ReactChild
+  children?: ReactChild,
+  isFocused: () => boolean
 }
 
 const ObservationComponent = (props: Props) => {
@@ -80,35 +84,30 @@ const ObservationComponent = (props: Props) => {
   const [observation, setObservation] = useState<Record<string, any> | undefined>(undefined)
 
   useEffect(() => {
+    console.log('useeffect ', props.fromMap, ' ', props.editing, ' ', props.observationId, ' ', props.sourcePage)
     //initialize only when editing observations
     if (props.observationId) {
       init()
     }
 
     //checks if we are coming from MapComponent or ObservationEventComponent
-    if (props.sourcePage) {
+    if (props.sourcePage && !props.editing.started) {
       props.setEditing({
         started: false,
         locChanged: false,
         originalSourcePage: props.sourcePage
       })
     }
-
-    //cleanup when component unmounts, ensures that if navigator back-button
-    //is used observationLocation, observationId and editing-flags are returned
-    //to defaults
-    return () => {
-      if (!props.fromMap) {
-        props.clearObservationLocation()
-        props.setEditing({
-          started: false,
-          locChanged: false,
-          originalSourcePage: props.editing.originalSourcePage
-        })
-        props.clearObservationId()
-      }
-    }
   }, [])
+
+  useBackHandler(() => {
+    if (props.isFocused()) {
+      cleanUp()
+      return true
+    }
+
+    return false
+  })
 
   //initialization (only for editing observations)
   const init = () => {
@@ -273,11 +272,15 @@ const ObservationComponent = (props: Props) => {
       } else if (props.editing.originalSourcePage === 'ObservationEventComponent') {
         props.toObservationEvent(props.observationId.eventId)
       }
+
       props.setEditing({
         started: false,
         locChanged: false,
         originalSourcePage: ''
       })
+
+      props.clearObservationId()
+
     } catch (error) {
       props.setMessageState({
         type: 'err',
@@ -325,6 +328,20 @@ const ObservationComponent = (props: Props) => {
     } finally {
       setSaving(false)
     }
+  }
+
+  const cleanUp = () => {
+    //cleanup when component unmounts, ensures that if navigator back-button
+    //is used observationLocation, observationId and editing-flags are returned
+    //to defaults
+    console.log('cleanup', props.fromMap)
+    props.clearObservationLocation()
+    props.setEditing({
+      started: false,
+      locChanged: false,
+      originalSourcePage: props.editing.originalSourcePage
+    })
+    props.clearObservationId()
   }
 
   if (saving) {
