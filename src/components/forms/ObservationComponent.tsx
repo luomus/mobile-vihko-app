@@ -84,7 +84,6 @@ const ObservationComponent = (props: Props) => {
   const [observation, setObservation] = useState<Record<string, any> | undefined>(undefined)
 
   useEffect(() => {
-    console.log('useeffect ', props.fromMap, ' ', props.editing, ' ', props.observationId, ' ', props.sourcePage)
     //initialize only when editing observations
     if (props.observationId) {
       init()
@@ -101,9 +100,9 @@ const ObservationComponent = (props: Props) => {
   }, [])
 
   useBackHandler(() => {
+
     if (props.isFocused()) {
       cleanUp()
-      return true
     }
 
     return false
@@ -334,7 +333,6 @@ const ObservationComponent = (props: Props) => {
     //cleanup when component unmounts, ensures that if navigator back-button
     //is used observationLocation, observationId and editing-flags are returned
     //to defaults
-    console.log('cleanup', props.fromMap)
     props.clearObservationLocation()
     props.setEditing({
       started: false,
