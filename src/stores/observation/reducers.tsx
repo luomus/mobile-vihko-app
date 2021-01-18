@@ -1,17 +1,21 @@
 import {
-  observationActionTypes,
   SchemaType,
-  SET_OBSERVATION,
-  CLEAR_OBSERVATION,
-  TOGGLE_OBSERVING,
-  NEW_OBSERVATION_EVENT,
-  SET_SCHEMA,
-  REPLACE_OBSERVATION_EVENTS,
-  CLEAR_OBSERVATION_EVENTS,
-  SET_OBSERVATION_ID,
-  CLEAR_OBSERVATION_ID,
+  observationActionTypes,
   ObservationEventType,
+  CLEAR_OBSERVATION,
+  SET_OBSERVATION,
+  CLEAR_OBSERVATION_EVENTS,
+  NEW_OBSERVATION_EVENT,
+  REPLACE_OBSERVATION_EVENTS,
+  CLEAR_OBSERVATION_ID,
+  SET_OBSERVATION_ID,
+  TOGGLE_OBSERVING,
+  SET_SCHEMA
 } from './types'
+
+const initObsEventState: ObservationEventType = {
+  events: []
+}
 
 const initSchemaState: SchemaType = {
   fi: null,
@@ -20,25 +24,12 @@ const initSchemaState: SchemaType = {
   formID: ''
 }
 
-const initObsEventState: ObservationEventType = {
-  events: []
-}
-
 const observationReducer = (state = null, action : observationActionTypes) => {
   switch (action.type) {
     case SET_OBSERVATION:
       return action.payload
     case CLEAR_OBSERVATION:
       return null
-    default:
-      return state
-  }
-}
-
-const observingReducer = (state = false, action : observationActionTypes) => {
-  switch (action.type) {
-    case TOGGLE_OBSERVING:
-      return !state
     default:
       return state
   }
@@ -70,17 +61,6 @@ const observationEventsReducer = (state: ObservationEventType = initObsEventStat
   }
 }
 
-const schemaReducer = (state = initSchemaState, action : observationActionTypes) => {
-  switch (action.type) {
-    case SET_SCHEMA:
-      return {
-        ...action.payload,
-      }
-    default:
-      return state
-  }
-}
-
 const observationIdReducer = (state = null, action : observationActionTypes) => {
   switch (action.type) {
     case SET_OBSERVATION_ID:
@@ -92,10 +72,30 @@ const observationIdReducer = (state = null, action : observationActionTypes) => 
   }
 }
 
+const observingReducer = (state = false, action : observationActionTypes) => {
+  switch (action.type) {
+    case TOGGLE_OBSERVING:
+      return !state
+    default:
+      return state
+  }
+}
+
+const schemaReducer = (state = initSchemaState, action : observationActionTypes) => {
+  switch (action.type) {
+    case SET_SCHEMA:
+      return {
+        ...action.payload,
+      }
+    default:
+      return state
+  }
+}
+
 export {
   observationReducer,
-  observingReducer,
   observationEventsReducer,
-  schemaReducer,
   observationIdReducer,
+  observingReducer,
+  schemaReducer
 }

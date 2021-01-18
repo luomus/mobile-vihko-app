@@ -4,14 +4,14 @@ import { Button, Icon } from 'react-native-elements'
 import Modal from 'react-native-modal'
 import { connect, ConnectedProps } from 'react-redux'
 import { setMessageState, popMessageState } from '../../stores/message/actions'
-import { MessageState } from '../../stores/message/types'
+import { MessageType } from '../../stores/message/types'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
 
 interface RootState {
-  message: MessageState[]
+  message: MessageType[]
 }
 
 const mapStateToProps = (state: RootState) => {

@@ -1,7 +1,7 @@
 import {
   userActionTypes,
-  SET_CREDENTIALS,
   CLEAR_CREDENTIALS,
+  SET_CREDENTIALS,
 } from './types'
 
 const initCredentials = {
@@ -11,10 +11,10 @@ const initCredentials = {
 
 const credentialsReducer = (state = initCredentials, action: userActionTypes) => {
   switch (action.type) {
-    case SET_CREDENTIALS:
-      return action.payload
     case CLEAR_CREDENTIALS:
       return initCredentials
+    case SET_CREDENTIALS:
+      return action.payload
     default:
       return state
   }

@@ -1,12 +1,12 @@
 import {
   messageActionTypes,
-  MessageState,
+  MessageType,
   SET_MESSAGE_STATE,
   CLEAR_MESSAGE_STATE,
   POP_MESSAGE_STATE,
 } from './types'
 
-export const setMessageState = (newState: MessageState) : messageActionTypes => ({
+export const setMessageState = (newState: MessageType) : messageActionTypes => ({
   type: SET_MESSAGE_STATE,
   payload: newState
 })

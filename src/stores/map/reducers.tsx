@@ -1,16 +1,13 @@
-import { mapActionTypes,
-  TOGGLE_CENTERED,
-  TOGGLE_MAPTYPE,
-  SET_REGION,
-  CLEAR_REGION,
-  SET_EDITING,
+import {
+  mapActionTypes,
   EditingType,
+  TOGGLE_CENTERED,
+  SET_EDITING,
+  TOGGLE_MAPTYPE,
+  CLEAR_REGION,
+  SET_REGION
 } from './types'
 import { Region } from 'react-native-maps'
-
-const initRegionState = {
-  latitude: 60.171, longitude: 24.931, latitudeDelta: 0.010, longitudeDelta: 0.010
-}
 
 const initEditingState: EditingType = {
   started: false,
@@ -18,15 +15,8 @@ const initEditingState: EditingType = {
   originalSourcePage: ''
 }
 
-const regionReducer = (state: Region = initRegionState, action: mapActionTypes) => {
-  switch (action.type) {
-    case SET_REGION:
-      return action.payload
-    case CLEAR_REGION:
-      return initRegionState
-    default:
-      return state
-  }
+const initRegionState = {
+  latitude: 60.171, longitude: 24.931, latitudeDelta: 0.010, longitudeDelta: 0.010
 }
 
 const centeringReducer = (state: boolean = true, action : mapActionTypes) => {
@@ -62,9 +52,20 @@ const maptypeReducer = (state: 'topographic' | 'satellite' = 'topographic', acti
   }
 }
 
+const regionReducer = (state: Region = initRegionState, action: mapActionTypes) => {
+  switch (action.type) {
+    case CLEAR_REGION:
+      return initRegionState
+    case SET_REGION:
+      return action.payload
+    default:
+      return state
+  }
+}
+
 export {
-  regionReducer,
   centeringReducer,
-  maptypeReducer,
   editingReducer,
+  maptypeReducer,
+  regionReducer
 }
