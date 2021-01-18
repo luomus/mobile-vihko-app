@@ -1,5 +1,5 @@
 import { logger, transportFunctionType } from 'react-native-logs'
-import storageController from '../controllers/storageController'
+import storageController from '../services/storageService'
 
 const customTransport: transportFunctionType = async (msg, level) => {
   let logs = await storageController.fetch('logs')

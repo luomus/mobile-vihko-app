@@ -5,8 +5,8 @@ import {
   CredentialsType,
 } from './types'
 import { ThunkAction } from 'redux-thunk'
-import { pollUserLogin } from '../../controllers/userController'
-import storageController from '../../controllers/storageController'
+import { pollUserLogin } from '../../services/userService'
+import storageController from '../../services/storageService'
 import i18n from '../../language/i18n'
 import { log } from '../../utilities/logger'
 

@@ -14,11 +14,11 @@ import {
   CLEAR_OBSERVATION_ID,
   SET_SCHEMA,
 } from './types'
-import { getSchemas, postObservationEvent } from '../../controllers/documentController'
-import storageController from '../../controllers/storageController'
+import { getSchemas, postObservationEvent } from '../../services/documentService'
+import storageController from '../../services/storageService'
 import { CredentialsType } from '../user/types'
 import { parseUiSchemaToObservations } from '../../parsers/UiSchemaParser'
-import { saveMedias } from '../../controllers/imageController'
+import { saveMedias } from '../../services/imageService'
 import { netStatusChecker } from '../../utilities/netStatusCheck'
 import { overlapsFinland } from '../../utilities/geometryCreator'
 import { log } from '../../utilities/logger'
