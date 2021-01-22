@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 
 type Props = {
   selectedTab: number,
-  onBeginObservationEvent: (zoneUsed: boolean) => void
+  onBeginObservationEvent: () => Promise<void>
 }
 
 const NewEventWithoutZoneComponent = (props: Props) => {
@@ -37,7 +37,7 @@ const NewEventWithoutZoneComponent = (props: Props) => {
           title={beginText()}
           iconRight={true}
           icon={<Icon name='play-arrow' type='material-icons' color={'white'} size={22} />}
-          onPress={() => props.onBeginObservationEvent(false)}
+          onPress={props.onBeginObservationEvent}
         />
       </View>
     </View>

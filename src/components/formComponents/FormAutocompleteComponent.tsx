@@ -79,7 +79,6 @@ const FormAutocompleteComponent = (props: Props) => {
     }
 
     setError(message)
-    console.log(message)
     timeout = setTimeout(() => setError(''), 10000)
   }
 

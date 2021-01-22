@@ -79,7 +79,7 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
           this.props.navigation.navigate('ObservationEvent', { id })
         }}
         obsStopped={state.params?.obsStopped}
-        onFinishObservationEvent={() => {
+        onPressFinishObservationEvent={() => {
           this.props.navigation.navigate('EditObservationEvent')
         }}
       >
