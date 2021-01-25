@@ -243,10 +243,16 @@ const FormAutocompleteComponent = (props: Props) => {
           <Text style={{ fontStyle: 'italic', fontSize: 15 }}>{addBolding(item?.value, oldQuery, true)}</Text>
         </View>
       )
-    } else {
+    } else if (item.value === item?.payload?.vernacularName){
       return (
         <View style={{ paddingTop: 10, paddingBottom: 10 }}>
           <Text>{addBolding(item?.value, oldQuery, false)}{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
+          <Text>{item?.payload?.vernacularName}{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
         </View>
       )
     }
