@@ -301,6 +301,7 @@ const FormAutocompleteComponent = (props: Props) => {
           defaultValue={query}
           onChangeText={(text) => onQueryChange(text)}
           hideResults={hideResult}
+          listStyle={{ paddingLeft: 15 }}
           renderTextInput={({ onFocus, onBlur, onChangeText, defaultValue }) => {
             return renderTextInput(onFocus, onBlur, onChangeText, defaultValue)
           }}

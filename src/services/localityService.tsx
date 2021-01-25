@@ -1,4 +1,5 @@
-import { accessToken, localityUrl, googleGeocodingAPIURL } from '../config/urls'
+import { localityUrl, googleGeocodingAPIURL } from '../config/urls'
+import { accessToken } from '../config/keys'
 import axios from 'axios'
 import { LineString, Point } from 'geojson'
 import { geocodingAPIKey } from '../config/keys'

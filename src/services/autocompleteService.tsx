@@ -1,4 +1,5 @@
-import { accessToken, autocompleteUrl } from '../config/urls'
+import { autocompleteUrl } from '../config/urls'
+import { accessToken } from '../config/keys'
 import axios, { Canceler } from 'axios'
 
 const CancelToken = axios.CancelToken
@@ -10,6 +11,8 @@ export const getTaxonAutocomplete = async (target: string, q: string, filters: R
     'limit': 5,
     'includePayload': true,
     'matchType': 'exact,partial',
+    'includeHidden': false,
+    'excludeNameTypes': 'MX.hasMisappliedName,MX.hasMisspelledName,MX.hasUncertainSynonym,MX.hasOrthographicVariant',
     'access_token': accessToken
   }
 

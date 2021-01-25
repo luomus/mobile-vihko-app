@@ -8,7 +8,9 @@ import i18n from 'i18next'
 export const definePublicity = (event: Record<string, any>, isPublic: boolean): Record<string, any> => {
   let modifiedEvent = event
 
-  if (!isPublic) {
+  if (isPublic) {
+    modifiedEvent.publicityRestrictions = 'MZ.publicityRestrictionsPublic'
+  } else {
     modifiedEvent.publicityRestrictions = 'MZ.publicityRestrictionsPrivate'
   }
 

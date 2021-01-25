@@ -1,7 +1,8 @@
 import ApolloClient, { gql } from 'apollo-boost'
 import axios from 'axios'
 import i18n from '../language/i18n'
-import { graphqlUrl, postDocumentUrl, accessToken } from '../config/urls'
+import { graphqlUrl, postDocumentUrl } from '../config/urls'
+import { accessToken } from '../config/keys'
 import { CredentialsType } from '../stores/user/types'
 
 interface BasicObject {
