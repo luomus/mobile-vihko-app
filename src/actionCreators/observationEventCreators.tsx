@@ -5,37 +5,36 @@ import { LocationObject } from 'expo-location'
 import {
   toggleCentered,
   clearRegion
-} from '../../stores/map/actions'
+} from '../stores/map/actions'
 import {
   setMessageState
-} from '../../stores/message/actions'
+} from '../stores/message/actions'
 import {
   removeDuplicatesFromPath,
   clearObservationLocation,
   setObservationEventFinished,
   replaceObservationEventById,
   replaceObservationEvents,
-  setObservationId,
   toggleObserving,
   clearObservationId
-} from '../../stores/observation/actions'
+} from '../stores/observation/actions'
 import {
   clearLocation,
   updateLocation,
   clearPath
-} from '../../stores/position/actions'
-import { mapActionTypes } from '../../stores/map/types'
-import { messageActionTypes } from '../../stores/message/types'
-import { observationActionTypes } from '../../stores/observation/types'
-import i18n from '../../language/i18n'
-import storageService from '../../services/storageService'
-import { parseSchemaToNewObject } from '../../parsers/SchemaObjectParser'
-import { setDateForDocument } from '../../utilities/dateHelper'
-import { log } from '../../utilities/logger'
-import { stopLocationAsync, watchLocationAsync } from '../../geolocation/geolocation'
-import { locationActionTypes } from '../../stores/position/types'
-import { createUnitBoundingBox } from '../../utilities/geometryCreator'
-import { lineStringConstructor } from '../../converters/geoJSONConverters'
+} from '../stores/position/actions'
+import { mapActionTypes } from '../stores/map/types'
+import { messageActionTypes } from '../stores/message/types'
+import { observationActionTypes } from '../stores/observation/types'
+import i18n from '../language/i18n'
+import storageService from '../services/storageService'
+import { parseSchemaToNewObject } from '../parsers/SchemaObjectParser'
+import { setDateForDocument } from '../utilities/dateHelper'
+import { log } from '../utilities/logger'
+import { stopLocationAsync, watchLocationAsync } from '../geolocation/geolocation'
+import { locationActionTypes } from '../stores/position/types'
+import { createUnitBoundingBox } from '../utilities/geometryCreator'
+import { lineStringConstructor } from '../converters/geoJSONConverters'
 
 export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {

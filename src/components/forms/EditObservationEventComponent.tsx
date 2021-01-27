@@ -2,8 +2,9 @@ import React, { useState, useEffect, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
+import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
-import { finishObservationEvent } from '../../actionCreators/home/homeActionCreators'
+import { finishObservationEvent } from '../../actionCreators/observationEventCreators'
 import { replaceObservationEventById, clearObservationId, setObservationEventFinished, uploadObservationEvent } from '../../stores/observation/actions'
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import Cs from '../../styles/ContainerStyles'
@@ -53,14 +54,16 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
   onPressSubmit: () => void,
-  children?: ReactChild
+  children?: ReactChild,
+  sourcePage: string,
+  isFocused: () => boolean
 }
 
 const EditObservationEventComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
-  const [ event, setEvent ] = useState<Record<string, any> | undefined>(undefined)
-  const [ form, setForm ] = useState<Array<Element> | undefined>(undefined)
-  const [ saving, setSaving ] = useState<boolean>(false)
+  const [event, setEvent] = useState<Record<string, any> | undefined>(undefined)
+  const [form, setForm] = useState<Array<Element> | undefined>(undefined)
+  const [saving, setSaving] = useState<boolean>(false)
   //for react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
@@ -76,6 +79,16 @@ const EditObservationEventComponent = (props: Props) => {
       setForm(undefined)
     }
   }, [])
+
+  useBackHandler(() => {
+    if (props.isFocused()) {
+      if (props.sourcePage === 'MapComponent') {
+        props.onPressSubmit()
+        return true
+      }
+    }
+    return false
+  })
 
   const init = () => {
     //find the correct event by id
@@ -165,12 +178,12 @@ const EditObservationEventComponent = (props: Props) => {
 
   if (saving) {
     return (
-      <ActivityComponent text={'saving'}/>
+      <ActivityComponent text={'saving'} />
     )
   } else if (!form) {
     onUninitalizedForm()
     return (
-      <ActivityComponent text={'loading'}/>
+      <ActivityComponent text={'loading'} />
     )
   } else if (sending) {
     return (
@@ -184,11 +197,11 @@ const EditObservationEventComponent = (props: Props) => {
             {form}
           </View>
         </ScrollView>
-        <MessageComponent/>
+        <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)}/>
+          <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)} />
         </View>
-        <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.onPressSubmit} sendObservationEvent={sendObservationEvent}/>
+        <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.onPressSubmit} sendObservationEvent={sendObservationEvent} />
         {props.children}
       </View>
     )

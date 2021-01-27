@@ -80,7 +80,7 @@ type Props = PropsFromRedux & {
   onPressHome: () => void,
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
-  onPressFinishObservationEvent: () => void,
+  onPressFinishObservationEvent: (sourcePage: string) => void,
   children?: ReactChild
 }
 
@@ -239,7 +239,7 @@ const MapComponent = (props: Props) => {
           eventId: props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1].id,
           unitId: null
         })
-        props.onPressFinishObservationEvent()
+        props.onPressFinishObservationEvent('MapComponent')
       }
     })
   }

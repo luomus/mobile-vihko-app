@@ -57,7 +57,7 @@ type Props = PropsFromRedux & {
   id: string,
   onPressHome: () => void,
   onPressObservation: (sourcePage?: string) => void,
-  onPressObservationEvent: () => void,
+  onPressObservationEvent: (sourcePage: string) => void,
   isFocused: () => boolean,
   children?: ReactChild
 }
@@ -172,7 +172,7 @@ const ObservationEventComponent = (props: Props) => {
                     unitId: ''
                   }
                   props.setObservationId(id)
-                  props.onPressObservationEvent()
+                  props.onPressObservationEvent('ObservationEventComponent')
                 }}
               />
               <Button

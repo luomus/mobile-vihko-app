@@ -33,7 +33,7 @@ import {
 import {
   beginObservationEvent,
   finishObservationEvent
-} from '../../actionCreators/home/homeActionCreators'
+} from '../../actionCreators/observationEventCreators'
 import { connect, ConnectedProps } from 'react-redux'
 import { watchLocationAsync } from '../../geolocation/geolocation'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'

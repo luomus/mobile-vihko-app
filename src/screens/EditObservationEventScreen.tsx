@@ -59,11 +59,14 @@ export default class EditObservationEventScreen extends Component<NavigationStac
   }
 
   render() {
+    const { isFocused } = this.props.navigation
     return (
       <EditObservationEventComponent
         onPressSubmit={() => {
           this.props.navigation.navigate('Home')
         }}
+        sourcePage={this.props.navigation?.state?.params?.sourcePage}
+        isFocused={() => isFocused()}
       >
         <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
       </EditObservationEventComponent>
