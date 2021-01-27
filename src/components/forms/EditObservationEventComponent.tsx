@@ -1,12 +1,12 @@
 import React, { useState, useEffect, ReactChild } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { replaceObservationEventById, clearObservationId } from '../../stores/observation/actions'
+import { finishObservationEvent } from '../../actionCreators/home/homeActionCreators'
+import { replaceObservationEventById, clearObservationId, setObservationEventFinished } from '../../stores/observation/actions'
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import Cs from '../../styles/ContainerStyles'
-import Ts from '../../styles/TextStyles'
 import { set, merge, omit } from 'lodash'
 import MessageComponent from '../general/MessageComponent'
 import { ObservationEventType, SchemaType } from '../../stores/observation/types'
@@ -36,6 +36,8 @@ const mapDispatchToProps = {
   clearObservationId,
   setMessageState,
   clearMessageState,
+  setObservationEventFinished,
+  finishObservationEvent
 }
 
 const connector = connect(
@@ -46,7 +48,7 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  onPress: (id: string) => void,
+  onPressSubmit: () => void,
   children?: ReactChild
 }
 
@@ -112,9 +114,9 @@ const EditObservationEventComponent = (props: Props) => {
           type: 'msg',
           messageContent: t('changes saved'),
           onOk: () => {
-            props.onPress(event.id)
-            props.clearObservationId()
+            props.finishObservationEvent()
             setForm(undefined)
+            props.onPressSubmit()
           }
         })
       } catch (error) {

@@ -4,6 +4,7 @@ import {
   ObservationEventType,
   CLEAR_OBSERVATION,
   SET_OBSERVATION,
+  SET_OBSERVATION_EVENT_FINISHED,
   CLEAR_OBSERVATION_EVENTS,
   NEW_OBSERVATION_EVENT,
   REPLACE_OBSERVATION_EVENTS,
@@ -30,6 +31,15 @@ const observationReducer = (state = null, action : observationActionTypes) => {
       return action.payload
     case CLEAR_OBSERVATION:
       return null
+    default:
+      return state
+  }
+}
+
+const observationEventFinishedReducer = (state: boolean = false, action : observationActionTypes) => {
+  switch (action.type) {
+    case SET_OBSERVATION_EVENT_FINISHED:
+      return action.payload
     default:
       return state
   }
@@ -94,6 +104,7 @@ const schemaReducer = (state = initSchemaState, action : observationActionTypes)
 
 export {
   observationReducer,
+  observationEventFinishedReducer,
   observationEventsReducer,
   observationIdReducer,
   observingReducer,

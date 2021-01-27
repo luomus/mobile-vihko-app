@@ -15,7 +15,8 @@ import {
   replaceObservationEventById,
   clearObservationLocation,
   setObservationId,
-  switchSchema
+  switchSchema,
+  setObservationEventFinished
 } from '../../stores/observation/actions'
 import {
   toggleCentered,
@@ -59,14 +60,15 @@ interface RootState {
   observing: boolean,
   observation: LatLng,
   observationEvent: ObservationEventType,
+  observationEventFinished: boolean,
   schema: SchemaType,
   credentials: CredentialsType,
   centered: boolean
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, observationEvent, schema, credentials, centered } = state
-  return { position, path, observing, observation, observationEvent, schema, credentials, centered }
+  const { position, path, observing, observation, observationEvent, observationEventFinished, schema, credentials, centered } = state
+  return { position, path, observing, observation, observationEvent, observationEventFinished, schema, credentials, centered }
 }
 
 const mapDispatchToProps = {
@@ -85,7 +87,8 @@ const mapDispatchToProps = {
   setObservationId,
   switchSchema,
   beginObservationEvent,
-  finishObservationEvent
+  finishObservationEvent,
+  setObservationEventFinished
 }
 
 const connector = connect(
@@ -100,7 +103,6 @@ type Props = PropsFromRedux & {
   onPressMap: () => void,
   onPressObservationEvent: (id: string) => void,
   onPressFinishObservationEvent: () => void,
-  obsStopped: boolean,
   navigation: any,
   children?: ReactChild
 }
@@ -108,12 +110,10 @@ type Props = PropsFromRedux & {
 const HomeComponent = (props: Props) => {
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
-  const [unfinishedEvent, setUnfinishedEvent] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<number>(0)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
-  let focusListener: any
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
@@ -122,7 +122,7 @@ const HomeComponent = (props: Props) => {
 
     if (isUnfinished) {
       props.toggleObserving()
-      setUnfinishedEvent(true)
+      setObservationEventFinished(true)
     }
 
     const initTab = async () => {
@@ -142,16 +142,6 @@ const HomeComponent = (props: Props) => {
   useEffect(() => {
     loadObservationEvents()
   }, [props.observationEvent, props.observing, props.schema])
-
-  useEffect(() => {
-    focusListener = props.navigation.addListener('willFocus', ({ action }) => {
-      if (action.params?.obsStopped) {
-        onFinishObservationEvent()
-        props.navigation.setParams({ obsStopped: false })
-      }
-    })
-    return () => focusListener.remove()
-  }, [props.observationEvent])
 
   useEffect(() => {
     if (pressCounter > 0 && !logTimeout) {
@@ -207,8 +197,7 @@ const HomeComponent = (props: Props) => {
   }
 
   const onFinishObservationEvent = async () => {
-    setUnfinishedEvent(false)
-    await props.finishObservationEvent(props.onPressFinishObservationEvent)
+    await props.finishObservationEvent()
   }
 
   //if above is answered positively stop observation and exit app
@@ -218,7 +207,7 @@ const HomeComponent = (props: Props) => {
   }
 
   const continueObservationEvent = async () => {
-    if (!unfinishedEvent) {
+    if (!props.observationEventFinished) {
       props.onPressMap()
       return
     }
@@ -238,7 +227,7 @@ const HomeComponent = (props: Props) => {
       return
     }
 
-    setUnfinishedEvent(false)
+    setObservationEventFinished(false)
 
     //reset map centering and zoom level
     !props.centered ? props.toggleCentered() : null
@@ -257,7 +246,13 @@ const HomeComponent = (props: Props) => {
     props.setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
-      onOk: () => onFinishObservationEvent()
+      onOk: () => {
+        props.setObservationId({
+          eventId: props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1].id,
+          unitId: null
+        })
+        props.onPressFinishObservationEvent()
+      }
     })
   }
 
@@ -279,7 +274,7 @@ const HomeComponent = (props: Props) => {
   }
 
   const switchSelectedForm = async (ind: number) => {
-    if (!props.observing && !unfinishedEvent) {
+    if (!props.observing) {
       await props.switchSchema(availableForms[ind])
       setSelectedTab(ind)
     }
@@ -312,7 +307,7 @@ const HomeComponent = (props: Props) => {
                 <HomeIntroductionComponent />
                 <View style={{ height: 10 }}></View>
                 {props.observing ?
-                  <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
+                  <UnfinishedEventViewComponent unfinishedEvent={props.observationEventFinished} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
                   :
                   <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={onBeginObservationEvent} />
                 }

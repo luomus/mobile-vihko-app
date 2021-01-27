@@ -12,10 +12,12 @@ import {
 import {
   removeDuplicatesFromPath,
   clearObservationLocation,
+  setObservationEventFinished,
   replaceObservationEventById,
   replaceObservationEvents,
   setObservationId,
-  toggleObserving
+  toggleObserving,
+  clearObservationId
 } from '../../stores/observation/actions'
 import {
   clearLocation,
@@ -96,13 +98,14 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
     dispatch(toggleObserving())
+    dispatch(setObservationEventFinished(false))
     onPressMap()
 
     return Promise.resolve()
   }
 }
 
-export const finishObservationEvent = (onPressFinishObservationEvent: () => void): ThunkAction<Promise<any>, any, void,
+export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent, path } = getState()
@@ -154,20 +157,11 @@ export const finishObservationEvent = (onPressFinishObservationEvent: () => void
       }
     }
 
+    dispatch(setObservationEventFinished(true))
     dispatch(toggleObserving())
     dispatch(clearObservationLocation())
+    dispatch(clearObservationId())
     await stopLocationAsync()
-
-
-    if (event.formID === 'JX.519') {
-      //stores event id into redux so that EditObservationEventComponent knows which event is being finished
-      dispatch(setObservationId({
-        eventId: event.id,
-        unitId: null
-      }))
-
-      onPressFinishObservationEvent()
-    }
 
     return Promise.resolve()
   }

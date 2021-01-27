@@ -252,7 +252,7 @@ const FormAutocompleteComponent = (props: Props) => {
     } else {
       return (
         <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-          <Text>{item?.payload?.vernacularName}{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
+          <Text><Text style={{ fontSize: 15 }}>{item?.payload?.vernacularName}</Text>{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
         </View>
       )
     }

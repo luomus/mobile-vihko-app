@@ -77,9 +77,10 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
-  onPressHome: (obsStopped: boolean) => void,
+  onPressHome: () => void,
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
+  onPressFinishObservationEvent: () => void,
   children?: ReactChild
 }
 
@@ -233,7 +234,13 @@ const MapComponent = (props: Props) => {
     props.setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
-      onOk: () => props.onPressHome(true)
+      onOk: () => {
+        props.setObservationId({
+          eventId: props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1].id,
+          unitId: null
+        })
+        props.onPressFinishObservationEvent()
+      }
     })
   }
 

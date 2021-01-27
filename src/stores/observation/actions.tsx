@@ -13,6 +13,7 @@ import {
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
   SET_SCHEMA,
+  SET_OBSERVATION_EVENT_FINISHED,
 } from './types'
 import { getSchemas, postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
@@ -49,6 +50,11 @@ export const setObservationId = (id: Record<string, any>): observationActionType
 
 export const clearObservationId = (): observationActionTypes => ({
   type: CLEAR_OBSERVATION_ID
+})
+
+export const setObservationEventFinished = (finished: boolean): observationActionTypes => ({
+  type: SET_OBSERVATION_EVENT_FINISHED,
+  payload: finished
 })
 
 export const eventPathUpdate = (store: Store, lineStringPath: LineString | null): void => {

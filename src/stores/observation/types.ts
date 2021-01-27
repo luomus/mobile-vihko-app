@@ -3,6 +3,8 @@ import { Point } from 'geojson'
 export const CLEAR_OBSERVATION = 'CLEAR_OBSERVATION'
 export const SET_OBSERVATION = 'SET_OBSERVATION'
 
+export const SET_OBSERVATION_EVENT_FINISHED = 'SET_OBSERVATION_EVENT_FINISHED'
+
 export const ALL_OBSERVATION_EVENTS = 'ALL_OBSERVATION_EVENTS'
 export const CLEAR_OBSERVATION_EVENTS = 'CLEAR_OBSERVATION_EVENTS'
 export const DELETE_OBSERVATION = 'DELETE_OBSERVATION'
@@ -45,6 +47,11 @@ interface newObservationEvent {
   payload: Record<string, any>,
 }
 
+interface setObservationEventFinished {
+  type: typeof SET_OBSERVATION_EVENT_FINISHED,
+  payload: boolean
+}
+
 interface replaceObservationEvents {
   type: typeof REPLACE_OBSERVATION_EVENTS,
   payload: Record<string, any>[],
@@ -71,6 +78,7 @@ interface setSchema {
 export type observationActionTypes =
   clearObservationLocation |
   setObservationLocation |
+  setObservationEventFinished |
   clearObservationEvents |
   newObservationEvent |
   replaceObservationEvents |

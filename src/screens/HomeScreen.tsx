@@ -64,7 +64,7 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
   }
 
   render() {
-    const { dispatch, isFocused, navigate, state } = this.props.navigation
+    const { dispatch, isFocused, navigate } = this.props.navigation
     return (
       <HomeComponent
         isFocused={() => isFocused()}
@@ -78,7 +78,6 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
         onPressObservationEvent={(id: string) => {
           this.props.navigation.navigate('ObservationEvent', { id })
         }}
-        obsStopped={state.params?.obsStopped}
         onPressFinishObservationEvent={() => {
           this.props.navigation.navigate('EditObservationEvent')
         }}
