@@ -17,7 +17,7 @@ import { setMessageState, clearMessageState } from '../../stores/message/actions
 import i18n from '../../language/i18n'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
-import SendEventModalComponent from './SendEventModalComponent'
+import SendEventModalComponent from '../general/SendEventModalComponent'
 import MessageComponent from '../general/MessageComponent'
 import { parseDateForUI } from '../../utilities/dateHelper'
 import { CredentialsType } from '../../stores/user/types'
@@ -226,7 +226,7 @@ const ObservationEventComponent = (props: Props) => {
             </View>
           )}
           {props.children}
-          <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility} sendObservationEvent={sendObservationEvent}/>
+          <SendEventModalComponent modalVisibility={modalVisibility} onCancel={setModalVisibility} sendObservationEvent={sendObservationEvent}/>
           <MessageComponent />
         </ScrollView>
       </View>

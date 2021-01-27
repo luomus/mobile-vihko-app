@@ -8,7 +8,7 @@ import Cs from '../../styles/ContainerStyles'
 
 type Props = {
   modalVisibility: boolean,
-  setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  onCancel: React.Dispatch<React.SetStateAction<boolean>> | (() => void),
   sendObservationEvent: (isPublic: boolean) => Promise<void>
 }
 
@@ -17,7 +17,7 @@ const SendEventModalComponent = (props: Props) => {
   const { t } = useTranslation()
 
   return (
-    <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.setModalVisibility(false) }}>
+    <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.onCancel(false) }}>
       <View style={Cs.sendEventModalContainer}>
         <Text style={Cs.containerWithJustPadding}>
           {t('send observation event to server?')}
@@ -41,7 +41,7 @@ const SendEventModalComponent = (props: Props) => {
           buttonStyle={Bs.sendEventModalNegativeButton}
           icon={<Icon type={'material-community'} name={'close'} color={'white'} />}
           iconRight={true}
-          onPress={() => { props.setModalVisibility(false) }}
+          onPress={() => { props.onCancel(false) }}
         />
       </View>
     </Modal>
