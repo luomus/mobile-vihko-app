@@ -13,6 +13,7 @@ import {
   removeDuplicatesFromPath,
   clearObservationLocation,
   setObservationEventFinished,
+  setObservationEventInterrupted,
   replaceObservationEventById,
   replaceObservationEvents,
   toggleObserving,
@@ -21,11 +22,13 @@ import {
 import {
   clearLocation,
   updateLocation,
-  clearPath
+  clearPath,
+  setPath
 } from '../stores/position/actions'
 import { mapActionTypes } from '../stores/map/types'
 import { messageActionTypes } from '../stores/message/types'
 import { observationActionTypes } from '../stores/observation/types'
+import { PathType } from '../stores/position/types'
 import i18n from '../language/i18n'
 import storageService from '../services/storageService'
 import { parseSchemaToNewObject } from '../parsers/SchemaObjectParser'
@@ -104,10 +107,53 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
   }
 }
 
+export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Promise<any>, any, void,
+  locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
+  return async (dispatch, getState) => {
+    const { centered, observationEventInterrupted, observationEvent } = getState()
+
+    if (!observationEventInterrupted) {
+      onPressMap()
+      return
+    }
+
+    //atempt to start geolocation systems
+    try {
+      await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)))
+    } catch (error) {
+      log.error({
+        location: '/components/HomeComponent.tsx continueObservationEvent()',
+        error: error
+      })
+      dispatch(setMessageState({
+        type: 'err',
+        messageContent: error.message
+      }))
+      return
+    }
+
+    dispatch(setObservationEventFinished(false))
+    dispatch(setObservationEventInterrupted(false))
+    //reset map centering and zoom level
+    !centered ? dispatch(toggleCentered()) : null
+    dispatch(clearRegion())
+
+    //set old path if exists
+    const path: PathType = observationEvent.events?.[observationEvent.events.length - 1].gatherings[0]?.geometry.coordinates
+    if (path) {
+      dispatch(setPath(path))
+    }
+
+    onPressMap()
+  }
+}
+
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent, path } = getState()
+
+    dispatch(setObservationEventInterrupted(false))
 
     let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
 

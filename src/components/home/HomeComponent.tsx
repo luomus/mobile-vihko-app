@@ -16,7 +16,8 @@ import {
   clearObservationLocation,
   setObservationId,
   switchSchema,
-  setObservationEventFinished
+  setObservationEventFinished,
+  setObservationEventInterrupted
 } from '../../stores/observation/actions'
 import {
   toggleCentered,
@@ -32,10 +33,10 @@ import {
 } from '../../stores/position/actions'
 import {
   beginObservationEvent,
+  continueObservationEvent,
   finishObservationEvent
 } from '../../actionCreators/observationEventCreators'
 import { connect, ConnectedProps } from 'react-redux'
-import { watchLocationAsync } from '../../geolocation/geolocation'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'
 import { SchemaType, ObservationEventType } from '../../stores/observation/types'
 import { CredentialsType } from '../../stores/user/types'
@@ -44,7 +45,6 @@ import { withNavigation } from 'react-navigation'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
 import storageController from '../../services/storageService'
-import { log } from '../../utilities/logger'
 import { HomeIntroductionComponent } from './HomeIntroductionComponent'
 import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
 import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
@@ -61,14 +61,15 @@ interface RootState {
   observation: LatLng,
   observationEvent: ObservationEventType,
   observationEventFinished: boolean,
+  observationEventInterrupted: boolean,
   schema: SchemaType,
   credentials: CredentialsType,
   centered: boolean
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, observationEvent, observationEventFinished, schema, credentials, centered } = state
-  return { position, path, observing, observation, observationEvent, observationEventFinished, schema, credentials, centered }
+  const { position, path, observing, observation, observationEvent, observationEventFinished, observationEventInterrupted, schema, credentials, centered } = state
+  return { position, path, observing, observation, observationEvent, observationEventFinished, observationEventInterrupted, schema, credentials, centered }
 }
 
 const mapDispatchToProps = {
@@ -87,8 +88,10 @@ const mapDispatchToProps = {
   setObservationId,
   switchSchema,
   beginObservationEvent,
+  continueObservationEvent,
   finishObservationEvent,
-  setObservationEventFinished
+  setObservationEventFinished,
+  setObservationEventInterrupted
 }
 
 const connector = connect(
@@ -117,12 +120,20 @@ const HomeComponent = (props: Props) => {
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
+    // const length = props.observationEvent.events.length
+    // const isUnfinished = length && !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+
     const length = props.observationEvent.events.length
-    const isUnfinished = length && !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+    let isUnfinished: boolean = false
+
+    if (length >= 1) {
+      isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+    }
 
     if (isUnfinished) {
       props.toggleObserving()
-      setObservationEventFinished(true)
+      props.setObservationEventInterrupted(true)
+      props.setObservationEventFinished(false)
     }
 
     const initTab = async () => {
@@ -196,6 +207,10 @@ const HomeComponent = (props: Props) => {
     await props.beginObservationEvent(props.onPressMap)
   }
 
+  const onContinueObservationEvent = async () => {
+    await props.continueObservationEvent(props.onPressMap)
+  }
+
   const onFinishObservationEvent = async () => {
     await props.finishObservationEvent()
   }
@@ -204,42 +219,6 @@ const HomeComponent = (props: Props) => {
   const onExit = async () => {
     await onFinishObservationEvent()
     BackHandler.exitApp()
-  }
-
-  const continueObservationEvent = async () => {
-    if (!props.observationEventFinished) {
-      props.onPressMap()
-      return
-    }
-
-    //atempt to start geolocation systems
-    try {
-      await watchLocationAsync(props.updateLocation)
-    } catch (error) {
-      log.error({
-        location: '/components/HomeComponent.tsx continueObservationEvent()',
-        error: error
-      })
-      props.setMessageState({
-        type: 'err',
-        messageContent: error.message
-      })
-      return
-    }
-
-    setObservationEventFinished(false)
-
-    //reset map centering and zoom level
-    !props.centered ? props.toggleCentered() : null
-    props.clearRegion()
-
-    //set old path if exists
-    const path = props.observationEvent.events?.[props.observationEvent.events.length - 1].gatherings[0]?.geometry.coordinates
-    if (path) {
-      props.setPath(path)
-    }
-
-    props.onPressMap()
   }
 
   const stopObserving = () => {
@@ -307,7 +286,7 @@ const HomeComponent = (props: Props) => {
                 <HomeIntroductionComponent />
                 <View style={{ height: 10 }}></View>
                 {props.observing ?
-                  <UnfinishedEventViewComponent unfinishedEvent={props.observationEventFinished} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
+                  <UnfinishedEventViewComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
                   :
                   <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={onBeginObservationEvent} />
                 }

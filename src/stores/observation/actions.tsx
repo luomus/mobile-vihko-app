@@ -8,12 +8,13 @@ import {
   SET_OBSERVATION,
   CLEAR_OBSERVATION,
   TOGGLE_OBSERVING,
+  SET_OBSERVATION_EVENT_FINISHED,
+  SET_OBSERVATION_EVENT_INTERRUPTED,
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_EVENTS,
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
-  SET_SCHEMA,
-  SET_OBSERVATION_EVENT_FINISHED,
+  SET_SCHEMA
 } from './types'
 import { getSchemas, postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
@@ -55,6 +56,11 @@ export const clearObservationId = (): observationActionTypes => ({
 export const setObservationEventFinished = (finished: boolean): observationActionTypes => ({
   type: SET_OBSERVATION_EVENT_FINISHED,
   payload: finished
+})
+
+export const setObservationEventInterrupted = (interrupted: boolean): observationActionTypes => ({
+  type: SET_OBSERVATION_EVENT_INTERRUPTED,
+  payload: interrupted
 })
 
 export const eventPathUpdate = (store: Store, lineStringPath: LineString | null): void => {

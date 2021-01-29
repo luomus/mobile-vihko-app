@@ -13,7 +13,8 @@ import {
   clearObservationLocation,
   setObservationId,
   clearObservationId,
-  deleteObservation
+  deleteObservation,
+  setObservationEventInterrupted
 } from '../../stores/observation/actions'
 import {
   setRegion,
@@ -49,11 +50,12 @@ interface RootState {
   maptype: 'topographic' | 'satellite',
   editing: EditingType,
   observationId: Record<string, any>,
+  observationEventInterrupted: boolean
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationEvent, centered, maptype, editing, observationId } = state
-  return { position, path, region, observation, observationEvent, centered, maptype, editing, observationId }
+  const { position, path, region, observation, observationEvent, observationEventInterrupted, centered, maptype, editing, observationId } = state
+  return { position, path, region, observation, observationEvent, observationEventInterrupted, centered, maptype, editing, observationId }
 }
 
 const mapDispatchToProps = {
@@ -67,7 +69,8 @@ const mapDispatchToProps = {
   setObservationId,
   clearObservationId,
   setMessageState,
-  deleteObservation
+  deleteObservation,
+  setObservationEventInterrupted
 }
 
 const connector = connect(

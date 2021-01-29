@@ -9,6 +9,7 @@ import { messageReducer } from './message/reducers'
 import {
   observationReducer,
   observationEventFinishedReducer,
+  observationEventInterruptedReducer,
   observationEventsReducer,
   observationIdReducer,
   observingReducer,
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
   message: messageReducer,
   observation: observationReducer,
   observationEventFinished: observationEventFinishedReducer,
+  observationEventInterrupted: observationEventInterruptedReducer,
   observationEvent: observationEventsReducer,
   observationId: observationIdReducer,
   observing: observingReducer,

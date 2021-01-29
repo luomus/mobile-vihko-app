@@ -5,6 +5,8 @@ export const SET_OBSERVATION = 'SET_OBSERVATION'
 
 export const SET_OBSERVATION_EVENT_FINISHED = 'SET_OBSERVATION_EVENT_FINISHED'
 
+export const SET_OBSERVATION_EVENT_INTERRUPTED = 'SET_OBSERVATION_EVENT_INTERRUPTED'
+
 export const ALL_OBSERVATION_EVENTS = 'ALL_OBSERVATION_EVENTS'
 export const CLEAR_OBSERVATION_EVENTS = 'CLEAR_OBSERVATION_EVENTS'
 export const DELETE_OBSERVATION = 'DELETE_OBSERVATION'
@@ -52,6 +54,11 @@ interface setObservationEventFinished {
   payload: boolean
 }
 
+interface setObservationEventInterrupted {
+  type: typeof SET_OBSERVATION_EVENT_INTERRUPTED,
+  payload: boolean
+}
+
 interface replaceObservationEvents {
   type: typeof REPLACE_OBSERVATION_EVENTS,
   payload: Record<string, any>[],
@@ -79,6 +86,7 @@ export type observationActionTypes =
   clearObservationLocation |
   setObservationLocation |
   setObservationEventFinished |
+  setObservationEventInterrupted |
   clearObservationEvents |
   newObservationEvent |
   replaceObservationEvents |
