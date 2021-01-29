@@ -1,5 +1,5 @@
 import { Point, LineString, Polygon } from 'geojson'
-import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../../controllers/localityController'
+import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../../services/localityService'
 import { centerOfBoundingBox, createCombinedGeometry } from '../../utilities/geometryCreator'
 import { log } from '../../utilities/logger'
 import i18n from 'i18next'
@@ -8,7 +8,9 @@ import i18n from 'i18next'
 export const definePublicity = (event: Record<string, any>, isPublic: boolean): Record<string, any> => {
   let modifiedEvent = event
 
-  if (!isPublic) {
+  if (isPublic) {
+    modifiedEvent.publicityRestrictions = 'MZ.publicityRestrictionsPublic'
+  } else {
     modifiedEvent.publicityRestrictions = 'MZ.publicityRestrictionsPrivate'
   }
 

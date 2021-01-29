@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
-import { getTaxonAutocomplete } from '../../controllers/autocompleteController'
+import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import Autocomplete from 'react-native-autocomplete-input'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
@@ -79,7 +79,6 @@ const FormAutocompleteComponent = (props: Props) => {
     }
 
     setError(message)
-    console.log(message)
     timeout = setTimeout(() => setError(''), 10000)
   }
 
@@ -244,10 +243,16 @@ const FormAutocompleteComponent = (props: Props) => {
           <Text style={{ fontStyle: 'italic', fontSize: 15 }}>{addBolding(item?.value, oldQuery, true)}</Text>
         </View>
       )
-    } else {
+    } else if (item.value === item?.payload?.vernacularName){
       return (
         <View style={{ paddingTop: 10, paddingBottom: 10 }}>
           <Text>{addBolding(item?.value, oldQuery, false)}{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
+          <Text><Text style={{ fontSize: 15 }}>{item?.payload?.vernacularName}</Text>{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
         </View>
       )
     }
@@ -302,6 +307,7 @@ const FormAutocompleteComponent = (props: Props) => {
           defaultValue={query}
           onChangeText={(text) => onQueryChange(text)}
           hideResults={hideResult}
+          listStyle={{ paddingLeft: 15 }}
           renderTextInput={({ onFocus, onBlur, onChangeText, defaultValue }) => {
             return renderTextInput(onFocus, onBlur, onChangeText, defaultValue)
           }}

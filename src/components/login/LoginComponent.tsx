@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { getTempTokenAndLoginUrl } from '../../controllers/userController'
+import { getTempTokenAndLoginUrl } from '../../services/userService'
 import { connect, ConnectedProps } from 'react-redux'
 import { initSchema, initObservationEvents } from '../../stores/observation/actions'
 import { setCredentials, loginUser, logoutUser, initLocalCredentials } from '../../stores/user/actions'

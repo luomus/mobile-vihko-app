@@ -1,35 +1,39 @@
 import { combineReducers } from 'redux'
-import { positionReducer, pathReducer } from './position/reducers'
+import {
+  centeringReducer,
+  editingReducer,
+  maptypeReducer,
+  regionReducer
+} from './map/reducers'
+import { messageReducer } from './message/reducers'
 import {
   observationReducer,
-  observingReducer,
+  observationEventFinishedReducer,
+  observationEventInterruptedReducer,
   observationEventsReducer,
-  schemaReducer,
-  observationIdReducer
+  observationIdReducer,
+  observingReducer,
+  schemaReducer
 } from './observation/reducers'
-import {
-  regionReducer,
-  centeringReducer,
-  maptypeReducer,
-  editingReducer
-} from './map/reducers'
+import { pathReducer, positionReducer } from './position/reducers'
 import { credentialsReducer } from './user/reducers'
-import { messageReducer } from './message/reducers'
 
 const appReducer = combineReducers({
-  region: regionReducer,
-  position: positionReducer,
-  path: pathReducer,
-  observing: observingReducer,
-  observation: observationReducer,
   centered: centeringReducer,
-  maptype: maptypeReducer,
-  observationEvent: observationEventsReducer,
-  schema: schemaReducer,
-  observationId: observationIdReducer,
-  editing: editingReducer,
   credentials: credentialsReducer,
-  message: messageReducer
+  editing: editingReducer,
+  maptype: maptypeReducer,
+  message: messageReducer,
+  observation: observationReducer,
+  observationEventFinished: observationEventFinishedReducer,
+  observationEventInterrupted: observationEventInterruptedReducer,
+  observationEvent: observationEventsReducer,
+  observationId: observationIdReducer,
+  observing: observingReducer,
+  path: pathReducer,
+  position: positionReducer,
+  region: regionReducer,
+  schema: schemaReducer
 })
 
 const rootReducer = (state: any, action: any) => {

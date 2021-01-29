@@ -6,7 +6,7 @@
     "platforms": [
       "android"
     ],
-    "version": "0.4.1",
+    "version": "0.5.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -27,7 +27,7 @@
     },
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 5,
+      "versionCode": 6,
       "config": {
         "googleMaps": {
           "apiKey": ""

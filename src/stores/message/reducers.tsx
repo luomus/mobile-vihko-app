@@ -1,21 +1,21 @@
 import {
+  MessageType,
   messageActionTypes,
-  MessageState,
-  SET_MESSAGE_STATE,
+  CLEAR_MESSAGE_STATE,
   POP_MESSAGE_STATE,
-  CLEAR_MESSAGE_STATE
+  SET_MESSAGE_STATE
 } from './types'
 
-const initState: MessageState[] = []
+const initState: MessageType[] = []
 
-export const messageReducer = (state: MessageState[] = initState, action: messageActionTypes) => {
+export const messageReducer = (state: MessageType[] = initState, action: messageActionTypes) => {
   switch (action.type) {
-    case SET_MESSAGE_STATE:
-      return state.concat(action.payload)
-    case POP_MESSAGE_STATE:
-      return state.splice(1)
     case CLEAR_MESSAGE_STATE:
       return initState
+    case POP_MESSAGE_STATE:
+      return state.splice(1)
+    case SET_MESSAGE_STATE:
+      return state.concat(action.payload)
     default:
       return state
   }

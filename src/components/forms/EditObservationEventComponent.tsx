@@ -1,19 +1,22 @@
 import React, { useState, useEffect, ReactChild } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
+import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
-import { replaceObservationEventById, clearObservationId } from '../../stores/observation/actions'
+import { finishObservationEvent } from '../../actionCreators/observationEventCreators'
+import { replaceObservationEventById, clearObservationId, setObservationEventFinished, uploadObservationEvent } from '../../stores/observation/actions'
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import Cs from '../../styles/ContainerStyles'
-import Ts from '../../styles/TextStyles'
 import { set, merge, omit } from 'lodash'
 import MessageComponent from '../general/MessageComponent'
 import { ObservationEventType, SchemaType } from '../../stores/observation/types'
+import { CredentialsType } from '../../stores/user/types'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../language/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
+import SendEventModalComponent from '../general/SendEventModalComponent'
 import { JX519ObservationEventFields, JX652ObservationEventFields } from '../../config/fields'
 
 interface BasicObject {
@@ -21,14 +24,15 @@ interface BasicObject {
 }
 
 interface RootState {
+  credentials: CredentialsType,
   observationEvent: ObservationEventType,
   observationId: BasicObject,
   schema: SchemaType,
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent, observationId, schema } = state
-  return { observationEvent, observationId, schema }
+  const { credentials, observationEvent, observationId, schema } = state
+  return { credentials, observationEvent, observationId, schema }
 }
 
 const mapDispatchToProps = {
@@ -36,6 +40,9 @@ const mapDispatchToProps = {
   clearObservationId,
   setMessageState,
   clearMessageState,
+  setObservationEventFinished,
+  uploadObservationEvent,
+  finishObservationEvent
 }
 
 const connector = connect(
@@ -46,18 +53,23 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  onPress: (id: string) => void,
-  children?: ReactChild
+  onPressSubmit: () => void,
+  children?: ReactChild,
+  sourcePage: string,
+  isFocused: () => boolean
 }
 
 const EditObservationEventComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
-  const [ event, setEvent ] = useState<Record<string, any> | undefined>(undefined)
-  const [ form, setForm ] = useState<Array<Element> | undefined>(undefined)
-  const [ saving, setSaving ] = useState<boolean>(false)
+  const [event, setEvent] = useState<Record<string, any> | undefined>(undefined)
+  const [form, setForm] = useState<Array<Element> | undefined>(undefined)
+  const [saving, setSaving] = useState<boolean>(false)
   //for react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
+  //for sending modal
+  const [modalVisibility, setModalVisibility] = useState<boolean>(false)
+  const [sending, setSending] = useState<boolean>(false)
 
   useEffect(() => {
     init()
@@ -67,6 +79,16 @@ const EditObservationEventComponent = (props: Props) => {
       setForm(undefined)
     }
   }, [])
+
+  useBackHandler(() => {
+    if (props.isFocused()) {
+      if (props.sourcePage === 'MapComponent') {
+        props.onPressSubmit()
+        return true
+      }
+    }
+    return false
+  })
 
   const init = () => {
     //find the correct event by id
@@ -112,9 +134,8 @@ const EditObservationEventComponent = (props: Props) => {
           type: 'msg',
           messageContent: t('changes saved'),
           onOk: () => {
-            props.onPress(event.id)
-            props.clearObservationId()
-            setForm(undefined)
+            props.finishObservationEvent()
+            setModalVisibility(true)
           }
         })
       } catch (error) {
@@ -126,14 +147,47 @@ const EditObservationEventComponent = (props: Props) => {
     }
   }
 
+  const sendObservationEvent = async (isPublic: boolean) => {
+    setModalVisibility(false)
+    setSending(true)
+    try {
+      await props.uploadObservationEvent(event?.id, props.credentials, i18n.language, isPublic)
+      showMessage(t('post success'))
+      setForm(undefined)
+      props.onPressSubmit()
+    } catch (error) {
+      props.setMessageState({
+        type: 'err',
+        messageContent: error.message,
+        onOk: () => {
+          setForm(undefined)
+          props.onPressSubmit()
+        }
+      })
+    }
+
+    setSending(false)
+  }
+
+  const showMessage = (content: string) => {
+    props.setMessageState({
+      type: 'msg',
+      messageContent: content
+    })
+  }
+
   if (saving) {
     return (
-      <ActivityComponent text={'saving'}/>
+      <ActivityComponent text={'saving'} />
     )
   } else if (!form) {
     onUninitalizedForm()
     return (
-      <ActivityComponent text={'loading'}/>
+      <ActivityComponent text={'loading'} />
+    )
+  } else if (sending) {
+    return (
+      <ActivityComponent text={t('sending')} />
     )
   } else {
     return (
@@ -143,10 +197,11 @@ const EditObservationEventComponent = (props: Props) => {
             {form}
           </View>
         </ScrollView>
-        <MessageComponent/>
+        <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)}/>
+          <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)} />
         </View>
+        <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.onPressSubmit} sendObservationEvent={sendObservationEvent} />
         {props.children}
       </View>
     )

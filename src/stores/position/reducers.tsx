@@ -1,26 +1,15 @@
 import {
+  LocationType,
+  PathType,
   locationActionTypes,
-  UPDATE_LOCATION,
   CLEAR_LOCATION,
+  UPDATE_LOCATION,
   APPEND_PATH,
   CLEAR_PATH,
-  pathType,
-  locationType,
   SET_PATH
 } from './types'
 
-const positionReducer = (state: locationType = null, action : locationActionTypes) => {
-  switch (action.type) {
-    case UPDATE_LOCATION:
-      return action.payload
-    case CLEAR_LOCATION:
-      return null
-    default:
-      return state
-  }
-}
-
-const pathReducer = (state: pathType = [], action : locationActionTypes) => {
+const pathReducer = (state: PathType = [], action : locationActionTypes) => {
   switch (action.type) {
     case APPEND_PATH:
       return [...state, ...action.payload]
@@ -33,4 +22,15 @@ const pathReducer = (state: pathType = [], action : locationActionTypes) => {
   }
 }
 
-export { positionReducer, pathReducer }
+const positionReducer = (state: LocationType = null, action : locationActionTypes) => {
+  switch (action.type) {
+    case UPDATE_LOCATION:
+      return action.payload
+    case CLEAR_LOCATION:
+      return null
+    default:
+      return state
+  }
+}
+
+export { pathReducer, positionReducer }

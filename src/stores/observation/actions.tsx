@@ -8,17 +8,19 @@ import {
   SET_OBSERVATION,
   CLEAR_OBSERVATION,
   TOGGLE_OBSERVING,
+  SET_OBSERVATION_EVENT_FINISHED,
+  SET_OBSERVATION_EVENT_INTERRUPTED,
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_EVENTS,
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
-  SET_SCHEMA,
+  SET_SCHEMA
 } from './types'
-import { getSchemas, postObservationEvent } from '../../controllers/documentController'
-import storageController from '../../controllers/storageController'
+import { getSchemas, postObservationEvent } from '../../services/documentService'
+import storageService from '../../services/storageService'
 import { CredentialsType } from '../user/types'
 import { parseUiSchemaToObservations } from '../../parsers/UiSchemaParser'
-import { saveMedias } from '../../controllers/imageController'
+import { saveMedias } from '../../services/imageService'
 import { netStatusChecker } from '../../utilities/netStatusCheck'
 import { overlapsFinland } from '../../utilities/geometryCreator'
 import { log } from '../../utilities/logger'
@@ -51,6 +53,16 @@ export const clearObservationId = (): observationActionTypes => ({
   type: CLEAR_OBSERVATION_ID
 })
 
+export const setObservationEventFinished = (finished: boolean): observationActionTypes => ({
+  type: SET_OBSERVATION_EVENT_FINISHED,
+  payload: finished
+})
+
+export const setObservationEventInterrupted = (interrupted: boolean): observationActionTypes => ({
+  type: SET_OBSERVATION_EVENT_INTERRUPTED,
+  payload: interrupted
+})
+
 export const eventPathUpdate = (store: Store, lineStringPath: LineString | null): void => {
   const { observationEvent } = store.getState()
 
@@ -62,7 +74,7 @@ export const eventPathUpdate = (store: Store, lineStringPath: LineString | null)
 
     newEvents.push(newEvent)
 
-    storageController.save('observationEvents', newEvents)
+    storageService.save('observationEvents', newEvents)
     store.dispatch(replaceObservationEvents(newEvents))
   }
 }
@@ -96,7 +108,7 @@ export const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<numb
 export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async dispatch => {
     try {
-      const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
+      const observationEvents: Array<Object> = await storageService.fetch('observationEvents')
       if (observationEvents !== null) {
         dispatch(replaceObservationEvents(observationEvents))
         return Promise.resolve()
@@ -230,7 +242,7 @@ export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<
     const newEvents = observationEvent.events.concat(newEvent)
 
     try {
-      await storageController.save('observationEvents', newEvents)
+      await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx newObservationEvent()',
@@ -259,7 +271,7 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
     })
 
     try {
-      await storageController.save('observationEvents', newEvents)
+      await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx replaceObservationEventById()',
@@ -288,7 +300,7 @@ export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any
     const newEvents = observationEvent.events.filter((event: Record<string, any>) => event.id !== eventId)
 
     try {
-      await storageController.save('observationEvents', newEvents)
+      await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx deleteObservationEvent()',
@@ -323,7 +335,7 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: LineSt
     newEvents.push(newEvent)
 
     try {
-      await storageController.save('observationEvents', newEvents)
+      await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx newObservation()',
@@ -357,7 +369,7 @@ export const deleteObservation = (eventId: string, unitId: string): ThunkAction<
     })
 
     try {
-      await storageController.save('observationEvents', newEvents)
+      await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx deleteObservation()',
@@ -392,7 +404,7 @@ export const replaceLocationById = (geometry: Geometry, eventId: string, unitId:
     })
 
     try {
-      await storageController.save('observationEvents', newEvents)
+      await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx replaceLocationById()',
@@ -429,7 +441,7 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
     })
 
     try {
-      await storageController.save('observationEvents', newEvents)
+      await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx replaceObservationById()',
@@ -483,7 +495,7 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
         try {
           //try loading schema from internal storage, if success inform user
           //of use of old stored version, if error warn user of total failure
-          tempSchemas = await storageController.fetch(storageKeys[lang])
+          tempSchemas = await storageService.fetch(storageKeys[lang])
 
           //warn user of using internally stored schema
           langError = {
@@ -541,7 +553,7 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
         //if fails set error message
         if (!langError) {
           try {
-            await storageController.save(storageKeys[lang], tempSchemas)
+            await storageService.save(storageKeys[lang], tempSchemas)
           } catch (error) {
             langError = {
               severity: 'low',
@@ -607,7 +619,7 @@ export const switchSchema = (formId: string): ThunkAction<Promise<void>, any, vo
     }
 
     for (let lang of languages) {
-      schemas[lang.toLowerCase()] = await storageController.fetch(`${formId}${lang}`)
+      schemas[lang.toLowerCase()] = await storageService.fetch(`${formId}${lang}`)
     }
 
     dispatch(setSchema(schemas))

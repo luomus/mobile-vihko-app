@@ -14,9 +14,10 @@ import {
   newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
-  removeDuplicatesFromPath,
   setObservationId,
-  switchSchema
+  switchSchema,
+  setObservationEventFinished,
+  setObservationEventInterrupted
 } from '../../stores/observation/actions'
 import {
   toggleCentered,
@@ -30,24 +31,20 @@ import {
   setPath,
   clearPath,
 } from '../../stores/position/actions'
+import {
+  beginObservationEvent,
+  continueObservationEvent,
+  finishObservationEvent
+} from '../../actionCreators/observationEventCreators'
 import { connect, ConnectedProps } from 'react-redux'
-import { watchLocationAsync, stopLocationAsync } from '../../geolocation/geolocation'
-import uuid from 'react-native-uuid'
-import { clone, set } from 'lodash'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'
-import { setDateForDocument } from '../../utilities/dateHelper'
 import { SchemaType, ObservationEventType } from '../../stores/observation/types'
 import { CredentialsType } from '../../stores/user/types'
-import { lineStringConstructor } from '../../converters/geoJSONConverters'
-import { parseSchemaToNewObject } from '../../parsers/SchemaObjectParser'
-import i18n from '../../language/i18n'
 import MessageComponent from '../general/MessageComponent'
 import { withNavigation } from 'react-navigation'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
-import { createUnitBoundingBox } from '../../utilities/geometryCreator'
-import storageController from '../../controllers/storageController'
-import { log } from '../../utilities/logger'
+import storageController from '../../services/storageService'
 import { HomeIntroductionComponent } from './HomeIntroductionComponent'
 import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
 import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
@@ -63,14 +60,16 @@ interface RootState {
   observing: boolean,
   observation: LatLng,
   observationEvent: ObservationEventType,
+  observationEventFinished: boolean,
+  observationEventInterrupted: boolean,
   schema: SchemaType,
   credentials: CredentialsType,
   centered: boolean
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, observationEvent, schema, credentials, centered } = state
-  return { position, path, observing, observation, observationEvent, schema, credentials, centered }
+  const { position, path, observing, observation, observationEvent, observationEventFinished, observationEventInterrupted, schema, credentials, centered } = state
+  return { position, path, observing, observation, observationEvent, observationEventFinished, observationEventInterrupted, schema, credentials, centered }
 }
 
 const mapDispatchToProps = {
@@ -88,6 +87,11 @@ const mapDispatchToProps = {
   toggleCentered,
   setObservationId,
   switchSchema,
+  beginObservationEvent,
+  continueObservationEvent,
+  finishObservationEvent,
+  setObservationEventFinished,
+  setObservationEventInterrupted
 }
 
 const connector = connect(
@@ -101,8 +105,7 @@ type Props = PropsFromRedux & {
   onLogout: () => void,
   onPressMap: () => void,
   onPressObservationEvent: (id: string) => void,
-  onFinishObservationEvent: () => void,
-  obsStopped: boolean,
+  onPressFinishObservationEvent: () => void,
   navigation: any,
   children?: ReactChild
 }
@@ -110,21 +113,27 @@ type Props = PropsFromRedux & {
 const HomeComponent = (props: Props) => {
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
-  const [unfinishedEvent, setUnfinishedEvent] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<number>(0)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
-  let focusListener: any
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
+    // const length = props.observationEvent.events.length
+    // const isUnfinished = length && !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+
     const length = props.observationEvent.events.length
-    const isUnfinished = length && !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+    let isUnfinished: boolean = false
+
+    if (length >= 1) {
+      isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+    }
 
     if (isUnfinished) {
       props.toggleObserving()
-      setUnfinishedEvent(true)
+      props.setObservationEventInterrupted(true)
+      props.setObservationEventFinished(false)
     }
 
     const initTab = async () => {
@@ -144,16 +153,6 @@ const HomeComponent = (props: Props) => {
   useEffect(() => {
     loadObservationEvents()
   }, [props.observationEvent, props.observing, props.schema])
-
-  useEffect(() => {
-    focusListener = props.navigation.addListener('willFocus', ({ action }) => {
-      if (action.params?.obsStopped) {
-        finishObservationEvent()
-        props.navigation.setParams({ obsStopped: false })
-      }
-    })
-    return () => focusListener.remove()
-  }, [props.observationEvent])
 
   useEffect(() => {
     if (pressCounter > 0 && !logTimeout) {
@@ -204,174 +203,35 @@ const HomeComponent = (props: Props) => {
     return false
   })
 
+  const onBeginObservationEvent = async () => {
+    await props.beginObservationEvent(props.onPressMap)
+  }
+
+  const onContinueObservationEvent = async () => {
+    await props.continueObservationEvent(props.onPressMap)
+  }
+
+  const onFinishObservationEvent = async () => {
+    await props.finishObservationEvent()
+  }
+
   //if above is answered positively stop observation and exit app
   const onExit = async () => {
-    await finishObservationEvent()
+    await onFinishObservationEvent()
     BackHandler.exitApp()
-  }
-
-  const onBeginObservationEvent = async () => {
-
-    const userId = props.credentials?.user?.id
-
-    if (!userId) {
-      return
-    }
-
-    const lang = i18n.language
-    let schema = props.schema[lang].schema
-
-    let observationEventDefaults = {}
-    set(observationEventDefaults, 'editors', [userId])
-    set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
-    set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], setDateForDocument())
-
-    let observationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema)
-
-    const observationEventObject = {
-      id: 'observationEvent_' + uuid.v4(),
-      formID: props.schema.formID,
-      ...observationEvent
-    }
-
-    try {
-      await props.newObservationEvent(observationEventObject)
-    } catch (error) {
-      props.setMessageState({
-        type: 'err',
-        messageContent: error.message
-      })
-    }
-
-    //attempt to start geolocation systems
-    try {
-      await watchLocationAsync(props.updateLocation)
-    } catch (error) {
-      log.error({
-        location: '/components/HomeComponent.tsx beginObservationEvent()',
-        error: error
-      })
-      props.setMessageState({
-        type: 'err',
-        messageContent: error.message
-      })
-      return
-    }
-
-    //reset map centering and zoom level, redirect to map
-    !props.centered ? props.toggleCentered() : null
-    props.clearRegion()
-    props.toggleObserving()
-
-    props.onPressMap()
-  }
-
-  const continueObservationEvent = async () => {
-    if (!unfinishedEvent) {
-      props.onPressMap()
-      return
-    }
-
-    //atempt to start geolocation systems
-    try {
-      await watchLocationAsync(props.updateLocation)
-    } catch (error) {
-      log.error({
-        location: '/components/HomeComponent.tsx continueObservationEvent()',
-        error: error
-      })
-      props.setMessageState({
-        type: 'err',
-        messageContent: error.message
-      })
-      return
-    }
-
-    setUnfinishedEvent(false)
-
-    //reset map centering and zoom level
-    !props.centered ? props.toggleCentered() : null
-    props.clearRegion()
-
-    //set old path if exists
-    const path = props.observationEvent.events?.[props.observationEvent.events.length - 1].gatherings[0]?.geometry.coordinates
-    if (path) {
-      props.setPath(path)
-    }
-
-    props.onPressMap()
-  }
-
-  const finishObservationEvent = async () => {
-    setUnfinishedEvent(false)
-    let event = clone(props.observationEvent.events?.[props.observationEvent.events.length - 1])
-
-    if (event) {
-      const oldGathering = event.gatheringEvent
-      event.gatheringEvent = {
-        ...oldGathering,
-        dateEnd: setDateForDocument()
-      }
-
-      const setBoundingBoxGeometry = () => {
-        const geometry = createUnitBoundingBox(event)
-
-        if (geometry) {
-          event.gatherings[0].geometry = geometry
-        }
-      }
-
-      let lineStringPath = lineStringConstructor(props.path)
-
-      if (lineStringPath && !unfinishedEvent) {
-        //remove duplicates from path
-        lineStringPath.coordinates = removeDuplicatesFromPath(lineStringPath.coordinates)
-
-        if (lineStringPath.coordinates.length >= 2) {
-          event.gatherings[0].geometry = lineStringPath
-        } else {
-          setBoundingBoxGeometry()
-        }
-      } else if (!unfinishedEvent) {
-        setBoundingBoxGeometry()
-      }
-
-      props.clearPath()
-      props.clearLocation()
-
-      //replace events with modified list
-      try {
-        await props.replaceObservationEventById(event, event.id)
-      } catch (error) {
-        props.setMessageState({
-          type: 'err',
-          messageContent: error.message
-        })
-      }
-    }
-
-    props.toggleObserving()
-    props.clearObservationLocation()
-    if (!unfinishedEvent) {
-      stopLocationAsync()
-    }
-
-    if (event.formID === 'JX.519') {
-      //stores event id into redux so that EditObservationEventComponent knows which event is being finished
-      props.setObservationId({
-        eventId: event.id,
-        unitId: null
-      })
-
-      props.onFinishObservationEvent()
-    }
   }
 
   const stopObserving = () => {
     props.setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
-      onOk: () => finishObservationEvent()
+      onOk: () => {
+        props.setObservationId({
+          eventId: props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1].id,
+          unitId: null
+        })
+        props.onPressFinishObservationEvent()
+      }
     })
   }
 
@@ -393,7 +253,7 @@ const HomeComponent = (props: Props) => {
   }
 
   const switchSelectedForm = async (ind: number) => {
-    if (!props.observing && !unfinishedEvent) {
+    if (!props.observing) {
       await props.switchSchema(availableForms[ind])
       setSelectedTab(ind)
     }
@@ -426,7 +286,7 @@ const HomeComponent = (props: Props) => {
                 <HomeIntroductionComponent />
                 <View style={{ height: 10 }}></View>
                 {props.observing ?
-                  <UnfinishedEventViewComponent unfinishedEvent={unfinishedEvent} continueObservationEvent={continueObservationEvent} stopObserving={stopObserving} />
+                  <UnfinishedEventViewComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
                   :
                   <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={onBeginObservationEvent} />
                 }
@@ -438,13 +298,13 @@ const HomeComponent = (props: Props) => {
                 <View style={{ height: 10 }}></View>
               </View>
             </View>
-            <View style={Cs.versionContainer}>
-              <Text
-                style={Ts.alignedRightText}
-                onPress={() => setPressCounter(pressCounter + 1)}>
-                {t('version')} {AppJSON.expo.version}
-              </Text>
-            </View>
+          </View>
+          <View style={Cs.versionContainer}>
+            <Text
+              style={Ts.alignedRightText}
+              onPress={() => setPressCounter(pressCounter + 1)}>
+              {t('version')} {AppJSON.expo.version}
+            </Text>
           </View>
         </ScrollView>
         {props.children}

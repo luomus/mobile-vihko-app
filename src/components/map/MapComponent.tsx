@@ -13,7 +13,8 @@ import {
   clearObservationLocation,
   setObservationId,
   clearObservationId,
-  deleteObservation
+  deleteObservation,
+  setObservationEventInterrupted
 } from '../../stores/observation/actions'
 import {
   setRegion,
@@ -49,11 +50,12 @@ interface RootState {
   maptype: 'topographic' | 'satellite',
   editing: EditingType,
   observationId: Record<string, any>,
+  observationEventInterrupted: boolean
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationEvent, centered, maptype, editing, observationId } = state
-  return { position, path, region, observation, observationEvent, centered, maptype, editing, observationId }
+  const { position, path, region, observation, observationEvent, observationEventInterrupted, centered, maptype, editing, observationId } = state
+  return { position, path, region, observation, observationEvent, observationEventInterrupted, centered, maptype, editing, observationId }
 }
 
 const mapDispatchToProps = {
@@ -67,7 +69,8 @@ const mapDispatchToProps = {
   setObservationId,
   clearObservationId,
   setMessageState,
-  deleteObservation
+  deleteObservation,
+  setObservationEventInterrupted
 }
 
 const connector = connect(
@@ -77,9 +80,10 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
-  onPressHome: (obsStopped: boolean) => void,
+  onPressHome: () => void,
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
+  onPressFinishObservationEvent: (sourcePage: string) => void,
   children?: ReactChild
 }
 
@@ -233,7 +237,13 @@ const MapComponent = (props: Props) => {
     props.setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
-      onOk: () => props.onPressHome(true)
+      onOk: () => {
+        props.setObservationId({
+          eventId: props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1].id,
+          unitId: null
+        })
+        props.onPressFinishObservationEvent('MapComponent')
+      }
     })
   }
 

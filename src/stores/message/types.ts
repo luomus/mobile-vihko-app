@@ -1,8 +1,8 @@
-export const SET_MESSAGE_STATE = 'SET_MESSAGE_STATE'
-export const POP_MESSAGE_STATE = 'POP_MESSAGE_STATE'
 export const CLEAR_MESSAGE_STATE = 'CLEAR_MESSAGE_STATE'
+export const POP_MESSAGE_STATE = 'POP_MESSAGE_STATE'
+export const SET_MESSAGE_STATE = 'SET_MESSAGE_STATE'
 
-export interface MessageState {
+export interface MessageType {
   type: 'msg' | 'conf' | 'dangerConf' | 'err' | null,
   messageContent: string | null,
   okLabel?: string,
@@ -11,20 +11,20 @@ export interface MessageState {
   onCancel?: () => void,
 }
 
-interface setMessageState {
-  type: typeof SET_MESSAGE_STATE,
-  payload: MessageState,
+interface clearMessageState {
+  type: typeof CLEAR_MESSAGE_STATE,
 }
 
 interface popMessageState {
   type: typeof POP_MESSAGE_STATE,
 }
 
-interface clearMessageState {
-  type: typeof CLEAR_MESSAGE_STATE,
+interface setMessageState {
+  type: typeof SET_MESSAGE_STATE,
+  payload: MessageType,
 }
 
 export type messageActionTypes =
-  setMessageState |
+  clearMessageState |
   popMessageState |
-  clearMessageState
+  setMessageState

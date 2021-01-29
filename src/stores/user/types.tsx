@@ -1,5 +1,10 @@
 export const SET_CREDENTIALS = 'SET_CREDENTIALS'
-export const CLEAR_CREDENTIALS = 'CLEAR_CEDENTIALS'
+export const CLEAR_CREDENTIALS = 'CLEAR_CREDENTIALS'
+
+export interface CredentialsType {
+  user: UserType | null,
+  token: string | null,
+}
 
 export interface UserType {
   id: string,
@@ -8,9 +13,8 @@ export interface UserType {
   defaultLanguage: string,
 }
 
-export interface CredentialsType {
-  user: UserType | null,
-  token: string | null,
+interface clearCredentials {
+  type: typeof CLEAR_CREDENTIALS,
 }
 
 interface setCredentials {
@@ -18,10 +22,6 @@ interface setCredentials {
   payload: CredentialsType,
 }
 
-interface clearCredentials {
-  type: typeof CLEAR_CREDENTIALS,
-}
-
 export type userActionTypes =
-  setCredentials |
-  clearCredentials
+  clearCredentials |
+  setCredentials
