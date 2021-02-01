@@ -158,11 +158,6 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
 
     if (event) {
-      const oldGathering = event.gatheringEvent
-      event.gatheringEvent = {
-        ...oldGathering,
-        dateEnd: setDateForDocument()
-      }
 
       const setBoundingBoxGeometry = () => {
         const geometry = createUnitBoundingBox(event)

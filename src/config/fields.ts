@@ -24,6 +24,7 @@ export const JX519ObservationEventFields = [
 export const JX519Fields = [
   'identifications_0_taxon',
   'count',
+  'unitGathering_dateBegin',
   'atlasCode',
   'taxonConfidence',
   'notes',
@@ -71,6 +72,7 @@ export const JX652Fields = [
   'identifications_0_taxon',
   'substrateSpecies',
   'substrateNotes',
+  'unitGathering_dateBegin',
   'taxonConfidence',
   'notes',
   'images'
@@ -125,6 +127,5 @@ export const overrideJX652Fields = {
     }
   }
 }
-
 
 export const availableForms = ['JX.519', 'JX.652']

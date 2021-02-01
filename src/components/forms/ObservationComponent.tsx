@@ -39,7 +39,7 @@ interface RootState {
 
 const mapStateToProps = (state: RootState) => {
   const { observation, observationEvent, observationId, observationLocations, editing, schema, path } = state
-  return { observation, observationEvent, observationLocations, observationId, editing, schema, path }
+  return { observation, observationEvent, observationId, observationLocations, editing, schema, path }
 }
 
 const mapDispatchToProps = {
