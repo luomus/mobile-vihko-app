@@ -54,6 +54,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
   onPressSubmit: () => void,
+  onPressObservationEvent: () => void,
   children?: ReactChild,
   sourcePage: string,
   isFocused: () => boolean
@@ -128,16 +129,14 @@ const EditObservationEventComponent = (props: Props) => {
       //replace events with the modified copy
       try {
         await props.replaceObservationEventById(editedEvent, props.observationId.eventId)
+        if (props.sourcePage !== 'ObservationEventComponent') {
+          props.finishObservationEvent()
+          setModalVisibility(true)
+        } else {
+          props.onPressObservationEvent()
+        }
         props.clearObservationId()
         setSaving(false)
-        props.setMessageState({
-          type: 'msg',
-          messageContent: t('changes saved'),
-          onOk: () => {
-            props.finishObservationEvent()
-            setModalVisibility(true)
-          }
-        })
       } catch (error) {
         props.setMessageState({
           type: 'err',

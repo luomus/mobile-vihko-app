@@ -105,7 +105,7 @@ type Props = PropsFromRedux & {
   onLogout: () => void,
   onPressMap: () => void,
   onPressObservationEvent: (id: string) => void,
-  onPressFinishObservationEvent: () => void,
+  onPressFinishObservationEvent: (sourcePage: string) => void,
   navigation: any,
   children?: ReactChild
 }
@@ -120,9 +120,6 @@ const HomeComponent = (props: Props) => {
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
-    // const length = props.observationEvent.events.length
-    // const isUnfinished = length && !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
-
     const length = props.observationEvent.events.length
     let isUnfinished: boolean = false
 
@@ -230,7 +227,7 @@ const HomeComponent = (props: Props) => {
           eventId: props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1].id,
           unitId: null
         })
-        props.onPressFinishObservationEvent()
+        props.onPressFinishObservationEvent('HomeComponent')
       }
     })
   }

@@ -237,6 +237,8 @@ const MapComponent = (props: Props) => {
     props.setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
+      okLabel: t('cancelObservation'),
+      cancelLabel: t('do not stop'),
       onOk: () => {
         props.setObservationId({
           eventId: props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1].id,

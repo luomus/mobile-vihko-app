@@ -78,8 +78,8 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
         onPressObservationEvent={(id: string) => {
           this.props.navigation.navigate('ObservationEvent', { id })
         }}
-        onPressFinishObservationEvent={() => {
-          this.props.navigation.navigate('EditObservationEvent')
+        onPressFinishObservationEvent={(sourcePage: string) => {
+          this.props.navigation.navigate('EditObservationEvent', { sourcePage })
         }}
       >
         <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
