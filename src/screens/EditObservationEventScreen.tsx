@@ -65,6 +65,9 @@ export default class EditObservationEventScreen extends Component<NavigationStac
         onPressSubmit={() => {
           this.props.navigation.navigate('Home')
         }}
+        onPressObservationEvent={() => {
+          this.props.navigation.navigate('ObservationEvent')
+        }}
         sourcePage={this.props.navigation?.state?.params?.sourcePage}
         isFocused={() => isFocused()}
       >

@@ -37,7 +37,7 @@ const SendEventModalComponent = (props: Props) => {
           onPress={ () => {props.sendObservationEvent(false)} }
         />
         <Button
-          title={t('cancel')}
+          title={t('do not submit')}
           buttonStyle={Bs.sendEventModalNegativeButton}
           icon={<Icon type={'material-community'} name={'close'} color={'white'} />}
           iconRight={true}

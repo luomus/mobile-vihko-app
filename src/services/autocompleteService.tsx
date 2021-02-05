@@ -1,10 +1,10 @@
 import { autocompleteUrl } from '../config/urls'
 import { accessToken } from '../config/keys'
-import axios, { Canceler } from 'axios'
+import axios, { AxiosResponse, Canceler } from 'axios'
 
 const CancelToken = axios.CancelToken
 
-export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any> | null, lang: string, setCancelToken: (c: Canceler) => void) => {
+export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any> | null, lang: string, setCancelToken: ((c: Canceler) => void) | null) => {
   let params = {
     'q': q,
     'lang': lang,
@@ -28,11 +28,20 @@ export const getTaxonAutocomplete = async (target: string, q: string, filters: R
   }
 
   try {
-    const result = await axios.get(autocompleteUrl + target, {
-      params,
-      headers,
-      cancelToken: new CancelToken((c) => setCancelToken(c)),
-    })
+    let result: AxiosResponse<any>
+
+    if (setCancelToken !== null) {
+      result = await axios.get(autocompleteUrl + target, {
+        params,
+        headers,
+        cancelToken: new CancelToken((c) => setCancelToken(c))
+      })
+    } else {
+      result = await axios.get(autocompleteUrl + target, {
+        params,
+        headers
+      })
+    }
 
     return {
       query: q,

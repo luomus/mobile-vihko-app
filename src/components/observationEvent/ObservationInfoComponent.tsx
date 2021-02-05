@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Image, Text, ScrollView } from 'react-native'
 import { connect, ConnectedProps } from 'react-redux'
 import { createSchemaObjectComponents } from '../../parsers/SchemaObjectParser'
@@ -33,7 +33,27 @@ type Props = PropsFromRedux & {
 }
 
 const ObservationInfoComponent = (props: Props) => {
+
+  const [list, setList] = useState<Array<any> | null>(null)
   const { t } = useTranslation()
+
+  useEffect(() => {
+
+    const initList = async () => {
+      let fields: string[] | null = null
+
+      if (props.event.formID === 'JX.519') {
+        fields = JX519Fields
+      } else if (props.event.formID === 'JX.652') {
+        fields = JX652Fields
+      }
+      if (schema && fields) {
+        setList(await createSchemaObjectComponents(props.observation, fields, schema))
+      }
+    }
+
+    initList()
+  }, [])
 
   const lang = i18n.language
   const schema = props.schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units
@@ -42,18 +62,10 @@ const ObservationInfoComponent = (props: Props) => {
     return null
   }
 
-  let fields: string[] | null = null
-
-  if (props.event.formID === 'JX.519') {
-    fields = JX519Fields
-  } else if (props.event.formID === 'JX.652') {
-    fields = JX652Fields
-  }
-
   return (
     <View style={Cs.observationInfoContainer}>
       <MiniMapComponent observation={props.observation} event={props.event} />
-      {(schema && fields) ? createSchemaObjectComponents(props.observation, fields, schema) : null}
+      {list}
       {props.observation.images !== undefined && props.observation.images.length > 0 ?
         <View>
           <View style={Cs.observationListLine}>

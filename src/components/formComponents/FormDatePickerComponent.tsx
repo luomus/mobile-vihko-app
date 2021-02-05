@@ -47,7 +47,14 @@ const FormDatePickerComponent = (props: Props) => {
   const dateEnd = props.watch('gatheringEvent_dateEnd')
 
   useEffect(() => {
-    props.setValue(props.objectTitle, currentValue)
+    if (!currentValue || currentValue === '') {
+      setCurrentValue(parseDateFromISOToDocument(date))
+      onChangeDate(date)
+      onChangeTime(date)
+      props.setValue(props.objectTitle, parseDateFromISOToDocument(date))
+    } else {
+      props.setValue(props.objectTitle, currentValue)
+    }
   }, [])
 
   //every time date and time change, combine them so both values are updated
@@ -71,12 +78,12 @@ const FormDatePickerComponent = (props: Props) => {
     combinedDate !== '' ? setCurrentValue(combinedDate) : null
   }, [currentDate, currentTime])
 
-  const onChangeDate = (event: any, date: Date | undefined) => {
+  const onChangeDate = (date: Date | undefined) => {
     setShow(false)
     date !== undefined ? setCurrentDate(parseDateFromISOToDocument(date)) : null
   }
 
-  const onChangeTime = (event: any, date: Date | undefined) => {
+  const onChangeTime = (date: Date | undefined) => {
     date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date)) : null
   }
 

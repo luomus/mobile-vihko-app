@@ -3,21 +3,20 @@ import i18n from '../language/i18n'
 import SchemaObjectComponent from '../components/observationEvent/SchemaObjectComponent'
 import { parsePathForFieldParams } from './SchemaToInputParser'
 import { get, set } from 'lodash'
+import { getTaxonAutocomplete } from '../services/autocompleteService'
+import { log } from '../utilities/logger'
 
-export const createSchemaObjectComponents = (inputObject: Record<string, any>, fields: Array<string>, schema: Record<string, any>) => {
-  const returnArray: Array<any> = []
+export const createSchemaObjectComponents = async (inputObject: Record<string, any>, fields: Array<string>, schema: Record<string, any>) => {
 
-  fields.forEach((field) => {
-    parseObjectToComponents(field, inputObject, schema, returnArray)
-  })
+  const returnArray: Array<any> = await Promise.all(
+    fields.map(async (field) => await parseObjectToComponents(field, inputObject, schema)))
   return returnArray
 }
 
-const parseObjectToComponents = (
+const parseObjectToComponents = async (
   field: string,
   inputObject: Record<string, any>,
-  schema: Record<string, any>,
-  componentArray: Array<any>
+  schema: Record<string, any>
 ) => {
   if (field.includes('images')) {
     return null
@@ -28,22 +27,41 @@ const parseObjectToComponents = (
   const value = get(inputObject, path, null)
 
   if (fieldParams.isArray) {
-    componentArray.push(
-      <SchemaObjectComponent key={field} title={fieldParams.title} value={value.toString()}/>
+    return (
+      <SchemaObjectComponent key={field} title={fieldParams.title} value={value.toString()} />
     )
   } else if (fieldParams.isEnum) {
     const localizedValue = fieldParams['enumDict'][value]
-    componentArray.push(
-      <SchemaObjectComponent key={field} title={fieldParams.title} value={localizedValue}/>
+    return (
+      <SchemaObjectComponent key={field} title={fieldParams.title} value={localizedValue} />
     )
   } else {
     if (fieldParams.type === 'boolean' || fieldParams.type === 'integer') {
-      componentArray.push(
-        <SchemaObjectComponent key={field} title={fieldParams.title} value={i18n.t(value)}/>
+      return (
+        <SchemaObjectComponent key={field} title={fieldParams.title} value={i18n.t(value)} />
       )
     } else if (fieldParams.type === 'string') {
-      componentArray.push(
-        <SchemaObjectComponent key={field} title={fieldParams.title} value={value}/>
+      let finalValue = value
+
+      //API call for viewing substrateSpecies' name
+      if (value !== null && value.includes('MX')) {
+        try {
+          let response: Record<string, any> = await getTaxonAutocomplete('taxon', value, null, i18n.language, null)
+          if (response.result[0].payload.vernacularName) {
+            finalValue = response.result[0].payload.vernacularName
+          } else if (response.result[0].payload.scientificName) {
+            finalValue = response.result[0].payload.scientificName
+          }
+        } catch (error) {
+          log.error({
+            location: '/parsers/SchemaObjectParser parseObjectToComponents()',
+            error: error
+          })
+        }
+      }
+
+      return (
+        <SchemaObjectComponent key={field} title={fieldParams.title} value={finalValue} />
       )
     }
   }
@@ -56,7 +74,7 @@ export const parseSchemaToNewObject = (
 ) => {
   let outputObject = {}
 
-  const setValue = (path: string, defaultObject: any,  schemaDefault: any) => {
+  const setValue = (path: string, defaultObject: any, schemaDefault: any) => {
     if (defaultObject) {
       set(outputObject, path.split('_'), defaultObject)
     } else if (schemaDefault) {
@@ -67,7 +85,7 @@ export const parseSchemaToNewObject = (
   const schemaToObject = (path: string | null, defaultObject: any, schema: Record<string, any>) => {
     const keysBlacklist = ['type', 'title', 'enum', 'enumNames', 'excludeFromCopy', 'required', 'uniqueItems']
     const keys = Object.keys(schema)
-    if (keys.length <= 0 && path && defaultObject){
+    if (keys.length <= 0 && path && defaultObject) {
       set(outputObject, path.split('_'), defaultObject)
     } else if (keys.includes('properties')) {
       schemaToObject(path, defaultObject, schema['properties'])
@@ -110,7 +128,7 @@ export const parseSchemaToNewObject = (
           } else if (schema[key]['properties'] || schema[key]['items']) {
             schemaToObject(newPath, defaultObject?.[key], schema[key])
 
-          } else if (defaultObject?.[key] || schema[key]['default']){
+          } else if (defaultObject?.[key] || schema[key]['default']) {
             setValue(newPath, defaultObject?.[key], schema?.[key]['default'])
           }
         })
