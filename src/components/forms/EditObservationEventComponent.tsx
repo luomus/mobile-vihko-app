@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
 import { finishObservationEvent } from '../../actionCreators/observationEventCreators'
-import { replaceObservationEventById, clearObservationId, setObservationEventFinished, uploadObservationEvent } from '../../stores/observation/actions'
+import { replaceObservationEventById, clearObservationId, uploadObservationEvent } from '../../stores/observation/actions'
 import { setMessageState, clearMessageState } from '../../stores/message/actions'
 import Cs from '../../styles/ContainerStyles'
 import { set, merge, omit } from 'lodash'
@@ -40,7 +40,6 @@ const mapDispatchToProps = {
   clearObservationId,
   setMessageState,
   clearMessageState,
-  setObservationEventFinished,
   uploadObservationEvent,
   finishObservationEvent
 }

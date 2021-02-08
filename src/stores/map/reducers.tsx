@@ -3,6 +3,7 @@ import {
   EditingType,
   TOGGLE_CENTERED,
   SET_EDITING,
+  SET_FIRST_ZOOM,
   TOGGLE_MAPTYPE,
   CLEAR_REGION,
   SET_REGION
@@ -16,7 +17,7 @@ const initEditingState: EditingType = {
 }
 
 const initRegionState = {
-  latitude: 60.171, longitude: 24.931, latitudeDelta: 0.010, longitudeDelta: 0.010
+  latitude: 64.559, longitude: 26.840, latitudeDelta: 12, longitudeDelta: 12
 }
 
 const centeringReducer = (state: boolean = true, action : mapActionTypes) => {
@@ -36,6 +37,15 @@ const editingReducer = (state: EditingType = initEditingState, action: mapAction
     case SET_EDITING:
       newState = action.payload
       return newState
+    default:
+      return state
+  }
+}
+
+const firstZoomReducer = (state: boolean = true, action : mapActionTypes) => {
+  switch (action.type) {
+    case SET_FIRST_ZOOM:
+      return action.payload
     default:
       return state
   }
@@ -66,6 +76,7 @@ const regionReducer = (state: Region = initRegionState, action: mapActionTypes) 
 export {
   centeringReducer,
   editingReducer,
+  firstZoomReducer,
   maptypeReducer,
   regionReducer
 }

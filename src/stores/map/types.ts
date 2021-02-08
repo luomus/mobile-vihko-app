@@ -4,6 +4,8 @@ export const TOGGLE_CENTERED = 'TOGGLE_CENTERED'
 
 export const SET_EDITING = 'SET_EDITING'
 
+export const SET_FIRST_ZOOM = 'SET_FIRST_ZOOM'
+
 export const TOGGLE_MAPTYPE = 'TOGGLE_MAPTYPE'
 
 export const CLEAR_REGION = 'CLEAR_REGION'
@@ -24,6 +26,11 @@ interface setEditing {
   payload: EditingType,
 }
 
+interface setFirstZoom {
+  type: typeof SET_FIRST_ZOOM,
+  payload: boolean
+}
+
 interface toggleMaptype {
   type: typeof TOGGLE_MAPTYPE,
 }
@@ -40,6 +47,7 @@ interface setRegion {
 export type mapActionTypes =
   toggleCentered |
   setEditing |
+  setFirstZoom |
   toggleMaptype |
   clearRegion |
   setRegion

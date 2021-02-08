@@ -49,11 +49,6 @@ interface newObservationEvent {
   payload: Record<string, any>,
 }
 
-interface setObservationEventFinished {
-  type: typeof SET_OBSERVATION_EVENT_FINISHED,
-  payload: boolean
-}
-
 interface setObservationEventInterrupted {
   type: typeof SET_OBSERVATION_EVENT_INTERRUPTED,
   payload: boolean
@@ -85,7 +80,6 @@ interface setSchema {
 export type observationActionTypes =
   clearObservationLocation |
   setObservationLocation |
-  setObservationEventFinished |
   setObservationEventInterrupted |
   clearObservationEvents |
   newObservationEvent |

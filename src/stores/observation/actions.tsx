@@ -53,11 +53,6 @@ export const clearObservationId = (): observationActionTypes => ({
   type: CLEAR_OBSERVATION_ID
 })
 
-export const setObservationEventFinished = (finished: boolean): observationActionTypes => ({
-  type: SET_OBSERVATION_EVENT_FINISHED,
-  payload: finished
-})
-
 export const setObservationEventInterrupted = (interrupted: boolean): observationActionTypes => ({
   type: SET_OBSERVATION_EVENT_INTERRUPTED,
   payload: interrupted

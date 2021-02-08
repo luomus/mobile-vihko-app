@@ -1,6 +1,7 @@
 import { Region } from 'react-native-maps'
 import { mapActionTypes,
   TOGGLE_CENTERED,
+  SET_FIRST_ZOOM,
   TOGGLE_MAPTYPE,
   SET_REGION,
   CLEAR_REGION,
@@ -28,4 +29,9 @@ export const toggleMaptype = (): mapActionTypes => ({
 export const setEditing = (editing: EditingType): mapActionTypes => ({
   type: SET_EDITING,
   payload: editing
+})
+
+export const setFirstZoom = (isFirstZoom: boolean): mapActionTypes => ({
+  type: SET_FIRST_ZOOM,
+  payload: isFirstZoom
 })
