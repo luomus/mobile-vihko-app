@@ -6,7 +6,8 @@ import {
   SET_FIRST_ZOOM,
   TOGGLE_MAPTYPE,
   CLEAR_REGION,
-  SET_REGION
+  SET_REGION,
+  FirstZoomType
 } from './types'
 import { Region } from 'react-native-maps'
 
@@ -42,7 +43,7 @@ const editingReducer = (state: EditingType = initEditingState, action: mapAction
   }
 }
 
-const firstZoomReducer = (state: boolean = true, action : mapActionTypes) => {
+const firstZoomReducer = (state: FirstZoomType = 'not', action : mapActionTypes) => {
   switch (action.type) {
     case SET_FIRST_ZOOM:
       return action.payload

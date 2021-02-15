@@ -17,6 +17,8 @@ export interface EditingType {
   originalSourcePage: string
 }
 
+export type FirstZoomType = 'not' | 'zooming' | 'zoomed'
+
 interface toggleCentered {
   type: typeof TOGGLE_CENTERED,
 }
@@ -28,7 +30,7 @@ interface setEditing {
 
 interface setFirstZoom {
   type: typeof SET_FIRST_ZOOM,
-  payload: boolean
+  payload: FirstZoomType
 }
 
 interface toggleMaptype {

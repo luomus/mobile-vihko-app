@@ -114,11 +114,11 @@ export const overrideJX652Fields = {
       ],
       fi: [
         'laji',
-        'kasvupaikka',
+        'habitaatti',
       ],
       sv: [
-        'arter',
-        'livsmiljö',
+        'arten',
+        'habitaten',
       ],
       en: [
         'species',

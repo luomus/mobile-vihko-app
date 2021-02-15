@@ -5,7 +5,8 @@ import {
   APPEND_PATH,
   SET_PATH,
   CLEAR_PATH,
-  locationActionTypes
+  locationActionTypes,
+  PathType
 } from './types'
 import { Store } from 'redux'
 
@@ -33,7 +34,7 @@ export const appendPath = ( store: Store, locations : LocationData[] ): void => 
   }
 }
 
-export const setPath = (points: Array<Array<number>>) => ({
+export const setPath = (points: PathType): locationActionTypes => ({
   type: SET_PATH,
   payload: points
 })

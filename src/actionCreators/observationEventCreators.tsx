@@ -102,6 +102,7 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
     dispatch(toggleObserving())
+    dispatch(setFirstZoom('not'))
     onPressMap()
 
     return Promise.resolve()
@@ -115,7 +116,7 @@ export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Pr
 
     if (!observationEventInterrupted) {
       onPressMap()
-      return
+      return Promise.resolve()
     }
 
     //atempt to start geolocation systems
@@ -130,21 +131,21 @@ export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Pr
         type: 'err',
         messageContent: error.message
       }))
-      return
+      return Promise.reject()
     }
 
-    dispatch(setObservationEventInterrupted(false))
     //reset map centering and zoom level
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
-
+    dispatch(setFirstZoom('not'))
     //set old path if exists
-    const path: PathType = observationEvent.events?.[observationEvent.events.length - 1].gatherings[0]?.geometry.coordinates
+    const path: PathType = observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry?.coordinates
     if (path) {
       dispatch(setPath(path))
     }
-
+    dispatch(setObservationEventInterrupted(false))
     onPressMap()
+    return Promise.resolve()
   }
 }
 
@@ -200,7 +201,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(toggleObserving())
     dispatch(clearObservationLocation())
     dispatch(clearObservationId())
-    dispatch(setFirstZoom(true))
+    dispatch(setFirstZoom('not'))
     await stopLocationAsync()
 
     return Promise.resolve()

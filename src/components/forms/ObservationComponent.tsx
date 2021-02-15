@@ -213,7 +213,6 @@ const ObservationComponent = (props: Props) => {
     if (color) {
       set(newUnit, 'color', color)
     }
-
     //add the new observation to latest event, clear location
     //and redirect to map after user oks message
     try {

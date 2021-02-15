@@ -29,16 +29,12 @@ import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
 import GpsBarComponent from './GpsBarComponent'
-import { EditingType } from '../../stores/map/types'
+import { EditingType, FirstZoomType } from '../../stores/map/types'
 import { ObservationEventType } from '../../stores/observation/types'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
-
-interface BasicObject {
-  [key: string]: any
-}
 
 interface RootState {
   position: LocationObject,
@@ -50,7 +46,7 @@ interface RootState {
   maptype: 'topographic' | 'satellite',
   editing: EditingType,
   observationId: Record<string, any>,
-  firstZoom: boolean
+  firstZoom: FirstZoomType
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -100,25 +96,22 @@ const MapComponent = (props: Props) => {
 
   //if centering is true keeps recentering the map on renders
   useEffect(() => {
-    if (props.centered && props.position) {
+    if (props.centered && props.position && mapLoaded) {
 
-      if (!props.firstZoom) {
+      //zoom from initial region to user location when starting the observation event
+      const triggerZoomFromFinland = async () => {
+        zoomFromFinlandToLocation()
+      }
+
+      if (props.firstZoom === 'zoomed') {
         followUser()
 
-      } else {
-        const coords: LatLng = { ...props.position.coords }
-        let initialRegion = {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          latitudeDelta: 0.01000000000000000,
-          longitudeDelta: 0.01000000000000000
-        }
-
-        props.setRegion(initialRegion)
-        moveToRegion(initialRegion)
+      } else if (props.firstZoom === 'not') {
+        triggerZoomFromFinland()
       }
     }
   })
+
   //if observation location is being edited center on observation initially, else to user location
   useEffect(() => {
     if (props.editing.started && props.observation) {
@@ -145,7 +138,6 @@ const MapComponent = (props: Props) => {
   const moveToRegion = (region: Region | null) => {
     if (region && mapView && mapLoaded) {
       mapView.animateToRegion(region, 500)
-      if (props.firstZoom) { props.setFirstZoom(false) }
     }
   }
 
@@ -196,6 +188,26 @@ const MapComponent = (props: Props) => {
   const markObservation = (coordinate: LatLng) => {
     const point = convertLatLngToPoint(coordinate)
     props.setObservationLocation(point)
+  }
+
+  //performs the zoom from initial region to user location
+  const zoomFromFinlandToLocation = () => {
+    props.setFirstZoom('zooming')
+
+    const coords: LatLng = { ...props.position.coords }
+    let initialRegion = {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      latitudeDelta: 0.01000000000000000,
+      longitudeDelta: 0.01000000000000000
+    }
+
+    props.setRegion(initialRegion)
+    moveToRegion(initialRegion)
+
+    setTimeout(() => {
+      setFirstZoom('zoomed')
+    }, 1000)
   }
 
   //clears observation location from its reducer, and removes it from the list
@@ -358,16 +370,17 @@ const MapComponent = (props: Props) => {
   const observationLocationsOverlay = () => {
     if (
       props.editing.started ||
+      props.observationEvent.events[props?.observationEvent?.events?.length - 1] === undefined ||
       props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1]
         ?.schema?.gatherings[0]?.units?.length <= 0
     ) {
       return null
     }
 
-    const units: BasicObject[] = props.observationEvent.events?.[props.observationEvent.events.length - 1]
+    const units: Record<string, any> = props.observationEvent.events?.[props.observationEvent.events.length - 1]
       .gatherings[0].units
 
-    return units.map((unit) => {
+    return units.map((unit: Record<string, any>) => {
       const coordinate = convertPointToLatLng(unit.unitGathering.geometry)
       const unitId = unit.id
       let color = unit.color

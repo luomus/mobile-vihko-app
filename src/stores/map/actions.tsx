@@ -6,7 +6,8 @@ import { mapActionTypes,
   SET_REGION,
   CLEAR_REGION,
   SET_EDITING,
-  EditingType
+  EditingType,
+  FirstZoomType
 } from './types'
 
 export const setRegion = (region: Region): mapActionTypes => ({
@@ -31,7 +32,7 @@ export const setEditing = (editing: EditingType): mapActionTypes => ({
   payload: editing
 })
 
-export const setFirstZoom = (isFirstZoom: boolean): mapActionTypes => ({
+export const setFirstZoom = (zoomState: FirstZoomType): mapActionTypes => ({
   type: SET_FIRST_ZOOM,
-  payload: isFirstZoom
+  payload: zoomState
 })

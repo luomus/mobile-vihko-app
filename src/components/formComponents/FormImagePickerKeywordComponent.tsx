@@ -77,11 +77,11 @@ const ImagePickerKeywordComponent = (props: Props) => {
     if (succeeded) {
       setImages(images.concat({
         uri,
-        keywords: keywords[0]
+        keywords: ''
       }))
       props.setValue(props.objectTitle, images.concat({
         uri,
-        keywords: keywords[0]
+        keywords: ''
       }))
     }
 
@@ -117,7 +117,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
       if (image.uri === uri) {
         return {
           uri,
-          keywords: keywords[value],
+          keywords: localized[value],
         }
       } else {
         return image
