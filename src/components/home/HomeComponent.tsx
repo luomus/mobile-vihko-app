@@ -16,7 +16,6 @@ import {
   clearObservationLocation,
   setObservationId,
   switchSchema,
-  setObservationEventFinished,
   setObservationEventInterrupted
 } from '../../stores/observation/actions'
 import {
@@ -60,7 +59,6 @@ interface RootState {
   observing: boolean,
   observation: LatLng,
   observationEvent: ObservationEventType,
-  observationEventFinished: boolean,
   observationEventInterrupted: boolean,
   schema: SchemaType,
   credentials: CredentialsType,
@@ -68,8 +66,8 @@ interface RootState {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, observationEvent, observationEventFinished, observationEventInterrupted, schema, credentials, centered } = state
-  return { position, path, observing, observation, observationEvent, observationEventFinished, observationEventInterrupted, schema, credentials, centered }
+  const { position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered } = state
+  return { position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered }
 }
 
 const mapDispatchToProps = {
@@ -90,7 +88,6 @@ const mapDispatchToProps = {
   beginObservationEvent,
   continueObservationEvent,
   finishObservationEvent,
-  setObservationEventFinished,
   setObservationEventInterrupted
 }
 
@@ -130,7 +127,6 @@ const HomeComponent = (props: Props) => {
     if (isUnfinished) {
       props.toggleObserving()
       props.setObservationEventInterrupted(true)
-      props.setObservationEventFinished(false)
     }
 
     const initTab = async () => {
@@ -185,7 +181,7 @@ const HomeComponent = (props: Props) => {
     setObservationEvents(events)
   }
 
-  //handle back press in homescreen by asking user if they fish to exit the app
+  //handle back press in homescreen by asking user if they wish to exit the app
   useBackHandler(() => {
     if (props.isFocused() && props.observing) {
       props.setMessageState({

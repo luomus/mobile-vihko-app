@@ -13,12 +13,12 @@ import {
   clearObservationLocation,
   setObservationId,
   clearObservationId,
-  deleteObservation,
-  setObservationEventInterrupted
+  deleteObservation
 } from '../../stores/observation/actions'
 import {
   setRegion,
   toggleCentered,
+  setFirstZoom,
   toggleMaptype,
   setEditing,
 } from '../../stores/map/actions'
@@ -29,16 +29,12 @@ import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
 import GpsBarComponent from './GpsBarComponent'
-import { EditingType } from '../../stores/map/types'
+import { EditingType, FirstZoomType } from '../../stores/map/types'
 import { ObservationEventType } from '../../stores/observation/types'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
-
-interface BasicObject {
-  [key: string]: any
-}
 
 interface RootState {
   position: LocationObject,
@@ -50,12 +46,12 @@ interface RootState {
   maptype: 'topographic' | 'satellite',
   editing: EditingType,
   observationId: Record<string, any>,
-  observationEventInterrupted: boolean
+  firstZoom: FirstZoomType
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationEvent, observationEventInterrupted, centered, maptype, editing, observationId } = state
-  return { position, path, region, observation, observationEvent, observationEventInterrupted, centered, maptype, editing, observationId }
+  const { position, path, region, observation, observationEvent, centered, maptype, editing, observationId, firstZoom } = state
+  return { position, path, region, observation, observationEvent, centered, maptype, editing, observationId, firstZoom }
 }
 
 const mapDispatchToProps = {
@@ -70,7 +66,7 @@ const mapDispatchToProps = {
   clearObservationId,
   setMessageState,
   deleteObservation,
-  setObservationEventInterrupted
+  setFirstZoom
 }
 
 const connector = connect(
@@ -89,10 +85,10 @@ type Props = PropsFromRedux & {
 
 const MapComponent = (props: Props) => {
   const { t } = useTranslation()
-  const [ mapLoaded, setMapLoaded ] = useState(false)
-  const [ observationButtonsState, setObservationButtonsState ] = useState('')
-  const [ modalVisibility, setModalVisibility ] = useState(false)
-  const [ observationOptions, setObservationOptions ] = useState<Record<string, any>[]>([])
+  const [mapLoaded, setMapLoaded] = useState(false)
+  const [observationButtonsState, setObservationButtonsState] = useState('')
+  const [modalVisibility, setModalVisibility] = useState(false)
+  const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
 
   const onMapLoaded = () => {
     setMapLoaded(true)
@@ -100,14 +96,25 @@ const MapComponent = (props: Props) => {
 
   //if centering is true keeps recentering the map on renders
   useEffect(() => {
-    if ( props.centered && props.position ) {
-      followUser()
+    if (props.centered && props.position && mapLoaded) {
+
+      //zoom from initial region to user location when starting the observation event
+      const triggerZoomFromFinland = async () => {
+        zoomFromFinlandToLocation()
+      }
+
+      if (props.firstZoom === 'zoomed') {
+        followUser()
+
+      } else if (props.firstZoom === 'not') {
+        triggerZoomFromFinland()
+      }
     }
   })
 
   //if observation location is being edited center on observation initially, else to user location
   useEffect(() => {
-    if ( props.editing.started && props.observation ) {
+    if (props.editing.started && props.observation) {
       props.setRegion({
         ...convertPointToLatLng(props.observation),
         latitudeDelta: 0.01000000000000000,
@@ -144,13 +151,13 @@ const MapComponent = (props: Props) => {
   //for map view
   const getRegionFromCoords = () => {
     if (props.position) {
-      const coords : LatLng = { ...props.position.coords }
+      const coords: LatLng = { ...props.position.coords }
 
-      const region : Region = {
+      const region: Region = {
         latitude: coords.latitude,
         longitude: coords.longitude,
         latitudeDelta: props.region.latitudeDelta,
-        longitudeDelta: props.region.longitudeDelta,
+        longitudeDelta: props.region.longitudeDelta
       }
 
       return region
@@ -181,6 +188,26 @@ const MapComponent = (props: Props) => {
   const markObservation = (coordinate: LatLng) => {
     const point = convertLatLngToPoint(coordinate)
     props.setObservationLocation(point)
+  }
+
+  //performs the zoom from initial region to user location
+  const zoomFromFinlandToLocation = () => {
+    props.setFirstZoom('zooming')
+
+    const coords: LatLng = { ...props.position.coords }
+    let initialRegion = {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      latitudeDelta: 0.01000000000000000,
+      longitudeDelta: 0.01000000000000000
+    }
+
+    props.setRegion(initialRegion)
+    moveToRegion(initialRegion)
+
+    setTimeout(() => {
+      setFirstZoom('zoomed')
+    }, 1000)
   }
 
   //clears observation location from its reducer, and removes it from the list
@@ -282,11 +309,11 @@ const MapComponent = (props: Props) => {
   const locationOverlay = () => (props.position !== null ?
     <Marker
       onPress={(event) => markObservation(event.nativeEvent.coordinate)}
-      coordinate = {{
+      coordinate={{
         latitude: props.position.coords.latitude,
         longitude: props.position.coords.longitude
       }}
-      zIndex = {3}
+      zIndex={3}
       anchor={{ x: 0.5, y: 0.5 }}>
       <Icon
         type={'materials-icons'}
@@ -308,9 +335,9 @@ const MapComponent = (props: Props) => {
       const lineString: LineString | null = lineStringConstructor(path)
       return lineString ?
         <Geojson
-          geojson = {wrapGeometryInFC(lineString)}
-          strokeWidth = {5}
-          strokeColor = {Colors.red}
+          geojson={wrapGeometryInFC(lineString)}
+          strokeWidth={5}
+          strokeColor={Colors.red}
         />
         : null
     }
@@ -320,12 +347,12 @@ const MapComponent = (props: Props) => {
 
   //draws currently selected point to map & enables dragabilty to finetune its
   //position
-  const targetOverlay  = () => (props.observation ?
+  const targetOverlay = () => (props.observation ?
     <Marker
-      draggable = {true}
-      coordinate = {convertPointToLatLng(props.observation)}
-      onDragEnd = {(event) => markObservation(event.nativeEvent.coordinate)}
-      zIndex = {4}
+      draggable={true}
+      coordinate={convertPointToLatLng(props.observation)}
+      onDragEnd={(event) => markObservation(event.nativeEvent.coordinate)}
+      zIndex={4}
     />
     : null
   )
@@ -333,8 +360,8 @@ const MapComponent = (props: Props) => {
   //if topomap is selected draws its tiles on map
   const tileOverlay = () => (props.maptype === 'topographic' ?
     <UrlTile
-      urlTemplate = {urlTemplate}
-      zIndex = {-1}
+      urlTemplate={urlTemplate}
+      zIndex={-1}
     />
     : null
   )
@@ -343,16 +370,17 @@ const MapComponent = (props: Props) => {
   const observationLocationsOverlay = () => {
     if (
       props.editing.started ||
+      props.observationEvent.events[props?.observationEvent?.events?.length - 1] === undefined ||
       props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1]
         ?.schema?.gatherings[0]?.units?.length <= 0
     ) {
       return null
     }
 
-    const units: BasicObject[] = props.observationEvent.events?.[props.observationEvent.events.length - 1]
+    const units: Record<string, any> = props.observationEvent.events?.[props.observationEvent.events.length - 1]
       .gatherings[0].units
 
-    return units.map((unit) => {
+    return units.map((unit: Record<string, any>) => {
       const coordinate = convertPointToLatLng(unit.unitGathering.geometry)
       const unitId = unit.id
       let color = unit.color
@@ -364,9 +392,9 @@ const MapComponent = (props: Props) => {
       return (
         <Marker
           key={unitId}
-          coordinate = {coordinate}
-          pinColor = {color}
-          zIndex = {3}
+          coordinate={coordinate}
+          pinColor={color}
+          zIndex={3}
         />
       )
     })
@@ -375,22 +403,22 @@ const MapComponent = (props: Props) => {
   return (
     <>
       <GpsBarComponent stopObserving={stopObserving} />
-      <View style = {Cs.mapContainer}>
+      <View style={Cs.mapContainer}>
         <MapView
-          ref = {map => {mapView = map}}
-          provider = {'google'}
-          initialRegion = { props.region }
-          onPanDrag = {() => stopCentering()}
-          onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
-          onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
-          maxZoomLevel = {18.9}
-          minZoomLevel = {5}
-          mapType = {props.maptype === 'topographic' ? 'none' : props.maptype}
-          pitchEnabled = {false}
-          rotateEnabled = {false}
-          moveOnMarkerPress = {false}
-          style = {Cs.mapViewStyle}
-          onMapReady = {onMapLoaded}
+          ref={map => { mapView = map }}
+          provider={'google'}
+          initialRegion={props.region}
+          onPanDrag={() => stopCentering()}
+          onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}
+          onRegionChangeComplete={(region) => onRegionChangeComplete(region)}
+          maxZoomLevel={18.9}
+          minZoomLevel={5}
+          mapType={props.maptype === 'topographic' ? 'none' : props.maptype}
+          pitchEnabled={false}
+          rotateEnabled={false}
+          moveOnMarkerPress={false}
+          style={Cs.mapViewStyle}
+          onMapReady={onMapLoaded}
         >
           {locationOverlay()}
           {targetOverlay()}
@@ -399,8 +427,8 @@ const MapComponent = (props: Props) => {
           {observationLocationsOverlay()}
         </MapView>
         <View
-          style = {Cs.mapTypeContainer}>
-          <TouchableHighlight onPress = {() => props.toggleMaptype()} style = {Os.touchableHiglightStyle}>
+          style={Cs.mapTypeContainer}>
+          <TouchableHighlight onPress={() => props.toggleMaptype()} style={Os.touchableHiglightStyle}>
             <MaterialIcons
               name='layers'
               size={50}
@@ -409,8 +437,8 @@ const MapComponent = (props: Props) => {
           </TouchableHighlight>
         </View>
         <View
-          style = {Cs.userLocationContainer}>
-          <TouchableHighlight onPress = {() => centerMapAnim()} style = {Os.touchableHiglightStyle}>
+          style={Cs.userLocationContainer}>
+          <TouchableHighlight onPress={() => centerMapAnim()} style={Os.touchableHiglightStyle}>
             <MaterialIcons
               name='my-location'
               size={50}
@@ -418,24 +446,24 @@ const MapComponent = (props: Props) => {
             />
           </TouchableHighlight>
         </View>
-        { props.observation ?
+        {props.observation ?
           observationButtonsState === 'newObservation' &&
-            <ObservationButtonsComponent
-              confirmationButton={props.onPressObservation}
-              cancelButton={cancelObservation}
-              mode={observationButtonsState}
-              openModal={openModal}
-              shiftToEditPage={shiftToEditPage}
-            />
-            ||
-            observationButtonsState === 'changeLocation' &&
-              <ObservationButtonsComponent
-                confirmationButton={submitEdit}
-                cancelButton={cancelEdit}
-                mode={observationButtonsState}
-                openModal={openModal}
-                shiftToEditPage={shiftToEditPage}
-              />
+          <ObservationButtonsComponent
+            confirmationButton={props.onPressObservation}
+            cancelButton={cancelObservation}
+            mode={observationButtonsState}
+            openModal={openModal}
+            shiftToEditPage={shiftToEditPage}
+          />
+          ||
+          observationButtonsState === 'changeLocation' &&
+          <ObservationButtonsComponent
+            confirmationButton={submitEdit}
+            cancelButton={cancelEdit}
+            mode={observationButtonsState}
+            openModal={openModal}
+            shiftToEditPage={shiftToEditPage}
+          />
           : null
         }
         {props.children}
@@ -443,7 +471,7 @@ const MapComponent = (props: Props) => {
           shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
           cancelObservation={cancelObservation} isVisible={modalVisibility}
           onBackButtonPress={closeModal} observationOptions={observationOptions} />
-        <MessageComponent/>
+        <MessageComponent />
       </View>
     </>
   )

@@ -283,7 +283,9 @@ const FormAutocompleteComponent = (props: Props) => {
             <ActivityIndicator size={25} color={Colors.neutralColor} />
             : selected ?
               <Icon iconStyle={{ padding: 5, color: Colors.positiveColor }} name='done' type='material-icons' size={25} />
-              : <Icon iconStyle={{ padding: 5, color: Colors.neutralColor }} name='warning' type='material-icons' size={25} />
+              : query !== '' ?
+                <Icon iconStyle={{ padding: 5, color: Colors.neutralColor }} name='warning' type='material-icons' size={25} />
+                : null
           }
         </View>
       </View>

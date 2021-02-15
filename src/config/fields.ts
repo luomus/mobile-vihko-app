@@ -88,6 +88,16 @@ export const overrideJX652Fields = {
         informalTaxonGroup: 'MVL.233,MVL.321'
       },
       valueField: 'identifications_0_taxon',
+      validation: {
+        required: {
+          value: true,
+          message: 'must not be empty'
+        },
+        minLength: {
+          value: 2,
+          message: 'must be at least 2 letters'
+        },
+      },
       transform: {
         'key': 'unitFact_autocompleteSelectedTaxonID',
         'value': 'identifications_0_taxon',
@@ -114,11 +124,11 @@ export const overrideJX652Fields = {
       ],
       fi: [
         'laji',
-        'kasvupaikka',
+        'habitaatti',
       ],
       sv: [
-        'arter',
-        'livsmiljö',
+        'arten',
+        'habitaten',
       ],
       en: [
         'species',

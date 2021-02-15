@@ -8,7 +8,6 @@ import {
   SET_OBSERVATION,
   CLEAR_OBSERVATION,
   TOGGLE_OBSERVING,
-  SET_OBSERVATION_EVENT_FINISHED,
   SET_OBSERVATION_EVENT_INTERRUPTED,
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_EVENTS,
@@ -51,11 +50,6 @@ export const setObservationId = (id: Record<string, any>): observationActionType
 
 export const clearObservationId = (): observationActionTypes => ({
   type: CLEAR_OBSERVATION_ID
-})
-
-export const setObservationEventFinished = (finished: boolean): observationActionTypes => ({
-  type: SET_OBSERVATION_EVENT_FINISHED,
-  payload: finished
 })
 
 export const setObservationEventInterrupted = (interrupted: boolean): observationActionTypes => ({
@@ -202,6 +196,8 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       event.gatherings[0].units = newUnits
       delete event.id
 
+      console.log(event)
+
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx uploadObservationEvent()',
@@ -231,7 +227,6 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     } catch (error) {
       return Promise.reject(error)
     }
-
     return Promise.resolve()
   }
 }
@@ -311,7 +306,6 @@ export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any
         message: i18n.t('error removing observation event')
       })
     }
-
     dispatch(replaceObservationEvents(newEvents))
     return Promise.resolve()
   }

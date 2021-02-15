@@ -4,6 +4,7 @@ import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
 import {
   toggleCentered,
+  setFirstZoom,
   clearRegion
 } from '../stores/map/actions'
 import {
@@ -12,7 +13,6 @@ import {
 import {
   removeDuplicatesFromPath,
   clearObservationLocation,
-  setObservationEventFinished,
   setObservationEventInterrupted,
   replaceObservationEventById,
   replaceObservationEvents,
@@ -38,6 +38,7 @@ import { stopLocationAsync, watchLocationAsync } from '../geolocation/geolocatio
 import { locationActionTypes } from '../stores/position/types'
 import { createUnitBoundingBox } from '../utilities/geometryCreator'
 import { lineStringConstructor } from '../converters/geoJSONConverters'
+import { sourceId } from '../config/keys'
 
 export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
@@ -53,6 +54,7 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
 
     let observationEventDefaults = {}
     set(observationEventDefaults, 'editors', [userId])
+    set(observationEventDefaults, 'sourceID', sourceId)
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
     set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], setDateForDocument())
 
@@ -70,7 +72,7 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx newObservationEvent()',
+        location: '/actionCreators/observationEventCreators.tsx beginObservationEvent()',
         error: error
       })
       return Promise.reject({
@@ -100,7 +102,7 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
     dispatch(toggleObserving())
-    dispatch(setObservationEventFinished(false))
+    dispatch(setFirstZoom('not'))
     onPressMap()
 
     return Promise.resolve()
@@ -114,7 +116,7 @@ export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Pr
 
     if (!observationEventInterrupted) {
       onPressMap()
-      return
+      return Promise.resolve()
     }
 
     //atempt to start geolocation systems
@@ -122,29 +124,28 @@ export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Pr
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)))
     } catch (error) {
       log.error({
-        location: '/components/HomeComponent.tsx continueObservationEvent()',
+        location: '/actionCreators/observationEventCreators continueObservationEvent()',
         error: error
       })
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
       }))
-      return
+      return Promise.reject()
     }
 
-    dispatch(setObservationEventFinished(false))
-    dispatch(setObservationEventInterrupted(false))
     //reset map centering and zoom level
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
-
+    dispatch(setFirstZoom('not'))
     //set old path if exists
-    const path: PathType = observationEvent.events?.[observationEvent.events.length - 1].gatherings[0]?.geometry.coordinates
+    const path: PathType = observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry?.coordinates
     if (path) {
       dispatch(setPath(path))
     }
-
+    dispatch(setObservationEventInterrupted(false))
     onPressMap()
+    return Promise.resolve()
   }
 }
 
@@ -197,10 +198,10 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       }
     }
 
-    dispatch(setObservationEventFinished(true))
     dispatch(toggleObserving())
     dispatch(clearObservationLocation())
     dispatch(clearObservationId())
+    dispatch(setFirstZoom('not'))
     await stopLocationAsync()
 
     return Promise.resolve()

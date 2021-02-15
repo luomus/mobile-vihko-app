@@ -2,13 +2,13 @@ import { combineReducers } from 'redux'
 import {
   centeringReducer,
   editingReducer,
+  firstZoomReducer,
   maptypeReducer,
   regionReducer
 } from './map/reducers'
 import { messageReducer } from './message/reducers'
 import {
   observationReducer,
-  observationEventFinishedReducer,
   observationEventInterruptedReducer,
   observationEventsReducer,
   observationIdReducer,
@@ -22,10 +22,10 @@ const appReducer = combineReducers({
   centered: centeringReducer,
   credentials: credentialsReducer,
   editing: editingReducer,
+  firstZoom: firstZoomReducer,
   maptype: maptypeReducer,
   message: messageReducer,
   observation: observationReducer,
-  observationEventFinished: observationEventFinishedReducer,
   observationEventInterrupted: observationEventInterruptedReducer,
   observationEvent: observationEventsReducer,
   observationId: observationIdReducer,

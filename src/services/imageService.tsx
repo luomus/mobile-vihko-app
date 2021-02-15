@@ -146,7 +146,6 @@ export const saveMedias = async (images: any, credentials: CredentialsType) => {
       const tempId = tempImage.id
       const keyword: string = keywords[index]
       let metadata
-
       if (keywords) {
         metadata = {
           ...defaultMetadata,
