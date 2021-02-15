@@ -196,6 +196,8 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       event.gatherings[0].units = newUnits
       delete event.id
 
+      console.log(event)
+
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx uploadObservationEvent()',
