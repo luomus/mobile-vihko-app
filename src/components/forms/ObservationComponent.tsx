@@ -70,7 +70,8 @@ type Props = PropsFromRedux & {
   fromMap?: boolean,
   sourcePage?: string,
   children?: ReactChild,
-  isFocused: () => boolean
+  isFocused: () => boolean,
+  goBack: (routeKey?: string | null | undefined) => boolean
 }
 
 const ObservationComponent = (props: Props) => {
@@ -102,11 +103,34 @@ const ObservationComponent = (props: Props) => {
   useBackHandler(() => {
 
     if (props.isFocused()) {
-      cleanUp()
+
+      props.setMessageState({
+        type: 'dangerConf',
+        messageContent: t('discard observation?'),
+        onOk: () => {
+          cleanUp()
+        }
+      })
+
+      return true
     }
 
     return false
   })
+
+  const cleanUp = () => {
+    //cleanup when component unmounts, ensures that if navigator back-button
+    //is used observationLocation, observationId and editing-flags are returned
+    //to defaults
+    props.clearObservationLocation()
+    props.setEditing({
+      started: false,
+      locChanged: false,
+      originalSourcePage: props.editing.originalSourcePage
+    })
+    props.clearObservationId()
+    props.goBack()
+  }
 
   //initialization (only for editing observations)
   const init = () => {
@@ -326,19 +350,6 @@ const ObservationComponent = (props: Props) => {
     } finally {
       setSaving(false)
     }
-  }
-
-  const cleanUp = () => {
-    //cleanup when component unmounts, ensures that if navigator back-button
-    //is used observationLocation, observationId and editing-flags are returned
-    //to defaults
-    props.clearObservationLocation()
-    props.setEditing({
-      started: false,
-      locChanged: false,
-      originalSourcePage: props.editing.originalSourcePage
-    })
-    props.clearObservationId()
   }
 
   if (saving) {

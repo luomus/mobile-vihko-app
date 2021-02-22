@@ -58,7 +58,7 @@ export default class ObservationScreen extends Component<NavigationStackScreenPr
   }
 
   render() {
-    const { navigate, isFocused } = this.props.navigation
+    const { navigate, isFocused, goBack } = this.props.navigation
     //handles situation where fromMap can purposefully be undefined
     let fromMap = false
     if (this.props.navigation?.state?.params?.fromMap) {
@@ -74,6 +74,7 @@ export default class ObservationScreen extends Component<NavigationStackScreenPr
         fromMap={fromMap}
         sourcePage={this.props.navigation?.state?.params?.sourcePage}
         isFocused={isFocused}
+        goBack={goBack}
       >
         <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
       </ObservationComponent>
