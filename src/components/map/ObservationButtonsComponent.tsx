@@ -96,7 +96,7 @@ const ObservationButtonsComponent = (props: Props) => {
             {createButtonList()}
           </View>
           <View style={Cs.observationTypeButtonsColumnRight}>
-            {createButton(t('add new observation').toUpperCase(), Bs.observationButton, () => props.confirmationButton())}
+            {createButton(t('add new observation').toUpperCase(), Bs.observationButton, () => props.confirmationButton(true))}
             {createButton(t('cancel'), Bs.endButton, () => props.cancelButton())}
           </View>
         </View>

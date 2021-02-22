@@ -8,6 +8,7 @@ const Form = (
   blacklist: Record<string, any> | null,
   schema: Record<string, any> | null,
   overrideFields: Record<string, any> | null,
+  additionalFields: Record<string, any> | null,
   lang: string,
 ) => {
   let toReturn: any[] = []
@@ -98,19 +99,43 @@ const Form = (
     if (!fields.includes(path) && fieldDefaultValue) {
       toReturn.push(createHidden(path, fieldDefaultValue))
     } else if (fields.includes(path)) {
-      if (path === 'gatheringEvent_leg' && fieldIsArray) {
-        toReturn.push(createArray(fieldTitle, '', path, fieldTypeOfArray, fieldDefaultValue, true, false))
-      } else if (path.includes('images')) {
-        toReturn.push(createImagePicker(fieldTitle, path, fieldDefaultValue))
-      } else if (fieldIsArray) {
-        toReturn.push(createArray(fieldTitle, '', path, fieldTypeOfArray, fieldDefaultValue, true, true))
-      } else if (fieldIsEnum) {
-        toReturn.push(createPicker(fieldTitle, path, fieldDefaultValue, fieldEnumDict, fieldBlacklist))
-      } else if (fieldType === 'boolean') {
-        toReturn.push(createSwitch(fieldTitle, path, fieldDefaultValue))
-      } else {
-        toReturn.push(createInputElement(fieldTitle, path, '', fieldType, fieldDefaultValue, false, undefined, true))
-      }
+      createVisibleField(
+        path,
+        fieldTitle,
+        fieldIsArray,
+        fieldTypeOfArray,
+        fieldIsEnum,
+        fieldEnumDict,
+        fieldType,
+        fieldDefaultValue,
+        fieldBlacklist
+      )
+    }
+  }
+
+  const createVisibleField = (
+    path: string,
+    title: string,
+    isArray: boolean,
+    typeOfArray: string,
+    isEnum: boolean,
+    enumDict: Record<string, any>,
+    type: string,
+    defaultValue: any,
+    blacklist: string[] | null
+  ) => {
+    if (path === 'gatheringEvent_leg' && isArray) {
+      toReturn.push(createArray(title, '', path, typeOfArray, defaultValue, true, false))
+    } else if (path.includes('images')) {
+      toReturn.push(createImagePicker(title, path, defaultValue))
+    } else if (isArray) {
+      toReturn.push(createArray(title, '', path, typeOfArray, defaultValue, true, true))
+    } else if (isEnum) {
+      toReturn.push(createPicker(title, path, defaultValue, enumDict, blacklist))
+    } else if (type === 'boolean') {
+      toReturn.push(createSwitch(title, path, defaultValue))
+    } else {
+      toReturn.push(createInputElement(title, path, '', type, defaultValue, false, undefined, true))
     }
   }
 
@@ -135,6 +160,31 @@ const Form = (
 
   if (schema) {
     schemaToForm(null, defaults, schema)
+  }
+
+  if (additionalFields) {
+    Object.keys(additionalFields).forEach(key => {
+      const { title, isArray, typeOfArray, isEnum, enumDict, type, defaultValue, blacklist } = additionalFields[key]
+      let fieldDefault: any = null
+
+      if (defaults) {
+        fieldDefault = get(defaults, key.split('_'))
+      }
+
+      fieldDefault = fieldDefault | defaultValue
+
+      createVisibleField(
+        key,
+        title,
+        isArray,
+        typeOfArray,
+        isEnum,
+        enumDict,
+        type,
+        fieldDefault,
+        blacklist
+      )
+    })
   }
 
   return createOrderedArray()

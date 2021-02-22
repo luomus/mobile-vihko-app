@@ -57,6 +57,19 @@ export const overrideJX519Fields = {
   }
 }
 
+export const additionalJX519Fields = {
+  'unitGathering_geometry_radius': {
+    title: 'Accuracy',
+    type: 'integer',
+    isArray: false,
+    typeOfArray: '',
+    isEnum: false,
+    enumDict: {},
+    defaultValue: 0,
+    blacklist: null
+  }
+}
+
 export const JX652ObservationEventFields = [
   'gatheringEvent_legPublic',
   'secureLevel',

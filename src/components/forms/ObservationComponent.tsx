@@ -24,7 +24,7 @@ import { setEditing } from '../../stores/map/actions'
 import { EditingType } from '../../stores/map/types'
 import { lineStringConstructor } from '../../converters/geoJSONConverters'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
-import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields } from '../../config/fields'
+import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
 interface RootState {
@@ -179,23 +179,23 @@ const ObservationComponent = (props: Props) => {
     if (props.observationId) {
       //flying squirrel edit observation
       if (observation?.rules) {
-        initForm(setForm, observation, observation.rules, schema, fieldScopes, null, null, lang)
+        initForm(setForm, observation, observation.rules, schema, fieldScopes, null, null, null, lang)
         //trip form new observation
       } else if (props.schema.formID === 'JX.519') {
-        initForm(setForm, observation, null, schema, null, JX519Fields, overrideJX519Fields, lang)
+        initForm(setForm, observation, null, schema, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
       } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, observation, null, schema, null, JX652Fields, overrideJX652Fields, lang)
+        initForm(setForm, observation, null, schema, null, JX652Fields, overrideJX652Fields, null, lang)
       }
       //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
-        initForm(setForm, defaultObject, props.rules, schema, fieldScopes, null, null, lang)
+        initForm(setForm, defaultObject, props.rules, schema, fieldScopes, null, null, null, lang)
         //trip form edit observation
       } else if (props.schema.formID === 'JX.519') {
-        initForm(setForm, defaultObject, null, schema, null, JX519Fields, overrideJX519Fields, lang)
+        initForm(setForm, defaultObject, null, schema, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
       } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, defaultObject, null, schema, null, JX652Fields, overrideJX652Fields, lang)
+        initForm(setForm, defaultObject, null, schema, null, JX652Fields, overrideJX652Fields, null, lang)
       }
     }
   }
