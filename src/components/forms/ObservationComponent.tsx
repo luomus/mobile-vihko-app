@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
@@ -77,7 +77,7 @@ type Props = PropsFromRedux & {
 const ObservationComponent = (props: Props) => {
 
   //for react-hook-form
-  const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
+  const methods = useForm()
   const { t } = useTranslation()
   const [saving, setSaving] = useState<boolean>(false)
   const lang = i18n.language
@@ -179,23 +179,23 @@ const ObservationComponent = (props: Props) => {
     if (props.observationId) {
       //flying squirrel edit observation
       if (observation?.rules) {
-        initForm(setForm, observation, observation.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
+        initForm(setForm, observation, observation.rules, schema, fieldScopes, null, null, lang)
         //trip form new observation
       } else if (props.schema.formID === 'JX.519') {
-        initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
+        initForm(setForm, observation, null, schema, null, JX519Fields, overrideJX519Fields, lang)
       } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX652Fields, overrideJX652Fields, lang)
+        initForm(setForm, observation, null, schema, null, JX652Fields, overrideJX652Fields, lang)
       }
       //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
-        initForm(setForm, defaultObject, props.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
+        initForm(setForm, defaultObject, props.rules, schema, fieldScopes, null, null, lang)
         //trip form edit observation
       } else if (props.schema.formID === 'JX.519') {
-        initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
+        initForm(setForm, defaultObject, null, schema, null, JX519Fields, overrideJX519Fields, lang)
       } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX652Fields, overrideJX652Fields, lang)
+        initForm(setForm, defaultObject, null, schema, null, JX652Fields, overrideJX652Fields, lang)
       }
     }
   }
@@ -392,13 +392,15 @@ const ObservationComponent = (props: Props) => {
             : null
           }
           <View style={Cs.formContainer}>
-            {form}
+            <FormProvider {...methods}>
+              {form}
+            </FormProvider>
           </View>
         </ScrollView>
         {props.children}
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)} />
+          <FloatingIconButtonComponent onPress={methods.handleSubmit(onSubmit)} />
         </View>
       </View>
     )

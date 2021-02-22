@@ -3,11 +3,6 @@ import { get } from 'lodash'
 import { parseObjectForFieldParams } from '../parsers/SchemaToInputParser'
 
 const Form = (
-  register: Function,
-  setValue: Function,
-  watch: Function,
-  errors: Object,
-  unregister: Function,
   defaults: Record<string, any> | undefined,
   fields: string[],
   blacklist: Record<string, any> | null,
@@ -67,7 +62,7 @@ const Form = (
 
   const createField = (path: string, defaultObject: any, fieldParams: Record<string, any> | null) => {
     if (!fieldParams) {
-      toReturn.push(createHidden(path, defaultObject, register, setValue))
+      toReturn.push(createHidden(path, defaultObject))
       return
     }
     const index = fields.length - fields.findIndex(field => field === path)
@@ -88,10 +83,10 @@ const Form = (
     if (overrideFields && Object.keys(overrideFields).includes(path)) {
       switch (overrideFields[path].field) {
         case 'autocomplete':
-          toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, register, setValue, watch, unregister, errors, overrideFields[path].params, lang, index))
+          toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, lang, index))
           return
         case 'imagesKeywords':
-          toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, register, setValue, overrideFields[path].params, lang))
+          toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, lang))
           return
       }
     }
@@ -101,20 +96,20 @@ const Form = (
     }
 
     if (!fields.includes(path) && fieldDefaultValue) {
-      toReturn.push(createHidden(path, fieldDefaultValue, register, setValue))
+      toReturn.push(createHidden(path, fieldDefaultValue))
     } else if (fields.includes(path)) {
       if (path === 'gatheringEvent_leg' && fieldIsArray) {
-        toReturn.push(createArray(fieldTitle, '', path, fieldTypeOfArray, fieldDefaultValue, register, setValue, watch, errors, unregister, true, false))
+        toReturn.push(createArray(fieldTitle, '', path, fieldTypeOfArray, fieldDefaultValue, true, false))
       } else if (path.includes('images')) {
-        toReturn.push(createImagePicker(fieldTitle, path, fieldDefaultValue, register, setValue))
+        toReturn.push(createImagePicker(fieldTitle, path, fieldDefaultValue))
       } else if (fieldIsArray) {
-        toReturn.push(createArray(fieldTitle, '', path, fieldTypeOfArray, fieldDefaultValue, register, setValue, watch, errors, unregister, true, true))
+        toReturn.push(createArray(fieldTitle, '', path, fieldTypeOfArray, fieldDefaultValue, true, true))
       } else if (fieldIsEnum) {
-        toReturn.push(createPicker(fieldTitle, path, fieldDefaultValue, register, setValue, watch, errors, unregister, fieldEnumDict, fieldBlacklist))
+        toReturn.push(createPicker(fieldTitle, path, fieldDefaultValue, fieldEnumDict, fieldBlacklist))
       } else if (fieldType === 'boolean') {
-        toReturn.push(createSwitch(fieldTitle, path, fieldDefaultValue, register, setValue, watch, errors, unregister))
+        toReturn.push(createSwitch(fieldTitle, path, fieldDefaultValue))
       } else {
-        toReturn.push(createInputElement(fieldTitle, path, '', fieldType, fieldDefaultValue, register, setValue, watch, errors, unregister, false, undefined, true))
+        toReturn.push(createInputElement(fieldTitle, path, '', fieldType, fieldDefaultValue, false, undefined, true))
       }
     }
   }

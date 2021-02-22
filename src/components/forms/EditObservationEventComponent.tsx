@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
@@ -65,7 +65,7 @@ const EditObservationEventComponent = (props: Props) => {
   const [form, setForm] = useState<Array<Element> | undefined>(undefined)
   const [saving, setSaving] = useState<boolean>(false)
   //for react-hook-form
-  const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
+  const methods = useForm()
   const { t } = useTranslation()
   //for sending modal
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
@@ -107,9 +107,9 @@ const EditObservationEventComponent = (props: Props) => {
       let schema = omit(props.schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
       if (props.schema.formID === 'JX.519') {
-        initForm(setForm, event, null, register, setValue, watch, errors, unregister, schema, null, JX519ObservationEventFields, null, lang)
+        initForm(setForm, event, null, schema, null, JX519ObservationEventFields, null, lang)
       } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, event, null, register, setValue, watch, errors, unregister, schema, null, JX652ObservationEventFields, null, lang)
+        initForm(setForm, event, null, schema, null, JX652ObservationEventFields, null, lang)
       }
     }
   }
@@ -192,12 +192,14 @@ const EditObservationEventComponent = (props: Props) => {
       <View style={Cs.observationContainer}>
         <ScrollView>
           <View style={Cs.formContainer}>
-            {form}
+            <FormProvider {...methods}>
+              {form}
+            </FormProvider>
           </View>
         </ScrollView>
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)} />
+          <FloatingIconButtonComponent onPress={methods.handleSubmit(onSubmit)} />
         </View>
         <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.onPressSubmit} sendObservationEvent={sendObservationEvent} />
         {props.children}

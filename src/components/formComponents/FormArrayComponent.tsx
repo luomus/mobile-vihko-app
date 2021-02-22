@@ -1,39 +1,70 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
-import { createInputElement } from '../../builders/FormComponentBuilders'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
+import { useFormContext } from 'react-hook-form'
 
 interface Props {
   title: string,
   objectTitle: string,
   parentObjectTitle: string,
   inputType: string,
-  register: Function,
-  setValue: Function,
-  watch: Function,
-  errors: Object,
-  unregister: Function,
-  inputElements: Array<Element | undefined>,
-  elementDictionary: any,
-  callbackFunction: Function | undefined,
+  defaultValue: Array<string> | undefined,
   editable: boolean,
   firstEditable: boolean,
+  createInputElement: (
+    title: string, objectTitle: string, parentObjectTitle: string,
+    type: string, defaultValue: string, isArrayItem: boolean,
+    callbackFunction: Function|undefined, editable: boolean
+  ) => JSX.Element | undefined
 }
 
 const FormArrayComponent = (props: Props) => {
-
-  const [inputElements, setInputElements] = useState(props.inputElements)
+  const [inputElements, setInputElements] = useState<Array<JSX.Element | undefined>>([])
   const indexOfRemovable = props.firstEditable ? 0 : 1
+  const { register, setValue, unregister, watch } = useFormContext()
+  let elementDictionary: Record<string, any> = {}
+
+  useEffect(() => {
+    //if there are default values for the array, we iterate them, create the according input elements and pass the elements to FormArrayComponent
+    let inputElems: Array<JSX.Element | undefined> = []
+
+    if (props.parentObjectTitle !== '') {
+      register({ name: props.parentObjectTitle })
+      setValue(props.parentObjectTitle, []) // Adds empty array to register
+    }
+
+    //make first input uneditabel if set as such
+    if (!props.firstEditable && props.defaultValue) {
+      props.defaultValue.forEach((value, index) => {
+        let defaultIsEditable = true
+        if (index === 0) {
+          defaultIsEditable = false
+        }
+
+        inputElems.push(props.createInputElement(
+          props.title, props.objectTitle, props.parentObjectTitle, props.inputType, value,
+          true, callbackFunction, defaultIsEditable))
+      })
+    } else if (props.defaultValue) {
+      props.defaultValue.forEach((value) => inputElems.push(props.createInputElement(
+        props.title, props.objectTitle, props.parentObjectTitle, props.inputType, value,
+        true, callbackFunction, true)))
+    }
+
+    setInputElements(inputElems)
+  }, [])
+
+  const callbackFunction = (childValue: any) => { // Create callback function for fetching values from inputs
+    elementDictionary[childValue.title] = childValue.value
+  }
 
   const addInputElement = () => {
     const elements = [...inputElements]
-    elements.push(createInputElement(
+    elements.push(props.createInputElement(
       props.title, props.objectTitle, props.parentObjectTitle,
-      props.inputType, '', props.register, props.setValue,
-      props.watch, props.errors, props.unregister, true,
-      props.callbackFunction, props.editable
+      props.inputType, '', true, callbackFunction, props.editable
     ))
     setInputElements(elements)
   }
@@ -42,23 +73,28 @@ const FormArrayComponent = (props: Props) => {
   const removeInputElement = () => {
     const elements = [...inputElements]
     const elementToRemove = elements.pop()
-    const elementKey = elementToRemove.key
-    const valueToRemove = props.elementDictionary[elementKey] //dictionary stores key-value pairs, where key is key/title of input and value is crrent value of input
+    const elementKey = elementToRemove?.key
+
+    if (!(elementToRemove && elementKey)) {
+      return
+    }
+
+    const valueToRemove = elementDictionary[elementKey] //dictionary stores key-value pairs, where key is key/title of input and value is crrent value of input
     removeValueFromRegister(valueToRemove)
-    delete props.elementDictionary[elementKey]
+    delete elementDictionary[elementKey]
     setInputElements(elements)
   }
 
   //gets values stored in register, removes the value to remove and replaces register entry with modified array
   const removeValueFromRegister = (value: string) => {
-    const values = props.watch(props.parentObjectTitle)
+    const values = watch(props.parentObjectTitle)
     const index = values.indexOf(value)
     if (index > -1) {
       values.splice(index, 1)
     }
-    props.unregister(props.parentObjectTitle)
-    props.register({ name: props.parentObjectTitle })
-    props.setValue(props.parentObjectTitle, values)
+    unregister(props.parentObjectTitle)
+    register({ name: props.parentObjectTitle })
+    setValue(props.parentObjectTitle, values)
   }
 
   return (

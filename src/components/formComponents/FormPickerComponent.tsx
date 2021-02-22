@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { View, Text, Picker } from 'react-native'
 import Cs from '../../styles/ContainerStyles'
 
@@ -7,18 +8,14 @@ interface Props {
   objectTitle: string,
   pickerItems: Array<Object>,
   selectedValue: string|null,
-  register: Function,
-  setValue: Function,
-  watch: Function,
-  errors: Object,
-  unregister: Function,
 }
 
 const FormPickerComponent = (props: Props) => {
+  const { register, setValue } = useFormContext()
   const [selected, setSelected] = useState(props.selectedValue)
 
   useEffect(() => {
-    props.setValue(props.objectTitle, props.selectedValue)
+    setValue(props.objectTitle, props.selectedValue)
   }, [])
 
   return (
@@ -26,11 +23,11 @@ const FormPickerComponent = (props: Props) => {
       <Text>{props.title}</Text>
       <View style={Cs.formPickerContainer}>
         <Picker
-          ref={props.register({ name: props.objectTitle })}
+          ref={register({ name: props.objectTitle })}
           selectedValue={selected}
           onValueChange={itemValue => {
             setSelected(itemValue)
-            props.setValue(props.objectTitle, itemValue)}
+            setValue(props.objectTitle, itemValue)}
           }>
           {props.pickerItems}
         </Picker>

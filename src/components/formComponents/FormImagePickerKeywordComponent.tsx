@@ -10,6 +10,7 @@ import * as ImagePicker from 'expo-image-picker'
 import Colors from '../../styles/Colors'
 import { setMessageState } from '../../stores/message/actions'
 import { connect, ConnectedProps } from 'react-redux'
+import { useFormContext } from 'react-hook-form'
 
 interface RadioPropsType {
   label: string,
@@ -30,19 +31,18 @@ type Props = PropsFromRedux & {
   params: Record<string, any>,
   objectTitle: string,
   defaultValue: Array<Record<string, any>>,
-  register: Function,
-  setValue: Function,
   lang: string,
 }
 
 const ImagePickerKeywordComponent = (props: Props) => {
+  const { register, setValue } = useFormContext()
   const [images, setImages] = useState<Array<Record<string, any>>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
   const keywords: string[] = props.params.keywords
   const localized: string[] = props.params[props.lang]
 
   useEffect(() => {
-    props.setValue(props.objectTitle, images)
+    setValue(props.objectTitle, images)
   }, [])
 
   const radioProps: RadioPropsType[] = localized.map((localized, index) => {
@@ -79,7 +79,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
         uri,
         keywords: ''
       }))
-      props.setValue(props.objectTitle, images.concat({
+      setValue(props.objectTitle, images.concat({
         uri,
         keywords: ''
       }))
@@ -169,7 +169,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
         </View>
         <View
           style={Cs.imageElementRowContainer}
-          ref={props.register({ name: props.objectTitle })}
+          ref={register({ name: props.objectTitle })}
         >
           {images.length === 0 ?
             <View style={Cs.noImageContainer}>
@@ -206,7 +206,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
         </View>
         <View
           style={Cs.imageElementColumnContainer}
-          ref={props.register({ name: props.objectTitle })}
+          ref={register({ name: props.objectTitle })}
         >
           <View style={{ paddingLeft: 10 }}>
             <Text>{props.title}</Text>
