@@ -67,7 +67,7 @@ const Form = (
       return
     }
     const index = fields.length - fields.findIndex(field => field === path)
-    const fieldTitle: string =  get(fieldParams, 'title') === '' ? path : get(fieldParams, 'title')
+    const fieldTitle: string = get(fieldParams, 'title') === '' ? path : get(fieldParams, 'title')
     const fieldIsArray: boolean = fieldParams.isArray
     const fieldTypeOfArray: string = fieldParams.typeOfArray
     const fieldIsEnum: boolean = fieldParams.isEnum
@@ -115,7 +115,7 @@ const Form = (
 
   const createVisibleField = (
     path: string,
-    title: string,
+    title: string | Array<string>,
     isArray: boolean,
     typeOfArray: string,
     isEnum: boolean,
@@ -124,18 +124,32 @@ const Form = (
     defaultValue: any,
     blacklist: string[] | null
   ) => {
-    if (path === 'gatheringEvent_leg' && isArray) {
-      toReturn.push(createArray(title, '', path, typeOfArray, defaultValue, true, false))
-    } else if (path.includes('images')) {
-      toReturn.push(createImagePicker(title, path, defaultValue))
-    } else if (isArray) {
-      toReturn.push(createArray(title, '', path, typeOfArray, defaultValue, true, true))
-    } else if (isEnum) {
-      toReturn.push(createPicker(title, path, defaultValue, enumDict, blacklist))
-    } else if (type === 'boolean') {
-      toReturn.push(createSwitch(title, path, defaultValue))
+    let translatedTitle: string = ''
+
+    if (typeof (title) !== 'string') {
+      if (lang === 'fi') {
+        translatedTitle = title[0]
+      } else if (lang === 'sv') {
+        translatedTitle = title[1]
+      } else if (lang === 'en') {
+        translatedTitle = title[2]
+      }
     } else {
-      toReturn.push(createInputElement(title, path, '', type, defaultValue, false, undefined, true))
+      translatedTitle = title
+    }
+
+    if (path === 'gatheringEvent_leg' && isArray) {
+      toReturn.push(createArray(translatedTitle, '', path, typeOfArray, defaultValue, true, false))
+    } else if (path.includes('images')) {
+      toReturn.push(createImagePicker(translatedTitle, path, defaultValue))
+    } else if (isArray) {
+      toReturn.push(createArray(translatedTitle, '', path, typeOfArray, defaultValue, true, true))
+    } else if (isEnum) {
+      toReturn.push(createPicker(translatedTitle, path, defaultValue, enumDict, blacklist))
+    } else if (type === 'boolean') {
+      toReturn.push(createSwitch(translatedTitle, path, defaultValue))
+    } else {
+      toReturn.push(createInputElement(translatedTitle, path, '', type, defaultValue, false, undefined, true))
     }
   }
 

@@ -59,7 +59,11 @@ export const overrideJX519Fields = {
 
 export const additionalJX519Fields = {
   'unitGathering_geometry_radius': {
-    title: 'Accuracy',
+    title: [
+      'Tarkkuus (m)',
+      'Noggrannhet (m)',
+      'Accuracy (m)'
+    ],
     type: 'integer',
     isArray: false,
     typeOfArray: '',
