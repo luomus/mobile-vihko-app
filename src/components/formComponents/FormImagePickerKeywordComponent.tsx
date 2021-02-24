@@ -99,7 +99,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
   const removeImage = (image: string) => {
     const updatedImages = images.filter(i => i.uri !== image)
     setImages(updatedImages)
-    props.setValue(props.objectTitle, updatedImages)
+    setValue(props.objectTitle, updatedImages)
   }
 
   const showRemoveImage = (image: string) => {
@@ -125,7 +125,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
     })
 
     setImages(updatedImages)
-    props.setValue(props.objectTitle, updatedImages)
+    setValue(props.objectTitle, updatedImages)
   }
 
   const renderImages = () => {

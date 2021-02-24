@@ -54,6 +54,27 @@ export const overrideJX519Fields = {
         'payload_informalTaxonGroups': 'informalTaxonGroups'
       }
     }
+  },
+  'images': {
+    field: 'imagesKeywords',
+    params: {
+      keywords: [
+        'species',
+        'habitat',
+      ],
+      fi: [
+        'laji',
+        'habitaatti',
+      ],
+      sv: [
+        'arten',
+        'habitaten',
+      ],
+      en: [
+        'species',
+        'habitat',
+      ]
+    }
   }
 }
 
