@@ -128,7 +128,7 @@ const HomeComponent = (props: Props) => {
     }
 
     const initTab = async () => {
-      const formID = props.observationEvent.events[length - 1].formID
+      const formID = props.schema.formID
 
       setSelectedTab(availableForms.findIndex(form => form === formID))
       await props.switchSchema(formID)
@@ -234,6 +234,8 @@ const HomeComponent = (props: Props) => {
       await props.switchSchema(availableForms[ind])
       setSelectedTab(ind)
     }
+    // console.log(props.schema.formID)
+    // console.log(ind)
   }
 
   if (loading) {
