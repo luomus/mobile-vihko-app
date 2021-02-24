@@ -11,6 +11,7 @@ import { get, debounce } from 'lodash'
 import { Canceler } from 'axios'
 import uuid from 'react-native-uuid'
 import { ErrorMessage } from '@hookform/error-message'
+import { useFormContext } from 'react-hook-form'
 
 export interface AutocompleteParams {
   target: string,
@@ -23,11 +24,6 @@ export interface AutocompleteParams {
 interface Props {
   title: string,
   defaultValue: string,
-  register: Function,
-  setValue: Function,
-  watch: Function,
-  unregister: Function,
-  errors: Record<string, any>,
   autocompleteParams: AutocompleteParams,
   lang: string,
   index: number,
@@ -43,7 +39,7 @@ const FormAutocompleteComponent = (props: Props) => {
   const [error, setError] = useState<string>('')
 
   const { t } = useTranslation()
-
+  const { register, unregister, setValue, formState, watch } = useFormContext()
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
   let timeout: NodeJS.Timeout | undefined
@@ -51,10 +47,10 @@ const FormAutocompleteComponent = (props: Props) => {
   useEffect(() => {
     let allFound = true
     const transformKeys = Object.keys(transform)
-    const registeredFields = Object.keys(props.watch())
+    const registeredFields = Object.keys(watch())
 
     registerField(valueField)
-    props.setValue(valueField, props.defaultValue, { shouldValidate: true })
+    setValue(valueField, props.defaultValue, { shouldValidate: false })
 
     transformKeys.forEach(key => {
       if (transform[key] === valueField && props.defaultValue === '') {
@@ -110,7 +106,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
   const wipeOldSelection = () => {
     Object.keys(transform).forEach(key => {
-      props.unregister(transform[key])
+      unregister(transform[key])
     })
   }
 
@@ -122,9 +118,9 @@ const FormAutocompleteComponent = (props: Props) => {
 
   const registerField = (name: string) => {
     if (validation && name === valueField) {
-      props.register(name, validation)
+      register(name, validation)
     } else {
-      props.register(name)
+      register(name)
     }
   }
 
@@ -133,9 +129,9 @@ const FormAutocompleteComponent = (props: Props) => {
       registerField(transform[key])
 
       if (key.includes('informalTaxonGroup')) {
-        props.setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))), { shouldValidate: true })
+        setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))), { shouldValidate: false })
       } else {
-        props.setValue(transform[key], get(item, key.split('_')), { shouldValidate: true })
+        setValue(transform[key], get(item, key.split('_')), { shouldValidate: false })
       }
     })
   }
@@ -186,7 +182,7 @@ const FormAutocompleteComponent = (props: Props) => {
     setQuery(text)
     setHideResult(false)
 
-    props.setValue(valueField, text, { shouldValidate: true })
+    setValue(valueField, text, { shouldValidate: false })
 
     debouncedQuery(text)
   }
@@ -296,7 +292,7 @@ const FormAutocompleteComponent = (props: Props) => {
     <View style={Cs.containerWithJustPadding}>
       <Text>{props.title}</Text>
       <ErrorMessage
-        errors={props.errors}
+        errors={formState.errors}
         name={valueField}
         render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{errorMessageTranslation(message)}</Text>}
       />

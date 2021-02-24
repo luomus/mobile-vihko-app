@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { View } from 'react-native'
 import Os from '../../styles/OtherStyles'
 
 interface Props {
   objectTitle: string,
   defaultValue: string,
-  register: Function,
-  setValue: Function,
 }
 
 const FormHiddenComponent = (props: Props) => {
+  const { register, setValue } = useFormContext()
+
   useEffect(() => {
-    props.setValue(props.objectTitle, props.defaultValue)
+    setValue(props.objectTitle, props.defaultValue)
   }, [])
 
   return (
-    <View key={props.objectTitle} style={Os.hiddenComponent} ref={props.register({ name: props.objectTitle })}/>
+    <View key={props.objectTitle} style={Os.hiddenComponent} ref={register({ name: props.objectTitle })}/>
   )
 }
 

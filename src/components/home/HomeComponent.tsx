@@ -32,8 +32,7 @@ import {
 } from '../../stores/position/actions'
 import {
   beginObservationEvent,
-  continueObservationEvent,
-  finishObservationEvent
+  continueObservationEvent
 } from '../../actionCreators/observationEventCreators'
 import { connect, ConnectedProps } from 'react-redux'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'
@@ -87,7 +86,6 @@ const mapDispatchToProps = {
   switchSchema,
   beginObservationEvent,
   continueObservationEvent,
-  finishObservationEvent,
   setObservationEventInterrupted
 }
 
@@ -130,14 +128,10 @@ const HomeComponent = (props: Props) => {
     }
 
     const initTab = async () => {
-      if (isUnfinished) {
-        const formID = props.observationEvent.events[length - 1].formID
+      const formID = props.observationEvent.events[length - 1].formID
 
-        setSelectedTab(availableForms.findIndex(form => form === formID))
-        await props.switchSchema(formID)
-      } else {
-        await props.switchSchema(availableForms[0])
-      }
+      setSelectedTab(availableForms.findIndex(form => form === formID))
+      await props.switchSchema(formID)
     }
 
     initTab()
@@ -185,9 +179,9 @@ const HomeComponent = (props: Props) => {
   useBackHandler(() => {
     if (props.isFocused() && props.observing) {
       props.setMessageState({
-        type: 'conf',
-        messageContent: t('are you sure you want to cease observation and exit app'),
-        onOk: () => onExit()
+        type: 'dangerConf',
+        messageContent: t('exit app?'),
+        onOk: () => BackHandler.exitApp()
       })
 
       return true
@@ -202,16 +196,6 @@ const HomeComponent = (props: Props) => {
 
   const onContinueObservationEvent = async () => {
     await props.continueObservationEvent(props.onPressMap)
-  }
-
-  const onFinishObservationEvent = async () => {
-    await props.finishObservationEvent()
-  }
-
-  //if above is answered positively stop observation and exit app
-  const onExit = async () => {
-    await onFinishObservationEvent()
-    BackHandler.exitApp()
   }
 
   const stopObserving = () => {

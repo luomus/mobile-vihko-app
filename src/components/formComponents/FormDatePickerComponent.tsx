@@ -6,6 +6,7 @@ import Cs from '../../styles/ContainerStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../utilities/dateHelper'
 import Colors from '../../styles/Colors'
+import { useFormContext } from 'react-hook-form'
 
 interface Props {
   title: string,
@@ -27,33 +28,28 @@ interface Props {
     'web-search' |
     undefined,
   defaultValue: string,
-  register: Function,
-  setValue: Function,
-  watch: Function,
-  errors: Object,
-  unregister: Function,
   isArrayItem: boolean,
   parentCallback: Function | undefined,
 }
 
 const FormDatePickerComponent = (props: Props) => {
-
+  const { register, setValue, watch } = useFormContext()
   const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
   const [currentDate, setCurrentDate] = useState<string>(props.defaultValue)
   const [currentTime, setCurrentTime] = useState<string>(props.defaultValue)
   const [show, setShow] = useState<boolean>(false)
   const date = new Date()
-  const dateBegin = props.watch('gatheringEvent_dateBegin')
-  const dateEnd = props.watch('gatheringEvent_dateEnd')
+  const dateBegin = watch('gatheringEvent_dateBegin')
+  const dateEnd = watch('gatheringEvent_dateEnd')
 
   useEffect(() => {
     if (!currentValue || currentValue === '') {
       setCurrentValue(parseDateFromISOToDocument(date))
       onChangeDate(date)
       onChangeTime(date)
-      props.setValue(props.objectTitle, parseDateFromISOToDocument(date))
+      setValue(props.objectTitle, parseDateFromISOToDocument(date))
     } else {
-      props.setValue(props.objectTitle, currentValue)
+      setValue(props.objectTitle, currentValue)
     }
   }, [])
 
@@ -72,7 +68,7 @@ const FormDatePickerComponent = (props: Props) => {
     }
 
     //set new value to register
-    props.setValue(props.objectTitle, combinedDate)
+    setValue(props.objectTitle, combinedDate)
 
     //set combined date as current value (which is shown to user)
     combinedDate !== '' ? setCurrentValue(combinedDate) : null
@@ -95,7 +91,7 @@ const FormDatePickerComponent = (props: Props) => {
           style={Os.datePicker}
           value={parseDateForUI(currentValue)}
           editable={false}
-          ref={props.register({ name: props.objectTitle })}
+          ref={register({ name: props.objectTitle })}
         />
         <Button
           buttonStyle={{ backgroundColor: Colors.neutralButton }}

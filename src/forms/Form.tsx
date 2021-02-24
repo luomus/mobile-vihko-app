@@ -3,16 +3,12 @@ import { get } from 'lodash'
 import { parseObjectForFieldParams } from '../parsers/SchemaToInputParser'
 
 const Form = (
-  register: Function,
-  setValue: Function,
-  watch: Function,
-  errors: Object,
-  unregister: Function,
   defaults: Record<string, any> | undefined,
   fields: string[],
   blacklist: Record<string, any> | null,
   schema: Record<string, any> | null,
   overrideFields: Record<string, any> | null,
+  additionalFields: Record<string, any> | null,
   lang: string,
 ) => {
   let toReturn: any[] = []
@@ -67,11 +63,11 @@ const Form = (
 
   const createField = (path: string, defaultObject: any, fieldParams: Record<string, any> | null) => {
     if (!fieldParams) {
-      toReturn.push(createHidden(path, defaultObject, register, setValue))
+      toReturn.push(createHidden(path, defaultObject))
       return
     }
     const index = fields.length - fields.findIndex(field => field === path)
-    const fieldTitle: string =  get(fieldParams, 'title') === '' ? path : get(fieldParams, 'title')
+    const fieldTitle: string = get(fieldParams, 'title') === '' ? path : get(fieldParams, 'title')
     const fieldIsArray: boolean = fieldParams.isArray
     const fieldTypeOfArray: string = fieldParams.typeOfArray
     const fieldIsEnum: boolean = fieldParams.isEnum
@@ -88,10 +84,10 @@ const Form = (
     if (overrideFields && Object.keys(overrideFields).includes(path)) {
       switch (overrideFields[path].field) {
         case 'autocomplete':
-          toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, register, setValue, watch, unregister, errors, overrideFields[path].params, lang, index))
+          toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, lang, index))
           return
         case 'imagesKeywords':
-          toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, register, setValue, overrideFields[path].params, lang))
+          toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, lang))
           return
       }
     }
@@ -101,21 +97,59 @@ const Form = (
     }
 
     if (!fields.includes(path) && fieldDefaultValue) {
-      toReturn.push(createHidden(path, fieldDefaultValue, register, setValue))
+      toReturn.push(createHidden(path, fieldDefaultValue))
     } else if (fields.includes(path)) {
-      if (path === 'gatheringEvent_leg' && fieldIsArray) {
-        toReturn.push(createArray(fieldTitle, '', path, fieldTypeOfArray, fieldDefaultValue, register, setValue, watch, errors, unregister, true, false))
-      } else if (path.includes('images')) {
-        toReturn.push(createImagePicker(fieldTitle, path, fieldDefaultValue, register, setValue))
-      } else if (fieldIsArray) {
-        toReturn.push(createArray(fieldTitle, '', path, fieldTypeOfArray, fieldDefaultValue, register, setValue, watch, errors, unregister, true, true))
-      } else if (fieldIsEnum) {
-        toReturn.push(createPicker(fieldTitle, path, fieldDefaultValue, register, setValue, watch, errors, unregister, fieldEnumDict, fieldBlacklist))
-      } else if (fieldType === 'boolean') {
-        toReturn.push(createSwitch(fieldTitle, path, fieldDefaultValue, register, setValue, watch, errors, unregister))
-      } else {
-        toReturn.push(createInputElement(fieldTitle, path, '', fieldType, fieldDefaultValue, register, setValue, watch, errors, unregister, false, undefined, true))
+      createVisibleField(
+        path,
+        fieldTitle,
+        fieldIsArray,
+        fieldTypeOfArray,
+        fieldIsEnum,
+        fieldEnumDict,
+        fieldType,
+        fieldDefaultValue,
+        fieldBlacklist
+      )
+    }
+  }
+
+  const createVisibleField = (
+    path: string,
+    title: string | Array<string>,
+    isArray: boolean,
+    typeOfArray: string,
+    isEnum: boolean,
+    enumDict: Record<string, any>,
+    type: string,
+    defaultValue: any,
+    blacklist: string[] | null
+  ) => {
+    let translatedTitle: string = ''
+
+    if (typeof (title) !== 'string') {
+      if (lang === 'fi') {
+        translatedTitle = title[0]
+      } else if (lang === 'sv') {
+        translatedTitle = title[1]
+      } else if (lang === 'en') {
+        translatedTitle = title[2]
       }
+    } else {
+      translatedTitle = title
+    }
+
+    if (path === 'gatheringEvent_leg' && isArray) {
+      toReturn.push(createArray(translatedTitle, '', path, typeOfArray, defaultValue, true, false))
+    } else if (path.includes('images')) {
+      toReturn.push(createImagePicker(translatedTitle, path, defaultValue))
+    } else if (isArray) {
+      toReturn.push(createArray(translatedTitle, '', path, typeOfArray, defaultValue, true, true))
+    } else if (isEnum) {
+      toReturn.push(createPicker(translatedTitle, path, defaultValue, enumDict, blacklist))
+    } else if (type === 'boolean') {
+      toReturn.push(createSwitch(translatedTitle, path, defaultValue))
+    } else {
+      toReturn.push(createInputElement(translatedTitle, path, '', type, defaultValue, false, undefined, true))
     }
   }
 
@@ -140,6 +174,31 @@ const Form = (
 
   if (schema) {
     schemaToForm(null, defaults, schema)
+  }
+
+  if (additionalFields) {
+    Object.keys(additionalFields).forEach(key => {
+      const { title, isArray, typeOfArray, isEnum, enumDict, type, defaultValue, blacklist } = additionalFields[key]
+      let fieldDefault: any = null
+
+      if (defaults) {
+        fieldDefault = get(defaults, key.split('_'))
+      }
+
+      fieldDefault = fieldDefault | defaultValue
+
+      createVisibleField(
+        key,
+        title,
+        isArray,
+        typeOfArray,
+        isEnum,
+        enumDict,
+        type,
+        fieldDefault,
+        blacklist
+      )
+    })
   }
 
   return createOrderedArray()

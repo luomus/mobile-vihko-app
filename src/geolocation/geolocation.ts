@@ -11,7 +11,7 @@ import {
   PATH_MIN_X_INTERVALL
 } from '../config/location'
 
-let positionWatcher: null | {remove(): void} = null
+let positionWatcher: null | { remove(): void } = null
 
 const watchLocationAsync = async (updateLocation: (location: LocationObject) => void) => {
   let permission = await Location.requestPermissionsAsync()
@@ -35,16 +35,19 @@ const watchPositionAsync = async (updateLocation: (location: LocationObject) => 
 }
 
 const watchLocationAsyncAndroid = async () => {
-  await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
-    accuracy: PATH_ACCURACY,
-    distanceInterval: PATH_MIN_X_INTERVALL,
-    timeInterval: PATH_MIN_T_INTERVALL,
-    foregroundService: {
-      notificationTitle: 'Location',
-      notificationBody: 'Your path is being tracked.',
-      notificationColor: Colors.headerBackground
-    }
-  })
+  setTimeout(async () => {
+    await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
+      accuracy: PATH_ACCURACY,
+      distanceInterval: PATH_MIN_X_INTERVALL,
+      timeInterval: PATH_MIN_T_INTERVALL,
+      foregroundService: {
+        notificationTitle: 'Location',
+        notificationBody: 'Your path is being tracked.',
+        notificationColor: Colors.headerBackground
+      }
+    })
+  }
+  , 5000)
 }
 
 const stopLocationAsync = async () => {

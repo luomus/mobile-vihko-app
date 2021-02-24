@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
@@ -24,7 +24,7 @@ import { setEditing } from '../../stores/map/actions'
 import { EditingType } from '../../stores/map/types'
 import { lineStringConstructor } from '../../converters/geoJSONConverters'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
-import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields } from '../../config/fields'
+import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
 interface RootState {
@@ -70,13 +70,14 @@ type Props = PropsFromRedux & {
   fromMap?: boolean,
   sourcePage?: string,
   children?: ReactChild,
-  isFocused: () => boolean
+  isFocused: () => boolean,
+  goBack: (routeKey?: string | null | undefined) => boolean
 }
 
 const ObservationComponent = (props: Props) => {
 
   //for react-hook-form
-  const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
+  const methods = useForm()
   const { t } = useTranslation()
   const [saving, setSaving] = useState<boolean>(false)
   const lang = i18n.language
@@ -102,11 +103,34 @@ const ObservationComponent = (props: Props) => {
   useBackHandler(() => {
 
     if (props.isFocused()) {
-      cleanUp()
+
+      props.setMessageState({
+        type: 'dangerConf',
+        messageContent: t('discard observation?'),
+        onOk: () => {
+          cleanUp()
+        }
+      })
+
+      return true
     }
 
     return false
   })
+
+  const cleanUp = () => {
+    //cleanup when component unmounts, ensures that if navigator back-button
+    //is used observationLocation, observationId and editing-flags are returned
+    //to defaults
+    props.clearObservationLocation()
+    props.setEditing({
+      started: false,
+      locChanged: false,
+      originalSourcePage: props.editing.originalSourcePage
+    })
+    props.clearObservationId()
+    props.goBack()
+  }
 
   //initialization (only for editing observations)
   const init = () => {
@@ -155,23 +179,23 @@ const ObservationComponent = (props: Props) => {
     if (props.observationId) {
       //flying squirrel edit observation
       if (observation?.rules) {
-        initForm(setForm, observation, observation.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
+        initForm(setForm, observation, observation.rules, schema, fieldScopes, null, null, null, lang)
         //trip form new observation
       } else if (props.schema.formID === 'JX.519') {
-        initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
+        initForm(setForm, observation, null, schema, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
       } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, observation, null, register, setValue, watch, errors, unregister, schema, null, JX652Fields, overrideJX652Fields, lang)
+        initForm(setForm, observation, null, schema, null, JX652Fields, overrideJX652Fields, null, lang)
       }
       //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
-        initForm(setForm, defaultObject, props.rules, register, setValue, watch, errors, unregister, schema, fieldScopes, null, null, lang)
+        initForm(setForm, defaultObject, props.rules, schema, fieldScopes, null, null, null, lang)
         //trip form edit observation
       } else if (props.schema.formID === 'JX.519') {
-        initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX519Fields, overrideJX519Fields, lang)
+        initForm(setForm, defaultObject, null, schema, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
       } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, defaultObject, null, register, setValue, watch, errors, unregister, schema, null, JX652Fields, overrideJX652Fields, lang)
+        initForm(setForm, defaultObject, null, schema, null, JX652Fields, overrideJX652Fields, null, lang)
       }
     }
   }
@@ -328,19 +352,6 @@ const ObservationComponent = (props: Props) => {
     }
   }
 
-  const cleanUp = () => {
-    //cleanup when component unmounts, ensures that if navigator back-button
-    //is used observationLocation, observationId and editing-flags are returned
-    //to defaults
-    props.clearObservationLocation()
-    props.setEditing({
-      started: false,
-      locChanged: false,
-      originalSourcePage: props.editing.originalSourcePage
-    })
-    props.clearObservationId()
-  }
-
   if (saving) {
     return (
       <ActivityComponent text={'saving'} />
@@ -381,13 +392,15 @@ const ObservationComponent = (props: Props) => {
             : null
           }
           <View style={Cs.formContainer}>
-            {form}
+            <FormProvider {...methods}>
+              {form}
+            </FormProvider>
           </View>
         </ScrollView>
         {props.children}
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <FloatingIconButtonComponent onPress={handleSubmit(onSubmit)} />
+          <FloatingIconButtonComponent onPress={methods.handleSubmit(onSubmit)} />
         </View>
       </View>
     )

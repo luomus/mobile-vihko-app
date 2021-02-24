@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
+import { useFormContext } from 'react-hook-form'
 
 interface Props {
   title: string,
@@ -23,11 +24,6 @@ interface Props {
     'web-search' |
     undefined,
   defaultValue: string,
-  register: Function,
-  setValue: Function,
-  watch: Function,
-  errors: Object,
-  unregister: Function,
   isArrayItem: boolean,
   parentCallback: Function | undefined,
   editable: boolean,
@@ -36,15 +32,16 @@ interface Props {
 const FormInputComponent = (props: Props) => {
 
   const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
+  const { register, setValue, watch } = useFormContext()
 
   const addValueToArray = (value: string) => {
-    const values = props.watch(props.parentObjectTitle)
+    const values = watch(props.parentObjectTitle)
     const index = values.indexOf(currentValue)
     if (index > -1) {
       values.splice(index, 1)
     }
     values.push(value)
-    props.setValue(props.parentObjectTitle, values)
+    setValue(props.parentObjectTitle, values)
     setCurrentValue(value)
   }
 
@@ -59,7 +56,7 @@ const FormInputComponent = (props: Props) => {
   useEffect(() => {
     props.parentObjectTitle !== ''
       ? addValueToArray(props.defaultValue)
-      : props.setValue(props.objectTitle, props.defaultValue)
+      : setValue(props.objectTitle, props.defaultValue)
     if (props.parentCallback !== undefined) {
       props.parentCallback({ title: props.title, value: props.defaultValue })
     }
@@ -78,14 +75,14 @@ const FormInputComponent = (props: Props) => {
         onChangeText={text => {
           props.parentObjectTitle !== ''
             ? addValueToArray(text)
-            : props.setValue(props.objectTitle, typeSelector(text))
+            : setValue(props.objectTitle, typeSelector(text))
           props.parentCallback !== undefined
             ? props.parentCallback({ title: props.title, value: typeSelector(text) })
             : null
         }}
         defaultValue={props.defaultValue.toString()}
         ref={props.parentObjectTitle === ''
-          ? props.register({ name: props.objectTitle })
+          ? register({ name: props.objectTitle })
           : null }
       />
     </View>

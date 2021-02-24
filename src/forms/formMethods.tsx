@@ -5,15 +5,11 @@ export const initForm = (
   setForm: Function,
   defaults: any,
   rules: Record<string, any> | null = null,
-  register: Function,
-  setValue: Function,
-  watch: Function,
-  errors: Object,
-  unregister: Function,
   schema: Record<string, any> | null = null,
   fieldScopes: Record<string, any> | null = null,
   fields: string[] | null = null,
   overrideFields: Record<string, any> | null = null,
+  additionalFields: Record<string, any> | null = null,
   lang: string
 ) => {
 
@@ -26,7 +22,7 @@ export const initForm = (
   }
 
   if (!rules) {
-    setForm(Form(register, setValue, watch, errors, unregister, defaults, fields, null, schema, overrideFields, lang))
+    setForm(Form(defaults, fields, null, schema, overrideFields, additionalFields, lang))
   } else {
     const fieldScope = Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key: string) => {
       const matches = new RegExp(rules.regexp).test(key)
@@ -44,6 +40,6 @@ export const initForm = (
     const fields = fieldScope?.fields.concat(['images'])
     const blacklist = fieldScope?.blacklist
 
-    setForm(Form(register, setValue, watch, errors, unregister, defaults, fields, blacklist, schema, overrideFields, lang))
+    setForm(Form(defaults, fields, blacklist, schema, overrideFields, additionalFields, lang))
   }
 }

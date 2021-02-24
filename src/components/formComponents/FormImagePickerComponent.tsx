@@ -9,6 +9,7 @@ import * as ImagePicker from 'expo-image-picker'
 import Colors from '../../styles/Colors'
 import { setMessageState } from '../../stores/message/actions'
 import { connect, ConnectedProps } from 'react-redux'
+import { useFormContext } from 'react-hook-form'
 
 const mapDispatchToProps = {
   setMessageState
@@ -23,17 +24,16 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   title: string,
   objectTitle: string,
-  defaultValue: Array<string>,
-  register: Function,
-  setValue: Function,
+  defaultValue: Array<string>
 }
 
 const ImagePickerComponent = (props: Props) => {
+  const { register, setValue } = useFormContext()
   const [images, setImages] = useState<Array<string>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
 
   useEffect(() => {
-    props.setValue(props.objectTitle, images)
+    setValue(props.objectTitle, images)
   }, [])
 
   const attachImage = async (useCamera: boolean) => {
@@ -60,7 +60,7 @@ const ImagePickerComponent = (props: Props) => {
     let uri = pickerResult.uri
     if (succeeded) {
       setImages(images.concat(uri))
-      props.setValue(props.objectTitle, images.concat(uri))
+      setValue(props.objectTitle, images.concat(uri))
     }
 
     return succeeded
@@ -77,7 +77,7 @@ const ImagePickerComponent = (props: Props) => {
   const removeImage = (image: string) => {
     const updatedImages = images.filter(i => i !== image)
     setImages(updatedImages)
-    props.setValue(props.objectTitle, updatedImages)
+    setValue(props.objectTitle, updatedImages)
   }
 
   const showRemoveImage = (image: string) => {
@@ -120,7 +120,7 @@ const ImagePickerComponent = (props: Props) => {
         </View>
         <View
           style={Cs.imageElementRowContainer}
-          ref={props.register({ name: props.objectTitle })}
+          ref={register({ name: props.objectTitle })}
         >
           {images.length === 0 ?
             <View style={Cs.noImageContainer}>
@@ -157,7 +157,7 @@ const ImagePickerComponent = (props: Props) => {
         </View>
         <View
           style={Cs.imageElementColumnContainer}
-          ref={props.register({ name: props.objectTitle })}
+          ref={register({ name: props.objectTitle })}
         >
           <View style={{ paddingLeft: 10 }}>
             <Text>{props.title}</Text>
