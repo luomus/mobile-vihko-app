@@ -234,8 +234,6 @@ const HomeComponent = (props: Props) => {
       await props.switchSchema(availableForms[ind])
       setSelectedTab(ind)
     }
-    // console.log(props.schema.formID)
-    // console.log(ind)
   }
 
   if (loading) {

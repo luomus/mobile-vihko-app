@@ -25,6 +25,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   navigation: NavigationStackProp<any, any>
 }
+
 class ObservationScreen extends Component<Props>  {
 
   state: {
@@ -43,7 +44,7 @@ class ObservationScreen extends Component<Props>  {
         type: 'dangerConf',
         messageContent: i18n.t('discard observation?'),
         onOk: () => {
-          this.props.navigation.navigate('Home')
+          this.props.navigation.navigate('Map')
         }
       })
     }
