@@ -6,7 +6,8 @@ import {
   SET_PATH,
   CLEAR_PATH,
   locationActionTypes,
-  PathType
+  PathType,
+  SET_FIRST_LOCATION
 } from './types'
 import { Store } from 'redux'
 
@@ -41,4 +42,9 @@ export const setPath = (points: PathType): locationActionTypes => ({
 
 export const clearPath = (): locationActionTypes => ({
   type: CLEAR_PATH
+})
+
+export const setFirstLocation = (coordinates: Array<number>): locationActionTypes => ({
+  type: SET_FIRST_LOCATION,
+  payload: coordinates
 })

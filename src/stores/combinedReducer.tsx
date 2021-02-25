@@ -15,13 +15,18 @@ import {
   observingReducer,
   schemaReducer
 } from './observation/reducers'
-import { pathReducer, positionReducer } from './position/reducers'
+import {
+  firstLocationReducer,
+  pathReducer,
+  positionReducer
+} from './position/reducers'
 import { credentialsReducer } from './user/reducers'
 
 const appReducer = combineReducers({
   centered: centeringReducer,
   credentials: credentialsReducer,
   editing: editingReducer,
+  firstLocation: firstLocationReducer,
   firstZoom: firstZoomReducer,
   maptype: maptypeReducer,
   message: messageReducer,

@@ -23,7 +23,8 @@ import {
   clearLocation,
   updateLocation,
   clearPath,
-  setPath
+  setPath,
+  setFirstLocation
 } from '../stores/position/actions'
 import { mapActionTypes } from '../stores/map/types'
 import { messageActionTypes } from '../stores/message/types'
@@ -152,7 +153,7 @@ export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Pr
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent, path } = getState()
+    const { firstLocation, observationEvent, path } = getState()
 
     dispatch(setObservationEventInterrupted(false))
 
@@ -161,7 +162,19 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     if (event) {
 
       const setBoundingBoxGeometry = () => {
-        const geometry = createUnitBoundingBox(event)
+        let geometry
+
+        if (event.gatherings[0].units.length >= 1) {
+          geometry = createUnitBoundingBox(event)
+        } else {
+          geometry = {
+            coordinates: [
+              firstLocation[1],
+              firstLocation[0]
+            ],
+            type: 'Point'
+          }
+        }
 
         if (geometry) {
           event.gatherings[0].geometry = geometry
@@ -202,6 +215,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(clearObservationLocation())
     dispatch(clearObservationId())
     dispatch(setFirstZoom('not'))
+    dispatch(setFirstLocation([60.192059, 24.945831]))
     await stopLocationAsync()
 
     return Promise.resolve()
