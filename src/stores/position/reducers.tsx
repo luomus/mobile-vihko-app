@@ -4,10 +4,20 @@ import {
   locationActionTypes,
   CLEAR_LOCATION,
   UPDATE_LOCATION,
+  SET_FIRST_LOCATION,
   APPEND_PATH,
   CLEAR_PATH,
   SET_PATH
 } from './types'
+
+const firstLocationReducer = (state: Array<number> = [60.192059, 	24.945831], action: locationActionTypes) => {
+  switch (action.type) {
+    case SET_FIRST_LOCATION:
+      return action.payload
+    default:
+      return state
+  }
+}
 
 const pathReducer = (state: PathType = [], action : locationActionTypes) => {
   switch (action.type) {
@@ -33,4 +43,4 @@ const positionReducer = (state: LocationType = null, action : locationActionType
   }
 }
 
-export { pathReducer, positionReducer }
+export { firstLocationReducer, pathReducer, positionReducer }

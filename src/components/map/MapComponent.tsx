@@ -22,6 +22,9 @@ import {
   toggleMaptype,
   setEditing,
 } from '../../stores/map/actions'
+import {
+  setFirstLocation
+} from '../../stores/position/actions'
 import { setMessageState } from '../../stores/message/actions'
 import Colors from '../../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -66,7 +69,8 @@ const mapDispatchToProps = {
   clearObservationId,
   setMessageState,
   deleteObservation,
-  setFirstZoom
+  setFirstZoom,
+  setFirstLocation
 }
 
 const connector = connect(
@@ -204,6 +208,7 @@ const MapComponent = (props: Props) => {
 
     props.setRegion(initialRegion)
     moveToRegion(initialRegion)
+    props.setFirstLocation([coords.latitude, coords.longitude])
 
     setTimeout(() => {
       setFirstZoom('zoomed')
