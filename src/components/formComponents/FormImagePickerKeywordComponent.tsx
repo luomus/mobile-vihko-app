@@ -38,7 +38,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
   const { register, setValue } = useFormContext()
   const [images, setImages] = useState<Array<Record<string, any>>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
-  const keywords: string[] = props.params.keywords
+  const keywords: Record<string, any> = props.params
   const localized: string[] = props.params[props.lang]
 
   useEffect(() => {
@@ -84,7 +84,6 @@ const ImagePickerKeywordComponent = (props: Props) => {
         keywords: ''
       }))
     }
-
     return succeeded
   }
 
@@ -130,7 +129,15 @@ const ImagePickerKeywordComponent = (props: Props) => {
 
   const renderImages = () => {
     return images.map((image: Record<string, any>) => {
-      const initial = keywords.findIndex(keyword => keyword === image.keywords)
+      let initial: number = -1
+
+      //checks the keywords of all languages to find out which index was chosen in the radio button
+      const indexFi: number = keywords.fi.findIndex((keyword: string) => keyword === image.keywords)
+      if (indexFi !== -1) { initial = indexFi }
+      const indexSv: number = keywords.sv.findIndex((keyword: string) => keyword === image.keywords)
+      if (indexSv !== -1) { initial = indexSv }
+      const indexEn: number = keywords.en.findIndex((keyword: string) => keyword === image.keywords)
+      if (indexEn !== -1) { initial = indexEn }
 
       return (
         <View key={image.uri} style={Cs.keywordSingleImageContainer}>

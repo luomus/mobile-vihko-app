@@ -42,7 +42,7 @@ import MessageComponent from '../general/MessageComponent'
 import { withNavigation } from 'react-navigation'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
-import storageController from '../../services/storageService'
+import storageService from '../../services/storageService'
 import { HomeIntroductionComponent } from './HomeIntroductionComponent'
 import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
 import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
@@ -53,6 +53,7 @@ interface BasicObject {
 }
 
 interface RootState {
+  formId: string,
   position: LocationObject,
   path: LocationObject[],
   observing: boolean,
@@ -128,7 +129,10 @@ const HomeComponent = (props: Props) => {
     }
 
     const initTab = async () => {
-      const formID = props.schema.formID
+      let formID = await storageService.fetch('formID')
+      if (!formID) {
+        formID = 'JX.519'
+      }
 
       setSelectedTab(availableForms.findIndex(form => form === formID))
       await props.switchSchema(formID)
@@ -151,7 +155,7 @@ const HomeComponent = (props: Props) => {
 
     const logHandler = async () => {
       if (pressCounter === 5) {
-        const logs: any[] = await storageController.fetch('logs')
+        const logs: any[] = await storageService.fetch('logs')
         clipboardConfirmation(logs)
         setPressCounter(0)
       }
@@ -232,6 +236,7 @@ const HomeComponent = (props: Props) => {
   const switchSelectedForm = async (ind: number) => {
     if (!props.observing) {
       await props.switchSchema(availableForms[ind])
+      await storageService.save('formID', availableForms[ind])
       setSelectedTab(ind)
     }
   }

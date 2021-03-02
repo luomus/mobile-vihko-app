@@ -6,7 +6,7 @@ import {
 } from './types'
 import { ThunkAction } from 'redux-thunk'
 import { pollUserLogin } from '../../services/userService'
-import storageController from '../../services/storageService'
+import storageService from '../../services/storageService'
 import i18n from '../../language/i18n'
 import { log } from '../../utilities/logger'
 
@@ -40,7 +40,7 @@ export const loginUser = (tmpToken: string): ThunkAction<Promise<any>, any, void
 
     //try to save credentials to asyncstorage to remember logged in user after app shutdown
     try {
-      storageController.save('credentials', credentials)
+      storageService.save('credentials', credentials)
       return Promise.resolve()
 
     //if asyncstorage fails set error as such, allows user to continue anyway
@@ -60,7 +60,7 @@ export const loginUser = (tmpToken: string): ThunkAction<Promise<any>, any, void
 export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async dispatch => {
     try {
-      storageController.remove('credentials')
+      storageService.remove('credentials')
       dispatch(clearCredentials())
       return Promise.resolve()
 
@@ -80,7 +80,7 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
 export const initLocalCredentials = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async dispatch => {
     try {
-      const credentials = await storageController.fetch('credentials')
+      const credentials = await storageService.fetch('credentials')
 
       if (!credentials) {
         return Promise.reject()

@@ -185,7 +185,7 @@ const Form = (
         fieldDefault = get(defaults, key.split('_'))
       }
 
-      fieldDefault = fieldDefault | defaultValue
+      fieldDefault = fieldDefault || defaultValue
 
       createVisibleField(
         key,

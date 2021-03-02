@@ -45,13 +45,13 @@ const FormInputComponent = (props: Props) => {
     setCurrentValue(value)
   }
 
-  const typeSelector = (value: string) => {
-    if (props.keyboardType === 'numeric') {
-      return parseInt(value)
-    } else {
-      return value
-    }
-  }
+  // const typeSelector = (value: string) => {
+  //   if (props.keyboardType === 'numeric') {
+  //     return parseInt(value)
+  //   } else {
+  //     return value
+  //   }
+  // }
 
   useEffect(() => {
     props.parentObjectTitle !== ''
@@ -75,9 +75,9 @@ const FormInputComponent = (props: Props) => {
         onChangeText={text => {
           props.parentObjectTitle !== ''
             ? addValueToArray(text)
-            : setValue(props.objectTitle, typeSelector(text))
+            : setValue(props.objectTitle, text)
           props.parentCallback !== undefined
-            ? props.parentCallback({ title: props.title, value: typeSelector(text) })
+            ? props.parentCallback({ title: props.title, value: text })
             : null
         }}
         defaultValue={props.defaultValue.toString()}
