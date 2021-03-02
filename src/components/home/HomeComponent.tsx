@@ -10,6 +10,7 @@ import Colors from '../../styles/Colors'
 import { LocationObject } from 'expo-location'
 import { LatLng } from 'react-native-maps'
 import {
+  setFormId,
   toggleObserving,
   newObservationEvent,
   replaceObservationEventById,
@@ -53,6 +54,7 @@ interface BasicObject {
 }
 
 interface RootState {
+  formId: string,
   position: LocationObject,
   path: LocationObject[],
   observing: boolean,
@@ -65,8 +67,8 @@ interface RootState {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered } = state
-  return { position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered }
+  const { formId, position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered } = state
+  return { formId, position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered }
 }
 
 const mapDispatchToProps = {
@@ -128,7 +130,10 @@ const HomeComponent = (props: Props) => {
     }
 
     const initTab = async () => {
-      const formID = props.schema.formID
+      let formID = await storageController.fetch('formID')
+      if (!formID) {
+        formID = 'JX.519'
+      }
 
       setSelectedTab(availableForms.findIndex(form => form === formID))
       await props.switchSchema(formID)
@@ -232,6 +237,7 @@ const HomeComponent = (props: Props) => {
   const switchSelectedForm = async (ind: number) => {
     if (!props.observing) {
       await props.switchSchema(availableForms[ind])
+      await storageController.save('formID', availableForms[ind])
       setSelectedTab(ind)
     }
   }
