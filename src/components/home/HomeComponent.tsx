@@ -10,7 +10,6 @@ import Colors from '../../styles/Colors'
 import { LocationObject } from 'expo-location'
 import { LatLng } from 'react-native-maps'
 import {
-  setFormId,
   toggleObserving,
   newObservationEvent,
   replaceObservationEventById,
@@ -43,7 +42,7 @@ import MessageComponent from '../general/MessageComponent'
 import { withNavigation } from 'react-navigation'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
-import storageController from '../../services/storageService'
+import storageService from '../../services/storageService'
 import { HomeIntroductionComponent } from './HomeIntroductionComponent'
 import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
 import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
@@ -67,8 +66,8 @@ interface RootState {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { formId, position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered } = state
-  return { formId, position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered }
+  const { position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered } = state
+  return { position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered }
 }
 
 const mapDispatchToProps = {
@@ -130,7 +129,7 @@ const HomeComponent = (props: Props) => {
     }
 
     const initTab = async () => {
-      let formID = await storageController.fetch('formID')
+      let formID = await storageService.fetch('formID')
       if (!formID) {
         formID = 'JX.519'
       }
@@ -156,7 +155,7 @@ const HomeComponent = (props: Props) => {
 
     const logHandler = async () => {
       if (pressCounter === 5) {
-        const logs: any[] = await storageController.fetch('logs')
+        const logs: any[] = await storageService.fetch('logs')
         clipboardConfirmation(logs)
         setPressCounter(0)
       }
@@ -237,7 +236,7 @@ const HomeComponent = (props: Props) => {
   const switchSelectedForm = async (ind: number) => {
     if (!props.observing) {
       await props.switchSchema(availableForms[ind])
-      await storageController.save('formID', availableForms[ind])
+      await storageService.save('formID', availableForms[ind])
       setSelectedTab(ind)
     }
   }

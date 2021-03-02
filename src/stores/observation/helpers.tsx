@@ -18,7 +18,7 @@ export const definePublicity = (event: Record<string, any>, isPublic: boolean): 
 }
 
 //define record basis for each unit, depending on whether the unit has images attached
-export const defineRecordBasis = (event: Record<string, any>): Record<string, any> => {
+export const defineRecordBasisAndFixRadius = (event: Record<string, any>): Record<string, any> => {
 
   let modifiedEvent: Record<string, any> = event
 
@@ -27,6 +27,9 @@ export const defineRecordBasis = (event: Record<string, any>): Record<string, an
       unit.recordBasis = 'MY.recordBasisHumanObservationPhoto'
     } else {
       unit.recordBasis = 'MY.recordBasisHumanObservation'
+    }
+    if (unit.unitGathering.geometry.radius === '') {
+      delete unit.unitGathering.geometry.radius
     }
   })
 
@@ -70,7 +73,7 @@ export const fetchForeign = async (event: Record<string, any>, lang: string) => 
 export const defineLocalityInFinland = async (geometry: LineString | Point, lang: string): Promise<Record<string, string>> => {
   let localityDetails
 
-  //call the controller to fetch from Laji API
+  //call the service to fetch from Laji API
   try {
     localityDetails = await getLocalityDetailsFromLajiApi(geometry, lang)
   } catch (error) {
@@ -126,7 +129,7 @@ export const defineLocalityForeign = async (geometry: Point, lang: string): Prom
 
   let localityDetails
 
-  //call the controller to fetch from Google Geocoding API
+  //call the service to fetch from Google Geocoding API
   try {
     const response = await getLocalityDetailsFromGoogleAPI(geometry, lang)
     localityDetails = response.data.results
