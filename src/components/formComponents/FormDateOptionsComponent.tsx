@@ -7,49 +7,50 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../utilities/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { color } from 'react-native-reanimated'
 
 interface Props {
   title: string,
   objectTitle: string,
   parentObjectTitle: string,
   keyboardType:
-    'default' |
-    'email-address' |
-    'numeric' |
-    'phone-pad' |
-    'visible-password' |
-    'ascii-capable' |
-    'numbers-and-punctuation' |
-    'url' |
-    'number-pad' |
-    'name-phone-pad' |
-    'decimal-pad' |
-    'twitter' |
-    'web-search' |
-    undefined,
+  'default' |
+  'email-address' |
+  'numeric' |
+  'phone-pad' |
+  'visible-password' |
+  'ascii-capable' |
+  'numbers-and-punctuation' |
+  'url' |
+  'number-pad' |
+  'name-phone-pad' |
+  'decimal-pad' |
+  'twitter' |
+  'web-search' |
+  undefined,
   defaultValue: string,
   isArrayItem: boolean,
   parentCallback: Function | undefined,
 }
 
-const FormDatePickerComponent = (props: Props) => {
+const FormDateOptionsComponent = (props: Props) => {
   const { register, setValue, watch } = useFormContext()
   const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
   const [currentDate, setCurrentDate] = useState<string>(props.defaultValue)
   const [currentTime, setCurrentTime] = useState<string>(props.defaultValue)
+  const [selected, setSelected] = useState<boolean>(false)
   const [show, setShow] = useState<boolean>(false)
   const date = new Date()
   const dateBegin = watch('gatheringEvent_dateBegin')
   const dateEnd = watch('gatheringEvent_dateEnd')
 
+  const { t } = useTranslation()
+
   useEffect(() => {
-    if (!currentValue || currentValue === '') {
-      setCurrentValue(parseDateFromISOToDocument(date))
-      onChangeDate(undefined, date)
-      onChangeTime(undefined, date)
-      setValue(props.objectTitle, parseDateFromISOToDocument(date))
-    } else {
+    if (currentValue && currentValue !== '') {
       setValue(props.objectTitle, currentValue)
+      setSelected(true)
     }
   }, [])
 
@@ -74,6 +75,14 @@ const FormDatePickerComponent = (props: Props) => {
     combinedDate !== '' ? setCurrentValue(combinedDate) : null
   }, [currentDate, currentTime])
 
+  const onLockIntoCurrentDate = () => {
+    setCurrentValue(parseDateFromISOToDocument(date))
+    onChangeDate(undefined, date)
+    onChangeTime(undefined, date)
+    setValue(props.objectTitle, parseDateFromISOToDocument(date))
+    setSelected(true)
+  }
+
   const onChangeDate = (event: Event | undefined, date: Date | undefined) => {
     setShow(false)
     date !== undefined ? setCurrentDate(parseDateFromISOToDocument(date)) : null
@@ -81,24 +90,45 @@ const FormDatePickerComponent = (props: Props) => {
 
   const onChangeTime = (event: Event | undefined, date: Date | undefined) => {
     date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date)) : null
+    setSelected(true)
   }
 
   return (
     <View style={Cs.formInputContainer}>
       <Text>{props.title}</Text>
-      <View style={Cs.eventDateContainer}>
-        <TextInput
-          style={Os.datePicker}
-          value={parseDateForUI(currentValue)}
-          editable={false}
-          ref={register({ name: props.objectTitle })}
-        />
-        <Button
-          buttonStyle={{ backgroundColor: Colors.neutralButton }}
-          icon={<Icon name={'edit'} color='white' size={22} />}
-          onPress={() => setShow(true)}>
-        </Button>
-      </View>
+      {!selected ?
+        <View style={Cs.eventDateContainer}>
+          <Button
+            buttonStyle={{ backgroundColor: Colors.positiveButton, marginRight: 5, width: 150 }}
+            title={t('timestamp')}
+            icon={<Icon name={'add'} color='white' size={22} />}
+            onPress={() => onLockIntoCurrentDate()}>
+          </Button>
+          <Button
+            buttonStyle={{ backgroundColor: Colors.neutralButton, marginLeft: 5, width: 150 }}
+            title={t('choose time')}
+            icon={<Icon name={'edit'} color='white' size={22} />}
+            onPress={() => setShow(true)}>
+          </Button>
+        </View>
+        :
+        <View style={Cs.eventDateContainer}>
+          <TextInput
+            style={Os.datePicker}
+            value={parseDateForUI(currentValue)}
+            editable={false}
+            ref={register({ name: props.objectTitle })}
+          />
+          <Button
+            buttonStyle={{ backgroundColor: Colors.negativeButton }}
+            icon={<Icon name={'delete'} color='white' size={22} />}
+            onPress={() => {
+              setSelected(false)
+              setValue(props.objectTitle, '')
+            }}>
+          </Button>
+        </View>
+      }
       {show && (
         <View>
           <DateTimePicker
@@ -110,12 +140,6 @@ const FormDatePickerComponent = (props: Props) => {
             value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
             mode='date'
             onChange={onChangeDate}
-            minimumDate={props.objectTitle.includes('dateEnd')
-              ? (dateBegin ? new Date(parseFromLocalToISO(dateBegin)) : undefined)
-              : undefined}
-            maximumDate={props.objectTitle.includes('dateBegin')
-              ? (dateEnd ? new Date(parseFromLocalToISO(dateEnd)) : undefined)
-              : undefined}
           />
         </View>
       )}
@@ -123,4 +147,4 @@ const FormDatePickerComponent = (props: Props) => {
   )
 }
 
-export default FormDatePickerComponent
+export default FormDateOptionsComponent

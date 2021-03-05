@@ -23,7 +23,7 @@ import { saveMedias } from '../../services/imageService'
 import { netStatusChecker } from '../../utilities/netStatusCheck'
 import { overlapsFinland } from '../../utilities/geometryCreator'
 import { log } from '../../utilities/logger'
-import { definePublicity, defineRecordBasisAndFixRadius, fetchFinland, fetchForeign } from './helpers'
+import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from './helpers'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -146,7 +146,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
 
     //define record basis for each unit, depending on whether the unit has images attached
     //remove empty radius -fields
-    event = defineRecordBasisAndFixRadius(event)
+    event = loopThroughUnits(event)
 
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
     if (overlapsFinland(event.gatherings[0].geometry)) {

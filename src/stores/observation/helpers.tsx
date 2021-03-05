@@ -18,7 +18,7 @@ export const definePublicity = (event: Record<string, any>, isPublic: boolean): 
 }
 
 //define record basis for each unit, depending on whether the unit has images attached
-export const defineRecordBasisAndFixRadius = (event: Record<string, any>): Record<string, any> => {
+export const loopThroughUnits = (event: Record<string, any>): Record<string, any> => {
 
   let modifiedEvent: Record<string, any> = event
 
@@ -30,6 +30,9 @@ export const defineRecordBasisAndFixRadius = (event: Record<string, any>): Recor
     }
     if (unit.unitGathering.geometry.radius === '') {
       delete unit.unitGathering.geometry.radius
+    }
+    if (unit.unitGathering.dateBegin === '') {
+      delete unit.unitGathering.dateBegin
     }
   })
 
