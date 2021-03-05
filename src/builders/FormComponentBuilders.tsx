@@ -5,6 +5,7 @@ import FormImageKeywordPickerComponent from '../components/formComponents/FormIm
 import FormArrayComponent from '../components/formComponents/FormArrayComponent'
 import FormPickerItemComponent from '../components/formComponents/FormPickerItemComponent'
 import FormPickerComponent from '../components/formComponents/FormPickerComponent'
+import FormDateOptionsComponent from '../components/formComponents/FormDateOptionsComponent'
 import FormDatePickerComponent from '../components/formComponents/FormDatePickerComponent'
 import FormSwitchComponent from '../components/formComponents/FormSwitchComponent'
 import uuid from 'react-native-uuid'
@@ -115,8 +116,15 @@ export const createInputElement = (
 ) => {
   const titleKey = isArrayItem ? objectTitle + ' ' + uuid.v4() : objectTitle
 
-  if (objectTitle.includes('dateBegin') || objectTitle.includes('dateEnd')) {
+  if (objectTitle.includes('gatheringEvent_dateBegin') || objectTitle.includes('gatheringEvent_dateEnd')) {
     return <FormDatePickerComponent
+      key={titleKey} title={title} objectTitle={objectTitle}
+      parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
+      keyboardType='default'
+      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+    />
+  } else if (objectTitle.includes('unitGathering_dateBegin')) {
+    return <FormDateOptionsComponent
       key={titleKey} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='default'
