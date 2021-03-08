@@ -4,7 +4,7 @@ import SchemaObjectComponent from '../components/observationEvent/SchemaObjectCo
 import { parsePathForFieldParams } from './SchemaToInputParser'
 import { get, set } from 'lodash'
 import { getTaxonAutocomplete } from '../services/autocompleteService'
-import { log } from '../utilities/logger'
+import { log } from '../helpers/logger'
 
 export const createSchemaObjectComponents = async (inputObject: Record<string, any>, fields: Array<string>, schema: Record<string, any>) => {
 

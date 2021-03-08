@@ -7,9 +7,8 @@ import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { ObservationEventType } from '../../stores/observation/types'
-import { SchemaType } from '../../stores/observation/types'
-import { listOfHaversineNeighbors } from '../../utilities/haversineFormula'
+import { ObservationEventType, SchemaType } from '../../stores'
+import { listOfHaversineNeighbors } from '../../helpers/distanceHelper'
 
 interface BasicObject {
   [key: string]: any

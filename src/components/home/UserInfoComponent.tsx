@@ -5,10 +5,14 @@ import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
-import { clearCredentials, logoutUser } from '../../stores/user/actions'
-import { resetReducer } from '../../stores/combinedActions'
-import { CredentialsType } from '../../stores/user/types'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
+import {
+  resetReducer,
+  clearCredentials,
+  logoutUser,
+  setMessageState,
+  clearMessageState,
+  CredentialsType
+} from '../../stores'
 import MessageComponent from '../general/MessageComponent'
 
 interface RootState {

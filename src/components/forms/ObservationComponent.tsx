@@ -7,21 +7,28 @@ import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import { LocationObject } from 'expo-location'
 import {
-  replaceObservationEvents, newObservation, clearObservationLocation, replaceObservationById, clearObservationId,
-  deleteObservation, setObservationLocation
-} from '../../stores/observation/actions'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
+  replaceObservationEvents,
+  newObservation,
+  clearObservationLocation,
+  replaceObservationById,
+  clearObservationId,
+  deleteObservation,
+  setObservationLocation,
+  setMessageState,
+  clearMessageState,
+  setEditing,
+  ObservationEventType,
+  SchemaType,
+  EditingType
+} from '../../stores'
 import MessageComponent from '../general/MessageComponent'
 import Cs from '../../styles/ContainerStyles'
-import { ObservationEventType, SchemaType } from '../../stores/observation/types'
 import { initForm } from '../../forms/formMethods'
 import { set, clone } from 'lodash'
 import uuid from 'react-native-uuid'
 import i18n from '../../language/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import { Button as ButtonElement, Icon } from 'react-native-elements'
-import { setEditing } from '../../stores/map/actions'
-import { EditingType } from '../../stores/map/types'
 import { lineStringConstructor } from '../../converters/geoJSONConverters'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
 import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'

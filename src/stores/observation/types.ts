@@ -18,17 +18,8 @@ export const SET_OBSERVATION_ID = 'SET_OBSERVATION_ID'
 
 export const TOGGLE_OBSERVING = 'TOGGLE_OBSERVING'
 
-export const SET_SCHEMA = 'SET_SCHEMA_SUCCESS'
-
 export interface ObservationEventType {
   events: Record<string, any>[],
-}
-
-export interface SchemaType extends Record<string, any> {
-  formID: string,
-  fi: Record<string, any> | null,
-  sv: Record<string, any> | null,
-  en: Record<string, any> | null,
 }
 
 interface clearObservationLocation {
@@ -42,11 +33,6 @@ interface setObservationLocation {
 
 interface clearObservationEvents {
   type: typeof CLEAR_OBSERVATION_EVENTS,
-}
-
-interface newObservationEvent {
-  type: typeof NEW_OBSERVATION_EVENT,
-  payload: Record<string, any>,
 }
 
 interface setObservationEventInterrupted {
@@ -72,19 +58,12 @@ interface toggleObserving {
   type: typeof TOGGLE_OBSERVING,
 }
 
-interface setSchema {
-  type: typeof SET_SCHEMA,
-  payload: Record<string, any>,
-}
-
 export type observationActionTypes =
   clearObservationLocation |
   setObservationLocation |
   setObservationEventInterrupted |
   clearObservationEvents |
-  newObservationEvent |
   replaceObservationEvents |
   clearObservationId |
   setObservationId |
-  toggleObserving |
-  setSchema
+  toggleObserving

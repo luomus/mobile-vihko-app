@@ -1,7 +1,7 @@
 import { Point, LineString, Polygon } from 'geojson'
-import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../../services/localityService'
-import { centerOfBoundingBox, createCombinedGeometry } from '../../utilities/geometryCreator'
-import { log } from '../../utilities/logger'
+import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../services/localityService'
+import { centerOfBoundingBox, createCombinedGeometry } from './geometryHelper'
+import { log } from '../helpers/logger'
 import i18n from 'i18next'
 
 //define whether the event will be released publicly or privately

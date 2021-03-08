@@ -3,21 +3,28 @@ import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
 import { connect, ConnectedProps } from 'react-redux'
-import { initSchema, initObservationEvents } from '../../stores/observation/actions'
-import { setCredentials, loginUser, logoutUser, initLocalCredentials } from '../../stores/user/actions'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
-import { resetReducer } from '../../stores/combinedActions'
+import {
+  initObservationEvents,
+  initSchema,
+  resetReducer,
+  setCredentials,
+  loginUser,
+  logoutUser,
+  initLocalCredentials,
+  setMessageState,
+  clearMessageState,
+  CredentialsType
+} from '../../stores'
 import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import i18n from '../../language/i18n'
-import { CredentialsType } from '../../stores/user/types'
 import ActivityComponent from '../general/ActivityComponent'
 import MessageComponent from '../general/MessageComponent'
-import { netStatusChecker } from '../../utilities/netStatusCheck'
+import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
-import { log } from '../../utilities/logger'
+import { log } from '../../helpers/logger'
 import { availableForms } from '../../config/fields'
 
 interface RootState {

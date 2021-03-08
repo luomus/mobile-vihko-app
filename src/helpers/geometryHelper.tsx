@@ -186,3 +186,29 @@ export const centerOfBoundingBox = (geometry: Polygon | Point): Point => {
     coordinates: [avgLng, avgLat]
   }
 }
+
+export const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<number>>): Array<Array<number>> => {
+  let uniqueCoordinates: Array<Array<number>> = []
+
+  //loop through each point in path's LineString
+  lineStringCoordinates.forEach((point: Array<number>) => {
+    let noDuplicates: boolean = true
+    //use same decimals for all coordinates
+    const coord0: number = Number(point[0].toFixed(5))
+    const coord1: number = Number(point[1].toFixed(5))
+    //check that the point isn't a duplicate of any of the unique coordinates
+    uniqueCoordinates.forEach((uniquePoint: Array<number>) => {
+      const uniqueCoord0: number = Number(uniquePoint[0].toFixed(5))
+      const uniqueCoord1: number = Number(uniquePoint[1].toFixed(5))
+      if (coord0 === uniqueCoord0 && coord1 === uniqueCoord1) {
+        noDuplicates = false
+      }
+    })
+    //if no duplicates were found, push the point to be a unique coordinate
+    if (noDuplicates) {
+      uniqueCoordinates.push(point)
+    }
+  })
+
+  return uniqueCoordinates
+}

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getLoginUrl, pollLoginUrl, getUserUrl } from '../config/urls'
 import { accessToken } from '../config/keys'
-import { CredentialsType } from '../stores/user/types'
+import { CredentialsType } from '../stores'
 
 export const getTempTokenAndLoginUrl = async () => {
   const params = {

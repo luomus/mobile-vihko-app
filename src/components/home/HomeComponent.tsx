@@ -11,33 +11,26 @@ import { LocationObject } from 'expo-location'
 import { LatLng } from 'react-native-maps'
 import {
   toggleObserving,
-  newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
   setObservationId,
-  switchSchema,
-  setObservationEventInterrupted
-} from '../../stores/observation/actions'
-import {
+  setObservationEventInterrupted,
   toggleCentered,
-  clearRegion
-} from '../../stores/map/actions'
-import { setMessageState } from '../../stores/message/actions'
-import {
+  clearRegion,
+  setMessageState,
   updateLocation,
   clearLocation,
-  appendPath,
   setPath,
   clearPath,
-} from '../../stores/position/actions'
-import {
+  switchSchema,
   beginObservationEvent,
-  continueObservationEvent
-} from '../../actionCreators/observationEventCreators'
+  continueObservationEvent,
+  ObservationEventType,
+  SchemaType,
+  CredentialsType
+} from '../../stores'
 import { connect, ConnectedProps } from 'react-redux'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'
-import { SchemaType, ObservationEventType } from '../../stores/observation/types'
-import { CredentialsType } from '../../stores/user/types'
 import MessageComponent from '../general/MessageComponent'
 import { withNavigation } from 'react-navigation'
 import ActivityComponent from '../general/ActivityComponent'
@@ -71,13 +64,11 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = {
-  appendPath,
   setPath,
   clearPath,
   updateLocation,
   clearLocation,
   toggleObserving,
-  newObservationEvent,
   replaceObservationEventById,
   clearObservationLocation,
   setMessageState,

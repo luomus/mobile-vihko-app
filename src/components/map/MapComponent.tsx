@@ -13,27 +13,24 @@ import {
   clearObservationLocation,
   setObservationId,
   clearObservationId,
-  deleteObservation
-} from '../../stores/observation/actions'
-import {
+  deleteObservation,
   setRegion,
   toggleCentered,
   setFirstZoom,
   toggleMaptype,
   setEditing,
-} from '../../stores/map/actions'
-import {
-  setFirstLocation
-} from '../../stores/position/actions'
-import { setMessageState } from '../../stores/message/actions'
+  setFirstLocation,
+  setMessageState,
+  EditingType,
+  FirstZoomType,
+  ObservationEventType
+} from '../../stores'
 import Colors from '../../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
 import GpsBarComponent from './GpsBarComponent'
-import { EditingType, FirstZoomType } from '../../stores/map/types'
-import { ObservationEventType } from '../../stores/observation/types'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'

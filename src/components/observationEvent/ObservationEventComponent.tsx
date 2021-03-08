@@ -12,16 +12,17 @@ import {
   uploadObservationEvent,
   deleteObservationEvent,
   deleteObservation,
-} from '../../stores/observation/actions'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
+  setMessageState,
+  clearMessageState,
+  CredentialsType,
+  ObservationEventType
+} from '../../stores'
 import i18n from '../../language/i18n'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import MessageComponent from '../general/MessageComponent'
-import { parseDateForUI } from '../../utilities/dateHelper'
-import { CredentialsType } from '../../stores/user/types'
-import { ObservationEventType } from '../../stores/observation/types'
+import { parseDateForUI } from '../../helpers/dateHelper'
 import ActivityComponent from '../general/ActivityComponent'
 
 interface RootState {

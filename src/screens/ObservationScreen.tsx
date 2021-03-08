@@ -7,7 +7,7 @@ import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
 import { NavigationStackProp } from 'react-navigation-stack'
 import { Icon } from 'react-native-elements'
-import { setMessageState } from '../stores/message/actions'
+import { setMessageState } from '../stores'
 import { connect, ConnectedProps } from 'react-redux'
 import i18n from '../language/i18n'
 

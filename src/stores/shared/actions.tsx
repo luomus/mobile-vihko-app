@@ -5,41 +5,38 @@ import { LocationObject } from 'expo-location'
 import {
   toggleCentered,
   setFirstZoom,
-  clearRegion
-} from '../stores/map/actions'
-import {
-  setMessageState
-} from '../stores/message/actions'
-import {
-  removeDuplicatesFromPath,
+  clearRegion,
+  setMessageState,
   clearObservationLocation,
   setObservationEventInterrupted,
   replaceObservationEventById,
   replaceObservationEvents,
   toggleObserving,
-  clearObservationId
-} from '../stores/observation/actions'
-import {
+  clearObservationId,
   clearLocation,
   updateLocation,
   clearPath,
   setPath,
-  setFirstLocation
-} from '../stores/position/actions'
-import { mapActionTypes } from '../stores/map/types'
-import { messageActionTypes } from '../stores/message/types'
-import { observationActionTypes } from '../stores/observation/types'
-import { PathType } from '../stores/position/types'
-import i18n from '../language/i18n'
-import storageService from '../services/storageService'
-import { parseSchemaToNewObject } from '../parsers/SchemaObjectParser'
-import { setDateForDocument } from '../utilities/dateHelper'
-import { log } from '../utilities/logger'
-import { stopLocationAsync, watchLocationAsync } from '../geolocation/geolocation'
-import { locationActionTypes } from '../stores/position/types'
-import { createUnitBoundingBox } from '../utilities/geometryCreator'
-import { lineStringConstructor } from '../converters/geoJSONConverters'
-import { sourceId } from '../config/keys'
+  setFirstLocation,
+  mapActionTypes,
+  messageActionTypes,
+  observationActionTypes,
+  locationActionTypes,
+  PathType
+} from '../../stores'
+import i18n from '../../language/i18n'
+import storageService from '../../services/storageService'
+import { parseSchemaToNewObject } from '../../parsers/SchemaObjectParser'
+import { setDateForDocument } from '../../helpers/dateHelper'
+import { log } from '../../helpers/logger'
+import { stopLocationAsync, watchLocationAsync } from '../../geolocation/geolocation'
+import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
+import { lineStringConstructor } from '../../converters/geoJSONConverters'
+import { sourceId } from '../../config/keys'
+
+export const resetReducer = () => ({
+  type: 'RESET_STORE'
+})
 
 export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
@@ -73,7 +70,7 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/actionCreators/observationEventCreators.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()',
         error: error
       })
       return Promise.reject({
@@ -125,7 +122,7 @@ export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Pr
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)))
     } catch (error) {
       log.error({
-        location: '/actionCreators/observationEventCreators continueObservationEvent()',
+        location: '/stores/shared/actions.tsx continueObservationEvent()',
         error: error
       })
       dispatch(setMessageState({

@@ -4,14 +4,20 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
-import { finishObservationEvent } from '../../actionCreators/observationEventCreators'
-import { replaceObservationEventById, clearObservationId, uploadObservationEvent } from '../../stores/observation/actions'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
+import {
+  finishObservationEvent,
+  replaceObservationEventById,
+  clearObservationId,
+  uploadObservationEvent,
+  setMessageState,
+  clearMessageState,
+  ObservationEventType,
+  SchemaType,
+  CredentialsType
+} from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import { set, merge, omit } from 'lodash'
 import MessageComponent from '../general/MessageComponent'
-import { ObservationEventType, SchemaType } from '../../stores/observation/types'
-import { CredentialsType } from '../../stores/user/types'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../language/i18n'
 import ActivityComponent from '../general/ActivityComponent'

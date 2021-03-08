@@ -8,7 +8,7 @@ import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import * as ImagePicker from 'expo-image-picker'
 import Colors from '../../styles/Colors'
-import { setMessageState } from '../../stores/message/actions'
+import { setMessageState } from '../../stores'
 import { connect, ConnectedProps } from 'react-redux'
 import { useFormContext } from 'react-hook-form'
 

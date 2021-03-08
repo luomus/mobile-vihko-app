@@ -4,11 +4,10 @@ import { Icon, Button } from 'react-native-elements'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../utilities/dateHelper'
+import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { color } from 'react-native-reanimated'
 
 interface Props {
   title: string,
