@@ -24,14 +24,14 @@ import {
   locationActionTypes,
   PathType
 } from '../../stores'
-import i18n from '../../language/i18n'
+import i18n from '../../languages/i18n'
 import storageService from '../../services/storageService'
-import { parseSchemaToNewObject } from '../../parsers/SchemaObjectParser'
+import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser'
 import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
-import { stopLocationAsync, watchLocationAsync } from '../../geolocation/geolocation'
+import { stopLocationAsync, watchLocationAsync } from '../../helpers/geolocationHelper'
 import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
-import { lineStringConstructor } from '../../converters/geoJSONConverters'
+import { lineStringConstructor } from '../../helpers/geoJSONHelper'
 import { sourceId } from '../../config/keys'
 
 export const resetReducer = () => ({

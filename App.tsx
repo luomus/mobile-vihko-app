@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import AppContainer from './src/navigator/MyNavigator'
+import AppContainer from './src/navigation/MyNavigator'
 import { Provider } from 'react-redux'
 import {
   store,
@@ -8,10 +8,10 @@ import {
   resetReducer
 } from './src/stores'
 import * as TaskManager from 'expo-task-manager'
-import './src/language/i18n'
+import './src/languages/i18n'
 import { LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/location'
-import { cleanupLocationAsync } from './src/geolocation/geolocation'
-import { lineStringConstructor } from './src/converters/geoJSONConverters'
+import { cleanupLocationAsync } from './src/helpers/geolocationHelper'
+import { lineStringConstructor } from './src/helpers/geoJSONHelper'
 
 export default class App extends Component {
   componentDidMount() {

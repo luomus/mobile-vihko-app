@@ -1,38 +1,18 @@
 import React from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
-import { Region } from 'react-native-maps'
-import { Point } from 'geojson'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
-import { connect, ConnectedProps } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { ObservationEventType, SchemaType } from '../../stores'
+import { rootState } from '../../stores'
 import { listOfHaversineNeighbors } from '../../helpers/distanceHelper'
 
 interface BasicObject {
   [key: string]: any
 }
 
-interface RootState {
-  observation: Point,
-  observationEvent: ObservationEventType,
-  region: Region,
-  schema: SchemaType
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { observation, observationEvent, region, schema } = state
-  return { observation, observationEvent, region, schema }
-}
-
-const connector = connect(
-  mapStateToProps
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
+type Props = {
   confirmationButton: (isNew?: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   cancelButton: () => void,
   mode: string,
@@ -41,6 +21,10 @@ type Props = PropsFromRedux & {
 }
 
 const ObservationButtonsComponent = (props: Props) => {
+
+  const observation = useSelector((state: rootState) => state.observation)
+  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const region = useSelector((state: rootState) => state.region)
 
   const { t } = useTranslation()
 
@@ -61,10 +45,10 @@ const ObservationButtonsComponent = (props: Props) => {
   }
 
   const createButtonList = () => {
-    const units: BasicObject[] = props.observationEvent.events?.[props.observationEvent.events.length - 1]
+    const units: BasicObject[] = observationEvent.events?.[observationEvent.events.length - 1]
       .gatherings[0].units
-    const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, props.region, props.observation)
-    const eventId: string = props.observationEvent.events?.[props.observationEvent.events.length - 1].id
+    const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, region, observation)
+    const eventId: string = observationEvent.events?.[observationEvent.events.length - 1].id
 
     if (haversineNeighbors.length >= 4) {
       return (
@@ -118,4 +102,4 @@ const ObservationButtonsComponent = (props: Props) => {
   )
 }
 
-export default connector(ObservationButtonsComponent)
+export default ObservationButtonsComponent

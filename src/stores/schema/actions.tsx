@@ -6,7 +6,7 @@ import {
 } from './types'
 import { getSchemas } from '../../services/documentService'
 import storageService from '../../services/storageService'
-import { parseUiSchemaToObservations } from '../../parsers/UiSchemaParser'
+import { parseUiSchemaToObservations } from '../../helpers/parsers/UiSchemaParser'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { log } from '../../helpers/logger'
 

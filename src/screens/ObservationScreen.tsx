@@ -9,7 +9,7 @@ import { NavigationStackProp } from 'react-navigation-stack'
 import { Icon } from 'react-native-elements'
 import { setMessageState } from '../stores'
 import { connect, ConnectedProps } from 'react-redux'
-import i18n from '../language/i18n'
+import i18n from '../languages/i18n'
 
 const mapDispatchToProps = {
   setMessageState

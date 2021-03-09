@@ -1,31 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, Text, ScrollView } from 'react-native'
-import { connect, ConnectedProps } from 'react-redux'
-import { createSchemaObjectComponents } from '../../parsers/SchemaObjectParser'
+import { useSelector } from 'react-redux'
+import { createSchemaObjectComponents } from '../../helpers/parsers/SchemaObjectParser'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
-import { SchemaType } from '../../stores'
+import { rootState } from '../../stores'
 import MiniMapComponent from './MiniMapComponent'
 import { JX519Fields, JX652Fields } from '../../config/fields'
-import i18n from '../../language/i18n'
+import i18n from '../../languages/i18n'
 
-interface RootState {
-  schema: SchemaType,
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { schema } = state
-  return { schema }
-}
-
-const connector = connect(
-  mapStateToProps,
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
+type Props = {
   event: Record<string, any>,
   observation: Record<string, any>,
   editButton: any,
@@ -37,6 +22,8 @@ const ObservationInfoComponent = (props: Props) => {
   const [list, setList] = useState<Array<any> | null>(null)
   const { t } = useTranslation()
 
+  const schema = useSelector((state: rootState) => state.schema)
+
   useEffect(() => {
 
     const initList = async () => {
@@ -47,8 +34,8 @@ const ObservationInfoComponent = (props: Props) => {
       } else if (props.event.formID === 'JX.652') {
         fields = JX652Fields
       }
-      if (schema && fields) {
-        setList(await createSchemaObjectComponents(props.observation, fields, schema))
+      if (schemaUnits && fields) {
+        setList(await createSchemaObjectComponents(props.observation, fields, schemaUnits))
       }
     }
 
@@ -56,9 +43,9 @@ const ObservationInfoComponent = (props: Props) => {
   }, [])
 
   const lang = i18n.language
-  const schema = props.schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units
+  const schemaUnits = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units
 
-  if (!schema) {
+  if (!schemaUnits) {
     return null
   }
 
@@ -108,4 +95,4 @@ const ObservationInfoComponent = (props: Props) => {
   )
 }
 
-export default connector(ObservationInfoComponent)
+export default ObservationInfoComponent

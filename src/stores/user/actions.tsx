@@ -7,7 +7,7 @@ import {
 import { ThunkAction } from 'redux-thunk'
 import { pollUserLogin } from '../../services/userService'
 import storageService from '../../services/storageService'
-import i18n from '../../language/i18n'
+import i18n from '../../languages/i18n'
 import { log } from '../../helpers/logger'
 
 export const loginUser = (tmpToken: string): ThunkAction<Promise<any>, any, void, userActionTypes> => {

@@ -1,32 +1,15 @@
 import React from 'react'
 import WebView from 'react-native-webview'
-import { connect, ConnectedProps } from 'react-redux'
-import { CredentialsType } from '../../stores'
 import { useBackHandler } from '@react-native-community/hooks'
 
-
-interface RootState {
-  credentials: CredentialsType
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { credentials } = state
-  return { credentials }
-}
-
-const connector = connect(
-  mapStateToProps,
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
+type Props = {
   loginURL: string,
   onReturn: (loginAccepted?: boolean) => void,
   onBackPress: () => void,
 }
 
 const WebViewComponent = (props: Props) => {
+
   const onLoadEnd = (syntheticEvent: any) => {
     const { nativeEvent } = syntheticEvent
 
@@ -49,4 +32,4 @@ const WebViewComponent = (props: Props) => {
   )
 }
 
-export default connector(WebViewComponent)
+export default WebViewComponent

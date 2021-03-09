@@ -1,10 +1,10 @@
 import React from 'react'
-import i18n from '../language/i18n'
-import SchemaObjectComponent from '../components/observationEvent/SchemaObjectComponent'
+import i18n from '../../languages/i18n'
+import SchemaObjectComponent from '../../components/observationEvent/SchemaObjectComponent'
 import { parsePathForFieldParams } from './SchemaToInputParser'
 import { get, set } from 'lodash'
-import { getTaxonAutocomplete } from '../services/autocompleteService'
-import { log } from '../helpers/logger'
+import { getTaxonAutocomplete } from '../../services/autocompleteService'
+import { log } from '../logger'
 
 export const createSchemaObjectComponents = async (inputObject: Record<string, any>, fields: Array<string>, schema: Record<string, any>) => {
 

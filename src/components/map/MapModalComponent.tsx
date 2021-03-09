@@ -1,29 +1,15 @@
 import React from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Button } from 'react-native-elements'
-import { connect, ConnectedProps } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
+import { rootState } from '../../stores'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
 
-interface RootState {
-  observationId: Record<string, any>
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { observationId } = state
-  return { observationId }
-}
-
-const connector = connect(
-  mapStateToProps
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
+type Props = {
   shiftToEditPage: (eventId: string, unitId: string) => void,
   showSubmitDelete: (eventId: string, unitId: string) => void,
   cancelObservation: () => void,
@@ -33,6 +19,9 @@ type Props = PropsFromRedux & {
 }
 
 const MapModalComponent = (props: Props) => {
+
+  const observationId = useSelector((state: rootState) => state.observationId)
+
   const { t } = useTranslation()
 
   return (
@@ -45,12 +34,12 @@ const MapModalComponent = (props: Props) => {
               <Button
                 buttonStyle={Bs.mapModalPositiveButton}
                 title={t('edit button')}
-                onPress={() => props.shiftToEditPage(props.observationId.eventId, observation.id)}
+                onPress={() => props.shiftToEditPage(observationId.eventId, observation.id)}
               />
               <Button
                 buttonStyle={Bs.mapModalNegativeButton}
                 title={t('delete')}
-                onPress={() => props.showSubmitDelete(props.observationId.eventId, observation.id)}
+                onPress={() => props.showSubmitDelete(observationId.eventId, observation.id)}
               />
             </View>
           )}
@@ -60,4 +49,4 @@ const MapModalComponent = (props: Props) => {
   )
 }
 
-export default connector(MapModalComponent)
+export default MapModalComponent

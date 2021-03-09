@@ -1,6 +1,6 @@
-import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker } from '../builders/FormComponentBuilders'
+import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker } from './formComponentBuilders'
 import { get } from 'lodash'
-import { parseObjectForFieldParams } from '../parsers/SchemaToInputParser'
+import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParser'
 
 const Form = (
   defaults: Record<string, any> | undefined,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Linking } from 'react-native'
+import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { lajiFI, lajiSV, lajiEN } from '../../config/urls'
 import Cs from '../../styles/ContainerStyles'

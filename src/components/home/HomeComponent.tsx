@@ -7,29 +7,17 @@ import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
-import { LocationObject } from 'expo-location'
-import { LatLng } from 'react-native-maps'
 import {
+  rootState,
   toggleObserving,
-  replaceObservationEventById,
-  clearObservationLocation,
   setObservationId,
   setObservationEventInterrupted,
-  toggleCentered,
-  clearRegion,
   setMessageState,
-  updateLocation,
-  clearLocation,
-  setPath,
-  clearPath,
   switchSchema,
   beginObservationEvent,
-  continueObservationEvent,
-  ObservationEventType,
-  SchemaType,
-  CredentialsType
+  continueObservationEvent
 } from '../../stores'
-import { connect, ConnectedProps } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'
 import MessageComponent from '../general/MessageComponent'
 import { withNavigation } from 'react-navigation'
@@ -45,49 +33,7 @@ interface BasicObject {
   [key: string]: any
 }
 
-interface RootState {
-  formId: string,
-  position: LocationObject,
-  path: LocationObject[],
-  observing: boolean,
-  observation: LatLng,
-  observationEvent: ObservationEventType,
-  observationEventInterrupted: boolean,
-  schema: SchemaType,
-  credentials: CredentialsType,
-  centered: boolean
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered } = state
-  return { position, path, observing, observation, observationEvent, observationEventInterrupted, schema, credentials, centered }
-}
-
-const mapDispatchToProps = {
-  setPath,
-  clearPath,
-  updateLocation,
-  clearLocation,
-  toggleObserving,
-  replaceObservationEventById,
-  clearObservationLocation,
-  setMessageState,
-  clearRegion,
-  toggleCentered,
-  setObservationId,
-  switchSchema,
-  beginObservationEvent,
-  continueObservationEvent,
-  setObservationEventInterrupted
-}
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & {
+type Props = {
   isFocused: () => boolean,
   onLogout: () => void,
   onPressMap: () => void,
@@ -106,17 +52,23 @@ const HomeComponent = (props: Props) => {
   const [data, setString] = useClipboard()
   let logTimeout: NodeJS.Timeout | undefined
 
+  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observing = useSelector((state: rootState) => state.observing)
+  const schema = useSelector((state: rootState) => state.schema)
+
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    const length = props.observationEvent.events.length
+    const length = observationEvent.events.length
     let isUnfinished: boolean = false
 
     if (length >= 1) {
-      isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+      isUnfinished = !observationEvent.events[length - 1].gatheringEvent.dateEnd
     }
 
     if (isUnfinished) {
-      props.toggleObserving()
-      props.setObservationEventInterrupted(true)
+      dispatch(toggleObserving())
+      dispatch(setObservationEventInterrupted(true))
     }
 
     const initTab = async () => {
@@ -126,7 +78,7 @@ const HomeComponent = (props: Props) => {
       }
 
       setSelectedTab(availableForms.findIndex(form => form === formID))
-      await props.switchSchema(formID)
+      dispatch(switchSchema(formID))
     }
 
     initTab()
@@ -134,7 +86,7 @@ const HomeComponent = (props: Props) => {
 
   useEffect(() => {
     loadObservationEvents()
-  }, [props.observationEvent, props.observing, props.schema])
+  }, [observationEvent, observing, schema])
 
   useEffect(() => {
     if (pressCounter > 0 && !logTimeout) {
@@ -157,12 +109,12 @@ const HomeComponent = (props: Props) => {
 
   const loadObservationEvents = () => {
     const events: Array<Element> = []
-    const indexLast: number = props.observationEvent.events.length - 1
-    props.observationEvent.events.forEach((event: BasicObject, index: number) => {
-      if (props.observing && index === indexLast) {
+    const indexLast: number = observationEvent.events.length - 1
+    observationEvent.events.forEach((event: BasicObject, index: number) => {
+      if (observing && index === indexLast) {
         return
       }
-      if (event.formID === props.schema.formID) {
+      if (event.formID === schema.formID) {
         events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
       }
     })
@@ -172,12 +124,12 @@ const HomeComponent = (props: Props) => {
 
   //handle back press in homescreen by asking user if they wish to exit the app
   useBackHandler(() => {
-    if (props.isFocused() && props.observing) {
-      props.setMessageState({
+    if (props.isFocused() && observing) {
+      dispatch(setMessageState({
         type: 'dangerConf',
         messageContent: t('exit app?'),
         onOk: () => BackHandler.exitApp()
-      })
+      }))
 
       return true
     }
@@ -186,47 +138,47 @@ const HomeComponent = (props: Props) => {
   })
 
   const onBeginObservationEvent = async () => {
-    await props.beginObservationEvent(props.onPressMap)
+    dispatch(beginObservationEvent(props.onPressMap))
   }
 
   const onContinueObservationEvent = async () => {
-    await props.continueObservationEvent(props.onPressMap)
+    dispatch(continueObservationEvent(props.onPressMap))
   }
 
   const stopObserving = () => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
       onOk: () => {
-        props.setObservationId({
-          eventId: props.observationEvent?.events?.[props?.observationEvent?.events?.length - 1].id,
+        dispatch(setObservationId({
+          eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
           unitId: null
-        })
+        }))
         props.onPressFinishObservationEvent('HomeComponent')
       }
-    })
+    }))
   }
 
   const clipboardConfirmation = (logs: any[] | null) => {
     if (logs !== null && logs !== []) {
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'dangerConf',
         messageContent: t('copy log to clipboard?'),
         okLabel: t('yes'),
         cancelLabel: t('no'),
         onOk: () => setString(JSON.stringify(logs, null, '  '))
-      })
+      }))
     } else {
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'msg',
         messageContent: t('no logs')
-      })
+      }))
     }
   }
 
   const switchSelectedForm = async (ind: number) => {
-    if (!props.observing) {
-      await props.switchSchema(availableForms[ind])
+    if (!observing) {
+      dispatch(switchSchema(availableForms[ind]))
       await storageService.save('formID', availableForms[ind])
       setSelectedTab(ind)
     }
@@ -258,7 +210,7 @@ const HomeComponent = (props: Props) => {
               <View style={Cs.homeContainer}>
                 <HomeIntroductionComponent />
                 <View style={{ height: 10 }}></View>
-                {props.observing ?
+                {observing ?
                   <UnfinishedEventViewComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
                   :
                   <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={onBeginObservationEvent} />
@@ -287,4 +239,4 @@ const HomeComponent = (props: Props) => {
   }
 }
 
-export default withNavigation(connector(HomeComponent))
+export default withNavigation(HomeComponent)

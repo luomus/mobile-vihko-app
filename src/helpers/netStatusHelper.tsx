@@ -1,4 +1,4 @@
-import i18n from '../language/i18n'
+import i18n from '../languages/i18n'
 import NetInfo from '@react-native-community/netinfo'
 
 export const netStatusChecker = async () => {

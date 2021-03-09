@@ -1,40 +1,23 @@
 import React from 'react'
 import { View, Text } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, Icon } from 'react-native-elements'
 import Modal from 'react-native-modal'
-import { connect, ConnectedProps } from 'react-redux'
-import { setMessageState, popMessageState, MessageType } from '../../stores'
+import { rootState, popMessageState } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
 
-interface RootState {
-  message: MessageType[]
-}
+const MessageComponent = () => {
 
-const mapStateToProps = (state: RootState) => {
-  const { message } = state
-  return { message }
-}
+  const message = useSelector((state: rootState) => state.message)
 
-const mapDispatchToProps = {
-  setMessageState,
-  popMessageState
-}
+  const dispatch = useDispatch()
 
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux
-
-const MessageComponent = (props: Props) => {
   const { t } = useTranslation()
-  const topMessage = props.message[0]
+
+  const topMessage = message[0]
   let isVisible = false
 
   if (topMessage) {
@@ -42,14 +25,14 @@ const MessageComponent = (props: Props) => {
   }
 
   const onOk = () => {
-    props.popMessageState()
+    dispatch(popMessageState())
     if (topMessage.onOk) {
       topMessage.onOk()
     }
   }
 
   const onCancel = () => {
-    props.popMessageState()
+    dispatch(popMessageState())
     if (topMessage.onCancel) {
       topMessage.onCancel()
     }
@@ -137,10 +120,10 @@ const MessageComponent = (props: Props) => {
   return (
     <Modal isVisible={isVisible} onBackButtonPress={onBackButtonPress}>
       <View style={Cs.observationAddModal}>
-        {props.message.length <= 1 ?
+        {message.length <= 1 ?
           null :
           <Text style={Ts.alignedRightText}>
-            1/{props.message.length}
+            1/{message.length}
           </Text>
         }
         <View>
@@ -158,4 +141,4 @@ const MessageComponent = (props: Props) => {
   )
 }
 
-export default connector(MessageComponent)
+export default MessageComponent

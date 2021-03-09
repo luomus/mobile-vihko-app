@@ -2,24 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
-import { connect, ConnectedProps } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
+  rootState,
   initObservationEvents,
   initSchema,
   resetReducer,
-  setCredentials,
   loginUser,
   logoutUser,
   initLocalCredentials,
-  setMessageState,
-  clearMessageState,
-  CredentialsType
+  setMessageState
 } from '../../stores'
 import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
-import i18n from '../../language/i18n'
+import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import MessageComponent from '../general/MessageComponent'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
@@ -27,35 +25,7 @@ import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
 import { availableForms } from '../../config/fields'
 
-interface RootState {
-  credentials: CredentialsType,
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { credentials } = state
-  return { credentials }
-}
-
-const mapDispatchToProps = {
-  initObservationEvents,
-  initSchema,
-  setCredentials,
-  loginUser,
-  logoutUser,
-  setMessageState,
-  clearMessageState,
-  resetReducer,
-  initLocalCredentials
-}
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
+type Props = {
   loginAccepted?: boolean,
   onPressLogin: (loginURL: string) => void,
   onSuccessfulLogin: () => void,
@@ -63,43 +33,49 @@ type Props = PropsFromRedux & {
 }
 
 const LoginComponent = (props: Props) => {
-  const { t } = useTranslation()
+
   const [loggingIn, setLoggingIn] = useState<boolean>(true)
   const [tempToken, setTempToken] = useState<string>('')
 
+  const credentials = useSelector((state: rootState) => state.credentials)
+
+  const dispatch = useDispatch()
+
+  const { t } = useTranslation()
+
   useEffect(() => {
     loadData()
-  }, [props.loginAccepted || props.credentials])
+  }, [props.loginAccepted || credentials])
 
   const showError = (error: string) => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'err',
       messageContent: error
-    })
+    }))
   }
 
   const showFatalError = (error: string) => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'err',
       messageContent: error,
       onOk: onFatalError
-    })
+    }))
   }
 
   //logout user and reset reducers on fatal error
   const onFatalError = async () => {
-    await props.logoutUser()
-    props.resetReducer()
+    dispatch(logoutUser())
+    dispatch(resetReducer())
     props.onReset()
   }
 
   //check if user has previously logged in, redirect to home screen if is
   const loadData = async () => {
     setLoggingIn(true)
-    if (!props.credentials.token) {
+    if (!credentials.token) {
       if (props.loginAccepted === undefined) {
         try {
-          await props.initLocalCredentials()
+          dispatch(initLocalCredentials())
           await initializeApp()
         } catch (error) {
           if (error?.severity) {
@@ -109,7 +85,7 @@ const LoginComponent = (props: Props) => {
         }
       } else if (props.loginAccepted) {
         try {
-          await props.loginUser(tempToken)
+          dispatch(loginUser(tempToken))
         } catch (error) {
           if (error.severity === 'fatal') {
             showFatalError(`${t('critical error')}:\n${error.message}`)
@@ -126,14 +102,14 @@ const LoginComponent = (props: Props) => {
 
   const initializeApp = async () => {
     try {
-      await props.initObservationEvents()
+      dispatch(initObservationEvents())
     } catch (error) {
       showError(error.message)
     }
 
     await Promise.all(availableForms.map(async formId => {
       try {
-        await props.initSchema(false, formId)
+        dispatch(initSchema(false, formId))
       } catch (errors) {
         if (errors[errors.length - 1].severity === 'fatal') {
           errors.forEach((error: Record<string, any>, index: number) => {
@@ -210,4 +186,4 @@ const LoginComponent = (props: Props) => {
   }
 }
 
-export default connector(LoginComponent)
+export default LoginComponent

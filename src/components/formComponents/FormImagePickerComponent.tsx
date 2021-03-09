@@ -1,27 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView } from 'react-native'
 import { Button as ButtonElement, Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
+import { setMessageState } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import * as ImagePicker from 'expo-image-picker'
 import Colors from '../../styles/Colors'
-import { setMessageState } from '../../stores'
-import { connect, ConnectedProps } from 'react-redux'
 import { useFormContext } from 'react-hook-form'
 
-const mapDispatchToProps = {
-  setMessageState
-}
-
-const connector = connect(
-  null,
-  mapDispatchToProps
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & {
+type Props = {
   title: string,
   objectTitle: string,
   defaultValue: Array<string>
@@ -31,6 +21,8 @@ const ImagePickerComponent = (props: Props) => {
   const { register, setValue } = useFormContext()
   const [images, setImages] = useState<Array<string>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setValue(props.objectTitle, images)
@@ -81,13 +73,13 @@ const ImagePickerComponent = (props: Props) => {
   }
 
   const showRemoveImage = (image: string) => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('delete image?'),
       okLabel: t('delete'),
       cancelLabel: t('cancel'),
       onOk: () => removeImage(image)
-    })
+    }))
   }
 
   const renderImages = () => {
@@ -191,4 +183,4 @@ const ImagePickerComponent = (props: Props) => {
   }
 }
 
-export default connector(ImagePickerComponent)
+export default ImagePickerComponent

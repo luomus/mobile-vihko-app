@@ -119,6 +119,28 @@ import {
   UserType
 } from './user/types'
 
+import { Point } from 'geojson'
+import { Region } from 'react-native-maps'
+
+interface rootState {
+  centered: boolean,
+  credentials: CredentialsType,
+  editing: EditingType,
+  firstLocation: number[],
+  firstZoom: FirstZoomType,
+  maptype: string,
+  message: MessageType[],
+  observation: Point | null,
+  observationEventInterrupted: boolean,
+  observationEvent: ObservationEventType,
+  observationId: object | null,
+  observing: boolean,
+  path: PathType,
+  position: LocationType,
+  region: Region,
+  schema: SchemaType
+}
+
 const appReducer = combineReducers({
   centered: centeringReducer,
   credentials: credentialsReducer,
@@ -149,6 +171,8 @@ const rootReducer = (state: any, action: any) => {
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
 export { store }
+
+export type { rootState }
 
 //actions
 export {
