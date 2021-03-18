@@ -1,9 +1,10 @@
 import {
   createStore,
   combineReducers,
-  applyMiddleware
+  applyMiddleware,
+  AnyAction
 } from 'redux'
-import thunk from 'redux-thunk'
+import thunk, { ThunkDispatch } from 'redux-thunk'
 
 //actions
 import {
@@ -102,7 +103,8 @@ import {
 } from './message/types'
 import {
   observationActionTypes,
-  ObservationEventType
+  ObservationEventType,
+  ObservationIdType
 } from './observation/types'
 import {
   locationActionTypes,
@@ -133,7 +135,7 @@ interface rootState {
   observation: Point | null,
   observationEventInterrupted: boolean,
   observationEvent: ObservationEventType,
-  observationId: object | null,
+  observationId: ObservationIdType | null,
   observing: boolean,
   path: PathType,
   position: LocationType,
@@ -170,9 +172,11 @@ const rootReducer = (state: any, action: any) => {
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
+type DispatchType = ThunkDispatch<any, void, AnyAction>
 export { store }
 
 export type { rootState }
+export type { DispatchType }
 
 //actions
 export {

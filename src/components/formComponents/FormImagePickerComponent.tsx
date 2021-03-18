@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView } from 'react-native'
 import { Button as ButtonElement, Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
-import { setMessageState } from '../../stores'
+import { DispatchType, setMessageState } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
@@ -22,7 +22,7 @@ const ImagePickerComponent = (props: Props) => {
   const [images, setImages] = useState<Array<string>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
     setValue(props.objectTitle, images)

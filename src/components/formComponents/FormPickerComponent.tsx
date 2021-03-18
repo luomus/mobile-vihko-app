@@ -7,7 +7,7 @@ interface Props {
   title: string,
   objectTitle: string,
   pickerItems: Array<Object>,
-  selectedValue: string|null,
+  selectedValue: string|null
 }
 
 const FormPickerComponent = (props: Props) => {

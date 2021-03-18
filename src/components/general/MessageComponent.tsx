@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Icon } from 'react-native-elements'
 import Modal from 'react-native-modal'
-import { rootState, popMessageState } from '../../stores'
+import { DispatchType, rootState, popMessageState } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
@@ -13,7 +13,7 @@ const MessageComponent = () => {
 
   const message = useSelector((state: rootState) => state.message)
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   const { t } = useTranslation()
 

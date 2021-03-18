@@ -9,6 +9,7 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import {
   rootState,
+  DispatchType,
   toggleObserving,
   setObservationId,
   setObservationEventInterrupted,
@@ -56,7 +57,7 @@ const HomeComponent = (props: Props) => {
   const observing = useSelector((state: rootState) => state.observing)
   const schema = useSelector((state: rootState) => state.schema)
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
     const length = observationEvent.events.length
@@ -78,7 +79,7 @@ const HomeComponent = (props: Props) => {
       }
 
       setSelectedTab(availableForms.findIndex(form => form === formID))
-      dispatch(switchSchema(formID))
+      await dispatch(switchSchema(formID))
     }
 
     initTab()
@@ -138,11 +139,11 @@ const HomeComponent = (props: Props) => {
   })
 
   const onBeginObservationEvent = async () => {
-    dispatch(beginObservationEvent(props.onPressMap))
+    await dispatch(beginObservationEvent(props.onPressMap))
   }
 
   const onContinueObservationEvent = async () => {
-    dispatch(continueObservationEvent(props.onPressMap))
+    await dispatch(continueObservationEvent(props.onPressMap))
   }
 
   const stopObserving = () => {
@@ -178,7 +179,7 @@ const HomeComponent = (props: Props) => {
 
   const switchSelectedForm = async (ind: number) => {
     if (!observing) {
-      dispatch(switchSchema(availableForms[ind]))
+      await dispatch(switchSchema(availableForms[ind]))
       await storageService.save('formID', availableForms[ind])
       setSelectedTab(ind)
     }

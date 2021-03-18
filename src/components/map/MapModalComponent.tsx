@@ -25,27 +25,29 @@ const MapModalComponent = (props: Props) => {
   const { t } = useTranslation()
 
   return (
-    <Modal isVisible={props.isVisible} onBackButtonPress={props.onBackButtonPress} backdropOpacity={0.5} onBackdropPress={props.onBackButtonPress}>
-      <View style={Cs.mapModalContainer}>
-        <ScrollView>
-          {props.observationOptions.map(observation =>
-            <View key={observation.id} style={Cs.mapModalItemContainer}>
-              <Text style={Ts.centeredBold}>{observation.identifications[0].taxon}</Text>
-              <Button
-                buttonStyle={Bs.mapModalPositiveButton}
-                title={t('edit button')}
-                onPress={() => props.shiftToEditPage(observationId.eventId, observation.id)}
-              />
-              <Button
-                buttonStyle={Bs.mapModalNegativeButton}
-                title={t('delete')}
-                onPress={() => props.showSubmitDelete(observationId.eventId, observation.id)}
-              />
-            </View>
-          )}
-        </ScrollView>
-      </View>
-    </Modal>
+    observationId ?
+      <Modal isVisible={props.isVisible} onBackButtonPress={props.onBackButtonPress} backdropOpacity={0.5} onBackdropPress={props.onBackButtonPress}>
+        <View style={Cs.mapModalContainer}>
+          <ScrollView>
+            {props.observationOptions.map(observation =>
+              <View key={observation.id} style={Cs.mapModalItemContainer}>
+                <Text style={Ts.centeredBold}>{observation.identifications[0].taxon}</Text>
+                <Button
+                  buttonStyle={Bs.mapModalPositiveButton}
+                  title={t('edit button')}
+                  onPress={() => props.shiftToEditPage(observationId.eventId, observation.id)}
+                />
+                <Button
+                  buttonStyle={Bs.mapModalNegativeButton}
+                  title={t('delete')}
+                  onPress={() => props.showSubmitDelete(observationId.eventId, observation.id)}
+                />
+              </View>
+            )}
+          </ScrollView>
+        </View>
+      </Modal>
+      : null
   )
 }
 

@@ -45,14 +45,6 @@ const FormInputComponent = (props: Props) => {
     setCurrentValue(value)
   }
 
-  // const typeSelector = (value: string) => {
-  //   if (props.keyboardType === 'numeric') {
-  //     return parseInt(value)
-  //   } else {
-  //     return value
-  //   }
-  // }
-
   useEffect(() => {
     props.parentObjectTitle !== ''
       ? addValueToArray(props.defaultValue)

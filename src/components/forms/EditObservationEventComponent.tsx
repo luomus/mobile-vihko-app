@@ -6,6 +6,7 @@ import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
 import {
   rootState,
+  DispatchType,
   finishObservationEvent,
   replaceObservationEventById,
   clearObservationId,
@@ -47,7 +48,7 @@ const EditObservationEventComponent = (props: Props) => {
   const observationId = useSelector((state: rootState) => state.observationId)
   const schema = useSelector((state: rootState) => state.schema)
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
     init()
@@ -71,7 +72,7 @@ const EditObservationEventComponent = (props: Props) => {
   const init = () => {
     //find the correct event by id
     const searchedEvent = observationEvent.events.find(event => {
-      return event.id === observationId.eventId
+      return event.id === observationId?.eventId
     })
 
     if (searchedEvent) {
@@ -100,14 +101,14 @@ const EditObservationEventComponent = (props: Props) => {
       set(editedEvent, key.split('_'), data[key])
     })
 
-    if (event) {
+    if (event && observationId) {
       editedEvent = merge(event, editedEvent)
 
       //replace events with the modified copy
       try {
-        dispatch(replaceObservationEventById(editedEvent, observationId.eventId))
+        await dispatch(replaceObservationEventById(editedEvent, observationId.eventId))
         if (props.sourcePage !== 'ObservationEventComponent') {
-          dispatch(finishObservationEvent())
+          await dispatch(finishObservationEvent())
           setModalVisibility(true)
         } else {
           props.onPressObservationEvent()
@@ -127,7 +128,7 @@ const EditObservationEventComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
+      await dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
       showMessage(t('post success'))
       setForm(undefined)
       props.onPressSubmit()

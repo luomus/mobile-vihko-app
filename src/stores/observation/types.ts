@@ -22,6 +22,11 @@ export interface ObservationEventType {
   events: Record<string, any>[],
 }
 
+export interface ObservationIdType {
+  eventId: string,
+  unitId: string
+}
+
 interface clearObservationLocation {
   type: typeof CLEAR_OBSERVATION,
 }

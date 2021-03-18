@@ -5,6 +5,7 @@ import { getTempTokenAndLoginUrl } from '../../services/userService'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   rootState,
+  DispatchType,
   initObservationEvents,
   initSchema,
   resetReducer,
@@ -39,7 +40,7 @@ const LoginComponent = (props: Props) => {
 
   const credentials = useSelector((state: rootState) => state.credentials)
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   const { t } = useTranslation()
 
@@ -64,7 +65,7 @@ const LoginComponent = (props: Props) => {
 
   //logout user and reset reducers on fatal error
   const onFatalError = async () => {
-    dispatch(logoutUser())
+    await dispatch(logoutUser())
     dispatch(resetReducer())
     props.onReset()
   }
@@ -75,7 +76,7 @@ const LoginComponent = (props: Props) => {
     if (!credentials.token) {
       if (props.loginAccepted === undefined) {
         try {
-          dispatch(initLocalCredentials())
+          await dispatch(initLocalCredentials())
           await initializeApp()
         } catch (error) {
           if (error?.severity) {
@@ -85,7 +86,7 @@ const LoginComponent = (props: Props) => {
         }
       } else if (props.loginAccepted) {
         try {
-          dispatch(loginUser(tempToken))
+          await dispatch(loginUser(tempToken))
         } catch (error) {
           if (error.severity === 'fatal') {
             showFatalError(`${t('critical error')}:\n${error.message}`)
@@ -102,14 +103,14 @@ const LoginComponent = (props: Props) => {
 
   const initializeApp = async () => {
     try {
-      dispatch(initObservationEvents())
+      await dispatch(initObservationEvents())
     } catch (error) {
       showError(error.message)
     }
 
     await Promise.all(availableForms.map(async formId => {
       try {
-        dispatch(initSchema(false, formId))
+        await dispatch(initSchema(false, formId))
       } catch (errors) {
         if (errors[errors.length - 1].severity === 'fatal') {
           errors.forEach((error: Record<string, any>, index: number) => {

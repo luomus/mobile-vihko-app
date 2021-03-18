@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
   rootState,
+  DispatchType,
   newObservation,
   clearObservationLocation,
   replaceObservationById,
@@ -58,7 +59,7 @@ const ObservationComponent = (props: Props) => {
   const path = useSelector((state: rootState) => state.path)
   const schema = useSelector((state: rootState) => state.schema)
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
     //initialize only when editing observations
@@ -112,7 +113,7 @@ const ObservationComponent = (props: Props) => {
   const init = () => {
     //clone events from reducer for modification
     const searchedEvent = observationEvent.events.find(event => {
-      return event.id === observationId.eventId
+      return event.id === observationId?.eventId
     })
 
     if (!searchedEvent) {
@@ -122,7 +123,7 @@ const ObservationComponent = (props: Props) => {
     //find the correct observation by id
     const searchedObservation = clone(
       searchedEvent.gatherings[0].units.find((observation: Record<string, any>) => {
-        return observation.id === observationId.unitId
+        return observation.id === observationId?.unitId
       })
     )
 
@@ -216,7 +217,7 @@ const ObservationComponent = (props: Props) => {
     //add the new observation to latest event, clear location
     //and redirect to map after user oks message
     try {
-      dispatch(newObservation(newUnit, lineStringConstructor(path)))
+      await dispatch(newObservation(newUnit, lineStringConstructor(path)))
       dispatch(clearObservationLocation())
       setSaving(false)
       props.toMap()
@@ -232,7 +233,7 @@ const ObservationComponent = (props: Props) => {
   const updateObservation = async (data: { [key: string]: any }) => {
     setSaving(true)
 
-    if (!observationState) {
+    if (!observationState || !observationId) {
       setSaving(false)
       return
     }
@@ -262,13 +263,13 @@ const ObservationComponent = (props: Props) => {
 
     //replace original observation with edited one
     try {
-      dispatch(replaceObservationById(editedUnit, observationId.eventId, observationId.unitId))
+      await dispatch(replaceObservationById(editedUnit, observationId?.eventId, observationId?.unitId))
       dispatch(clearObservationId())
 
       if (editing.originalSourcePage === 'MapComponent') {
         props.toMap()
       } else if (editing.originalSourcePage === 'ObservationEventComponent') {
-        props.toObservationEvent(observationId.eventId)
+        props.toObservationEvent(observationId?.eventId)
       }
 
       dispatch(setEditing({
@@ -303,15 +304,18 @@ const ObservationComponent = (props: Props) => {
   }
 
   const handleRemove = async () => {
+
+    if (!observationId) { return }
+
     setSaving(true)
     try {
-      dispatch(deleteObservation(observationId.eventId, observationId.unitId))
+      await dispatch(deleteObservation(observationId?.eventId, observationId?.unitId))
       dispatch(clearObservationId())
 
       if (editing.originalSourcePage === 'MapComponent') {
         props.toMap()
       } else if (editing.originalSourcePage === 'ObservationEventComponent') {
-        props.toObservationEvent(observationId.eventId)
+        props.toObservationEvent(observationId?.eventId)
       }
       dispatch(setEditing({
         started: false,

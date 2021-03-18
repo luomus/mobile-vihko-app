@@ -7,6 +7,7 @@ import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import {
   rootState,
+  DispatchType,
   resetReducer,
   logoutUser,
   setMessageState
@@ -21,7 +22,7 @@ const UserInfoComponent = (props: Props) => {
 
   const credentials = useSelector((state: rootState) => state.credentials)
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   const { t } = useTranslation()
 

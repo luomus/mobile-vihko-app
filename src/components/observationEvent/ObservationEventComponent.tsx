@@ -8,9 +8,12 @@ import Bs from '../../styles/ButtonStyles'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   rootState,
+  DispatchType,
   setObservationId,
   uploadObservationEvent,
-  setMessageState
+  setMessageState,
+  deleteObservation,
+  deleteObservationEvent
 } from '../../stores'
 import i18n from '../../languages/i18n'
 import { useTranslation } from 'react-i18next'
@@ -37,7 +40,7 @@ const ObservationEventComponent = (props: Props) => {
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   const { t } = useTranslation()
 
@@ -55,14 +58,14 @@ const ObservationEventComponent = (props: Props) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation?'),
-      onOk: () => deleteObservation(eventId, unitId),
+      onOk: () => handleDeleteObservation(eventId, unitId),
       okLabel: t('delete')
     }))
   }
 
-  const deleteObservation = async (eventId: string, unitId: string) => {
+  const handleDeleteObservation = async (eventId: string, unitId: string) => {
     try {
-      dispatch(deleteObservation(eventId, unitId))
+      await dispatch(deleteObservation(eventId, unitId))
     } catch (error) {
       dispatch(setMessageState({
         type: 'err',
@@ -75,14 +78,14 @@ const ObservationEventComponent = (props: Props) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation event?'),
-      onOk: () => deleteObservationEvent(eventId),
+      onOk: () => handleDeleteObservationEvent(eventId),
       okLabel: t('delete')
     }))
   }
 
-  const deleteObservationEvent = async (eventId: string) => {
+  const handleDeleteObservationEvent = async (eventId: string) => {
     try {
-      dispatch(deleteObservationEvent(eventId))
+      await dispatch(deleteObservationEvent(eventId))
       props.onPressHome()
     } catch (error) {
       dispatch(setMessageState({
@@ -96,7 +99,7 @@ const ObservationEventComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
+      await dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error) {

@@ -8,6 +8,7 @@ import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrap
 import Geojson from 'react-native-typescript-geojson'
 import {
   rootState,
+  DispatchType,
   setObservationLocation,
   clearObservationLocation,
   setObservationId,
@@ -57,7 +58,7 @@ const MapComponent = (props: Props) => {
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
 
-  const dispatch = useDispatch()
+  const dispatch: DispatchType = useDispatch()
 
   const { t } = useTranslation()
 
@@ -211,7 +212,7 @@ const MapComponent = (props: Props) => {
 
   const submitDelete = async (eventId: string, unitId: string) => {
     try {
-      dispatch(deleteObservation(eventId, unitId))
+      await dispatch(deleteObservation(eventId, unitId))
     } catch (error) {
       dispatch(setMessageState({
         type: 'err',
