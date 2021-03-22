@@ -1,5 +1,6 @@
 import * as Location from 'expo-location'
 import { LocationObject } from 'expo-location'
+import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
 import {
   LOCATION_BACKGROUND_TASK,
@@ -13,12 +14,12 @@ import {
 
 let positionWatcher: null | { remove(): void } = null
 
-const watchLocationAsync = async (updateLocation: (location: LocationObject) => void) => {
+const watchLocationAsync = async (updateLocation: (location: LocationObject) => void, title: string, body: string) => {
   let permission = await Location.requestPermissionsAsync()
 
   if (permission.status === 'granted') {
     await watchPositionAsync((location) => updateLocation(location))
-    await watchLocationAsyncAndroid()
+    await watchLocationAsyncAndroid(title, body)
   } else {
     throw new Error('Permission to access location denied.')
   }
@@ -34,15 +35,20 @@ const watchPositionAsync = async (updateLocation: (location: LocationObject) => 
   })
 }
 
-const watchLocationAsyncAndroid = async () => {
+const watchLocationAsyncAndroid = async (title: string, body: string) => {
+  //const { t } = useTranslation()
+
+  // notificationTitle: t('notification title'),
+  // notificationBody: t('notification body'),
+
   setTimeout(async () => {
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
       accuracy: PATH_ACCURACY,
       distanceInterval: PATH_MIN_X_INTERVALL,
       timeInterval: PATH_MIN_T_INTERVALL,
       foregroundService: {
-        notificationTitle: 'Location',
-        notificationBody: 'Your path is being tracked.',
+        notificationTitle: title,
+        notificationBody: body,
         notificationColor: Colors.headerBackground
       }
     })

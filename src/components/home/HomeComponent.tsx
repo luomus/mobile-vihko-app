@@ -139,11 +139,15 @@ const HomeComponent = (props: Props) => {
   })
 
   const onBeginObservationEvent = async () => {
-    await dispatch(beginObservationEvent(props.onPressMap))
+    const title: string = t('notification title')
+    const body: string = t('notification body')
+    await dispatch(beginObservationEvent(props.onPressMap, title, body))
   }
 
   const onContinueObservationEvent = async () => {
-    await dispatch(continueObservationEvent(props.onPressMap))
+    const title: string = t('notification title')
+    const body: string = t('notification body')
+    await dispatch(continueObservationEvent(props.onPressMap, title, body))
   }
 
   const stopObserving = () => {

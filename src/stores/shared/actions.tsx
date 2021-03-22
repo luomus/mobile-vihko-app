@@ -38,12 +38,12 @@ export const resetReducer = () => ({
   type: 'RESET_STORE'
 })
 
-export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promise<any>, any, void,
+export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
     const { centered, credentials, observationEvent, schema } = getState()
     const userId = credentials?.user?.id
-
+    console.log('action 1')
     if (!userId) {
       return
     }
@@ -55,7 +55,7 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
     set(observationEventDefaults, 'sourceID', sourceId)
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
     set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], setDateForDocument())
-
+    console.log('action 2')
     let parsedObservationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema[lang].schema)
 
     const observationEventObject = {
@@ -78,12 +78,16 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
         message: i18n.t('could not save new event to long term memory, discarding modifications')
       })
     }
-
+    console.log('action 3')
     dispatch(replaceObservationEvents(newEvents))
 
     //attempt to start geolocation systems
     try {
-      await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)))
+      await watchLocationAsync(
+        (location: LocationObject) => dispatch(updateLocation(location)),
+        title,
+        body
+      )
     } catch (error) {
       log.error({
         location: '/components/HomeComponent.tsx beginObservationEvent()',
@@ -95,7 +99,7 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
       }))
       return Promise.reject()
     }
-
+    console.log('action 4')
     //reset map centering and zoom level, redirect to map
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
@@ -107,7 +111,7 @@ export const beginObservationEvent = (onPressMap: () => void): ThunkAction<Promi
   }
 }
 
-export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Promise<any>, any, void,
+export const continueObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
     const { centered, observationEventInterrupted, observationEvent } = getState()
@@ -119,7 +123,7 @@ export const continueObservationEvent = (onPressMap: () => void): ThunkAction<Pr
 
     //atempt to start geolocation systems
     try {
-      await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)))
+      await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), title, body)
     } catch (error) {
       log.error({
         location: '/stores/shared/actions.tsx continueObservationEvent()',

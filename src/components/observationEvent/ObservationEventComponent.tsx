@@ -191,7 +191,7 @@ const ObservationEventComponent = (props: Props) => {
                 removeButton={
                   <Button
                     buttonStyle={Bs.basicNegativeButton}
-                    title={t('remove button')}
+                    title={t('remove')}
                     iconRight={true}
                     icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
                     onPress={() => {
