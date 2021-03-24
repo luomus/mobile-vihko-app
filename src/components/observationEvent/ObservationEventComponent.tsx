@@ -58,8 +58,9 @@ const ObservationEventComponent = (props: Props) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation?'),
-      onOk: () => handleDeleteObservation(eventId, unitId),
-      okLabel: t('delete')
+      cancelLabel: t('do not delete'),
+      okLabel: t('delete'),
+      onOk: () => handleDeleteObservation(eventId, unitId)
     }))
   }
 
@@ -78,8 +79,9 @@ const ObservationEventComponent = (props: Props) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation event?'),
-      onOk: () => handleDeleteObservationEvent(eventId),
-      okLabel: t('delete')
+      cancelLabel: t('do not delete'),
+      okLabel: t('delete'),
+      onOk: () => handleDeleteObservationEvent(eventId)
     }))
   }
 

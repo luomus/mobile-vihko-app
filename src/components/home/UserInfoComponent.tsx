@@ -28,8 +28,10 @@ const UserInfoComponent = (props: Props) => {
 
   const showLogoutDialoue = () => {
     dispatch(setMessageState({
-      type: 'conf',
+      type: 'dangerConf',
       messageContent: t('logout'),
+      cancelLabel: t('cancel'),
+      okLabel: t('exit'),
       onOk: logout
     }))
   }

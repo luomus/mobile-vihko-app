@@ -129,6 +129,8 @@ const HomeComponent = (props: Props) => {
       dispatch(setMessageState({
         type: 'dangerConf',
         messageContent: t('exit app?'),
+        cancelLabel: t('cancel'),
+        okLabel: t('exit'),
         onOk: () => BackHandler.exitApp()
       }))
 
@@ -154,6 +156,8 @@ const HomeComponent = (props: Props) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
+      okLabel: t('cancelObservation'),
+      cancelLabel: t('do not stop'),
       onOk: () => {
         dispatch(setObservationId({
           eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,

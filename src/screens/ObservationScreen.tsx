@@ -43,8 +43,10 @@ class ObservationScreen extends Component<Props>  {
       this.props.setMessageState({
         type: 'dangerConf',
         messageContent: i18n.t('discard observation?'),
+        cancelLabel: i18n.t('cancel'),
+        okLabel: i18n.t('exit'),
         onOk: () => {
-          this.props.navigation.navigate('Map')
+          this.props.navigation.navigate('Home')
         }
       })
     }

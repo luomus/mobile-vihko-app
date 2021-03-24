@@ -1,6 +1,5 @@
 import * as Location from 'expo-location'
 import { LocationObject } from 'expo-location'
-import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
 import {
   LOCATION_BACKGROUND_TASK,
@@ -36,10 +35,6 @@ const watchPositionAsync = async (updateLocation: (location: LocationObject) => 
 }
 
 const watchLocationAsyncAndroid = async (title: string, body: string) => {
-  //const { t } = useTranslation()
-
-  // notificationTitle: t('notification title'),
-  // notificationBody: t('notification body'),
 
   setTimeout(async () => {
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {

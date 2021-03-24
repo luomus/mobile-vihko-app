@@ -43,7 +43,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
   return async (dispatch, getState) => {
     const { centered, credentials, observationEvent, schema } = getState()
     const userId = credentials?.user?.id
-    console.log('action 1')
+
     if (!userId) {
       return
     }
@@ -55,7 +55,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     set(observationEventDefaults, 'sourceID', sourceId)
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
     set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], setDateForDocument())
-    console.log('action 2')
+
     let parsedObservationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema[lang].schema)
 
     const observationEventObject = {
@@ -78,7 +78,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         message: i18n.t('could not save new event to long term memory, discarding modifications')
       })
     }
-    console.log('action 3')
+
     dispatch(replaceObservationEvents(newEvents))
 
     //attempt to start geolocation systems
@@ -99,7 +99,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
       }))
       return Promise.reject()
     }
-    console.log('action 4')
+
     //reset map centering and zoom level, redirect to map
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())

@@ -84,6 +84,8 @@ const ObservationComponent = (props: Props) => {
       dispatch(setMessageState({
         type: 'dangerConf',
         messageContent: t('discard observation?'),
+        cancelLabel: t('cancel'),
+        okLabel: t('exit'),
         onOk: () => {
           cleanUp()
         }
