@@ -5,7 +5,7 @@ import {
   CredentialsType,
 } from './types'
 import { ThunkAction } from 'redux-thunk'
-import { pollUserLogin } from '../../services/userService'
+import userService, { pollUserLogin } from '../../services/userService'
 import storageService from '../../services/storageService'
 import i18n from '../../languages/i18n'
 import { log } from '../../helpers/logger'
@@ -58,11 +58,12 @@ export const loginUser = (tmpToken: string): ThunkAction<Promise<any>, any, void
 }
 
 export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const { credentials } = getState()
+
     try {
       storageService.remove('credentials')
       dispatch(clearCredentials())
-      return Promise.resolve()
 
     } catch (error) {
       log.error({
@@ -72,6 +73,21 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
       return Promise.reject({
         severity: 'low',
         message: i18n.t('failed to remove credentials from local storage')
+      })
+    }
+
+    try {
+      await userService.logout(credentials)
+      return Promise.resolve
+
+    } catch (error) {
+      log.error({
+        location: '/stores/user/actions.tsx logoutUser()',
+        error: error
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('failed to logout from laji.fi server')
       })
     }
   }

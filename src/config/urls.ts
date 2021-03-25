@@ -23,6 +23,7 @@ export const localityUrl          = `${apiRoot}/coordinates/location`
 export const getLoginUrl          = `${apiRoot}/login`
 export const pollLoginUrl         = `${apiRoot}/login/check`
 export const getUserUrl           = `${apiRoot}/person/`
+export const logoutUrl            = `${apiRoot}/person-token/`
 
 //laji.fi
 export const lajiHomepageEn       = 'https://laji.fi/en'
