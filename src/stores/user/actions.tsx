@@ -78,7 +78,6 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
 
     try {
       await userService.logout(credentials)
-      return Promise.resolve
 
     } catch (error) {
       log.error({
@@ -90,6 +89,8 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
         message: i18n.t('failed to logout from laji.fi server')
       })
     }
+
+    return Promise.resolve
   }
 }
 

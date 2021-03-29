@@ -5,6 +5,7 @@ import { parsePathForFieldParams } from './SchemaToInputParser'
 import { get, set } from 'lodash'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import { log } from '../logger'
+import { parseDateForUI } from '../dateHelper'
 
 export const createSchemaObjectComponents = async (inputObject: Record<string, any>, fields: Array<string>, schema: Record<string, any>) => {
 
@@ -24,7 +25,12 @@ const parseObjectToComponents = async (
 
   const path = field.split('_')
   const fieldParams = parsePathForFieldParams(schema, path)
-  const value = get(inputObject, path, null)
+  let value = get(inputObject, path, null)
+
+  //parse the dates to readable format for ui
+  if (field.includes('date')) {
+    value = parseDateForUI(value)
+  }
 
   if (fieldParams.isArray) {
     return (

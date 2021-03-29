@@ -44,3 +44,13 @@ export const parseDateFromISOToDocument = (dateObject: Date) => {
     return ''
   }
 }
+
+//checks whether two 'yyyy-MM-ddTHH.mm' formated dates are from same day
+export const sameDay = (dateOne: string, dateTwo: string) => {
+
+  if (dateOne.substring(0, 9) === dateTwo.substring(0, 9)) {
+    return true
+  } else {
+    return false
+  }
+}
