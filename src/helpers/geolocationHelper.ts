@@ -52,7 +52,10 @@ const watchLocationAsyncAndroid = async (title: string, body: string) => {
 }
 
 const stopLocationAsync = async () => {
-  positionWatcher?.remove()
+  if (!positionWatcher) {
+    return
+  }
+  positionWatcher.remove()
   await Location.stopLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
 }
 
