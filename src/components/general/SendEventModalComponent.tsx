@@ -23,24 +23,21 @@ const SendEventModalComponent = (props: Props) => {
           {t('send observation event to server?')}
         </Text>
         <Button
-          title={t('send public')}
+          title={' ' + t('send public')}
           buttonStyle={Bs.sendEventModalPositiveButton}
           icon={<Icon type={'material-community'} name={'publish'} color={'white'} />}
-          iconRight={true}
           onPress={ () => {props.sendObservationEvent(true)} }
         />
         <Button
-          title={t('send private')}
+          title={' ' + t('send private')}
           buttonStyle={Bs.sendEventModalNeutralButton}
           icon={<Icon type={'material-community'} name={'security'} color={'white'} />}
-          iconRight={true}
           onPress={ () => {props.sendObservationEvent(false)} }
         />
         <Button
-          title={t('do not submit')}
+          title={' ' + t('do not submit')}
           buttonStyle={Bs.sendEventModalNegativeButton}
           icon={<Icon type={'material-community'} name={'close'} color={'white'} />}
-          iconRight={true}
           onPress={() => { props.onCancel(false) }}
         />
       </View>

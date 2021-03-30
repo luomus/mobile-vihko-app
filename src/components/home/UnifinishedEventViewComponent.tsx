@@ -31,16 +31,14 @@ const UnfinishedEventViewComponent = (props: Props) => {
         <Button
           containerStyle={Cs.continueButtonContainer}
           buttonStyle={Bs.continueButton}
-          title={observationEventInterrupted ? t('continue unfinished') : t('continue')}
-          iconRight={true}
+          title={observationEventInterrupted ? ' ' +  t('continue unfinished') : ' ' +  t('continue')}
           icon={<Icon name='map-outline' type='material-community' color='white' size={22} />}
           onPress={() => props.onContinueObservationEvent()}
         />
         <Button
           containerStyle={Cs.endButtonContainer}
           buttonStyle={Bs.endButton}
-          title={t('cancelObservation')}
-          iconRight={true}
+          title={' ' + t('cancelObservation')}
           icon={<Icon name='stop' type='material-icons' color='white' size={22} />}
           onPress={() => props.stopObserving()}
         />

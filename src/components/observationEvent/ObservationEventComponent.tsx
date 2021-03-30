@@ -177,8 +177,7 @@ const ObservationEventComponent = (props: Props) => {
                 editButton={
                   <Button
                     buttonStyle={Bs.basicNeutralButton}
-                    title={t('edit button')}
-                    iconRight={true}
+                    title={' ' + t('edit button')}
                     icon={<Icon name='edit' type='material-icons' color='white' size={22} />}
                     onPress={() => {
                       const id = {
@@ -193,8 +192,7 @@ const ObservationEventComponent = (props: Props) => {
                 removeButton={
                   <Button
                     buttonStyle={Bs.basicNegativeButton}
-                    title={t('remove')}
-                    iconRight={true}
+                    title={' ' + t('remove')}
                     icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
                     onPress={() => {
                       showDeleteObservation(event.id, observation.id)

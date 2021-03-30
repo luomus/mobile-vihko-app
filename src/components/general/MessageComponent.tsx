@@ -65,9 +65,8 @@ const MessageComponent = () => {
     return (
       <View style={Cs.singleButton}>
         <Button
-          title={buttonLabel}
+          title={' ' + buttonLabel}
           buttonStyle={buttonStyle}
-          iconRight={true}
           icon={<Icon type={'material-community'} name={'check'} color={'white'} />}
           onPress={onOk}
         />
@@ -85,18 +84,16 @@ const MessageComponent = () => {
       <View style={Cs.editObservationButtonContainer}>
         <View style={Cs.singleButton}>
           <Button
-            title={leftButtonLabel}
+            title={' ' + leftButtonLabel}
             buttonStyle={leftButtonStyle}
-            iconRight={true}
             icon={<Icon type={'material-community'} name={'check'} color={'white'} />}
             onPress={onOk}
           />
         </View>
         <View style={Cs.singleButton}>
           <Button
-            title={rightButtonLabel}
+            title={' ' + rightButtonLabel}
             buttonStyle={rightButtonStyle}
-            iconRight={true}
             icon={<Icon type={'material-community'} name={'close'} color={'white'} />}
             onPress={onCancel}
           />

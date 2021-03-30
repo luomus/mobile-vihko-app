@@ -352,8 +352,7 @@ const ObservationComponent = (props: Props) => {
               <ButtonElement
                 buttonStyle={{}}
                 disabled={saving}
-                title={t('edit location')}
-                iconRight={true}
+                title={' ' + t('edit location')}
                 icon={<Icon name='edit-location' type='material-icons' color='white' size={22} />}
                 onPress={() => handleChangeToMap()}
               />
@@ -365,8 +364,7 @@ const ObservationComponent = (props: Props) => {
               <ButtonElement
                 buttonStyle={{ backgroundColor: Colors.negativeButton }}
                 disabled={saving}
-                title={t('delete')}
-                iconRight={true}
+                title={' ' + t('delete')}
                 icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
                 onPress={() => handleRemove()}
               />

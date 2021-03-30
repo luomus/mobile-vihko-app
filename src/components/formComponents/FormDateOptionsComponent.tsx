@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
+import Bs from '../../styles/ButtonStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument, sameDay } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
@@ -124,14 +125,14 @@ const FormDateOptionsComponent = (props: Props) => {
       {!selected ?
         <View style={Cs.eventDateContainer}>
           <Button
-            buttonStyle={{ backgroundColor: Colors.positiveButton, marginRight: 5, width: 130 }}
+            buttonStyle={Bs.timestampButton}
             title={' ' + t('timestamp')}
             icon={<Icon name={'schedule'} color='white' size={22} />}
             iconContainerStyle={{ paddingLeft: 5 }}
             onPress={() => onLockIntoCurrentDate()}>
           </Button>
           <Button
-            buttonStyle={{ backgroundColor: Colors.neutralButton, marginLeft: 5, width: 130 }}
+            buttonStyle={Bs.chooseTimeButton}
             title={' ' + t('choose time')}
             icon={<Icon name={'restore'} color='white' size={22} />}
             onPress={() => setShow(true)}>
@@ -146,7 +147,7 @@ const FormDateOptionsComponent = (props: Props) => {
             ref={register({ name: props.objectTitle })}
           />
           <Button
-            buttonStyle={{ backgroundColor: Colors.negativeButton }}
+            buttonStyle={Bs.negativeIconButton}
             icon={<Icon name={'delete'} color='white' size={22} />}
             onPress={() => {
               setSelected(false)

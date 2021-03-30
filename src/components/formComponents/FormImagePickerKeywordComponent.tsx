@@ -181,16 +181,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
             <ButtonElement
               buttonStyle={Bs.addImageButton}
               containerStyle={Cs.padding5Container}
-              title={t('choose image')}
-              iconRight={true}
+              title={' ' + t('choose image')}
               icon={<Icon name='photo-library' type='material-icons' color='white'  size={22} />}
               onPress={imageFromLibrary}
             />
             <ButtonElement
               buttonStyle={Bs.addImageButton}
               containerStyle={Cs.padding5Container}
-              title={t('use camera')}
-              iconRight={true}
+              title={' ' + t('use camera')}
               icon={<Icon name='add-a-photo' type='material-icons' color='white'  size={22} />}
               onPress={imageFromCamera}
             />
@@ -219,16 +217,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
               <ButtonElement
                 buttonStyle={Bs.addImageButton}
                 containerStyle={Cs.padding5Container}
-                title={t('choose image')}
-                iconRight={true}
+                title={' ' + t('choose image')}
                 icon={<Icon name='photo-library' type='material-icons' color='white'  size={22} />}
                 onPress={imageFromLibrary}
               />
               <ButtonElement
                 buttonStyle={Bs.addImageButton}
                 containerStyle={Cs.padding5Container}
-                title={t('use camera')}
-                iconRight={true}
+                title={' ' + t('use camera')}
                 icon={<Icon name='add-a-photo' type='material-icons' color='white'  size={22} />}
                 onPress={imageFromCamera}
               />

@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
+import Bs from '../../styles/ButtonStyles'
 
 interface Props {
   title: string,
@@ -94,7 +95,7 @@ const FormDatePickerComponent = (props: Props) => {
           ref={register({ name: props.objectTitle })}
         />
         <Button
-          buttonStyle={{ backgroundColor: Colors.neutralButton }}
+          buttonStyle={ Bs.neutralIconButton }
           icon={<Icon name={'edit'} color='white' size={22} />}
           onPress={() => setShow(true)}>
         </Button>
