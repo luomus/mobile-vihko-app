@@ -39,7 +39,7 @@ const FormAutocompleteComponent = (props: Props) => {
   const [error, setError] = useState<string>('')
 
   const { t } = useTranslation()
-  const { register, unregister, setValue, formState, watch } = useFormContext()
+  const { register, unregister, setValue, formState, watch, clearErrors } = useFormContext()
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
   let timeout: NodeJS.Timeout | undefined
@@ -69,14 +69,14 @@ const FormAutocompleteComponent = (props: Props) => {
     }
   }, [])
 
-  const setErrorMessage = (message: string) => {
-    if (timeout) {
-      clearTimeout(timeout)
+  //this timeout clears taxon name -field's errors (and the error notification) in 5 sec
+  useEffect(() => {
+    if (Object.keys(formState.errors).length > 0) {
+      setTimeout(() => {
+        clearErrors('identifications_0_taxon')
+      }, 5000)
     }
-
-    setError(message)
-    timeout = setTimeout(() => setError(''), 10000)
-  }
+  }, [formState.errors])
 
   const initAutocompleteOnMCode = async (query: string) => {
     try {
@@ -97,7 +97,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
     } catch (err) {
       if (!err.isCanceled) {
-        setErrorMessage('Autocomplete network error!')
+        //setErrorMessage('Autocomplete network error!')
       }
     } finally {
       setLoading(false)
@@ -160,7 +160,7 @@ const FormAutocompleteComponent = (props: Props) => {
       cancel = undefined
     } catch (err) {
       if (!err.isCanceled) {
-        setErrorMessage(t('autocomplete network error'))
+        //setErrorMessage(t('autocomplete network error'))
       }
     } finally {
       setLoading(false)
