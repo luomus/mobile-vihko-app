@@ -51,18 +51,17 @@ const watchLocationAsyncAndroid = async (title: string, body: string) => {
   , 5000)
 }
 
-const stopLocationAsync = async () => {
-  if (!positionWatcher) {
-    return
+const stopLocationAsync = async (observationEventInterrupted: boolean) => {
+  if (!observationEventInterrupted) {
+    positionWatcher ? positionWatcher.remove() : null
+    await Location.stopLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
   }
-  positionWatcher.remove()
-  await Location.stopLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
 }
 
-const cleanupLocationAsync = async () => {
+const cleanupLocationAsync = async (observationEventInterrupted: boolean) => {
   const locationRunning = await Location.hasStartedLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
   if (locationRunning) {
-    await stopLocationAsync()
+    await stopLocationAsync(observationEventInterrupted)
   }
 }
 

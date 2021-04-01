@@ -154,7 +154,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { firstLocation, observationEvent, path } = getState()
+    const { firstLocation, observationEvent, path, observationEventInterrupted } = getState()
 
     dispatch(setObservationEventInterrupted(false))
 
@@ -217,7 +217,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(clearObservationId())
     dispatch(setFirstZoom('not'))
     dispatch(setFirstLocation([60.192059, 24.945831]))
-    await stopLocationAsync()
+    await stopLocationAsync(observationEventInterrupted)
 
     return Promise.resolve()
   }

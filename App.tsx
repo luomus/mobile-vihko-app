@@ -15,7 +15,8 @@ import { lineStringConstructor } from './src/helpers/geoJSONHelper'
 
 export default class App extends Component {
   componentDidMount() {
-    cleanupLocationAsync()
+    const { observationEventInterrupted } = store.getState()
+    cleanupLocationAsync(observationEventInterrupted)
     store.dispatch(resetReducer())
   }
 
