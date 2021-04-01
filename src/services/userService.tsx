@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { getLoginUrl, pollLoginUrl, getUserUrl } from '../config/urls'
+import { getLoginUrl, pollLoginUrl, getUserUrl, logoutUrl } from '../config/urls'
 import { accessToken } from '../config/keys'
-import { CredentialsType } from '../stores/user/types'
+import { CredentialsType } from '../stores'
 
 export const getTempTokenAndLoginUrl = async () => {
   const params = {
@@ -72,4 +72,13 @@ export const pollUserLogin = async (tmpToken: string) => {
   return userPromise
 }
 
-export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken }
+export const logout = async (credentials: CredentialsType) => {
+  const params = {
+    'access_token': accessToken
+  }
+  const result = await axios.delete(logoutUrl + '/' + credentials.token, { params })
+
+  return result.data
+}
+
+export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken, logout }

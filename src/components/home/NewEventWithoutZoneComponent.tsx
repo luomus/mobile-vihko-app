@@ -34,8 +34,7 @@ const NewEventWithoutZoneComponent = (props: Props) => {
         <Button
           containerStyle={Cs.beginButtonContainer}
           buttonStyle={{ backgroundColor: Colors.positiveColor }}
-          title={beginText()}
-          iconRight={true}
+          title={' ' + beginText()}
           icon={<Icon name='play-arrow' type='material-icons' color={'white'} size={22} />}
           onPress={props.onBeginObservationEvent}
         />

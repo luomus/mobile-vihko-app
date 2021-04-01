@@ -1,5 +1,4 @@
 import { Point, Geometry, LineString } from 'geojson'
-import { Store } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import { clone, cloneDeep } from 'lodash'
 import i18n from 'i18next'
@@ -12,18 +11,16 @@ import {
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_EVENTS,
   SET_OBSERVATION_ID,
-  CLEAR_OBSERVATION_ID,
-  SET_SCHEMA
+  CLEAR_OBSERVATION_ID
 } from './types'
-import { getSchemas, postObservationEvent } from '../../services/documentService'
+import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import { CredentialsType } from '../user/types'
-import { parseUiSchemaToObservations } from '../../parsers/UiSchemaParser'
 import { saveMedias } from '../../services/imageService'
-import { netStatusChecker } from '../../utilities/netStatusCheck'
-import { overlapsFinland } from '../../utilities/geometryCreator'
-import { log } from '../../utilities/logger'
-import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from './helpers'
+import { netStatusChecker } from '../../helpers/netStatusHelper'
+import { overlapsFinland } from '../../helpers/geometryHelper'
+import { log } from '../../helpers/logger'
+import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from '../../helpers/uploadHelper'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -36,11 +33,6 @@ export const clearObservationLocation = (): observationActionTypes => ({
 
 export const toggleObserving = (): observationActionTypes => ({
   type: TOGGLE_OBSERVING
-})
-
-export const setSchema = (schemas: Record<string, any>): observationActionTypes => ({
-  type: SET_SCHEMA,
-  payload: schemas
 })
 
 export const setObservationId = (id: Record<string, any>): observationActionTypes => ({
@@ -57,47 +49,14 @@ export const setObservationEventInterrupted = (interrupted: boolean): observatio
   payload: interrupted
 })
 
-export const eventPathUpdate = (store: Store, lineStringPath: LineString | null): void => {
-  const { observationEvent } = store.getState()
+export const clearObservationEvents = (): observationActionTypes => ({
+  type: CLEAR_OBSERVATION_EVENTS
+})
 
-  const newEvents = clone(observationEvent.events)
-  const newEvent = cloneDeep(newEvents.pop())
-
-  if (lineStringPath) {
-    newEvent.gatherings[0].geometry = lineStringPath
-
-    newEvents.push(newEvent)
-
-    storageService.save('observationEvents', newEvents)
-    store.dispatch(replaceObservationEvents(newEvents))
-  }
-}
-
-export const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<number>>): Array<Array<number>> => {
-  let uniqueCoordinates: Array<Array<number>> = []
-
-  //loop through each point in path's LineString
-  lineStringCoordinates.forEach((point: Array<number>) => {
-    let noDuplicates: boolean = true
-    //use same decimals for all coordinates
-    const coord0: number = Number(point[0].toFixed(5))
-    const coord1: number = Number(point[1].toFixed(5))
-    //check that the point isn't a duplicate of any of the unique coordinates
-    uniqueCoordinates.forEach((uniquePoint: Array<number>) => {
-      const uniqueCoord0: number = Number(uniquePoint[0].toFixed(5))
-      const uniqueCoord1: number = Number(uniquePoint[1].toFixed(5))
-      if (coord0 === uniqueCoord0 && coord1 === uniqueCoord1) {
-        noDuplicates = false
-      }
-    })
-    //if no duplicates were found, push the point to be a unique coordinate
-    if (noDuplicates) {
-      uniqueCoordinates.push(point)
-    }
-  })
-
-  return uniqueCoordinates
-}
+export const replaceObservationEvents = (events: Record<string, any>[]): observationActionTypes => ({
+  type: REPLACE_OBSERVATION_EVENTS,
+  payload: events
+})
 
 export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async dispatch => {
@@ -291,11 +250,6 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
   }
 }
 
-export const replaceObservationEvents = (events: Record<string, any>[]): observationActionTypes => ({
-  type: REPLACE_OBSERVATION_EVENTS,
-  payload: events
-})
-
 export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
@@ -318,9 +272,23 @@ export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any
   }
 }
 
-export const clearObservationEvents = (): observationActionTypes => ({
-  type: CLEAR_OBSERVATION_EVENTS
-})
+export const eventPathUpdate = (lineStringPath: LineString | null): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+  return async (dispatch, getState) => {
+    const { observationEvent } = getState()
+
+    const newEvents = clone(observationEvent.events)
+    const newEvent = cloneDeep(newEvents.pop())
+
+    if (lineStringPath) {
+      newEvent.gatherings[0].geometry = lineStringPath
+
+      newEvents.push(newEvent)
+
+      storageService.save('observationEvents', newEvents)
+      dispatch(replaceObservationEvents(newEvents))
+    }
+  }
+}
 
 export const newObservation = (unit: Record<string, any>, lineStringPath: LineString | null): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
@@ -456,174 +424,5 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
 
     dispatch(replaceObservationEvents(newEvents))
     return Promise.resolve()
-  }
-}
-
-export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
-  return async dispatch => {
-    let languages: string[] = ['fi', 'en', 'sv']
-    let schemas: Record<string, any> = {
-      formID: formId,
-      fi: null,
-      en: null,
-      sv: null
-    }
-    let storageKeys: Record<string, string> = {
-      fi: `${formId}Fi`,
-      en: `${formId}En`,
-      sv: `${formId}Sv`
-    }
-
-    //try to load schemas from server, else case if error try to load schemas
-    //from internal storage
-    let errors: Record<string, any>[] = []
-    let errorFatal: Record<string, boolean> = {
-      fi: false,
-      en: false,
-      sv: false
-    }
-
-    //loop over each language initializing field parameters for each and schema for first existing
-    for (let lang of languages) {
-      let tempSchemas = null
-      let langError: Record<string, string> | null = null
-
-      try {
-        //check network status and try loading schema and uiSchema from server
-        await netStatusChecker()
-        tempSchemas = await getSchemas(lang, formId)
-      } catch (netError) {
-        try {
-          //try loading schema from internal storage, if success inform user
-          //of use of old stored version, if error warn user of total failure
-          tempSchemas = await storageService.fetch(storageKeys[lang])
-
-          //warn user of using internally stored schema
-          langError = {
-            severity: 'low',
-            message: `${netError.message
-              ? netError.message
-              : i18n.t('status code') + netError.response.status
-            } ${i18n.t(`error loading ${lang} schema from server`)}`
-          }
-          log.error({
-            location: '/stores/observation/actions.tsx initSchema()',
-            error: netError.response.data.error,
-            details: 'While downloading ' + lang + ' schema.'
-          })
-        } catch (locError) {
-          langError = {
-            severity: 'high',
-            message: `${netError.message
-              ? netError.message
-              : i18n.t('status code') + netError.response.status
-            } ${i18n.t(`error loading ${lang} schema from server and internal`)}`
-          }
-          log.error({
-            location: '/stores/observation/actions.tsx initSchema()',
-            error: locError,
-            details: 'While fetching ' + lang + ' from AsyncStorage.'
-          })
-
-          errors.push(langError)
-          errorFatal[lang] = true
-          continue
-        }
-      }
-
-      //schema was found try to parse necessary parameters and values for input creation from it
-      if (tempSchemas) {
-        let uiSchemaParams
-
-        if (useUiSchema) {
-          uiSchemaParams = parseUiSchemaToObservations(tempSchemas.uiSchema)
-
-          //if parsing fails warn user that language is unusable
-          if (!uiSchemaParams) {
-            errors.push({
-              severity: 'high',
-              message: i18n.t(`could not parse ${lang} uiSchema to input`)
-            })
-
-            errorFatal[lang] = true
-            continue
-          }
-        }
-
-        //try to store schema to internal storage for use as backup, if schemas are from server (i.e. first try-catch has not set any error),
-        //if fails set error message
-        if (!langError) {
-          try {
-            await storageService.save(storageKeys[lang], tempSchemas)
-          } catch (error) {
-            langError = {
-              severity: 'low',
-              message: i18n.t(`${lang} schema save to async failed`)
-            }
-            log.error({
-              location: '/stores/observation/actions.tsx initSchema()',
-              error: error,
-              details: 'While saving ' + lang + ' to AsyncStorage.'
-            })
-          }
-        }
-        //if error was met push into errors-array for eventual return to user
-        if (langError) {
-          errors.push(langError)
-        }
-
-        if (useUiSchema) {
-          schemas[lang] = {
-            schema: tempSchemas.schema,
-            uiSchemaParams: uiSchemaParams
-          }
-        } else {
-          schemas[lang] = {
-            schema: tempSchemas.schema,
-          }
-        }
-      }
-    }
-
-    //check if every language suffered fatal errors resulting in no usable schemas or form parameter collections
-    if (Object.keys(errorFatal).every(key => errorFatal[key])) {
-      let fatalError: Record<string, any> = [{
-        severity: 'fatal',
-        message: i18n.t('could not load any schemas')
-      }]
-
-      errors = errors.concat(fatalError)
-
-      return Promise.reject(errors)
-    }
-
-    //schema and field parameters to correct language choice
-    dispatch(setSchema(schemas))
-
-    //if non-fatal errors present reject and send errors
-    if (errors.length > 0) {
-      return Promise.reject(errors)
-    }
-    return Promise.resolve()
-  }
-}
-
-export const switchSchema = (formId: string): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
-  return async dispatch => {
-    let languages: string[] = ['Fi', 'En', 'Sv']
-
-    let schemas: Record<string, any> = {
-      formID: formId,
-      fi: null,
-      en: null,
-      sv: null
-    }
-
-    for (let lang of languages) {
-      schemas[lang.toLowerCase()] = await storageService.fetch(`${formId}${lang}`)
-    }
-
-    dispatch(setSchema(schemas))
-    Promise.resolve()
   }
 }

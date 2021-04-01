@@ -1,9 +1,12 @@
 import axios from 'axios'
-import i18n from '../language/i18n'
+import i18n from '../languages/i18n'
 import * as FileSystem from 'expo-file-system'
 import { postImageUrl } from '../config/urls'
 import { accessToken } from '../config/keys'
-import { CredentialsType, UserType } from '../stores/user/types'
+import {
+  CredentialsType,
+  UserType
+} from '../stores'
 
 const JPEG_EXTENSIONS = ['jpeg', 'jpg']
 const TIFF_EXTENSIONS = ['tiff', 'tif']

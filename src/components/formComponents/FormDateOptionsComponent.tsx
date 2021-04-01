@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
+import { useSelector } from 'react-redux'
+import { rootState } from '../../stores'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
+import Bs from '../../styles/ButtonStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../utilities/dateHelper'
+import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument, sameDay } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { color } from 'react-native-reanimated'
 
 interface Props {
   title: string,
@@ -41,9 +43,12 @@ const FormDateOptionsComponent = (props: Props) => {
   const [currentTime, setCurrentTime] = useState<string>(props.defaultValue)
   const [selected, setSelected] = useState<boolean>(false)
   const [show, setShow] = useState<boolean>(false)
+  const [showDate, setShowDate] = useState<boolean>(true)
   const date = new Date()
   const dateBegin = watch('gatheringEvent_dateBegin')
   const dateEnd = watch('gatheringEvent_dateEnd')
+
+  const observationEvent = useSelector((state: rootState) => state.observationEvent)
 
   const { t } = useTranslation()
 
@@ -51,6 +56,11 @@ const FormDateOptionsComponent = (props: Props) => {
     if (currentValue && currentValue !== '') {
       setValue(props.objectTitle, currentValue)
       setSelected(true)
+    }
+
+    //when observing in the same day as when the event was started, do not give option to pick date
+    if (sameDay(observationEvent.events[observationEvent.events.length - 1].gatheringEvent.dateBegin, parseDateFromISOToDocument(date))) {
+      setShowDate(false)
     }
   }, [])
 
@@ -89,8 +99,24 @@ const FormDateOptionsComponent = (props: Props) => {
   }
 
   const onChangeTime = (event: Event | undefined, date: Date | undefined) => {
+
+    setShow(false)
+
+    //when date picker is not shown, set current date to be the same as current event's
+    if ((date !== undefined) && !showDate) {
+      setCurrentDate(observationEvent.events[observationEvent.events.length - 1].gatheringEvent.dateBegin)
+    }
+
     date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date)) : null
-    setSelected(true)
+
+    if (date !== undefined) {
+      setSelected(true)
+
+      // if user cancels when choosing time of dateBegin, do not add any date
+    } else {
+      setSelected(false)
+      setValue(props.objectTitle, '')
+    }
   }
 
   return (
@@ -99,15 +125,16 @@ const FormDateOptionsComponent = (props: Props) => {
       {!selected ?
         <View style={Cs.eventDateContainer}>
           <Button
-            buttonStyle={{ backgroundColor: Colors.positiveButton, marginRight: 5, width: 150 }}
-            title={t('timestamp')}
-            icon={<Icon name={'add'} color='white' size={22} />}
+            buttonStyle={Bs.timestampButton}
+            title={' ' + t('timestamp')}
+            icon={<Icon name={'schedule'} color='white' size={22} />}
+            iconContainerStyle={{ paddingLeft: 5 }}
             onPress={() => onLockIntoCurrentDate()}>
           </Button>
           <Button
-            buttonStyle={{ backgroundColor: Colors.neutralButton, marginLeft: 5, width: 150 }}
-            title={t('choose time')}
-            icon={<Icon name={'edit'} color='white' size={22} />}
+            buttonStyle={Bs.chooseTimeButton}
+            title={' ' + t('choose time')}
+            icon={<Icon name={'restore'} color='white' size={22} />}
             onPress={() => setShow(true)}>
           </Button>
         </View>
@@ -120,7 +147,7 @@ const FormDateOptionsComponent = (props: Props) => {
             ref={register({ name: props.objectTitle })}
           />
           <Button
-            buttonStyle={{ backgroundColor: Colors.negativeButton }}
+            buttonStyle={Bs.negativeIconButton}
             icon={<Icon name={'delete'} color='white' size={22} />}
             onPress={() => {
               setSelected(false)
@@ -129,7 +156,7 @@ const FormDateOptionsComponent = (props: Props) => {
           </Button>
         </View>
       }
-      {show && (
+      {show && showDate && (
         <View>
           <DateTimePicker
             value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
@@ -140,6 +167,15 @@ const FormDateOptionsComponent = (props: Props) => {
             value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
             mode='date'
             onChange={onChangeDate}
+          />
+        </View>
+      )}
+      {show && !showDate && (
+        <View>
+          <DateTimePicker
+            value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
+            mode='time'
+            onChange={onChangeTime}
           />
         </View>
       )}

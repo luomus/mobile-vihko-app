@@ -1,28 +1,18 @@
 import {
-  SchemaType,
   observationActionTypes,
   ObservationEventType,
   CLEAR_OBSERVATION,
   SET_OBSERVATION,
   SET_OBSERVATION_EVENT_INTERRUPTED,
   CLEAR_OBSERVATION_EVENTS,
-  NEW_OBSERVATION_EVENT,
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_ID,
   SET_OBSERVATION_ID,
-  TOGGLE_OBSERVING,
-  SET_SCHEMA
+  TOGGLE_OBSERVING
 } from './types'
 
 const initObsEventState: ObservationEventType = {
   events: []
-}
-
-const initSchemaState: SchemaType = {
-  fi: null,
-  en: null,
-  sv: null,
-  formID: ''
 }
 
 const observationReducer = (state = null, action : observationActionTypes) => {
@@ -48,12 +38,6 @@ const observationEventInterruptedReducer = (state: boolean = false, action : obs
 const observationEventsReducer = (state: ObservationEventType = initObsEventState, action : observationActionTypes) => {
   let newState
   switch (action.type) {
-    case NEW_OBSERVATION_EVENT:
-      newState = {
-        ...state,
-        events: state.events.concat(action.payload)
-      }
-      return newState
     case REPLACE_OBSERVATION_EVENTS:
       newState = {
         ...state,
@@ -91,22 +75,10 @@ const observingReducer = (state = false, action : observationActionTypes) => {
   }
 }
 
-const schemaReducer = (state = initSchemaState, action : observationActionTypes) => {
-  switch (action.type) {
-    case SET_SCHEMA:
-      return {
-        ...action.payload,
-      }
-    default:
-      return state
-  }
-}
-
 export {
   observationReducer,
   observationEventInterruptedReducer,
   observationEventsReducer,
   observationIdReducer,
-  observingReducer,
-  schemaReducer
+  observingReducer
 }

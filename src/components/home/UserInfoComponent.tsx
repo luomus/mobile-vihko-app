@@ -1,61 +1,47 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
-import { connect, ConnectedProps } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
-import { clearCredentials, logoutUser } from '../../stores/user/actions'
-import { resetReducer } from '../../stores/combinedActions'
-import { CredentialsType } from '../../stores/user/types'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
+import {
+  rootState,
+  DispatchType,
+  resetReducer,
+  logoutUser,
+  setMessageState
+} from '../../stores'
 import MessageComponent from '../general/MessageComponent'
 
-interface RootState {
-  credentials: CredentialsType,
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { credentials } = state
-  return { credentials }
-}
-
-const mapDispatchToProps = {
-  clearCredentials,
-  setMessageState,
-  clearMessageState,
-  logoutUser,
-  resetReducer,
-}
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
+type Props = {
   onLogout: () => void
 }
 
 const UserInfoComponent = (props: Props) => {
+
+  const credentials = useSelector((state: rootState) => state.credentials)
+
+  const dispatch: DispatchType = useDispatch()
+
   const { t } = useTranslation()
 
   const showLogoutDialoue = () => {
-    props.setMessageState({
-      type: 'conf',
+    dispatch(setMessageState({
+      type: 'dangerConf',
       messageContent: t('logout'),
+      cancelLabel: t('cancel'),
+      okLabel: t('exit'),
       onOk: logout
-    })
+    }))
   }
 
   //on logout redirect to login screen, remove user from stores and asyncStore,
   //and remove observation events from reducer
   const logout = () => {
     props.onLogout()
-    props.logoutUser()
-    props.resetReducer()
+    dispatch(logoutUser())
+    dispatch(resetReducer())
   }
 
   return (
@@ -63,7 +49,7 @@ const UserInfoComponent = (props: Props) => {
       <View style={Cs.userInfoContainer}>
         <View>
           <Text>
-            {props.credentials.user !== null ? t('loggedin') + ' ' + props.credentials.user.fullName : null}
+            {credentials.user !== null ? t('loggedin') + ' ' + credentials.user.fullName : null}
           </Text>
         </View>
         <View style={Cs.logoutButtonContainer}>
@@ -79,4 +65,4 @@ const UserInfoComponent = (props: Props) => {
   )
 }
 
-export default connector(UserInfoComponent)
+export default UserInfoComponent

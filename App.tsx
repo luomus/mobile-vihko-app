@@ -1,23 +1,22 @@
 import React, { Component } from 'react'
-import AppContainer from './src/navigator/MyNavigator'
+import AppContainer from './src/navigation/MyNavigator'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import { appendPath } from './src/stores/position/actions'
-import reducer from './src/stores/combinedReducer'
+import {
+  store,
+  appendPath,
+  eventPathUpdate,
+  resetReducer
+} from './src/stores'
 import * as TaskManager from 'expo-task-manager'
-import thunk from 'redux-thunk'
-import './src/language/i18n'
+import './src/languages/i18n'
 import { LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/location'
-import { cleanupLocationAsync } from './src/geolocation/geolocation'
-import { resetReducer } from './src/stores/combinedActions'
-import { eventPathUpdate } from './src/stores/observation/actions'
-import { lineStringConstructor } from './src/converters/geoJSONConverters'
-
-const store = createStore(reducer, applyMiddleware(thunk))
+import { cleanupLocationAsync } from './src/helpers/geolocationHelper'
+import { lineStringConstructor } from './src/helpers/geoJSONHelper'
 
 export default class App extends Component {
   componentDidMount() {
-    cleanupLocationAsync()
+    const { observationEventInterrupted } = store.getState()
+    cleanupLocationAsync(observationEventInterrupted)
     store.dispatch(resetReducer())
   }
 
@@ -33,7 +32,7 @@ export default class App extends Component {
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, error }) => {
   if (locations) {
     const { observationEvent, path } = store.getState()
-    appendPath(store, locations)
+    appendPath(locations)
 
     const indLast = observationEvent.events.length - 1
 
@@ -41,7 +40,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
       (!observationEvent.events[indLast].gatherings[0].geometry && locations[0].coords.accuracy <= 100) ||
       path.length - observationEvent?.events[indLast]?.gatherings[0]?.geometry?.coordinates?.length >= PATH_BACKUP_INTERVALL
     ) {
-      eventPathUpdate(store, lineStringConstructor(path))
+      eventPathUpdate(lineStringConstructor(path))
     }
   }
 })

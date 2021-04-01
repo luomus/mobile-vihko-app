@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import Ts from '../../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
-import { parseDateForUI } from '../../utilities/dateHelper'
+import { parseDateForUI } from '../../helpers/dateHelper'
 import { Icon } from 'react-native-elements'
 import Cs from '../../styles/ContainerStyles'
 

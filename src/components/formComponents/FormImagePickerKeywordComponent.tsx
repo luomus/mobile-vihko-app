@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView } from 'react-native'
 import { Button as ButtonElement, Icon } from 'react-native-elements'
 import RadioForm from 'react-native-simple-radio-button'
 import { useTranslation } from 'react-i18next'
+import { DispatchType, setMessageState } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import * as ImagePicker from 'expo-image-picker'
 import Colors from '../../styles/Colors'
-import { setMessageState } from '../../stores/message/actions'
-import { connect, ConnectedProps } from 'react-redux'
 import { useFormContext } from 'react-hook-form'
 
 interface RadioPropsType {
@@ -17,16 +17,7 @@ interface RadioPropsType {
   value: string | number
 }
 
-const mapDispatchToProps = {
-  setMessageState
-}
-
-const connector = connect(
-  null,
-  mapDispatchToProps
-)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & {
+type Props = {
   title: string,
   params: Record<string, any>,
   objectTitle: string,
@@ -40,6 +31,8 @@ const ImagePickerKeywordComponent = (props: Props) => {
   const { t } = useTranslation()
   const keywords: Record<string, any> = props.params
   const localized: string[] = props.params[props.lang]
+
+  const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
     setValue(props.objectTitle, images)
@@ -102,13 +95,13 @@ const ImagePickerKeywordComponent = (props: Props) => {
   }
 
   const showRemoveImage = (image: string) => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('delete image?'),
       okLabel: t('delete'),
       cancelLabel: t('cancel'),
       onOk: () => removeImage(image)
-    })
+    }))
   }
 
   const onRadioButtonSelect = (value: number, uri: string) => {
@@ -188,16 +181,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
             <ButtonElement
               buttonStyle={Bs.addImageButton}
               containerStyle={Cs.padding5Container}
-              title={t('choose image')}
-              iconRight={true}
+              title={' ' + t('choose image')}
               icon={<Icon name='photo-library' type='material-icons' color='white'  size={22} />}
               onPress={imageFromLibrary}
             />
             <ButtonElement
               buttonStyle={Bs.addImageButton}
               containerStyle={Cs.padding5Container}
-              title={t('use camera')}
-              iconRight={true}
+              title={' ' + t('use camera')}
               icon={<Icon name='add-a-photo' type='material-icons' color='white'  size={22} />}
               onPress={imageFromCamera}
             />
@@ -226,16 +217,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
               <ButtonElement
                 buttonStyle={Bs.addImageButton}
                 containerStyle={Cs.padding5Container}
-                title={t('choose image')}
-                iconRight={true}
+                title={' ' + t('choose image')}
                 icon={<Icon name='photo-library' type='material-icons' color='white'  size={22} />}
                 onPress={imageFromLibrary}
               />
               <ButtonElement
                 buttonStyle={Bs.addImageButton}
                 containerStyle={Cs.padding5Container}
-                title={t('use camera')}
-                iconRight={true}
+                title={' ' + t('use camera')}
                 icon={<Icon name='add-a-photo' type='material-icons' color='white'  size={22} />}
                 onPress={imageFromCamera}
               />
@@ -247,4 +236,4 @@ const ImagePickerKeywordComponent = (props: Props) => {
   }
 }
 
-export default connector(ImagePickerKeywordComponent)
+export default ImagePickerKeywordComponent

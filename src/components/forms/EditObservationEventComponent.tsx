@@ -1,57 +1,29 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
-import { connect, ConnectedProps } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
-import { finishObservationEvent } from '../../actionCreators/observationEventCreators'
-import { replaceObservationEventById, clearObservationId, uploadObservationEvent } from '../../stores/observation/actions'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
+import {
+  rootState,
+  DispatchType,
+  finishObservationEvent,
+  replaceObservationEventById,
+  clearObservationId,
+  uploadObservationEvent,
+  setMessageState
+} from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import { set, merge, omit } from 'lodash'
 import MessageComponent from '../general/MessageComponent'
-import { ObservationEventType, SchemaType } from '../../stores/observation/types'
-import { CredentialsType } from '../../stores/user/types'
 import { initForm } from '../../forms/formMethods'
-import i18n from '../../language/i18n'
+import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import { JX519ObservationEventFields, JX652ObservationEventFields } from '../../config/fields'
 
-interface BasicObject {
-  [key: string]: any
-}
-
-interface RootState {
-  credentials: CredentialsType,
-  observationEvent: ObservationEventType,
-  observationId: BasicObject,
-  schema: SchemaType,
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { credentials, observationEvent, observationId, schema } = state
-  return { credentials, observationEvent, observationId, schema }
-}
-
-const mapDispatchToProps = {
-  replaceObservationEventById,
-  clearObservationId,
-  setMessageState,
-  clearMessageState,
-  uploadObservationEvent,
-  finishObservationEvent
-}
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
+type Props = {
   onPressSubmit: () => void,
   onPressObservationEvent: () => void,
   children?: ReactChild,
@@ -71,11 +43,18 @@ const EditObservationEventComponent = (props: Props) => {
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
   const [sending, setSending] = useState<boolean>(false)
 
+  const credentials = useSelector((state: rootState) => state.credentials)
+  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observationId = useSelector((state: rootState) => state.observationId)
+  const schema = useSelector((state: rootState) => state.schema)
+
+  const dispatch: DispatchType = useDispatch()
+
   useEffect(() => {
     init()
 
     return () => {
-      props.clearObservationId()
+      dispatch(clearObservationId())
       setForm(undefined)
     }
   }, [])
@@ -92,8 +71,8 @@ const EditObservationEventComponent = (props: Props) => {
 
   const init = () => {
     //find the correct event by id
-    const searchedEvent = props.observationEvent.events.find(event => {
-      return event.id === props.observationId.eventId
+    const searchedEvent = observationEvent.events.find(event => {
+      return event.id === observationId?.eventId
     })
 
     if (searchedEvent) {
@@ -104,12 +83,12 @@ const EditObservationEventComponent = (props: Props) => {
   const onUninitalizedForm = () => {
     if (event) {
       const lang = i18n.language
-      let schema = omit(props.schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
+      let schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
-      if (props.schema.formID === 'JX.519') {
-        initForm(setForm, event, null, schema, null, JX519ObservationEventFields, null, null, lang)
-      } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, event, null, schema, null, JX652ObservationEventFields, null, null, lang)
+      if (schema.formID === 'JX.519') {
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, null, null, lang)
+      } else if (schema.formID === 'JX.652') {
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, null, null, lang)
       }
     }
   }
@@ -122,25 +101,25 @@ const EditObservationEventComponent = (props: Props) => {
       set(editedEvent, key.split('_'), data[key])
     })
 
-    if (event) {
+    if (event && observationId) {
       editedEvent = merge(event, editedEvent)
 
       //replace events with the modified copy
       try {
-        await props.replaceObservationEventById(editedEvent, props.observationId.eventId)
+        await dispatch(replaceObservationEventById(editedEvent, observationId.eventId))
         if (props.sourcePage !== 'ObservationEventComponent') {
-          props.finishObservationEvent()
+          await dispatch(finishObservationEvent())
           setModalVisibility(true)
         } else {
           props.onPressObservationEvent()
         }
-        props.clearObservationId()
+        dispatch(clearObservationId())
         setSaving(false)
       } catch (error) {
-        props.setMessageState({
+        dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
-        })
+        }))
       }
     }
   }
@@ -149,29 +128,29 @@ const EditObservationEventComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await props.uploadObservationEvent(event?.id, props.credentials, i18n.language, isPublic)
+      await dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
       showMessage(t('post success'))
       setForm(undefined)
       props.onPressSubmit()
     } catch (error) {
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'err',
         messageContent: error.message,
         onOk: () => {
           setForm(undefined)
           props.onPressSubmit()
         }
-      })
+      }))
     }
 
     setSending(false)
   }
 
   const showMessage = (content: string) => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'msg',
       messageContent: content
-    })
+    }))
   }
 
   if (saving) {
@@ -208,4 +187,4 @@ const EditObservationEventComponent = (props: Props) => {
   }
 }
 
-export default connector(EditObservationEventComponent)
+export default EditObservationEventComponent

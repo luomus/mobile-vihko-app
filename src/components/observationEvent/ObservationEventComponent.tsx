@@ -5,55 +5,25 @@ import { useBackHandler } from '@react-native-community/hooks'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Bs from '../../styles/ButtonStyles'
-import { connect, ConnectedProps } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
-  replaceObservationEvents,
+  rootState,
+  DispatchType,
   setObservationId,
   uploadObservationEvent,
-  deleteObservationEvent,
+  setMessageState,
   deleteObservation,
-} from '../../stores/observation/actions'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
-import i18n from '../../language/i18n'
+  deleteObservationEvent
+} from '../../stores'
+import i18n from '../../languages/i18n'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import MessageComponent from '../general/MessageComponent'
-import { parseDateForUI } from '../../utilities/dateHelper'
-import { CredentialsType } from '../../stores/user/types'
-import { ObservationEventType } from '../../stores/observation/types'
+import { parseDateForUI } from '../../helpers/dateHelper'
 import ActivityComponent from '../general/ActivityComponent'
 
-interface RootState {
-  observationEvent: ObservationEventType,
-  observationId: Record<string, any>,
-  credentials: CredentialsType,
-  message: Record<string, any>,
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { observationEvent, observationId, credentials, message } = state
-  return { observationEvent, observationId, credentials, message }
-}
-
-const mapDispatchToProps = {
-  setObservationId,
-  setMessageState,
-  clearMessageState,
-  replaceObservationEvents,
-  uploadObservationEvent,
-  deleteObservationEvent,
-  deleteObservation,
-}
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
+type Props = {
   id: string,
   onPressHome: () => void,
   onPressObservation: (sourcePage?: string) => void,
@@ -63,57 +33,67 @@ type Props = PropsFromRedux & {
 }
 
 const ObservationEventComponent = (props: Props) => {
-  const { t } = useTranslation()
-  const event: Record<string, any> | null = props.observationEvent.events.find(e => e.id === props.id) || null
-  const observations: Record<string, any>[] = event?.gatherings[0]?.units || null
+
   const [sending, setSending] = useState<boolean>(false)
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
 
+  const credentials = useSelector((state: rootState) => state.credentials)
+  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+
+  const dispatch: DispatchType = useDispatch()
+
+  const { t } = useTranslation()
+
+  const event: Record<string, any> | null = observationEvent.events.find(e => e.id === props.id) || null
+  const observations: Record<string, any>[] = event?.gatherings[0]?.units || null
+
   const showMessage = (content: string) => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'msg',
       messageContent: content
-    })
+    }))
   }
 
   const showDeleteObservation = (eventId: string, unitId: string) => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation?'),
-      onOk: () => deleteObservation(eventId, unitId),
-      okLabel: t('delete')
-    })
+      cancelLabel: t('do not delete'),
+      okLabel: t('delete'),
+      onOk: () => handleDeleteObservation(eventId, unitId)
+    }))
   }
 
-  const deleteObservation = async (eventId: string, unitId: string) => {
+  const handleDeleteObservation = async (eventId: string, unitId: string) => {
     try {
-      await props.deleteObservation(eventId, unitId)
+      await dispatch(deleteObservation(eventId, unitId))
     } catch (error) {
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
-      })
+      }))
     }
   }
 
   const showDeleteObservationEvent = (eventId: string) => {
-    props.setMessageState({
+    dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation event?'),
-      onOk: () => deleteObservationEvent(eventId),
-      okLabel: t('delete')
-    })
+      cancelLabel: t('do not delete'),
+      okLabel: t('delete'),
+      onOk: () => handleDeleteObservationEvent(eventId)
+    }))
   }
 
-  const deleteObservationEvent = async (eventId: string) => {
+  const handleDeleteObservationEvent = async (eventId: string) => {
     try {
-      await props.deleteObservationEvent(eventId)
+      await dispatch(deleteObservationEvent(eventId))
       props.onPressHome()
     } catch (error) {
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
-      })
+      }))
     }
   }
 
@@ -121,15 +101,15 @@ const ObservationEventComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await props.uploadObservationEvent(event?.id, props.credentials, i18n.language, isPublic)
+      await dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error) {
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'err',
         messageContent: error.message,
         onOk: () => props.onPressHome()
-      })
+      }))
     }
 
     setSending(false)
@@ -171,7 +151,7 @@ const ObservationEventComponent = (props: Props) => {
                     eventId: event.id,
                     unitId: ''
                   }
-                  props.setObservationId(id)
+                  dispatch(setObservationId(id))
                   props.onPressObservationEvent('ObservationEventComponent')
                 }}
               />
@@ -197,15 +177,14 @@ const ObservationEventComponent = (props: Props) => {
                 editButton={
                   <Button
                     buttonStyle={Bs.basicNeutralButton}
-                    title={t('edit button')}
-                    iconRight={true}
+                    title={' ' + t('edit button')}
                     icon={<Icon name='edit' type='material-icons' color='white' size={22} />}
                     onPress={() => {
                       const id = {
                         eventId: event.id,
                         unitId: observation.id
                       }
-                      props.setObservationId(id)
+                      dispatch(setObservationId(id))
                       props.onPressObservation('ObservationEventComponent')
                     }}
                   />
@@ -213,8 +192,7 @@ const ObservationEventComponent = (props: Props) => {
                 removeButton={
                   <Button
                     buttonStyle={Bs.basicNegativeButton}
-                    title={t('remove button')}
-                    iconRight={true}
+                    title={' ' + t('remove')}
                     icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
                     onPress={() => {
                       showDeleteObservation(event.id, observation.id)
@@ -234,5 +212,4 @@ const ObservationEventComponent = (props: Props) => {
   }
 }
 
-export default connector(ObservationEventComponent)
-
+export default ObservationEventComponent

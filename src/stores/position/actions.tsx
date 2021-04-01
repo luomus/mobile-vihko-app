@@ -1,3 +1,4 @@
+import { ThunkAction } from 'redux-thunk'
 import { LocationData } from 'expo-location'
 import {
   UPDATE_LOCATION,
@@ -9,9 +10,8 @@ import {
   PathType,
   SET_FIRST_LOCATION
 } from './types'
-import { Store } from 'redux'
 
-export const updateLocation = (location : LocationData | null ): locationActionTypes => ({
+export const updateLocation = (location: LocationData | null): locationActionTypes => ({
   type: UPDATE_LOCATION,
   payload: location,
 })
@@ -20,18 +20,20 @@ export const clearLocation = (): locationActionTypes => ({
   type: CLEAR_LOCATION
 })
 
-export const appendPath = ( store: Store, locations : LocationData[] ): void => {
-  if (locations.length > 0) {
-    const points: Array<Array<number>> = locations.map(location => {
-      const coords = location.coords
+export const appendPath = (locations: LocationData[]): ThunkAction<Promise<any>, any, void, locationActionTypes> => {
+  return async dispatch => {
+    if (locations.length > 0) {
+      const points: Array<Array<number>> = locations.map(location => {
+        const coords = location.coords
 
-      return [coords.longitude, coords.latitude]
-    })
+        return [coords.longitude, coords.latitude]
+      })
 
-    store.dispatch({
-      type: APPEND_PATH,
-      payload: points
-    })
+      dispatch({
+        type: APPEND_PATH,
+        payload: points
+      })
+    }
   }
 }
 

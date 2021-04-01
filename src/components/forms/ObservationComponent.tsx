@@ -2,66 +2,34 @@ import React, { useState, useEffect, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
-import { connect, ConnectedProps } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Point } from 'geojson'
-import { LocationObject } from 'expo-location'
 import {
-  replaceObservationEvents, newObservation, clearObservationLocation, replaceObservationById, clearObservationId,
-  deleteObservation, setObservationLocation
-} from '../../stores/observation/actions'
-import { setMessageState, clearMessageState } from '../../stores/message/actions'
+  rootState,
+  DispatchType,
+  newObservation,
+  clearObservationLocation,
+  replaceObservationById,
+  clearObservationId,
+  deleteObservation,
+  setObservationLocation,
+  setMessageState,
+  setEditing
+} from '../../stores'
 import MessageComponent from '../general/MessageComponent'
 import Cs from '../../styles/ContainerStyles'
-import { ObservationEventType, SchemaType } from '../../stores/observation/types'
 import { initForm } from '../../forms/formMethods'
 import { set, clone } from 'lodash'
 import uuid from 'react-native-uuid'
-import i18n from '../../language/i18n'
+import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import { Button as ButtonElement, Icon } from 'react-native-elements'
-import { setEditing } from '../../stores/map/actions'
-import { EditingType } from '../../stores/map/types'
-import { lineStringConstructor } from '../../converters/geoJSONConverters'
+import { lineStringConstructor } from '../../helpers/geoJSONHelper'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
 import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
-interface RootState {
-  observation: Point,
-  observationEvent: ObservationEventType,
-  observationId: Record<string, any>,
-  observationLocations: Point[],
-  editing: EditingType,
-  schema: SchemaType,
-  path: LocationObject[]
-}
-
-const mapStateToProps = (state: RootState) => {
-  const { observation, observationEvent, observationId, observationLocations, editing, schema, path } = state
-  return { observation, observationEvent, observationId, observationLocations, editing, schema, path }
-}
-
-const mapDispatchToProps = {
-  newObservation,
-  replaceObservationEvents,
-  clearObservationLocation,
-  setMessageState,
-  clearMessageState,
-  replaceObservationById,
-  clearObservationId,
-  setEditing,
-  deleteObservation,
-  setObservationLocation
-}
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & {
+type Props = {
   toObservationEvent: (id: string) => void,
   toMap: () => void,
   isNew?: boolean,
@@ -82,21 +50,30 @@ const ObservationComponent = (props: Props) => {
   const [saving, setSaving] = useState<boolean>(false)
   const lang = i18n.language
   const [form, setForm] = useState<Array<Element | undefined> | null>(null)
-  const [observation, setObservation] = useState<Record<string, any> | undefined>(undefined)
+  const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
+
+  const editing = useSelector((state: rootState) => state.editing)
+  const observation = useSelector((state: rootState) => state.observation)
+  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observationId = useSelector((state: rootState) => state.observationId)
+  const path = useSelector((state: rootState) => state.path)
+  const schema = useSelector((state: rootState) => state.schema)
+
+  const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
     //initialize only when editing observations
-    if (props.observationId) {
+    if (observationId) {
       init()
     }
 
     //checks if we are coming from MapComponent or ObservationEventComponent
-    if (props.sourcePage && !props.editing.started) {
-      props.setEditing({
+    if (props.sourcePage && !editing.started) {
+      dispatch(setEditing({
         started: false,
         locChanged: false,
         originalSourcePage: props.sourcePage
-      })
+      }))
     }
   }, [])
 
@@ -104,13 +81,15 @@ const ObservationComponent = (props: Props) => {
 
     if (props.isFocused()) {
 
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'dangerConf',
         messageContent: t('discard observation?'),
+        cancelLabel: t('cancel'),
+        okLabel: t('exit'),
         onOk: () => {
           cleanUp()
         }
-      })
+      }))
 
       return true
     }
@@ -122,21 +101,21 @@ const ObservationComponent = (props: Props) => {
     //cleanup when component unmounts, ensures that if navigator back-button
     //is used observationLocation, observationId and editing-flags are returned
     //to defaults
-    props.clearObservationLocation()
-    props.setEditing({
+    dispatch(clearObservationLocation())
+    dispatch(setEditing({
       started: false,
       locChanged: false,
-      originalSourcePage: props.editing.originalSourcePage
-    })
-    props.clearObservationId()
+      originalSourcePage: editing.originalSourcePage
+    }))
+    dispatch(clearObservationId())
     props.goBack()
   }
 
   //initialization (only for editing observations)
   const init = () => {
     //clone events from reducer for modification
-    const searchedEvent = props.observationEvent.events.find(event => {
-      return event.id === props.observationId.eventId
+    const searchedEvent = observationEvent.events.find(event => {
+      return event.id === observationId?.eventId
     })
 
     if (!searchedEvent) {
@@ -146,7 +125,7 @@ const ObservationComponent = (props: Props) => {
     //find the correct observation by id
     const searchedObservation = clone(
       searchedEvent.gatherings[0].units.find((observation: Record<string, any>) => {
-        return observation.id === props.observationId.unitId
+        return observation.id === observationId?.unitId
       })
     )
 
@@ -154,17 +133,17 @@ const ObservationComponent = (props: Props) => {
       return
     }
 
-    setObservation(searchedObservation)
+    setObservationState(searchedObservation)
   }
 
   const onUninitializedForm = () => {
     //if editing observation but observation not yet extracted from observation event
-    if (props.observationId && !observation) {
+    if (observationId && !observationState) {
       return
     }
 
-    let schema = props.schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
-    let fieldScopes = props.schema[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
+    let schemaVar = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
+    let fieldScopes = schema[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
     let defaultObject: Record<string, any> = {}
 
     if (props.defaults) {
@@ -173,35 +152,35 @@ const ObservationComponent = (props: Props) => {
       })
     }
 
-    set(defaultObject, ['unitGathering', 'geometry'], props.observation)
+    set(defaultObject, ['unitGathering', 'geometry'], observation)
 
     //edit observations
-    if (props.observationId) {
+    if (observationId) {
       //flying squirrel edit observation
-      if (observation?.rules) {
-        initForm(setForm, observation, observation.rules, schema, fieldScopes, null, null, null, lang)
+      if (observationState?.rules) {
+        initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, lang)
         //trip form new observation
-      } else if (props.schema.formID === 'JX.519') {
-        initForm(setForm, observation, null, schema, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
-      } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, observation, null, schema, null, JX652Fields, overrideJX652Fields, null, lang)
+      } else if (schema.formID === 'JX.519') {
+        initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
+      } else if (schema.formID === 'JX.652') {
+        initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, lang)
       }
       //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
-        initForm(setForm, defaultObject, props.rules, schema, fieldScopes, null, null, null, lang)
+        initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, lang)
         //trip form edit observation
-      } else if (props.schema.formID === 'JX.519') {
-        initForm(setForm, defaultObject, null, schema, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
-      } else if (props.schema.formID === 'JX.652') {
-        initForm(setForm, defaultObject, null, schema, null, JX652Fields, overrideJX652Fields, null, lang)
+      } else if (schema.formID === 'JX.519') {
+        initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
+      } else if (schema.formID === 'JX.652') {
+        initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, lang)
       }
     }
   }
 
   const onSubmit = async (data: { [key: string]: any }) => {
-    if (!observation) {
+    if (!observationState) {
       createNewObservation(data)
     } else {
       updateObservation(data)
@@ -225,7 +204,7 @@ const ObservationComponent = (props: Props) => {
     })
 
     //set correct color for obseration, if available
-    let color = props.schema[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
+    let color = schema[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
       const field: string = unitColor.rules.field
       if (newUnit[field]) {
         return new RegExp(unitColor.rules.regexp).test(newUnit[unitColor.rules.field])
@@ -240,23 +219,23 @@ const ObservationComponent = (props: Props) => {
     //add the new observation to latest event, clear location
     //and redirect to map after user oks message
     try {
-      await props.newObservation(newUnit, lineStringConstructor(props.path))
-      props.clearObservationLocation()
+      await dispatch(newObservation(newUnit, lineStringConstructor(path)))
+      dispatch(clearObservationLocation())
       setSaving(false)
       props.toMap()
     } catch (error) {
       setSaving(false)
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
-      })
+      }))
     }
   }
 
   const updateObservation = async (data: { [key: string]: any }) => {
     setSaving(true)
 
-    if (!observation) {
+    if (!observationState || !observationId) {
       setSaving(false)
       return
     }
@@ -269,45 +248,45 @@ const ObservationComponent = (props: Props) => {
     })
 
     //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
-    if (props.editing.started && props.editing.locChanged) {
-      props.observation ? set(editedUnit, ['unitGathering', 'geometry'], props.observation) : null
-      props.clearObservationLocation()
-      props.setEditing({
+    if (editing.started && editing.locChanged) {
+      observation ? set(editedUnit, ['unitGathering', 'geometry'], observation) : null
+      dispatch(clearObservationLocation())
+      dispatch(setEditing({
         started: false,
         locChanged: false,
-        originalSourcePage: props.editing.originalSourcePage
-      })
+        originalSourcePage: editing.originalSourcePage
+      }))
     }
 
     editedUnit = {
-      ...observation,
+      ...observationState,
       ...editedUnit,
     }
 
     //replace original observation with edited one
     try {
-      await props.replaceObservationById(editedUnit, props.observationId.eventId, props.observationId.unitId)
-      props.clearObservationId()
+      await dispatch(replaceObservationById(editedUnit, observationId?.eventId, observationId?.unitId))
+      dispatch(clearObservationId())
 
-      if (props.editing.originalSourcePage === 'MapComponent') {
+      if (editing.originalSourcePage === 'MapComponent') {
         props.toMap()
-      } else if (props.editing.originalSourcePage === 'ObservationEventComponent') {
-        props.toObservationEvent(props.observationId.eventId)
+      } else if (editing.originalSourcePage === 'ObservationEventComponent') {
+        props.toObservationEvent(observationId?.eventId)
       }
 
-      props.setEditing({
+      dispatch(setEditing({
         started: false,
         locChanged: false,
         originalSourcePage: ''
-      })
+      }))
 
-      props.clearObservationId()
+      dispatch(clearObservationId())
 
     } catch (error) {
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
-      })
+      }))
     } finally {
       setSaving(false)
     }
@@ -315,38 +294,41 @@ const ObservationComponent = (props: Props) => {
 
   //redirects navigator to map for selection of new observation location
   const handleChangeToMap = () => {
-    if (observation) {
-      props.setObservationLocation(observation.unitGathering.geometry)
-      props.setEditing({
+    if (observationState) {
+      dispatch(setObservationLocation(observationState.unitGathering.geometry))
+      dispatch(setEditing({
         started: true,
         locChanged: false,
-        originalSourcePage: props.editing.originalSourcePage
-      })
+        originalSourcePage: editing.originalSourcePage
+      }))
       props.toMap()
     }
   }
 
   const handleRemove = async () => {
+
+    if (!observationId) { return }
+
     setSaving(true)
     try {
-      await props.deleteObservation(props.observationId.eventId, props.observationId.unitId)
-      props.clearObservationId()
+      await dispatch(deleteObservation(observationId?.eventId, observationId?.unitId))
+      dispatch(clearObservationId())
 
-      if (props.editing.originalSourcePage === 'MapComponent') {
+      if (editing.originalSourcePage === 'MapComponent') {
         props.toMap()
-      } else if (props.editing.originalSourcePage === 'ObservationEventComponent') {
-        props.toObservationEvent(props.observationId.eventId)
+      } else if (editing.originalSourcePage === 'ObservationEventComponent') {
+        props.toObservationEvent(observationId?.eventId)
       }
-      props.setEditing({
+      dispatch(setEditing({
         started: false,
         locChanged: false,
         originalSourcePage: ''
-      })
+      }))
     } catch (error) {
-      props.setMessageState({
+      dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
-      })
+      }))
     } finally {
       setSaving(false)
     }
@@ -365,26 +347,24 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView keyboardShouldPersistTaps='always'>
-          {props.observationId ?
+          {observationId ?
             <View style={Cs.buttonContainer}>
               <ButtonElement
                 buttonStyle={{}}
                 disabled={saving}
-                title={t('edit location')}
-                iconRight={true}
+                title={' ' + t('edit location')}
                 icon={<Icon name='edit-location' type='material-icons' color='white' size={22} />}
                 onPress={() => handleChangeToMap()}
               />
             </View>
             : null
           }
-          {props.observationId ?
+          {observationId ?
             <View style={Cs.buttonContainer}>
               <ButtonElement
                 buttonStyle={{ backgroundColor: Colors.negativeButton }}
                 disabled={saving}
-                title={t('delete')}
-                iconRight={true}
+                title={' ' + t('delete')}
                 icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
                 onPress={() => handleRemove()}
               />
@@ -407,4 +387,4 @@ const ObservationComponent = (props: Props) => {
   }
 }
 
-export default connector(ObservationComponent)
+export default ObservationComponent

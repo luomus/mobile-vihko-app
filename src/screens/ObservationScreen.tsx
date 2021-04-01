@@ -7,9 +7,9 @@ import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
 import { NavigationStackProp } from 'react-navigation-stack'
 import { Icon } from 'react-native-elements'
-import { setMessageState } from '../stores/message/actions'
+import { setMessageState } from '../stores'
 import { connect, ConnectedProps } from 'react-redux'
-import i18n from '../language/i18n'
+import i18n from '../languages/i18n'
 
 const mapDispatchToProps = {
   setMessageState
@@ -43,8 +43,10 @@ class ObservationScreen extends Component<Props>  {
       this.props.setMessageState({
         type: 'dangerConf',
         messageContent: i18n.t('discard observation?'),
+        cancelLabel: i18n.t('cancel'),
+        okLabel: i18n.t('exit'),
         onOk: () => {
-          this.props.navigation.navigate('Map')
+          this.props.navigation.navigate('Home')
         }
       })
     }
