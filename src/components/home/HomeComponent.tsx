@@ -16,7 +16,9 @@ import {
   setMessageState,
   switchSchema,
   beginObservationEvent,
-  continueObservationEvent
+  continueObservationEvent,
+  logoutUser,
+  resetReducer
 } from '../../stores'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'
@@ -56,6 +58,7 @@ const HomeComponent = (props: Props) => {
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observing = useSelector((state: rootState) => state.observing)
   const schema = useSelector((state: rootState) => state.schema)
+  const credentials = useSelector((state: rootState) => state.credentials)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -143,13 +146,37 @@ const HomeComponent = (props: Props) => {
   const onBeginObservationEvent = async () => {
     const title: string = t('notification title')
     const body: string = t('notification body')
-    await dispatch(beginObservationEvent(props.onPressMap, title, body))
+    try {
+      await dispatch(beginObservationEvent(props.onPressMap, title, body))
+    } catch (error) {
+      dispatch(setMessageState({
+        type: 'err',
+        messageContent: error.message,
+        onOk: () => {
+          props.onLogout()
+          dispatch(logoutUser())
+          dispatch(resetReducer())
+        }
+      }))
+    }
   }
 
   const onContinueObservationEvent = async () => {
     const title: string = t('notification title')
     const body: string = t('notification body')
-    await dispatch(continueObservationEvent(props.onPressMap, title, body))
+    try {
+      await dispatch(continueObservationEvent(props.onPressMap, title, body))
+    } catch (error) {
+      dispatch(setMessageState({
+        type: 'err',
+        messageContent: error.message,
+        onOk: () => {
+          props.onLogout()
+          dispatch(logoutUser())
+          dispatch(resetReducer())
+        }
+      }))
+    }
   }
 
   const stopObserving = () => {

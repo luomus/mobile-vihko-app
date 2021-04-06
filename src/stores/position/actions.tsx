@@ -34,6 +34,7 @@ export const appendPath = (locations: LocationData[]): ThunkAction<Promise<any>,
         payload: points
       })
     }
+    Promise.resolve()
   }
 }
 

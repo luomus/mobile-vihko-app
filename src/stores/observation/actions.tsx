@@ -17,6 +17,7 @@ import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import { CredentialsType } from '../user/types'
 import { saveMedias } from '../../services/imageService'
+import userService from '../../services/userService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
@@ -81,7 +82,7 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
 
 export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+    const { credentials, observationEvent } = getState()
 
     let event = cloneDeep(observationEvent.events.find((event: Record<string, any>) => event.id === id))
     let units = event.gatherings[0].units
@@ -97,6 +98,20 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       return Promise.reject({
         severity: 'low',
         message: `${i18n.t('post failure')} ${error.message}`
+      })
+    }
+
+    //check that person token isn't expired
+    try {
+      await userService.checkTokenValidity(credentials.token)
+    } catch (error) {
+      log.error({
+        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        error: error
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('user token has expired')
       })
     }
 

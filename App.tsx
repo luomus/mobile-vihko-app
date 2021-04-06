@@ -32,7 +32,7 @@ export default class App extends Component {
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, error }) => {
   if (locations) {
     const { observationEvent, path } = store.getState()
-    appendPath(locations)
+    store.dispatch(appendPath(locations))
 
     const indLast = observationEvent.events.length - 1
 
@@ -40,7 +40,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
       (!observationEvent.events[indLast].gatherings[0].geometry && locations[0].coords.accuracy <= 100) ||
       path.length - observationEvent?.events[indLast]?.gatherings[0]?.geometry?.coordinates?.length >= PATH_BACKUP_INTERVALL
     ) {
-      eventPathUpdate(lineStringConstructor(path))
+      store.dispatch(eventPathUpdate(lineStringConstructor(path)))
     }
   }
 })

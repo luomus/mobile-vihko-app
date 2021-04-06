@@ -33,6 +33,7 @@ import { stopLocationAsync, watchLocationAsync } from '../../helpers/geolocation
 import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
 import { lineStringConstructor } from '../../helpers/geoJSONHelper'
 import { sourceId } from '../../config/keys'
+import userService from '../../services/userService'
 
 export const resetReducer = () => ({
   type: 'RESET_STORE'
@@ -46,6 +47,20 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 
     if (!userId) {
       return
+    }
+
+    //check that person token isn't expired
+    try {
+      await userService.checkTokenValidity(credentials.token)
+    } catch (error) {
+      log.error({
+        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        error: error
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('user token has expired')
+      })
     }
 
     const lang = i18n.language
@@ -114,11 +129,25 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 export const continueObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, observationEventInterrupted, observationEvent } = getState()
+    const { centered, credentials, observationEventInterrupted, observationEvent } = getState()
 
     if (!observationEventInterrupted) {
       onPressMap()
       return Promise.resolve()
+    }
+
+    //check that person token isn't expired
+    try {
+      await userService.checkTokenValidity(credentials.token)
+    } catch (error) {
+      log.error({
+        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        error: error
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('user token has expired')
+      })
     }
 
     //atempt to start geolocation systems

@@ -3,6 +3,7 @@ import Colors from '../styles/Colors'
 import ObservationEventComponent from '../components/observationEvent/ObservationEventComponent'
 import InstructionModalComponent from '../components/general/InstructionModalComponent'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
+import { NavigationActions, StackActions } from 'react-navigation'
 import { View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Cs from '../styles/ContainerStyles'
@@ -59,13 +60,19 @@ export default class ObservationEventScreen extends Component<NavigationStackScr
   }
 
   render() {
-    const { isFocused } = this.props.navigation
+    const { dispatch, isFocused } = this.props.navigation
     return (
       <ObservationEventComponent
         id={this.props.navigation.state.params?.id}
         onPressHome={() => { this.props.navigation.navigate('Home') }}
         onPressObservation={(sourcePage?: string) => { this.props.navigation.navigate('Observation', { sourcePage }) }}
         onPressObservationEvent={(sourcePage?: string) => { this.props.navigation.navigate('EditObservationEvent', { sourcePage }) }}
+        onLogout={() => dispatch(
+          StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })]
+          })
+        )}
         isFocused={() => isFocused()}
       >
         <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
