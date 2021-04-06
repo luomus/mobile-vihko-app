@@ -11,7 +11,9 @@ import {
   replaceObservationEventById,
   clearObservationId,
   uploadObservationEvent,
-  setMessageState
+  setMessageState,
+  logoutUser,
+  resetReducer
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import { set, merge, omit } from 'lodash'
@@ -26,6 +28,7 @@ import { JX519ObservationEventFields, JX652ObservationEventFields } from '../../
 type Props = {
   onPressSubmit: () => void,
   onPressObservationEvent: () => void,
+  onLogout: () => void,
   children?: ReactChild,
   sourcePage: string,
   isFocused: () => boolean
@@ -133,14 +136,26 @@ const EditObservationEventComponent = (props: Props) => {
       setForm(undefined)
       props.onPressSubmit()
     } catch (error) {
-      dispatch(setMessageState({
-        type: 'err',
-        messageContent: error.message,
-        onOk: () => {
-          setForm(undefined)
-          props.onPressSubmit()
-        }
-      }))
+      if (error.message !== t('user token has expired')) {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: () => {
+            setForm(undefined)
+            props.onPressSubmit()
+          }
+        }))
+      } else {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: () => {
+            props.onLogout()
+            dispatch(logoutUser())
+            dispatch(resetReducer())
+          }
+        }))
+      }
     }
 
     setSending(false)

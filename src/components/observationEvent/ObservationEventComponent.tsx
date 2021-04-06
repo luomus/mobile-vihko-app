@@ -13,7 +13,9 @@ import {
   uploadObservationEvent,
   setMessageState,
   deleteObservation,
-  deleteObservationEvent
+  deleteObservationEvent,
+  logoutUser,
+  resetReducer
 } from '../../stores'
 import i18n from '../../languages/i18n'
 import { useTranslation } from 'react-i18next'
@@ -28,6 +30,7 @@ type Props = {
   onPressHome: () => void,
   onPressObservation: (sourcePage?: string) => void,
   onPressObservationEvent: (sourcePage: string) => void,
+  onLogout: () => void,
   isFocused: () => boolean,
   children?: ReactChild
 }
@@ -105,11 +108,23 @@ const ObservationEventComponent = (props: Props) => {
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error) {
-      dispatch(setMessageState({
-        type: 'err',
-        messageContent: error.message,
-        onOk: () => props.onPressHome()
-      }))
+      if (error.message !== t('user token has expired')) {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: () => props.onPressHome()
+        }))
+      } else {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: () => {
+            props.onLogout()
+            dispatch(logoutUser())
+            dispatch(resetReducer())
+          }
+        }))
+      }
     }
 
     setSending(false)
@@ -117,7 +132,7 @@ const ObservationEventComponent = (props: Props) => {
 
   //override back button to point to home screen in all cases
   useBackHandler(() => {
-    if (props.isFocused() ) {
+    if (props.isFocused()) {
       props.onPressHome()
       return true
     }
@@ -204,7 +219,7 @@ const ObservationEventComponent = (props: Props) => {
             </View>
           )}
           {props.children}
-          <SendEventModalComponent modalVisibility={modalVisibility} onCancel={setModalVisibility} sendObservationEvent={sendObservationEvent}/>
+          <SendEventModalComponent modalVisibility={modalVisibility} onCancel={setModalVisibility} sendObservationEvent={sendObservationEvent} />
           <MessageComponent />
         </ScrollView>
       </View>

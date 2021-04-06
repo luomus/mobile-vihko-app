@@ -3,6 +3,7 @@ import EditObservationEventComponent from '../components/forms/EditObservationEv
 import InstructionModalComponent from '../components/general/InstructionModalComponent'
 import Colors from '../styles/Colors'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
+import { NavigationActions, StackActions } from 'react-navigation'
 import { Icon } from 'react-native-elements'
 import { View } from 'react-native'
 import Cs from '../styles/ContainerStyles'
@@ -59,7 +60,7 @@ export default class EditObservationEventScreen extends Component<NavigationStac
   }
 
   render() {
-    const { isFocused } = this.props.navigation
+    const { dispatch, isFocused } = this.props.navigation
     return (
       <EditObservationEventComponent
         onPressSubmit={() => {
@@ -68,6 +69,12 @@ export default class EditObservationEventScreen extends Component<NavigationStac
         onPressObservationEvent={() => {
           this.props.navigation.navigate('ObservationEvent')
         }}
+        onLogout={() => dispatch(
+          StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })]
+          })
+        )}
         sourcePage={this.props.navigation?.state?.params?.sourcePage}
         isFocused={() => isFocused()}
       >
