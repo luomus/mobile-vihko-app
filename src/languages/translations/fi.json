@@ -32,6 +32,7 @@
   "edit location": "Muuta paikkaa",
   "edit observation": "Muokkaa havaintoa",
   "edit observation event": "Muokkaa havaintotapahtumaa",
+  "edit observations": "Muokkaa havaintoja",
   "en schema save to async failed": "Englanninkielisen havaintopohjan tallennus epäonnistui.",
   "english": "englanti",
   "error loading en schema from server": "Englanninkielisen havaintopohjan lataaminen epäonnistui, käytetään tallennettua pohjaa.",

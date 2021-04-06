@@ -134,6 +134,12 @@ const ButtonStyles = StyleSheet.create({
   },
   negativeIconButton: {
     backgroundColor: Colors.negativeButton
+  },
+  stopObservingFromMapButton: {
+    backgroundColor: Colors.negativeButton,
+    padding: 2,
+    width: 160,
+    borderRadius: 5
   }
 })
 

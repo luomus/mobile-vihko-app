@@ -2,6 +2,7 @@ import React, { useState, useEffect, ReactChild } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { View, TouchableHighlight } from 'react-native'
+import { Button } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { LineString } from 'geojson'
 import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../../helpers/geoJSONHelper'
@@ -22,12 +23,13 @@ import {
   setFirstLocation,
   setMessageState
 } from '../../stores'
+import Bs from '../../styles/ButtonStyles'
+import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
-import GpsBarComponent from './GpsBarComponent'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
@@ -375,7 +377,14 @@ const MapComponent = (props: Props) => {
 
   return (
     <>
-      <GpsBarComponent stopObserving={stopObserving} />
+      <View style={Cs.gpsStatusBar}>
+        <Button
+          buttonStyle={Bs.stopObservingFromMapButton}
+          title={t('stop observation event')}
+          titleStyle={Ts.fontSizeFifteen}
+          onPress={() => stopObserving()}
+        />
+      </View>
       <View style={Cs.mapContainer}>
         <MapView
           ref={map => { mapView = map }}

@@ -141,10 +141,13 @@ const ContainerStyles = StyleSheet.create({
   },
   observationTypeColumnsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    width: '100%',
   },
   observationTypeButtonsColumnLeft: {
     alignSelf: 'flex-start',
+    backgroundColor: 'white',
+    borderRadius: 5,
     width: '50%'
   },
   observationTypeButtonsColumnRight: {
@@ -369,9 +372,6 @@ const ContainerStyles = StyleSheet.create({
   },
   mapModalItemContainer: {
     padding: 10,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: 'black',
     margin: 5
   }
 })
