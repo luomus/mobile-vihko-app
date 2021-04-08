@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
@@ -13,6 +13,7 @@ interface Props {
   defaultValue: Array<string> | undefined,
   editable: boolean,
   firstEditable: boolean,
+  scrollView: React.MutableRefObject<ScrollView | null>,
   createInputElement: (
     title: string, objectTitle: string, parentObjectTitle: string,
     type: string, defaultValue: string, isArrayItem: boolean,
@@ -67,6 +68,13 @@ const FormArrayComponent = (props: Props) => {
       props.inputType, '', true, callbackFunction, props.editable
     ))
     setInputElements(elements)
+
+    //scroll down, as the new element appears
+    if (props.scrollView !== null) {
+      setTimeout(() => {
+        props.scrollView.current?.scrollToEnd()
+      }, 100)
+    }
   }
 
   //removes the last input element from form

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactChild } from 'react'
+import React, { useState, useEffect, useRef, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -46,6 +46,9 @@ const EditObservationEventComponent = (props: Props) => {
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
   const [sending, setSending] = useState<boolean>(false)
 
+  //reference for scrollView
+  const scrollView = useRef<ScrollView | null>(null)
+
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
@@ -89,9 +92,9 @@ const EditObservationEventComponent = (props: Props) => {
       let schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
       if (schema.formID === 'JX.519') {
-        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, null, null, lang)
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, null, null, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
-        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, null, null, lang)
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, null, null, lang, scrollView)
       }
     }
   }
@@ -184,7 +187,7 @@ const EditObservationEventComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.observationContainer}>
-        <ScrollView>
+        <ScrollView ref={ scrollView }>
           <View style={Cs.formContainer}>
             <FormProvider {...methods}>
               {form}

@@ -1,4 +1,4 @@
-import React, { useState, ReactChild } from 'react'
+import React, { useState, ReactChild, useEffect } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -39,6 +39,8 @@ const ObservationEventComponent = (props: Props) => {
 
   const [sending, setSending] = useState<boolean>(false)
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
+  const [event, setEvent] = useState<Record<string, any> | null>(null)
+  const [observations, setObservations] = useState<Record<string, any>[] | null>(null)
 
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -47,8 +49,12 @@ const ObservationEventComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const event: Record<string, any> | null = observationEvent.events.find(e => e.id === props.id) || null
-  const observations: Record<string, any>[] = event?.gatherings[0]?.units || null
+  useEffect(() => {
+    const searchedEvent: Record<string, any> | null = observationEvent.events.find(e => e.id === props.id) || null
+    const searchedObservations: Record<string, any>[] = searchedEvent?.gatherings[0]?.units || null
+    setEvent(searchedEvent)
+    setObservations(searchedObservations)
+  }, [observationEvent])
 
   const showMessage = (content: string) => {
     dispatch(setMessageState({
