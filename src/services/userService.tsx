@@ -81,6 +81,15 @@ export const checkTokenValidity = async (personToken: string) => {
   return result.data
 }
 
+export const getProfile = async (personToken: string) => {
+  const params = {
+    'access_token': accessToken
+  }
+  const result = await axios.get(getUserUrl + '/' + personToken + '/profile', { params })
+
+  return result.data
+}
+
 export const logout = async (credentials: CredentialsType) => {
   const params = {
     'access_token': accessToken
@@ -90,4 +99,4 @@ export const logout = async (credentials: CredentialsType) => {
   return result.data
 }
 
-export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken, checkTokenValidity, logout }
+export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken, checkTokenValidity, getProfile, logout }

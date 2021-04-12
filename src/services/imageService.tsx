@@ -7,6 +7,7 @@ import {
   CredentialsType,
   UserType
 } from '../stores'
+import { getProfile } from './userService'
 
 const JPEG_EXTENSIONS = ['jpeg', 'jpg']
 const TIFF_EXTENSIONS = ['tiff', 'tif']
@@ -53,16 +54,6 @@ const processImages = async (uris: string[]) => {
 
     return Promise.resolve(image)
   }))
-}
-
-const getDefaultMetadata = (user: UserType) => {
-  const name = user.fullName || user.id
-
-  return {
-    intellectualRights: 'MZ.intellectualRightsCC-BY-SA-4.0',
-    capturerVerbatim: [name],
-    intellectualOwner: name
-  }
 }
 
 const getAllowedMediaFormatsAsString = () => {
@@ -141,7 +132,16 @@ export const saveMedias = async (images: any, credentials: CredentialsType) => {
     }
   }
 
-  const defaultMetadata = getDefaultMetadata(credentials.user)
+  //fetch profile from API and get the default media metadata from there
+  const profile = await getProfile(credentials.token)
+  let fetchedMetadata = profile.settings.defaultMediaMetadata
+
+  //if there isn't default media metadata, use "all rights reserved":
+  const defaultMetadata = {
+    'capturerVerbatim': fetchedMetadata.capturerVerbatim ? [fetchedMetadata.capturerVerbatim] : [credentials.user?.fullName], //has to be array
+    'intellectualOwner': fetchedMetadata.intellectualOwner ? fetchedMetadata.intellectualOwner : credentials.user?.fullName,
+    'intellectualRights': fetchedMetadata.intellectualRights ? fetchedMetadata.intellectualRights : 'MZ.intellectualRightsARR'
+  }
 
   //for each tempid in response send metadata and store the received permanent ID
   try {
