@@ -1,5 +1,6 @@
 import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker } from './formComponentBuilders'
 import { get } from 'lodash'
+import { ScrollView } from 'react-native'
 import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParser'
 
 const Form = (
@@ -10,6 +11,7 @@ const Form = (
   overrideFields: Record<string, any> | null,
   additionalFields: Record<string, any> | null,
   lang: string,
+  scrollView: React.MutableRefObject<ScrollView | null>
 ) => {
   let toReturn: any[] = []
 
@@ -139,11 +141,11 @@ const Form = (
     }
 
     if (path === 'gatheringEvent_leg' && isArray) {
-      toReturn.push(createArray(translatedTitle, '', path, typeOfArray, defaultValue, true, false))
+      toReturn.push(createArray(translatedTitle, '', path, typeOfArray, defaultValue, true, false, scrollView))
     } else if (path.includes('images')) {
       toReturn.push(createImagePicker(translatedTitle, path, defaultValue))
     } else if (isArray) {
-      toReturn.push(createArray(translatedTitle, '', path, typeOfArray, defaultValue, true, true))
+      toReturn.push(createArray(translatedTitle, '', path, typeOfArray, defaultValue, true, true, scrollView))
     } else if (isEnum) {
       toReturn.push(createPicker(translatedTitle, path, defaultValue, enumDict, blacklist))
     } else if (type === 'boolean') {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactChild } from 'react'
+import React, { useState, useEffect, useRef, ReactChild } from 'react'
 import { View, ScrollView } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -52,6 +52,9 @@ const ObservationComponent = (props: Props) => {
   const [form, setForm] = useState<Array<Element | undefined> | null>(null)
   const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
 
+  //reference for scrollView
+  const scrollView = useRef<ScrollView | null>(null)
+
   const editing = useSelector((state: rootState) => state.editing)
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -76,6 +79,13 @@ const ObservationComponent = (props: Props) => {
       }))
     }
   }, [])
+
+  //scrolls the ScrollView up, if a validation error happens
+  useEffect(() => {
+    if (Object.keys(methods.formState.errors).length > 0) {
+      scrollView?.current?.scrollTo({ y: 0, animated: false })
+    }
+  }, [methods.formState])
 
   useBackHandler(() => {
 
@@ -158,23 +168,23 @@ const ObservationComponent = (props: Props) => {
     if (observationId) {
       //flying squirrel edit observation
       if (observationState?.rules) {
-        initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, lang)
+        initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, lang, scrollView)
         //trip form new observation
       } else if (schema.formID === 'JX.519') {
-        initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
+        initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
-        initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, lang)
+        initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, lang, scrollView)
       }
       //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
-        initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, lang)
+        initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, lang, scrollView)
         //trip form edit observation
       } else if (schema.formID === 'JX.519') {
-        initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang)
+        initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
-        initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, lang)
+        initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, lang, scrollView)
       }
     }
   }
@@ -346,7 +356,7 @@ const ObservationComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.observationContainer}>
-        <ScrollView keyboardShouldPersistTaps='always'>
+        <ScrollView keyboardShouldPersistTaps='always' ref={ scrollView }>
           {observationId ?
             <View style={Cs.buttonContainer}>
               <ButtonElement

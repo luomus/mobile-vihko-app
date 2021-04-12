@@ -32,6 +32,7 @@
   "edit location": "Förändra platsen",
   "edit observation": "Redigera observationen",
   "edit observation event": "Redigera observationstransaktionen",
+  "edit observations": "Redigera observationen",
   "en schema save to async failed": "Misslyckades at spara engelska observationsscheman.",
   "english": "engelska",
   "error loading en schema from server": "Misslyckades att ladda engelska observationsscheman, används den sparade scheman.",

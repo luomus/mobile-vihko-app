@@ -58,7 +58,6 @@ const HomeComponent = (props: Props) => {
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observing = useSelector((state: rootState) => state.observing)
   const schema = useSelector((state: rootState) => state.schema)
-  const credentials = useSelector((state: rootState) => state.credentials)
 
   const dispatch: DispatchType = useDispatch()
 

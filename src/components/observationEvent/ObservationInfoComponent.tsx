@@ -25,7 +25,6 @@ const ObservationInfoComponent = (props: Props) => {
   const schema = useSelector((state: rootState) => state.schema)
 
   useEffect(() => {
-
     const initList = async () => {
       let fields: string[] | null = null
 
@@ -40,7 +39,7 @@ const ObservationInfoComponent = (props: Props) => {
     }
 
     initList()
-  }, [])
+  }, [props.observation])
 
   const lang = i18n.language
   const schemaUnits = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units

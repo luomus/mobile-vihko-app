@@ -1,8 +1,9 @@
 import React from 'react'
-import { StyleProp, View, ViewStyle } from 'react-native'
+import { StyleProp, Text, View, ViewStyle } from 'react-native'
 import { Icon, Button } from 'react-native-elements'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
+import Ts from '../../styles/TextStyles'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { rootState } from '../../stores'
@@ -52,21 +53,31 @@ const ObservationButtonsComponent = (props: Props) => {
 
     if (haversineNeighbors.length >= 4) {
       return (
-        createButton(
-          haversineNeighbors.length + ' ' + t('observation count'),
-          Bs.observationNeighborsButton,
-          () => props.openModal(haversineNeighbors, eventId),
-          <Icon name='edit' type='material-icons' color='white' size={22} />
+        (
+          <View style={Cs.observationTypeButtonsColumnLeft}>
+            <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
+            {createButton(
+              haversineNeighbors.length + ' ' + t('observation count'),
+              Bs.observationNeighborsButton,
+              () => props.openModal(haversineNeighbors, eventId),
+              <Icon name='edit' type='material-icons' color='white' size={22} />
+            )}
+          </View>
         )
       )
     } else if (haversineNeighbors.length >= 1) {
-      return haversineNeighbors?.map((neighbor: Record<string, any>) =>
-        createButton(
-          neighbor.identifications[0].taxon,
-          Bs.observationNeighborsButton,
-          () => props.shiftToEditPage(eventId, neighbor.id),
-          <Icon name='edit' type='material-icons' color='white' size={22} />
-        )
+      return (
+        <View style={Cs.observationTypeButtonsColumnLeft}>
+          <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
+          {haversineNeighbors?.map((neighbor: Record<string, any>) =>
+            createButton(
+              neighbor.identifications[0].taxon,
+              Bs.observationNeighborsButton,
+              () => props.shiftToEditPage(eventId, neighbor.id),
+              <Icon name='edit' type='material-icons' color='white' size={22} />
+            )
+          )}
+        </View>
       )
     }
   }
@@ -75,11 +86,9 @@ const ObservationButtonsComponent = (props: Props) => {
     if (props.mode === 'newObservation') {
       return (
         <View style={Cs.observationTypeColumnsContainer}>
-          <View style={Cs.observationTypeButtonsColumnLeft}>
-            {createButtonList()}
-          </View>
+          {createButtonList() ? createButtonList() : <View></View>}
           <View style={Cs.observationTypeButtonsColumnRight}>
-            {createButton(t('add observation'), Bs.observationButton, () => props.confirmationButton(true))}
+            {createButton('+ ' + t('observation'), Bs.observationButton, () => props.confirmationButton(true))}
             {createButton(t('cancel'), Bs.endButton, () => props.cancelButton())}
           </View>
         </View>

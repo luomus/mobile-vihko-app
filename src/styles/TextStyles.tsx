@@ -68,6 +68,13 @@ const TextStyles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     marginBottom: 5
+  },
+  mapButtonsLeftTitle: {
+    fontSize: 16,
+    padding: 6
+  },
+  fontSizeFifteen: {
+    fontSize: 15
   }
 })
 

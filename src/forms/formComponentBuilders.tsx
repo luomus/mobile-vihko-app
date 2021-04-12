@@ -1,4 +1,5 @@
 import React from 'react'
+import { ScrollView } from 'react-native'
 import FormInputComponent from '../components/formComponents/FormInputComponent'
 import FormImagePickerComponent from '../components/formComponents/FormImagePickerComponent'
 import FormImageKeywordPickerComponent from '../components/formComponents/FormImagePickerKeywordComponent'
@@ -94,12 +95,13 @@ export const createImageKeywordPicker = (
 //create an array type input field
 export const createArray = (
   title: string, objectTitle: string, parentObjectTitle: string, type: string,
-  defaultValue: Array<string> | undefined, editable: boolean, firstEditable: boolean
+  defaultValue: Array<string> | undefined, editable: boolean,
+  firstEditable: boolean, scrollView: React.MutableRefObject<ScrollView | null>
 ) => {
   return <FormArrayComponent
     key={parentObjectTitle} title={title} objectTitle={objectTitle} parentObjectTitle={parentObjectTitle}
     inputType={type} defaultValue={defaultValue} editable={editable} firstEditable={firstEditable}
-    createInputElement={createInputElement}
+    scrollView={scrollView} createInputElement={createInputElement}
   />
 }
 

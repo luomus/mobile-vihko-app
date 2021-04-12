@@ -32,6 +32,7 @@
   "edit location": "Change location",
   "edit observation": "Edit observation",
   "edit observation event": "Edit observation event",
+  "edit observations": "Edit observations",
   "en schema save to async failed": "Failed to save English schema to local storage.",
   "english": "English",
   "error loading en schema from server": "Failed to load English schema from server, using locally stored version.",

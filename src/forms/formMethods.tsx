@@ -1,4 +1,5 @@
 import Form from './Form'
+import { ScrollView } from 'react-native'
 
 //called in component to initalize to ane of the forms
 export const initForm = (
@@ -10,7 +11,8 @@ export const initForm = (
   fields: string[] | null = null,
   overrideFields: Record<string, any> | null = null,
   additionalFields: Record<string, any> | null = null,
-  lang: string
+  lang: string,
+  scrollView: React.MutableRefObject<ScrollView | null>
 ) => {
 
   if (!schema) {
@@ -22,7 +24,7 @@ export const initForm = (
   }
 
   if (!rules) {
-    setForm(Form(defaults, fields, null, schema, overrideFields, additionalFields, lang))
+    setForm(Form(defaults, fields, null, schema, overrideFields, additionalFields, lang, scrollView))
   } else {
     const fieldScope = Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key: string) => {
       const matches = new RegExp(rules.regexp).test(key)
@@ -40,6 +42,6 @@ export const initForm = (
     const fields = fieldScope?.fields.concat(['images'])
     const blacklist = fieldScope?.blacklist
 
-    setForm(Form(defaults, fields, blacklist, schema, overrideFields, additionalFields, lang))
+    setForm(Form(defaults, fields, blacklist, schema, overrideFields, additionalFields, lang, scrollView))
   }
 }
