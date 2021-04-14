@@ -25,8 +25,9 @@ export const JX519Fields = [
   'identifications_0_taxon',
   'count',
   'unitGathering_dateBegin',
-  'atlasCode',
   'taxonConfidence',
+  'wild',
+  'atlasCode',
   'notes',
   'images'
 ]
@@ -75,6 +76,14 @@ export const overrideJX519Fields = {
         'habitat',
       ]
     }
+  },
+  'unitGathering_dateBegin': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Aika',
+      'Tid',
+      'Time'
+    ]
   }
 }
 
@@ -94,6 +103,18 @@ export const additionalJX519Fields = {
     blacklist: null
   }
 }
+
+export const JX519FieldOrder = [
+  'identifications_0_taxon',
+  'count',
+  'unitGathering_geometry_radius',
+  'unitGathering_dateBegin',
+  'taxonConfidence',
+  'wild',
+  'atlasCode',
+  'notes',
+  'images'
+]
 
 export const JX652ObservationEventFields = [
   'gatheringEvent_legPublic',

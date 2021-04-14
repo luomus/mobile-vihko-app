@@ -10,6 +10,7 @@ const Form = (
   schema: Record<string, any> | null,
   overrideFields: Record<string, any> | null,
   additionalFields: Record<string, any> | null,
+  fieldOrder: string[] | null = null,
   lang: string,
   scrollView: React.MutableRefObject<ScrollView | null>
 ) => {
@@ -91,6 +92,10 @@ const Form = (
         case 'imagesKeywords':
           toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, lang))
           return
+        case 'inputTitleOverridden':
+          createVisibleField(path, overrideFields[path].title, fieldIsArray, fieldTypeOfArray, fieldIsEnum,
+            fieldEnumDict, fieldType, fieldDefaultValue, fieldBlacklist)
+          return
       }
     }
 
@@ -159,11 +164,22 @@ const Form = (
     if (!fields) {
       return toReturn
     }
+    let orderedToReturn
 
-    let orderedToReturn = fields.includes('*') ? new Array(fields.length - 1) : new Array(fields.length)
+    if (fieldOrder) {
+      orderedToReturn = fieldOrder.includes('*') ? new Array(fieldOrder.length - 1) : new Array(fieldOrder.length)
+    } else {
+      orderedToReturn = fields.includes('*') ? new Array(fields.length - 1) : new Array(fields.length)
+    }
 
     toReturn.forEach(element => {
-      let index = fields.findIndex(field => field === element.key)
+      let index: number = 0
+      if (fieldOrder) {
+        index = fieldOrder.findIndex(field => field === element.key)
+      } else {
+        index = fields.findIndex(field => field === element.key)
+      }
+
       if (index >= 0) {
         orderedToReturn[index] = element
       } else {
@@ -188,7 +204,6 @@ const Form = (
       }
 
       fieldDefault = fieldDefault || defaultValue
-
       createVisibleField(
         key,
         title,

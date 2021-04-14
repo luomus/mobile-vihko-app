@@ -19,14 +19,14 @@ import {
 import MessageComponent from '../general/MessageComponent'
 import Cs from '../../styles/ContainerStyles'
 import { initForm } from '../../forms/formMethods'
-import { set, clone } from 'lodash'
+import { get, set, clone, merge } from 'lodash'
 import uuid from 'react-native-uuid'
 import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import { Button as ButtonElement, Icon } from 'react-native-elements'
 import { lineStringConstructor } from '../../helpers/geoJSONHelper'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
-import { JX519Fields, overrideJX519Fields, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
+import { JX519Fields, overrideJX519Fields, JX519FieldOrder, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
 type Props = {
@@ -168,23 +168,23 @@ const ObservationComponent = (props: Props) => {
     if (observationId) {
       //flying squirrel edit observation
       if (observationState?.rules) {
-        initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, lang, scrollView)
+        initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollView)
         //trip form new observation
       } else if (schema.formID === 'JX.519') {
-        initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang, scrollView)
+        initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
-        initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, lang, scrollView)
+        initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
       }
       //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
-        initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, lang, scrollView)
+        initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollView)
         //trip form edit observation
       } else if (schema.formID === 'JX.519') {
-        initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, lang, scrollView)
+        initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
-        initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, lang, scrollView)
+        initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
       }
     }
   }
@@ -210,7 +210,13 @@ const ObservationComponent = (props: Props) => {
     }
 
     Object.keys(data).forEach(key => {
-      set(newUnit, key.split('_'), data[key])
+      const target = get(newUnit, key.split('_'))
+
+      if (typeof data[key] === 'object' && target) {
+        merge(target, data[key])
+      } else {
+        set(newUnit, key.split('_'), data[key])
+      }
     })
 
     //set correct color for obseration, if available
@@ -356,7 +362,7 @@ const ObservationComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.observationContainer}>
-        <ScrollView keyboardShouldPersistTaps='always' ref={ scrollView }>
+        <ScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
           {observationId ?
             <View style={Cs.buttonContainer}>
               <ButtonElement
