@@ -36,13 +36,11 @@ const FormAutocompleteComponent = (props: Props) => {
   const [hideResult, setHideResult] = useState<boolean>(true)
   const [selected, setSelected] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string>('')
 
   const { t } = useTranslation()
-  const { register, unregister, setValue, formState, watch, clearErrors } = useFormContext()
+  const { register, unregister, setValue, formState, watch, clearErrors, setError } = useFormContext()
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
-  let timeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
     let allFound = true
@@ -73,7 +71,7 @@ const FormAutocompleteComponent = (props: Props) => {
   useEffect(() => {
     if (Object.keys(formState.errors).length > 0) {
       setTimeout(() => {
-        clearErrors('identifications_0_taxon')
+        clearErrors(valueField)
       }, 5000)
     }
   }, [formState.errors])
@@ -97,7 +95,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
     } catch (err) {
       if (!err.isCanceled) {
-        //setErrorMessage('Autocomplete network error!')
+        setError(valueField, { message: 'Autocomplete network error', type: 'manual' })
       }
     } finally {
       setLoading(false)
@@ -160,7 +158,7 @@ const FormAutocompleteComponent = (props: Props) => {
       cancel = undefined
     } catch (err) {
       if (!err.isCanceled) {
-        //setErrorMessage(t('autocomplete network error'))
+        setError(valueField, { message: 'Autocomplete network error', type: 'manual' })
       }
     } finally {
       setLoading(false)

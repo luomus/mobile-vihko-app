@@ -80,13 +80,6 @@ const ObservationComponent = (props: Props) => {
     }
   }, [])
 
-  //scrolls the ScrollView up, if a validation error happens
-  useEffect(() => {
-    if (Object.keys(methods.formState.errors).length > 0) {
-      scrollView?.current?.scrollTo({ y: 0, animated: false })
-    }
-  }, [methods.formState])
-
   useBackHandler(() => {
 
     if (props.isFocused()) {
@@ -195,6 +188,11 @@ const ObservationComponent = (props: Props) => {
     } else {
       updateObservation(data)
     }
+  }
+
+  //as autocomplete field is the only possible validation error, scroll to top when validation error occurs
+  const onError = async () => {
+    scrollView?.current?.scrollTo({ y: 0, animated: false })
   }
 
   const createNewObservation = async (data: { [key: string]: any }) => {
@@ -396,7 +394,7 @@ const ObservationComponent = (props: Props) => {
         {props.children}
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <FloatingIconButtonComponent onPress={methods.handleSubmit(onSubmit)} />
+          <FloatingIconButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
         </View>
       </View>
     )
