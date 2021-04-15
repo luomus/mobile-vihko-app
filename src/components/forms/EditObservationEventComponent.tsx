@@ -92,9 +92,9 @@ const EditObservationEventComponent = (props: Props) => {
       let schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
       if (schema.formID === 'JX.519') {
-        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, null, null, null, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
-        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, null, null, null, lang, scrollView)
       }
     }
   }
