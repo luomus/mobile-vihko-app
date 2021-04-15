@@ -21,20 +21,20 @@ export const loginUser = (tmpToken: string): ThunkAction<Promise<any>, any, void
 
     //if timeout or other error inform user of error, credentials stay null
     } catch (netError) {
-      if (netError.timeout) {
+      if (!netError.timeout) {
         log.error({
           location: '/stores/user/actions.tsx loginUser()',
           error: netError.response.data.error
         })
         return Promise.reject({
           severity: 'fatal',
-          message: i18n.t('login timed out')
+          message: i18n.t('failed to load credentials from server')
         })
       }
 
       return Promise.reject({
         severity: 'fatal',
-        message: i18n.t('failed to load credentials from server')
+        message: i18n.t('login timed out')
       })
     }
 

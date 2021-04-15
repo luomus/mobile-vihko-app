@@ -25,10 +25,9 @@ import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
 import { availableForms } from '../../config/fields'
+import { openBrowserAsync } from 'expo-web-browser'
 
 type Props = {
-  loginAccepted?: boolean,
-  onPressLogin: (loginURL: string) => void,
   onSuccessfulLogin: () => void,
   onReset: () => void,
 }
@@ -36,7 +35,6 @@ type Props = {
 const LoginComponent = (props: Props) => {
 
   const [loggingIn, setLoggingIn] = useState<boolean>(true)
-  const [tempToken, setTempToken] = useState<string>('')
 
   const credentials = useSelector((state: rootState) => state.credentials)
 
@@ -46,7 +44,7 @@ const LoginComponent = (props: Props) => {
 
   useEffect(() => {
     loadData()
-  }, [props.loginAccepted || credentials])
+  }, [credentials])
 
   const showError = (error: string) => {
     dispatch(setMessageState({
@@ -74,30 +72,17 @@ const LoginComponent = (props: Props) => {
   const loadData = async () => {
     setLoggingIn(true)
     if (!credentials.token) {
-      if (props.loginAccepted === undefined) {
-        try {
-          await dispatch(initLocalCredentials())
-          await initializeApp()
-        } catch (error) {
-          if (error?.severity) {
-            showError(error.message)
-          }
-          setLoggingIn(false)
-        }
-      } else if (props.loginAccepted) {
-        try {
-          await dispatch(loginUser(tempToken))
-        } catch (error) {
-          if (error.severity === 'fatal') {
-            showFatalError(`${t('critical error')}:\n${error.message}`)
-            setLoggingIn(false)
-            return
-          } else {
-            showError(error.message)
-          }
-        }
+      try {
+        await dispatch(initLocalCredentials())
         await initializeApp()
+      } catch (error) {
+        if (error?.severity) {
+          showError(error.message)
+        }
+        setLoggingIn(false)
       }
+    } else {
+      await initializeApp()
     }
   }
 
@@ -136,15 +121,14 @@ const LoginComponent = (props: Props) => {
     setLoggingIn(false)
   }
 
+
   const login = async () => {
     setLoggingIn(true)
     //check internet status and attempt to get temporary login url for webview
+    let result
     try {
       await netStatusChecker()
-      const result = await getTempTokenAndLoginUrl()
-      setTempToken(result.tmpToken)
-      props.onPressLogin(result.loginURL)
-      setLoggingIn(false)
+      result = await getTempTokenAndLoginUrl()
     } catch (error) {
       log.error({
         location: '/components/LoginComponent.tsx login()',
@@ -152,6 +136,30 @@ const LoginComponent = (props: Props) => {
       })
       setLoggingIn(false)
       showFatalError(`${t('critical error')}:\n${t('getting temp token failed with')} ${error.message ? error.message : i18n.t('status code') + error.response.status}`)
+      return
+    }
+
+    try {
+      await openBrowserAsync(result.loginURL)
+    } catch (error) {
+      log.error({
+        location: 'components/LoginComponent.tsx login()',
+        error: JSON.stringify(error)
+      })
+      setLoggingIn(false)
+      showFatalError(`${t('critical error')}:\n${t('could not open browser for login')}`)
+    }
+
+    try {
+      await dispatch(loginUser(result.tmpToken))
+    } catch (error) {
+      if (error.severity === 'fatal') {
+        showFatalError(`${t('critical error')}:\n${error.message}`)
+        setLoggingIn(false)
+        return
+      } else {
+        showError(error.message)
+      }
     }
   }
 
