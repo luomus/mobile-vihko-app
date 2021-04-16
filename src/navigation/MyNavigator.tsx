@@ -7,7 +7,6 @@ import MapScreen from '../screens/MapScreen'
 import ObservationScreen from '../screens/ObservationScreen'
 import ObservationEventScreen from '../screens/ObservationEventScreen'
 import LoginScreen from '../screens/LoginScreen'
-import WebViewScreen from '../screens/WebViewScreen'
 import EditObservationEventScreen from '../screens/EditObservationEventScreen'
 import InfoScreen from '../screens/InfoScreen'
 
@@ -19,7 +18,6 @@ const MainNavigator = createStackNavigator(
     Observation: ObservationScreen,
     ObservationEvent: ObservationEventScreen,
     EditObservationEvent: EditObservationEventScreen,
-    WebView: WebViewScreen,
     Info: InfoScreen
   },
   {
