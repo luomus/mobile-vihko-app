@@ -3,10 +3,7 @@ import i18n from '../languages/i18n'
 import * as FileSystem from 'expo-file-system'
 import { postImageUrl } from '../config/urls'
 import { accessToken } from '../config/keys'
-import {
-  CredentialsType,
-  UserType
-} from '../stores'
+import { CredentialsType } from '../stores'
 import { getProfile } from './userService'
 
 const JPEG_EXTENSIONS = ['jpeg', 'jpg']
@@ -134,13 +131,13 @@ export const saveMedias = async (images: any, credentials: CredentialsType) => {
 
   //fetch profile from API and get the default media metadata from there
   const profile = await getProfile(credentials.token)
-  let fetchedMetadata = profile.settings.defaultMediaMetadata
+  let fetchedMetadata = profile.settings ? profile.settings.defaultMediaMetadata : undefined
 
   //if there isn't default media metadata, use "all rights reserved":
   const defaultMetadata = {
-    'capturerVerbatim': fetchedMetadata.capturerVerbatim ? [fetchedMetadata.capturerVerbatim] : [credentials.user?.fullName], //has to be array
-    'intellectualOwner': fetchedMetadata.intellectualOwner ? fetchedMetadata.intellectualOwner : credentials.user?.fullName,
-    'intellectualRights': fetchedMetadata.intellectualRights ? fetchedMetadata.intellectualRights : 'MZ.intellectualRightsARR'
+    'capturerVerbatim': fetchedMetadata?.capturerVerbatim ? [fetchedMetadata.capturerVerbatim] : [credentials.user?.fullName], //has to be array
+    'intellectualOwner': fetchedMetadata?.intellectualOwner ? fetchedMetadata.intellectualOwner : credentials.user?.fullName,
+    'intellectualRights': fetchedMetadata?.intellectualRights ? fetchedMetadata.intellectualRights : 'MZ.intellectualRightsARR'
   }
 
   //for each tempid in response send metadata and store the received permanent ID

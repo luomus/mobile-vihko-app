@@ -28,7 +28,7 @@ type Props = {
 }
 
 const ImagePickerKeywordComponent = (props: Props) => {
-  const { register, setValue, setError, formState } = useFormContext()
+  const { register, setValue, setError, clearErrors, formState } = useFormContext()
   const [images, setImages] = useState<Array<Record<string, any>>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
   const keywords: Record<string, any> = props.params
@@ -82,11 +82,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
       }
       return succeeded
     } catch (err) {
-      setError(props.objectTitle, { message: 'Error while attaching image', type: 'manual' })
+      setError(props.objectTitle, { message: 'image attachment failure', type: 'manual' })
       log.error({
-        location: '/components/formComponents/FormImagePickerComponent attachImage()',
+        location: '/components/formComponents/FormImagePickerKeywordComponent attachImage()',
         error: JSON.stringify(err)
       })
+      setTimeout(() => {
+        clearErrors(props.objectTitle)
+      }, 5000)
     }
   }
 

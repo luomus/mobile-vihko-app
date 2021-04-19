@@ -57,6 +57,7 @@
   "fungi atlas": "Fungi Atlas",
   "getting temp token failed with": "Getting url and temporary token for login failed,",
   "gps recording on": "GPS tracking on...",
+  "image attachment failure": "Error while adding image",
   "image post failure": "Sending failed, posting images failed,",
   "images": "Images",
   "incorrect format": "Sending failed, the allowed image formats are",
