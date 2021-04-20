@@ -17,6 +17,12 @@ const ButtonStyles = StyleSheet.create({
     padding: 10,
     borderRadius: 5
   },
+  loginCancelButton: {
+    width: '60%',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'center'
+  },
   editEventButton: {
     width: 60,
     backgroundColor: Colors.neutralButton,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
@@ -35,11 +35,10 @@ type Props = {
 const LoginComponent = (props: Props) => {
 
   const [loggingIn, setLoggingIn] = useState<boolean>(true)
-
+  const [polling, setPolling] = useState<boolean>(false)
+  const [canceler, setCanceler] = useState<() => void | undefined>()
   const credentials = useSelector((state: rootState) => state.credentials)
-
   const dispatch: DispatchType = useDispatch()
-
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -151,8 +150,14 @@ const LoginComponent = (props: Props) => {
     }
 
     try {
-      await dispatch(loginUser(result.tmpToken))
+      setPolling(true)
+      await dispatch(loginUser(result.tmpToken, setCanceler))
     } catch (error) {
+      if (error.canceled) {
+        setLoggingIn(false)
+        return
+      }
+
       if (error.severity === 'fatal') {
         showFatalError(`${t('critical error')}:\n${error.message}`)
         setLoggingIn(false)
@@ -160,12 +165,27 @@ const LoginComponent = (props: Props) => {
       } else {
         showError(error.message)
       }
+    } finally {
+      setPolling(false)
     }
   }
 
-  if (loggingIn) {
+  if (polling) {
+    return <>
+      <ActivityComponent text={t('waiting for login')}>
+        <View style={Bs.loginCancelButton}>
+          <Button onPress={() => {
+            if (canceler) {
+              canceler()
+            }
+          }} title={t('cancel')} color={Colors.negativeButton}/>
+        </View>
+      </ActivityComponent>
+    </>
+
+  } else if (loggingIn) {
     return (
-      <ActivityComponent text={'loading'} />
+      <ActivityComponent text={t('loading')} />
     )
   } else {
     return (

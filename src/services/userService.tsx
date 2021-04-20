@@ -35,11 +35,11 @@ export const getUserByPersonToken = async (personToken: string) => {
   return fetchResult.data
 }
 
-export const pollUserLogin = async (tmpToken: string) => {
+export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
   let poller: NodeJS.Timeout
   let timeout: NodeJS.Timeout
 
-  let userPromise = new Promise<CredentialsType>((resolve, reject) => {
+  let userPromise = new Promise<CredentialsType | {canceled: boolean}>((resolve, reject) => {
     //starts a 180 second timeout which stops above polling interval
     timeout = setTimeout(() => {
       clearInterval(poller)
@@ -67,6 +67,14 @@ export const pollUserLogin = async (tmpToken: string) => {
         }
       }
     }, 3000)
+
+    setCanceler(() => () => {
+      clearInterval(poller)
+      clearTimeout(timeout)
+      reject({
+        canceled: true
+      })
+    })
   })
 
   return userPromise
