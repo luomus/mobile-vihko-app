@@ -157,6 +157,7 @@
   "use camera": "Ta bild",
   "user token has expired": "Din inloggning har gått ut. Var så god, och logga in igen.",
   "version": "Version:",
+  "waiting for login": "Väntar på bekräftelse från inloggningen.",
   "yes": "Ja",
   "zone": "Observationsplats",
   "zone save to async failed": "Misslyckades att spara observationsplatser till lokalt minne.",

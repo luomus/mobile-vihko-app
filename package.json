@@ -58,6 +58,7 @@
     "react-native-screens": "~2.10.1",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-typescript-geojson": "0.0.4",
+    "react-native-unimodules": "^0.13.3",
     "react-native-uuid": "^1.4.9",
     "react-native-web": "~0.13.7",
     "react-native-webview": "^11.0.2",
