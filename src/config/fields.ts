@@ -51,7 +51,7 @@ export const overrideJX519Fields = {
       },
       transform: {
         'key': 'unitFact_autocompleteSelectedTaxonID',
-        'value': 'identifications_0_taxon',
+        'shownName': 'identifications_0_taxon',
         'payload_informalTaxonGroups': 'informalTaxonGroups'
       }
     }
@@ -159,7 +159,7 @@ export const overrideJX652Fields = {
       },
       transform: {
         'key': 'unitFact_autocompleteSelectedTaxonID',
-        'value': 'identifications_0_taxon',
+        'shownName': 'identifications_0_taxon',
         'payload_informalTaxonGroups': 'informalTaxonGroups'
       }
     }
