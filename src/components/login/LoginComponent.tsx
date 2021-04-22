@@ -73,7 +73,6 @@ const LoginComponent = (props: Props) => {
     if (!credentials.token) {
       try {
         await dispatch(initLocalCredentials())
-        await initializeApp()
       } catch (error) {
         if (error?.severity) {
           showError(error.message)
