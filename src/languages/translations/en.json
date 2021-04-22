@@ -157,6 +157,7 @@
   "use camera": "Take photo",
   "user token has expired": "Your session has expired. Please, log in again.",
   "version": "Version:",
+  "waiting for login": "Waiting for confirmation from login.",
   "yes": "Yes",
   "zone": "Observation locality",
   "zone save to async failed": "Failed to save observation zones to local storage.",
