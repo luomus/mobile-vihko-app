@@ -11,6 +11,8 @@ import Ts from '../../styles/TextStyles'
 import * as ImagePicker from 'expo-image-picker'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
+import { log } from '../../helpers/logger'
+import { ErrorMessage } from '@hookform/error-message'
 
 interface RadioPropsType {
   label: string,
@@ -26,7 +28,7 @@ type Props = {
 }
 
 const ImagePickerKeywordComponent = (props: Props) => {
-  const { register, setValue } = useFormContext()
+  const { register, setValue, setError, clearErrors, formState } = useFormContext()
   const [images, setImages] = useState<Array<Record<string, any>>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
   const keywords: Record<string, any> = props.params
@@ -46,38 +48,49 @@ const ImagePickerKeywordComponent = (props: Props) => {
   })
 
   const attachImage = async (useCamera: boolean) => {
-    let permissionResult: ImagePicker.PermissionResponse
+    try {
+      let permissionResult: ImagePicker.PermissionResponse
 
-    if (useCamera) {
-      permissionResult = await ImagePicker.requestCameraPermissionsAsync()
-    } else {
-      permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
-    }
-    if (permissionResult.granted === false) {
-      return false
-    }
+      if (useCamera) {
+        permissionResult = await ImagePicker.requestCameraPermissionsAsync()
+      } else {
+        permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
+      }
+      if (permissionResult.granted === false) {
+        return false
+      }
 
-    let pickerResult: ImagePicker.ImagePickerResult
+      let pickerResult: ImagePicker.ImagePickerResult
 
-    if (useCamera) {
-      pickerResult = await ImagePicker.launchCameraAsync()
-    } else {
-      pickerResult = await ImagePicker.launchImageLibraryAsync()
-    }
+      if (useCamera) {
+        pickerResult = await ImagePicker.launchCameraAsync()
+      } else {
+        pickerResult = await ImagePicker.launchImageLibraryAsync()
+      }
 
-    let succeeded : boolean = !pickerResult.cancelled
-    let uri = pickerResult.uri
-    if (succeeded) {
-      setImages(images.concat({
-        uri,
-        keywords: ''
-      }))
-      setValue(props.objectTitle, images.concat({
-        uri,
-        keywords: ''
-      }))
+      let succeeded: boolean = !pickerResult.cancelled
+      let uri = pickerResult.uri
+      if (succeeded) {
+        setImages(images.concat({
+          uri,
+          keywords: ''
+        }))
+        setValue(props.objectTitle, images.concat({
+          uri,
+          keywords: ''
+        }))
+      }
+      return succeeded
+    } catch (err) {
+      setError(props.objectTitle, { message: 'image attachment failure', type: 'manual' })
+      log.error({
+        location: '/components/formComponents/FormImagePickerKeywordComponent attachImage()',
+        error: JSON.stringify(err)
+      })
+      setTimeout(() => {
+        clearErrors(props.objectTitle)
+      }, 5000)
     }
-    return succeeded
   }
 
   const imageFromLibrary = async () => {
@@ -120,6 +133,11 @@ const ImagePickerKeywordComponent = (props: Props) => {
     setValue(props.objectTitle, updatedImages)
   }
 
+  const errorMessageTranslation = (errorMessage: string): Element => {
+    const errorTranslation = t(errorMessage)
+    return <Text style={{ color: Colors.negativeColor }}>{errorTranslation}</Text>
+  }
+
   const renderImages = () => {
     return images.map((image: Record<string, any>) => {
       let initial: number = -1
@@ -144,7 +162,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
                 type='material-icons'
                 color={Colors.negativeColor}
                 size={22}
-                onPress={() => {showRemoveImage(image.uri)}}
+                onPress={() => { showRemoveImage(image.uri) }}
               />
             </View>
           </ImageBackground>
@@ -152,11 +170,12 @@ const ImagePickerKeywordComponent = (props: Props) => {
             <RadioForm
               radio_props={radioProps}
               initial={initial}
-              onPress={(value) => {onRadioButtonSelect(value, image.uri)}}
+              onPress={(value) => { onRadioButtonSelect(value, image.uri) }}
             />
           </View>
         </View>
-      )}
+      )
+    }
     )
   }
 
@@ -164,6 +183,11 @@ const ImagePickerKeywordComponent = (props: Props) => {
   if (images.length < 2) {
     return (
       <>
+        <ErrorMessage
+          errors={formState.errors}
+          name={props.objectTitle}
+          render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{errorMessageTranslation(message)}</Text>}
+        />
         <View style={{ paddingLeft: 10 }}>
           <Text>{props.title}</Text>
         </View>
@@ -182,14 +206,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
               buttonStyle={Bs.addImageButton}
               containerStyle={Cs.padding5Container}
               title={' ' + t('choose image')}
-              icon={<Icon name='photo-library' type='material-icons' color='white'  size={22} />}
+              icon={<Icon name='photo-library' type='material-icons' color='white' size={22} />}
               onPress={imageFromLibrary}
             />
             <ButtonElement
               buttonStyle={Bs.addImageButton}
               containerStyle={Cs.padding5Container}
               title={' ' + t('use camera')}
-              icon={<Icon name='add-a-photo' type='material-icons' color='white'  size={22} />}
+              icon={<Icon name='add-a-photo' type='material-icons' color='white' size={22} />}
               onPress={imageFromCamera}
             />
           </View>
@@ -199,6 +223,11 @@ const ImagePickerKeywordComponent = (props: Props) => {
   } else {
     return (
       <>
+        <ErrorMessage
+          errors={formState.errors}
+          name={props.objectTitle}
+          render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{errorMessageTranslation(message)}</Text>}
+        />
         <View style={{ paddingLeft: 10 }}>
           <Text>{props.title}</Text>
         </View>
@@ -218,14 +247,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
                 buttonStyle={Bs.addImageButton}
                 containerStyle={Cs.padding5Container}
                 title={' ' + t('choose image')}
-                icon={<Icon name='photo-library' type='material-icons' color='white'  size={22} />}
+                icon={<Icon name='photo-library' type='material-icons' color='white' size={22} />}
                 onPress={imageFromLibrary}
               />
               <ButtonElement
                 buttonStyle={Bs.addImageButton}
                 containerStyle={Cs.padding5Container}
                 title={' ' + t('use camera')}
-                icon={<Icon name='add-a-photo' type='material-icons' color='white'  size={22} />}
+                icon={<Icon name='add-a-photo' type='material-icons' color='white' size={22} />}
                 onPress={imageFromCamera}
               />
             </View>

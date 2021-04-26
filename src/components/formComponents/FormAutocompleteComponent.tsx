@@ -9,9 +9,9 @@ import Colors from '../../styles/Colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { get, debounce } from 'lodash'
 import { Canceler } from 'axios'
-import uuid from 'react-native-uuid'
 import { ErrorMessage } from '@hookform/error-message'
 import { useFormContext } from 'react-hook-form'
+import { convert } from '../../helpers/taxonAutocomplete'
 
 export interface AutocompleteParams {
   target: string,
@@ -31,18 +31,15 @@ interface Props {
 
 const FormAutocompleteComponent = (props: Props) => {
   const [query, setQuery] = useState<string>(props.defaultValue)
-  const [oldQuery, setOldQuery] = useState<string>(props.defaultValue)
   const [options, setOptions] = useState<Record<string, any>[]>([])
   const [hideResult, setHideResult] = useState<boolean>(true)
   const [selected, setSelected] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string>('')
 
   const { t } = useTranslation()
-  const { register, unregister, setValue, formState, watch, clearErrors } = useFormContext()
+  const { register, unregister, setValue, formState, watch, clearErrors, setError } = useFormContext()
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
-  let timeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
     let allFound = true
@@ -73,7 +70,7 @@ const FormAutocompleteComponent = (props: Props) => {
   useEffect(() => {
     if (Object.keys(formState.errors).length > 0) {
       setTimeout(() => {
-        clearErrors('identifications_0_taxon')
+        clearErrors(valueField)
       }, 5000)
     }
   }, [formState.errors])
@@ -88,16 +85,12 @@ const FormAutocompleteComponent = (props: Props) => {
         const payload = res.result[0].payload
         setSelected(true)
 
-        if (payload?.vernacularName) {
-          setQuery(payload.vernacularName)
-        } else {
-          setQuery(payload.scientificName)
-        }
+        setQuery(payload.matchingName)
       }
 
     } catch (err) {
       if (!err.isCanceled) {
-        //setErrorMessage('Autocomplete network error!')
+        setError(valueField, { message: 'Autocomplete network error', type: 'manual' })
       }
     } finally {
       setLoading(false)
@@ -149,18 +142,18 @@ const FormAutocompleteComponent = (props: Props) => {
 
       let res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, setCancelToken)
 
-      setOptions(removeDuplicates(res.result))
-      setOldQuery(res.query)
+      const autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
+      setOptions(autocompleteOptions)
 
-      if (res.result[0]?.payload?.matchType === 'exactMatches') {
+      if (autocompleteOptions[0]?.data.payload?.matchType === 'exactMatches') {
         setSelected(true)
-        addSelectionToForm(res.result[0])
+        addSelectionToForm(autocompleteOptions[0].data)
       }
 
       cancel = undefined
     } catch (err) {
       if (!err.isCanceled) {
-        //setErrorMessage(t('autocomplete network error'))
+        setError(valueField, { message: 'Autocomplete network error', type: 'manual' })
       }
     } finally {
       setLoading(false)
@@ -194,7 +187,7 @@ const FormAutocompleteComponent = (props: Props) => {
   }
 
   const onSelection = (item: Record<string, any>) => {
-    setQuery(item.value)
+    setQuery(item.payload.matchingName)
     setSelected(true)
     setHideResult(true)
 
@@ -207,51 +200,6 @@ const FormAutocompleteComponent = (props: Props) => {
 
   const onBlur = () => {
     setHideResult(true)
-  }
-
-  const renderedItem = (item: Record<string, any>) => {
-    const addBolding = (name: string, query: string, isScientific: boolean) => {
-      const startIndex = name.toLowerCase().indexOf(query)
-      const endIndex = startIndex + query.length
-      const text: Element[] = []
-
-      if (startIndex === 0 && isScientific) {
-        const cappedQuery = query.charAt(0).toUpperCase() + query.slice(1)
-
-        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{cappedQuery}</Text>)
-      } else if (startIndex === 0) {
-        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{query}</Text>)
-      } else {
-        text.push(<Text key={uuid.v1()} style={{ fontSize: 15 }}>{name.slice(0, startIndex)}</Text>)
-        text.push(<Text key={uuid.v1()} style={{ fontWeight: 'bold', fontSize: 15 }}>{query}</Text>)
-      }
-
-      if (endIndex !== name.length) {
-        text.push(<Text key={uuid.v1()} style={{ fontSize: 15 }}>{name.slice(endIndex)}</Text>)
-      }
-
-      return text
-    }
-
-    if (item?.payload?.nameType === 'MX.scientificName') {
-      return (
-        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-          <Text style={{ fontStyle: 'italic', fontSize: 15 }}>{addBolding(item?.value, oldQuery, true)}</Text>
-        </View>
-      )
-    } else if (item.value === item?.payload?.vernacularName){
-      return (
-        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-          <Text>{addBolding(item?.value, oldQuery, false)}{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
-        </View>
-      )
-    } else {
-      return (
-        <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-          <Text><Text style={{ fontSize: 15 }}>{item?.payload?.vernacularName}</Text>{' - '}<Text style={{ fontStyle: 'italic', fontSize: 15 }}>{item?.payload?.scientificName}</Text></Text>
-        </View>
-      )
-    }
   }
 
   const errorMessageTranslation = (errorMessage: string): Element => {
@@ -311,8 +259,8 @@ const FormAutocompleteComponent = (props: Props) => {
           }}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity onPress={() => onSelection(item)}>
-                {renderedItem(item)}
+              <TouchableOpacity onPress={() => onSelection(item.data)}>
+                {item.element}
               </TouchableOpacity>
             )
           }}

@@ -14,7 +14,7 @@ export const postDocumentUrl      = `${apiRoot}/documents`
 export const postImageUrl         = `${apiRoot}/images`
 
 //autocomplete url
-export const autocompleteUrl      = `${apiRoot}/autocomplete/`
+export const autocompleteUrl      = 'https://api.laji.fi/v0/autocomplete/'
 
 //locality url
 export const localityUrl          = `${apiRoot}/coordinates/location`

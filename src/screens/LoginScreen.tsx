@@ -27,13 +27,8 @@ export default class LoginScreen extends Component<NavigationStackScreenProps<Pr
   })
 
   render() {
-    const { navigate, state } = this.props.navigation
     return (
       <LoginComponent
-        loginAccepted={state.params?.loginAccepted}
-        onPressLogin={(loginURL: string) => {
-          navigate('WebView', { loginURL }) // Redirect to login web view
-        }}
         onSuccessfulLogin={() => {this.props.navigation.dispatch(
           StackActions.reset({
             index: 0,

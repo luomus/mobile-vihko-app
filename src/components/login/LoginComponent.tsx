@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
@@ -25,10 +25,9 @@ import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
 import { availableForms } from '../../config/fields'
+import { openBrowserAsync } from 'expo-web-browser'
 
 type Props = {
-  loginAccepted?: boolean,
-  onPressLogin: (loginURL: string) => void,
   onSuccessfulLogin: () => void,
   onReset: () => void,
 }
@@ -36,17 +35,15 @@ type Props = {
 const LoginComponent = (props: Props) => {
 
   const [loggingIn, setLoggingIn] = useState<boolean>(true)
-  const [tempToken, setTempToken] = useState<string>('')
-
+  const [polling, setPolling] = useState<boolean>(false)
+  const [canceler, setCanceler] = useState<() => void | undefined>()
   const credentials = useSelector((state: rootState) => state.credentials)
-
   const dispatch: DispatchType = useDispatch()
-
   const { t } = useTranslation()
 
   useEffect(() => {
     loadData()
-  }, [props.loginAccepted || credentials])
+  }, [credentials])
 
   const showError = (error: string) => {
     dispatch(setMessageState({
@@ -74,30 +71,16 @@ const LoginComponent = (props: Props) => {
   const loadData = async () => {
     setLoggingIn(true)
     if (!credentials.token) {
-      if (props.loginAccepted === undefined) {
-        try {
-          await dispatch(initLocalCredentials())
-          await initializeApp()
-        } catch (error) {
-          if (error?.severity) {
-            showError(error.message)
-          }
-          setLoggingIn(false)
+      try {
+        await dispatch(initLocalCredentials())
+      } catch (error) {
+        if (error?.severity) {
+          showError(error.message)
         }
-      } else if (props.loginAccepted) {
-        try {
-          await dispatch(loginUser(tempToken))
-        } catch (error) {
-          if (error.severity === 'fatal') {
-            showFatalError(`${t('critical error')}:\n${error.message}`)
-            setLoggingIn(false)
-            return
-          } else {
-            showError(error.message)
-          }
-        }
-        await initializeApp()
+        setLoggingIn(false)
       }
+    } else {
+      await initializeApp()
     }
   }
 
@@ -136,15 +119,14 @@ const LoginComponent = (props: Props) => {
     setLoggingIn(false)
   }
 
+
   const login = async () => {
     setLoggingIn(true)
     //check internet status and attempt to get temporary login url for webview
+    let result
     try {
       await netStatusChecker()
-      const result = await getTempTokenAndLoginUrl()
-      setTempToken(result.tmpToken)
-      props.onPressLogin(result.loginURL)
-      setLoggingIn(false)
+      result = await getTempTokenAndLoginUrl()
     } catch (error) {
       log.error({
         location: '/components/LoginComponent.tsx login()',
@@ -152,12 +134,57 @@ const LoginComponent = (props: Props) => {
       })
       setLoggingIn(false)
       showFatalError(`${t('critical error')}:\n${t('getting temp token failed with')} ${error.message ? error.message : i18n.t('status code') + error.response.status}`)
+      return
+    }
+
+    try {
+      await openBrowserAsync(result.loginURL)
+    } catch (error) {
+      log.error({
+        location: 'components/LoginComponent.tsx login()',
+        error: JSON.stringify(error)
+      })
+      setLoggingIn(false)
+      showFatalError(`${t('critical error')}:\n${t('could not open browser for login')}`)
+    }
+
+    try {
+      setPolling(true)
+      await dispatch(loginUser(result.tmpToken, setCanceler))
+    } catch (error) {
+      if (error.canceled) {
+        setLoggingIn(false)
+        return
+      }
+
+      if (error.severity === 'fatal') {
+        showFatalError(`${t('critical error')}:\n${error.message}`)
+        setLoggingIn(false)
+        return
+      } else {
+        showError(error.message)
+      }
+    } finally {
+      setPolling(false)
     }
   }
 
-  if (loggingIn) {
+  if (polling) {
+    return <>
+      <ActivityComponent text={t('waiting for login')}>
+        <View style={Bs.loginCancelButton}>
+          <Button onPress={() => {
+            if (canceler) {
+              canceler()
+            }
+          }} title={t('cancel')} color={Colors.negativeButton}/>
+        </View>
+      </ActivityComponent>
+    </>
+
+  } else if (loggingIn) {
     return (
-      <ActivityComponent text={'loading'} />
+      <ActivityComponent text={t('loading')} />
     )
   } else {
     return (
