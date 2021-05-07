@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
@@ -26,6 +26,7 @@ import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
 import { availableForms } from '../../config/fields'
 import { openBrowserAsync } from 'expo-web-browser'
+import storageService from '../../services/storageService'
 
 type Props = {
   onSuccessfulLogin: () => void,
@@ -33,7 +34,7 @@ type Props = {
 }
 
 const LoginComponent = (props: Props) => {
-
+  const tmpTokenKey = 'TEMP_TOKEN_STORAGE_KEY'
   const [loggingIn, setLoggingIn] = useState<boolean>(true)
   const [polling, setPolling] = useState<boolean>(false)
   const [canceler, setCanceler] = useState<() => void | undefined>()
@@ -77,7 +78,14 @@ const LoginComponent = (props: Props) => {
         if (error?.severity) {
           showError(error.message)
         }
-        setLoggingIn(false)
+
+        const tmpToken = await storageService.fetch(tmpTokenKey)
+        if (tmpToken) {
+          await pollLogin(tmpToken)
+          await storageService.remove(tmpTokenKey)
+        } else {
+          setLoggingIn(false)
+        }
       }
     } else {
       await initializeApp()
@@ -119,6 +127,28 @@ const LoginComponent = (props: Props) => {
     setLoggingIn(false)
   }
 
+  const pollLogin = async (tmpToken: string) => {
+    try {
+      setPolling(true)
+      await dispatch(loginUser(tmpToken, setCanceler))
+    } catch (error) {
+      if (error.canceled) {
+        setLoggingIn(false)
+        return
+      }
+
+      if (error.severity === 'fatal') {
+        showFatalError(`${t('critical error')}:\n${error.message}`)
+        setLoggingIn(false)
+        return
+      } else {
+        showError(error.message)
+        setLoggingIn(false)
+      }
+    } finally {
+      setPolling(false)
+    }
+  }
 
   const login = async () => {
     setLoggingIn(true)
@@ -127,6 +157,7 @@ const LoginComponent = (props: Props) => {
     try {
       await netStatusChecker()
       result = await getTempTokenAndLoginUrl()
+      await storageService.save(tmpTokenKey, result.tmpToken)
     } catch (error) {
       log.error({
         location: '/components/LoginComponent.tsx login()',
@@ -148,25 +179,8 @@ const LoginComponent = (props: Props) => {
       showFatalError(`${t('critical error')}:\n${t('could not open browser for login')}`)
     }
 
-    try {
-      setPolling(true)
-      await dispatch(loginUser(result.tmpToken, setCanceler))
-    } catch (error) {
-      if (error.canceled) {
-        setLoggingIn(false)
-        return
-      }
-
-      if (error.severity === 'fatal') {
-        showFatalError(`${t('critical error')}:\n${error.message}`)
-        setLoggingIn(false)
-        return
-      } else {
-        showError(error.message)
-      }
-    } finally {
-      setPolling(false)
-    }
+    await pollLogin(result.tmpToken)
+    await storageService.remove(tmpTokenKey)
   }
 
   if (polling) {

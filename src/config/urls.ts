@@ -2,7 +2,7 @@
 export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
 //api root url
-const apiRoot                     = 'https://apitest.laji.fi/v0'
+const apiRoot                     = 'https://api.laji.fi/v0'
 
 //graphql url
 export const graphqlUrl           = `${apiRoot}/graphql`

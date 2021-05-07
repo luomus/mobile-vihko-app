@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text } from 'react-native'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { rootState } from '../../stores'
 import { lajiFI, lajiSV, lajiEN } from '../../config/urls'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 
 export const HomeIntroductionComponent = () => {
 
-  const { t, i18n } = useTranslation()
-
   const [link, setLink] = useState<string>('')
+
+  const schema = useSelector((state: rootState) => state.schema)
+
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     changeLinkPage()
@@ -28,7 +32,7 @@ export const HomeIntroductionComponent = () => {
   return (
     <View style={Cs.homeInfoContainer}>
       <Text style={Ts.linkToLajiText}>
-        {t('instructions.mobilevihko.intro') + ' '}
+        { schema.formID === 'JX.519' ? t('instructions.mobilevihko.intro') : t('instructions.mobilevihko.intro.fungi') }
       </Text>
     </View>
   )
