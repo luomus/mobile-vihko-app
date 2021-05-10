@@ -169,7 +169,7 @@ const LoginComponent = (props: Props) => {
     }
 
     try {
-      await openBrowserAsync(result.loginURL)
+      await openBrowserAsync(result.loginURL, { toolbarColor: Colors.headerBackground })
     } catch (error) {
       log.error({
         location: 'components/LoginComponent.tsx login()',
