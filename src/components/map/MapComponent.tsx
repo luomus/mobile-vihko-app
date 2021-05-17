@@ -23,6 +23,7 @@ import {
   setFirstLocation,
   setMessageState
 } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
@@ -378,11 +379,10 @@ const MapComponent = (props: Props) => {
   return (
     <>
       <View style={Cs.gpsStatusBar}>
-        <Button
-          buttonStyle={Bs.stopObservingFromMapButton}
-          title={t('stop observation event')}
-          titleStyle={Ts.fontSizeFifteen}
-          onPress={() => stopObserving()}
+        <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop observation event')}
+          height={30} width={150} buttonStyle={Bs.stopObservingFromMapButton}
+          gradientColorStart={Colors.danger1} gradientColorEnd={Colors.danger2} shadowColor={Colors.dangerShadow}
+          textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
         />
       </View>
       <View style={Cs.mapContainer}>
@@ -410,23 +410,19 @@ const MapComponent = (props: Props) => {
         </MapView>
         <View
           style={Cs.mapTypeContainer}>
-          <TouchableHighlight onPress={() => dispatch(toggleMaptype())} style={Os.touchableHiglightStyle}>
-            <MaterialIcons
-              name='layers'
-              size={50}
-              color='white'
-            />
-          </TouchableHighlight>
+          <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
+            height={50} width={50} buttonStyle={Bs.mapIconButton}
+            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+          />
         </View>
         <View
           style={Cs.userLocationContainer}>
-          <TouchableHighlight onPress={() => centerMapAnim()} style={Os.touchableHiglightStyle}>
-            <MaterialIcons
-              name='my-location'
-              size={50}
-              color='white'
-            />
-          </TouchableHighlight>
+          <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
+            height={50} width={50} buttonStyle={Bs.mapIconButton}
+            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+          />
         </View>
         {observation ?
           observationButtonsState === 'newObservation' &&

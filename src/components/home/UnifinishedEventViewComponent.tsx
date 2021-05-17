@@ -3,9 +3,11 @@ import { View, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 import { Button, Icon } from 'react-native-elements'
 import { rootState } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
@@ -28,20 +30,20 @@ const UnfinishedEventViewComponent = (props: Props) => {
         }
       </Text>
       <View style={Cs.buttonContainer}>
-        <Button
-          containerStyle={Cs.continueButtonContainer}
-          buttonStyle={Bs.continueButton}
-          title={observationEventInterrupted ? ' ' +  t('continue unfinished') : ' ' +  t('continue')}
-          icon={<Icon name='map-outline' type='material-community' color='white' size={22} />}
-          onPress={() => props.onContinueObservationEvent()}
-        />
-        <Button
-          containerStyle={Cs.endButtonContainer}
-          buttonStyle={Bs.endButton}
-          title={' ' + t('cancelObservation')}
-          icon={<Icon name='stop' type='material-icons' color='white' size={22} />}
-          onPress={() => props.stopObserving()}
-        />
+        <View style={Cs.padding5Container}>
+          <ButtonComponent onPressFunction={() => props.onContinueObservationEvent()} title={t('continue')}
+            height={40} width={150} buttonStyle={Bs.continueButton}
+            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={'map-outline'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
+          />
+        </View>
+        <View style={Cs.padding5Container}>
+          <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('cancelObservation')}
+            height={40} width={150} buttonStyle={Bs.endButton}
+            gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'stop'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          />
+        </View>
       </View>
     </View>)
 }

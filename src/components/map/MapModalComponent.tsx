@@ -4,9 +4,11 @@ import { Button } from 'react-native-elements'
 import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { rootState } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
@@ -28,20 +30,24 @@ const MapModalComponent = (props: Props) => {
     observationId ?
       <Modal isVisible={props.isVisible} onBackButtonPress={props.onBackButtonPress} backdropOpacity={0.5} onBackdropPress={props.onBackButtonPress}>
         <View style={Cs.mapModalContainer}>
-          <ScrollView>
+          <ScrollView style={{ width: '100%' }}>
             {props.observationOptions.map(observation =>
               <View key={observation.id} style={Cs.mapModalItemContainer}>
                 <Text style={Ts.centeredBold}>{observation.identifications[0].taxon}</Text>
-                <Button
-                  buttonStyle={Bs.mapModalPositiveButton}
-                  title={t('edit button')}
-                  onPress={() => props.shiftToEditPage(observationId.eventId, observation.id)}
-                />
-                <Button
-                  buttonStyle={Bs.mapModalNegativeButton}
-                  title={t('delete')}
-                  onPress={() => props.showSubmitDelete(observationId.eventId, observation.id)}
-                />
+                <View style={Cs.padding5Container}>
+                  <ButtonComponent onPressFunction={() => props.shiftToEditPage(observationId.eventId, observation.id)}
+                    title={t('edit button')} height={40} width={120} buttonStyle={Bs.mapModalButton}
+                    gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+                    textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                  />
+                </View>
+                <View style={Cs.padding5Container}>
+                  <ButtonComponent onPressFunction={() => props.showSubmitDelete(observationId.eventId, observation.id)}
+                    title={t('delete')} height={40} width={120} buttonStyle={Bs.mapModalButton}
+                    gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                    textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                  />
+                </View>
               </View>
             )}
           </ScrollView>

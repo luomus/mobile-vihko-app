@@ -16,14 +16,16 @@ import {
   setMessageState,
   setEditing
 } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import MessageComponent from '../general/MessageComponent'
+import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
 import { initForm } from '../../forms/formMethods'
 import { get, set, clone, merge } from 'lodash'
 import uuid from 'react-native-uuid'
 import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
-import { Button as ButtonElement, Icon } from 'react-native-elements'
 import { lineStringConstructor } from '../../helpers/geoJSONHelper'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
 import { JX519Fields, overrideJX519Fields, JX519FieldOrder, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
@@ -363,24 +365,20 @@ const ObservationComponent = (props: Props) => {
         <ScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
           {observationId ?
             <View style={Cs.buttonContainer}>
-              <ButtonElement
-                buttonStyle={{}}
-                disabled={saving}
-                title={' ' + t('edit location')}
-                icon={<Icon name='edit-location' type='material-icons' color='white' size={22} />}
-                onPress={() => handleChangeToMap()}
+              <ButtonComponent onPressFunction={() => handleChangeToMap()}
+                title={t('edit location')} height={40} width={150} buttonStyle={Bs.editObservationButton}
+                gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'edit-location'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
             : null
           }
           {observationId ?
             <View style={Cs.buttonContainer}>
-              <ButtonElement
-                buttonStyle={{ backgroundColor: Colors.negativeButton }}
-                disabled={saving}
-                title={' ' + t('delete')}
-                icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
-                onPress={() => handleRemove()}
+              <ButtonComponent onPressFunction={() => handleRemove()}
+                title={t('delete')} height={40} width={150} buttonStyle={Bs.editObservationButton}
+                gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
             : null

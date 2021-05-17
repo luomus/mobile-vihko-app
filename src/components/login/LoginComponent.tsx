@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, Button, Text } from 'react-native'
+import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,6 +26,7 @@ import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
 import { availableForms } from '../../config/fields'
 import { openBrowserAsync } from 'expo-web-browser'
+import ButtonComponent from '../general/ButtonComponent'
 
 type Props = {
   onSuccessfulLogin: () => void,
@@ -40,7 +41,6 @@ const LoginComponent = (props: Props) => {
   const credentials = useSelector((state: rootState) => state.credentials)
   const dispatch: DispatchType = useDispatch()
   const { t } = useTranslation()
-
   useEffect(() => {
     loadData()
   }, [credentials])
@@ -139,7 +139,7 @@ const LoginComponent = (props: Props) => {
     }
 
     try {
-      await openBrowserAsync(result.loginURL)
+      await openBrowserAsync(result.loginURL, { toolbarColor: Colors.headerBackground })
     } catch (error) {
       log.error({
         location: 'components/LoginComponent.tsx login()',
@@ -174,11 +174,16 @@ const LoginComponent = (props: Props) => {
     return <>
       <ActivityComponent text={t('waiting for login')}>
         <View style={Bs.loginCancelButton}>
-          <Button onPress={() => {
-            if (canceler) {
-              canceler()
-            }
-          }} title={t('cancel')} color={Colors.negativeButton}/>
+          <ButtonComponent onPressFunction={
+            () => {
+              if (canceler) {
+                canceler()
+              }
+            }}
+          title={t('cancel')} height={40} width={150} buttonStyle={Bs.loginCancelButton}
+          gradientColorStart={Colors.danger1} gradientColorEnd={Colors.danger2} shadowColor={Colors.dangerShadow}
+          textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+          />
         </View>
       </ActivityComponent>
     </>
@@ -196,9 +201,12 @@ const LoginComponent = (props: Props) => {
             <View style={Cs.inputContainer}>
               <Text style={Ts.loginText}>{t('login text')}</Text>
             </View>
-            <View style={Bs.loginButton}>
-              <Button onPress={login} title={t('login')} color={Colors.neutralColor} />
-            </View>
+            <View style={{ height: 25, width: 300 }} />
+            <ButtonComponent onPressFunction={login} title={t('login')}
+              height={40} width={230} buttonStyle={Bs.loginButton}
+              gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}
+            />
           </View>
           <View style={Cs.loginLanguageContainer}>
             <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('fi')}>FI</Text>

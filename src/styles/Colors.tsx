@@ -17,5 +17,26 @@ export default {
   fecesColor: '#7CFC00',
   nestColor: '#800080',
   noImageBorder: '#a9a9a9',
-  darkBlueInputBorder: '#BCDEEE'
+  darkBlueInputBorder: '#BCDEEE',
+
+  //New colors
+  neutral: '#FCFDFD',
+  neutralShadow: '#141B1F',
+  primary1: '#22ABC3',
+  primary2: '#1F74AD',
+  primaryShadow: '#0F598A',
+  success1: '#79A423',
+  success2: '#448F1E',
+  successShadow: '#2D6E0C',
+  warning1: '#B8A800',
+  warning2: '#9E9100',
+  warningShadow: '#7A7000',
+  danger1: '#BD5A28',
+  danger2: '#A82424',
+  dangerShadow: '#8A0F0F',
+  background: '#F1F3F4',
+  whiteText: '#F8FFF5',
+  darkText: '#5C6870',
+  neutral2Bg: '#F6F8F8',
+  neutral3Bg: '#F1F3F4'
 }

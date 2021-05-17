@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
-import { Icon, Button } from 'react-native-elements'
 import Os from '../../styles/OtherStyles'
+import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import ButtonComponent from '../general/ButtonComponent'
 import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
-import Bs from '../../styles/ButtonStyles'
 
 interface Props {
   title: string,
   objectTitle: string,
   parentObjectTitle: string,
   keyboardType:
-    'default' |
-    'email-address' |
-    'numeric' |
-    'phone-pad' |
-    'visible-password' |
-    'ascii-capable' |
-    'numbers-and-punctuation' |
-    'url' |
-    'number-pad' |
-    'name-phone-pad' |
-    'decimal-pad' |
-    'twitter' |
-    'web-search' |
-    undefined,
+  'default' |
+  'email-address' |
+  'numeric' |
+  'phone-pad' |
+  'visible-password' |
+  'ascii-capable' |
+  'numbers-and-punctuation' |
+  'url' |
+  'number-pad' |
+  'name-phone-pad' |
+  'decimal-pad' |
+  'twitter' |
+  'web-search' |
+  undefined,
   defaultValue: string,
   isArrayItem: boolean,
   parentCallback: Function | undefined,
@@ -94,11 +95,11 @@ const FormDatePickerComponent = (props: Props) => {
           editable={false}
           ref={register({ name: props.objectTitle })}
         />
-        <Button
-          buttonStyle={ Bs.neutralIconButton }
-          icon={<Icon name={'edit'} color='white' size={22} />}
-          onPress={() => setShow(true)}>
-        </Button>
+        <ButtonComponent onPressFunction={() => setShow(true)}
+          title={undefined} height={40} width={45} buttonStyle={Bs.neutralIconButton}
+          gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+          textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+        />
       </View>
       {show && (
         <View>

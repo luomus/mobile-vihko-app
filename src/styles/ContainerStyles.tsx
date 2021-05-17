@@ -127,7 +127,7 @@ const ContainerStyles = StyleSheet.create({
   },
   userLocationContainer: {
     position: 'absolute',
-    top: '10%',
+    top: '11%',
     right: '1%',
     alignSelf: 'flex-end'
   },
@@ -146,7 +146,7 @@ const ContainerStyles = StyleSheet.create({
   },
   observationTypeButtonsColumnLeft: {
     alignSelf: 'flex-start',
-    backgroundColor: 'white',
+    backgroundColor: Colors.neutral3Bg,
     borderRadius: 5,
     width: '50%'
   },
@@ -268,10 +268,6 @@ const ContainerStyles = StyleSheet.create({
     top: '1%',
     right: '1%'
   },
-  beginButtonContainer: {
-    padding: 5,
-    width: '100%',
-  },
   continueButtonContainer: {
     padding: 5,
     width: '50%'
@@ -349,6 +345,8 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'column'
   },
   sendEventModalContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
     padding: 10,
     borderRadius: 10,
     backgroundColor: Colors.white
@@ -364,6 +362,7 @@ const ContainerStyles = StyleSheet.create({
   },
   mapModalContainer: {
     alignSelf: 'center',
+    alignItems: 'center',
     padding: 10,
     borderRadius: 10,
     backgroundColor: Colors.white,
@@ -371,8 +370,15 @@ const ContainerStyles = StyleSheet.create({
     maxHeight: '75%'
   },
   mapModalItemContainer: {
-    padding: 10,
+    alignSelf: 'center',
+    alignItems: 'center',
+    padding: 5,
+    width: '90%',
     margin: 5
+  },
+  iconAndTextContainer: {
+    flexDirection: 'row',
+    textDecorationColor: Colors.whiteText
   }
 })
 

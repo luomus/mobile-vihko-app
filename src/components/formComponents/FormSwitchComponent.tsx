@@ -30,9 +30,13 @@ const FormSwitchComponent = (props: Props) => {
             setSelected(!selected)
             setValue(props.objectTitle, selected)
           }}
+          thumbColor={
+            Colors.neutral
+          }
           trackColor={{
-            false: Colors.negativeColor,
-            true: Colors.positiveColor }}>
+            false: Colors.danger1,
+            true: Colors.headerBackground
+          }}>
         </Switch>
         {setValue(props.objectTitle, selected)}
       </View>

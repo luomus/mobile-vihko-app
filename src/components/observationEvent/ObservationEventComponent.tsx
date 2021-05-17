@@ -1,10 +1,10 @@
 import React, { useState, ReactChild, useEffect } from 'react'
 import { View, Text, ScrollView } from 'react-native'
-import { Icon, Button } from 'react-native-elements'
 import { useBackHandler } from '@react-native-community/hooks'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Bs from '../../styles/ButtonStyles'
+import Colors from '../../styles/Colors'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   rootState,
@@ -24,6 +24,7 @@ import SendEventModalComponent from '../general/SendEventModalComponent'
 import MessageComponent from '../general/MessageComponent'
 import { parseDateForUI } from '../../helpers/dateHelper'
 import ActivityComponent from '../general/ActivityComponent'
+import ButtonComponent from '../general/ButtonComponent'
 
 type Props = {
   id: string,
@@ -163,11 +164,8 @@ const ObservationEventComponent = (props: Props) => {
               <Text>{t('dateEnd')}: {parseDateForUI(event.gatheringEvent.dateEnd)}</Text>
             </View>
             <View style={Cs.eventButtonsContainer}>
-              <Button
-                buttonStyle={Bs.editEventButton}
-                containerStyle={Cs.padding5Container}
-                icon={<Icon name='edit' type='material-icons' color='white' size={22} />}
-                onPress={() => {
+              <View style={Cs.padding5Container}>
+                <ButtonComponent onPressFunction={() => {
                   const id = {
                     eventId: event.id,
                     unitId: ''
@@ -175,18 +173,25 @@ const ObservationEventComponent = (props: Props) => {
                   dispatch(setObservationId(id))
                   props.onPressObservationEvent('ObservationEventComponent')
                 }}
-              />
-              <Button
-                buttonStyle={Bs.sendEventButton}
-                icon={<Icon name='send' type='material-icons' color='white' size={22} />}
-                onPress={() => setModalVisibility(true)}
-              />
-              <Button
-                buttonStyle={Bs.removeEventButton}
-                containerStyle={Cs.padding5Container}
-                icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
-                onPress={() => showDeleteObservationEvent(event.id)}
-              />
+                  title={undefined} height={40} width={45} buttonStyle={Bs.editEventButton}
+                  gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                />
+              </View>
+              <View style={Cs.padding5Container}>
+                <ButtonComponent onPressFunction={() => setModalVisibility(true)} title={undefined}
+                  height={40} width={45} buttonStyle={Bs.sendEventButton}
+                  gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+                  textStyle={Ts.buttonText} iconName={'send'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                />
+              </View>
+              <View style={Cs.padding5Container}>
+                <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={undefined}
+                  height={40} width={45} buttonStyle={Bs.removeEventButton}
+                  gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
+              </View>
             </View>
           </View>
           <Text style={Ts.observationText}>{t('observations')}:</Text>
@@ -196,28 +201,26 @@ const ObservationEventComponent = (props: Props) => {
                 event={event}
                 observation={observation}
                 editButton={
-                  <Button
-                    buttonStyle={Bs.basicNeutralButton}
-                    title={' ' + t('edit button')}
-                    icon={<Icon name='edit' type='material-icons' color='white' size={22} />}
-                    onPress={() => {
-                      const id = {
-                        eventId: event.id,
-                        unitId: observation.id
-                      }
-                      dispatch(setObservationId(id))
-                      props.onPressObservation('ObservationEventComponent')
-                    }}
+                  <ButtonComponent onPressFunction={() => {
+                    const id = {
+                      eventId: event.id,
+                      unitId: observation.id
+                    }
+                    dispatch(setObservationId(id))
+                    props.onPressObservation('ObservationEventComponent')
+                  }}
+                  title={t('edit button')} height={40} width={150} buttonStyle={Bs.basicPrimaryButton}
+                  gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                   />
                 }
                 removeButton={
-                  <Button
-                    buttonStyle={Bs.basicNegativeButton}
-                    title={' ' + t('remove')}
-                    icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
-                    onPress={() => {
-                      showDeleteObservation(event.id, observation.id)
-                    }}
+                  <ButtonComponent onPressFunction={() => {
+                    showDeleteObservation(event.id, observation.id)
+                  }}
+                  title={t('remove')} height={40} width={150} buttonStyle={Bs.basicNeutralButton}
+                  gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
                   />
                 }
               />

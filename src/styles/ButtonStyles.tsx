@@ -13,34 +13,42 @@ const ButtonStyles = StyleSheet.create({
     borderRadius: 5
   },
   loginButton: {
-    width: '60%',
     padding: 10,
-    borderRadius: 5
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 5,
+    alignItems: 'center'
   },
   loginCancelButton: {
-    width: '60%',
-    padding: 10,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
     borderRadius: 5,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   editEventButton: {
-    width: 60,
-    backgroundColor: Colors.neutralButton,
+    padding: 5,
     borderRadius: 5
   },
   sendEventButton: {
-    width: 60,
-    backgroundColor: Colors.positiveButton,
+    padding: 5,
     borderRadius: 5
   },
   removeEventButton: {
-    width: 60,
-    backgroundColor: Colors.negativeButton,
+    padding: 5,
     borderRadius: 5
   },
   addImageButton: {
-    width: 190,
-    backgroundColor: Colors.neutralButton,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
     borderRadius: 5
   },
   removeImageButton: {
@@ -49,50 +57,80 @@ const ButtonStyles = StyleSheet.create({
     borderRadius: 5
   },
   logoutButton: {
-    backgroundColor: Colors.negativeButton,
-    width: '45%',
+    padding: 3,
     borderRadius: 5
   },
   continueButton: {
-    backgroundColor: Colors.neutralColor,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
     borderRadius: 5
   },
   endButton: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
     backgroundColor: Colors.negativeColor,
     borderRadius: 5
   },
   observationButton: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     backgroundColor: Colors.neutralColor,
+    borderRadius: 5
+  },
+  editObservationButton: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
     borderRadius: 5
   },
   observationNeighborsButton: {
-    backgroundColor: Colors.neutralColor,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     justifyContent: 'flex-start',
-    borderRadius: 5
-  },
-  basicNegativeButton: {
-    backgroundColor: Colors.negativeButton,
+    flexDirection: 'row',
     borderRadius: 5
   },
   basicNeutralButton: {
-    backgroundColor: Colors.neutralButton,
-    borderRadius: 5
+    paddingBottom: 5,
+    flexDirection: 'row',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  basicPositiveButton: {
-    backgroundColor: Colors.positiveButton,
-    borderRadius: 5
+  basicPrimaryButton: {
+    paddingBottom: 5,
+    flexDirection: 'row',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  mapModalPositiveButton: {
-    backgroundColor: Colors.neutralColor,
-    width: '45%',
+  beginButton: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 5,
+    flexDirection: 'row'
+  },
+  mapModalButton: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     alignSelf: 'center',
-    margin: 2,
-    borderRadius: 5
-  },
-  mapModalNegativeButton: {
-    backgroundColor: Colors.negativeColor,
-    width: '45%',
-    alignSelf: 'center',
+    flexDirection: 'row',
     margin: 2,
     borderRadius: 5
   },
@@ -102,49 +140,75 @@ const ButtonStyles = StyleSheet.create({
     borderRadius: 5
   },
   sendEventModalPositiveButton: {
-    backgroundColor: Colors.positiveButton,
-    width: '75%',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
     alignSelf: 'center',
-    justifyContent: 'space-between',
-    margin: 10,
+    justifyContent: 'flex-start',
     borderRadius: 5
   },
   sendEventModalNeutralButton: {
-    backgroundColor: Colors.privateColor,
-    width: '75%',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
     alignSelf: 'center',
-    justifyContent: 'space-between',
-    margin: 10,
+    justifyContent: 'flex-start',
     borderRadius: 5
   },
   sendEventModalNegativeButton: {
-    backgroundColor: Colors.negativeButton,
-    width: '75%',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
     alignSelf: 'center',
-    justifyContent: 'space-between',
-    margin: 10,
+    justifyContent: 'flex-start',
     borderRadius: 5
   },
   timestampButton: {
-    backgroundColor: Colors.positiveButton,
     marginRight: 5,
-    width: 130
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   chooseTimeButton: {
-    backgroundColor: Colors.neutralButton,
     marginRight: 5,
-    width: 130
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   neutralIconButton: {
     backgroundColor: Colors.neutralButton
   },
   negativeIconButton: {
-    backgroundColor: Colors.negativeButton
+    padding: 5,
+    borderRadius: 5
+  },
+  addIconButton: {
+    padding: 5,
+    borderRadius: 5
+  },
+  mapIconButton: {
+    paddingTop: 2,
+    paddingLeft: 5,
+    paddingRight: 5,
+    borderRadius: 5
   },
   stopObservingFromMapButton: {
-    backgroundColor: Colors.negativeButton,
-    padding: 2,
-    width: 160,
+    paddingBottom: 2,
+    alignItems: 'center',
     borderRadius: 5
   }
 })
