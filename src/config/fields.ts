@@ -84,7 +84,15 @@ export const overrideJX519Fields = {
       'Tid',
       'Time'
     ]
-  }
+  },
+  'atlasCode': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Lintujen pesimisvarmuusindeksi',
+      'Häckningsindex av fåglar',
+      'Bird breeding category'
+    ]
+  },
 }
 
 export const additionalJX519Fields = {
