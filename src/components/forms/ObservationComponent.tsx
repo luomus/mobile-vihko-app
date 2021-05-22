@@ -34,6 +34,7 @@ import Colors from '../../styles/Colors'
 type Props = {
   toObservationEvent: (id: string) => void,
   toMap: () => void,
+  pushToMap: () => void,
   isNew?: boolean,
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
@@ -309,7 +310,7 @@ const ObservationComponent = (props: Props) => {
   }
 
   //redirects navigator to map for selection of new observation location
-  const handleChangeToMap = () => {
+  const editObservationLocation = () => {
     if (observationState) {
       dispatch(setObservationLocation(observationState.unitGathering.geometry))
       dispatch(setEditing({
@@ -317,7 +318,7 @@ const ObservationComponent = (props: Props) => {
         locChanged: false,
         originalSourcePage: editing.originalSourcePage
       }))
-      props.toMap()
+      props.pushToMap()
     }
   }
 
@@ -365,7 +366,7 @@ const ObservationComponent = (props: Props) => {
         <ScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
           {observationId ?
             <View style={Cs.buttonContainer}>
-              <ButtonComponent onPressFunction={() => handleChangeToMap()}
+              <ButtonComponent onPressFunction={() => editObservationLocation()}
                 title={t('edit location')} height={40} width={150} buttonStyle={Bs.editObservationButton}
                 gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'edit-location'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}

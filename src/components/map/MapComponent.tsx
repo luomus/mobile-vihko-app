@@ -1,8 +1,7 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, TouchableHighlight } from 'react-native'
-import { Button } from 'react-native-elements'
+import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LineString } from 'geojson'
 import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../../helpers/geoJSONHelper'
@@ -27,9 +26,7 @@ import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
-import { MaterialIcons } from '@expo/vector-icons'
 import Cs from '../../styles/ContainerStyles'
-import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
@@ -41,6 +38,7 @@ type Props = {
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
+  onPop: () => void,
   children?: ReactChild
 }
 
@@ -194,13 +192,13 @@ const MapComponent = (props: Props) => {
 
   //redirects navigator back to edit page of single observation with flags telling
   //it that coordinate has been changed
-  const submitEdit = () => {
+  const changeObservationLocation = () => {
     dispatch(setEditing({
       started: true,
       locChanged: true,
       originalSourcePage: editing.originalSourcePage
     }))
-    props.onPressEditing()
+    props.onPop()
   }
 
   const showSubmitDelete = (eventId: string, unitId: string) => {
@@ -436,7 +434,7 @@ const MapComponent = (props: Props) => {
           ||
           observationButtonsState === 'changeLocation' &&
           <ObservationButtonsComponent
-            confirmationButton={submitEdit}
+            confirmationButton={changeObservationLocation}
             cancelButton={cancelEdit}
             mode={observationButtonsState}
             openModal={openModal}

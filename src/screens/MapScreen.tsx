@@ -60,7 +60,7 @@ export default class MapScreen extends Component<NavigationStackScreenProps<Prop
   }
 
   render() {
-    const { navigate } = this.props.navigation
+    const { navigate, pop } = this.props.navigation
 
     return (
       <MapComponent
@@ -71,6 +71,7 @@ export default class MapScreen extends Component<NavigationStackScreenProps<Prop
         onPressFinishObservationEvent={(sourcePage: string) => {
           this.props.navigation.navigate('EditObservationEvent', { sourcePage })
         }}
+        onPop={() => pop()}
       >
         <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
       </MapComponent>
