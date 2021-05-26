@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
+import ButtonComponent from '../general/ButtonComponent'
+import i18n from '../../languages/i18n'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
@@ -15,15 +17,17 @@ const NewEventWithoutZoneComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const beginText = (): string => {
+  const [ beginButtonText, setBeginButtonText ] = useState<string>(t('beginObservationTripForm'))
+
+  useEffect(() => {
     if (props.selectedTab === 0) {
-      return (t('beginObservationTripForm'))
+      setBeginButtonText(t('beginObservationTripForm'))
     } else if (props.selectedTab === 1) {
-      return (t('beginObservationFungiAtlas'))
+      setBeginButtonText(t('beginObservationFungiAtlas'))
     } else {
-      return (t('beginObservation'))
+      setBeginButtonText(t('beginObservation'))
     }
-  }
+  }, [props.selectedTab, i18n.language])
 
   return (
     <View style={Cs.observationEventContainer}>
@@ -31,12 +35,10 @@ const NewEventWithoutZoneComponent = (props: Props) => {
         {t('new observation event without zone')}
       </Text>
       <View style={Cs.buttonContainer}>
-        <Button
-          containerStyle={Cs.beginButtonContainer}
-          buttonStyle={{ backgroundColor: Colors.positiveColor }}
-          title={' ' + beginText()}
-          icon={<Icon name='play-arrow' type='material-icons' color={'white'} size={22} />}
-          onPress={props.onBeginObservationEvent}
+        <ButtonComponent onPressFunction={props.onBeginObservationEvent} title={beginButtonText}
+          height={40} width={300} buttonStyle={Bs.beginButton}
+          gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+          textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
         />
       </View>
     </View>

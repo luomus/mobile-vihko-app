@@ -37,7 +37,6 @@ const InstructionModalComponent = (props: Props) => {
               data={[...Array(7).keys()].map(val => { return { key: `${val + 1}` } })}
               renderItem={({ item }) =>
                 <View style={Cs.instructionContainer}>
-                  {console.log(t('instructions.mobilevihko.' + item.key))}
                   <Text>{t('instructions.mobilevihko.' + item.key)}</Text>
                 </View>
               }

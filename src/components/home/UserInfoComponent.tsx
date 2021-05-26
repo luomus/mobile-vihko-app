@@ -1,10 +1,11 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
+import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 import {
   rootState,
   DispatchType,
@@ -13,6 +14,7 @@ import {
   setMessageState
 } from '../../stores'
 import MessageComponent from '../general/MessageComponent'
+import ButtonComponent from '../general/ButtonComponent'
 
 type Props = {
   onLogout: () => void
@@ -53,14 +55,14 @@ const UserInfoComponent = (props: Props) => {
           </Text>
         </View>
         <View style={Cs.logoutButtonContainer}>
-          <Button
-            buttonStyle={Bs.logoutButton}
-            icon={<Icon name='logout' type='material-community' color='white' size={22} />}
-            onPress={() => showLogoutDialoue()}
+          <ButtonComponent onPressFunction={() => showLogoutDialoue()} title={undefined}
+            height={40} width={40} buttonStyle={Bs.logoutButton}
+            gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
           />
         </View>
       </View>
-      <MessageComponent/>
+      <MessageComponent />
     </View>
   )
 }

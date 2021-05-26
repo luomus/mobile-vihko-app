@@ -1,12 +1,14 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
 import Modal from 'react-native-modal'
 import { DispatchType, rootState, popMessageState } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 import { useTranslation } from 'react-i18next'
 
 const MessageComponent = () => {
@@ -61,44 +63,70 @@ const MessageComponent = () => {
     return cancelLabel ? cancelLabel : t('no')
   }
 
-  const oneButtonCreator = (buttonStyle: Record<string, any>, buttonLabel: string) => {
-    return (
-      <View style={Cs.singleButton}>
-        <Button
-          title={' ' + buttonLabel}
-          buttonStyle={buttonStyle}
-          icon={<Icon type={'material-community'} name={'check'} color={'white'} />}
-          onPress={onOk}
-        />
-      </View>
-    )
+  const oneButtonCreator = (buttonType: string, buttonLabel: string) => {
+    if (buttonType === 'primary') {
+      return (
+        <View style={Cs.singleButton}>
+          {primaryButton(buttonLabel, 'check')}
+        </View>
+      )
+    } else {
+      return (
+        <View style={Cs.singleButton}>
+          {neutralButton(buttonLabel, 'check')}
+        </View>
+      )
+    }
   }
 
   const twoButtonCreator = (
-    leftButtonStyle: Record<string, any>,
+    leftButtonType: string,
     leftButtonLabel: string,
-    rightButtonStyle: Record<string, any>,
+    rightButtonType: string,
     rightButtonLabel: string
   ) => {
+    if (leftButtonType === 'primary' && rightButtonType === 'neutral') {
+      return (
+        <View style={Cs.editObservationButtonContainer}>
+          <View style={Cs.singleButton}>
+            {primaryButton(leftButtonLabel, 'check')}
+          </View>
+          <View style={Cs.singleButton}>
+            {neutralButton(rightButtonLabel, 'cancel')}
+          </View>
+        </View>
+      )
+    } else {
+      return (
+        <View style={Cs.editObservationButtonContainer}>
+          <View style={Cs.singleButton}>
+            {neutralButton(leftButtonLabel, 'check')}
+          </View>
+          <View style={Cs.singleButton}>
+            {primaryButton(rightButtonLabel, 'cancel')}
+          </View>
+        </View>
+      )
+    }
+  }
+
+  const primaryButton = (label: string, iconName: string): JSX.Element => {
     return (
-      <View style={Cs.editObservationButtonContainer}>
-        <View style={Cs.singleButton}>
-          <Button
-            title={' ' + leftButtonLabel}
-            buttonStyle={leftButtonStyle}
-            icon={<Icon type={'material-community'} name={'check'} color={'white'} />}
-            onPress={onOk}
-          />
-        </View>
-        <View style={Cs.singleButton}>
-          <Button
-            title={' ' + rightButtonLabel}
-            buttonStyle={rightButtonStyle}
-            icon={<Icon type={'material-community'} name={'close'} color={'white'} />}
-            onPress={onCancel}
-          />
-        </View>
-      </View>
+      <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
+        height={40} width={160} buttonStyle={Bs.basicPrimaryButton}
+        gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+        textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+      />
+    )
+  }
+
+  const neutralButton = (label: string, iconName: string): JSX.Element => {
+    return (
+      <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
+        height={40} width={160} buttonStyle={Bs.basicNeutralButton}
+        gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+        textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+      />
     )
   }
 
@@ -106,11 +134,11 @@ const MessageComponent = () => {
     switch (topMessage?.type) {
       case 'err':
       case 'msg':
-        return oneButtonCreator(Bs.basicNeutralButton, buttonLabel())
+        return oneButtonCreator('primary', buttonLabel())
       case 'conf':
-        return twoButtonCreator(Bs.basicNeutralButton, leftLabel(), Bs.basicNegativeButton, rightLabel())
+        return twoButtonCreator('primary', leftLabel(), 'neutral', rightLabel())
       case 'dangerConf':
-        return twoButtonCreator(Bs.basicNegativeButton, leftLabel(), Bs.basicNeutralButton, rightLabel())
+        return twoButtonCreator('neutral', leftLabel(), 'primary', rightLabel())
     }
   }
 

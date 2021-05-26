@@ -34,6 +34,19 @@ const FormInputComponent = (props: Props) => {
   const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
   const { register, setValue, watch } = useFormContext()
 
+  useEffect(() => {
+    props.parentObjectTitle !== ''
+      ? addValueToArray(props.defaultValue)
+      : setValue(props.objectTitle, parseInput(props.defaultValue))
+    if (props.parentCallback !== undefined) {
+      props.parentCallback({ title: props.title, value: props.defaultValue })
+    }
+  }, [])
+
+  const parseInput = (input: string) => {
+    return props.keyboardType === 'numeric' ? parseInt(input) : input
+  }
+
   const addValueToArray = (value: string) => {
     const values = watch(props.parentObjectTitle)
     const index = values.indexOf(currentValue)
@@ -41,18 +54,9 @@ const FormInputComponent = (props: Props) => {
       values.splice(index, 1)
     }
     values.push(value)
-    setValue(props.parentObjectTitle, values)
+    setValue(props.parentObjectTitle, parseInput(values))
     setCurrentValue(value)
   }
-
-  useEffect(() => {
-    props.parentObjectTitle !== ''
-      ? addValueToArray(props.defaultValue)
-      : setValue(props.objectTitle, props.defaultValue)
-    if (props.parentCallback !== undefined) {
-      props.parentCallback({ title: props.title, value: props.defaultValue })
-    }
-  }, [])
 
   return (
     <View style={props.isArrayItem ? Cs.formArrayInputContainer : Cs.formInputContainer}>
@@ -67,7 +71,7 @@ const FormInputComponent = (props: Props) => {
         onChangeText={text => {
           props.parentObjectTitle !== ''
             ? addValueToArray(text)
-            : setValue(props.objectTitle, text)
+            : setValue(props.objectTitle, parseInput(text))
           props.parentCallback !== undefined
             ? props.parentCallback({ title: props.title, value: text })
             : null

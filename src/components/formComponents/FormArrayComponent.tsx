@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView } from 'react-native'
-import { Icon, Button } from 'react-native-elements'
+import ButtonComponent from '../general/ButtonComponent'
+import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
 
@@ -17,7 +19,7 @@ interface Props {
   createInputElement: (
     title: string, objectTitle: string, parentObjectTitle: string,
     type: string, defaultValue: string, isArrayItem: boolean,
-    callbackFunction: Function|undefined, editable: boolean
+    callbackFunction: Function | undefined, editable: boolean
   ) => JSX.Element | undefined
 }
 
@@ -111,17 +113,22 @@ const FormArrayComponent = (props: Props) => {
       <View style={Cs.formAllInputsContainer}>
         {inputElements}
         <View style={Cs.formArrayButtonContainer}>
-          <Button
-            buttonStyle={{ backgroundColor: Colors.positiveButton }}
-            icon={<Icon name={'add'} color='white' size={22} />}
-            onPress={() => addInputElement()}
-          />
-          {inputElements.length > indexOfRemovable
-            ? <Button
-              icon={<Icon name={'remove'} color='white' size={22} />}
-              buttonStyle={{ backgroundColor: Colors.negativeButton }}
-              onPress={() => removeInputElement()}
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => addInputElement()} title={undefined}
+              height={40} width={45} buttonStyle={Bs.addIconButton}
+              gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'add'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
+          </View>
+          {inputElements.length > indexOfRemovable
+            ?
+            <View style={Cs.padding5Container}>
+              <ButtonComponent onPressFunction={() => removeInputElement()} title={undefined}
+                height={40} width={45} buttonStyle={Bs.addIconButton}
+                gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'remove'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+            </View>
             : null
           }
         </View>

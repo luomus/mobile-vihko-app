@@ -1,8 +1,7 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, TouchableHighlight } from 'react-native'
-import { Button } from 'react-native-elements'
+import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LineString } from 'geojson'
 import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../../helpers/geoJSONHelper'
@@ -23,12 +22,11 @@ import {
   setFirstLocation,
   setMessageState
 } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
-import { MaterialIcons } from '@expo/vector-icons'
 import Cs from '../../styles/ContainerStyles'
-import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
@@ -40,6 +38,7 @@ type Props = {
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
+  onPop: () => void,
   children?: ReactChild
 }
 
@@ -193,13 +192,13 @@ const MapComponent = (props: Props) => {
 
   //redirects navigator back to edit page of single observation with flags telling
   //it that coordinate has been changed
-  const submitEdit = () => {
+  const changeObservationLocation = () => {
     dispatch(setEditing({
       started: true,
       locChanged: true,
       originalSourcePage: editing.originalSourcePage
     }))
-    props.onPressEditing()
+    props.onPop()
   }
 
   const showSubmitDelete = (eventId: string, unitId: string) => {
@@ -378,11 +377,10 @@ const MapComponent = (props: Props) => {
   return (
     <>
       <View style={Cs.gpsStatusBar}>
-        <Button
-          buttonStyle={Bs.stopObservingFromMapButton}
-          title={t('stop observation event')}
-          titleStyle={Ts.fontSizeFifteen}
-          onPress={() => stopObserving()}
+        <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop observation event')}
+          height={30} width={150} buttonStyle={Bs.stopObservingFromMapButton}
+          gradientColorStart={Colors.danger1} gradientColorEnd={Colors.danger2} shadowColor={Colors.dangerShadow}
+          textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
         />
       </View>
       <View style={Cs.mapContainer}>
@@ -410,23 +408,19 @@ const MapComponent = (props: Props) => {
         </MapView>
         <View
           style={Cs.mapTypeContainer}>
-          <TouchableHighlight onPress={() => dispatch(toggleMaptype())} style={Os.touchableHiglightStyle}>
-            <MaterialIcons
-              name='layers'
-              size={50}
-              color='white'
-            />
-          </TouchableHighlight>
+          <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
+            height={50} width={50} buttonStyle={Bs.mapIconButton}
+            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+          />
         </View>
         <View
           style={Cs.userLocationContainer}>
-          <TouchableHighlight onPress={() => centerMapAnim()} style={Os.touchableHiglightStyle}>
-            <MaterialIcons
-              name='my-location'
-              size={50}
-              color='white'
-            />
-          </TouchableHighlight>
+          <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
+            height={50} width={50} buttonStyle={Bs.mapIconButton}
+            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+          />
         </View>
         {observation ?
           observationButtonsState === 'newObservation' &&
@@ -440,7 +434,7 @@ const MapComponent = (props: Props) => {
           ||
           observationButtonsState === 'changeLocation' &&
           <ObservationButtonsComponent
-            confirmationButton={submitEdit}
+            confirmationButton={changeObservationLocation}
             cancelButton={cancelEdit}
             mode={observationButtonsState}
             openModal={openModal}

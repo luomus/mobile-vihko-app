@@ -86,7 +86,7 @@ class ObservationScreen extends Component<Props>  {
   }
 
   render() {
-    const { navigate, isFocused, goBack } = this.props.navigation
+    const { navigate, push, isFocused, goBack } = this.props.navigation
     //handles situation where fromMap can purposefully be undefined
     let fromMap = false
     if (this.props.navigation?.state?.params?.fromMap) {
@@ -97,6 +97,7 @@ class ObservationScreen extends Component<Props>  {
       <ObservationComponent
         toObservationEvent={(id: string) => navigate('ObservationEvent', { id })}
         toMap={() => navigate('Map')}
+        pushToMap={() => push('Map')}
         rules={this.props.navigation.state.params?.rules}
         defaults={this.props.navigation.state.params?.defaults}
         fromMap={fromMap}

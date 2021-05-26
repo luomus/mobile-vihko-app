@@ -1,10 +1,12 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
 import Modal from 'react-native-modal'
 import { useTranslation } from 'react-i18next'
+import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 
 type Props = {
   modalVisibility: boolean,
@@ -22,24 +24,27 @@ const SendEventModalComponent = (props: Props) => {
         <Text style={Cs.containerWithJustPadding}>
           {t('send observation event to server?')}
         </Text>
-        <Button
-          title={' ' + t('send public')}
-          buttonStyle={Bs.sendEventModalPositiveButton}
-          icon={<Icon type={'material-community'} name={'publish'} color={'white'} />}
-          onPress={ () => {props.sendObservationEvent(true)} }
-        />
-        <Button
-          title={' ' + t('send private')}
-          buttonStyle={Bs.sendEventModalNeutralButton}
-          icon={<Icon type={'material-community'} name={'security'} color={'white'} />}
-          onPress={ () => {props.sendObservationEvent(false)} }
-        />
-        <Button
-          title={' ' + t('do not submit')}
-          buttonStyle={Bs.sendEventModalNegativeButton}
-          icon={<Icon type={'material-community'} name={'close'} color={'white'} />}
-          onPress={() => { props.onCancel(false) }}
-        />
+        <View style={Cs.padding5Container}>
+          <ButtonComponent onPressFunction={() => { props.sendObservationEvent(true) }} title={t('send public')}
+            height={40} width={250} buttonStyle={Bs.sendEventModalPositiveButton}
+            gradientColorStart={Colors.success1} gradientColorEnd={Colors.success2} shadowColor={Colors.successShadow}
+            textStyle={Ts.buttonText} iconName={'publish'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
+          />
+        </View>
+        <View style={Cs.padding5Container}>
+          <ButtonComponent onPressFunction={() => { props.sendObservationEvent(false) }} title={t('send private')}
+            height={40} width={250} buttonStyle={Bs.sendEventModalNeutralButton}
+            gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'security'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
+          />
+        </View>
+        <View style={Cs.padding5Container}>
+          <ButtonComponent onPressFunction={() => { props.onCancel(false) }} title={t('do not submit')}
+            height={40} width={250} buttonStyle={Bs.sendEventModalNegativeButton}
+            gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'close'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
+          />
+        </View>
       </View>
     </Modal>
   )

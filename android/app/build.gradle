@@ -134,8 +134,8 @@ android {
         applicationId 'org.luomus.mobi'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 19
-        versionName "1.0.0"
+        versionCode 20
+        versionName "1.0.1"
     }
     splits {
         abi {

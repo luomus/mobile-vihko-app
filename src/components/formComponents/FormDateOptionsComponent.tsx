@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
-import { Icon, Button } from 'react-native-elements'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
+import Ts from '../../styles/TextStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument, sameDay } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
@@ -124,19 +125,20 @@ const FormDateOptionsComponent = (props: Props) => {
       <Text>{props.title}</Text>
       {!selected ?
         <View style={Cs.eventDateContainer}>
-          <Button
-            buttonStyle={Bs.timestampButton}
-            title={' ' + t('timestamp')}
-            icon={<Icon name={'schedule'} color='white' size={22} />}
-            iconContainerStyle={{ paddingLeft: 5 }}
-            onPress={() => onLockIntoCurrentDate()}>
-          </Button>
-          <Button
-            buttonStyle={Bs.chooseTimeButton}
-            title={' ' + t('choose time')}
-            icon={<Icon name={'restore'} color='white' size={22} />}
-            onPress={() => setShow(true)}>
-          </Button>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => onLockIntoCurrentDate()}
+              title={t('timestamp')} height={40} width={130} buttonStyle={Bs.timestampButton}
+              gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'schedule'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+            />
+          </View>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => setShow(true)}
+              title={t('choose time')} height={40} width={130} buttonStyle={Bs.chooseTimeButton}
+              gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'restore'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
+          </View>
         </View>
         :
         <View style={Cs.eventDateContainer}>
@@ -146,14 +148,11 @@ const FormDateOptionsComponent = (props: Props) => {
             editable={false}
             ref={register({ name: props.objectTitle })}
           />
-          <Button
-            buttonStyle={Bs.negativeIconButton}
-            icon={<Icon name={'delete'} color='white' size={22} />}
-            onPress={() => {
-              setSelected(false)
-              setValue(props.objectTitle, '')
-            }}>
-          </Button>
+          <ButtonComponent onPressFunction={() => setShow(true)}
+            title={undefined} height={40} width={45} buttonStyle={Bs.negativeIconButton}
+            gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          />
         </View>
       }
       {show && showDate && (

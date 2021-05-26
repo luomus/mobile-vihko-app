@@ -2,6 +2,12 @@ import { StyleSheet } from 'react-native'
 import Colors from './Colors'
 
 const TextStyles = StyleSheet.create({
+  buttonText: {
+    fontFamily: 'Roboto',
+    fontSize: 15,
+    fontWeight: '400',
+    marginTop: 5
+  },
   infoText: {
     fontSize: 18
   },
