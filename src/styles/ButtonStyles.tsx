@@ -74,7 +74,6 @@ const ButtonStyles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     flexDirection: 'row',
-    backgroundColor: Colors.negativeColor,
     borderRadius: 5
   },
   observationButton: {
@@ -82,7 +81,6 @@ const ButtonStyles = StyleSheet.create({
     paddingBottom: 5,
     paddingLeft: 10,
     paddingRight: 10,
-    backgroundColor: Colors.neutralColor,
     borderRadius: 5
   },
   editObservationButton: {

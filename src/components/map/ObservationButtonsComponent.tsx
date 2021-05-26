@@ -34,15 +34,6 @@ const ObservationButtonsComponent = (props: Props) => {
     iconName: string | undefined, iconType: string | undefined, width: number) => {
     return (
       <View key={title} style={Cs.observationTypeButton}>
-        {/* <Button
-          buttonStyle={bStyle}
-          icon={icon}
-          title={title}
-          titleProps={{
-            numberOfLines: 1
-          }}
-          onPress={() => onPress()}
-        /> */}
         <ButtonComponent onPressFunction={() => onPress()} title={title}
           height={40} width={width} buttonStyle={buttonStyle}
           gradientColorStart={styleType === 'primary' ? Colors.primary1 : Colors.neutral}
@@ -84,7 +75,7 @@ const ObservationButtonsComponent = (props: Props) => {
               neighbor.identifications[0].taxon,
               Bs.observationNeighborsButton,
               () => props.shiftToEditPage(eventId, neighbor.id),
-              'neutral', 'edit', 'material-icons', 180
+              'primary', undefined, undefined, 180
             )
           )}
         </View>

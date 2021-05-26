@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
 import Modal from 'react-native-modal'
 import { useTranslation } from 'react-i18next'
 import ButtonComponent from '../general/ButtonComponent'
