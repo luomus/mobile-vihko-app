@@ -14,39 +14,40 @@ import {
   termsOfServiceSv
 } from '../../config/urls'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 
 export const InfoPageComponent = () => {
   const { t, i18n } = useTranslation()
 
-  let lajiHomepage    = ''
-  let instructions    = ''
-  let privacyPolicy   = ''
-  let termsOfService  = ''
+  let lajiHomepage = ''
+  let instructions = ''
+  let privacyPolicy = ''
+  let termsOfService = ''
 
   if (i18n.language === 'fi') {
-    lajiHomepage      = lajiHomepageFi
-    instructions      = instructionsFi
-    privacyPolicy     = privacyPolicyFi
-    termsOfService    = termsOfServiceFi
+    lajiHomepage = lajiHomepageFi
+    instructions = instructionsFi
+    privacyPolicy = privacyPolicyFi
+    termsOfService = termsOfServiceFi
   } else if (i18n.language === 'sv') {
-    lajiHomepage      = lajiHomepageSv
-    instructions      = instructionsSv
-    privacyPolicy     = privacyPolicyFi
-    termsOfService    = termsOfServiceSv
+    lajiHomepage = lajiHomepageSv
+    instructions = instructionsSv
+    privacyPolicy = privacyPolicyFi
+    termsOfService = termsOfServiceSv
   } else {
-    lajiHomepage      = lajiHomepageEn
-    instructions      = instructionsEn
-    privacyPolicy     = privacyPolicyEn
-    termsOfService    = termsOfServiceEn
+    lajiHomepage = lajiHomepageEn
+    instructions = instructionsEn
+    privacyPolicy = privacyPolicyEn
+    termsOfService = termsOfServiceEn
   }
 
   return (
-    <View style={Cs.infoContainer}>
+    <ScrollView style={Cs.infoContainer}>
       <Text style={Ts.infoText}>
         <Text>
-          {t('infotext.mobilevihko.1') +  ' '}
+          {t('infotext.mobilevihko.1') + ' '}
         </Text>
         <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(lajiHomepage)}>
           {`${lajiHomepage}\n\n`}
@@ -70,6 +71,6 @@ export const InfoPageComponent = () => {
           {`${termsOfService}`}
         </Text>
       </Text>
-    </View>
+    </ScrollView>
   )
 }
