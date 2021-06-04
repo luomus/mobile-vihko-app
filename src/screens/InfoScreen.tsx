@@ -17,9 +17,9 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
   static navigationOptions = ({ screenProps, navigation }: any) =>  ({
     title: screenProps.t('info page'),
     headerStyle: {
-      backgroundColor: Colors.headerBackground,
+      backgroundColor: Colors.primary5,
     },
-    headerTintColor: Colors.white,
+    headerTintColor: Colors.whiteText,
     headerLeft: () => null,
     headerRight: () =>
       <View style={Cs.languageContainer}>

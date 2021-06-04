@@ -233,10 +233,10 @@ const HomeComponent = (props: Props) => {
                 items={[t('trip report form'), t('fungi atlas')]}
                 selectedIndex={selectedTab}
                 onChange={switchSelectedForm}
-                barColor={Colors.blueBackground}
+                barColor={Colors.primary3}
                 indicatorColor="black"
                 activeTextColor="black"
-                inactiveTextColor="grey"
+                inactiveTextColor={Colors.neutral7}
               />
             </View>
             <View style={{ height: 10 }}></View>

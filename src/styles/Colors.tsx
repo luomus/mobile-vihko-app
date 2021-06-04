@@ -1,42 +1,37 @@
 export default {
-  headerBackground: '#3498DB',
-  white: '#FFFFFF',
-  red: '#FF0000',
-  neutralColor: '#1D76B2',
-  positiveColor: '#5CB85C',
-  negativeColor: '#D9534F',
-  privateColor: '#F0AD4E',
-  neutralButton: '#1D76B2',
-  positiveButton: '#5CB85C',
-  negativeButton: '#D9534F',
-  unavailableButton: '#C0C0C0',
-  inputBorder: '#DEDEDE',
-  blueBackground: '#D9EDF7',
-  obsColor: '#0000CD',
+
+  //general colors
+  neutral2: '#F6F8F8',
+  neutral3: '#F1F3F4',
+  neutral5: '#ABB4BA',
+  neutral7: '#5C6870',
+  primary3: '#BADFF7',
+  primary4: '#7DBDE8',
+  primary5: '#2691D9',
+
+  //map screen colors
+  pathColor: '#FF0000',
+  observationColor: '#0000CD',
   trackColor: '#FFD700',
   fecesColor: '#7CFC00',
   nestColor: '#800080',
-  noImageBorder: '#a9a9a9',
-  darkBlueInputBorder: '#BCDEEE',
 
-  //New colors
-  neutral: '#FCFDFD',
+  //button colors and their shadows
+  neutralButton: '#FCFDFD',
   neutralShadow: '#141B1F',
-  primary1: '#22ABC3',
-  primary2: '#1F74AD',
+  primaryButton1: '#22ABC3',
+  primaryButton2: '#1F74AD',
   primaryShadow: '#0F598A',
-  success1: '#79A423',
-  success2: '#448F1E',
+  successButton1: '#79A423',
+  successButton2: '#448F1E',
   successShadow: '#2D6E0C',
-  warning1: '#B8A800',
-  warning2: '#9E9100',
-  warningShadow: '#7A7000',
-  danger1: '#BD5A28',
-  danger2: '#A82424',
+  dangerButton1: '#BD5A28',
+  dangerButton2: '#A82424',
   dangerShadow: '#8A0F0F',
-  background: '#F1F3F4',
+  unavailableButton: '#C0C0C0',
+
+  //text colors
   whiteText: '#F8FFF5',
   darkText: '#5C6870',
-  neutral2Bg: '#F6F8F8',
-  neutral3Bg: '#F1F3F4'
+
 }

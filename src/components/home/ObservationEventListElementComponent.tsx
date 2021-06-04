@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { parseDateForUI } from '../../helpers/dateHelper'
 import { Icon } from 'react-native-elements'
 import Cs from '../../styles/ContainerStyles'
+import Colors from '../../styles/Colors'
 
 interface Props {
   observationEvent: Record<string, any>,
@@ -27,7 +28,7 @@ const ObservationEventListElementComponent = (props: Props) => {
         </Text>
       </View>
       <View style={Cs.alignRightContainer}>
-        <Icon name='eye-outline' color='dimgray' type='material-community' size={35} />
+        <Icon name='eye-outline' color={Colors.neutral7} type='material-community' size={35} />
       </View>
     </TouchableOpacity>
   )

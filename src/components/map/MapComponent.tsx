@@ -311,7 +311,7 @@ const MapComponent = (props: Props) => {
         <Geojson
           geojson={wrapGeometryInFC(lineString)}
           strokeWidth={5}
-          strokeColor={Colors.red}
+          strokeColor={Colors.pathColor}
         />
         : null
     }
@@ -360,7 +360,7 @@ const MapComponent = (props: Props) => {
       let color = unit.color
 
       if (!color) {
-        color = Colors.obsColor
+        color = Colors.observationColor
       }
 
       return (
@@ -379,7 +379,7 @@ const MapComponent = (props: Props) => {
       <View style={Cs.gpsStatusBar}>
         <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop observation event')}
           height={30} width={150} buttonStyle={Bs.stopObservingFromMapButton}
-          gradientColorStart={Colors.danger1} gradientColorEnd={Colors.danger2} shadowColor={Colors.dangerShadow}
+          gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
           textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
         />
       </View>
@@ -410,7 +410,7 @@ const MapComponent = (props: Props) => {
           style={Cs.mapTypeContainer}>
           <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
             height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
             textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
           />
         </View>
@@ -418,7 +418,7 @@ const MapComponent = (props: Props) => {
           style={Cs.userLocationContainer}>
           <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
             height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
             textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
           />
         </View>

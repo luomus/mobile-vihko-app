@@ -36,8 +36,8 @@ const ObservationButtonsComponent = (props: Props) => {
       <View key={title} style={Cs.observationTypeButton}>
         <ButtonComponent onPressFunction={() => onPress()} title={title}
           height={40} width={width} buttonStyle={buttonStyle}
-          gradientColorStart={styleType === 'primary' ? Colors.primary1 : Colors.neutral}
-          gradientColorEnd={styleType === 'primary' ? Colors.primary2 : Colors.neutral}
+          gradientColorStart={styleType === 'primary' ? Colors.primaryButton1 : Colors.neutralButton}
+          gradientColorEnd={styleType === 'primary' ? Colors.primaryButton2 : Colors.neutralButton}
           shadowColor={styleType === 'primary' ? Colors.primaryShadow : Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={iconName} iconType={iconType} iconSize={22}
           contentColor={styleType === 'primary' ? Colors.whiteText : Colors.darkText}

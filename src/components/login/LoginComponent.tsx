@@ -169,7 +169,7 @@ const LoginComponent = (props: Props) => {
     }
 
     try {
-      await openBrowserAsync(result.loginURL, { toolbarColor: Colors.headerBackground })
+      await openBrowserAsync(result.loginURL, { toolbarColor: Colors.primary5 })
     } catch (error) {
       log.error({
         location: 'components/LoginComponent.tsx login()',
@@ -194,7 +194,7 @@ const LoginComponent = (props: Props) => {
               }
             }}
           title={t('cancel')} height={40} width={150} buttonStyle={Bs.loginCancelButton}
-          gradientColorStart={Colors.danger1} gradientColorEnd={Colors.danger2} shadowColor={Colors.dangerShadow}
+          gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
           textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
@@ -217,7 +217,7 @@ const LoginComponent = (props: Props) => {
             <View style={{ height: 25, width: 300 }} />
             <ButtonComponent onPressFunction={login} title={t('login')}
               height={40} width={230} buttonStyle={Bs.loginButton}
-              gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}
             />
           </View>

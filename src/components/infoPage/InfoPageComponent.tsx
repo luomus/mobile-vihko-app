@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking, Text, View } from 'react-native'
+import { Linking, Text } from 'react-native'
 import {
   lajiHomepageEn,
   lajiHomepageFi,

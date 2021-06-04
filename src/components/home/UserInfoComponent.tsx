@@ -57,7 +57,7 @@ const UserInfoComponent = (props: Props) => {
         <View style={Cs.logoutButtonContainer}>
           <ButtonComponent onPressFunction={() => showLogoutDialoue()} title={undefined}
             height={40} width={40} buttonStyle={Bs.logoutButton}
-            gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
           />
         </View>

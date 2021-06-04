@@ -15,7 +15,7 @@ const ActivityComponent = (props: Props) => {
 
   return (
     <View style={Cs.loadingContainer}>
-      <ActivityIndicator size='large' color={Colors.neutralColor}/>
+      <ActivityIndicator size='large' color={Colors.primary5}/>
       <Text style={Ts.loginText}>{t(props.text)}</Text>
       {
         props.children ? props.children : null

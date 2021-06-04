@@ -128,14 +128,14 @@ const FormDateOptionsComponent = (props: Props) => {
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => onLockIntoCurrentDate()}
               title={t('timestamp')} height={40} width={130} buttonStyle={Bs.timestampButton}
-              gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'schedule'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
             />
           </View>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => setShow(true)}
               title={t('choose time')} height={40} width={130} buttonStyle={Bs.chooseTimeButton}
-              gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'restore'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
           </View>
@@ -150,7 +150,7 @@ const FormDateOptionsComponent = (props: Props) => {
           />
           <ButtonComponent onPressFunction={() => setShow(true)}
             title={undefined} height={40} width={45} buttonStyle={Bs.negativeIconButton}
-            gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
           />
         </View>

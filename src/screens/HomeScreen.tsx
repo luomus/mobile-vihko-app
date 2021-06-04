@@ -48,9 +48,9 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
     return {
       title: screenProps.t('mobile vihko'),
       headerStyle: {
-        backgroundColor: Colors.headerBackground,
+        backgroundColor: Colors.primary5,
       },
-      headerTintColor: Colors.white,
+      headerTintColor: Colors.whiteText,
       headerLeft: () => null,
       headerRight: () =>
         <View style={Cs.languageContainer}>

@@ -47,9 +47,9 @@ export default class MapScreen extends Component<NavigationStackScreenProps<Prop
     return {
       title: screenProps.t('notification body').substring(0, screenProps.t('notification body').length - 1),
       headerStyle: {
-        backgroundColor: Colors.headerBackground,
+        backgroundColor: Colors.primary5,
       },
-      headerTintColor: Colors.white,
+      headerTintColor: Colors.whiteText,
       headerLeft: () => null,
       headerRight: () =>
         <View style={Cs.languageContainer}>

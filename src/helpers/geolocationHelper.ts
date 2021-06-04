@@ -44,7 +44,7 @@ const watchLocationAsyncAndroid = async (title: string, body: string) => {
       foregroundService: {
         notificationTitle: title,
         notificationBody: body,
-        notificationColor: Colors.headerBackground
+        notificationColor: Colors.primary5
       }
     })
   }

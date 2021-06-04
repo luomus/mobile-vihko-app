@@ -31,13 +31,10 @@ const NewEventWithoutZoneComponent = (props: Props) => {
 
   return (
     <View style={Cs.observationEventContainer}>
-      <Text style={Ts.observationEventTitle}>
-        {t('new observation event without zone')}
-      </Text>
       <View style={Cs.buttonContainer}>
         <ButtonComponent onPressFunction={props.onBeginObservationEvent} title={beginButtonText}
           height={40} width={300} buttonStyle={Bs.beginButton}
-          gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+          gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
           textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
         />
       </View>

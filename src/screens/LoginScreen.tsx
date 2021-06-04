@@ -17,9 +17,9 @@ export default class LoginScreen extends Component<NavigationStackScreenProps<Pr
   static navigationOptions = ({ screenProps, navigation }: any) => ({
     title: screenProps.t('mobile vihko'),
     headerStyle: {
-      backgroundColor: Colors.headerBackground
+      backgroundColor: Colors.primary5
     },
-    headerTintColor: Colors.white,
+    headerTintColor: Colors.whiteText,
     headerRight: () =>
       <View style={Cs.languageContainer}>
         <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => navigation.navigate('Info')}/>

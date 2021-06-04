@@ -47,9 +47,9 @@ export default class ObservationEventScreen extends Component<NavigationStackScr
     return {
       title: screenProps.t('event'),
       headerStyle: {
-        backgroundColor: Colors.headerBackground,
+        backgroundColor: Colors.primary5,
       },
-      headerTintColor: Colors.white,
+      headerTintColor: Colors.whiteText,
       headerLeft: () => null,
       headerRight: () =>
         <View style={Cs.languageContainer}>
