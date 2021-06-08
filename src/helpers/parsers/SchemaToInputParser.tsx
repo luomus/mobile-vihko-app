@@ -28,7 +28,7 @@ export const parseObjectForFieldParams = (inputObject: Record<string, any>) => {
   let enumDict: Record<string, any> = {}
   let isArray: boolean = false
   let typeOfArray: string = ''
-  let defaultValue: string = ''
+  let defaultValue: string | number | boolean = ''
 
   const formEnumDict = (enumKey: string[], enumNames: string[]) => {
     let dict: { [key: string]: any } = {}

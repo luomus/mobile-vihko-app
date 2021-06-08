@@ -27,6 +27,7 @@ const ImagePickerComponent = (props: Props) => {
   const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
+    register(props.objectTitle)
     setValue(props.objectTitle, images)
   }, [])
 
@@ -131,7 +132,6 @@ const ImagePickerComponent = (props: Props) => {
         </View>
         <View
           style={Cs.imageElementRowContainer}
-          ref={register({ name: props.objectTitle })}
         >
           {images.length === 0 ?
             <View style={Cs.noImageContainer}>
@@ -171,7 +171,6 @@ const ImagePickerComponent = (props: Props) => {
         </View>
         <View
           style={Cs.imageElementColumnContainer}
-          ref={register({ name: props.objectTitle })}
         >
           <View style={{ paddingLeft: 10 }}>
             <Text>{props.title}</Text>

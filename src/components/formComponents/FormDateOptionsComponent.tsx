@@ -54,6 +54,8 @@ const FormDateOptionsComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
+    register(props.objectTitle)
+
     if (currentValue && currentValue !== '') {
       setValue(props.objectTitle, currentValue)
       setSelected(true)
@@ -146,7 +148,6 @@ const FormDateOptionsComponent = (props: Props) => {
             style={Os.datePicker}
             value={parseDateForUI(currentValue)}
             editable={false}
-            ref={register({ name: props.objectTitle })}
           />
           <ButtonComponent onPressFunction={() => setShow(true)}
             title={undefined} height={40} width={45} buttonStyle={Bs.negativeIconButton}

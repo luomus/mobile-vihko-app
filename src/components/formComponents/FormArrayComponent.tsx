@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Text, View, ScrollView } from 'react-native'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -6,6 +6,7 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
+import uuid from 'react-native-uuid'
 
 interface Props {
   title: string,
@@ -18,7 +19,7 @@ interface Props {
   scrollView: React.MutableRefObject<ScrollView | null>,
   createInputElement: (
     title: string, objectTitle: string, parentObjectTitle: string,
-    type: string, defaultValue: string, isArrayItem: boolean,
+    type: string, defaultValue: string | number | undefined, isArrayItem: boolean,
     callbackFunction: Function | undefined, editable: boolean
   ) => JSX.Element | undefined
 }
@@ -26,17 +27,22 @@ interface Props {
 const FormArrayComponent = (props: Props) => {
   const [inputElements, setInputElements] = useState<Array<JSX.Element | undefined>>([])
   const indexOfRemovable = props.firstEditable ? 0 : 1
-  const { register, setValue, unregister, watch } = useFormContext()
-  let elementDictionary: Record<string, any> = {}
+  const { register, setValue, watch, getValues } = useFormContext()
+  const [elementDictionary, setElementDictionary] = useState<Record<string, any>>({})
+  const stateRef = useRef<Record<string, any>>()
+  stateRef.current = elementDictionary
 
   useEffect(() => {
     //if there are default values for the array, we iterate them, create the according input elements and pass the elements to FormArrayComponent
     let inputElems: Array<JSX.Element | undefined> = []
 
     if (props.parentObjectTitle !== '') {
-      register({ name: props.parentObjectTitle })
+      register(props.parentObjectTitle)
       setValue(props.parentObjectTitle, []) // Adds empty array to register
     }
+
+    let newElementDictionary: Record<string, any> = {}
+    const values: Array<number | string | undefined> = []
 
     //make first input uneditabel if set as such
     if (!props.firstEditable && props.defaultValue) {
@@ -46,30 +52,73 @@ const FormArrayComponent = (props: Props) => {
           defaultIsEditable = false
         }
 
+        const childObjectTiltle = props.parentObjectTitle + ' ' + uuid.v4()
+
+        newElementDictionary[childObjectTiltle] = value
+        values.push(value)
+
         inputElems.push(props.createInputElement(
-          props.title, props.objectTitle, props.parentObjectTitle, props.inputType, value,
+          childObjectTiltle, childObjectTiltle, props.parentObjectTitle, props.inputType, value,
           true, callbackFunction, defaultIsEditable))
       })
     } else if (props.defaultValue) {
-      props.defaultValue.forEach((value) => inputElems.push(props.createInputElement(
-        props.title, props.objectTitle, props.parentObjectTitle, props.inputType, value,
-        true, callbackFunction, true)))
+      props.defaultValue.forEach((value) => {
+        const childObjectTiltle = props.parentObjectTitle + ' ' + uuid.v4()
+
+        newElementDictionary[childObjectTiltle] = value
+        values.push(value)
+
+        inputElems.push(props.createInputElement(
+          childObjectTiltle, childObjectTiltle, props.parentObjectTitle, props.inputType, value,
+          true, callbackFunction, true))
+      })
     }
 
+    setElementDictionary(newElementDictionary)
+    setValue(props.parentObjectTitle, values)
     setInputElements(inputElems)
   }, [])
 
   const callbackFunction = (childValue: any) => { // Create callback function for fetching values from inputs
-    elementDictionary[childValue.title] = childValue.value
+    addValueToArray(childValue)
+
+    let newElementDictionary = { ...stateRef.current }
+    newElementDictionary[childValue.objectTitle] = childValue.value
+    setElementDictionary(newElementDictionary)
+  }
+
+
+  const addValueToArray = (childValue: any) => {
+    const values = getValues(props.parentObjectTitle)
+    const index = values.indexOf(stateRef.current?.[childValue.objectTitle])
+    if (index > -1) {
+      values.splice(index, 1)
+    }
+    values.push(childValue.value)
+    setValue(props.parentObjectTitle, values)
   }
 
   const addInputElement = () => {
     const elements = [...inputElements]
+    const childObjectTiltle = props.parentObjectTitle + ' ' + uuid.v4()
+    const childDefaultValue = props.inputType === 'string' ? '' : undefined
+
+    //create new input element
     elements.push(props.createInputElement(
-      props.title, props.objectTitle, props.parentObjectTitle,
-      props.inputType, '', true, callbackFunction, props.editable
+      childObjectTiltle, childObjectTiltle, props.parentObjectTitle,
+      props.inputType, childDefaultValue, true, callbackFunction, props.editable
     ))
     setInputElements(elements)
+
+    //add new input field to elementDict
+    let newElementDictionary = { ...elementDictionary }
+    newElementDictionary[childObjectTiltle] = childDefaultValue
+    setElementDictionary(newElementDictionary)
+
+    //push value for new filed to array
+    const values = getValues(props.parentObjectTitle)
+    values.push(childDefaultValue)
+    setValue(props.parentObjectTitle, values)
 
     //scroll down, as the new element appears
     if (props.scrollView !== null) {
@@ -91,8 +140,11 @@ const FormArrayComponent = (props: Props) => {
 
     const valueToRemove = elementDictionary[elementKey] //dictionary stores key-value pairs, where key is key/title of input and value is crrent value of input
     removeValueFromRegister(valueToRemove)
-    delete elementDictionary[elementKey]
     setInputElements(elements)
+
+    let newElementDictionay = { ...elementDictionary }
+    delete newElementDictionay[elementKey]
+    setElementDictionary(newElementDictionay)
   }
 
   //gets values stored in register, removes the value to remove and replaces register entry with modified array
@@ -102,8 +154,6 @@ const FormArrayComponent = (props: Props) => {
     if (index > -1) {
       values.splice(index, 1)
     }
-    unregister(props.parentObjectTitle)
-    register({ name: props.parentObjectTitle })
     setValue(props.parentObjectTitle, values)
   }
 

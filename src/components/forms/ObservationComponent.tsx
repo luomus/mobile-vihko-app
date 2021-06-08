@@ -211,13 +211,17 @@ const ObservationComponent = (props: Props) => {
     }
 
     Object.keys(data).forEach(key => {
+      if (!data[key]) {
+        return
+      }
+
       const target = get(newUnit, key.split('_'))
 
-      if (typeof data[key] === 'object' && target) {
-        merge(target, data[key])
-      } else {
-        set(newUnit, key.split('_'), data[key])
+      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
+        merge(data[key], target)
       }
+
+      set(newUnit, key.split('_'), data[key])
     })
 
     //set correct color for obseration, if available
@@ -261,12 +265,22 @@ const ObservationComponent = (props: Props) => {
     let editedUnit = {}
 
     Object.keys(data).forEach(key => {
+      if (!data[key]) {
+        return
+      }
+
+      const target = get(editedUnit, key.split('_'))
+
+      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
+        merge(data[key], target)
+      }
+
       set(editedUnit, key.split('_'), data[key])
     })
 
     //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
     if (editing.started && editing.locChanged) {
-      observation ? set(editedUnit, ['unitGathering', 'geometry'], observation) : null
+      observation ? set(editedUnit, ['unitGathering', 'geometry'], merge(get(editedUnit, ['unitGathering', 'geometry']), observation)) : null
       dispatch(clearObservationLocation())
       dispatch(setEditing({
         started: false,

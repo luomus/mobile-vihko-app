@@ -16,7 +16,7 @@ import {
   resetReducer
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
-import { set, merge, omit } from 'lodash'
+import { set, get, merge, mergeWith, omit, replace } from 'lodash'
 import MessageComponent from '../general/MessageComponent'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../languages/i18n'
@@ -101,14 +101,27 @@ const EditObservationEventComponent = (props: Props) => {
 
   const onSubmit = async (data: { [key: string]: any }) => {
     setSaving(true)
-    let editedEvent = {}
-
-    Object.keys(data).forEach(key => {
-      set(editedEvent, key.split('_'), data[key])
-    })
 
     if (event && observationId) {
-      editedEvent = merge(event, editedEvent)
+      let editedEvent = {}
+
+      Object.keys(data).forEach(key => {
+        const target = get(editedEvent, key.split('_'))
+
+        if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
+          merge(data[key], target)
+        }
+
+        set(editedEvent, key.split('_'), data[key])
+      })
+
+      const customizer = (target: any, replacer: any) => {
+        if (Array.isArray(replacer) && !(typeof target[0] === 'object' || typeof replacer[0] === 'object')) {
+          return replacer
+        }
+      }
+
+      editedEvent = mergeWith(event, editedEvent, customizer)
 
       //replace events with the modified copy
       try {

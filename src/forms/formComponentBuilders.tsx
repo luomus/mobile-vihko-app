@@ -113,35 +113,33 @@ export const createSwitch = (
 
 export const createInputElement = (
   title: string, objectTitle: string, parentObjectTitle: string,
-  type: string, defaultValue: string,
+  type: string, defaultValue: string | string | number,
   isArrayItem: boolean, callbackFunction: Function|undefined, editable: boolean
 ) => {
-  const titleKey = isArrayItem ? objectTitle + ' ' + uuid.v4() : objectTitle
-
-  if (objectTitle.includes('gatheringEvent_dateBegin') || objectTitle.includes('gatheringEvent_dateEnd')) {
+  if ((objectTitle.includes('gatheringEvent_dateBegin') || objectTitle.includes('gatheringEvent_dateEnd')) && typeof defaultValue === 'string') {
     return <FormDatePickerComponent
-      key={titleKey} title={title} objectTitle={objectTitle}
+      key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='default'
       isArrayItem={isArrayItem} parentCallback={callbackFunction}
     />
-  } else if (objectTitle.includes('unitGathering_dateBegin')) {
+  } else if (objectTitle.includes('unitGathering_dateBegin') && typeof defaultValue === 'string') {
     return <FormDateOptionsComponent
-      key={titleKey} title={title} objectTitle={objectTitle}
+      key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='default'
       isArrayItem={isArrayItem} parentCallback={callbackFunction}
     />
   } else if (type === 'string') {
     return <FormInputComponent
-      key={titleKey} title={title} objectTitle={objectTitle}
+      key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='default'
       isArrayItem={isArrayItem} parentCallback={callbackFunction} editable={editable}
     />
   } else if (type === 'integer') {
     return <FormInputComponent
-      key={titleKey} title={title} objectTitle={objectTitle}
+      key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='numeric'
       isArrayItem={isArrayItem} parentCallback={callbackFunction} editable={editable}

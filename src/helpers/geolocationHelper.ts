@@ -14,7 +14,7 @@ import {
 let positionWatcher: null | { remove(): void } = null
 
 const watchLocationAsync = async (updateLocation: (location: LocationObject) => void, title: string, body: string) => {
-  let permission = await Location.requestPermissionsAsync()
+  let permission = await Location.requestForegroundPermissionsAsync()
 
   if (permission.status === 'granted') {
     await watchPositionAsync((location) => updateLocation(location))

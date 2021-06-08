@@ -23,7 +23,7 @@ interface Props {
     'twitter' |
     'web-search' |
     undefined,
-  defaultValue: string,
+  defaultValue: string | number | undefined,
   isArrayItem: boolean,
   parentCallback: Function | undefined,
   editable: boolean,
@@ -31,31 +31,21 @@ interface Props {
 
 const FormInputComponent = (props: Props) => {
 
-  const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
-  const { register, setValue, watch } = useFormContext()
+  const [currentValue, setCurrentValue] = useState<string>(props.defaultValue ? props.defaultValue.toString() : '')
+  const { register, setValue } = useFormContext()
 
   useEffect(() => {
-    props.parentObjectTitle !== ''
-      ? addValueToArray(props.defaultValue)
-      : setValue(props.objectTitle, parseInput(props.defaultValue))
-    if (props.parentCallback !== undefined) {
-      props.parentCallback({ title: props.title, value: props.defaultValue })
-    }
+    if (!props.isArrayItem)
+      initField()
   }, [])
 
   const parseInput = (input: string) => {
-    return props.keyboardType === 'numeric' ? parseInt(input) : input
+    return props.keyboardType === 'numeric' ? input !== '' ? parseInt(input) : undefined : input
   }
 
-  const addValueToArray = (value: string) => {
-    const values = watch(props.parentObjectTitle)
-    const index = values.indexOf(currentValue)
-    if (index > -1) {
-      values.splice(index, 1)
-    }
-    values.push(value)
-    setValue(props.parentObjectTitle, parseInput(values))
-    setCurrentValue(value)
+  const initField = () => {
+    register(props.objectTitle)
+    setValue(props.objectTitle, parseInput(currentValue))
   }
 
   return (
@@ -69,17 +59,12 @@ const FormInputComponent = (props: Props) => {
         keyboardType={props.keyboardType}
         editable={props.editable}
         onChangeText={text => {
-          props.parentObjectTitle !== ''
-            ? addValueToArray(text)
+          props.isArrayItem && props.parentCallback
+            ? props.parentCallback({ objectTitle: props.objectTitle, value: parseInput(text) })
             : setValue(props.objectTitle, parseInput(text))
-          props.parentCallback !== undefined
-            ? props.parentCallback({ title: props.title, value: text })
-            : null
+          setCurrentValue(text)
         }}
-        defaultValue={props.defaultValue.toString()}
-        ref={props.parentObjectTitle === ''
-          ? register({ name: props.objectTitle })
-          : null }
+        defaultValue={currentValue}
       />
     </View>
   )
