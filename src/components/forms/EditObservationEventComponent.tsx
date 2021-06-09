@@ -116,7 +116,7 @@ const EditObservationEventComponent = (props: Props) => {
       })
 
       const customizer = (target: any, replacer: any) => {
-        if (Array.isArray(replacer) && !(typeof target[0] === 'object' || typeof replacer[0] === 'object')) {
+        if (Array.isArray(replacer) && !(( target && typeof target[0] === 'object') || typeof replacer[0] === 'object')) {
           return replacer
         }
       }
