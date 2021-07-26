@@ -1,11 +1,10 @@
 import React, { useState, useEffect, ReactChild } from 'react'
-import MapView, { Marker, UrlTile, Region, LatLng } from 'react-native-maps'
+import MapView, { Marker, UrlTile, Region, LatLng, Geojson, Polyline } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { LineString } from 'geojson'
-import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../../helpers/geoJSONHelper'
-import Geojson from 'react-native-typescript-geojson'
+import { LineString, Polygon } from 'geojson'
+import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC, latLngArrayConstructor, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -300,12 +299,38 @@ const MapComponent = (props: Props) => {
 
   //draws user path to map
   const pathOverlay = () => {
-    if (path.length >= 1 && position) {
+    if (path?.length >= 1 && position) {
       const pathAppended: Array<Array<number>> = path.concat([[
         position.coords.longitude,
         position.coords.latitude
       ]])
 
+      const pathPolygon: Polygon | null = pathPolygonConstructor(pathAppended) 
+      console.log(pathPolygon, wrapGeometryInFC(pathPolygon))
+      return pathPolygon ?
+        <Geojson
+          geojson={wrapGeometryInFC(pathPolygon)}
+          strokeWidth={5}
+          strokeColor={Colors.pathColor}
+        />
+        : null
+
+      /**
+       * dotted path temporary fix for path bug
+      const latLngPath: Array<LatLng> | null = latLngArrayConstructor(pathAppended)
+      console.log(latLngPath)
+      return latLngPath ?
+        <Polyline
+          coordinates={latLngPath}
+          strokeWidth={5}
+          strokeColor={Colors.pathColor}
+          lineCap={'round'}
+          lineDashPattern={[0]}
+        />
+        : null
+      */
+      /**
+       * proper path renering, use after expo has fixed its problems
       const lineString: LineString | null = lineStringConstructor(pathAppended)
       return lineString ?
         <Geojson
@@ -314,6 +339,7 @@ const MapComponent = (props: Props) => {
           strokeColor={Colors.pathColor}
         />
         : null
+      */
     }
 
     return null
