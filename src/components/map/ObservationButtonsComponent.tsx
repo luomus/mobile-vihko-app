@@ -46,7 +46,7 @@ const ObservationButtonsComponent = (props: Props) => {
     )
   }
 
-  const createButtonList = () => {
+  const createLeftSideButtonsList = () => {
     const units: BasicObject[] = observationEvent.events?.[observationEvent.events.length - 1]
       .gatherings[0].units
     const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, region, observation)
@@ -87,7 +87,7 @@ const ObservationButtonsComponent = (props: Props) => {
     if (props.mode === 'newObservation') {
       return (
         <View style={Cs.observationTypeColumnsContainer}>
-          {createButtonList() ? createButtonList() : <View></View>}
+          {createLeftSideButtonsList() ? createLeftSideButtonsList() : <View></View>}
           <View style={Cs.observationTypeButtonsColumnRight}>
             {createButton(
               '+ ' + t('observation'),

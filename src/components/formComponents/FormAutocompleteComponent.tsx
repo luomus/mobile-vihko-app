@@ -242,7 +242,7 @@ const FormAutocompleteComponent = (props: Props) => {
       <ErrorMessage
         errors={formState.errors}
         name={valueField}
-        render={({ message }) => <Text style={{ color: Colors.dangerButton2}}>{errorMessageTranslation(message)}</Text>}
+        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
       />
       <View style={{ paddingBottom: 35 }}>
         <Autocomplete

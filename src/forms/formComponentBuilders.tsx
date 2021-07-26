@@ -9,7 +9,6 @@ import FormPickerComponent from '../components/formComponents/FormPickerComponen
 import FormDateOptionsComponent from '../components/formComponents/FormDateOptionsComponent'
 import FormDatePickerComponent from '../components/formComponents/FormDatePickerComponent'
 import FormSwitchComponent from '../components/formComponents/FormSwitchComponent'
-import uuid from 'react-native-uuid'
 import FormHiddenComponent from '../components/formComponents/FormHiddenComponent'
 import FormAutocompleteComponent, { AutocompleteParams } from '../components/formComponents/FormAutocompleteComponent'
 

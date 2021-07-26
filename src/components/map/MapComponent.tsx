@@ -332,7 +332,7 @@ const MapComponent = (props: Props) => {
   )
 
   //if topomap is selected draws its tiles on map
-  const tileOverlay = () => (maptype === 'topographic' ?
+  const tileOverlay = () => (maptype === 'terrain' ?
     <UrlTile
       urlTemplate={urlTemplate}
       zIndex={-1}
@@ -393,7 +393,7 @@ const MapComponent = (props: Props) => {
           onRegionChangeComplete={(region) => onRegionChangeComplete(region)}
           maxZoomLevel={18.9}
           minZoomLevel={5}
-          mapType={maptype === 'topographic' ? 'none' : maptype}
+          mapType={maptype === 'terrain' ? 'none' : maptype}
           pitchEnabled={false}
           rotateEnabled={false}
           moveOnMarkerPress={false}

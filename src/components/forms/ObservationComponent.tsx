@@ -281,7 +281,6 @@ const ObservationComponent = (props: Props) => {
     //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
     if (editing.started && editing.locChanged) {
       observation ? set(editedUnit, ['unitGathering', 'geometry'], merge(get(editedUnit, ['unitGathering', 'geometry']), observation)) : null
-      dispatch(clearObservationLocation())
       dispatch(setEditing({
         started: false,
         locChanged: false,
@@ -297,6 +296,7 @@ const ObservationComponent = (props: Props) => {
     //replace original observation with edited one
     try {
       await dispatch(replaceObservationById(editedUnit, observationId?.eventId, observationId?.unitId))
+      dispatch(clearObservationLocation())
       dispatch(clearObservationId())
 
       if (editing.originalSourcePage === 'MapComponent') {
@@ -344,6 +344,7 @@ const ObservationComponent = (props: Props) => {
     try {
       await dispatch(deleteObservation(observationId?.eventId, observationId?.unitId))
       dispatch(clearObservationId())
+      dispatch(clearObservationLocation())
 
       if (editing.originalSourcePage === 'MapComponent') {
         props.toMap()
