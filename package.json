@@ -19,7 +19,7 @@
     "@react-native-community/netinfo": "6.0.0",
     "@react-navigation/native": "5.9.4",
     "@types/geojson": "7946.0.8",
-    "@types/react-native-autocomplete-input": "4.0.2",
+    "@types/react-native-autocomplete-input": "^4.0.2",
     "@types/react-native-simple-radio-button": "2.7.1",
     "@types/react-native-uuid": "2.0.0",
     "apollo-boost": "0.4.9",

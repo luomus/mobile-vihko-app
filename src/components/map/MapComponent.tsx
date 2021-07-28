@@ -306,7 +306,6 @@ const MapComponent = (props: Props) => {
       ]])
 
       const pathPolygon: Polygon | null = pathPolygonConstructor(pathAppended) 
-      console.log(pathPolygon, wrapGeometryInFC(pathPolygon))
       return pathPolygon ?
         <Geojson
           geojson={wrapGeometryInFC(pathPolygon)}

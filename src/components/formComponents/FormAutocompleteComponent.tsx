@@ -143,6 +143,7 @@ const FormAutocompleteComponent = (props: Props) => {
       let res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, setCancelToken)
 
       const autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
+
       setOptions(autocompleteOptions)
 
       if (autocompleteOptions[0]?.data.payload?.matchType === 'exactMatches') {
@@ -257,12 +258,17 @@ const FormAutocompleteComponent = (props: Props) => {
           renderTextInput={({ onFocus, onBlur, onChangeText, defaultValue }) => {
             return renderTextInput(onFocus, onBlur, onChangeText, defaultValue)
           }}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity onPress={() => onSelection(item.data)}>
-                {item.element}
-              </TouchableOpacity>
-            )
+          flatListProps={{
+            keyboardShouldPersistTaps: 'always',
+            keyExtractor: (_, idx) => idx.toString(),
+            // eslint-disable-next-line react/display-name
+            renderItem: ({ item }) => {
+              return (
+                <TouchableOpacity onPress={() => onSelection(item.data)}>
+                  {item.element}
+                </TouchableOpacity>
+              )
+            }
           }}
         />
       </View>
