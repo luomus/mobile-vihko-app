@@ -173,9 +173,9 @@ const ObservationEventComponent = (props: Props) => {
                   dispatch(setObservationId(id))
                   props.onPressObservationEvent('ObservationEventComponent')
                 }}
-                  title={undefined} height={40} width={45} buttonStyle={Bs.editEventButton}
-                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                title={undefined} height={40} width={45} buttonStyle={Bs.editEventButton}
+                gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                 />
               </View>
               <View style={Cs.padding5Container}>
