@@ -52,24 +52,24 @@ const FormArrayComponent = (props: Props) => {
           defaultIsEditable = false
         }
 
-        const childObjectTiltle = props.parentObjectTitle + ' ' + uuid.v4()
+        const childObjectTitle = props.parentObjectTitle + ' ' + uuid.v4()
 
-        newElementDictionary[childObjectTiltle] = value
+        newElementDictionary[childObjectTitle] = value
         values.push(value)
 
         inputElems.push(props.createInputElement(
-          childObjectTiltle, childObjectTiltle, props.parentObjectTitle, props.inputType, value,
+          childObjectTitle, childObjectTitle, props.parentObjectTitle, props.inputType, value,
           true, callbackFunction, defaultIsEditable))
       })
     } else if (props.defaultValue) {
       props.defaultValue.forEach((value) => {
-        const childObjectTiltle = props.parentObjectTitle + ' ' + uuid.v4()
+        const childObjectTitle = props.parentObjectTitle + ' ' + uuid.v4()
 
-        newElementDictionary[childObjectTiltle] = value
+        newElementDictionary[childObjectTitle] = value
         values.push(value)
 
         inputElems.push(props.createInputElement(
-          childObjectTiltle, childObjectTiltle, props.parentObjectTitle, props.inputType, value,
+          childObjectTitle, childObjectTitle, props.parentObjectTitle, props.inputType, value,
           true, callbackFunction, true))
       })
     }

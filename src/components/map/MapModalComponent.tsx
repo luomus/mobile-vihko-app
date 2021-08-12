@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { rootState } from '../../stores'

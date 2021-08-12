@@ -1,10 +1,10 @@
 import React, { useState, useEffect, ReactChild } from 'react'
-import MapView, { Marker, UrlTile, Region, LatLng, Geojson, Polyline } from 'react-native-maps'
+import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { LineString, Polygon } from 'geojson'
-import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC, latLngArrayConstructor, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
+import { Polygon } from 'geojson'
+import { convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
