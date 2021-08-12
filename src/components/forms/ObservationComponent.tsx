@@ -211,13 +211,17 @@ const ObservationComponent = (props: Props) => {
     }
 
     Object.keys(data).forEach(key => {
+      if (!data[key]) {
+        return
+      }
+
       const target = get(newUnit, key.split('_'))
 
-      if (typeof data[key] === 'object' && target) {
-        merge(target, data[key])
-      } else {
-        set(newUnit, key.split('_'), data[key])
+      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
+        merge(data[key], target)
       }
+
+      set(newUnit, key.split('_'), data[key])
     })
 
     //set correct color for obseration, if available
@@ -261,13 +265,22 @@ const ObservationComponent = (props: Props) => {
     let editedUnit = {}
 
     Object.keys(data).forEach(key => {
+      if (!data[key]) {
+        return
+      }
+
+      const target = get(editedUnit, key.split('_'))
+
+      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
+        merge(data[key], target)
+      }
+
       set(editedUnit, key.split('_'), data[key])
     })
 
     //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
     if (editing.started && editing.locChanged) {
-      observation ? set(editedUnit, ['unitGathering', 'geometry'], observation) : null
-      dispatch(clearObservationLocation())
+      observation ? set(editedUnit, ['unitGathering', 'geometry'], merge(get(editedUnit, ['unitGathering', 'geometry']), observation)) : null
       dispatch(setEditing({
         started: false,
         locChanged: false,
@@ -283,6 +296,7 @@ const ObservationComponent = (props: Props) => {
     //replace original observation with edited one
     try {
       await dispatch(replaceObservationById(editedUnit, observationId?.eventId, observationId?.unitId))
+      dispatch(clearObservationLocation())
       dispatch(clearObservationId())
 
       if (editing.originalSourcePage === 'MapComponent') {
@@ -330,6 +344,7 @@ const ObservationComponent = (props: Props) => {
     try {
       await dispatch(deleteObservation(observationId?.eventId, observationId?.unitId))
       dispatch(clearObservationId())
+      dispatch(clearObservationLocation())
 
       if (editing.originalSourcePage === 'MapComponent') {
         props.toMap()
@@ -368,7 +383,7 @@ const ObservationComponent = (props: Props) => {
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => editObservationLocation()}
                 title={t('edit location')} height={40} width={150} buttonStyle={Bs.editObservationButton}
-                gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'edit-location'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
@@ -378,7 +393,7 @@ const ObservationComponent = (props: Props) => {
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => handleRemove()}
                 title={t('delete')} height={40} width={150} buttonStyle={Bs.editObservationButton}
-                gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>

@@ -14,7 +14,7 @@ import {
 let positionWatcher: null | { remove(): void } = null
 
 const watchLocationAsync = async (updateLocation: (location: LocationObject) => void, title: string, body: string) => {
-  let permission = await Location.requestPermissionsAsync()
+  let permission = await Location.requestForegroundPermissionsAsync()
 
   if (permission.status === 'granted') {
     await watchPositionAsync((location) => updateLocation(location))
@@ -44,7 +44,7 @@ const watchLocationAsyncAndroid = async (title: string, body: string) => {
       foregroundService: {
         notificationTitle: title,
         notificationBody: body,
-        notificationColor: Colors.headerBackground
+        notificationColor: Colors.primary5
       }
     })
   }

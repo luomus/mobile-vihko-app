@@ -143,6 +143,7 @@ const FormAutocompleteComponent = (props: Props) => {
       let res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, setCancelToken)
 
       const autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
+
       setOptions(autocompleteOptions)
 
       if (autocompleteOptions[0]?.data.payload?.matchType === 'exactMatches') {
@@ -204,7 +205,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
   const errorMessageTranslation = (errorMessage: string): Element => {
     const errorTranslation = t(errorMessage)
-    return <Text style={{ color: Colors.negativeColor }}>{errorTranslation}</Text>
+    return <Text style={{ color: Colors.dangerButton2 }}>{errorTranslation}</Text>
   }
 
   const renderTextInput = (
@@ -216,7 +217,7 @@ const FormAutocompleteComponent = (props: Props) => {
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch' }}>
         <TextInput
-          style={{ borderColor: Colors.inputBorder, borderWidth: 1, height: 40, width: '90%', padding: 10 }}
+          style={{ borderColor: Colors.neutral5, borderWidth: 1, height: 40, width: '90%', padding: 10 }}
           onFocus={onFocus}
           onBlur={onBlur}
           onChangeText={onChangeText}
@@ -224,11 +225,11 @@ const FormAutocompleteComponent = (props: Props) => {
         </TextInput>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           {loading ?
-            <ActivityIndicator size={25} color={Colors.neutralColor} />
+            <ActivityIndicator size={25} color={Colors.primary5} />
             : selected ?
-              <Icon iconStyle={{ padding: 5, color: Colors.positiveColor }} name='done' type='material-icons' size={25} />
+              <Icon iconStyle={{ padding: 5, color: Colors.successButton1 }} name='done' type='material-icons' size={25} />
               : query !== '' ?
-                <Icon iconStyle={{ padding: 5, color: Colors.neutralColor }} name='warning' type='material-icons' size={25} />
+                <Icon iconStyle={{ padding: 5, color: Colors.primary5 }} name='warning' type='material-icons' size={25} />
                 : null
           }
         </View>
@@ -242,7 +243,7 @@ const FormAutocompleteComponent = (props: Props) => {
       <ErrorMessage
         errors={formState.errors}
         name={valueField}
-        render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{errorMessageTranslation(message)}</Text>}
+        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
       />
       <View style={{ paddingBottom: 35 }}>
         <Autocomplete
@@ -257,12 +258,17 @@ const FormAutocompleteComponent = (props: Props) => {
           renderTextInput={({ onFocus, onBlur, onChangeText, defaultValue }) => {
             return renderTextInput(onFocus, onBlur, onChangeText, defaultValue)
           }}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity onPress={() => onSelection(item.data)}>
-                {item.element}
-              </TouchableOpacity>
-            )
+          flatListProps={{
+            keyboardShouldPersistTaps: 'always',
+            keyExtractor: (_, idx) => idx.toString(),
+            // eslint-disable-next-line react/display-name
+            renderItem: ({ item }) => {
+              return (
+                <TouchableOpacity onPress={() => onSelection(item.data)}>
+                  {item.element}
+                </TouchableOpacity>
+              )
+            }
           }}
         />
       </View>

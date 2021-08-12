@@ -27,6 +27,7 @@ const ImagePickerComponent = (props: Props) => {
   const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
+    register(props.objectTitle)
     setValue(props.objectTitle, images)
   }, [])
 
@@ -93,7 +94,7 @@ const ImagePickerComponent = (props: Props) => {
 
   const errorMessageTranslation = (errorMessage: string): Element => {
     const errorTranslation = t(errorMessage)
-    return <Text style={{ color: Colors.negativeColor }}>{errorTranslation}</Text>
+    return <Text style={{ color: Colors.dangerButton2 }}>{errorTranslation}</Text>
   }
 
   const renderImages = () => {
@@ -107,7 +108,7 @@ const ImagePickerComponent = (props: Props) => {
             <Icon
               name='delete'
               type='material-icons'
-              color={Colors.negativeColor}
+              color={Colors.dangerButton2}
               size={22}
               onPress={() => { showRemoveImage(image) }}
             />
@@ -124,14 +125,13 @@ const ImagePickerComponent = (props: Props) => {
         <ErrorMessage
           errors={formState.errors}
           name={props.objectTitle}
-          render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{errorMessageTranslation(message)}</Text>}
+          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
         />
         <View style={{ paddingLeft: 10 }}>
           <Text>{props.title}</Text>
         </View>
         <View
           style={Cs.imageElementRowContainer}
-          ref={register({ name: props.objectTitle })}
         >
           {images.length === 0 ?
             <View style={Cs.noImageContainer}>
@@ -164,14 +164,13 @@ const ImagePickerComponent = (props: Props) => {
         <ErrorMessage
           errors={formState.errors}
           name={props.objectTitle}
-          render={({ message }) => <Text style={{ color: Colors.negativeColor }}>{errorMessageTranslation(message)}</Text>}
+          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
         />
         <View style={{ paddingLeft: 10 }}>
           <Text>{props.title}</Text>
         </View>
         <View
           style={Cs.imageElementColumnContainer}
-          ref={register({ name: props.objectTitle })}
         >
           <View style={{ paddingLeft: 10 }}>
             <Text>{props.title}</Text>

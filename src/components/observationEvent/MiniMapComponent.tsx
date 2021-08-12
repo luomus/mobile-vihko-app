@@ -24,7 +24,7 @@ const MiniMapComponent = (props: Props) => {
     return (
       <Marker
         coordinate = {coordinate}
-        pinColor = {props.observation.color ? props.observation.color : Cl.obsColor}
+        pinColor = {props.observation.color ? props.observation.color : Cl.observationColor}
         zIndex = {5}
       >
       </Marker>

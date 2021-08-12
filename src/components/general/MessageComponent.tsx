@@ -114,7 +114,7 @@ const MessageComponent = () => {
     return (
       <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
         height={40} width={160} buttonStyle={Bs.basicPrimaryButton}
-        gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+        gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
         textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
       />
     )
@@ -124,7 +124,7 @@ const MessageComponent = () => {
     return (
       <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
         height={40} width={160} buttonStyle={Bs.basicNeutralButton}
-        gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+        gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
         textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
       />
     )

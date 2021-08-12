@@ -173,22 +173,22 @@ const ObservationEventComponent = (props: Props) => {
                   dispatch(setObservationId(id))
                   props.onPressObservationEvent('ObservationEventComponent')
                 }}
-                  title={undefined} height={40} width={45} buttonStyle={Bs.editEventButton}
-                  gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
-                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                title={undefined} height={40} width={45} buttonStyle={Bs.editEventButton}
+                gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                 />
               </View>
               <View style={Cs.padding5Container}>
                 <ButtonComponent onPressFunction={() => setModalVisibility(true)} title={undefined}
                   height={40} width={45} buttonStyle={Bs.sendEventButton}
-                  gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                   textStyle={Ts.buttonText} iconName={'send'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                 />
               </View>
               <View style={Cs.padding5Container}>
                 <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={undefined}
                   height={40} width={45} buttonStyle={Bs.removeEventButton}
-                  gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                   textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
                 />
               </View>
@@ -210,7 +210,7 @@ const ObservationEventComponent = (props: Props) => {
                     props.onPressObservation('ObservationEventComponent')
                   }}
                   title={t('edit button')} height={40} width={150} buttonStyle={Bs.basicPrimaryButton}
-                  gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                   textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                   />
                 }
@@ -219,7 +219,7 @@ const ObservationEventComponent = (props: Props) => {
                     showDeleteObservation(event.id, observation.id)
                   }}
                   title={t('remove')} height={40} width={150} buttonStyle={Bs.basicNeutralButton}
-                  gradientColorStart={Colors.neutral} gradientColorEnd={Colors.neutral} shadowColor={Colors.neutralShadow}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                   textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
                   />
                 }

@@ -107,7 +107,7 @@ export const additionalJX519Fields = {
     typeOfArray: '',
     isEnum: false,
     enumDict: {},
-    defaultValue: '',
+    defaultValue: undefined,
     blacklist: null
   }
 }

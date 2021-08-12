@@ -17,14 +17,14 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonContainer: {
-    padding: 5,
+    padding: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   observationEventContainer: {
     width: '90%',
-    backgroundColor: Colors.blueBackground
+    backgroundColor: Colors.primary3
   },
   switchContainer: {
     alignSelf: 'center',
@@ -34,7 +34,7 @@ const ContainerStyles = StyleSheet.create({
   pickerContainer: {
     alignSelf: 'center',
     width: '90%',
-    borderColor: Colors.darkBlueInputBorder,
+    borderColor: Colors.neutral5,
     borderWidth: 1,
   },
   loginContainer: {
@@ -91,7 +91,7 @@ const ContainerStyles = StyleSheet.create({
     width: '100%'
   },
   formPickerContainer: {
-    borderColor: Colors.inputBorder,
+    borderColor: Colors.neutral5,
     borderWidth: 1,
     paddingHorizontal: 10
   },
@@ -146,7 +146,7 @@ const ContainerStyles = StyleSheet.create({
   },
   observationTypeButtonsColumnLeft: {
     alignSelf: 'flex-start',
-    backgroundColor: Colors.neutral3Bg,
+    backgroundColor: Colors.neutral3,
     borderRadius: 5,
     width: '50%'
   },
@@ -157,7 +157,7 @@ const ContainerStyles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
-    backgroundColor: Colors.white
+    backgroundColor: Colors.whiteText
   },
   loginViewContainer: {
     flexDirection: 'column',
@@ -182,7 +182,7 @@ const ContainerStyles = StyleSheet.create({
   },
   observationInfoContainer: {
     padding: 5,
-    backgroundColor: Colors.blueBackground,
+    backgroundColor: Colors.primary3,
     justifyContent: 'center',
   },
   editObservationButtonContainer: {
@@ -225,7 +225,7 @@ const ContainerStyles = StyleSheet.create({
     width: 150,
     height: 150,
     borderStyle: 'dashed',
-    borderColor: Colors.noImageBorder,
+    borderColor: Colors.neutral5,
     borderWidth: 2,
     borderRadius: 5,
     alignItems: 'center',
@@ -286,17 +286,16 @@ const ContainerStyles = StyleSheet.create({
   },
   observationEventListContainer: {
     padding: 10,
-    backgroundColor: Colors.blueBackground,
+    backgroundColor: Colors.primary3,
     width: '90%'
   },
   observationEventListItemContainer: {
+    backgroundColor: Colors.primary4,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'stretch',
-    borderWidth: 1,
     borderRadius: 5,
-    borderColor: 'lightgray',
-    marginBottom: 5
+    marginTop: 5
   },
   homeInfoContainer: {
     padding: 10,
@@ -314,7 +313,7 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'stretch',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: Colors.headerBackground,
+    backgroundColor: Colors.primary5,
   },
   gpsBarLeft: {
     flexDirection: 'row',
@@ -349,7 +348,7 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 10,
-    backgroundColor: Colors.white
+    backgroundColor: Colors.whiteText
   },
   iconStretchContainer: {
     borderWidth: 150
@@ -365,7 +364,7 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.whiteText,
     width: '90%',
     maxHeight: '75%'
   },

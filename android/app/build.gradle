@@ -79,11 +79,12 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    enableHermes: false
+    enableHermes: (findProperty('expo.jsEngine') ?: "jsc") == "hermes",
 ]
 
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/expo-constants/scripts/get-app-config-android.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -134,8 +135,8 @@ android {
         applicationId 'org.luomus.mobi'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
-        versionName "1.0.1"
+        versionCode 21
+        versionName "1.1.0"
     }
     splits {
         abi {

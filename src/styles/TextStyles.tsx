@@ -17,7 +17,7 @@ const TextStyles = StyleSheet.create({
   },
   languageText: {
     padding: 10,
-    color: Colors.white
+    color: Colors.whiteText
   },
   loginHeader: {
     fontSize: 25,
@@ -27,7 +27,7 @@ const TextStyles = StyleSheet.create({
     padding: 10
   },
   errorText: {
-    color: Colors.negativeColor
+    color: Colors.dangerButton2
   },
   observationText: {
     fontWeight: 'bold'
@@ -58,7 +58,7 @@ const TextStyles = StyleSheet.create({
     paddingLeft: 10
   },
   noImageText: {
-    color: Colors.noImageBorder
+    color: Colors.neutral5
   },
   alignedRightText: {
     textAlign: 'right',

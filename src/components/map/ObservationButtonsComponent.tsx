@@ -36,8 +36,8 @@ const ObservationButtonsComponent = (props: Props) => {
       <View key={title} style={Cs.observationTypeButton}>
         <ButtonComponent onPressFunction={() => onPress()} title={title}
           height={40} width={width} buttonStyle={buttonStyle}
-          gradientColorStart={styleType === 'primary' ? Colors.primary1 : Colors.neutral}
-          gradientColorEnd={styleType === 'primary' ? Colors.primary2 : Colors.neutral}
+          gradientColorStart={styleType === 'primary' ? Colors.primaryButton1 : Colors.neutralButton}
+          gradientColorEnd={styleType === 'primary' ? Colors.primaryButton2 : Colors.neutralButton}
           shadowColor={styleType === 'primary' ? Colors.primaryShadow : Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={iconName} iconType={iconType} iconSize={22}
           contentColor={styleType === 'primary' ? Colors.whiteText : Colors.darkText}
@@ -46,7 +46,7 @@ const ObservationButtonsComponent = (props: Props) => {
     )
   }
 
-  const createButtonList = () => {
+  const createLeftSideButtonsList = () => {
     const units: BasicObject[] = observationEvent.events?.[observationEvent.events.length - 1]
       .gatherings[0].units
     const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, region, observation)
@@ -72,10 +72,10 @@ const ObservationButtonsComponent = (props: Props) => {
           <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
           {haversineNeighbors?.map((neighbor: Record<string, any>) =>
             createButton(
-              neighbor.identifications[0].taxon,
+              neighbor.identifications[0].taxon.length > 16 ? neighbor.identifications[0].taxon.substring(0, 14) + '...' : neighbor.identifications[0].taxon,
               Bs.observationNeighborsButton,
               () => props.shiftToEditPage(eventId, neighbor.id),
-              'primary', undefined, undefined, 180
+              'primary', 'edit', 'material-icons', 180
             )
           )}
         </View>
@@ -87,7 +87,7 @@ const ObservationButtonsComponent = (props: Props) => {
     if (props.mode === 'newObservation') {
       return (
         <View style={Cs.observationTypeColumnsContainer}>
-          {createButtonList() ? createButtonList() : <View></View>}
+          {createLeftSideButtonsList() ? createLeftSideButtonsList() : <View></View>}
           <View style={Cs.observationTypeButtonsColumnRight}>
             {createButton(
               '+ ' + t('observation'),

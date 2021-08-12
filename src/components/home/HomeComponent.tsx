@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, Text, ScrollView, BackHandler } from 'react-native'
-import MaterialTabs from 'react-native-material-tabs'
+import { Tab,  } from 'react-native-elements'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
@@ -53,6 +53,7 @@ const HomeComponent = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState<number>(0)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
+  const tabItems = [t('trip report form'), t('fungi atlas')]
   let logTimeout: NodeJS.Timeout | undefined
 
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -229,17 +230,24 @@ const HomeComponent = (props: Props) => {
         <ScrollView contentContainerStyle={Cs.outerVersionContainer}>
           <View style={Cs.homeScrollContainer}>
             <View>
-              <MaterialTabs
-                items={[t('trip report form'), t('fungi atlas')]}
-                selectedIndex={selectedTab}
+              <Tab
+                value={selectedTab}
                 onChange={switchSelectedForm}
-                barColor={Colors.blueBackground}
-                indicatorColor="black"
-                activeTextColor="black"
-                inactiveTextColor="grey"
-              />
+                indicatorStyle={{ backgroundColor: Colors.neutral9 }}
+              >
+                {[t('trip report form'), t('fungi atlas')].map((label, index) => {
+                  const titleStyle = index === selectedTab ? { color: Colors.neutral9 } : { color: Colors.neutral6 }
+
+                  return (
+                    <Tab.Item
+                      key={label}
+                      title={label}
+                      buttonStyle={{ backgroundColor: Colors.primary3 }}
+                      titleStyle={titleStyle}/>
+                  )
+                })}
+              </Tab>
             </View>
-            <View style={{ height: 10 }}></View>
             <View style={{ justifyContent: 'flex-start' }}>
               <UserInfoComponent onLogout={props.onLogout} />
               <View style={Cs.homeContainer}>

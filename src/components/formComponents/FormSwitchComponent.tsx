@@ -15,6 +15,7 @@ const FormSwitchComponent = (props: Props) => {
   const [selected, setSelected] = useState(props.defaultValue)
 
   useEffect(() => {
+    register(props.objectTitle)
     setValue(props.objectTitle, props.defaultValue)
   }, [])
 
@@ -24,18 +25,17 @@ const FormSwitchComponent = (props: Props) => {
       <View style={Cs.switchContainer}>
         <Switch
           style={{ padding: 5 }}
-          ref={register({ name: props.objectTitle })}
           value={selected}
           onValueChange={() => {
             setSelected(!selected)
             setValue(props.objectTitle, selected)
           }}
           thumbColor={
-            Colors.neutral
+            Colors.neutralButton
           }
           trackColor={{
-            false: Colors.danger1,
-            true: Colors.headerBackground
+            false: Colors.dangerButton1,
+            true: Colors.primary5
           }}>
         </Switch>
         {setValue(props.objectTitle, selected)}

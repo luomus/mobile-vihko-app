@@ -15,6 +15,7 @@ const FormPickerComponent = (props: Props) => {
   const [selected, setSelected] = useState(props.selectedValue)
 
   useEffect(() => {
+    register(props.objectTitle)
     setValue(props.objectTitle, props.selectedValue)
   }, [])
 
@@ -23,7 +24,6 @@ const FormPickerComponent = (props: Props) => {
       <Text>{props.title}</Text>
       <View style={Cs.formPickerContainer}>
         <Picker
-          ref={register({ name: props.objectTitle })}
           selectedValue={selected}
           onValueChange={itemValue => {
             setSelected(itemValue)

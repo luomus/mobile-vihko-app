@@ -1,6 +1,6 @@
-import { GeometryCollection, FeatureCollection, Feature, Geometry, Point, LineString } from 'geojson'
+import { GeometryCollection, FeatureCollection, Feature, Geometry, Point, LineString, Polygon } from 'geojson'
 import { LatLng } from 'react-native-maps'
-import { LocationData } from 'expo-location'
+import { LocationObject } from 'expo-location'
 
 const geometryCollectionConstructor = (geometries: Geometry[]) => {
   const geometryCollection: GeometryCollection = {
@@ -64,10 +64,34 @@ const lineStringConstructor = (points: any[]) => {
   return lineString
 }
 
+const pathPolygonConstructor = (points: any[]) => {
+  if (points.length <= 1) {
+    return null
+  }
+
+  const polygon: Polygon = {
+    type: 'Polygon',
+    coordinates: [[
+      ...points,
+      ...points.reverse()
+    ]]
+  }
+
+  return polygon
+}
+
 const wrapGeometryInFC = (geometry: Geometry) => {
   const feature = featureConstructor(geometry)
 
   return featureCollectionConstructor([feature])
+}
+
+const latLngArrayConstructor = (points: any[]) => {
+  if (points.length <= 1) {
+    return null
+  }
+
+  return points.map(point => latLngConstructor(point[0], point[1]))
 }
 
 const convertGC2FC = (geometryCollection: GeometryCollection) => {
@@ -96,7 +120,7 @@ const convertPointToLatLng = (point: Point) => {
   return latlng
 }
 
-const convertLocationDataArrToLineString = (locations: LocationData[]) => {
+const convertLocationDataArrToLineString = (locations: LocationObject[]) => {
   const points: any[] = []
 
   locations.forEach(location => points.push([location.coords.longitude, location.coords.latitude]))
@@ -106,4 +130,4 @@ const convertLocationDataArrToLineString = (locations: LocationData[]) => {
   return lineString
 }
 
-export { wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng, convertLocationDataArrToLineString, lineStringConstructor }
+export { latLngArrayConstructor, pathPolygonConstructor, wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng, convertLocationDataArrToLineString, lineStringConstructor }

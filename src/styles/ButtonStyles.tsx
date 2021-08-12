@@ -4,7 +4,7 @@ import Colors from './Colors'
 const ButtonStyles = StyleSheet.create({
   headerButton: {
     padding: 10,
-    color: Colors.white,
+    color: Colors.whiteText,
     borderRadius: 5
   },
   homeButton: {
@@ -133,7 +133,6 @@ const ButtonStyles = StyleSheet.create({
     borderRadius: 5
   },
   refreshButton: {
-    backgroundColor: Colors.neutralButton,
     marginLeft: 10,
     borderRadius: 5
   },

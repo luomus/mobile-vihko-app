@@ -47,9 +47,9 @@ export default class EditObservationEventScreen extends Component<NavigationStac
     return {
       title: screenProps.t('edit observation event'),
       headerStyle: {
-        backgroundColor: Colors.headerBackground
+        backgroundColor: Colors.primary5
       },
-      headerTintColor: Colors.white,
+      headerTintColor: Colors.whiteText,
       headerLeft: () => null,
       headerRight: () =>
         <View style={Cs.languageContainer}>

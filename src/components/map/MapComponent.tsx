@@ -1,11 +1,10 @@
 import React, { useState, useEffect, ReactChild } from 'react'
-import MapView, { Marker, UrlTile, Region, LatLng } from 'react-native-maps'
+import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { LineString } from 'geojson'
-import { convertLatLngToPoint, convertPointToLatLng, lineStringConstructor, wrapGeometryInFC } from '../../helpers/geoJSONHelper'
-import Geojson from 'react-native-typescript-geojson'
+import { Polygon } from 'geojson'
+import { convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -300,20 +299,46 @@ const MapComponent = (props: Props) => {
 
   //draws user path to map
   const pathOverlay = () => {
-    if (path.length >= 1 && position) {
+    if (path?.length >= 1 && position) {
       const pathAppended: Array<Array<number>> = path.concat([[
         position.coords.longitude,
         position.coords.latitude
       ]])
 
+      const pathPolygon: Polygon | null = pathPolygonConstructor(pathAppended) 
+      return pathPolygon ?
+        <Geojson
+          geojson={wrapGeometryInFC(pathPolygon)}
+          strokeWidth={5}
+          strokeColor={Colors.pathColor}
+        />
+        : null
+
+      /**
+       * dotted path temporary fix for path bug
+      const latLngPath: Array<LatLng> | null = latLngArrayConstructor(pathAppended)
+      console.log(latLngPath)
+      return latLngPath ?
+        <Polyline
+          coordinates={latLngPath}
+          strokeWidth={5}
+          strokeColor={Colors.pathColor}
+          lineCap={'round'}
+          lineDashPattern={[0]}
+        />
+        : null
+      */
+      /**
+       * proper path renering, use after expo has fixed its problems
       const lineString: LineString | null = lineStringConstructor(pathAppended)
       return lineString ?
         <Geojson
           geojson={wrapGeometryInFC(lineString)}
           strokeWidth={5}
-          strokeColor={Colors.red}
+          strokeColor={Colors.pathColor}
         />
         : null
+      */
     }
 
     return null
@@ -332,7 +357,7 @@ const MapComponent = (props: Props) => {
   )
 
   //if topomap is selected draws its tiles on map
-  const tileOverlay = () => (maptype === 'topographic' ?
+  const tileOverlay = () => (maptype === 'terrain' ?
     <UrlTile
       urlTemplate={urlTemplate}
       zIndex={-1}
@@ -360,7 +385,7 @@ const MapComponent = (props: Props) => {
       let color = unit.color
 
       if (!color) {
-        color = Colors.obsColor
+        color = Colors.observationColor
       }
 
       return (
@@ -379,7 +404,7 @@ const MapComponent = (props: Props) => {
       <View style={Cs.gpsStatusBar}>
         <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop observation event')}
           height={30} width={150} buttonStyle={Bs.stopObservingFromMapButton}
-          gradientColorStart={Colors.danger1} gradientColorEnd={Colors.danger2} shadowColor={Colors.dangerShadow}
+          gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
           textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
         />
       </View>
@@ -393,7 +418,7 @@ const MapComponent = (props: Props) => {
           onRegionChangeComplete={(region) => onRegionChangeComplete(region)}
           maxZoomLevel={18.9}
           minZoomLevel={5}
-          mapType={maptype === 'topographic' ? 'none' : maptype}
+          mapType={maptype === 'terrain' ? 'none' : maptype}
           pitchEnabled={false}
           rotateEnabled={false}
           moveOnMarkerPress={false}
@@ -410,7 +435,7 @@ const MapComponent = (props: Props) => {
           style={Cs.mapTypeContainer}>
           <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
             height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
             textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
           />
         </View>
@@ -418,7 +443,7 @@ const MapComponent = (props: Props) => {
           style={Cs.userLocationContainer}>
           <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
             height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primary1} gradientColorEnd={Colors.primary2} shadowColor={Colors.primaryShadow}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
             textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
           />
         </View>
