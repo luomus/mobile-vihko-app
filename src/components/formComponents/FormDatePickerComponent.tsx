@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Dimensions, Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
 import Os from '../../styles/OtherStyles'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -100,7 +100,7 @@ const FormDatePickerComponent = (props: Props) => {
           editable={false}
         />
         <ButtonComponent onPressFunction={() => setShowDate(true)}
-          title={undefined} height={Dimensions.get('window').height * 0.06} width={Dimensions.get('window').height * 0.06} buttonStyle={Bs.neutralIconButton}
+          title={undefined} height={40} width={45} buttonStyle={Bs.neutralIconButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
         />

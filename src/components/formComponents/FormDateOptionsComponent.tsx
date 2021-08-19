@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Dimensions, Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
@@ -136,14 +136,14 @@ const FormDateOptionsComponent = (props: Props) => {
         <View style={Cs.eventDateContainer}>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => onLockIntoCurrentDate()}
-              title={t('timestamp')} height={Dimensions.get('window').height * 0.06} width={Dimensions.get('window').height * 0.20} buttonStyle={Bs.timestampButton}
+              title={t('timestamp')} height={40} width={45} buttonStyle={Bs.timestampButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'schedule'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
             />
           </View>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => { differentDay ? setShowDate(true) : setShowTime(true) }}
-              title={t('choose time')} height={Dimensions.get('window').height * 0.06} width={Dimensions.get('window').height * 0.20} buttonStyle={Bs.chooseTimeButton}
+              title={t('choose time')} height={40} width={45} buttonStyle={Bs.chooseTimeButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'restore'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
@@ -157,7 +157,7 @@ const FormDateOptionsComponent = (props: Props) => {
             editable={false}
           />
           <ButtonComponent onPressFunction={() => clearDateAndTime()}
-            title={undefined} height={Dimensions.get('window').height * 0.06} width={Dimensions.get('window').height * 0.06} buttonStyle={Bs.negativeIconButton}
+            title={undefined} height={40} width={45} buttonStyle={Bs.negativeIconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
           />
