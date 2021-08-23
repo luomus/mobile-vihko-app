@@ -66,13 +66,13 @@ const MessageComponent = () => {
   const oneButtonCreator = (buttonType: string, buttonLabel: string) => {
     if (buttonType === 'primary') {
       return (
-        <View style={Cs.singleButton}>
+        <View style={Cs.messageButton}>
           {primaryButton(buttonLabel, 'check')}
         </View>
       )
     } else {
       return (
-        <View style={Cs.singleButton}>
+        <View style={Cs.messageButton}>
           {neutralButton(buttonLabel, 'check')}
         </View>
       )
@@ -87,22 +87,22 @@ const MessageComponent = () => {
   ) => {
     if (leftButtonType === 'primary' && rightButtonType === 'neutral') {
       return (
-        <View style={Cs.editObservationButtonContainer}>
-          <View style={Cs.singleButton}>
+        <View style={Cs.messageButtonsContainer}>
+          <View style={Cs.messageButton}>
             {primaryButton(leftButtonLabel, 'check')}
           </View>
-          <View style={Cs.singleButton}>
+          <View style={Cs.messageButton}>
             {neutralButton(rightButtonLabel, 'cancel')}
           </View>
         </View>
       )
     } else {
       return (
-        <View style={Cs.editObservationButtonContainer}>
-          <View style={Cs.singleButton}>
+        <View style={Cs.messageButtonsContainer}>
+          <View style={Cs.messageButton}>
             {neutralButton(leftButtonLabel, 'check')}
           </View>
-          <View style={Cs.singleButton}>
+          <View style={Cs.messageButton}>
             {primaryButton(rightButtonLabel, 'cancel')}
           </View>
         </View>
@@ -144,7 +144,7 @@ const MessageComponent = () => {
 
   return (
     <Modal isVisible={isVisible} onBackButtonPress={onBackButtonPress}>
-      <View style={Cs.observationAddModal}>
+      <View style={Cs.messageAndInstructionsModalContainer}>
         {message.length <= 1 ?
           null :
           <Text style={Ts.alignedRightText}>
@@ -156,7 +156,7 @@ const MessageComponent = () => {
             <Icon type={'material-icons'} name={'report-problem'} color={'red'} size={50} />
             : null
           }
-          <Text style={Cs.containerWithJustPadding}>
+          <Text style={Cs.padding5Container}>
             {topMessage?.messageContent}
           </Text>
         </View>

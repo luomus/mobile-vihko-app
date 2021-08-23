@@ -30,7 +30,7 @@ const NewEventWithoutZoneComponent = (props: Props) => {
   }, [props.selectedTab, i18n.language])
 
   return (
-    <View style={Cs.observationEventContainer}>
+    <View style={Cs.eventLauncherContainer}>
       <View style={Cs.buttonContainer}>
         <ButtonComponent onPressFunction={props.onBeginObservationEvent} title={beginButtonText}
           height={40} width={300} buttonStyle={Bs.beginButton}

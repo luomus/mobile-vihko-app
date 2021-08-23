@@ -93,7 +93,7 @@ const FormDatePickerComponent = (props: Props) => {
   return (
     <View style={Cs.formInputContainer}>
       <Text>{props.title}</Text>
-      <View style={Cs.eventDateContainer}>
+      <View style={Cs.datePickerContainer}>
         <TextInput
           style={Os.datePicker}
           value={parseDateForUI(currentValue)}

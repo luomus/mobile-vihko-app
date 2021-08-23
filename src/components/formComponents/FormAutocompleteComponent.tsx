@@ -238,7 +238,7 @@ const FormAutocompleteComponent = (props: Props) => {
   }
 
   return (
-    <View style={Cs.containerWithJustPadding}>
+    <View style={Cs.padding10Container}>
       <Text>{props.title}</Text>
       <ErrorMessage
         errors={formState.errors}

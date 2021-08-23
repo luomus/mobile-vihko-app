@@ -207,14 +207,13 @@ const LoginComponent = (props: Props) => {
     )
   } else {
     return (
-      <View style={Cs.outerVersionContainer}>
-        <View style={Cs.loginViewContainer}>
-          <View style={Cs.loginContainer}>
-            <Text style={Ts.loginHeader}>{t('login')}</Text>
-            <View style={Cs.inputContainer}>
-              <Text style={Ts.loginText}>{t('login text')}</Text>
-            </View>
-            <View style={{ height: 25, width: 300 }} />
+      <View style={Cs.contentAndVersionContainer}>
+        <View style={Cs.loginContentContainer}>
+          <Text style={Ts.loginHeader}>{t('login')}</Text>
+          <View style={Cs.inputContainer}>
+            <Text style={Ts.loginText}>{t('login text')}</Text>
+          </View>
+          <View style={Cs.loginButtonContainer}>
             <ButtonComponent onPressFunction={login} title={t('login')}
               height={40} width={230} buttonStyle={Bs.loginButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import Colors from './Colors'
 
 const OtherStyles = StyleSheet.create({
@@ -29,6 +29,15 @@ const OtherStyles = StyleSheet.create({
   },
   hiddenComponent: {
     height: 0,
+  },
+  mapViewStyle: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+  miniMapViewStyle: {
+    width: '100%',
+    height: 150
   }
 })
 

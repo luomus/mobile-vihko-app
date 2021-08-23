@@ -21,7 +21,7 @@ const UnfinishedEventViewComponent = (props: Props) => {
   const { t } = useTranslation()
 
   return (
-    <View style={Cs.observationEventContainer}>
+    <View style={Cs.eventLauncherContainer}>
       <Text style={Ts.observationEventTitle}>
         {observationEventInterrupted ?
           t('interrupted observation event') :

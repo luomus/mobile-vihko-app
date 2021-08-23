@@ -10,11 +10,11 @@ interface Props {
 
 const SchemaObjectComponent = (props: Props) => {
   return (
-    <View style={Cs.observationListLine}>
-      <View style={Cs.observationPropertyTitle}>
+    <View style={Cs.observationListElementTextContainer}>
+      <View style={Cs.observationListElementTitlesContainer}>
         <Text style={Ts.boldText}>{props.title}</Text>
       </View>
-      <View style={Cs.observationPropertyValue}>
+      <View style={Cs.observationListElementValuesContainer}>
         <Text>{props.value}</Text>
       </View>
     </View>

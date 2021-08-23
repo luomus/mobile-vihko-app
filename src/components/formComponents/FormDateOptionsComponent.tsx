@@ -133,24 +133,24 @@ const FormDateOptionsComponent = (props: Props) => {
     <View style={Cs.formInputContainer}>
       <Text>{props.title}</Text>
       {!selected ?
-        <View style={Cs.eventDateContainer}>
+        <View style={Cs.datePickerContainer}>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => onLockIntoCurrentDate()}
-              title={t('timestamp')} height={40} width={45} buttonStyle={Bs.timestampButton}
+              title={t('timestamp')} height={40} width={130} buttonStyle={Bs.timestampButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'schedule'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
             />
           </View>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => { differentDay ? setShowDate(true) : setShowTime(true) }}
-              title={t('choose time')} height={40} width={45} buttonStyle={Bs.chooseTimeButton}
+              title={t('choose time')} height={40} width={130} buttonStyle={Bs.chooseTimeButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'restore'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
           </View>
         </View>
         :
-        <View style={Cs.eventDateContainer}>
+        <View style={Cs.datePickerContainer}>
           <TextInput
             style={Os.datePicker}
             value={parseDateForUI(currentValue)}

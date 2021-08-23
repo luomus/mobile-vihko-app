@@ -20,7 +20,7 @@ const FormPickerComponent = (props: Props) => {
   }, [])
 
   return (
-    <View style={Cs.containerWithJustPadding}>
+    <View style={Cs.padding10Container}>
       <Text>{props.title}</Text>
       <View style={Cs.formPickerContainer}>
         <Picker

@@ -2,7 +2,7 @@ import React from 'react'
 import MapView, { Marker, Region, UrlTile } from 'react-native-maps'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import { convertPointToLatLng } from '../../helpers/geoJSONHelper'
-import Cs from '../../styles/ContainerStyles'
+import Os from '../../styles/OtherStyles'
 import Cl from '../../styles/Colors'
 
 interface Props {
@@ -44,7 +44,7 @@ const MiniMapComponent = (props: Props) => {
       region={region}
       rotateEnabled = {false}
       scrollEnabled={false}
-      style = {Cs.observationInfoMapContainer}
+      style = {Os.miniMapViewStyle}
     >
       {tileOverlay()}
       {observationLocationOverlay()}

@@ -26,6 +26,7 @@ import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
+import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
@@ -401,7 +402,7 @@ const MapComponent = (props: Props) => {
 
   return (
     <>
-      <View style={Cs.gpsStatusBar}>
+      <View style={Cs.stopObservingContainer}>
         <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop observation event')}
           height={30} width={150} buttonStyle={Bs.stopObservingFromMapButton}
           gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
@@ -422,7 +423,7 @@ const MapComponent = (props: Props) => {
           pitchEnabled={false}
           rotateEnabled={false}
           moveOnMarkerPress={false}
-          style={Cs.mapViewStyle}
+          style={Os.mapViewStyle}
           onMapReady={onMapLoaded}
         >
           {locationOverlay()}

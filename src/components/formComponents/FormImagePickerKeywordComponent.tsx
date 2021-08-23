@@ -153,12 +153,12 @@ const ImagePickerKeywordComponent = (props: Props) => {
       if (indexEn !== -1) { initial = indexEn }
 
       return (
-        <View key={image.uri} style={Cs.keywordSingleImageContainer}>
+        <View key={image.uri} style={Cs.keywordImageContainer}>
           <ImageBackground
             source={{ uri: image.uri }}
             style={{ width: 150, height: 150 }}
           >
-            <View style={Cs.removeIconContainer}>
+            <View style={Cs.deleteImageIconContainer}>
               <Icon
                 name='delete'
                 type='material-icons'
@@ -194,10 +194,10 @@ const ImagePickerKeywordComponent = (props: Props) => {
           <Text>{props.title}</Text>
         </View>
         <View
-          style={Cs.imageElementRowContainer}
+          style={Cs.imagePickerRowContainer}
         >
           {images.length === 0 ?
-            <View style={Cs.noImageContainer}>
+            <View style={Cs.imagePickerEmptyContainer}>
               <Text style={Ts.noImageText}>{t('no image')}</Text>
             </View>
             : renderImages()
@@ -233,7 +233,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
           <Text>{props.title}</Text>
         </View>
         <View
-          style={Cs.imageElementColumnContainer}
+          style={Cs.imagePickerColumnContainer}
         >
           <View style={{ paddingLeft: 10 }}>
             <Text>{props.title}</Text>
