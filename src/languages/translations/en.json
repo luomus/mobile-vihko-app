@@ -128,7 +128,7 @@
   "oversized image": "Sending failed, largest allowed size for image is",
   "piece": "pc",
   "pieces": "pcs",
-  "post failure": "Sending to server failed. if problem is repeating, please contact: helpdesk@laji.fi. ",
+  "post failure": "No Internet connection. If problem is repeating, while device is online, please contact: helpdesk@laji.fi. ",
   "post success": "Sending succeeded!",
   "previous observation events": "Events not submitted",
   "privacy policy": "Privacy Policy",

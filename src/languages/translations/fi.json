@@ -128,7 +128,7 @@
   "oversized image": "Tallennus epäonnistui, kuvan suurin sallittu koko on",
   "piece": "kpl",
   "pieces": "kpl",
-  "post failure": "Tallennus epäonnistui. Jos ongelma tapahtuu uudelleen, ota yhteyttä: helpdesk@laji.fi. ",
+  "post failure": "Ei verkkoyhteyttä. Jos ongelma tapahtuu uudelleen, vaikka laite on yhdistetty verkkoon, ota yhteyttä: helpdesk@laji.fi. ",
   "post success": "Tallennus onnistui!",
   "previous observation events": "Lähettämättömät tapahtumat",
   "privacy policy": "Tietosuojakäytänteet",
