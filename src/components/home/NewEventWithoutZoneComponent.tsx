@@ -33,7 +33,7 @@ const NewEventWithoutZoneComponent = (props: Props) => {
     <View style={Cs.eventLauncherContainer}>
       <View style={Cs.buttonContainer}>
         <ButtonComponent onPressFunction={props.onBeginObservationEvent} title={beginButtonText}
-          height={40} width={300} buttonStyle={Bs.beginButton}
+          height={40} width={200} buttonStyle={Bs.beginButton}
           gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
           textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
         />

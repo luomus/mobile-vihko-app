@@ -215,7 +215,7 @@ const LoginComponent = (props: Props) => {
           </View>
           <View style={Cs.loginButtonContainer}>
             <ButtonComponent onPressFunction={login} title={t('login')}
-              height={40} width={230} buttonStyle={Bs.loginButton}
+              height={40} width={200} buttonStyle={Bs.loginButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}
             />

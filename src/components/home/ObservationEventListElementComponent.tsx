@@ -28,7 +28,7 @@ const ObservationEventListElementComponent = (props: Props) => {
         </Text>
       </View>
       <View style={Cs.eyeIconContainer}>
-        <Icon name='eye-outline' color={Colors.neutral7} type='material-community' size={35} />
+        <Icon name='eye-outline' color={Colors.neutral7} type='material-community' size={32} />
       </View>
     </TouchableOpacity>
   )

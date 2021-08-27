@@ -66,13 +66,13 @@ const MessageComponent = () => {
   const oneButtonCreator = (buttonType: string, buttonLabel: string) => {
     if (buttonType === 'primary') {
       return (
-        <View style={Cs.messageButton}>
+        <View style={Cs.padding5Container}>
           {primaryButton(buttonLabel, 'check')}
         </View>
       )
     } else {
       return (
-        <View style={Cs.messageButton}>
+        <View style={Cs.padding5Container}>
           {neutralButton(buttonLabel, 'check')}
         </View>
       )
@@ -88,10 +88,10 @@ const MessageComponent = () => {
     if (leftButtonType === 'primary' && rightButtonType === 'neutral') {
       return (
         <View style={Cs.messageButtonsContainer}>
-          <View style={Cs.messageButton}>
+          <View style={Cs.padding5Container}>
             {primaryButton(leftButtonLabel, 'check')}
           </View>
-          <View style={Cs.messageButton}>
+          <View style={Cs.padding5Container}>
             {neutralButton(rightButtonLabel, 'cancel')}
           </View>
         </View>
@@ -99,10 +99,10 @@ const MessageComponent = () => {
     } else {
       return (
         <View style={Cs.messageButtonsContainer}>
-          <View style={Cs.messageButton}>
+          <View style={Cs.padding5Container}>
             {neutralButton(leftButtonLabel, 'check')}
           </View>
-          <View style={Cs.messageButton}>
+          <View style={Cs.padding5Container}>
             {primaryButton(rightButtonLabel, 'cancel')}
           </View>
         </View>
@@ -113,7 +113,7 @@ const MessageComponent = () => {
   const primaryButton = (label: string, iconName: string): JSX.Element => {
     return (
       <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
-        height={40} width={160} buttonStyle={Bs.basicPrimaryButton}
+        height={40} width={120} buttonStyle={Bs.basicPrimaryButton}
         gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
         textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
       />
@@ -123,7 +123,7 @@ const MessageComponent = () => {
   const neutralButton = (label: string, iconName: string): JSX.Element => {
     return (
       <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
-        height={40} width={160} buttonStyle={Bs.basicNeutralButton}
+        height={40} width={120} buttonStyle={Bs.basicNeutralButton}
         gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
         textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
       />

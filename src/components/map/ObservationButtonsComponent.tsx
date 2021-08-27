@@ -61,7 +61,7 @@ const ObservationButtonsComponent = (props: Props) => {
               haversineNeighbors.length + ' ' + t('observation count'),
               Bs.observationNeighborsButton,
               () => props.openModal(haversineNeighbors, eventId),
-              'neutral', 'edit', 'material-icons', 180
+              'neutral', 'edit', 'material-icons', 150
             )}
           </View>
         )
@@ -72,10 +72,10 @@ const ObservationButtonsComponent = (props: Props) => {
           <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
           {haversineNeighbors?.map((neighbor: Record<string, any>) =>
             createButton(
-              neighbor.identifications[0].taxon.length > 16 ? neighbor.identifications[0].taxon.substring(0, 14) + '...' : neighbor.identifications[0].taxon,
+              neighbor.identifications[0].taxon.length > 14 ? neighbor.identifications[0].taxon.substring(0, 12) + '...' : neighbor.identifications[0].taxon,
               Bs.observationNeighborsButton,
               () => props.shiftToEditPage(eventId, neighbor.id),
-              'primary', 'edit', 'material-icons', 180
+              'primary', 'edit', 'material-icons', 150
             )
           )}
         </View>
@@ -93,13 +93,13 @@ const ObservationButtonsComponent = (props: Props) => {
               '+ ' + t('observation'),
               Bs.observationButton,
               () => props.confirmationButton(true),
-              'primary', undefined, undefined, 150
+              'primary', undefined, undefined, 120
             )}
             {createButton(
               t('cancel'),
               Bs.endButton,
               () => props.cancelButton(),
-              'neutral', undefined, undefined, 150
+              'neutral', undefined, undefined, 120
             )}
           </View>
         </View>
@@ -112,13 +112,13 @@ const ObservationButtonsComponent = (props: Props) => {
             t('save'),
             Bs.observationButton,
             () => props.confirmationButton(),
-            'primary', undefined, undefined, 150
+            'primary', undefined, undefined, 120
           )}
           {createButton(
             t('cancel'),
             Bs.endButton,
             () => props.cancelButton(),
-            'neutral', undefined, undefined, 150
+            'neutral', undefined, undefined, 120
           )}
         </View>
       )

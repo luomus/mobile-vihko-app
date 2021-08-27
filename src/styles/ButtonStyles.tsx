@@ -129,7 +129,6 @@ const ButtonStyles = StyleSheet.create({
     paddingRight: 10,
     alignSelf: 'center',
     flexDirection: 'row',
-    margin: 2,
     borderRadius: 5
   },
   refreshButton: {
@@ -167,7 +166,6 @@ const ButtonStyles = StyleSheet.create({
     borderRadius: 5
   },
   timestampButton: {
-    marginRight: 5,
     paddingBottom: 5,
     paddingLeft: 10,
     paddingRight: 10,
@@ -177,7 +175,6 @@ const ButtonStyles = StyleSheet.create({
     alignItems: 'center'
   },
   chooseTimeButton: {
-    marginRight: 5,
     paddingBottom: 5,
     paddingLeft: 10,
     paddingRight: 10,

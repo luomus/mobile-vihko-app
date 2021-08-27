@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import Colors from './Colors'
 
 const ContainerStyles = StyleSheet.create({
@@ -97,6 +97,11 @@ const ContainerStyles = StyleSheet.create({
     backgroundColor: Colors.primary3,
     marginTop: 10
   },
+  unfinishedEventButtonsContainer: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
   eventsListContainer: {
     padding: 10,
     backgroundColor: Colors.primary3,
@@ -107,7 +112,6 @@ const ContainerStyles = StyleSheet.create({
     backgroundColor: Colors.primary4,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'stretch',
     borderRadius: 5,
     marginTop: 5
   },
@@ -142,7 +146,7 @@ const ContainerStyles = StyleSheet.create({
   },
   userLocationContainer: {
     position: 'absolute',
-    top: '11%',
+    top: '13%',
     right: '1%',
     alignSelf: 'flex-end'
   },
@@ -229,7 +233,7 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginTop: 5
   },
 
@@ -238,12 +242,8 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginTop: 5
-  },
-  messageButton: {
-    width: '50%',
-    padding: 5
   },
 
   //info page component
@@ -259,7 +259,7 @@ const ContainerStyles = StyleSheet.create({
   },
   formContentContainer: {
     justifyContent: 'space-between',
-    marginBottom: '1%'
+    marginBottom: Dimensions.get('screen').width * 0.125
   },
   formSaveButtonContainer: {
     padding: 10,
@@ -296,8 +296,7 @@ const ContainerStyles = StyleSheet.create({
   datePickerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
+    padding: 10,
   },
   imagePickerRowContainer: {
     flexDirection: 'row',
