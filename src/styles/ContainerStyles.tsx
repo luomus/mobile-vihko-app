@@ -138,17 +138,12 @@ const ContainerStyles = StyleSheet.create({
     backgroundColor: Colors.neutral3,
     alignItems: 'center'
   },
-  mapTypeContainer: {
+  mapButtonsContainer: {
     position: 'absolute',
     top: '1%',
     right: '1%',
-    alignSelf: 'flex-end'
-  },
-  userLocationContainer: {
-    position: 'absolute',
-    top: '13%',
-    right: '1%',
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
+    flexDirection: 'column'
   },
   observationButtonsBaseContainer: {
     position: 'absolute',

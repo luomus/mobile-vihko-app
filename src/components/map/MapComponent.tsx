@@ -306,7 +306,7 @@ const MapComponent = (props: Props) => {
         position.coords.latitude
       ]])
 
-      const pathPolygon: Polygon | null = pathPolygonConstructor(pathAppended) 
+      const pathPolygon: Polygon | null = pathPolygonConstructor(pathAppended)
       return pathPolygon ?
         <Geojson
           geojson={wrapGeometryInFC(pathPolygon)}
@@ -432,21 +432,21 @@ const MapComponent = (props: Props) => {
           {tileOverlay()}
           {observationLocationsOverlay()}
         </MapView>
-        <View
-          style={Cs.mapTypeContainer}>
-          <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
-            height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-          />
-        </View>
-        <View
-          style={Cs.userLocationContainer}>
-          <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
-            height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-          />
+        <View style={Cs.mapButtonsContainer}>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
+              height={50} width={50} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+            />
+          </View>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
+              height={50} width={50} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+            />
+          </View>
         </View>
         {observation ?
           observationButtonsState === 'newObservation' &&
