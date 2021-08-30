@@ -22,6 +22,9 @@ export const autocompleteUrl      = `${apiRoot}/autocomplete/`
 //locality url
 export const localityUrl          = `${apiRoot}/coordinates/location`
 
+//form permission url
+export const formPermissionUrl    = `${apiRoot}/formPermissions`
+
 //login urls
 export const getLoginUrl          = `${apiRoot}/login`
 export const pollLoginUrl         = `${apiRoot}/login/check`
