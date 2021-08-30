@@ -153,12 +153,12 @@ const ImagePickerKeywordComponent = (props: Props) => {
       if (indexEn !== -1) { initial = indexEn }
 
       return (
-        <View key={image.uri} style={Cs.keywordSingleImageContainer}>
+        <View key={image.uri} style={Cs.keywordImageContainer}>
           <ImageBackground
             source={{ uri: image.uri }}
             style={{ width: 150, height: 150 }}
           >
-            <View style={Cs.removeIconContainer}>
+            <View style={Cs.deleteImageIconContainer}>
               <Icon
                 name='delete'
                 type='material-icons'
@@ -194,10 +194,10 @@ const ImagePickerKeywordComponent = (props: Props) => {
           <Text>{props.title}</Text>
         </View>
         <View
-          style={Cs.imageElementRowContainer}
+          style={Cs.imagePickerRowContainer}
         >
           {images.length === 0 ?
-            <View style={Cs.noImageContainer}>
+            <View style={Cs.imagePickerEmptyContainer}>
               <Text style={Ts.noImageText}>{t('no image')}</Text>
             </View>
             : renderImages()
@@ -205,14 +205,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
           <View style={Cs.imageButtonsColumnContainer}>
             <View style={Cs.padding5Container}>
               <ButtonComponent onPressFunction={imageFromLibrary}
-                title={t('choose image')} height={40} width={190} buttonStyle={Bs.addImageButton}
+                title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
             <View style={Cs.padding5Container}>
               <ButtonComponent onPressFunction={imageFromCamera}
-                title={t('use camera')} height={40} width={190} buttonStyle={Bs.addImageButton}
+                title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
@@ -233,7 +233,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
           <Text>{props.title}</Text>
         </View>
         <View
-          style={Cs.imageElementColumnContainer}
+          style={Cs.imagePickerColumnContainer}
         >
           <View style={{ paddingLeft: 10 }}>
             <Text>{props.title}</Text>
@@ -245,14 +245,14 @@ const ImagePickerKeywordComponent = (props: Props) => {
             <View style={Cs.imageButtonsRowContainer}>
               <View style={Cs.padding5Container}>
                 <ButtonComponent onPressFunction={imageFromLibrary}
-                  title={t('choose image')} height={40} width={190} buttonStyle={Bs.addImageButton}
+                  title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
                   gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                   textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
                 />
               </View>
               <View style={Cs.padding5Container}>
                 <ButtonComponent onPressFunction={imageFromCamera}
-                  title={t('use camera')} height={40} width={190} buttonStyle={Bs.addImageButton}
+                  title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
                   gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                   textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
                 />

@@ -21,26 +21,26 @@ const SendEventModalComponent = (props: Props) => {
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.onCancel(false) }}>
       <View style={Cs.sendEventModalContainer}>
-        <Text style={Cs.containerWithJustPadding}>
+        <Text style={Cs.padding10Container}>
           {t('send observation event to server?')}
         </Text>
         <View style={Cs.padding5Container}>
           <ButtonComponent onPressFunction={() => { props.sendObservationEvent(true) }} title={t('send public')}
-            height={40} width={250} buttonStyle={Bs.sendEventModalPositiveButton}
+            height={40} width={200} buttonStyle={Bs.sendEventModalPositiveButton}
             gradientColorStart={Colors.successButton1} gradientColorEnd={Colors.successButton2} shadowColor={Colors.successShadow}
             textStyle={Ts.buttonText} iconName={'publish'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
         <View style={Cs.padding5Container}>
           <ButtonComponent onPressFunction={() => { props.sendObservationEvent(false) }} title={t('send private')}
-            height={40} width={250} buttonStyle={Bs.sendEventModalNeutralButton}
+            height={40} width={200} buttonStyle={Bs.sendEventModalNeutralButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'security'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
           />
         </View>
         <View style={Cs.padding5Container}>
           <ButtonComponent onPressFunction={() => { props.onCancel(false) }} title={t('do not submit')}
-            height={40} width={250} buttonStyle={Bs.sendEventModalNegativeButton}
+            height={40} width={200} buttonStyle={Bs.sendEventModalNegativeButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'close'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
           />

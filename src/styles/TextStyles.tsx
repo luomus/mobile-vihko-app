@@ -16,7 +16,7 @@ const TextStyles = StyleSheet.create({
     padding: 10
   },
   languageText: {
-    padding: 10,
+    padding: 8,
     color: Colors.whiteText
   },
   loginHeader: {

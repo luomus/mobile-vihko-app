@@ -39,7 +39,8 @@ const FormDatePickerComponent = (props: Props) => {
   const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
   const [currentDate, setCurrentDate] = useState<string>(props.defaultValue)
   const [currentTime, setCurrentTime] = useState<string>(props.defaultValue)
-  const [show, setShow] = useState<boolean>(false)
+  const [showDate, setShowDate] = useState<boolean>(false)
+  const [showTime, setShowTime] = useState<boolean>(false)
   const date = new Date()
   const dateBegin = watch('gatheringEvent_dateBegin')
   const dateEnd = watch('gatheringEvent_dateEnd')
@@ -79,36 +80,33 @@ const FormDatePickerComponent = (props: Props) => {
   }, [currentDate, currentTime])
 
   const onChangeDate = (event: Event | undefined, date: Date | undefined) => {
-    setShow(false)
+    setShowDate(false)
+    setShowTime(true)
     date !== undefined ? setCurrentDate(parseDateFromISOToDocument(date)) : null
   }
 
   const onChangeTime = (event: Event | undefined, date: Date | undefined) => {
+    setShowTime(false)
     date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date)) : null
   }
 
   return (
     <View style={Cs.formInputContainer}>
       <Text>{props.title}</Text>
-      <View style={Cs.eventDateContainer}>
+      <View style={Cs.datePickerContainer}>
         <TextInput
           style={Os.datePicker}
           value={parseDateForUI(currentValue)}
           editable={false}
         />
-        <ButtonComponent onPressFunction={() => setShow(true)}
+        <ButtonComponent onPressFunction={() => setShowDate(true)}
           title={undefined} height={40} width={45} buttonStyle={Bs.neutralIconButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
         />
       </View>
-      {show && (
+      {showDate && (
         <View>
-          <DateTimePicker
-            value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
-            mode='time'
-            onChange={onChangeTime}
-          />
           <DateTimePicker
             value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
             mode='date'
@@ -119,6 +117,15 @@ const FormDatePickerComponent = (props: Props) => {
             maximumDate={props.objectTitle.includes('dateBegin')
               ? (dateEnd ? new Date(parseFromLocalToISO(dateEnd)) : undefined)
               : undefined}
+          />
+        </View>
+      )}
+      {showTime && (
+        <View>
+          <DateTimePicker
+            value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
+            mode='time'
+            onChange={onChangeTime}
           />
         </View>
       )}

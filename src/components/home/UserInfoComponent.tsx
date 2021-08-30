@@ -47,20 +47,18 @@ const UserInfoComponent = (props: Props) => {
   }
 
   return (
-    <View>
-      <View style={Cs.userInfoContainer}>
-        <View>
-          <Text>
-            {credentials.user !== null ? t('loggedin') + ' ' + credentials.user.fullName : null}
-          </Text>
-        </View>
-        <View style={Cs.logoutButtonContainer}>
-          <ButtonComponent onPressFunction={() => showLogoutDialoue()} title={undefined}
-            height={40} width={40} buttonStyle={Bs.logoutButton}
-            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
-          />
-        </View>
+    <View style={Cs.homeUserContainer}>
+      <View>
+        <Text>
+          {credentials.user !== null ? t('loggedin') + ' ' + credentials.user.fullName : null}
+        </Text>
+      </View>
+      <View style={Cs.logoutButtonContainer}>
+        <ButtonComponent onPressFunction={() => showLogoutDialoue()} title={undefined}
+          height={40} width={40} buttonStyle={Bs.logoutButton}
+          gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+          textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
+        />
       </View>
       <MessageComponent />
     </View>

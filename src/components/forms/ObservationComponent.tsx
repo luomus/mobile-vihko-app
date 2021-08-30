@@ -377,7 +377,7 @@ const ObservationComponent = (props: Props) => {
     )
   } else {
     return (
-      <View style={Cs.observationContainer}>
+      <View style={Cs.formContainer}>
         <ScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
           {observationId ?
             <View style={Cs.buttonContainer}>
@@ -399,7 +399,7 @@ const ObservationComponent = (props: Props) => {
             </View>
             : null
           }
-          <View style={Cs.formContainer}>
+          <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               {form}
             </FormProvider>

@@ -20,15 +20,15 @@ const ObservationEventListElementComponent = (props: Props) => {
   const observationCount = props.observationEvent.gatherings[0].units.length
 
   return (
-    <TouchableOpacity style={Cs.observationEventListItemContainer} onPress={props.onPress}>
+    <TouchableOpacity style={Cs.eventsListItemContainer} onPress={props.onPress}>
       <View style={Ts.observationEventListElement}>
         <Text>{parseDateForUI(dateBegin)} - {parseDateForUI(dateEnd)}</Text>
         <Text style={Ts.indentedText}>
           {t('observationsInList') + ': ' + observationCount + ' ' + (observationCount === 1 ? t('piece') : t('pieces'))}
         </Text>
       </View>
-      <View style={Cs.alignRightContainer}>
-        <Icon name='eye-outline' color={Colors.neutral7} type='material-community' size={35} />
+      <View style={Cs.eyeIconContainer}>
+        <Icon name='eye-outline' color={Colors.neutral7} type='material-community' size={32} />
       </View>
     </TouchableOpacity>
   )

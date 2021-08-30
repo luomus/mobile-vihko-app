@@ -54,12 +54,12 @@ const ObservationInfoComponent = (props: Props) => {
       {list}
       {props.observation.images !== undefined && props.observation.images.length > 0 ?
         <View>
-          <View style={Cs.observationListLine}>
-            <View style={Cs.observationPropertyTitle}>
+          <View style={Cs.observationListElementTextContainer}>
+            <View style={Cs.observationListElementTitlesContainer}>
               <Text style={Ts.boldText}>{t('images')}</Text>
             </View>
           </View>
-          <ScrollView horizontal={true} style={Cs.observationInfoImageContainer}>
+          <ScrollView horizontal={true} style={Cs.observationListElementImageContainer}>
             {props.observation.images.map((image: any) => {
               let uri = ''
               if (typeof image === 'object') {
@@ -82,11 +82,11 @@ const ObservationInfoComponent = (props: Props) => {
         : null
       }
 
-      <View style={Cs.editObservationButtonContainer}>
-        <View style={Cs.singleButton}>
+      <View style={Cs.observationListElementButtonsContainer}>
+        <View style={Cs.padding5Container}>
           {props.editButton}
         </View>
-        <View style={Cs.singleButton}>
+        <View style={Cs.padding5Container}>
           {props.removeButton}
         </View>
       </View>

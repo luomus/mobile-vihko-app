@@ -158,9 +158,9 @@ const FormArrayComponent = (props: Props) => {
   }
 
   return (
-    <View style={Cs.containerWithJustPadding}>
+    <View style={Cs.padding10Container}>
       <Text>{props.title}</Text>
-      <View style={Cs.formAllInputsContainer}>
+      <View style={Cs.formArrayInputListContainer}>
         {inputElements}
         <View style={Cs.formArrayButtonContainer}>
           <View style={Cs.padding5Container}>

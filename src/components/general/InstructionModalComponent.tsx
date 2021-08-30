@@ -30,7 +30,7 @@ const InstructionModalComponent = (props: Props) => {
 
   return (
     <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
-      <View style={Cs.observationAddModal}>
+      <View style={Cs.messageAndInstructionsModalContainer}>
         <ScrollView>
           <View>
             <FlatList

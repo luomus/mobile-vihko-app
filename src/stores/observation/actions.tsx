@@ -93,7 +93,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx uploadObservationEvent()',
-        error: error.response.data.error
+        error: 'Network error (no connection)'
       })
       return Promise.reject({
         severity: 'low',

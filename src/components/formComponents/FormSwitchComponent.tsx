@@ -20,11 +20,11 @@ const FormSwitchComponent = (props: Props) => {
   }, [])
 
   return (
-    <View style={Cs.containerWithJustPadding}>
+    <View style={Cs.padding10Container}>
       <Text>{props.title}</Text>
       <View style={Cs.switchContainer}>
         <Switch
-          style={{ padding: 5 }}
+          style={Cs.padding5Container}
           value={selected}
           onValueChange={() => {
             setSelected(!selected)

@@ -10,7 +10,7 @@ type Props = {
 
 const FloatingIconButtonComponent = (props: Props) => {
   return (
-    <TouchableOpacity style={Cs.floatingButton} onPress={props.onPress}>
+    <TouchableOpacity style={Cs.floatingButtonContainer} onPress={props.onPress}>
       <Icon reverse color={Colors.successButton1} name='done' type='material-icons' raised size={Dimensions.get('screen').width * 0.075}/>
     </TouchableOpacity>
   )
