@@ -3,7 +3,7 @@ import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Polygon } from 'geojson'
+import { MultiPolygon, Polygon } from 'geojson'
 import { convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
@@ -300,12 +300,10 @@ const MapComponent = (props: Props) => {
   //draws user path to map
   const pathOverlay = () => {
     if (path?.length >= 1 && position) {
-      const pathAppended: Array<Array<number>> = path.concat([[
+      const pathPolygon: MultiPolygon | undefined = pathPolygonConstructor(path, [
         position.coords.longitude,
         position.coords.latitude
-      ]])
-
-      const pathPolygon: Polygon | null = pathPolygonConstructor(pathAppended) 
+      ])
       return pathPolygon ?
         <Geojson
           geojson={wrapGeometryInFC(pathPolygon)}

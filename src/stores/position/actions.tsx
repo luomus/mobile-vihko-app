@@ -1,17 +1,18 @@
 import { ThunkAction } from 'redux-thunk'
-import { LocationData } from 'expo-location'
+import { LocationObject } from 'expo-location'
 import {
   UPDATE_LOCATION,
   CLEAR_LOCATION,
-  APPEND_PATH,
   SET_PATH,
   CLEAR_PATH,
   locationActionTypes,
   PathType,
+  PathPoint,
   SET_FIRST_LOCATION
 } from './types'
+import { gpsOutlierFilter } from '../../helpers/gpsOutlierFilter'
 
-export const updateLocation = (location: LocationData | null): locationActionTypes => ({
+export const updateLocation = (location: LocationObject | null): locationActionTypes => ({
   type: UPDATE_LOCATION,
   payload: location,
 })
@@ -20,18 +21,23 @@ export const clearLocation = (): locationActionTypes => ({
   type: CLEAR_LOCATION
 })
 
-export const appendPath = (locations: LocationData[]): ThunkAction<Promise<any>, any, void, locationActionTypes> => {
-  return async dispatch => {
-    if (locations.length > 0) {
-      const points: Array<Array<number>> = locations.map(location => {
-        const coords = location.coords
+export const appendPath = (locations: LocationObject[]): ThunkAction<Promise<any>, any, void, locationActionTypes> => {
+  return async (dispatch, getState) => {
+    const { path } : { path: PathType } = getState()
+    const currentPath: Array<PathPoint> = path.slice(-1)[0]
 
-        return [coords.longitude, coords.latitude]
-      })
+    if (locations.length > 0) {
+      const points = gpsOutlierFilter(currentPath, locations)
+
+      if (!points) {
+        return Promise.resolve()
+      }
+
+      let newPath = [...path.slice(0, -1), [ ...currentPath, ...points ]]
 
       dispatch({
-        type: APPEND_PATH,
-        payload: points
+        type: SET_PATH,
+        payload: newPath
       })
     }
     Promise.resolve()

@@ -31,7 +31,7 @@ import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
 import { stopLocationAsync, watchLocationAsync } from '../../helpers/geolocationHelper'
 import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
-import { lineStringConstructor } from '../../helpers/geoJSONHelper'
+import { lineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
 
@@ -170,9 +170,13 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     dispatch(clearRegion())
     dispatch(setFirstZoom('not'))
     //set old path if exists
-    const path: PathType = observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry?.coordinates
+    const path: PathType | undefined = lineStringsToPathDeconstructor(observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry)
+
     if (path) {
+      path.push([])
       dispatch(setPath(path))
+    } else {
+      dispatch(setPath([[]]))
     }
     dispatch(setObservationEventInterrupted(false))
     onPressMap()
@@ -215,9 +219,9 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
 
       if (lineStringPath) {
         //remove duplicates from path
-        lineStringPath.coordinates = removeDuplicatesFromPath(lineStringPath.coordinates)
+        lineStringPath = removeDuplicatesFromPath(lineStringPath)
 
-        if (lineStringPath.coordinates.length >= 2) {
+        if (lineStringPath) {
           event.gatherings[0].geometry = lineStringPath
         } else {
           setBoundingBoxGeometry()

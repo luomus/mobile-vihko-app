@@ -109,7 +109,8 @@ import {
 import {
   locationActionTypes,
   LocationType,
-  PathType
+  PathType,
+  PathPoint
 } from './position/types'
 import {
   schemaActionTypes,
@@ -238,6 +239,7 @@ export type {
   locationActionTypes,
   LocationType,
   PathType,
+  PathPoint,
   schemaActionTypes,
   SchemaType,
   userActionTypes,

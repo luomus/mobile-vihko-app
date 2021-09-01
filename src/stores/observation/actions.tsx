@@ -1,4 +1,4 @@
-import { Point, Geometry, LineString } from 'geojson'
+import { Point, Geometry, LineString, MultiLineString } from 'geojson'
 import { ThunkAction } from 'redux-thunk'
 import { clone, cloneDeep } from 'lodash'
 import i18n from 'i18next'
@@ -287,7 +287,7 @@ export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any
   }
 }
 
-export const eventPathUpdate = (lineStringPath: LineString | null): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+export const eventPathUpdate = (lineStringPath: LineString | MultiLineString | undefined): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
 

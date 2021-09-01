@@ -9,8 +9,16 @@ export const APPEND_PATH = 'APPEND_PATH'
 export const CLEAR_PATH = 'CLEAR_PATH'
 export const SET_PATH = 'SET_PATH'
 
+export type PathPoint = [
+  number,
+  number,
+  number,
+  number,
+  boolean
+]
+
 export type LocationType = LocationObject | null
-export type PathType = Array<Array<number>>
+export type PathType = Array<Array<PathPoint>>
 
 interface clearLocation {
   type: typeof CLEAR_LOCATION
@@ -28,7 +36,7 @@ interface setFirstLocation {
 
 interface appendPath {
   type: typeof APPEND_PATH,
-  payload: Array<Array<number>>,
+  payload: PathType,
 }
 
 interface clearPath {
@@ -37,7 +45,7 @@ interface clearPath {
 
 interface setPath {
   type: typeof SET_PATH,
-  payload: Array<Array<number>>
+  payload: PathType
 }
 
 export type locationActionTypes =

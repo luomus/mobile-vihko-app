@@ -39,6 +39,7 @@
     "haversine-distance": "1.2.1",
     "i18next": "20.3.2",
     "lodash": "4.17.21",
+    "mathjs": "^9.4.4",
     "moment": "2.29.1",
     "react": "16.13.1",
     "react-apollo": "3.1.5",

@@ -1,6 +1,7 @@
-import { GeometryCollection, FeatureCollection, Feature, Geometry, Point, LineString, Polygon } from 'geojson'
+import { GeometryCollection, FeatureCollection, Feature, Geometry, Point, LineString, MultiLineString, MultiPolygon, Position } from 'geojson'
 import { LatLng } from 'react-native-maps'
 import { LocationObject } from 'expo-location'
+import { PathPoint, PathType } from '../stores'
 
 const geometryCollectionConstructor = (geometries: Geometry[]) => {
   const geometryCollection: GeometryCollection = {
@@ -51,33 +52,138 @@ const latLngConstructor = (lng: number, lat: number) => {
   return latlng
 }
 
-const lineStringConstructor = (points: any[]) => {
-  if (points.length <= 1) {
-    return null
-  }
+const lineStringConstructor = (path: any[]) => {
 
-  const lineString: LineString = {
-    type: 'LineString',
-    coordinates: points
-  }
+  if (path.length <= 0) {
+    return
+  } else if (path.length === 1) {
+    const coordinates: Array<[number, number]> = []
+    path[0].forEach((point: PathPoint) => {
+      if (!point[4]) {
+        coordinates.push([
+          point[0],
+          point[1]
+        ])
+      }
+    })
 
-  return lineString
+    if (coordinates.length < 2) {
+      return
+    }
+
+    const lineString: LineString = {
+      type: 'LineString',
+      coordinates: coordinates
+    }
+
+    return lineString
+  } else {
+    const coordinates: Array<Array<[number, number]>> = []
+    path.forEach(line => {
+      const subCoordinates: Array<[number, number]> = []
+
+      line.forEach((point:PathPoint) => {
+        if (!point[4]) {
+          subCoordinates.push([
+            point[0],
+            point[1]
+          ])
+        }
+      })
+
+      if (subCoordinates.length >= 2) {
+        coordinates.push(subCoordinates)
+      }
+    })
+
+    if (coordinates.length < 2) {
+      return
+    }
+
+    const multiLineString: MultiLineString = {
+      type: 'MultiLineString',
+      coordinates: coordinates
+    }
+
+    return multiLineString
+  }
 }
 
-const pathPolygonConstructor = (points: any[]) => {
-  if (points.length <= 1) {
-    return null
+const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString) => {
+  if (geometry.type === 'LineString') {
+    const path: PathType = [geometry.coordinates.map(point => [
+      point[0],
+      point[1],
+      0.0,
+      0.0,
+      false
+    ])]
+
+    return path
+  } else if (geometry.type === 'MultiLineString') {
+    const path: PathType = geometry.coordinates.map(coord =>
+      coord.map(point => [
+        point[0],
+        point[1],
+        0.0,
+        0.0,
+        false
+      ])
+    )
+
+    return path
+  }
+}
+
+const pathPolygonConstructor = (coords: PathType, userLocation: number[]) => {
+  if (coords.length <= 0) {
+    return
   }
 
-  const polygon: Polygon = {
-    type: 'Polygon',
-    coordinates: [[
-      ...points,
-      ...points.reverse()
-    ]]
+  let coordinates: Position[][][] = []
+
+  if (coords.length > 1) {
+    coordinates = coords.slice(0, -1).map(points => {
+      const cleanedPoints = points.map(point => [
+        point[0],
+        point[1]
+      ])
+
+      return [[
+        ...cleanedPoints,
+        ...[...cleanedPoints].reverse()
+      ]]
+    })
   }
 
-  return polygon
+
+  const subCoordinates: Position[] = []
+  coords.slice(-1)[0].forEach((point: PathPoint)  => {
+    if (!point[4]) {
+      subCoordinates.push([
+        point[0],
+        point[1]
+      ])
+    }
+  })
+
+  subCoordinates.push(userLocation)
+
+  if (subCoordinates.length < 2) {
+    return
+  }
+
+  coordinates.push([[
+    ...subCoordinates,
+    ...[...subCoordinates].reverse()
+  ]])
+
+  const multiPolygon: MultiPolygon = {
+    type: 'MultiPolygon',
+    coordinates: coordinates
+  }
+
+  return multiPolygon
 }
 
 const wrapGeometryInFC = (geometry: Geometry) => {
@@ -130,4 +236,4 @@ const convertLocationDataArrToLineString = (locations: LocationObject[]) => {
   return lineString
 }
 
-export { latLngArrayConstructor, pathPolygonConstructor, wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng, convertLocationDataArrToLineString, lineStringConstructor }
+export { lineStringsToPathDeconstructor, latLngArrayConstructor, pathPolygonConstructor, wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng, convertLocationDataArrToLineString, lineStringConstructor }
