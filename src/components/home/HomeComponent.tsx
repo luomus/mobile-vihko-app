@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, Text, ScrollView, BackHandler } from 'react-native'
-import { Tab,  } from 'react-native-elements'
+import { Tab } from 'react-native-elements'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
@@ -227,9 +227,9 @@ const HomeComponent = (props: Props) => {
   } else {
     return (
       <>
-        <ScrollView contentContainerStyle={Cs.outerVersionContainer}>
-          <View style={Cs.homeScrollContainer}>
-            <View>
+        <ScrollView contentContainerStyle={Cs.contentAndVersionContainer}>
+          <View style={Cs.homeContentContainer}>
+            <View style={Cs.tabContainer}>
               <Tab
                 value={selectedTab}
                 onChange={switchSelectedForm}
@@ -243,28 +243,21 @@ const HomeComponent = (props: Props) => {
                       key={label}
                       title={label}
                       buttonStyle={{ backgroundColor: Colors.primary3 }}
-                      titleStyle={titleStyle}/>
+                      titleStyle={titleStyle} />
                   )
                 })}
               </Tab>
             </View>
-            <View style={{ justifyContent: 'flex-start' }}>
-              <UserInfoComponent onLogout={props.onLogout} />
-              <View style={Cs.homeContainer}>
-                <HomeIntroductionComponent />
-                <View style={{ height: 10 }}></View>
-                {observing ?
-                  <UnfinishedEventViewComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
-                  :
-                  <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={onBeginObservationEvent} />
-                }
-                <View style={{ height: 10 }}></View>
-                <View style={Cs.observationEventListContainer}>
-                  <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
-                  {observationEvents}
-                </View>
-                <View style={{ height: 10 }}></View>
-              </View>
+            <UserInfoComponent onLogout={props.onLogout} />
+            <HomeIntroductionComponent />
+            {observing ?
+              <UnfinishedEventViewComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
+              :
+              <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={onBeginObservationEvent} />
+            }
+            <View style={Cs.eventsListContainer}>
+              <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
+              {observationEvents}
             </View>
           </View>
           <View style={Cs.versionContainer}>

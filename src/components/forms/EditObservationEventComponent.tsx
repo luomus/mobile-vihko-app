@@ -199,9 +199,9 @@ const EditObservationEventComponent = (props: Props) => {
     )
   } else {
     return (
-      <View style={Cs.observationContainer}>
+      <View style={Cs.formContainer}>
         <ScrollView ref={ scrollView }>
-          <View style={Cs.formContainer}>
+          <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               {form}
             </FormProvider>

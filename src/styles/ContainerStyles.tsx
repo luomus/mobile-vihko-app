@@ -2,98 +2,275 @@ import { StyleSheet, Dimensions } from 'react-native'
 import Colors from './Colors'
 
 const ContainerStyles = StyleSheet.create({
-  homeContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 10,
-  },
-  infoContainer: {
-    padding: '5%',
-  },
-  languageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
+
+  //general
   buttonContainer: {
     padding: 10,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-  observationEventContainer: {
-    width: '90%',
-    backgroundColor: Colors.primary3
-  },
-  switchContainer: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    width: '90%',
-  },
-  pickerContainer: {
-    alignSelf: 'center',
-    width: '90%',
-    borderColor: Colors.neutral5,
-    borderWidth: 1,
-  },
-  loginContainer: {
+  contentAndVersionContainer: {
+    flexGrow: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: '45%'
+    justifyContent: 'space-between'
   },
   inputContainer: {
     width: '90%',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  observationContainer: {
+  instructionContainer: {
     flex: 1,
-    flexDirection: 'column',
-    padding: 10,
-  },
-  inputContainer2: {
     flexDirection: 'row',
+    paddingBottom: 5,
+    width: '95%'
+  },
+  messageAndInstructionsModalContainer: {
+    padding: 10,
+    borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    backgroundColor: Colors.neutral3
+  },
+  padding5Container: {
+    padding: 5
+  },
+  padding10Container: {
     padding: 10
   },
-  userInfoContainer: {
+  sendEventModalContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.whiteText
+  },
+
+  //navigation bar
+  languageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+
+  //login component
+  loginContentContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: '45%'
+  },
+  loginButtonContainer: {
+    marginTop: 25
+  },
+  loginLanguageContainer: {
+    marginTop: 20,
+    justifyContent: 'center',
+    flexDirection: 'row'
+  },
+
+  //home component
+  homeContentContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  tabContainer: {
+    width: '100%'
+  },
+  homeUserContainer: {
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'center',
     justifyContent: 'space-between',
     width: '90%'
   },
   logoutButtonContainer: {
     alignItems: 'flex-end'
   },
+  homeInfoContainer: {
+    padding: 10,
+    width: '90%'
+  },
+  eventLauncherContainer: {
+    width: '90%',
+    backgroundColor: Colors.primary3,
+    marginTop: 10
+  },
+  unfinishedEventButtonsContainer: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
+  eventsListContainer: {
+    padding: 10,
+    backgroundColor: Colors.primary3,
+    marginTop: 10,
+    width: '90%'
+  },
+  eventsListItemContainer: {
+    backgroundColor: Colors.primary4,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderRadius: 5,
+    marginTop: 5
+  },
+  eyeIconContainer: {
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    right: '35%',
+    padding: 6
+  },
+  versionContainer: {
+    alignItems: 'stretch',
+    justifyContent: 'flex-end'
+  },
+
+  //map component
+  stopObservingContainer: {
+    padding: 5,
+    backgroundColor: Colors.primary5,
+    justifyContent: 'flex-start'
+  },
   mapContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.neutral3,
+    alignItems: 'center'
   },
-  containerWithJustPadding: {
+  mapButtonsContainer: {
+    position: 'absolute',
+    top: '1%',
+    right: '1%',
+    alignSelf: 'flex-end',
+    flexDirection: 'column'
+  },
+  observationButtonsBaseContainer: {
+    position: 'absolute',
+    width: '98%',
+    bottom: '1%'
+  },
+  observationButtonColumnsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%'
+  },
+  leftButtonColumnContainer: {
+    alignSelf: 'flex-start',
+    backgroundColor: Colors.neutral3,
+    borderRadius: 5,
+    width: '50%'
+  },
+  rightButtonColumnContainer: {
+    alignSelf: 'flex-end'
+  },
+  mapModalContainer: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.neutral3,
+    width: '90%',
+    maxHeight: '75%'
+  },
+  mapModalItemContainer: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    padding: 5,
+    width: '90%',
+    margin: 5
+  },
+
+  //observation event component
+  overviewBaseContainer: {
+    padding: 10,
+    flexDirection: 'column'
+  },
+  overviewContentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: 15
+  },
+  overviewTextContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '80%'
+  },
+  overviewButtonsContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '20%'
+  },
+  observationInfoContainer: {
+    padding: 5,
+    backgroundColor: Colors.primary3,
+    justifyContent: 'center'
+  },
+  observationListElementTextContainer: {
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  observationListElementTitlesContainer: {
+    width: '45%'
+  },
+  observationListElementValuesContainer: {
+    width: '55%',
+    paddingLeft: 10
+  },
+  observationListElementImageContainer: {
+    flexDirection: 'row',
+    padding: 5
+  },
+  observationListElementButtonsContainer: {
+    alignSelf: 'center',
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 5
+  },
+
+  //message component
+  messageButtonsContainer: {
+    alignSelf: 'center',
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 5
+  },
+
+  //info page component
+  infoContainer: {
+    padding: '5%',
+  },
+
+  //form components
+  formContainer: {
+    flex: 1,
+    flexDirection: 'column',
     padding: 10
   },
-  formContainer: {
+  formContentContainer: {
     justifyContent: 'space-between',
     marginBottom: Dimensions.get('screen').width * 0.125
+  },
+  formSaveButtonContainer: {
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   formInputContainer: {
     padding: 10,
     width: '100%'
   },
+  formArrayInputListContainer: {
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   formArrayInputContainer: {
     width: '100%'
-  },
-  formPickerContainer: {
-    borderColor: Colors.neutral5,
-    borderWidth: 1,
-    paddingHorizontal: 10
   },
   formArrayButtonContainer: {
     padding: 10,
@@ -101,127 +278,31 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around'
   },
-  formAllInputsContainer: {
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  formSaveButtonContainer: {
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  singleObservationEventContainer: {
-    padding: 10,
-    justifyContent: 'space-between',
-  },
-  mapViewStyle: {
-    flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-  mapTypeContainer: {
-    position: 'absolute',
-    top: '1%',
-    right: '1%',
-    alignSelf: 'flex-end'
-  },
-  userLocationContainer: {
-    position: 'absolute',
-    top: '11%',
-    right: '1%',
-    alignSelf: 'flex-end'
-  },
-  observationTypeButtonsContainer: {
-    position: 'absolute',
-    width: '98%',
-    bottom: '1%'
-  },
-  observationTypeButton: {
-    padding: 5,
-  },
-  observationTypeColumnsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  observationTypeButtonsColumnLeft: {
-    alignSelf: 'flex-start',
-    backgroundColor: Colors.neutral3,
-    borderRadius: 5,
-    width: '50%'
-  },
-  observationTypeButtonsColumnRight: {
-    alignSelf: 'flex-end'
-  },
-  observationAddModal: {
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    backgroundColor: Colors.whiteText
-  },
-  loginViewContainer: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-  },
-  loginLanguageContainer: {
-    paddingTop: 20,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  observationListLine: {
-    padding: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  observationPropertyTitle: {
-    width: '45%',
-  },
-  observationPropertyValue: {
-    width: '55%',
-    paddingLeft: 10
-  },
-  observationInfoContainer: {
-    padding: 5,
-    backgroundColor: Colors.primary3,
-    justifyContent: 'center',
-  },
-  editObservationButtonContainer: {
+  switchContainer: {
     alignSelf: 'center',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  eventDateContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 10
-  },
-  eventTopContainer: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 15
+    width: '90%'
   },
-  eventTextContainer: {
-    flexDirection: 'column',
-    width: '80%',
+  formPickerContainer: {
+    borderColor: Colors.neutral5,
+    borderWidth: 1,
+    paddingHorizontal: 10
+  },
+  datePickerContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
+    padding: 10,
   },
-  eventButtonsContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  imageElementRowContainer: {
+  imagePickerRowContainer: {
     flexDirection: 'row',
     padding: 10,
     justifyContent: 'space-between'
   },
-  imageElementColumnContainer: {
+  imagePickerColumnContainer: {
     padding: 5,
     justifyContent: 'space-between'
   },
-  noImageContainer: {
+  imagePickerEmptyContainer: {
     width: 150,
     height: 150,
     borderStyle: 'dashed',
@@ -234,150 +315,38 @@ const ContainerStyles = StyleSheet.create({
   imageButtonsRowContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   imageButtonsColumnContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  padding5Container: {
-    padding: 5
-  },
-  observationInfoMapContainer: {
-    width: '100%',
-    height: 150
-  },
-  observationInfoImageContainer: {
-    flexDirection: 'row',
-    padding: 5,
-  },
-  singleButton: {
-    width: '50%',
-    padding: 5
+    alignItems: 'center'
   },
   imagesContainer: {
     justifyContent: 'space-between'
   },
-  singleImageContainer: {
+  imageContainer: {
     padding: 5,
     marginRight: 5
   },
-  removeIconContainer: {
-    position: 'absolute',
-    top: '1%',
-    right: '1%'
-  },
-  continueButtonContainer: {
-    padding: 5,
-    width: '50%'
-  },
-  endButtonContainer: {
-    padding: 5,
-    width: '50%'
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center'
-  },
-  floatingButton: {
-    bottom: 0,
-    position: 'absolute',
-  },
-  observationEventListContainer: {
-    padding: 10,
-    backgroundColor: Colors.primary3,
-    width: '90%'
-  },
-  observationEventListItemContainer: {
-    backgroundColor: Colors.primary4,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'stretch',
-    borderRadius: 5,
-    marginTop: 5
-  },
-  homeInfoContainer: {
-    padding: 10,
-    width: '90%'
-  },
-  alignRightContainer: {
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    right: '35%',
-    padding: 6
-  },
-  gpsStatusBar: {
-    padding: 5,
-    alignItems: 'stretch',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.primary5,
-  },
-  gpsBarLeft: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  gpsBarRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#2979ae'
-  },
-  versionContainer: {
-    alignItems: 'stretch',
-    justifyContent: 'flex-end',
-  },
-  outerVersionContainer: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    flexDirection: 'column'
-  },
-  instructionContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingBottom: 5,
-    width: '95%'
-  },
-  homeScrollContainer: {
-    flexDirection: 'column'
-  },
-  sendEventModalContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: Colors.whiteText
-  },
-  iconStretchContainer: {
-    borderWidth: 150
-  },
-  keywordSingleImageContainer: {
+  keywordImageContainer: {
     padding: 5,
     borderColor: 'grey',
     borderWidth: 1,
     marginRight: 5
   },
-  mapModalContainer: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: Colors.whiteText,
-    width: '90%',
-    maxHeight: '75%'
+  deleteImageIconContainer: {
+    position: 'absolute',
+    top: '1%',
+    right: '1%'
   },
-  mapModalItemContainer: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    padding: 5,
-    width: '90%',
-    margin: 5
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center'
   },
-  iconAndTextContainer: {
-    flexDirection: 'row',
-    textDecorationColor: Colors.whiteText
+  floatingButtonContainer: {
+    bottom: 0,
+    position: 'absolute'
   }
 })
 

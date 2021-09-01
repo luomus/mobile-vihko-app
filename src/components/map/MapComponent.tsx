@@ -26,6 +26,7 @@ import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
+import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
@@ -304,6 +305,7 @@ const MapComponent = (props: Props) => {
         position.coords.longitude,
         position.coords.latitude
       ])
+
       return pathPolygon ?
         <Geojson
           geojson={wrapGeometryInFC(pathPolygon)}
@@ -399,7 +401,7 @@ const MapComponent = (props: Props) => {
 
   return (
     <>
-      <View style={Cs.gpsStatusBar}>
+      <View style={Cs.stopObservingContainer}>
         <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop observation event')}
           height={30} width={150} buttonStyle={Bs.stopObservingFromMapButton}
           gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
@@ -420,7 +422,7 @@ const MapComponent = (props: Props) => {
           pitchEnabled={false}
           rotateEnabled={false}
           moveOnMarkerPress={false}
-          style={Cs.mapViewStyle}
+          style={Os.mapViewStyle}
           onMapReady={onMapLoaded}
         >
           {locationOverlay()}
@@ -429,21 +431,21 @@ const MapComponent = (props: Props) => {
           {tileOverlay()}
           {observationLocationsOverlay()}
         </MapView>
-        <View
-          style={Cs.mapTypeContainer}>
-          <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
-            height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-          />
-        </View>
-        <View
-          style={Cs.userLocationContainer}>
-          <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
-            height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-          />
+        <View style={Cs.mapButtonsContainer}>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
+              height={50} width={50} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+            />
+          </View>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
+              height={50} width={50} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+            />
+          </View>
         </View>
         {observation ?
           observationButtonsState === 'newObservation' &&

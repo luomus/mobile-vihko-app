@@ -2,14 +2,13 @@ import React from 'react'
 import { StyleProp, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { LinearGradient } from 'expo-linear-gradient'
-import { BoxShadow } from 'react-native-shadow'
 import { Shadow } from 'react-native-shadow-2'
 
 type Props = {
   onPressFunction: () => any,
   title: string | undefined,
-  height: number | string,
-  width: number | string,
+  height: number,
+  width: number,
   buttonStyle: StyleProp<ViewStyle>,
   gradientColorStart: string,
   gradientColorEnd: string,
@@ -22,21 +21,6 @@ type Props = {
 }
 
 const ButtonComponent = (props: Props) => {
-
-  // const shadowOptions = {
-  //   height: '100%',
-  //   width: '100%',
-  //   border: 0,
-  //   color: props.shadowColor,
-  //   radius: 5,
-  //   opacity: 0.2,
-  //   x: 0,
-  //   y: 3
-  // }
-
-  // <BoxShadow setting={shadowOptions}>
-  // code
-  // </BoxShadow>
 
   return (
     <Shadow startColor={props.shadowColor} finalColor={props.shadowColor} distance={0} radius={5}
