@@ -81,7 +81,10 @@ const TextStyles = StyleSheet.create({
   },
   fontSizeFifteen: {
     fontSize: 15
-  }
+  },
+  zoneText: {
+    paddingLeft: 20
+  },
 })
 
 export default TextStyles

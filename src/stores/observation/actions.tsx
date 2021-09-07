@@ -82,7 +82,7 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
 
 export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
+    const { credentials, observationEvent, schema } = getState()
 
     let event = cloneDeep(observationEvent.events.find((event: Record<string, any>) => event.id === id))
     let units = event.gatherings[0].units
@@ -118,15 +118,21 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     //define whether the event will be released publicly or privately
     event = definePublicity(event, isPublic)
 
-    //define record basis for each unit, depending on whether the unit has images attached
+    //define record basis for each unit, depending on whether the unit has images attached,
     //remove empty radius -fields
-    event = loopThroughUnits(event)
+    //(skip this with flying squirrel form, which has already assigned the record basis)
+    if (schema.formID !== 'MHL.45') {
+      event = loopThroughUnits(event)
+    }
 
+    //if there isn't an observation zone, use APIs to get a proper locality name
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
-    if (overlapsFinland(event.gatherings[0].geometry)) {
-      await fetchFinland(event, lang)
-    } else {
-      await fetchForeign(event, lang)
+    if (!event.namedPlaceID || event.namedPlaceID === '') {
+      if (overlapsFinland(event.gatherings[0].geometry)) {
+        await fetchFinland(event, lang)
+      } else {
+        await fetchForeign(event, lang)
+      }
     }
 
     // //for each observation in observation event try to send images to server

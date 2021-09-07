@@ -13,7 +13,12 @@ import {
   toggleCentered,
   toggleMaptype,
   setEditing,
-  setFirstZoom
+  setFirstZoom,
+  setCurrentObservationZone,
+  clearCurrentObservationZone,
+  initObservationZones,
+  getObservationZonesSuccess,
+  toggleZoomToZone
 } from './map/actions'
 import {
   setMessageState,
@@ -73,6 +78,7 @@ import {
   editingReducer,
   firstZoomReducer,
   maptypeReducer,
+  observationZoneReducer,
   regionReducer
 } from './map/reducers'
 import { messageReducer } from './message/reducers'
@@ -95,7 +101,9 @@ import { credentialsReducer } from './user/reducers'
 import {
   mapActionTypes,
   EditingType,
-  FirstZoomType
+  FirstZoomType,
+  ObservationZonesType,
+  ZoneType
 } from './map/types'
 import {
   messageActionTypes,
@@ -137,6 +145,7 @@ interface rootState {
   observationEventInterrupted: boolean,
   observationEvent: ObservationEventType,
   observationId: ObservationIdType | null,
+  observationZone: ObservationZonesType,
   observing: boolean,
   path: PathType,
   position: LocationType,
@@ -156,6 +165,7 @@ const appReducer = combineReducers({
   observationEventInterrupted: observationEventInterruptedReducer,
   observationEvent: observationEventsReducer,
   observationId: observationIdReducer,
+  observationZone: observationZoneReducer,
   observing: observingReducer,
   path: pathReducer,
   position: positionReducer,
@@ -187,6 +197,11 @@ export {
   toggleMaptype,
   setEditing,
   setFirstZoom,
+  setCurrentObservationZone,
+  clearCurrentObservationZone,
+  initObservationZones,
+  getObservationZonesSuccess,
+  toggleZoomToZone,
   setMessageState,
   popMessageState,
   clearMessageState,
@@ -232,6 +247,8 @@ export type {
   mapActionTypes,
   EditingType,
   FirstZoomType,
+  ObservationZonesType,
+  ZoneType,
   messageActionTypes,
   MessageType,
   observationActionTypes,

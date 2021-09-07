@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView } from 'react-native'
-import { Button as ButtonElement, Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { DispatchType, setMessageState } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
@@ -140,20 +141,20 @@ const ImagePickerComponent = (props: Props) => {
             : renderImages()
           }
           <View style={Cs.imageButtonsColumnContainer}>
-            <ButtonElement
-              buttonStyle={Bs.addImageButton}
-              containerStyle={Cs.padding5Container}
-              title={' ' + t('choose image')}
-              icon={<Icon name='photo-library' type='material-icons' color='white' size={22} />}
-              onPress={imageFromLibrary}
-            />
-            <ButtonElement
-              buttonStyle={Bs.addImageButton}
-              containerStyle={Cs.padding5Container}
-              title={' ' + t('use camera')}
-              icon={<Icon name='add-a-photo' type='material-icons' color='white' size={22} />}
-              onPress={imageFromCamera}
-            />
+            <View style={Cs.padding5Container}>
+              <ButtonComponent onPressFunction={imageFromLibrary}
+                title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+            </View>
+            <View style={Cs.padding5Container}>
+              <ButtonComponent onPressFunction={imageFromCamera}
+                title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+            </View>
           </View>
         </View>
       </>
@@ -180,20 +181,20 @@ const ImagePickerComponent = (props: Props) => {
               {renderImages()}
             </ScrollView>
             <View style={Cs.imageButtonsRowContainer}>
-              <ButtonElement
-                buttonStyle={Bs.addImageButton}
-                containerStyle={Cs.padding5Container}
-                title={' ' + t('choose image')}
-                icon={<Icon name='photo-library' type='material-icons' color='white' size={22} />}
-                onPress={imageFromLibrary}
-              />
-              <ButtonElement
-                buttonStyle={Bs.addImageButton}
-                containerStyle={Cs.padding5Container}
-                title={' ' + t('use camera')}
-                icon={<Icon name='add-a-photo' type='material-icons' color='white' size={22} />}
-                onPress={imageFromCamera}
-              />
+              <View style={Cs.padding5Container}>
+                <ButtonComponent onPressFunction={imageFromLibrary}
+                  title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
+              </View>
+              <View style={Cs.padding5Container}>
+                <ButtonComponent onPressFunction={imageFromCamera}
+                  title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
+              </View>
             </View>
           </View>
         </View>

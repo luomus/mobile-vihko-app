@@ -203,7 +203,10 @@ export const centerOfBoundingBox = (geometry: Polygon | Point): Point => {
   }
 }
 
-export const removeDuplicatesFromPath = (lineString: LineString | MultiLineString): LineString | MultiLineString | undefined => {
+export const removeDuplicatesFromPath = (lineString: LineString | MultiLineString | undefined): LineString | MultiLineString | undefined => {
+
+  if (!lineString) { return }
+
   const filterGeometry = (points: Array<Array<number>>) => {
     let uniqueCoordinates: Array<Array<number>> = []
 

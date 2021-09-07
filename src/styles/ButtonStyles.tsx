@@ -132,7 +132,6 @@ const ButtonStyles = StyleSheet.create({
     borderRadius: 5
   },
   refreshButton: {
-    marginLeft: 10,
     borderRadius: 5
   },
   sendEventModalPositiveButton: {

@@ -5,6 +5,7 @@ import { LocationObject } from 'expo-location'
 import {
   toggleCentered,
   setFirstZoom,
+  setCurrentObservationZone,
   clearRegion,
   setMessageState,
   clearObservationLocation,
@@ -22,7 +23,8 @@ import {
   messageActionTypes,
   observationActionTypes,
   locationActionTypes,
-  PathType
+  PathType,
+  ZoneType
 } from '../../stores'
 import i18n from '../../languages/i18n'
 import storageService from '../../services/storageService'
@@ -39,13 +41,17 @@ export const resetReducer = () => ({
   type: 'RESET_STORE'
 })
 
-export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
+export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEvent, schema } = getState()
+    const { centered, credentials, observationEvent, observationZone, schema } = getState()
     const userId = credentials?.user?.id
 
-    if (!userId) {
+    const region: ZoneType | undefined = observationZone.zones.find((region: Record<string, any>) => {
+      return region.id === observationZone.currentZoneId
+    })
+
+    if (!userId || (zoneUsed && !region)) {
       return
     }
 
@@ -63,6 +69,10 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
       })
     }
 
+    if (!zoneUsed) {
+      dispatch(setCurrentObservationZone('empty'))
+    }
+
     const lang = i18n.language
 
     let observationEventDefaults = {}
@@ -72,6 +82,16 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], setDateForDocument())
 
     let parsedObservationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema[lang].schema)
+
+    const setGeometry = () => {
+      set(parsedObservationEvent, ['gatherings', '1', 'geometry'], region?.geometry)
+      set(parsedObservationEvent, ['gatherings', '1', 'locality'], region?.name)
+      set(parsedObservationEvent, ['namedPlaceID'], region?.id)
+    }
+
+    if (zoneUsed) {
+      setGeometry()
+    }
 
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
@@ -217,17 +237,35 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
 
       let lineStringPath = lineStringConstructor(path)
 
-      if (lineStringPath) {
-        //remove duplicates from path
-        lineStringPath = removeDuplicatesFromPath(lineStringPath)
+      //remove duplicates from path
+      lineStringPath = removeDuplicatesFromPath(lineStringPath)
 
-        if (lineStringPath) {
+      if (lineStringPath && event.formID !== 'MHL.45') {
+        event.gatherings[0].geometry = lineStringPath
+
+      } else {
+
+        if (event.namedPlaceID && event.namedPlaceID !== '') {
+          event.gatherings[0].geometry = event.gatherings[1].geometry
+        } else if (lineStringPath) {
           event.gatherings[0].geometry = lineStringPath
         } else {
           setBoundingBoxGeometry()
         }
-      } else {
-        setBoundingBoxGeometry()
+
+        if (event.formID === 'MHL.45') {
+
+          if (lineStringPath) {
+            if (event.gatherings[1]) {
+              event.gatherings[1].geometry = lineStringPath
+            } else {
+              event.gatherings.push({ geometry: lineStringPath })
+            }
+          } else {
+            event.gatherings = [event.gatherings[0]]
+          }
+
+        }
       }
 
       dispatch(clearPath())

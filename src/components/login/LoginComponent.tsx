@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   rootState,
   DispatchType,
+  initObservationZones,
   initObservationEvents,
   initSchema,
   resetReducer,
@@ -24,7 +25,7 @@ import MessageComponent from '../general/MessageComponent'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
-import { availableForms } from '../../config/fields'
+import { availableForms, useUiSchemaFields } from '../../config/fields'
 import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
@@ -79,6 +80,10 @@ const LoginComponent = (props: Props) => {
           showError(error.message)
         }
 
+        if (error && error?.severity === 'low') {
+          return
+        }
+
         const tmpToken = await storageService.fetch(tmpTokenKey)
         if (tmpToken) {
           await pollLogin(tmpToken)
@@ -93,6 +98,19 @@ const LoginComponent = (props: Props) => {
   }
 
   const initializeApp = async () => {
+
+    try {
+      await dispatch(initObservationZones())
+    } catch (error) {
+      if (error.severity === 'fatal') {
+        showFatalError(`${t('critical error')}:\n ${error.message}`)
+        setLoggingIn(false)
+        return
+      } else {
+        showError(error.message)
+      }
+    }
+
     try {
       await dispatch(initObservationEvents())
     } catch (error) {
@@ -101,7 +119,9 @@ const LoginComponent = (props: Props) => {
 
     await Promise.all(availableForms.map(async formId => {
       try {
-        await dispatch(initSchema(false, formId))
+        const useUiSchema = useUiSchemaFields.includes(formId)
+
+        await dispatch(initSchema(useUiSchema, formId))
       } catch (errors) {
         if (errors[errors.length - 1].severity === 'fatal') {
           errors.forEach((error: Record<string, any>, index: number) => {

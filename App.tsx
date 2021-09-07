@@ -38,7 +38,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
     store.dispatch(appendPath(locations))
 
     const indLast = observationEvent.events.length - 1
-    const lastGeometry: undefined | LineString | MultiLineString = observationEvent?.events[indLast]?.gatherings[0]?.geometry
+    const lastGeometry: undefined | LineString | MultiLineString = observationEvent?.events[indLast]?.gatherings[0]?.geometry
 
     const pathSections = path.length
 

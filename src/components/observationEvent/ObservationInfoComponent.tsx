@@ -24,15 +24,47 @@ const ObservationInfoComponent = (props: Props) => {
 
   const schema = useSelector((state: rootState) => state.schema)
 
+  const lang = i18n.language
+  const schemaUnits = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units
+
+  if (!schemaUnits) {
+    return null
+  }
+
   useEffect(() => {
     const initList = async () => {
+
       let fields: string[] | null = null
 
-      if (props.event.formID === 'JX.519') {
+      //on the flying squirrel form, there's a logic in fetching the shown fields, other forms just check them from an array
+      if (props.event.formID === 'MHL.45') {
+        const fieldScopes = schema[lang]?.uiSchemaParams?.unitFieldScopes
+
+        const getFields = () => {
+          const rules = props.observation.rules
+
+          if (!rules || !fieldScopes) {
+            return null
+          }
+
+          return Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key) => {
+            const matches = new RegExp(rules.regexp).test(key)
+            if (rules.complement ? !matches : matches) {
+              return fieldScopes[rules.field][key]
+            } else {
+              return foundObject
+            }
+          }, null)?.fields
+        }
+
+        fields = getFields()
+
+      } else if (props.event.formID === 'JX.519') {
         fields = JX519Fields
       } else if (props.event.formID === 'JX.652') {
         fields = JX652Fields
       }
+
       if (schemaUnits && fields) {
         setList(await createSchemaObjectComponents(props.observation, fields, schemaUnits))
       }
@@ -40,13 +72,6 @@ const ObservationInfoComponent = (props: Props) => {
 
     initList()
   }, [props.observation])
-
-  const lang = i18n.language
-  const schemaUnits = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units
-
-  if (!schemaUnits) {
-    return null
-  }
 
   return (
     <View style={Cs.observationInfoContainer}>

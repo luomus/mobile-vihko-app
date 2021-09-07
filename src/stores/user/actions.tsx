@@ -6,6 +6,7 @@ import {
 } from './types'
 import { ThunkAction } from 'redux-thunk'
 import userService, { pollUserLogin } from '../../services/userService'
+import { getFormPermissions } from '../../services/formPermissionService'
 import storageService from '../../services/storageService'
 import i18n from '../../languages/i18n'
 import { log } from '../../helpers/logger'
@@ -19,7 +20,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
       credentials = await pollUserLogin(tmpToken, setCanceler)
       dispatch(setCredentials(credentials))
 
-    //if timeout or other error inform user of error, credentials stay null
+      //if timeout or other error inform user of error, credentials stay null
     } catch (netError) {
       if (netError.canceled) {
         return Promise.reject({ canceled: true })
@@ -41,12 +42,30 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
       })
     }
 
+    //try to fetch users form permissions to join into the credentials
+    try {
+      const permissions = await getFormPermissions(credentials.token)
+      const permissionsArr = [ ...permissions.result.admins, ...permissions.result.editors ]
+
+      credentials.permissions = permissionsArr
+
+    } catch (error) {
+      log.error({
+        location: '/stores/user/actions.tsx loginUser()',
+        error: error
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('failed to load permissions')
+      })
+    }
+
     //try to save credentials to asyncstorage to remember logged in user after app shutdown
     try {
       storageService.save('credentials', credentials)
       return Promise.resolve()
 
-    //if asyncstorage fails set error as such, allows user to continue anyway
+      //if asyncstorage fails set error as such, allows user to continue anyway
     } catch (locError) {
       log.error({
         location: '/stores/user/actions.tsx loginUser()',
@@ -99,25 +118,62 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
 
 export const initLocalCredentials = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async dispatch => {
+    let credentials
+
     try {
-      const credentials = await storageService.fetch('credentials')
+      credentials = await storageService.fetch('credentials')
 
       if (!credentials) {
         return Promise.reject()
       }
 
-      dispatch(setCredentials(credentials))
-      return Promise.resolve()
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx initLocalCredentials()',
         error: error
       })
       return Promise.reject({
-        severity: 'low',
+        severity: 'high',
         message: i18n.t('failed to load credentials from local')
       })
     }
+
+    //loading and saving user's form permissions to storage
+    try {
+      const permissions = await getFormPermissions(credentials.token)
+      const permissionsArr = [ ...permissions.result.admins, ...permissions.result.editors ]
+
+      credentials.permissions = permissionsArr
+
+    } catch (error) {
+      log.error({
+        location: '/stores/user/actions.tsx getUserPermissions()',
+        error: error
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('failed to update permissions')
+      })
+    }
+
+    dispatch(setCredentials(credentials))
+
+    try {
+      storageService.save('credentials', credentials)
+
+      //if asyncstorage fails set error as such, allows user to continue anyway
+    } catch (error) {
+      log.error({
+        location: '/stores/user/actions.tsx initLocalCredentials',
+        error: error
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('failed to save updated permissions locally')
+      })
+    }
+
+    return Promise.resolve()
   }
 }
 

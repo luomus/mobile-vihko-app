@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 
 type Props = {
   selectedTab: number,
-  onBeginObservationEvent: () => Promise<void>
+  onBeginObservationEvent: (zoneUsed: boolean) => void
 }
 
 const NewEventWithoutZoneComponent = (props: Props) => {
@@ -32,7 +32,7 @@ const NewEventWithoutZoneComponent = (props: Props) => {
   return (
     <View style={Cs.eventLauncherContainer}>
       <View style={Cs.buttonContainer}>
-        <ButtonComponent onPressFunction={props.onBeginObservationEvent} title={beginButtonText}
+        <ButtonComponent onPressFunction={() => { props.onBeginObservationEvent(false) }} title={beginButtonText}
           height={40} width={200} buttonStyle={Bs.beginButton}
           gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
           textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}

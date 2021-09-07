@@ -97,6 +97,16 @@ const ContainerStyles = StyleSheet.create({
     backgroundColor: Colors.primary3,
     marginTop: 10
   },
+  zoneEventLauncherContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  zonePickerContainer: {
+    alignSelf: 'center',
+    width: '80%',
+    borderColor: Colors.neutral5,
+    borderWidth: 1,
+  },
   unfinishedEventButtonsContainer: {
     padding: 10,
     flexDirection: 'row',

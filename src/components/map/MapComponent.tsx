@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon, Polygon } from 'geojson'
-import { convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -55,6 +55,7 @@ const MapComponent = (props: Props) => {
   const maptype = useSelector((state: rootState) => state.maptype)
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observationZone = useSelector((state: rootState) => state.observationZone)
   const path = useSelector((state: rootState) => state.path)
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
@@ -356,6 +357,26 @@ const MapComponent = (props: Props) => {
     : null
   )
 
+  //draws observation zone to map
+  const zoneOverlay = () => {
+    let zone = observationZone.zones.find(z =>
+      observationZone.currentZoneId !== 'empty' &&
+      z.id === observationZone.currentZoneId &&
+      z.geometry !== null
+    )
+
+    return (zone ?
+      <Geojson
+        geojson={convertGC2FC(zone.geometry)}
+        fillColor="#f002"
+        pinColor="#f00"
+        strokeColor="#f00"
+        strokeWidth={1}
+      />
+      : null
+    )
+  }
+
   //if topomap is selected draws its tiles on map
   const tileOverlay = () => (maptype === 'terrain' ?
     <UrlTile
@@ -429,6 +450,7 @@ const MapComponent = (props: Props) => {
           {targetOverlay()}
           {pathOverlay()}
           {tileOverlay()}
+          {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>
         <View style={Cs.mapButtonsContainer}>

@@ -10,6 +10,7 @@ import Colors from '../../styles/Colors'
 import {
   rootState,
   DispatchType,
+  setCurrentObservationZone,
   toggleObserving,
   setObservationId,
   setObservationEventInterrupted,
@@ -28,6 +29,7 @@ import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
 import { HomeIntroductionComponent } from './HomeIntroductionComponent'
+import NewEventWithZoneComponent from './NewEventWithZoneComponent'
 import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
 import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
 import { availableForms } from '../../config/fields'
@@ -53,10 +55,11 @@ const HomeComponent = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState<number>(0)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
-  const tabItems = [t('trip report form'), t('fungi atlas')]
   let logTimeout: NodeJS.Timeout | undefined
 
+  const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observationZone = useSelector((state: rootState) => state.observationZone)
   const observing = useSelector((state: rootState) => state.observing)
   const schema = useSelector((state: rootState) => state.schema)
 
@@ -73,24 +76,31 @@ const HomeComponent = (props: Props) => {
     if (isUnfinished) {
       dispatch(toggleObserving())
       dispatch(setObservationEventInterrupted(true))
+      if (schema.formID === 'MHL.45') { dispatch(setCurrentObservationZone(getLastZoneId())) }
     }
 
-    const initTab = async () => {
+    const initTabSelection = async () => {
       let formID = await storageService.fetch('formID')
       if (!formID) {
         formID = 'JX.519'
       }
-
       setSelectedTab(availableForms.findIndex(form => form === formID))
       await dispatch(switchSchema(formID))
     }
 
-    initTab()
+    initTabSelection()
   }, [])
 
   useEffect(() => {
     loadObservationEvents()
   }, [observationEvent, observing, schema])
+
+  useEffect(() => {
+    //set first zone in array as selected zone to avoid undefined values
+    if (observationZone.currentZoneId === '' && observationZone.zones.length > 0) {
+      dispatch(setCurrentObservationZone(observationZone?.zones[0].id))
+    }
+  }, [observationZone])
 
   useEffect(() => {
     if (pressCounter > 0 && !logTimeout) {
@@ -143,11 +153,11 @@ const HomeComponent = (props: Props) => {
     return false
   })
 
-  const onBeginObservationEvent = async () => {
+  const onBeginObservationEvent = async (zoneUsed: boolean) => {
     const title: string = t('notification title')
     const body: string = t('notification body')
     try {
-      await dispatch(beginObservationEvent(props.onPressMap, title, body))
+      await dispatch(beginObservationEvent(props.onPressMap, zoneUsed, title, body))
     } catch (error) {
       dispatch(setMessageState({
         type: 'err',
@@ -177,6 +187,14 @@ const HomeComponent = (props: Props) => {
         }
       }))
     }
+  }
+
+  const getLastZoneId = () => {
+    const zone = observationZone.zones.find((zone: Record<string, any>) => {
+      return zone.name === observationEvent.events?.[observationEvent.events.length - 1].gatherings[1].locality
+    })
+
+    return zone ? zone.id : ''
   }
 
   const stopObserving = () => {
@@ -212,12 +230,41 @@ const HomeComponent = (props: Props) => {
     }
   }
 
+  const showError = (error: string) => {
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: error
+    }))
+  }
+
   const switchSelectedForm = async (ind: number) => {
     if (!observing) {
       await dispatch(switchSchema(availableForms[ind]))
       await storageService.save('formID', availableForms[ind])
       setSelectedTab(ind)
     }
+  }
+
+  const tabOptions = () => {
+    let tabItems = []
+
+    if (credentials.permissions && credentials.permissions.includes('HR.2951')) {
+      tabItems = [t('trip report form'), t('fungi atlas'), t('mobile app')]
+    } else {
+      tabItems = [t('trip report form'), t('fungi atlas')]
+    }
+
+    return tabItems.map((label, index) => {
+      const titleStyle = index === selectedTab ? { color: Colors.neutral9 } : { color: Colors.neutral6 }
+
+      return (
+        <Tab.Item
+          key={label}
+          title={label}
+          buttonStyle={{ backgroundColor: Colors.primary3 }}
+          titleStyle={titleStyle} />
+      )
+    })
   }
 
   if (loading) {
@@ -235,17 +282,7 @@ const HomeComponent = (props: Props) => {
                 onChange={switchSelectedForm}
                 indicatorStyle={{ backgroundColor: Colors.neutral9 }}
               >
-                {[t('trip report form'), t('fungi atlas')].map((label, index) => {
-                  const titleStyle = index === selectedTab ? { color: Colors.neutral9 } : { color: Colors.neutral6 }
-
-                  return (
-                    <Tab.Item
-                      key={label}
-                      title={label}
-                      buttonStyle={{ backgroundColor: Colors.primary3 }}
-                      titleStyle={titleStyle} />
-                  )
-                })}
+                { tabOptions() }
               </Tab>
             </View>
             <UserInfoComponent onLogout={props.onLogout} />
@@ -253,7 +290,12 @@ const HomeComponent = (props: Props) => {
             {observing ?
               <UnfinishedEventViewComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
               :
-              <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={onBeginObservationEvent} />
+              <NewEventWithoutZoneComponent selectedTab={selectedTab} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent(zoneUsed) }} />
+            }
+            {!observing && schema.formID === 'MHL.45' ?
+              <NewEventWithZoneComponent setLoading={setLoading} onBeginObservationEvent={onBeginObservationEvent} showError={showError} />
+              :
+              null
             }
             <View style={Cs.eventsListContainer}>
               <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>

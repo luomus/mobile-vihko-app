@@ -149,7 +149,7 @@ const ObservationComponent = (props: Props) => {
     }
 
     let schemaVar = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
-    let fieldScopes = schema[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
+    let fieldScopes = schema[lang]?.uiSchemaParams?.unitFieldScopes || null
     let defaultObject: Record<string, any> = {}
 
     if (props.defaults) {

@@ -48,11 +48,64 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
         //check network status and try loading schema and uiSchema from server
         await netStatusChecker()
         tempSchemas = await getSchemas(lang, formId)
+
+        //fresh schema was fetched from net, try to parse necessary parameters and values for input creation from it
+        if (tempSchemas) {
+          let uiSchemaParams
+
+          if (useUiSchema) {
+            uiSchemaParams = parseUiSchemaToObservations(tempSchemas.uiSchema)
+
+            //if parsing fails warn user that language is unusable
+            if (!uiSchemaParams) {
+              errors.push({
+                severity: 'high',
+                message: i18n.t(`could not parse ${lang} uiSchema to input`)
+              })
+
+              errorFatal[lang] = true
+              continue
+            }
+          }
+
+          if (useUiSchema) {
+            schemas[lang] = {
+              schema: tempSchemas.schema,
+              uiSchemaParams: uiSchemaParams
+            }
+          } else {
+            schemas[lang] = {
+              schema: tempSchemas.schema,
+            }
+          }
+        }
+
+        //try to store schema to internal storage for use as backup, if schemas are from server (i.e. first try-catch has not set any error),
+        //if fails set error message
+        try {
+          await storageService.save(storageKeys[lang], schemas[lang])
+        } catch (error) {
+          langError = {
+            severity: 'low',
+            message: i18n.t(`${lang} schema save to async failed`)
+          }
+          log.error({
+            location: '/stores/observation/actions.tsx initSchema()',
+            error: error,
+            details: 'While saving ' + lang + ' to AsyncStorage.'
+          })
+        }
+
+        //if error was met push into errors-array for eventual return to user
+        if (langError) {
+          errors.push(langError)
+        }
+
       } catch (netError) {
         try {
           //try loading schema from internal storage, if success inform user
           //of use of old stored version, if error warn user of total failure
-          tempSchemas = await storageService.fetch(storageKeys[lang])
+          schemas[lang] = await storageService.fetch(storageKeys[lang])
 
           //warn user of using internally stored schema
           langError = {
@@ -84,59 +137,6 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
           errors.push(langError)
           errorFatal[lang] = true
           continue
-        }
-      }
-
-      //schema was found try to parse necessary parameters and values for input creation from it
-      if (tempSchemas) {
-        let uiSchemaParams
-
-        if (useUiSchema) {
-          uiSchemaParams = parseUiSchemaToObservations(tempSchemas.uiSchema)
-
-          //if parsing fails warn user that language is unusable
-          if (!uiSchemaParams) {
-            errors.push({
-              severity: 'high',
-              message: i18n.t(`could not parse ${lang} uiSchema to input`)
-            })
-
-            errorFatal[lang] = true
-            continue
-          }
-        }
-
-        //try to store schema to internal storage for use as backup, if schemas are from server (i.e. first try-catch has not set any error),
-        //if fails set error message
-        if (!langError) {
-          try {
-            await storageService.save(storageKeys[lang], tempSchemas)
-          } catch (error) {
-            langError = {
-              severity: 'low',
-              message: i18n.t(`${lang} schema save to async failed`)
-            }
-            log.error({
-              location: '/stores/observation/actions.tsx initSchema()',
-              error: error,
-              details: 'While saving ' + lang + ' to AsyncStorage.'
-            })
-          }
-        }
-        //if error was met push into errors-array for eventual return to user
-        if (langError) {
-          errors.push(langError)
-        }
-
-        if (useUiSchema) {
-          schemas[lang] = {
-            schema: tempSchemas.schema,
-            uiSchemaParams: uiSchemaParams
-          }
-        } else {
-          schemas[lang] = {
-            schema: tempSchemas.schema,
-          }
         }
       }
     }
