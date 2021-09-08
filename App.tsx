@@ -13,7 +13,7 @@ import * as TaskManager from 'expo-task-manager'
 import './src/languages/i18n'
 import { LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/location'
 import { cleanupLocationAsync } from './src/helpers/geolocationHelper'
-import { lineStringConstructor } from './src/helpers/geoJSONHelper'
+import { pathToLineStringConstructor } from './src/helpers/geoJSONHelper'
 import { LineString, MultiLineString } from 'geojson'
 
 export default class App extends Component {
@@ -56,7 +56,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
         (lastGeometry?.type === 'MultiLineString' && pathSections > lastGeometry.coordinates.length && locationAccuracy <= 100) ||
         (coordinateLength && path[path.length - 1].length - coordinateLength > PATH_BACKUP_INTERVALL)
     ) {
-      store.dispatch(eventPathUpdate(lineStringConstructor(path)))
+      store.dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
     }
   }
 })

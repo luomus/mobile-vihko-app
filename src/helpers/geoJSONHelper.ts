@@ -52,7 +52,21 @@ const latLngConstructor = (lng: number, lat: number) => {
   return latlng
 }
 
-const lineStringConstructor = (path: any[]) => {
+const lineStringConstructor = (coordinates: Array<Position>): LineString => {
+  return {
+    type: 'LineString',
+    coordinates: coordinates
+  }
+}
+
+const multiLineStringConstructor = (coordinates: Array<Array<Position>>): MultiLineString => {
+  return {
+    type: 'MultiLineString',
+    coordinates: coordinates
+  }
+}
+
+const pathToLineStringConstructor = (path: any[]) => {
 
   if (path.length <= 0) {
     return
@@ -71,12 +85,7 @@ const lineStringConstructor = (path: any[]) => {
       return
     }
 
-    const lineString: LineString = {
-      type: 'LineString',
-      coordinates: coordinates
-    }
-
-    return lineString
+    return lineStringConstructor(coordinates)
   } else {
     const coordinates: Array<Array<[number, number]>> = []
     path.forEach(line => {
@@ -96,16 +105,7 @@ const lineStringConstructor = (path: any[]) => {
       }
     })
 
-    if (coordinates.length < 2) {
-      return
-    }
-
-    const multiLineString: MultiLineString = {
-      type: 'MultiLineString',
-      coordinates: coordinates
-    }
-
-    return multiLineString
+    return multiLineStringConstructor(coordinates)
   }
 }
 
@@ -214,6 +214,13 @@ const convertFC2GC = (featureCollection: FeatureCollection) => {
   return geometryCollection
 }
 
+const convertMultiLineStringToGCWrappedLineString = (multiLineString: MultiLineString) => {
+  const geometries: LineString[] = multiLineString.coordinates.map(path => lineStringConstructor(path))
+  const geometryCollection = geometryCollectionConstructor(geometries)
+
+  return geometryCollection
+}
+
 const convertLatLngToPoint = (coord: LatLng) => {
   const point = pointConstructor(coord.longitude, coord.latitude)
 
@@ -231,9 +238,9 @@ const convertLocationDataArrToLineString = (locations: LocationObject[]) => {
 
   locations.forEach(location => points.push([location.coords.longitude, location.coords.latitude]))
 
-  const lineString = lineStringConstructor(points)
+  const lineString = pathToLineStringConstructor(points)
 
   return lineString
 }
 
-export { lineStringsToPathDeconstructor, latLngArrayConstructor, pathPolygonConstructor, wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng, convertLocationDataArrToLineString, lineStringConstructor }
+export { lineStringsToPathDeconstructor, latLngArrayConstructor, pathPolygonConstructor, wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng, convertLocationDataArrToLineString, pathToLineStringConstructor, convertMultiLineStringToGCWrappedLineString }

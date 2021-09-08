@@ -33,7 +33,7 @@ import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
 import { stopLocationAsync, watchLocationAsync } from '../../helpers/geolocationHelper'
 import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
-import { lineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
+import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
 
@@ -235,7 +235,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
         }
       }
 
-      let lineStringPath = lineStringConstructor(path)
+      let lineStringPath = pathToLineStringConstructor(path)
 
       //remove duplicates from path
       lineStringPath = removeDuplicatesFromPath(lineStringPath)

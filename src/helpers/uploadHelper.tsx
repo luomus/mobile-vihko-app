@@ -1,4 +1,4 @@
-import { Point, LineString, Polygon } from 'geojson'
+import { Point, LineString, Polygon, MultiLineString } from 'geojson'
 import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../services/localityService'
 import { centerOfBoundingBox, createCombinedGeometry } from './geometryHelper'
 import { log } from '../helpers/logger'
@@ -73,7 +73,7 @@ export const fetchForeign = async (event: Record<string, any>, lang: string) => 
 
 //if observation event was made in finland, this function will be called
 //and it processes the localities fetched from laji-api
-export const defineLocalityInFinland = async (geometry: LineString | Point, lang: string): Promise<Record<string, string>> => {
+export const defineLocalityInFinland = async (geometry: MultiLineString | LineString | Point, lang: string): Promise<Record<string, string>> => {
   let localityDetails
 
   //call the service to fetch from Laji API

@@ -139,7 +139,7 @@ const createCombinedBoundingBox = (points: Array<Array<number>>, gatheringsZero:
 }
 
 //returns true if event geometry overlaps finland, else false
-export const overlapsFinland = (geometry: LineString | Polygon | Point): boolean => {
+export const overlapsFinland = (geometry: MultiLineString | LineString | Polygon | Point): boolean => {
 
   //helper function that checks whether a single point is inside finnish boundaries
   const pointOverlapsFinland = (coordinates: Array<number>) => {
@@ -163,6 +163,20 @@ export const overlapsFinland = (geometry: LineString | Polygon | Point): boolean
         somePointsOverlapFinland = true
       }
     })
+    return somePointsOverlapFinland
+  }
+  //same for GeometryCollection of LineStrings
+  if (geometry.type === 'MultiLineString') {
+    let somePointsOverlapFinland: boolean = false
+
+    geometry.coordinates.forEach((coords: Array<Array<number>>) => {
+      coords.forEach((point: Array<number>) => {
+        if (pointOverlapsFinland(point)) {
+          somePointsOverlapFinland = true
+        }
+      })
+    })
+
     return somePointsOverlapFinland
   }
 

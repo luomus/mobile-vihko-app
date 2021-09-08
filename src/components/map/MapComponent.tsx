@@ -331,7 +331,7 @@ const MapComponent = (props: Props) => {
       */
       /**
        * proper path renering, use after expo has fixed its problems
-      const lineString: LineString | null = lineStringConstructor(pathAppended)
+      const lineString: LineString | null = pathToLineStringConstructor(pathAppended)
       return lineString ?
         <Geojson
           geojson={wrapGeometryInFC(lineString)}

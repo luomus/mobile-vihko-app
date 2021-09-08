@@ -22,6 +22,7 @@ import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
 import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from '../../helpers/uploadHelper'
+import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -133,6 +134,15 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       } else {
         await fetchForeign(event, lang)
       }
+    }
+
+    //convert possible MultiLineStrings to GeometryCollections containing LineStrings which laji-map can edit properly
+    if (event.gatherings[0].geometry?.type === 'MultiLineString') {
+      event.gatherings[0].geometry = convertMultiLineStringToGCWrappedLineString(event.gatherings[0].geometry)
+    }
+
+    if (event.gatherings[1]?.geometry?.type === 'MultiLineString') {
+      event.gatherings[1].geometry = convertMultiLineStringToGCWrappedLineString(event.gatherings[1].geometry)
     }
 
     // //for each observation in observation event try to send images to server
