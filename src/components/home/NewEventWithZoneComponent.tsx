@@ -21,13 +21,14 @@ interface BasicObject {
 
 type Props = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  onBeginObservationEvent: (zoneUsed: boolean) => Promise<void>,
+  onBeginObservationEvent: (formID: string, zoneUsed: boolean) => Promise<void>,
   showError: (error: string) => void
 }
 
 const NewEventWithZoneComponent = (props: Props) => {
 
   const observationZone = useSelector((state: rootState) => state.observationZone)
+  const observing = useSelector((state: rootState) => state.observing)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -86,14 +87,14 @@ const NewEventWithZoneComponent = (props: Props) => {
       </View>
       <View style={Cs.buttonContainer}>
         {
-          observationZone.currentZoneId === 'empty' ?
+          observing || observationZone.currentZoneId === 'empty' ?
             <ButtonComponent onPressFunction={() => null} title={t('beginObservation')}
               height={40} width={300} buttonStyle={Bs.beginButton}
               gradientColorStart={Colors.unavailableButton} gradientColorEnd={Colors.unavailableButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
             :
-            <ButtonComponent onPressFunction={() => props.onBeginObservationEvent(true)} title={t('beginObservation')}
+            <ButtonComponent onPressFunction={() => props.onBeginObservationEvent('MHL.45', true)} title={t('beginObservation')}
               height={40} width={300} buttonStyle={Bs.beginButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}

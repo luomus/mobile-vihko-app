@@ -110,6 +110,11 @@ const pathToLineStringConstructor = (path: any[]) => {
 }
 
 const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString) => {
+
+  if (geometry === undefined) {
+    return undefined
+  }
+
   if (geometry.type === 'LineString') {
     const path: PathType = [geometry.coordinates.map(point => [
       point[0],
