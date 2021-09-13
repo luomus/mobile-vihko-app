@@ -8,7 +8,7 @@ import {
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_ID,
   SET_OBSERVATION_ID,
-  TOGGLE_OBSERVING
+  SET_OBSERVING
 } from './types'
 
 const initObsEventState: ObservationEventType = {
@@ -68,8 +68,8 @@ const observationIdReducer = (state = null, action : observationActionTypes) => 
 
 const observingReducer = (state = false, action : observationActionTypes) => {
   switch (action.type) {
-    case TOGGLE_OBSERVING:
-      return !state
+    case SET_OBSERVING:
+      return action.payload
     default:
       return state
   }

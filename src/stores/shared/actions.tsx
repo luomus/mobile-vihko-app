@@ -12,7 +12,7 @@ import {
   setObservationEventInterrupted,
   replaceObservationEventById,
   replaceObservationEvents,
-  toggleObserving,
+  setObserving,
   clearObservationId,
   clearLocation,
   updateLocation,
@@ -138,7 +138,7 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
     //reset map centering and zoom level, redirect to map
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
-    dispatch(toggleObserving())
+    dispatch(setObserving(true))
     dispatch(setFirstZoom('not'))
     onPressMap()
 
@@ -283,7 +283,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       }
     }
 
-    dispatch(toggleObserving())
+    dispatch(setObserving(false))
     dispatch(clearObservationLocation())
     dispatch(clearObservationId())
     dispatch(setFirstZoom('not'))

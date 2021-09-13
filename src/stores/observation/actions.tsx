@@ -6,7 +6,7 @@ import {
   observationActionTypes,
   SET_OBSERVATION,
   CLEAR_OBSERVATION,
-  TOGGLE_OBSERVING,
+  SET_OBSERVING,
   SET_OBSERVATION_EVENT_INTERRUPTED,
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_EVENTS,
@@ -33,8 +33,9 @@ export const clearObservationLocation = (): observationActionTypes => ({
   type: CLEAR_OBSERVATION
 })
 
-export const toggleObserving = (): observationActionTypes => ({
-  type: TOGGLE_OBSERVING
+export const setObserving = (observing: boolean): observationActionTypes => ({
+  type: SET_OBSERVING,
+  payload: observing
 })
 
 export const setObservationId = (id: Record<string, any>): observationActionTypes => ({

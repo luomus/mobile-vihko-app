@@ -34,11 +34,12 @@ const ImagePickerComponent = (props: Props) => {
 
   const attachImage = async (useCamera: boolean) => {
     try {
-      let permissionResult: ImagePicker.PermissionResponse
+      let permissionResult: ImagePicker.CameraPermissionResponse | ImagePicker.MediaLibraryPermissionResponse
+
       if (useCamera) {
         permissionResult = await ImagePicker.requestCameraPermissionsAsync()
       } else {
-        permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
+        permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
       }
       if (permissionResult.granted === false) {
         return false
@@ -52,14 +53,14 @@ const ImagePickerComponent = (props: Props) => {
         pickerResult = await ImagePicker.launchImageLibraryAsync()
       }
 
-      let succeeded: boolean = !pickerResult.cancelled
-      let uri = pickerResult.uri
-      if (succeeded) {
+      if (!pickerResult.cancelled) {
+        let uri = pickerResult.uri
+
         setImages(images.concat(uri))
         setValue(props.objectTitle, images.concat(uri))
       }
 
-      return succeeded
+      return !pickerResult.cancelled
     } catch (err) {
       setError(props.objectTitle, { message: 'Error while attaching image', type: 'manual' })
       log.error({

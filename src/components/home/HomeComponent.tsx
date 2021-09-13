@@ -9,7 +9,7 @@ import {
   rootState,
   DispatchType,
   setCurrentObservationZone,
-  toggleObserving,
+  setObserving,
   setObservationId,
   setObservationEventInterrupted,
   setMessageState,
@@ -45,7 +45,6 @@ const HomeComponent = (props: Props) => {
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [selectedTab, setSelectedTab] = useState<number>(0)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
   let logTimeout: NodeJS.Timeout | undefined
@@ -75,7 +74,7 @@ const HomeComponent = (props: Props) => {
     initSchema()
 
     if (isUnfinished) {
-      dispatch(toggleObserving())
+      dispatch(setObserving(true))
       dispatch(setObservationEventInterrupted(true))
       if (formID === 'MHL.45') { dispatch(setCurrentObservationZone(getLastZoneId())) }
     }

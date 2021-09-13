@@ -28,7 +28,7 @@ import {
 import {
   setObservationLocation,
   clearObservationLocation,
-  toggleObserving,
+  setObserving,
   setObservationId,
   clearObservationId,
   setObservationEventInterrupted,
@@ -207,7 +207,7 @@ export {
   clearMessageState,
   setObservationLocation,
   clearObservationLocation,
-  toggleObserving,
+  setObserving,
   setObservationId,
   clearObservationId,
   setObservationEventInterrupted,
