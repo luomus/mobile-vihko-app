@@ -24,7 +24,7 @@ const SendEventModalComponent = (props: Props) => {
 
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.onCancel(false) }}>
-      <View style={Cs.sendEventModalContainer}>
+      <View style={Cs.modalContainer}>
         <Text style={Cs.padding10Container}>
           {t('send observation event to server?')}
         </Text>

@@ -38,12 +38,12 @@ const ContainerStyles = StyleSheet.create({
   padding10Container: {
     padding: 10
   },
-  sendEventModalContainer: {
+  modalContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     padding: 10,
     borderRadius: 10,
-    backgroundColor: Colors.whiteText
+    backgroundColor: Colors.neutral2
   },
 
   //navigation bar
@@ -93,37 +93,48 @@ const ContainerStyles = StyleSheet.create({
     width: '90%'
   },
   eventLauncherContainer: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 5,
+  },
+  unsentEventsContainer: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 5,
+  },
+  continueEventContainer: {
     width: '90%',
-    backgroundColor: Colors.primary3,
     marginTop: 10
   },
   zoneEventLauncherContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   zonePickerContainer: {
-    alignSelf: 'center',
-    width: '80%',
+    width: 240,
     borderColor: Colors.neutral5,
     borderWidth: 1,
+    marginLeft: 10
   },
   unfinishedEventButtonsContainer: {
-    padding: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'flex-start'
+  },
+  zonePickerButtonContainer: {
+    padding: 10,
+    alignSelf: 'flex-start'
   },
   eventsListContainer: {
     padding: 10,
-    backgroundColor: Colors.primary3,
     marginTop: 10,
     width: '90%'
   },
   eventsListItemContainer: {
-    backgroundColor: Colors.primary4,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderRadius: 5,
-    marginTop: 5
+    borderRadius: 5
   },
   eyeIconContainer: {
     position: 'relative',

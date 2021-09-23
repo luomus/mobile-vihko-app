@@ -38,6 +38,11 @@ const OtherStyles = StyleSheet.create({
   miniMapViewStyle: {
     width: '100%',
     height: 150
+  },
+  horizontalLine: {
+    borderBottomColor: Colors.neutral5,
+    borderBottomWidth: 2,
+    paddingVertical: 5
   }
 })
 

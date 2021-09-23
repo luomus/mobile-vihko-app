@@ -113,8 +113,9 @@
   "must be at least 2 letters": "Arter namn måste vara minst 2 bokstav.",
   "must not be empty": "Arter namn måste inte vara tom.",
   "nest": "Bo",
+  "new observation event": "Ny observationstransaktion",
   "new observation event with zone": "Ny observationstransaktion i en tidigare etablerad observationsplats",
-  "new observation event without zone": "Ny observationstransaktion",
+  "new observation event without zone": "Ny observationshändelse med ingen etablerad observationsplats",
   "no": "Nej",
   "no connection": "Ingen internetanslutning tillgänglig. Den här applikationen kräver internetanslutning för att fungera.",
   "no image": "Inga bilder",
@@ -152,6 +153,9 @@
   "send public": "Skicka som offentligt",
   "sending": "Skickar...",
   "species": "Art",
+  "start with zone": "Börja i observationsplats",
+  "start without zone": "Börja utan observationsplats",
+  "started at": "Började",
   "status code": "felkod: ",
   "stop observation event": "Sluta att observera",
   "stop observing": "Är du säker på att du vill avsluta observationen?",
@@ -167,6 +171,7 @@
   "waiting for login": "Väntar på bekräftelse från inloggningen.",
   "yes": "Ja",
   "zone": "Observationsplats",
+  "zone picker description": "Välja en tidigare skapad observationplats eller börja utan observationplats (kan läggas till senare).",
   "zone save to async failed": "Misslyckades att spara observationsplatser till lokalt minne.",
   "zoneInList": "Platsen"
 }

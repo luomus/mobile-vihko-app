@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactChild } from 'react'
 import { View, Text, ScrollView, BackHandler } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
-import ObservationEventListComponent from './ObservationEventListElementComponent'
+import ObservationEventListComponent from './EventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -26,10 +26,9 @@ import { withNavigation } from 'react-navigation'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
-import { HomeIntroductionComponent } from './HomeIntroductionComponent'
-import NewEventWithZoneComponent from './NewEventWithZoneComponent'
-import NewEventWithoutZoneComponent from './NewEventWithoutZoneComponent'
-import UnfinishedEventViewComponent from './UnifinishedEventViewComponent'
+import FormLauncherComponent from './FormLauncherComponent'
+import UnfinishedEventComponent from './UnifinishedEventComponent'
+import ZoneModalComponent from './ZoneModalComponent'
 
 type Props = {
   isFocused: () => boolean,
@@ -44,11 +43,13 @@ type Props = {
 const HomeComponent = (props: Props) => {
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
+  const [modalVisibility, setModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
   let logTimeout: NodeJS.Timeout | undefined
 
+  const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationZone = useSelector((state: rootState) => state.observationZone)
   const observing = useSelector((state: rootState) => state.observing)
@@ -242,20 +243,24 @@ const HomeComponent = (props: Props) => {
         <ScrollView contentContainerStyle={Cs.contentAndVersionContainer}>
           <View style={Cs.homeContentContainer}>
             <UserInfoComponent onLogout={props.onLogout} />
-            <HomeIntroductionComponent />
             {observing ?
-              <UnfinishedEventViewComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
+              <UnfinishedEventComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
               :
               null
             }
-            <NewEventWithoutZoneComponent formID={'JX.519'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.519', zoneUsed) }} />
-            <NewEventWithoutZoneComponent formID={'JX.652'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.652', zoneUsed) }} />
-            <NewEventWithoutZoneComponent formID={'MHL.45'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.45', zoneUsed) }} />
-            <NewEventWithZoneComponent setLoading={setLoading} onBeginObservationEvent={onBeginObservationEvent} showError={showError} />
-            <View style={Cs.eventsListContainer}>
-              <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
-              {observationEvents}
-            </View>
+            <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
+            <FormLauncherComponent formID={'JX.519'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.519', zoneUsed) }}
+              setModalVisibility={setModalVisibility} />
+            <FormLauncherComponent formID={'JX.652'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.652', zoneUsed) }}
+              setModalVisibility={setModalVisibility} />
+            {
+              credentials.permissions?.includes('HR.2951') ?
+                <FormLauncherComponent formID={'MHL.45'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.45', zoneUsed) }}
+                  setModalVisibility={setModalVisibility} />
+                : null
+            }
+            <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
+            {observationEvents}
           </View>
           <View style={Cs.versionContainer}>
             <Text
@@ -266,6 +271,9 @@ const HomeComponent = (props: Props) => {
           </View>
         </ScrollView>
         {props.children}
+        <ZoneModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
+          onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.45', zoneUsed) }}
+          setLoading={setLoading} showError={showError} />
         <MessageComponent />
       </>
     )
