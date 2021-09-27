@@ -5,8 +5,6 @@ export const netStatusChecker = async () => {
   const netState = await NetInfo.fetch()
 
   if (!netState.isInternetReachable) {
-    throw {
-      message: i18n.t('no connection')
-    }
+    throw new Error(i18n.t('no connection'))
   }
 }

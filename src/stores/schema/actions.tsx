@@ -110,23 +110,17 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
           //warn user of using internally stored schema
           langError = {
             severity: 'low',
-            message: `${netError.message
-              ? netError.message
-              : i18n.t('status code') + netError.response.status
-            } ${i18n.t(`error loading ${lang} schema from server`)}`
+            message: `${i18n.t(`error loading ${lang} schema from server`)} ${netError.message}`
           }
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',
-            error: netError.response.data.error,
+            error: netError,
             details: 'While downloading ' + lang + ' schema.'
           })
         } catch (locError) {
           langError = {
             severity: 'high',
-            message: `${netError.message
-              ? netError.message
-              : i18n.t('status code') + netError.response.status
-            } ${i18n.t(`error loading ${lang} schema from server and internal`)}`
+            message: `${i18n.t(`error loading ${lang} schema from server and internal`)} ${netError.message}`
           }
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',

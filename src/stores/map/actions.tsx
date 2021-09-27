@@ -53,23 +53,17 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
         zones = await storageService.fetch('zones')
         error = {
           severity: 'low',
-          message: `${i18n.t('error loading zones from server')} ${netError.message
-            ? netError.message
-            : i18n.t('status code') + netError.response.status
-          }`
+          message: `${i18n.t('error loading zones from server')} ${netError.message}`
         }
         log.error({
           location: '/stores/map/actions.tsx initObservationZones()',
-          error: netError.response.data.error
+          error: netError
         })
       //if local copy does not exist inform user that no zones are available
       } catch (localError) {
         error = {
-          severity: 'fatal',
-          message: `${i18n.t('error loading zones from server and internal')} ${netError.message
-            ? netError.message
-            : i18n.t('status code') + netError.response.status
-          }`
+          severity: 'high',
+          message: `${i18n.t('error loading zones from server and internal')} ${netError.message}`
         }
         log.error({
           location: '/stores/map/actions.tsx initObservationZones()',
@@ -116,7 +110,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
           message: i18n.t('zone save to async failed')
         }
         log.error({
-          location: '/stores/map/actions.tsx initObservationZones()', 
+          location: '/stores/map/actions.tsx initObservationZones()',
           error: localError
         })
         return Promise.reject(error)

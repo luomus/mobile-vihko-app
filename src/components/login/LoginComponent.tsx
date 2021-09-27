@@ -13,7 +13,9 @@ import {
   loginUser,
   logoutUser,
   initLocalCredentials,
-  setMessageState
+  setMessageState,
+  getPermissions,
+  getMetadata
 } from '../../stores'
 import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
@@ -80,10 +82,6 @@ const LoginComponent = (props: Props) => {
           showError(error.message)
         }
 
-        if (error && error?.severity === 'low') {
-          return
-        }
-
         const tmpToken = await storageService.fetch(tmpTokenKey)
         if (tmpToken) {
           await pollLogin(tmpToken)
@@ -100,15 +98,21 @@ const LoginComponent = (props: Props) => {
   const initializeApp = async () => {
 
     try {
+      await dispatch(getPermissions())
+    } catch (error) {
+      showError(error.message)
+    }
+
+    try {
+      await dispatch(getMetadata())
+    } catch (error) {
+      showError(error.message)
+    }
+
+    try {
       await dispatch(initObservationZones())
     } catch (error) {
-      if (error.severity === 'fatal') {
-        showFatalError(`${t('critical error')}:\n ${error.message}`)
-        setLoggingIn(false)
-        return
-      } else {
-        showError(error.message)
-      }
+      showError(error.message)
     }
 
     try {
@@ -181,10 +185,10 @@ const LoginComponent = (props: Props) => {
     } catch (error) {
       log.error({
         location: '/components/LoginComponent.tsx login()',
-        error: error.response.data.error
+        error: error
       })
       setLoggingIn(false)
-      showFatalError(`${t('critical error')}:\n${t('getting temp token failed with')} ${error.message ? error.message : i18n.t('status code') + error.response.status}`)
+      showFatalError(`${t('critical error')}:\n${t('getting temp token failed with')} ${error.message}`)
       return
     }
 
@@ -193,7 +197,7 @@ const LoginComponent = (props: Props) => {
     } catch (error) {
       log.error({
         location: 'components/LoginComponent.tsx login()',
-        error: JSON.stringify(error)
+        error: error
       })
       setLoggingIn(false)
       showFatalError(`${t('critical error')}:\n${t('could not open browser for login')}`)

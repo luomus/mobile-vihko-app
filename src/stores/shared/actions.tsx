@@ -63,9 +63,15 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
         location: '/stores/shared/actions.tsx beginObservationEvent()',
         error: error
       })
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'high',
+          message: i18n.t('user token has expired')
+        })
+      }
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('user token has expired')
+        message: `${i18n.t('failed to check token')} ${error.message}`
       })
     }
 
@@ -128,11 +134,10 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
         location: '/components/HomeComponent.tsx beginObservationEvent()',
         error: error
       })
-      dispatch(setMessageState({
-        type: 'err',
-        messageContent: error.message
-      }))
-      return Promise.reject()
+      return Promise.reject({
+        severity: 'low',
+        message: `${i18n.t('could not use gps, event was not started')} ${error.message}`
+      })
     }
 
     //reset map centering and zoom level, redirect to map
@@ -164,9 +169,15 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
         location: '/stores/shared/actions.tsx beginObservationEvent()',
         error: error
       })
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'high',
+          message: i18n.t('user token has expired')
+        })
+      }
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('user token has expired')
+        message: `${i18n.t('failed to check token')} ${error.message}`
       })
     }
 
@@ -182,7 +193,10 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
         type: 'err',
         messageContent: error.message
       }))
-      return Promise.reject()
+      return Promise.reject({
+        severity: 'low',
+        message: `${i18n.t('could not use gps, event was not started')} ${error.message}`
+      })
     }
 
     //reset map centering and zoom level
@@ -214,7 +228,6 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
 
     if (event) {
-
       const setBoundingBoxGeometry = () => {
         let geometry
 
@@ -275,11 +288,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       try {
         dispatch(replaceObservationEventById(event, event.id))
       } catch (error) {
-        dispatch(setMessageState({
-          type: 'err',
-          messageContent: error.message
-        }))
-        return Promise.reject()
+        return Promise.reject(error)
       }
     }
 

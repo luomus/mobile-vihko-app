@@ -61,11 +61,11 @@ const ImagePickerComponent = (props: Props) => {
       }
 
       return !pickerResult.cancelled
-    } catch (err) {
+    } catch (error) {
       setError(props.objectTitle, { message: 'Error while attaching image', type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerComponent attachImage()',
-        error: JSON.stringify(err)
+        error: error
       })
     }
   }

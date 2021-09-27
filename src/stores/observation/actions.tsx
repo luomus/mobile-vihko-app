@@ -16,13 +16,13 @@ import {
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import { CredentialsType } from '../user/types'
-import { saveMedias } from '../../services/imageService'
 import userService from '../../services/userService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
 import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from '../../helpers/uploadHelper'
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
+import { saveImages } from '../../helpers/imageHelper'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -94,12 +94,12 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       await netStatusChecker()
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()',
+        location: '/stores/observation/actions.tsx uploadObservationEvent()/netStatusChecker()',
         error: 'Network error (no connection)'
       })
       return Promise.reject({
         severity: 'low',
-        message: `${i18n.t('post failure')} ${error.message}`
+        message: `${i18n.t('no connection')} ${error.message}`
       })
     }
 
@@ -108,12 +108,18 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       await userService.checkTokenValidity(credentials.token)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error
       })
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'low',
+          message: i18n.t('user token has expired')
+        })
+      }
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('user token has expired')
+        message: `${i18n.t('failed to check token')} ${error.message}`
       })
     }
 
@@ -155,16 +161,9 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
 
         if (unit.images?.length > 0) {
           try {
-            newImages = await saveMedias(unit.images, credentials)
+            newImages = await saveImages(unit.images, credentials)
           } catch (error) {
-            log.error({
-              location: '/stores/observation/actions.tsx uploadObservationEvent()',
-              error: error
-            })
-            return Promise.reject({
-              severity: 'low',
-              message: error.message
-            })
+            return Promise.reject(error)
           }
 
           newUnit = {
@@ -197,10 +196,6 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       delete event.id
 
     } catch (error) {
-      log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()',
-        error: 'Image error'
-      })
       return Promise.reject({
         severity: 'low',
         message: error.message
@@ -210,13 +205,22 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     try {
       await postObservationEvent(event, credentials)
     } catch (error) {
-      log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()',
-        error: error.response.data.error
-      })
+      if (error.response?.status.toString() === '422') {
+        log.error({
+          location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
+          error: error,
+          data: JSON.stringify(event)
+        })
+      } else {
+        log.error({
+          location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
+          error: error
+        })
+      }
+
       return Promise.reject({
         severity: 'low',
-        message: `${i18n.t('post failure')}: ${error.response.status}`
+        message: `${i18n.t('post failure')}  ${error.message}`
       })
     }
 
@@ -322,7 +326,7 @@ export const eventPathUpdate = (lineStringPath: LineString | MultiLineString | u
   }
 }
 
-export const newObservation = (unit: Record<string, any>, lineStringPath: LineString | null): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+export const newObservation = (unit: Record<string, any>, lineStringPath: MultiLineString | LineString | undefined): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
 

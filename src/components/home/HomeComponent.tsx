@@ -154,15 +154,22 @@ const HomeComponent = (props: Props) => {
     try {
       await dispatch(beginObservationEvent(props.onPressMap, zoneUsed, title, body))
     } catch (error) {
-      dispatch(setMessageState({
-        type: 'err',
-        messageContent: error.message,
-        onOk: () => {
-          props.onLogout()
-          dispatch(logoutUser())
-          dispatch(resetReducer())
-        }
-      }))
+      if (error.severity === 'high') {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: () => {
+            props.onLogout()
+            dispatch(logoutUser())
+            dispatch(resetReducer())
+          }
+        }))
+      } else {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+        }))
+      }
     }
   }
 
@@ -172,15 +179,22 @@ const HomeComponent = (props: Props) => {
     try {
       await dispatch(continueObservationEvent(props.onPressMap, title, body))
     } catch (error) {
-      dispatch(setMessageState({
-        type: 'err',
-        messageContent: error.message,
-        onOk: () => {
-          props.onLogout()
-          dispatch(logoutUser())
-          dispatch(resetReducer())
-        }
-      }))
+      if (error.severity === 'high') {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: () => {
+            props.onLogout()
+            dispatch(logoutUser())
+            dispatch(resetReducer())
+          }
+        }))
+      } else {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+        }))
+      }
     }
   }
 

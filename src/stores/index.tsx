@@ -69,7 +69,9 @@ import {
   logoutUser,
   initLocalCredentials,
   setCredentials,
-  clearCredentials
+  clearCredentials,
+  getPermissions,
+  getMetadata
 } from './user/actions'
 
 //reducers
@@ -238,6 +240,8 @@ export {
   finishObservationEvent,
   loginUser,
   logoutUser,
+  getPermissions,
+  getMetadata,
   initLocalCredentials,
   setCredentials,
   clearCredentials

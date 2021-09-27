@@ -82,7 +82,7 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   } catch (error) {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
-      error: error.response.data.error
+      error: error
     })
     return Promise.reject({
       severity: 'low',
@@ -95,6 +95,18 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
     return {
       status: 'fail'
     }
+  }
+
+  if (localityDetails.result.status === 'INVALID_REQUEST') {
+    log.error({
+      location: '/stores/observation/actions.tsx defineLocalityInFinland()',
+      error: localityDetails.result.error_message,
+      data: JSON.stringify(geometry)
+    })
+    return Promise.reject({
+      severity: 'low',
+      message: localityDetails.result.error_message
+    })
   }
 
   //store list of provinces and municipalities in string variables
@@ -139,7 +151,7 @@ export const defineLocalityForeign = async (geometry: Point, lang: string): Prom
   } catch (error) {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityForeign()',
-      error: error.response.data.error
+      error: error
     })
     return Promise.reject({
       severity: 'low',
