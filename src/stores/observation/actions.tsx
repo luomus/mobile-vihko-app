@@ -187,10 +187,17 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       event.gatherings[0].units = newUnits
 
       if (event.gatherings[0].units.length < 1) {
-        event.gatherings[0].units.push({
-          'taxonConfidence': 'MY.taxonConfidenceSure',
-          'recordBasis': 'MY.recordBasisHumanObservation'
-        })
+        if (event.formID !== 'MHL.45') {
+          event.gatherings[0].units.push({
+            'taxonConfidence': 'MY.taxonConfidenceSure',
+            'recordBasis': 'MY.recordBasisHumanObservation'
+          })
+        } else {
+          event.gatherings[0].units.push({
+            'taxonConfidence': 'MY.taxonConfidenceSure',
+            'recordBasis': ''
+          })
+        }
       }
 
       delete event.id

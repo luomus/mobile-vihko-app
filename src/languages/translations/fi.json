@@ -115,8 +115,9 @@
   "must be at least 2 letters": "Lajin nimen on oltava vähintään 2 merkkiä.",
   "must not be empty": "Lajin nimi ei saa olla tyhjä.",
   "nest": "Pesä",
+  "new observation event": "Uusi havaintotapahtuma",
   "new observation event with zone": "Uusi havaintotapahtuma aiemmin perustetulla seurantapaikalla",
-  "new observation event without zone": "Uusi havaintotapahtuma",
+  "new observation event without zone": "Uusi havaintotapahtuma ilman seurantapaikkaa",
   "no": "Ei",
   "no connection": "Ei internet-yhteyttä saatavilla. Sovellus tarvitsee internet-yhteyden voidakseen toimia.",
   "no image": "Ei kuvia",
@@ -154,6 +155,9 @@
   "send public": "Lähetä julkisena",
   "sending": "Lähetetään...",
   "species": "Laji",
+  "start with zone": "Aloita seurantapaikalla",
+  "start without zone": "Aloita ilman seurantapaikkaa",
+  "started at": "Aloitettu",
   "status code": "virhekoodi:",
   "stop observation event": "Lopeta havainnointi",
   "stop observing": "Oletko varma että haluat lopettaa havainnoinnin?",
@@ -169,6 +173,7 @@
   "waiting for login": "Odotetaan vahvistusta kirjautumisesta.",
   "yes": "Kyllä",
   "zone": "Seurantapaikka",
+  "zone picker description": "Valitse aiemmin perustettu seurantapaikka tai aloita ilman seurantapaikkaa (voidaan lisätä myöhemmin).",
   "zone save to async failed": "Havaintoalueiden tallennus laitteen tallennustilaan epäonnistui.",
   "zoneInList": "Alue"
 }
