@@ -17,8 +17,7 @@ import {
   setCurrentObservationZone,
   clearCurrentObservationZone,
   initObservationZones,
-  getObservationZonesSuccess,
-  toggleZoomToZone
+  getObservationZonesSuccess
 } from './map/actions'
 import {
   setMessageState,
@@ -203,7 +202,6 @@ export {
   clearCurrentObservationZone,
   initObservationZones,
   getObservationZonesSuccess,
-  toggleZoomToZone,
   setMessageState,
   popMessageState,
   clearMessageState,

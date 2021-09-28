@@ -45,9 +45,10 @@ const LoginComponent = (props: Props) => {
   const credentials = useSelector((state: rootState) => state.credentials)
   const dispatch: DispatchType = useDispatch()
   const { t } = useTranslation()
+
   useEffect(() => {
     loadData()
-  }, [credentials])
+  }, [credentials.token])
 
   const showError = (error: string) => {
     dispatch(setMessageState({
@@ -80,6 +81,7 @@ const LoginComponent = (props: Props) => {
       } catch (error) {
         if (error?.severity) {
           showError(error.message)
+          return
         }
 
         const tmpToken = await storageService.fetch(tmpTokenKey)

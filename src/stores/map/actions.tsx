@@ -132,10 +132,6 @@ export const toggleCentered = (): mapActionTypes => ({
   type: TOGGLE_CENTERED
 })
 
-export const toggleZoomToZone = (): mapActionTypes => ({
-  type: TOGGLE_ZONE
-})
-
 export const toggleMaptype = (): mapActionTypes => ({
   type: TOGGLE_MAPTYPE
 })

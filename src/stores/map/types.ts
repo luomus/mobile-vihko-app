@@ -68,10 +68,6 @@ interface setCurrentObservationZone {
   payload: string,
 }
 
-interface toggleZoomToZone {
-  type: typeof TOGGLE_ZONE,
-}
-
 interface clearRegion {
   type: typeof CLEAR_REGION,
 }
@@ -90,5 +86,4 @@ export type mapActionTypes =
   setRegion |
   setCurrentObservationZone |
   clearCurrentObservationZone |
-  getObservationZonesSuccess |
-  toggleZoomToZone
+  getObservationZonesSuccess

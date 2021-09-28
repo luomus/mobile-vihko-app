@@ -175,6 +175,7 @@ const HomeComponent = (props: Props) => {
   }
 
   const onContinueObservationEvent = async () => {
+
     const title: string = t('notification title')
     const body: string = t('notification body')
     try {
