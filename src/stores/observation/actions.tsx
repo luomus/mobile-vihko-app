@@ -15,7 +15,6 @@ import {
 } from './types'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
-import { CredentialsType } from '../user/types'
 import userService from '../../services/userService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { overlapsFinland } from '../../helpers/geometryHelper'
@@ -82,7 +81,7 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
   }
 }
 
-export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
+export const uploadObservationEvent = (id: string, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { credentials, observationEvent, schema } = getState()
 
@@ -99,7 +98,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       })
       return Promise.reject({
         severity: 'low',
-        message: `${i18n.t('no connection')} ${error.message}`
+        message: error.message
       })
     }
 
@@ -153,7 +152,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     }
 
     // //for each observation in observation event try to send images to server
-    // //using saveMedias, and clean out local properties
+    // //using saveImages, and clean out local properties
     try {
       let newUnits = await Promise.all(units.map(async (unit: Record<string, any>) => {
         let newUnit: Record<string, any>
@@ -216,7 +215,7 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
           error: error,
-          data: JSON.stringify(event)
+          data: event
         })
       } else {
         log.error({
@@ -254,7 +253,7 @@ export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save new event to long term memory, discarding modifications')
+        message: i18n.t('could not save new event to long term memory')
       })
     }
 
@@ -283,7 +282,7 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory, discarding modifications')
+        message: i18n.t('could not save event to storage')
       })
     }
 
@@ -355,7 +354,7 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: MultiL
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory, discarding modifications')
+        message: i18n.t('could not save modifications to long term memory')
       })
     }
 
@@ -389,7 +388,7 @@ export const deleteObservation = (eventId: string, unitId: string): ThunkAction<
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory discarding modifications')
+        message: i18n.t('could not save modifications to long term memory')
       })
     }
 
@@ -424,7 +423,7 @@ export const replaceLocationById = (geometry: Geometry, eventId: string, unitId:
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory discarding modifications')
+        message: i18n.t('could not save modifications to long term memory')
       })
     }
 
@@ -461,7 +460,7 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could save modifications to long term memory discarding modifications')
+        message: i18n.t('could not save modifications to long term memory')
       })
     }
 

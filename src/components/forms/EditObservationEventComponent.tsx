@@ -16,7 +16,7 @@ import {
   resetReducer
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
-import { set, get, merge, mergeWith, omit, replace } from 'lodash'
+import { set, get, merge, mergeWith, omit } from 'lodash'
 import MessageComponent from '../general/MessageComponent'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../languages/i18n'
@@ -135,12 +135,15 @@ const EditObservationEventComponent = (props: Props) => {
           props.onPressObservationEvent()
         }
         dispatch(clearObservationId())
-        setSaving(false)
       } catch (error) {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
         }))
+        //redirects to home page in case of error
+        props.onPressSubmit()
+      } finally {
+        setSaving(false)
       }
     }
   }
@@ -163,6 +166,7 @@ const EditObservationEventComponent = (props: Props) => {
             props.onPressSubmit()
           }
         }))
+      //log user out from the app if the token has expired
       } else {
         dispatch(setMessageState({
           type: 'err',

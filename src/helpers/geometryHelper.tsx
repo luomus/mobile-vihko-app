@@ -105,8 +105,6 @@ const createCombinedBoundingBox = (points: Array<Array<number>>, gatheringsZero:
     gatheringsZero.geometry.coordinates.forEach((coords: Array<Array<number>>) => {
       pathPoints.push(...coords)
     })
-  } else {
-    return null
   }
 
   //if there is no unit geometries (and there is a path, as !path scenario was handled in createCombinedGeometry)

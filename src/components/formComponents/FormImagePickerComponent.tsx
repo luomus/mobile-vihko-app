@@ -21,7 +21,7 @@ type Props = {
 }
 
 const ImagePickerComponent = (props: Props) => {
-  const { register, setValue, setError, formState } = useFormContext()
+  const { register, setValue, setError, clearErrors, formState } = useFormContext()
   const [images, setImages] = useState<Array<string>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
 
@@ -62,11 +62,14 @@ const ImagePickerComponent = (props: Props) => {
 
       return !pickerResult.cancelled
     } catch (error) {
-      setError(props.objectTitle, { message: 'Error while attaching image', type: 'manual' })
+      setError(props.objectTitle, { message: 'image attachment failure', type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerComponent attachImage()',
         error: error
       })
+      setTimeout(() => {
+        clearErrors(props.objectTitle)
+      }, 5000)
     }
   }
 

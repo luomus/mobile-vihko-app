@@ -119,7 +119,7 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
         invalidFileTypes.push(image.type)
       }
       invalidFile = true
-    } else if (isValidFileSize(image.size)) {
+    } else if (!isValidFileSize(image.size)) {
       fileTooLarge = true
     } else {
       formDataBody.append('data', image)

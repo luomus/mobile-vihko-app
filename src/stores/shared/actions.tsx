@@ -7,8 +7,8 @@ import {
   setFirstZoom,
   setCurrentObservationZone,
   clearRegion,
-  setMessageState,
   clearObservationLocation,
+  deleteObservationEvent,
   setObservationEventInterrupted,
   replaceObservationEventById,
   replaceObservationEvents,
@@ -60,7 +60,7 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
       await userService.checkTokenValidity(credentials.token)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error
       })
       if (error.message?.includes('INVALID TOKEN')) {
@@ -99,8 +99,10 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
       setGeometry()
     }
 
+    const newID = 'observationEvent_' + uuid.v4()
+
     const observationEventObject = {
-      id: 'observationEvent_' + uuid.v4(),
+      id: newID,
       formID: schema.formID,
       ...parsedObservationEvent
     }
@@ -111,12 +113,12 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/save()',
         error: error
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save new event to long term memory, discarding modifications')
+        message: i18n.t('could not save new event to long term memory')
       })
     }
 
@@ -130,13 +132,15 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
         body
       )
     } catch (error) {
+      //delete the new event if gps can't be launched
+      await dispatch(deleteObservationEvent(newID))
       log.error({
-        location: '/components/HomeComponent.tsx beginObservationEvent()',
+        location: '/components/HomeComponent.tsx beginObservationEvent()/watchLocationAsync()',
         error: error
       })
       return Promise.reject({
         severity: 'low',
-        message: `${i18n.t('could not use gps, event was not started')} ${error.message}`
+        message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
       })
     }
 
@@ -166,7 +170,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       await userService.checkTokenValidity(credentials.token)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error
       })
       if (error.message?.includes('INVALID TOKEN')) {
@@ -186,16 +190,12 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), title, body)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx continueObservationEvent()',
+        location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
         error: error
       })
-      dispatch(setMessageState({
-        type: 'err',
-        messageContent: error.message
-      }))
       return Promise.reject({
         severity: 'low',
-        message: `${i18n.t('could not use gps, event was not started')} ${error.message}`
+        message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
       })
     }
 

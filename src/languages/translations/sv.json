@@ -18,6 +18,7 @@
   "could not parse en uiSchema to input": "Det gick inte att läsa värden från den engelska observationsscheman, använda inte det här språket.",
   "could not parse fi uiSchema to input": "Det gick inte att läsa värden från den finska observationsscheman, använda inte det här språket.",
   "could not parse sv uiSchema to input": "Det gick inte att läsa värden från svenska observationsscheman, använda inte det här språket.",
+  "could not save event to storage": "Kunde inte spara observationtransaktionen på disken på enheten.",
   "critical error": "Kritiskt fel",
   "date": "Datum",
   "dateBegin": "Tid",

@@ -18,6 +18,7 @@
   "could not parse en uiSchema to input": "Could not extract form parameters from English ui-schema, language unusable.",
   "could not parse fi uiSchema to input": "Could not extract form parameters from Finnish ui-schema, language unusable.",
   "could not parse sv uiSchema to input": "Could not extract form parameters from Swedish ui-schema, language unusable.",
+  "could not save event to storage": "Could not save the observation event into the storage of the device.",
   "critical error": "Fatal error",
   "date": "Date",
   "dateBegin": "Time",

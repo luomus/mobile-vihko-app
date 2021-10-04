@@ -53,7 +53,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
         zones = await storageService.fetch('zones')
         error = {
           severity: 'low',
-          message: `${i18n.t('error loading zones from server')} ${netError.message}`
+          message: `${i18n.t('error loading zones from server')}`
         }
         log.error({
           location: '/stores/map/actions.tsx initObservationZones()',
@@ -63,7 +63,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
       } catch (localError) {
         error = {
           severity: 'high',
-          message: `${i18n.t('error loading zones from server and internal')} ${netError.message}`
+          message: `${i18n.t('error loading zones from server and internal')}`
         }
         log.error({
           location: '/stores/map/actions.tsx initObservationZones()',

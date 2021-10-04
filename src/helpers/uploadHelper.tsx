@@ -42,7 +42,6 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
 //calls the helper function for fetching and processing locality details for finnish events
 export const fetchFinland = async (event: Record<string, any>, lang: string) => {
   const localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang)
-
   //if it turns out that country wasn't finland, fetch foreign
   if (localityDetails.status === 'fail') {
     await fetchForeign(event, lang)
@@ -101,11 +100,11 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
       error: localityDetails.result.error_message,
-      data: JSON.stringify(geometry)
+      data: geometry
     })
     return Promise.reject({
       severity: 'low',
-      message: localityDetails.result.error_message
+      message: `${i18n.t('locality failure')} ${localityDetails.result.error_message}`
     })
   }
 
