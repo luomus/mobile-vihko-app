@@ -6,7 +6,6 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import MiniMapComponent from './MiniMapComponent'
 import { JX519Fields, JX652Fields } from '../../config/fields'
-import i18n from '../../languages/i18n'
 
 type Props = {
   event: Record<string, any>,
@@ -21,7 +20,6 @@ const ObservationInfoComponent = (props: Props) => {
   const [list, setList] = useState<Array<any> | null>(null)
   const { t } = useTranslation()
 
-  const lang = i18n.language
   const schemaUnits = props.eventSchema.schema?.properties?.gatherings?.items?.properties?.units
 
   if (!schemaUnits) {

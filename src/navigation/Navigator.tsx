@@ -10,7 +10,7 @@ import LoginScreen from '../screens/LoginScreen'
 import EditObservationEventScreen from '../screens/EditObservationEventScreen'
 import InfoScreen from '../screens/InfoScreen'
 
-const MainNavigator = createStackNavigator(
+const Navigator = createStackNavigator(
   {
     Login: LoginScreen,
     Home: HomeScreen,
@@ -25,7 +25,7 @@ const MainNavigator = createStackNavigator(
   }
 )
 
-const AppContainer = createAppContainer(MainNavigator)
+const AppContainer = createAppContainer(Navigator)
 
 class AppNavigator extends Component<WithTranslation> {
   render() {

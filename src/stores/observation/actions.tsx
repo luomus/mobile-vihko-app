@@ -354,7 +354,7 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: MultiL
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory')
+        message: i18n.t('error saving new observation')
       })
     }
 
@@ -388,7 +388,7 @@ export const deleteObservation = (eventId: string, unitId: string): ThunkAction<
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory')
+        message: i18n.t('error deleting observation')
       })
     }
 
@@ -460,7 +460,7 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory')
+        message: i18n.t('error modifying observation')
       })
     }
 

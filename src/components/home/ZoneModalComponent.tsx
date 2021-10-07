@@ -52,6 +52,7 @@ const ZoneModalComponent = (props: Props) => {
       await dispatch(initObservationZones())
     } catch (error) {
       props.showError(error.message)
+      props.setModalVisibility(false)
     } finally {
       props.setLoading(false)
     }

@@ -22,6 +22,7 @@ const FormLauncherComponent = (props: Props) => {
   const [title, setTitle] = useState<string>(t('beginObservationTripForm'))
   const [description, setDescription] = useState<string>(t('instructions.mobilevihko.intro'))
 
+  const observationZone = useSelector((state: rootState) => state.observationZone)
   const observing = useSelector((state: rootState) => state.observing)
 
   useEffect(() => {
@@ -38,10 +39,12 @@ const FormLauncherComponent = (props: Props) => {
   }, [i18n.language])
 
   const handleBeginEvent = () => {
-    if (props.formID !== 'MHL.45') {
-      props.onBeginObservationEvent(false)
-    } else {
+    //open zone modal if form is lolife and zones have been loaded successfully
+    if (props.formID === 'MHL.45' && observationZone.zones.length > 0) {
       props.setModalVisibility(true)
+    //else start an event without zone
+    } else {
+      props.onBeginObservationEvent(false)
     }
   }
 

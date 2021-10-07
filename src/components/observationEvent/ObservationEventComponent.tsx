@@ -133,6 +133,7 @@ const ObservationEventComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => props.onPressHome()
         }))
+      //log user out from the app if the token has expired
       } else {
         dispatch(setMessageState({
           type: 'err',

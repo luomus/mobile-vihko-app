@@ -13,32 +13,43 @@ import { log } from '../../helpers/logger'
 
 export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async dispatch => {
+
     let credentials: CredentialsType | null = null
+
     try {
       //start polling for credentials from server, error thrown when timeout of 180 seconds reached,
-      //else dispatch to store
+      //else dispatch credetials to store
       credentials = await pollUserLogin(tmpToken, setCanceler)
       dispatch(setCredentials(credentials))
 
-      //if timeout or other error inform user of error, credentials stay null
+    //in case of error, credentials stay null
     } catch (netError) {
+
+      //login canceled
       if (netError.canceled) {
         return Promise.reject({ canceled: true })
       }
-      if (!netError.timeout) {
+
+      //timeout
+      if (netError.timeout) {
         log.error({
           location: '/stores/user/actions.tsx loginUser()',
           error: netError
         })
         return Promise.reject({
           severity: 'fatal',
-          message: `${i18n.t('failed to load credentials from server')} ${error.message}`
+          message: i18n.t('login timed out')
         })
       }
 
+      //error from server
+      log.error({
+        location: '/stores/user/actions.tsx loginUser()',
+        error: netError
+      })
       return Promise.reject({
         severity: 'fatal',
-        message: i18n.t('login timed out')
+        message: `${i18n.t('failed to load credentials from server')} ${netError.message}`
       })
     }
 
@@ -46,7 +57,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
     try {
       await storageService.save('credentials', credentials)
 
-      //if asyncstorage fails set error as such, allows user to continue anyway
+    //if asyncstorage fails, set error as such, allows user to continue anyway
     } catch (locError) {
       log.error({
         location: '/stores/user/actions.tsx loginUser()',
@@ -70,11 +81,11 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
     //try to fetch users form permissions to join into the credentials
     try {
       const permissions = await getFormPermissions(credentials.token)
-      permissionsArr = [ ...permissions.result.admins, ...permissions.result.editors ]
+      permissionsArr = [...permissions.result.admins, ...permissions.result.editors]
 
     } catch (error) {
       log.error({
-        location: '/stores/user/actions.tsx loginUser()',
+        location: '/stores/user/actions.tsx getPermissions()',
         error: error
       })
       return Promise.reject({
@@ -122,7 +133,7 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
 
     } catch (error) {
       log.error({
-        location: '/stores/user/actions.tsx getProfile()',
+        location: '/stores/user/actions.tsx getMetadata()',
         error: error
       })
       return Promise.reject({
@@ -202,10 +213,12 @@ export const initLocalCredentials = (): ThunkAction<Promise<any>, any, void, use
     try {
       credentials = await storageService.fetch('credentials')
 
+      //managed to fetch credentials from storage, but user was not logged in
       if (!credentials) {
         return Promise.reject()
       }
 
+      //failed to fetch credentials from storage
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx initLocalCredentials()',

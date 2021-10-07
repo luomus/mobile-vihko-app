@@ -39,14 +39,27 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
       sv: false
     }
 
+    //check that internet can be reached
+    try {
+      await netStatusChecker()
+    } catch (error) {
+      log.error({
+        location: '/stores/schema/actions.tsx initSchema()/netStatusChecker()',
+        error: 'Network error (no connection)'
+      })
+      return Promise.reject([{
+        severity: 'fatal',
+        message: error.message
+      }])
+    }
+
     //loop over each language initializing field parameters for each and schema for first existing
     for (let lang of languages) {
       let tempSchemas = null
       let langError: Record<string, string> | null = null
 
       try {
-        //check network status and try loading schema and uiSchema from server
-        await netStatusChecker()
+        //try loading schema and uiSchema from server
         tempSchemas = await getSchemas(lang, formId)
 
         //fresh schema was fetched from net, try to parse necessary parameters and values for input creation from it
@@ -117,6 +130,9 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
             error: netError,
             details: 'While downloading ' + lang + ' schema.'
           })
+
+          errors.push(langError)
+
         } catch (locError) {
           langError = {
             severity: 'high',

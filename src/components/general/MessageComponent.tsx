@@ -134,7 +134,7 @@ const MessageComponent = () => {
     switch (topMessage?.type) {
       case 'err':
       case 'msg':
-        return oneButtonCreator('primary', buttonLabel())
+        return oneButtonCreator('neutral', buttonLabel())
       case 'conf':
         return twoButtonCreator('primary', leftLabel(), 'neutral', rightLabel())
       case 'dangerConf':

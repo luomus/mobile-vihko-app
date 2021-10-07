@@ -79,11 +79,15 @@ const LoginComponent = (props: Props) => {
       try {
         await dispatch(initLocalCredentials())
       } catch (error) {
+
+        //failed to fetch credentials from storage
         if (error?.severity) {
           showError(error.message)
+          setLoggingIn(false)
           return
         }
 
+        //user was not logged in
         const tmpToken = await storageService.fetch(tmpTokenKey)
         if (tmpToken) {
           await pollLogin(tmpToken)
@@ -92,6 +96,8 @@ const LoginComponent = (props: Props) => {
           setLoggingIn(false)
         }
       }
+
+    //user was logged in
     } else {
       await initializeApp()
     }
@@ -158,19 +164,24 @@ const LoginComponent = (props: Props) => {
       setPolling(true)
       await dispatch(loginUser(tmpToken, setCanceler))
     } catch (error) {
+
+      //stop polling if user canceled the login
       if (error.canceled) {
         setLoggingIn(false)
         return
       }
 
+      //timeout or server error
       if (error.severity === 'fatal') {
         showFatalError(`${t('critical error')}:\n${error.message}`)
         setLoggingIn(false)
         return
+      //storage fails
       } else {
         showError(error.message)
         setLoggingIn(false)
       }
+
     } finally {
       setPolling(false)
     }
@@ -178,10 +189,23 @@ const LoginComponent = (props: Props) => {
 
   const login = async () => {
     setLoggingIn(true)
-    //check internet status and attempt to get temporary login url for webview
     let result
+
+    //check that internet can be reached
     try {
       await netStatusChecker()
+    } catch (error) {
+      log.error({
+        location: '/components/LoginComponent.tsx login()',
+        error: 'Network error (no connection)'
+      })
+      setLoggingIn(false)
+      showFatalError(`${t('critical error')}:\n${error.message}`)
+      return
+    }
+
+    //attempt to get temporary login url for webview
+    try {
       result = await getTempTokenAndLoginUrl()
       await storageService.save(tmpTokenKey, result.tmpToken)
     } catch (error) {
@@ -194,6 +218,7 @@ const LoginComponent = (props: Props) => {
       return
     }
 
+    //open browser for login
     try {
       await openBrowserAsync(result.loginURL, { toolbarColor: Colors.primary5 })
     } catch (error) {

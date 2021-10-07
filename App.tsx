@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import AppContainer from './src/navigation/MyNavigator'
+import AppContainer from './src/navigation/Navigator'
 import { Provider } from 'react-redux'
 import {
   store,
