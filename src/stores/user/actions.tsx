@@ -73,9 +73,8 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
   }
 }
 
-export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials } = getState()
+export const getPermissions = (credentials: CredentialsType): ThunkAction<Promise<any>, any, void, userActionTypes> => {
+  return async (dispatch) => {
     let permissionsArr = []
 
     //try to fetch users form permissions to join into the credentials
@@ -121,9 +120,8 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
   }
 }
 
-export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials } = getState()
+export const getMetadata = (credentials: CredentialsType): ThunkAction<Promise<any>, any, void, userActionTypes> => {
+  return async (dispatch) => {
     let metadata
 
     //try to get users media metadata

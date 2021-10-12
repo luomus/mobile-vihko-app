@@ -3,8 +3,8 @@ import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { MultiPolygon, Polygon } from 'geojson'
-import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
+import { MultiLineString, LineString } from 'geojson'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -301,11 +301,23 @@ const MapComponent = (props: Props) => {
 
   //draws user path to map
   const pathOverlay = () => {
-    if (path?.length >= 1 && position) {
-      const pathPolygon: MultiPolygon | undefined = pathPolygonConstructor(path, [
-        position.coords.longitude,
-        position.coords.latitude
-      ])
+
+    if (path[path.length - 1]?.length >= 1 && position) {
+      const pathToDraw = path.map((subpath, index) => {
+        if (index === path.length - 1) {
+          return subpath.concat([[
+            position.coords.longitude,
+            position.coords.latitude,
+            0.0,
+            0.0,
+            false
+          ]])
+        }
+
+        return subpath
+      })
+
+      const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
 
       return pathPolygon ?
         <Geojson
@@ -314,32 +326,6 @@ const MapComponent = (props: Props) => {
           strokeColor={Colors.pathColor}
         />
         : null
-
-      /**
-       * dotted path temporary fix for path bug
-      const latLngPath: Array<LatLng> | null = latLngArrayConstructor(pathAppended)
-      console.log(latLngPath)
-      return latLngPath ?
-        <Polyline
-          coordinates={latLngPath}
-          strokeWidth={5}
-          strokeColor={Colors.pathColor}
-          lineCap={'round'}
-          lineDashPattern={[0]}
-        />
-        : null
-      */
-      /**
-       * proper path renering, use after expo has fixed its problems
-      const lineString: LineString | null = pathToLineStringConstructor(pathAppended)
-      return lineString ?
-        <Geojson
-          geojson={wrapGeometryInFC(lineString)}
-          strokeWidth={5}
-          strokeColor={Colors.pathColor}
-        />
-        : null
-      */
     }
 
     return null
