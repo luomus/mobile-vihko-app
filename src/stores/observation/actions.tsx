@@ -1,4 +1,4 @@
-import { Point, Geometry, LineString } from 'geojson'
+import { Point, Geometry, LineString, MultiLineString } from 'geojson'
 import { ThunkAction } from 'redux-thunk'
 import { clone, cloneDeep } from 'lodash'
 import i18n from 'i18next'
@@ -6,7 +6,7 @@ import {
   observationActionTypes,
   SET_OBSERVATION,
   CLEAR_OBSERVATION,
-  TOGGLE_OBSERVING,
+  SET_OBSERVING,
   SET_OBSERVATION_EVENT_INTERRUPTED,
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_EVENTS,
@@ -15,13 +15,13 @@ import {
 } from './types'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
-import { CredentialsType } from '../user/types'
-import { saveMedias } from '../../services/imageService'
 import userService from '../../services/userService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
 import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from '../../helpers/uploadHelper'
+import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
+import { saveImages } from '../../helpers/imageHelper'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -32,8 +32,9 @@ export const clearObservationLocation = (): observationActionTypes => ({
   type: CLEAR_OBSERVATION
 })
 
-export const toggleObserving = (): observationActionTypes => ({
-  type: TOGGLE_OBSERVING
+export const setObserving = (observing: boolean): observationActionTypes => ({
+  type: SET_OBSERVING,
+  payload: observing
 })
 
 export const setObservationId = (id: Record<string, any>): observationActionTypes => ({
@@ -80,9 +81,9 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
   }
 }
 
-export const uploadObservationEvent = (id: string, credentials: CredentialsType, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
+export const uploadObservationEvent = (id: string, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
+    const { credentials, observationEvent, schema } = getState()
 
     let event = cloneDeep(observationEvent.events.find((event: Record<string, any>) => event.id === id))
     let units = event.gatherings[0].units
@@ -92,12 +93,12 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       await netStatusChecker()
     } catch (error) {
       log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()',
+        location: '/stores/observation/actions.tsx uploadObservationEvent()/netStatusChecker()',
         error: 'Network error (no connection)'
       })
       return Promise.reject({
         severity: 'low',
-        message: `${i18n.t('post failure')} ${error.message}`
+        message: error.message
       })
     }
 
@@ -106,31 +107,52 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       await userService.checkTokenValidity(credentials.token)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error
       })
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'low',
+          message: i18n.t('user token has expired')
+        })
+      }
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('user token has expired')
+        message: `${i18n.t('failed to check token')} ${error.message}`
       })
     }
 
     //define whether the event will be released publicly or privately
     event = definePublicity(event, isPublic)
 
-    //define record basis for each unit, depending on whether the unit has images attached
+    //define record basis for each unit, depending on whether the unit has images attached,
     //remove empty radius -fields
-    event = loopThroughUnits(event)
+    //(skip this with flying squirrel form, which has already assigned the record basis)
+    if (schema.formID !== 'MHL.45') {
+      event = loopThroughUnits(event)
+    }
 
+    //if there isn't an observation zone, use APIs to get a proper locality name
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
-    if (overlapsFinland(event.gatherings[0].geometry)) {
-      await fetchFinland(event, lang)
-    } else {
-      await fetchForeign(event, lang)
+    if (!event.namedPlaceID || event.namedPlaceID === '') {
+      if (overlapsFinland(event.gatherings[0].geometry)) {
+        await fetchFinland(event, lang)
+      } else {
+        await fetchForeign(event, lang)
+      }
+    }
+
+    //convert possible MultiLineStrings to GeometryCollections containing LineStrings which laji-map can edit properly
+    if (event.gatherings[0].geometry?.type === 'MultiLineString') {
+      event.gatherings[0].geometry = convertMultiLineStringToGCWrappedLineString(event.gatherings[0].geometry)
+    }
+
+    if (event.gatherings[1]?.geometry?.type === 'MultiLineString') {
+      event.gatherings[1].geometry = convertMultiLineStringToGCWrappedLineString(event.gatherings[1].geometry)
     }
 
     // //for each observation in observation event try to send images to server
-    // //using saveMedias, and clean out local properties
+    // //using saveImages, and clean out local properties
     try {
       let newUnits = await Promise.all(units.map(async (unit: Record<string, any>) => {
         let newUnit: Record<string, any>
@@ -138,16 +160,9 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
 
         if (unit.images?.length > 0) {
           try {
-            newImages = await saveMedias(unit.images, credentials)
+            newImages = await saveImages(unit.images, credentials)
           } catch (error) {
-            log.error({
-              location: '/stores/observation/actions.tsx uploadObservationEvent()',
-              error: error
-            })
-            return Promise.reject({
-              severity: 'low',
-              message: error.message
-            })
+            return Promise.reject(error)
           }
 
           newUnit = {
@@ -171,19 +186,22 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
       event.gatherings[0].units = newUnits
 
       if (event.gatherings[0].units.length < 1) {
-        event.gatherings[0].units.push({
-          'taxonConfidence': 'MY.taxonConfidenceSure',
-          'recordBasis': 'MY.recordBasisHumanObservation'
-        })
+        if (event.formID !== 'MHL.45') {
+          event.gatherings[0].units.push({
+            'taxonConfidence': 'MY.taxonConfidenceSure',
+            'recordBasis': 'MY.recordBasisHumanObservation'
+          })
+        } else {
+          event.gatherings[0].units.push({
+            'taxonConfidence': 'MY.taxonConfidenceSure',
+            'recordBasis': ''
+          })
+        }
       }
 
       delete event.id
 
     } catch (error) {
-      log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()',
-        error: 'Image error'
-      })
       return Promise.reject({
         severity: 'low',
         message: error.message
@@ -193,13 +211,22 @@ export const uploadObservationEvent = (id: string, credentials: CredentialsType,
     try {
       await postObservationEvent(event, credentials)
     } catch (error) {
-      log.error({
-        location: '/stores/observation/actions.tsx uploadObservationEvent()',
-        error: error.response.data.error
-      })
+      if (error.response?.status.toString() === '422') {
+        log.error({
+          location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
+          error: error,
+          data: event
+        })
+      } else {
+        log.error({
+          location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
+          error: error
+        })
+      }
+
       return Promise.reject({
         severity: 'low',
-        message: `${i18n.t('post failure')}: ${error.response.status}`
+        message: `${i18n.t('post failure')}  ${error.message}`
       })
     }
 
@@ -226,7 +253,7 @@ export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save new event to long term memory, discarding modifications')
+        message: i18n.t('could not save new event to long term memory')
       })
     }
 
@@ -255,7 +282,7 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory, discarding modifications')
+        message: i18n.t('could not save event to storage')
       })
     }
 
@@ -287,7 +314,7 @@ export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any
   }
 }
 
-export const eventPathUpdate = (lineStringPath: LineString | null): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+export const eventPathUpdate = (lineStringPath: LineString | MultiLineString | undefined): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
 
@@ -305,7 +332,7 @@ export const eventPathUpdate = (lineStringPath: LineString | null): ThunkAction<
   }
 }
 
-export const newObservation = (unit: Record<string, any>, lineStringPath: LineString | null): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+export const newObservation = (unit: Record<string, any>, lineStringPath: MultiLineString | LineString | undefined): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { observationEvent } = getState()
 
@@ -327,7 +354,7 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: LineSt
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory, discarding modifications')
+        message: i18n.t('error saving new observation')
       })
     }
 
@@ -361,7 +388,7 @@ export const deleteObservation = (eventId: string, unitId: string): ThunkAction<
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory discarding modifications')
+        message: i18n.t('error deleting observation')
       })
     }
 
@@ -396,7 +423,7 @@ export const replaceLocationById = (geometry: Geometry, eventId: string, unitId:
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory discarding modifications')
+        message: i18n.t('could not save modifications to long term memory')
       })
     }
 
@@ -433,7 +460,7 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could save modifications to long term memory discarding modifications')
+        message: i18n.t('error modifying observation')
       })
     }
 

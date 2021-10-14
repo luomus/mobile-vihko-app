@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView } from 'react-native'
-import { Button as ButtonElement, Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { DispatchType, setMessageState } from '../../stores'
+import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
@@ -20,7 +21,7 @@ type Props = {
 }
 
 const ImagePickerComponent = (props: Props) => {
-  const { register, setValue, setError, formState } = useFormContext()
+  const { register, setValue, setError, clearErrors, formState } = useFormContext()
   const [images, setImages] = useState<Array<string>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
 
@@ -33,11 +34,12 @@ const ImagePickerComponent = (props: Props) => {
 
   const attachImage = async (useCamera: boolean) => {
     try {
-      let permissionResult: ImagePicker.PermissionResponse
+      let permissionResult: ImagePicker.CameraPermissionResponse | ImagePicker.MediaLibraryPermissionResponse
+
       if (useCamera) {
         permissionResult = await ImagePicker.requestCameraPermissionsAsync()
       } else {
-        permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
+        permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
       }
       if (permissionResult.granted === false) {
         return false
@@ -51,20 +53,23 @@ const ImagePickerComponent = (props: Props) => {
         pickerResult = await ImagePicker.launchImageLibraryAsync()
       }
 
-      let succeeded: boolean = !pickerResult.cancelled
-      let uri = pickerResult.uri
-      if (succeeded) {
+      if (!pickerResult.cancelled) {
+        let uri = pickerResult.uri
+
         setImages(images.concat(uri))
         setValue(props.objectTitle, images.concat(uri))
       }
 
-      return succeeded
-    } catch (err) {
-      setError(props.objectTitle, { message: 'Error while attaching image', type: 'manual' })
+      return !pickerResult.cancelled
+    } catch (error) {
+      setError(props.objectTitle, { message: 'image attachment failure', type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerComponent attachImage()',
-        error: JSON.stringify(err)
+        error: error
       })
+      setTimeout(() => {
+        clearErrors(props.objectTitle)
+      }, 5000)
     }
   }
 
@@ -140,20 +145,20 @@ const ImagePickerComponent = (props: Props) => {
             : renderImages()
           }
           <View style={Cs.imageButtonsColumnContainer}>
-            <ButtonElement
-              buttonStyle={Bs.addImageButton}
-              containerStyle={Cs.padding5Container}
-              title={' ' + t('choose image')}
-              icon={<Icon name='photo-library' type='material-icons' color='white' size={22} />}
-              onPress={imageFromLibrary}
-            />
-            <ButtonElement
-              buttonStyle={Bs.addImageButton}
-              containerStyle={Cs.padding5Container}
-              title={' ' + t('use camera')}
-              icon={<Icon name='add-a-photo' type='material-icons' color='white' size={22} />}
-              onPress={imageFromCamera}
-            />
+            <View style={Cs.padding5Container}>
+              <ButtonComponent onPressFunction={imageFromLibrary}
+                title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+            </View>
+            <View style={Cs.padding5Container}>
+              <ButtonComponent onPressFunction={imageFromCamera}
+                title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+            </View>
           </View>
         </View>
       </>
@@ -180,20 +185,20 @@ const ImagePickerComponent = (props: Props) => {
               {renderImages()}
             </ScrollView>
             <View style={Cs.imageButtonsRowContainer}>
-              <ButtonElement
-                buttonStyle={Bs.addImageButton}
-                containerStyle={Cs.padding5Container}
-                title={' ' + t('choose image')}
-                icon={<Icon name='photo-library' type='material-icons' color='white' size={22} />}
-                onPress={imageFromLibrary}
-              />
-              <ButtonElement
-                buttonStyle={Bs.addImageButton}
-                containerStyle={Cs.padding5Container}
-                title={' ' + t('use camera')}
-                icon={<Icon name='add-a-photo' type='material-icons' color='white' size={22} />}
-                onPress={imageFromCamera}
-              />
+              <View style={Cs.padding5Container}>
+                <ButtonComponent onPressFunction={imageFromLibrary}
+                  title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
+              </View>
+              <View style={Cs.padding5Container}>
+                <ButtonComponent onPressFunction={imageFromCamera}
+                  title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
+              </View>
             </View>
           </View>
         </View>

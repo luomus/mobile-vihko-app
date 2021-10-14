@@ -6,6 +6,7 @@ import Ts from '../../styles/TextStyles'
 import Bs from '../../styles/ButtonStyles'
 import Colors from '../../styles/Colors'
 import { useDispatch, useSelector } from 'react-redux'
+import i18n from '../../languages/i18n'
 import {
   rootState,
   DispatchType,
@@ -17,7 +18,6 @@ import {
   logoutUser,
   resetReducer
 } from '../../stores'
-import i18n from '../../languages/i18n'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
@@ -25,6 +25,7 @@ import MessageComponent from '../general/MessageComponent'
 import { parseDateForUI } from '../../helpers/dateHelper'
 import ActivityComponent from '../general/ActivityComponent'
 import ButtonComponent from '../general/ButtonComponent'
+import storageService from '../../services/storageService'
 
 type Props = {
   id: string,
@@ -42,6 +43,7 @@ const ObservationEventComponent = (props: Props) => {
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
   const [event, setEvent] = useState<Record<string, any> | null>(null)
   const [observations, setObservations] = useState<Record<string, any>[] | null>(null)
+  const [eventSchema, setEventSchema] = useState<Record<string, any> | null>(null)
 
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -55,6 +57,16 @@ const ObservationEventComponent = (props: Props) => {
     const searchedObservations: Record<string, any>[] = searchedEvent?.gatherings[0]?.units || null
     setEvent(searchedEvent)
     setObservations(searchedObservations)
+
+    const lang = i18n.language
+
+    const initEventSchema = async () => {
+      if (searchedEvent === null) { return }
+      const fetchedSchema = await storageService.fetch(`${searchedEvent.formID}${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
+      setEventSchema(fetchedSchema)
+    }
+
+    initEventSchema()
   }, [observationEvent])
 
   const showMessage = (content: string) => {
@@ -121,6 +133,7 @@ const ObservationEventComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => props.onPressHome()
         }))
+      //log user out from the app if the token has expired
       } else {
         dispatch(setMessageState({
           type: 'err',
@@ -146,7 +159,7 @@ const ObservationEventComponent = (props: Props) => {
     return false
   })
 
-  if (!event || !observations) {
+  if (!event || !observations || !eventSchema) {
     return (
       <ActivityComponent text={t('loading')} />
     )
@@ -199,6 +212,7 @@ const ObservationEventComponent = (props: Props) => {
             <ObservationInfoComponent
               event={event}
               observation={observation}
+              eventSchema={eventSchema}
               editButton={
                 <ButtonComponent onPressFunction={() => {
                   const id = {

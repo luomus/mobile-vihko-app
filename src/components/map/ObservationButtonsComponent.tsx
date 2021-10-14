@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { rootState } from '../../stores'
 import { listOfHaversineNeighbors } from '../../helpers/distanceHelper'
+import { useUiSchemaFields, lolifeObservationTypes } from '../../config/fields'
+import i18n from '../../languages/i18n'
 
 interface BasicObject {
   [key: string]: any
@@ -27,6 +29,7 @@ const ObservationButtonsComponent = (props: Props) => {
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const region = useSelector((state: rootState) => state.region)
+  const schema = useSelector((state: rootState) => state.schema)
 
   const { t } = useTranslation()
 
@@ -67,20 +70,59 @@ const ObservationButtonsComponent = (props: Props) => {
         )
       )
     } else if (haversineNeighbors.length >= 1) {
-      return (
-        <View style={Cs.leftButtonColumnContainer}>
-          <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
-          {haversineNeighbors?.map((neighbor: Record<string, any>) =>
-            createButton(
-              neighbor.identifications[0].taxon.length > 14 ? neighbor.identifications[0].taxon.substring(0, 12) + '...' : neighbor.identifications[0].taxon,
-              Bs.observationNeighborsButton,
-              () => props.shiftToEditPage(eventId, neighbor.id),
-              'primary', 'edit', 'material-icons', 150
-            )
-          )}
-        </View>
-      )
+      if (useUiSchemaFields.includes(schema.formID)) {
+        return (
+          <View style={Cs.leftButtonColumnContainer}>
+            <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
+            {haversineNeighbors?.map((neighbor: Record<string, any>) => {
+
+              const rulesField = neighbor.rules.field
+              let typeName = lolifeObservationTypes[rulesField] ? t(lolifeObservationTypes[rulesField]) : t('flying squirrel')
+
+              return createButton(
+                typeName.length > 14 ? typeName.substring(0, 12) + '...' : typeName,
+                Bs.observationNeighborsButton,
+                () => props.shiftToEditPage(eventId, neighbor.id),
+                'primary', 'edit', 'material-icons', 150
+              )
+            })}
+          </View>
+        )
+      } else {
+        return (
+          <View style={Cs.leftButtonColumnContainer}>
+            <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
+            {haversineNeighbors?.map((neighbor: Record<string, any>) =>
+              createButton(
+                neighbor.identifications[0].taxon.length > 14 ? neighbor.identifications[0].taxon.substring(0, 12) + '...' : neighbor.identifications[0].taxon,
+                Bs.observationNeighborsButton,
+                () => props.shiftToEditPage(eventId, neighbor.id),
+                'primary', 'edit', 'material-icons', 150
+              )
+            )}
+          </View>
+        )
+      }
     }
+  }
+
+  const createRightSideButtonsList = () => {
+    let lang = i18n.language
+    const unitGroups = schema[lang]?.uiSchemaParams?.unitGroups
+
+    return unitGroups ? unitGroups.map((observation: Record<string, any>) =>
+      createButton(
+        observation.button.label,
+        Bs.observationButton,
+        () => props.confirmationButton(true, observation.rules, observation.button.default),
+        'primary', undefined, undefined, 180
+      )
+    ) : createButton(
+      '+ ' + t('observation'),
+      Bs.observationButton,
+      () => props.confirmationButton(true),
+      'primary', undefined, undefined, 120
+    )
   }
 
   const observationButtons = () => {
@@ -89,12 +131,7 @@ const ObservationButtonsComponent = (props: Props) => {
         <View style={Cs.observationButtonColumnsContainer}>
           {createLeftSideButtonsList() ? createLeftSideButtonsList() : <View></View>}
           <View style={Cs.rightButtonColumnContainer}>
-            {createButton(
-              '+ ' + t('observation'),
-              Bs.observationButton,
-              () => props.confirmationButton(true),
-              'primary', undefined, undefined, 120
-            )}
+            {createRightSideButtonsList()}
             {createButton(
               t('cancel'),
               Bs.endButton,

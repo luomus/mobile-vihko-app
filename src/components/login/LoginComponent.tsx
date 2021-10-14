@@ -6,13 +6,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   rootState,
   DispatchType,
+  initObservationZones,
   initObservationEvents,
   initSchema,
   resetReducer,
   loginUser,
   logoutUser,
   initLocalCredentials,
-  setMessageState
+  setMessageState,
+  getPermissions,
+  getMetadata
 } from '../../stores'
 import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
@@ -24,7 +27,7 @@ import MessageComponent from '../general/MessageComponent'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
-import { availableForms } from '../../config/fields'
+import { availableForms, useUiSchemaFields } from '../../config/fields'
 import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
@@ -42,9 +45,10 @@ const LoginComponent = (props: Props) => {
   const credentials = useSelector((state: rootState) => state.credentials)
   const dispatch: DispatchType = useDispatch()
   const { t } = useTranslation()
+
   useEffect(() => {
     loadData()
-  }, [credentials])
+  }, [credentials.token])
 
   const showError = (error: string) => {
     dispatch(setMessageState({
@@ -75,10 +79,15 @@ const LoginComponent = (props: Props) => {
       try {
         await dispatch(initLocalCredentials())
       } catch (error) {
+
+        //failed to fetch credentials from storage
         if (error?.severity) {
           showError(error.message)
+          setLoggingIn(false)
+          return
         }
 
+        //user was not logged in
         const tmpToken = await storageService.fetch(tmpTokenKey)
         if (tmpToken) {
           await pollLogin(tmpToken)
@@ -87,12 +96,33 @@ const LoginComponent = (props: Props) => {
           setLoggingIn(false)
         }
       }
+
+    //user was logged in
     } else {
       await initializeApp()
     }
   }
 
   const initializeApp = async () => {
+
+    try {
+      await dispatch(getPermissions(credentials))
+    } catch (error) {
+      showError(error.message)
+    }
+
+    try {
+      await dispatch(getMetadata(credentials))
+    } catch (error) {
+      showError(error.message)
+    }
+
+    try {
+      await dispatch(initObservationZones())
+    } catch (error) {
+      showError(error.message)
+    }
+
     try {
       await dispatch(initObservationEvents())
     } catch (error) {
@@ -101,7 +131,9 @@ const LoginComponent = (props: Props) => {
 
     await Promise.all(availableForms.map(async formId => {
       try {
-        await dispatch(initSchema(false, formId))
+        const useUiSchema = useUiSchemaFields.includes(formId)
+
+        await dispatch(initSchema(useUiSchema, formId))
       } catch (errors) {
         if (errors[errors.length - 1].severity === 'fatal') {
           errors.forEach((error: Record<string, any>, index: number) => {
@@ -132,19 +164,24 @@ const LoginComponent = (props: Props) => {
       setPolling(true)
       await dispatch(loginUser(tmpToken, setCanceler))
     } catch (error) {
+
+      //stop polling if user canceled the login
       if (error.canceled) {
         setLoggingIn(false)
         return
       }
 
+      //timeout or server error
       if (error.severity === 'fatal') {
         showFatalError(`${t('critical error')}:\n${error.message}`)
         setLoggingIn(false)
         return
+      //storage fails
       } else {
         showError(error.message)
         setLoggingIn(false)
       }
+
     } finally {
       setPolling(false)
     }
@@ -152,28 +189,42 @@ const LoginComponent = (props: Props) => {
 
   const login = async () => {
     setLoggingIn(true)
-    //check internet status and attempt to get temporary login url for webview
     let result
+
+    //check that internet can be reached
     try {
       await netStatusChecker()
+    } catch (error) {
+      log.error({
+        location: '/components/LoginComponent.tsx login()',
+        error: 'Network error (no connection)'
+      })
+      setLoggingIn(false)
+      showFatalError(`${t('critical error')}:\n${error.message}`)
+      return
+    }
+
+    //attempt to get temporary login url for webview
+    try {
       result = await getTempTokenAndLoginUrl()
       await storageService.save(tmpTokenKey, result.tmpToken)
     } catch (error) {
       log.error({
         location: '/components/LoginComponent.tsx login()',
-        error: error.response.data.error
+        error: error
       })
       setLoggingIn(false)
-      showFatalError(`${t('critical error')}:\n${t('getting temp token failed with')} ${error.message ? error.message : i18n.t('status code') + error.response.status}`)
+      showFatalError(`${t('critical error')}:\n${t('getting temp token failed with')} ${error.message}`)
       return
     }
 
+    //open browser for login
     try {
       await openBrowserAsync(result.loginURL, { toolbarColor: Colors.primary5 })
     } catch (error) {
       log.error({
         location: 'components/LoginComponent.tsx login()',
-        error: JSON.stringify(error)
+        error: error
       })
       setLoggingIn(false)
       showFatalError(`${t('critical error')}:\n${t('could not open browser for login')}`)

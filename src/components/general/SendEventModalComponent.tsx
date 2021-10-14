@@ -1,7 +1,9 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import Modal from 'react-native-modal'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -18,9 +20,11 @@ const SendEventModalComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
+  const schema = useSelector((state: rootState) => state.schema)
+
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.onCancel(false) }}>
-      <View style={Cs.sendEventModalContainer}>
+      <View style={Cs.modalContainer}>
         <Text style={Cs.padding10Container}>
           {t('send observation event to server?')}
         </Text>
@@ -31,13 +35,15 @@ const SendEventModalComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={'publish'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
-        <View style={Cs.padding5Container}>
-          <ButtonComponent onPressFunction={() => { props.sendObservationEvent(false) }} title={t('send private')}
-            height={40} width={200} buttonStyle={Bs.sendEventModalNeutralButton}
-            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'security'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
-          />
-        </View>
+        { schema.formID !== 'MHL.45' &&
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => { props.sendObservationEvent(false) }} title={t('send private')}
+              height={40} width={200} buttonStyle={Bs.sendEventModalNeutralButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'security'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
+            />
+          </View>
+        }
         <View style={Cs.padding5Container}>
           <ButtonComponent onPressFunction={() => { props.onCancel(false) }} title={t('do not submit')}
             height={40} width={200} buttonStyle={Bs.sendEventModalNegativeButton}

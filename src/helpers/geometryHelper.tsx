@@ -1,4 +1,4 @@
-import { Polygon, Point, LineString } from 'geojson'
+import { Polygon, Point, LineString, MultiLineString } from 'geojson'
 import { FINLAND_BOUNDS } from '../config/location'
 
 //makes preparations for creating a combined bounding box (from path and units) which is used for determining
@@ -96,15 +96,29 @@ export const createUnitBoundingBox = (event: Record<string, any>): Polygon | Poi
 const createCombinedBoundingBox = (points: Array<Array<number>>, gatheringsZero: Record<string, any>): Polygon | Point | null => {
 
   let boundingBox: Record<string, any>
+  let pathPoints: Array<Array<number>> = []
+
+  //extract the points from path LineString or MultiLineString
+  if (gatheringsZero.geometry.type === 'LineString') {
+    pathPoints = gatheringsZero.geometry.coordinates
+  } else if (gatheringsZero.geometry.type === 'MultiLineString') {
+    gatheringsZero.geometry.coordinates.forEach((coords: Array<Array<number>>) => {
+      pathPoints.push(...coords)
+    })
+  }
 
   //if there is no unit geometries (and there is a path, as !path scenario was handled in createCombinedGeometry)
   //create bounding box from only path geometry, else use unit and path geometries to create BB
   if (!points) {
-    boundingBox = calculateBoundingBoxBoundaries(gatheringsZero.geometry.coordinates)
+    if (pathPoints.length === 0) {
+      return null
+    }
+
+    boundingBox = calculateBoundingBoxBoundaries(pathPoints)
   } else {
     const combinedCoordinates: Array<Array<number>> = [
       ...points,
-      ...gatheringsZero.geometry.coordinates
+      ...pathPoints
     ]
 
     boundingBox = calculateBoundingBoxBoundaries(combinedCoordinates)
@@ -123,7 +137,7 @@ const createCombinedBoundingBox = (points: Array<Array<number>>, gatheringsZero:
 }
 
 //returns true if event geometry overlaps finland, else false
-export const overlapsFinland = (geometry: LineString | Polygon | Point): boolean => {
+export const overlapsFinland = (geometry: MultiLineString | LineString | Polygon | Point): boolean => {
 
   //helper function that checks whether a single point is inside finnish boundaries
   const pointOverlapsFinland = (coordinates: Array<number>) => {
@@ -147,6 +161,20 @@ export const overlapsFinland = (geometry: LineString | Polygon | Point): boolean
         somePointsOverlapFinland = true
       }
     })
+    return somePointsOverlapFinland
+  }
+  //same for GeometryCollection of LineStrings
+  if (geometry.type === 'MultiLineString') {
+    let somePointsOverlapFinland: boolean = false
+
+    geometry.coordinates.forEach((coords: Array<Array<number>>) => {
+      coords.forEach((point: Array<number>) => {
+        if (pointOverlapsFinland(point)) {
+          somePointsOverlapFinland = true
+        }
+      })
+    })
+
     return somePointsOverlapFinland
   }
 
@@ -187,28 +215,73 @@ export const centerOfBoundingBox = (geometry: Polygon | Point): Point => {
   }
 }
 
-export const removeDuplicatesFromPath = (lineStringCoordinates: Array<Array<number>>): Array<Array<number>> => {
-  let uniqueCoordinates: Array<Array<number>> = []
+export const removeDuplicatesFromPath = (lineString: LineString | MultiLineString | undefined): LineString | MultiLineString | undefined => {
 
-  //loop through each point in path's LineString
-  lineStringCoordinates.forEach((point: Array<number>) => {
-    let noDuplicates: boolean = true
-    //use same decimals for all coordinates
-    const coord0: number = Number(point[0].toFixed(5))
-    const coord1: number = Number(point[1].toFixed(5))
-    //check that the point isn't a duplicate of any of the unique coordinates
-    uniqueCoordinates.forEach((uniquePoint: Array<number>) => {
-      const uniqueCoord0: number = Number(uniquePoint[0].toFixed(5))
-      const uniqueCoord1: number = Number(uniquePoint[1].toFixed(5))
-      if (coord0 === uniqueCoord0 && coord1 === uniqueCoord1) {
-        noDuplicates = false
+  if (!lineString) { return }
+
+  const filterGeometry = (points: Array<Array<number>>) => {
+    let uniqueCoordinates: Array<Array<number>> = []
+
+    points.forEach(point => {
+      let noDuplicates: boolean = true
+      //use same decimals for all coordinates
+      const coord0: number = Number(point[0].toFixed(5))
+      const coord1: number = Number(point[1].toFixed(5))
+
+      //check that the point isn't a duplicate of any of the unique coordinates
+      uniqueCoordinates.forEach((uniquePoint: Array<number>) => {
+        const uniqueCoord0: number = Number(uniquePoint[0].toFixed(5))
+        const uniqueCoord1: number = Number(uniquePoint[1].toFixed(5))
+
+        if (coord0 === uniqueCoord0 && coord1 === uniqueCoord1) {
+          noDuplicates = false
+        }
+      })
+
+      //if no duplicates were found, push the point to be a unique coordinate
+      if (noDuplicates) {
+        uniqueCoordinates.push(point)
       }
     })
-    //if no duplicates were found, push the point to be a unique coordinate
-    if (noDuplicates) {
-      uniqueCoordinates.push(point)
-    }
-  })
 
-  return uniqueCoordinates
+
+    return uniqueCoordinates
+  }
+
+  if (lineString.type === 'LineString') {
+    const uniqueCoordinates = filterGeometry(lineString.coordinates)
+
+    if (uniqueCoordinates.length < 2) {
+      return
+    }
+
+    lineString.coordinates = uniqueCoordinates
+
+    return lineString
+  } else if (lineString.type === 'MultiLineString') {
+    let uniqueCoordinates: Array<Array<Array<number>>> = []
+
+    lineString.coordinates.forEach((coord: Array<Array<number>>) => {
+      const uniqueSubCoordinates = filterGeometry(coord)
+
+      if (uniqueSubCoordinates.length >= 2) {
+        uniqueCoordinates = uniqueCoordinates.concat([uniqueSubCoordinates])
+      }
+    })
+
+    if (uniqueCoordinates.length <= 0) {
+      return
+    }
+
+    if (uniqueCoordinates.length === 1) {
+      return {
+        type: 'LineString',
+        coordinates: uniqueCoordinates[0]
+      }
+    }
+
+    lineString.coordinates = uniqueCoordinates
+
+    return lineString
+  }
 }

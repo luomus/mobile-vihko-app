@@ -5,13 +5,14 @@ import { LocationObject } from 'expo-location'
 import {
   toggleCentered,
   setFirstZoom,
+  setCurrentObservationZone,
   clearRegion,
-  setMessageState,
   clearObservationLocation,
+  deleteObservationEvent,
   setObservationEventInterrupted,
   replaceObservationEventById,
   replaceObservationEvents,
-  toggleObserving,
+  setObserving,
   clearObservationId,
   clearLocation,
   updateLocation,
@@ -22,7 +23,8 @@ import {
   messageActionTypes,
   observationActionTypes,
   locationActionTypes,
-  PathType
+  PathType,
+  ZoneType
 } from '../../stores'
 import i18n from '../../languages/i18n'
 import storageService from '../../services/storageService'
@@ -31,7 +33,7 @@ import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
 import { stopLocationAsync, watchLocationAsync } from '../../helpers/geolocationHelper'
 import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
-import { lineStringConstructor } from '../../helpers/geoJSONHelper'
+import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
 
@@ -39,13 +41,17 @@ export const resetReducer = () => ({
   type: 'RESET_STORE'
 })
 
-export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
+export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEvent, schema } = getState()
+    const { centered, credentials, observationEvent, observationZone, schema } = getState()
     const userId = credentials?.user?.id
 
-    if (!userId) {
+    const region: ZoneType | undefined = observationZone.zones.find((region: Record<string, any>) => {
+      return region.id === observationZone.currentZoneId
+    })
+
+    if (!userId || (zoneUsed && !region)) {
       return
     }
 
@@ -54,13 +60,23 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
       await userService.checkTokenValidity(credentials.token)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error
       })
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'high',
+          message: i18n.t('user token has expired')
+        })
+      }
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('user token has expired')
+        message: `${i18n.t('failed to check token')} ${error.message}`
       })
+    }
+
+    if (!zoneUsed) {
+      dispatch(setCurrentObservationZone('empty'))
     }
 
     const lang = i18n.language
@@ -73,8 +89,20 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 
     let parsedObservationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema[lang].schema)
 
+    const setGeometry = () => {
+      set(parsedObservationEvent, ['gatherings', '1', 'geometry'], region?.geometry)
+      set(parsedObservationEvent, ['gatherings', '1', 'locality'], region?.name)
+      set(parsedObservationEvent, ['namedPlaceID'], region?.id)
+    }
+
+    if (zoneUsed) {
+      setGeometry()
+    }
+
+    const newID = 'observationEvent_' + uuid.v4()
+
     const observationEventObject = {
-      id: 'observationEvent_' + uuid.v4(),
+      id: newID,
       formID: schema.formID,
       ...parsedObservationEvent
     }
@@ -85,12 +113,12 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/save()',
         error: error
       })
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('could not save new event to long term memory, discarding modifications')
+        message: i18n.t('could not save new event to long term memory')
       })
     }
 
@@ -104,21 +132,22 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         body
       )
     } catch (error) {
+      //delete the new event if gps can't be launched
+      await dispatch(deleteObservationEvent(newID))
       log.error({
-        location: '/components/HomeComponent.tsx beginObservationEvent()',
+        location: '/components/HomeComponent.tsx beginObservationEvent()/watchLocationAsync()',
         error: error
       })
-      dispatch(setMessageState({
-        type: 'err',
-        messageContent: error.message
-      }))
-      return Promise.reject()
+      return Promise.reject({
+        severity: 'low',
+        message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
+      })
     }
 
     //reset map centering and zoom level, redirect to map
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
-    dispatch(toggleObserving())
+    dispatch(setObserving(true))
     dispatch(setFirstZoom('not'))
     onPressMap()
 
@@ -141,12 +170,18 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       await userService.checkTokenValidity(credentials.token)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error
       })
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'high',
+          message: i18n.t('user token has expired')
+        })
+      }
       return Promise.reject({
         severity: 'low',
-        message: i18n.t('user token has expired')
+        message: `${i18n.t('failed to check token')} ${error.message}`
       })
     }
 
@@ -155,14 +190,13 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), title, body)
     } catch (error) {
       log.error({
-        location: '/stores/shared/actions.tsx continueObservationEvent()',
+        location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
         error: error
       })
-      dispatch(setMessageState({
-        type: 'err',
-        messageContent: error.message
-      }))
-      return Promise.reject()
+      return Promise.reject({
+        severity: 'low',
+        message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
+      })
     }
 
     //reset map centering and zoom level
@@ -170,9 +204,13 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     dispatch(clearRegion())
     dispatch(setFirstZoom('not'))
     //set old path if exists
-    const path: PathType = observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry?.coordinates
+    const path: PathType | undefined = lineStringsToPathDeconstructor(observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry)
+
     if (path) {
+      path.push([])
       dispatch(setPath(path))
+    } else {
+      dispatch(setPath([[]]))
     }
     dispatch(setObservationEventInterrupted(false))
     onPressMap()
@@ -190,7 +228,6 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
 
     if (event) {
-
       const setBoundingBoxGeometry = () => {
         let geometry
 
@@ -211,19 +248,37 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
         }
       }
 
-      let lineStringPath = lineStringConstructor(path)
+      let lineStringPath = pathToLineStringConstructor(path)
 
-      if (lineStringPath) {
-        //remove duplicates from path
-        lineStringPath.coordinates = removeDuplicatesFromPath(lineStringPath.coordinates)
+      //remove duplicates from path
+      lineStringPath = removeDuplicatesFromPath(lineStringPath)
 
-        if (lineStringPath.coordinates.length >= 2) {
+      if (lineStringPath && event.formID !== 'MHL.45') {
+        event.gatherings[0].geometry = lineStringPath
+
+      } else {
+
+        if (event.namedPlaceID && event.namedPlaceID !== '') {
+          event.gatherings[0].geometry = event.gatherings[1].geometry
+        } else if (lineStringPath) {
           event.gatherings[0].geometry = lineStringPath
         } else {
           setBoundingBoxGeometry()
         }
-      } else {
-        setBoundingBoxGeometry()
+
+        if (event.formID === 'MHL.45') {
+
+          if (lineStringPath) {
+            if (event.gatherings[1]) {
+              event.gatherings[1].geometry = lineStringPath
+            } else {
+              event.gatherings.push({ geometry: lineStringPath })
+            }
+          } else {
+            event.gatherings = [event.gatherings[0]]
+          }
+
+        }
       }
 
       dispatch(clearPath())
@@ -233,15 +288,11 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       try {
         dispatch(replaceObservationEventById(event, event.id))
       } catch (error) {
-        dispatch(setMessageState({
-          type: 'err',
-          messageContent: error.message
-        }))
-        return Promise.reject()
+        return Promise.reject(error)
       }
     }
 
-    dispatch(toggleObserving())
+    dispatch(setObserving(false))
     dispatch(clearObservationLocation())
     dispatch(clearObservationId())
     dispatch(setFirstZoom('not'))

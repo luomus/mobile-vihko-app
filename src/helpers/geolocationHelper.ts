@@ -35,7 +35,6 @@ const watchPositionAsync = async (updateLocation: (location: LocationObject) => 
 }
 
 const watchLocationAsyncAndroid = async (title: string, body: string) => {
-
   setTimeout(async () => {
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
       accuracy: PATH_ACCURACY,
@@ -47,8 +46,7 @@ const watchLocationAsyncAndroid = async (title: string, body: string) => {
         notificationColor: Colors.primary5
       }
     })
-  }
-  , 5000)
+  }, 5000)
 }
 
 const stopLocationAsync = async (observationEventInterrupted: boolean) => {

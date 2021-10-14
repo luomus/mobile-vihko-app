@@ -16,7 +16,7 @@ export const REPLACE_OBSERVATION_EVENTS = 'REPLACE_OBSERVATION_EVENTS'
 export const CLEAR_OBSERVATION_ID = 'CLEAR_OBSERVATION_ID'
 export const SET_OBSERVATION_ID = 'SET_OBSERVATION_ID'
 
-export const TOGGLE_OBSERVING = 'TOGGLE_OBSERVING'
+export const SET_OBSERVING = 'SET_OBSERVING'
 
 export interface ObservationEventType {
   events: Record<string, any>[],
@@ -59,8 +59,9 @@ interface setObservationId {
   payload: object,
 }
 
-interface toggleObserving {
-  type: typeof TOGGLE_OBSERVING,
+interface setObserving {
+  type: typeof SET_OBSERVING,
+  payload: boolean
 }
 
 export type observationActionTypes =
@@ -71,4 +72,4 @@ export type observationActionTypes =
   replaceObservationEvents |
   clearObservationId |
   setObservationId |
-  toggleObserving
+  setObserving

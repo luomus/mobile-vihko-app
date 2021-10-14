@@ -20,3 +20,6 @@ export const PATH_BACKUP_INTERVALL = 10
 
 //boundaries of finland
 export const FINLAND_BOUNDS = [[36.783, 71.348], [15.316, 56.311]]
+
+//maximum velocity for the gps outlier filter in m/s
+export const MAX_VEL = 33.33

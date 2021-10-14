@@ -1,4 +1,4 @@
-import { Point, LineString, Polygon } from 'geojson'
+import { Point, LineString, Polygon, MultiLineString } from 'geojson'
 import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../services/localityService'
 import { centerOfBoundingBox, createCombinedGeometry } from './geometryHelper'
 import { log } from '../helpers/logger'
@@ -42,7 +42,6 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
 //calls the helper function for fetching and processing locality details for finnish events
 export const fetchFinland = async (event: Record<string, any>, lang: string) => {
   const localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang)
-
   //if it turns out that country wasn't finland, fetch foreign
   if (localityDetails.status === 'fail') {
     await fetchForeign(event, lang)
@@ -73,7 +72,7 @@ export const fetchForeign = async (event: Record<string, any>, lang: string) => 
 
 //if observation event was made in finland, this function will be called
 //and it processes the localities fetched from laji-api
-export const defineLocalityInFinland = async (geometry: LineString | Point, lang: string): Promise<Record<string, string>> => {
+export const defineLocalityInFinland = async (geometry: MultiLineString | LineString | Point, lang: string): Promise<Record<string, string>> => {
   let localityDetails
 
   //call the service to fetch from Laji API
@@ -82,7 +81,7 @@ export const defineLocalityInFinland = async (geometry: LineString | Point, lang
   } catch (error) {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
-      error: error.response.data.error
+      error: error
     })
     return Promise.reject({
       severity: 'low',
@@ -95,6 +94,18 @@ export const defineLocalityInFinland = async (geometry: LineString | Point, lang
     return {
       status: 'fail'
     }
+  }
+
+  if (localityDetails.result.status === 'INVALID_REQUEST') {
+    log.error({
+      location: '/stores/observation/actions.tsx defineLocalityInFinland()',
+      error: localityDetails.result.error_message,
+      data: geometry
+    })
+    return Promise.reject({
+      severity: 'low',
+      message: `${i18n.t('locality failure')} ${localityDetails.result.error_message}`
+    })
   }
 
   //store list of provinces and municipalities in string variables
@@ -139,7 +150,7 @@ export const defineLocalityForeign = async (geometry: Point, lang: string): Prom
   } catch (error) {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityForeign()',
-      error: error.response.data.error
+      error: error
     })
     return Promise.reject({
       severity: 'low',

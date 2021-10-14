@@ -3,8 +3,8 @@ import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Polygon } from 'geojson'
-import { convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
+import { MultiLineString, LineString } from 'geojson'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -55,6 +55,7 @@ const MapComponent = (props: Props) => {
   const maptype = useSelector((state: rootState) => state.maptype)
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observationZone = useSelector((state: rootState) => state.observationZone)
   const path = useSelector((state: rootState) => state.path)
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
@@ -300,13 +301,24 @@ const MapComponent = (props: Props) => {
 
   //draws user path to map
   const pathOverlay = () => {
-    if (path?.length >= 1 && position) {
-      const pathAppended: Array<Array<number>> = path.concat([[
-        position.coords.longitude,
-        position.coords.latitude
-      ]])
 
-      const pathPolygon: Polygon | null = pathPolygonConstructor(pathAppended) 
+    if (path[path.length - 1]?.length >= 1 && position) {
+      const pathToDraw = path.map((subpath, index) => {
+        if (index === path.length - 1) {
+          return subpath.concat([[
+            position.coords.longitude,
+            position.coords.latitude,
+            0.0,
+            0.0,
+            false
+          ]])
+        }
+
+        return subpath
+      })
+
+      const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
+
       return pathPolygon ?
         <Geojson
           geojson={wrapGeometryInFC(pathPolygon)}
@@ -314,32 +326,6 @@ const MapComponent = (props: Props) => {
           strokeColor={Colors.pathColor}
         />
         : null
-
-      /**
-       * dotted path temporary fix for path bug
-      const latLngPath: Array<LatLng> | null = latLngArrayConstructor(pathAppended)
-      console.log(latLngPath)
-      return latLngPath ?
-        <Polyline
-          coordinates={latLngPath}
-          strokeWidth={5}
-          strokeColor={Colors.pathColor}
-          lineCap={'round'}
-          lineDashPattern={[0]}
-        />
-        : null
-      */
-      /**
-       * proper path renering, use after expo has fixed its problems
-      const lineString: LineString | null = lineStringConstructor(pathAppended)
-      return lineString ?
-        <Geojson
-          geojson={wrapGeometryInFC(lineString)}
-          strokeWidth={5}
-          strokeColor={Colors.pathColor}
-        />
-        : null
-      */
     }
 
     return null
@@ -356,6 +342,26 @@ const MapComponent = (props: Props) => {
     />
     : null
   )
+
+  //draws observation zone to map
+  const zoneOverlay = () => {
+    let zone = observationZone.zones.find(z =>
+      observationZone.currentZoneId !== 'empty' &&
+      z.id === observationZone.currentZoneId &&
+      z.geometry !== null
+    )
+
+    return (zone ?
+      <Geojson
+        geojson={convertGC2FC(zone.geometry)}
+        fillColor="#f002"
+        pinColor="#f00"
+        strokeColor="#f00"
+        strokeWidth={1}
+      />
+      : null
+    )
+  }
 
   //if topomap is selected draws its tiles on map
   const tileOverlay = () => (maptype === 'terrain' ?
@@ -430,23 +436,24 @@ const MapComponent = (props: Props) => {
           {targetOverlay()}
           {pathOverlay()}
           {tileOverlay()}
+          {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>
-        <View
-          style={Cs.mapTypeContainer}>
-          <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
-            height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-          />
-        </View>
-        <View
-          style={Cs.userLocationContainer}>
-          <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
-            height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-          />
+        <View style={Cs.mapButtonsContainer}>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
+              height={50} width={50} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+            />
+          </View>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
+              height={50} width={50} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+            />
+          </View>
         </View>
         {observation ?
           observationButtonsState === 'newObservation' &&

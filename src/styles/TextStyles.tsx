@@ -32,30 +32,32 @@ const TextStyles = StyleSheet.create({
   observationText: {
     fontWeight: 'bold'
   },
-  previousObservationsTitle: {
+  homeScreenTitle: {
+    color: Colors.neutral9,
+    fontSize: 20,
     fontWeight: 'bold',
-  },
-  observationEventTitle: {
     padding: 10,
-    fontWeight: 'bold'
+  },
+  previousObservationsTitle: {
+    alignSelf: 'flex-start',
+    color: Colors.neutral9,
+    fontSize: 16,
+    padding: 10,
+    paddingLeft: 25
   },
   observationEventListElement: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
     textAlign: 'left',
-    padding: 6,
+    padding: 10,
     alignItems: 'flex-start',
-    position: 'relative',
-    left: 0
+    width: '100%'
   },
   loginLanguage: {
     padding: 10
   },
   boldText: {
     fontWeight: 'bold'
-  },
-  indentedText: {
-    paddingLeft: 10
   },
   noImageText: {
     color: Colors.neutral5
@@ -81,6 +83,50 @@ const TextStyles = StyleSheet.create({
   },
   fontSizeFifteen: {
     fontSize: 15
+  },
+  formLauncherTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingVertical: 15,
+    paddingHorizontal: 25
+  },
+  formLauncherText: {
+    fontSize: 16,
+    paddingBottom: 25,
+    paddingHorizontal: 25
+  },
+  eventListElementTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingTop: 15,
+    paddingHorizontal: 25
+  },
+  eventListElementTextClear: {
+    color: Colors.neutral9,
+    fontSize: 16,
+    paddingHorizontal: 25
+  },
+  eventListElementTextFaded: {
+    color: Colors.neutral7,
+    fontSize: 16,
+    paddingHorizontal: 25,
+    paddingBottom: 10
+  },
+  unfinishedEventTextClear: {
+    color: Colors.neutral9,
+    fontSize: 16,
+    paddingLeft: 10
+  },
+  unfinishedEventTextFaded: {
+    color: Colors.neutral7,
+    fontSize: 16,
+    paddingLeft: 10
+  },
+  zonePickerDescription: {
+    color: Colors.neutral7,
+    fontSize: 16,
+    paddingLeft: 10,
+    paddingBottom: 10
   }
 })
 

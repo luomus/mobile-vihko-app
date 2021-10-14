@@ -4,6 +4,12 @@ export const CLEAR_CREDENTIALS = 'CLEAR_CREDENTIALS'
 export interface CredentialsType {
   user: UserType | null,
   token: string | null,
+  permissions?: Array<string>,
+  metadata?: {
+    capturerVerbatim: string,
+    intellectualOwner: string,
+    intellectualRights: string,
+  }
 }
 
 export interface UserType {

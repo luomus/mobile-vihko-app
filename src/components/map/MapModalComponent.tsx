@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
+import { lolifeObservationTypes } from '../../config/fields'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -22,6 +23,7 @@ type Props = {
 const MapModalComponent = (props: Props) => {
 
   const observationId = useSelector((state: rootState) => state.observationId)
+  const schema = useSelector((state: rootState) => state.schema)
 
   const { t } = useTranslation()
 
@@ -32,7 +34,13 @@ const MapModalComponent = (props: Props) => {
           <ScrollView style={{ width: '100%' }}>
             {props.observationOptions.map(observation =>
               <View key={observation.id} style={Cs.mapModalItemContainer}>
-                <Text style={Ts.centeredBold}>{observation.identifications[0].taxon}</Text>
+                { schema.formID !== 'MHL.45' ?
+                  <Text style={Ts.centeredBold}>{observation.identifications[0].taxon}</Text>
+                  :
+                  <Text style={Ts.centeredBold}>
+                    { lolifeObservationTypes[observation.rules.field] ? t(lolifeObservationTypes[observation.rules.field]) : t('flying squirrel') }
+                  </Text>
+                }
                 <View style={Cs.padding5Container}>
                   <ButtonComponent onPressFunction={() => props.shiftToEditPage(observationId.eventId, observation.id)}
                     title={t('edit button')} height={40} width={120} buttonStyle={Bs.mapModalButton}

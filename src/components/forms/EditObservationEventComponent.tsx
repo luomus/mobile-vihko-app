@@ -16,14 +16,14 @@ import {
   resetReducer
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
-import { set, get, merge, mergeWith, omit, replace } from 'lodash'
+import { set, get, merge, mergeWith, omit } from 'lodash'
 import MessageComponent from '../general/MessageComponent'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
-import { JX519ObservationEventFields, JX652ObservationEventFields } from '../../config/fields'
+import { observationEventFields, JX519ObservationEventFields, JX652ObservationEventFields } from '../../config/fields'
 
 type Props = {
   onPressSubmit: () => void,
@@ -91,7 +91,9 @@ const EditObservationEventComponent = (props: Props) => {
       const lang = i18n.language
       let schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
-      if (schema.formID === 'JX.519') {
+      if (schema.formID === 'MHL.45') {
+        initForm(setForm, event, null, schemaWithoutUnits, null, observationEventFields, null, null, null, lang, scrollView)
+      } else if (schema.formID === 'JX.519') {
         initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, null, null, null, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
         initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, null, null, null, lang, scrollView)
@@ -133,12 +135,15 @@ const EditObservationEventComponent = (props: Props) => {
           props.onPressObservationEvent()
         }
         dispatch(clearObservationId())
-        setSaving(false)
       } catch (error) {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
         }))
+        //redirects to home page in case of error
+        props.onPressSubmit()
+      } finally {
+        setSaving(false)
       }
     }
   }
@@ -161,6 +166,7 @@ const EditObservationEventComponent = (props: Props) => {
             props.onPressSubmit()
           }
         }))
+      //log user out from the app if the token has expired
       } else {
         dispatch(setMessageState({
           type: 'err',

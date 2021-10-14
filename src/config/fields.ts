@@ -205,4 +205,12 @@ export const overrideJX652Fields = {
   }
 }
 
-export const availableForms = ['JX.519', 'JX.652']
+export const lolifeObservationTypes: Record<string, string> = {
+  lifeStage: 'flying squirrel',
+  indirectObservationType: 'indirect observation type',
+  nestType: 'nest'
+}
+
+export const availableForms = ['JX.519', 'JX.652', 'MHL.45']
+
+export const useUiSchemaFields = ['MHL.45']

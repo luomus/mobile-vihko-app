@@ -5,7 +5,6 @@ import {
   CLEAR_LOCATION,
   UPDATE_LOCATION,
   SET_FIRST_LOCATION,
-  APPEND_PATH,
   CLEAR_PATH,
   SET_PATH
 } from './types'
@@ -19,14 +18,12 @@ const firstLocationReducer = (state: Array<number> = [60.192059, 	24.945831], ac
   }
 }
 
-const pathReducer = (state: PathType = [], action : locationActionTypes) => {
+const pathReducer = (state: PathType = [[]], action : locationActionTypes) => {
   switch (action.type) {
-    case APPEND_PATH:
-      return [...state, ...action.payload]
     case SET_PATH:
       return action.payload
     case CLEAR_PATH:
-      return []
+      return [[]]
     default:
       return state
   }

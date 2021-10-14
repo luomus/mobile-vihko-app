@@ -26,7 +26,7 @@ import { get, set, clone, merge } from 'lodash'
 import uuid from 'react-native-uuid'
 import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
-import { lineStringConstructor } from '../../helpers/geoJSONHelper'
+import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import FloatingIconButtonComponent from './FloatingIconButtonComponent'
 import { JX519Fields, overrideJX519Fields, JX519FieldOrder, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
 import Colors from '../../styles/Colors'
@@ -149,7 +149,7 @@ const ObservationComponent = (props: Props) => {
     }
 
     let schemaVar = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
-    let fieldScopes = schema[lang]?.schema?.uiSchemaParams?.unitFieldScopes || null
+    let fieldScopes = schema[lang]?.uiSchemaParams?.unitFieldScopes || null
     let defaultObject: Record<string, any> = {}
 
     if (props.defaults) {
@@ -240,7 +240,7 @@ const ObservationComponent = (props: Props) => {
     //add the new observation to latest event, clear location
     //and redirect to map after user oks message
     try {
-      await dispatch(newObservation(newUnit, lineStringConstructor(path)))
+      await dispatch(newObservation(newUnit, pathToLineStringConstructor(path)))
       dispatch(clearObservationLocation())
       setSaving(false)
       props.toMap()

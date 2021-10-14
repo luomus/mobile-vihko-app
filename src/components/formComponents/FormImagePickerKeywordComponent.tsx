@@ -51,12 +51,12 @@ const ImagePickerKeywordComponent = (props: Props) => {
 
   const attachImage = async (useCamera: boolean) => {
     try {
-      let permissionResult: ImagePicker.PermissionResponse
+      let permissionResult: ImagePicker.CameraPermissionResponse | ImagePicker.MediaLibraryPermissionResponse
 
       if (useCamera) {
         permissionResult = await ImagePicker.requestCameraPermissionsAsync()
       } else {
-        permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
+        permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
       }
       if (permissionResult.granted === false) {
         return false
@@ -70,9 +70,9 @@ const ImagePickerKeywordComponent = (props: Props) => {
         pickerResult = await ImagePicker.launchImageLibraryAsync()
       }
 
-      let succeeded: boolean = !pickerResult.cancelled
-      let uri = pickerResult.uri
-      if (succeeded) {
+      if (!pickerResult.cancelled) {
+        let uri = pickerResult.uri
+
         setImages(images.concat({
           uri,
           keywords: ''
@@ -82,12 +82,13 @@ const ImagePickerKeywordComponent = (props: Props) => {
           keywords: ''
         }))
       }
-      return succeeded
-    } catch (err) {
+      return !pickerResult.cancelled
+
+    } catch (error) {
       setError(props.objectTitle, { message: 'image attachment failure', type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerKeywordComponent attachImage()',
-        error: JSON.stringify(err)
+        error: error
       })
       setTimeout(() => {
         clearErrors(props.objectTitle)

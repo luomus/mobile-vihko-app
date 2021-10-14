@@ -90,7 +90,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
     } catch (err) {
       if (!err.isCanceled) {
-        setError(valueField, { message: 'Autocomplete network error', type: 'manual' })
+        setError(valueField, { message: 'autocomplete network error', type: 'manual' })
       }
     } finally {
       setLoading(false)
@@ -154,7 +154,7 @@ const FormAutocompleteComponent = (props: Props) => {
       cancel = undefined
     } catch (err) {
       if (!err.isCanceled) {
-        setError(valueField, { message: 'Autocomplete network error', type: 'manual' })
+        setError(valueField, { message: 'autocomplete network error', type: 'manual' })
       }
     } finally {
       setLoading(false)

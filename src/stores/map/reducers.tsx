@@ -1,10 +1,14 @@
 import {
   mapActionTypes,
   EditingType,
+  ObservationZonesType,
   TOGGLE_CENTERED,
   SET_EDITING,
   SET_FIRST_ZOOM,
   TOGGLE_MAPTYPE,
+  CLEAR_CURRENT_OBS_ZONE,
+  GET_OBS_ZONES_SUCCESS,
+  SET_CURRENT_OBS_ZONE,
   CLEAR_REGION,
   SET_REGION,
   FirstZoomType
@@ -19,6 +23,11 @@ const initEditingState: EditingType = {
 
 const initRegionState = {
   latitude: 64.559, longitude: 26.840, latitudeDelta: 12, longitudeDelta: 12
+}
+
+const initZoneState: ObservationZonesType = {
+  currentZoneId: '',
+  zones: []
 }
 
 const centeringReducer = (state: boolean = true, action : mapActionTypes) => {
@@ -63,6 +72,28 @@ const maptypeReducer = (state: MapTypes = 'terrain', action : mapActionTypes) =>
   }
 }
 
+const observationZoneReducer = (state = initZoneState, action : mapActionTypes) => {
+  switch (action.type) {
+    case CLEAR_CURRENT_OBS_ZONE:
+      return {
+        ...state,
+        currentZoneId: ''
+      }
+    case GET_OBS_ZONES_SUCCESS:
+      return {
+        ...initZoneState,
+        zones: action.payload
+      }
+    case SET_CURRENT_OBS_ZONE:
+      return {
+        ...state,
+        currentZoneId: action.payload
+      }
+    default:
+      return state
+  }
+}
+
 const regionReducer = (state: Region = initRegionState, action: mapActionTypes) => {
   switch (action.type) {
     case CLEAR_REGION:
@@ -79,5 +110,6 @@ export {
   editingReducer,
   firstZoomReducer,
   maptypeReducer,
+  observationZoneReducer,
   regionReducer
 }
