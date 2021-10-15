@@ -9,6 +9,7 @@ import userService, { getProfile, pollUserLogin } from '../../services/userServi
 import { getFormPermissions } from '../../services/formPermissionService'
 import storageService from '../../services/storageService'
 import i18n from '../../languages/i18n'
+import { stopLocationAsync } from '../../helpers/geolocationHelper'
 import { log } from '../../helpers/logger'
 
 export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promise<any>, any, void, userActionTypes> => {
@@ -173,8 +174,9 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
 
 export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async (dispatch, getState) => {
-    const { credentials } = getState()
+    const { credentials, observationEventInterrupted, observing } = getState()
 
+    //clear credentials
     try {
       storageService.remove('credentials')
       dispatch(clearCredentials())
@@ -190,6 +192,12 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
       })
     }
 
+    //stop recording when logging out
+    if (observing) {
+      await stopLocationAsync(observationEventInterrupted)
+    }
+
+    //logout from service
     try {
       await userService.logout(credentials)
 
