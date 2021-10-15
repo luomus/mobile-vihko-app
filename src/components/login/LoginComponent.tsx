@@ -106,13 +106,13 @@ const LoginComponent = (props: Props) => {
   const initializeApp = async () => {
 
     try {
-      await dispatch(getPermissions(credentials))
+      await dispatch(getPermissions())
     } catch (error) {
       showError(error.message)
     }
 
     try {
-      await dispatch(getMetadata(credentials))
+      await dispatch(getMetadata())
     } catch (error) {
       showError(error.message)
     }
