@@ -75,7 +75,7 @@ export default class ObservationEventScreen extends Component<NavigationStackScr
         )}
         isFocused={() => isFocused()}
       >
-        <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
+        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'document overview'} onClose={() => this.closeModal()} />
       </ObservationEventComponent>
     )
   }

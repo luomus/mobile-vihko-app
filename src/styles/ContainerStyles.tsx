@@ -21,9 +21,7 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   instructionContainer: {
-    flex: 1,
     flexDirection: 'row',
-    paddingBottom: 5,
     width: '95%'
   },
   messageAndInstructionsModalContainer: {

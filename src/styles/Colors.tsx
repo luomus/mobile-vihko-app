@@ -35,5 +35,5 @@ export default {
   //text colors
   whiteText: '#F8FFF5',
   darkText: '#5C6870',
-
+  linkText: '#0000EE'
 }

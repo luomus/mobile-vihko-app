@@ -1,65 +1,81 @@
 import React from 'react'
-import { Linking, View, FlatList, Text } from 'react-native'
+import { Linking, View, Text } from 'react-native'
 import Modal from 'react-native-modal'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
-import { vihkoEn, vihkoFi, vihkoSv, instructionsEn, instructionsFi, instructionsSv } from '../../config/urls'
+import Colors from '../../styles/Colors'
+import {
+  instructionsEn, instructionsFi, instructionsSv, lajiHomepageEn, lajiHomepageFi, lajiHomepageSv,
+  privacyPolicyEn, privacyPolicyFi, termsOfServiceEn, termsOfServiceFi, termsOfServiceSv,
+  vihkoEn, vihkoFi, vihkoSv, lolifeEn, lolifeFi, lolifeSv
+} from '../../config/urls'
 import { ScrollView } from 'react-native-gesture-handler'
 
 type Props = {
   isVisible: boolean,
+  screen: string,
   onClose: () => void
 }
 
 const InstructionModalComponent = (props: Props) => {
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
 
-  let vihko = ''
+  let links = []
+
+  let lajiHomepage = ''
   let instructions = ''
+  let lolifePage = ''
+  let privacyPolicy = ''
+  let termsOfService = ''
+  let vihkoPage = ''
 
   if (i18n.language === 'fi') {
-    vihko = vihkoFi
+    lajiHomepage = lajiHomepageFi
     instructions = instructionsFi
+    lolifePage = lolifeFi
+    privacyPolicy = privacyPolicyFi
+    termsOfService = termsOfServiceFi
+    vihkoPage = vihkoFi
   } else if (i18n.language === 'sv') {
-    vihko = vihkoSv
+    lajiHomepage = lajiHomepageSv
     instructions = instructionsSv
+    lolifePage = lolifeSv
+    privacyPolicy = privacyPolicyEn
+    termsOfService = termsOfServiceSv
+    vihkoPage = vihkoSv
   } else {
-    vihko = vihkoEn
+    lajiHomepage = lajiHomepageEn
     instructions = instructionsEn
+    lolifePage = lolifeEn
+    privacyPolicy = privacyPolicyEn
+    termsOfService = termsOfServiceEn
+    vihkoPage = vihkoEn
+  }
+
+  if (props.screen === 'home') {
+    links = [
+      <Text key={lajiHomepage} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(vihkoPage)}></Text>,
+      <Text key={instructions} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(instructions)}></Text>,
+      <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(privacyPolicy)}></Text>,
+      <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(termsOfService)}></Text>,
+      <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(lolifePage)}></Text>,
+    ]
+  } else {
+    links = [
+      <Text key={lajiHomepage} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(lajiHomepage)}></Text>,
+      <Text key={instructions} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(instructions)}></Text>,
+      <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(privacyPolicy)}></Text>,
+      <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(termsOfService)}></Text>
+    ]
   }
 
   return (
     <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
       <View style={Cs.messageAndInstructionsModalContainer}>
-        <ScrollView>
-          <View>
-            <FlatList
-              data={[...Array(7).keys()].map(val => { return { key: `${val + 1}` } })}
-              renderItem={({ item }) =>
-                <View style={Cs.instructionContainer}>
-                  <Text>{t('instructions.mobilevihko.' + item.key)}</Text>
-                </View>
-              }
-            />
-            <Text>
-              <Text>
-                {t('instructions.mobilevihko.8')}
-              </Text>
-              <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(vihko)}>
-                {' ' + `${t('instructions.mobilevihko.link')}`}
-              </Text>
-              <Text>
-                {t('instructions.mobilevihko.9')}
-                {'\n\n'}
-              </Text>
-              <Text>
-                {t('instructions.mobilevihko.10')}
-              </Text>
-              <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(instructions)}>
-                {' ' + `${'https://laji.fi/about/4981'}`}
-              </Text>
-            </Text>
-          </View>
+        <ScrollView style={{ margin: 10 }}>
+          <Text>
+            <Trans i18nKey={'instructions.' + props.screen} components={links} />
+          </Text>
         </ScrollView>
       </View>
     </Modal>

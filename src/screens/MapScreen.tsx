@@ -73,7 +73,7 @@ export default class MapScreen extends Component<NavigationStackScreenProps<Prop
         }}
         onPop={() => pop()}
       >
-        <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
+        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'map'} onClose={() => this.closeModal()} />
       </MapComponent>
     )
   }

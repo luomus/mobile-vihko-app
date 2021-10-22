@@ -35,6 +35,7 @@ import storageService from '../../services/storageService'
 type Props = {
   onSuccessfulLogin: () => void,
   onReset: () => void,
+  children?: ReactChild
 }
 
 const LoginComponent = (props: Props) => {
@@ -277,6 +278,7 @@ const LoginComponent = (props: Props) => {
             <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('en')}>EN</Text>
           </View>
         </View>
+        {props.children}
         <MessageComponent />
         <View style={Cs.versionContainer}>
           <Text style={Ts.alignedRightText}>{t('version')} {AppJSON.expo.version}</Text>

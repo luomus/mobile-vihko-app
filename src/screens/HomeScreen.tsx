@@ -82,7 +82,7 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
           this.props.navigation.navigate('EditObservationEvent', { sourcePage })
         }}
       >
-        <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
+        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'home'} onClose={() => this.closeModal()} />
       </HomeComponent>
     )
   }

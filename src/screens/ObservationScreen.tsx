@@ -105,7 +105,7 @@ class ObservationScreen extends Component<Props>  {
         isFocused={isFocused}
         goBack={goBack}
       >
-        <InstructionModalComponent isVisible={this.state.modalVisibility} onClose={() => this.closeModal()} />
+        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'observation form'} onClose={() => this.closeModal()} />
       </ObservationComponent>
     )
   }
