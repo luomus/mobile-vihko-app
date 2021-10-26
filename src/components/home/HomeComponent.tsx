@@ -48,7 +48,7 @@ const HomeComponent = (props: Props) => {
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
   let logTimeout: NodeJS.Timeout | undefined
-
+  const message = useSelector((state: rootState) => state.message)
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationZone = useSelector((state: rootState) => state.observationZone)
