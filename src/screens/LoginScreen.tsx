@@ -53,8 +53,7 @@ export default class LoginScreen extends Component<NavigationStackScreenProps<Pr
       headerTintColor: Colors.whiteText,
       headerRight: () =>
         <View style={Cs.languageContainer}>
-          <Icon iconStyle={Bs.headerButton} name='help' type='material-icons' size={25} onPress={() => params.openModal()} />
-          <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => navigation.navigate('Info')} />
+          <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => params.openModal()} />
         </View>
     }
   }

@@ -57,8 +57,7 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
           <Text style={Ts.languageText} onPress={() => { screenProps.i18n.changeLanguage('fi') }}>FI</Text>
           <Text style={Ts.languageText} onPress={() => { screenProps.i18n.changeLanguage('sv') }}>SV</Text>
           <Text style={Ts.languageText} onPress={() => { screenProps.i18n.changeLanguage('en') }}>EN</Text>
-          <Icon iconStyle={Bs.headerButton} name='help' type='material-icons' size={25} onPress={() => params.openModal()} />
-          <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => navigation.navigate('Info')} />
+          <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => params.openModal()} />
         </View>
     }
   }

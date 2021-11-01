@@ -79,7 +79,7 @@ class ObservationScreen extends Component<Props>  {
       headerLeft: () => null,
       headerRight: () =>
         <View style={Cs.languageContainer}>
-          <Icon iconStyle={Bs.headerButton} name='help' type='material-icons' size={25} onPress={() => params.openModal()} />
+          <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => params.openModal()} />
           <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25} onPress={() => params.homeButtonHandler()} />
         </View>
     }
@@ -105,7 +105,7 @@ class ObservationScreen extends Component<Props>  {
         isFocused={isFocused}
         goBack={goBack}
       >
-        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'observation form'} onClose={() => this.closeModal()} />
+        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'observation'} onClose={() => this.closeModal()} />
       </ObservationComponent>
     )
   }

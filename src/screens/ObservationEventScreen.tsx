@@ -53,7 +53,7 @@ export default class ObservationEventScreen extends Component<NavigationStackScr
       headerLeft: () => null,
       headerRight: () =>
         <View style={Cs.languageContainer}>
-          <Icon iconStyle={Bs.headerButton} name='help' type='material-icons' size={25} onPress={() => params.openModal()} />
+          <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => params.openModal()} />
           <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25} onPress={() => navigation.navigate('Home')} />
         </View>
     }
@@ -75,7 +75,7 @@ export default class ObservationEventScreen extends Component<NavigationStackScr
         )}
         isFocused={() => isFocused()}
       >
-        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'document overview'} onClose={() => this.closeModal()} />
+        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'overview'} onClose={() => this.closeModal()} />
       </ObservationEventComponent>
     )
   }

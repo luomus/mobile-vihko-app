@@ -58,7 +58,25 @@ const InstructionModalComponent = (props: Props) => {
       <Text key={instructions} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(instructions)}></Text>,
       <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(privacyPolicy)}></Text>,
       <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(termsOfService)}></Text>,
-      <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(lolifePage)}></Text>,
+      <Text key={termsOfService} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(lolifePage)}></Text>
+    ]
+  } else if (props.screen === 'map') {
+    links = [
+      <Text key={instructions} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(instructions)}></Text>
+    ]
+  } else if (props.screen === 'observation') {
+    links = [
+      <Text key={instructions} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(instructions)}></Text>
+    ]
+  } else if (props.screen === 'document') {
+    links = [
+      <Text key={lajiHomepage} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(vihkoPage)}></Text>,
+      <Text key={instructions} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(instructions)}></Text>
+    ]
+  } else if (props.screen === 'overview') {
+    links = [
+      <Text key={lajiHomepage} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(vihkoPage)}></Text>,
+      <Text key={instructions} style={{ color: Colors.linkText }} onPress={() => Linking.openURL(instructions)}></Text>
     ]
   } else {
     links = [

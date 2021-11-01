@@ -53,7 +53,7 @@ export default class MapScreen extends Component<NavigationStackScreenProps<Prop
       headerLeft: () => null,
       headerRight: () =>
         <View style={Cs.languageContainer}>
-          <Icon iconStyle={Bs.headerButton} name='help' type='material-icons' size={25} onPress={() => params.openModal()} />
+          <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => params.openModal()} />
           <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25} onPress={() => navigation.navigate('Home')} />
         </View>
     }
