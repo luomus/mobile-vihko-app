@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import AppContainer from './src/navigation/Navigator'
+import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
 import {
   store,
@@ -15,21 +14,20 @@ import { LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/lo
 import { cleanupLocationAsync } from './src/helpers/geolocationHelper'
 import { pathToLineStringConstructor } from './src/helpers/geoJSONHelper'
 import { LineString, MultiLineString } from 'geojson'
+import Navigator from './src/navigation/Navigator'
 
-export default class App extends Component {
-  componentDidMount() {
+const App = () => {
+  useEffect(() => {
     const { observationEventInterrupted } = store.getState()
     cleanupLocationAsync(observationEventInterrupted)
     store.dispatch(resetReducer())
-  }
+  }, [])
 
-  render() {
-    return  (
-      <Provider store={ store }>
-        <AppContainer />
-      </Provider>
-    )
-  }
+  return (
+    <Provider store={ store }>
+      <Navigator />
+    </Provider>
+  )
 }
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, error }) => {
@@ -60,3 +58,5 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
     }
   }
 })
+
+export default App

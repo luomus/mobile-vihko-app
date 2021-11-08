@@ -24,9 +24,17 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     width: '95%'
   },
-  messageAndInstructionsModalContainer: {
+  messageModalContainer: {
     padding: 10,
     borderRadius: 10,
+    alignItems: 'center',
+    backgroundColor: Colors.neutral3
+  },
+  userModalContainer: {
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: Colors.neutral3
   },
@@ -46,9 +54,11 @@ const ContainerStyles = StyleSheet.create({
 
   //navigation bar
   languageContainer: {
+    backgroundColor: Colors.primary5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 40
   },
 
   //login component

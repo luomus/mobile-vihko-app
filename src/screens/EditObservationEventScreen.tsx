@@ -1,85 +1,38 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { CommonActions, ParamListBase, Route } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import EditObservationEventComponent from '../components/forms/EditObservationEventComponent'
-import InstructionModalComponent from '../components/general/InstructionModalComponent'
-import Colors from '../styles/Colors'
-import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
-import { NavigationActions, StackActions } from 'react-navigation'
-import { Icon } from 'react-native-elements'
-import { View } from 'react-native'
-import Cs from '../styles/ContainerStyles'
-import Bs from '../styles/ButtonStyles'
 
 type Props = {
-  navigation: NavigationStackProp<any, any>
+  navigation: NativeStackNavigationProp<ParamListBase, string>,
+  route: Route<string>
 }
 
-export default class EditObservationEventScreen extends Component<NavigationStackScreenProps<Props>>  {
+const EditObservationEventScreen = (props: Props) => {
 
-  state: {
-    modalVisibility: boolean
-  }
+  const { dispatch, isFocused } = props.navigation
+  const { sourcePage } = props.route.params
 
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      modalVisibility: false
-    }
-  }
-
-  openModal = () => {
-    this.setState({ modalVisibility: true })
-  }
-
-  closeModal = () => {
-    this.setState({ modalVisibility: false })
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({
-      ...this.props.navigation.state.params,
-      openModal: this.openModal
-    })
-  }
-
-  static navigationOptions = ({ screenProps, navigation }: any) => {
-    const { params = {} } = navigation.state
-
-    return {
-      title: screenProps.t('edit observation event'),
-      headerStyle: {
-        backgroundColor: Colors.primary5
-      },
-      headerTintColor: Colors.whiteText,
-      headerLeft: () => null,
-      headerRight: () =>
-        <View style={Cs.languageContainer}>
-          <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => params.openModal()} />
-          <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25} onPress={() => navigation.navigate('Home')} />
-        </View>
-    }
-  }
-
-  render() {
-    const { dispatch, isFocused } = this.props.navigation
-    return (
-      <EditObservationEventComponent
-        onPressSubmit={() => {
-          this.props.navigation.navigate('Home')
-        }}
-        onPressObservationEvent={() => {
-          this.props.navigation.navigate('ObservationEvent')
-        }}
-        onLogout={() => dispatch(
-          StackActions.reset({
+  return (
+    <EditObservationEventComponent
+      onPressSubmit={() => {
+        props.navigation.navigate('home')
+      }}
+      onPressObservationEvent={(id: string) => {
+        props.navigation.navigate('overview', { id })
+      }}
+      onLogout={() => {
+        dispatch(
+          CommonActions.reset({
             index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'Login' })]
+            routes: [{ name: 'login' }]
           })
-        )}
-        sourcePage={this.props.navigation?.state?.params?.sourcePage}
-        isFocused={() => isFocused()}
-      >
-        <InstructionModalComponent isVisible={this.state.modalVisibility} screen={'document'} onClose={() => this.closeModal()} />
-      </EditObservationEventComponent>
-    )
-  }
+        )
+      }}
+      sourcePage={sourcePage}
+      isFocused={() => isFocused()}
+    />
+  )
 }
+
+export default EditObservationEventScreen

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactChild } from 'react'
+import React, { useState, useEffect } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
@@ -38,8 +38,7 @@ type Props = {
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
-  onPop: () => void,
-  children?: ReactChild
+  onPop: () => void
 }
 
 const MapComponent = (props: Props) => {
@@ -246,7 +245,7 @@ const MapComponent = (props: Props) => {
           eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
           unitId: null
         }))
-        props.onPressFinishObservationEvent('MapComponent')
+        props.onPressFinishObservationEvent('map')
       }
     }))
   }
@@ -261,7 +260,7 @@ const MapComponent = (props: Props) => {
       eventId,
       unitId
     }))
-    props.onPressEditing(true, 'MapComponent')
+    props.onPressEditing(true, 'map')
   }
 
   //preparations for opening the edit observation modal
@@ -481,7 +480,6 @@ const MapComponent = (props: Props) => {
           />
           : null
         }
-        {props.children}
         <MapModalComponent
           shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
           cancelObservation={cancelObservation} isVisible={modalVisibility}

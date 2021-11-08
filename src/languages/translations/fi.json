@@ -55,6 +55,7 @@
   "error saving new location": "Havainnon uuden paikan tallentaminen levylle epäonnistui.",
   "error saving new observation": "Havainnon tallentaminen levylle epäonnistui.",
   "event": "Käynnissä oleva havaintotapahtuma",
+  "event overview": "Tapahtuman yhteenveto",
   "exit": "Poistu",
   "exit app?": "Haluatko varmasti keskeyttää havainnoinnin ja poistua sovelluksesta?",
   "failed to check token": "Kirjautumistietojen tarkastaminen palvelimella epäonnistui.",

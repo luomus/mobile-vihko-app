@@ -27,7 +27,7 @@ import { observationEventFields, JX519ObservationEventFields, JX652ObservationEv
 
 type Props = {
   onPressSubmit: () => void,
-  onPressObservationEvent: () => void,
+  onPressObservationEvent: (id: string) => void,
   onLogout: () => void,
   children?: ReactChild,
   sourcePage: string,
@@ -67,7 +67,7 @@ const EditObservationEventComponent = (props: Props) => {
 
   useBackHandler(() => {
     if (props.isFocused()) {
-      if (props.sourcePage === 'MapComponent') {
+      if (props.sourcePage === 'map') {
         props.onPressSubmit()
         return true
       }
@@ -128,11 +128,11 @@ const EditObservationEventComponent = (props: Props) => {
       //replace events with the modified copy
       try {
         await dispatch(replaceObservationEventById(editedEvent, observationId.eventId))
-        if (props.sourcePage !== 'ObservationEventComponent') {
+        if (props.sourcePage !== 'overview') {
           await dispatch(finishObservationEvent())
           setModalVisibility(true)
         } else {
-          props.onPressObservationEvent()
+          props.onPressObservationEvent(observationId?.eventId)
         }
         dispatch(clearObservationId())
       } catch (error) {

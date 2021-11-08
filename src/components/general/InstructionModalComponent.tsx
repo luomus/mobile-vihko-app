@@ -89,7 +89,7 @@ const InstructionModalComponent = (props: Props) => {
 
   return (
     <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
-      <View style={Cs.messageAndInstructionsModalContainer}>
+      <View style={Cs.messageModalContainer}>
         <ScrollView style={{ margin: 10 }}>
           <Text>
             <Trans i18nKey={'instructions.' + props.screen} components={links} />

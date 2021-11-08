@@ -7,6 +7,11 @@ const ButtonStyles = StyleSheet.create({
     color: Colors.whiteText,
     borderRadius: 5
   },
+  headerUnavailableButton: {
+    padding: 10,
+    color: Colors.unavailableButton,
+    borderRadius: 5
+  },
   homeButton: {
     width: '20%',
     padding: 10,
