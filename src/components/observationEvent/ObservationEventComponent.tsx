@@ -123,7 +123,7 @@ const ObservationEventComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
+      await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error) {
