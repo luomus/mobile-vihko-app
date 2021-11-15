@@ -28,7 +28,7 @@ type Props = {
   navigation: NativeStackNavigationProp<ParamListBase, string>
 }
 
-const InstructionModalComponent = (props: Props) => {
+const UserModalComponent = (props: Props) => {
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEventInterrupted = useSelector((state: rootState) => state.observationEventInterrupted)
   const observing = useSelector((state: rootState) => state.observing)
@@ -55,15 +55,15 @@ const InstructionModalComponent = (props: Props) => {
       await stopLocationAsync(observationEventInterrupted)
     }
 
+    dispatch(logoutUser())
+    dispatch(resetReducer())
+
     props.navigation.dispatch(
       CommonActions.reset({
         index: 0,
         routes: [{ name: 'login' }]
       })
     )
-
-    dispatch(logoutUser())
-    dispatch(resetReducer())
   }
 
   return (
@@ -87,4 +87,4 @@ const InstructionModalComponent = (props: Props) => {
   )
 }
 
-export default InstructionModalComponent
+export default UserModalComponent

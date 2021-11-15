@@ -49,7 +49,6 @@ const EditObservationEventComponent = (props: Props) => {
   //reference for scrollView
   const scrollView = useRef<ScrollView | null>(null)
 
-  const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
   const schema = useSelector((state: rootState) => state.schema)
