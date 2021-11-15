@@ -123,7 +123,7 @@ const ObservationEventComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
+      await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error) {
@@ -183,7 +183,7 @@ const ObservationEventComponent = (props: Props) => {
                   unitId: ''
                 }
                 dispatch(setObservationId(id))
-                props.onPressObservationEvent('ObservationEventComponent')
+                props.onPressObservationEvent('overview')
               }}
                 title={undefined} height={40} width={45} buttonStyle={Bs.editEventButton}
                 gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
@@ -220,7 +220,7 @@ const ObservationEventComponent = (props: Props) => {
                     unitId: observation.id
                   }
                   dispatch(setObservationId(id))
-                  props.onPressObservation('ObservationEventComponent')
+                  props.onPressObservation('overview')
                 }}
                   title={t('edit button')} height={40} width={120} buttonStyle={Bs.basicPrimaryButton}
                   gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}

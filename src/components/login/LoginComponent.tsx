@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactChild } from 'react'
 import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
@@ -35,6 +35,7 @@ import storageService from '../../services/storageService'
 type Props = {
   onSuccessfulLogin: () => void,
   onReset: () => void,
+  children?: ReactChild
 }
 
 const LoginComponent = (props: Props) => {
@@ -47,7 +48,11 @@ const LoginComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    loadData()
+    if (credentials.token) {
+      initializeApp()
+    } else {
+      loadData()
+    }
   }, [credentials.token])
 
   const showError = (error: string) => {
@@ -75,47 +80,30 @@ const LoginComponent = (props: Props) => {
   //check if user has previously logged in, redirect to home screen if is
   const loadData = async () => {
     setLoggingIn(true)
-    if (!credentials.token) {
-      try {
-        await dispatch(initLocalCredentials())
-      } catch (error) {
 
-        //failed to fetch credentials from storage
-        if (error?.severity) {
-          showError(error.message)
-          setLoggingIn(false)
-          return
-        }
+    try {
+      await dispatch(initLocalCredentials())
+    } catch (error) {
 
-        //user was not logged in
-        const tmpToken = await storageService.fetch(tmpTokenKey)
-        if (tmpToken) {
-          await pollLogin(tmpToken)
-          await storageService.remove(tmpTokenKey)
-        } else {
-          setLoggingIn(false)
-        }
+      //failed to fetch credentials from storage
+      if (error?.severity) {
+        showError(error.message)
+        setLoggingIn(false)
+        return
       }
 
-    //user was logged in
-    } else {
-      await initializeApp()
+      //user was not logged in
+      const tmpToken = await storageService.fetch(tmpTokenKey)
+      if (tmpToken) {
+        await pollLogin(tmpToken)
+        await storageService.remove(tmpTokenKey)
+      } else {
+        setLoggingIn(false)
+      }
     }
   }
 
   const initializeApp = async () => {
-
-    try {
-      await dispatch(getPermissions(credentials))
-    } catch (error) {
-      showError(error.message)
-    }
-
-    try {
-      await dispatch(getMetadata(credentials))
-    } catch (error) {
-      showError(error.message)
-    }
 
     try {
       await dispatch(initObservationZones())
@@ -155,6 +143,19 @@ const LoginComponent = (props: Props) => {
     })
     )
 
+    //keep the following two action calls here, there will be errors if they're moved above
+    try {
+      await dispatch(getPermissions())
+    } catch (error) {
+      showError(error.message)
+    }
+
+    try {
+      await dispatch(getMetadata())
+    } catch (error) {
+      showError(error.message)
+    }
+
     props.onSuccessfulLogin()
     setLoggingIn(false)
   }
@@ -176,7 +177,7 @@ const LoginComponent = (props: Props) => {
         showFatalError(`${t('critical error')}:\n${error.message}`)
         setLoggingIn(false)
         return
-      //storage fails
+        //storage fails
       } else {
         showError(error.message)
         setLoggingIn(false)
@@ -244,9 +245,9 @@ const LoginComponent = (props: Props) => {
                 canceler()
               }
             }}
-          title={t('cancel')} height={40} width={150} buttonStyle={Bs.loginCancelButton}
-          gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-          textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+            title={t('cancel')} height={40} width={150} buttonStyle={Bs.loginCancelButton}
+            gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
+            textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
       </ActivityComponent>
@@ -277,6 +278,7 @@ const LoginComponent = (props: Props) => {
             <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('en')}>EN</Text>
           </View>
         </View>
+        {props.children}
         <MessageComponent />
         <View style={Cs.versionContainer}>
           <Text style={Ts.alignedRightText}>{t('version')} {AppJSON.expo.version}</Text>

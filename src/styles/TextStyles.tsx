@@ -2,6 +2,13 @@ import { StyleSheet } from 'react-native'
 import Colors from './Colors'
 
 const TextStyles = StyleSheet.create({
+  headerTitle: {
+    color: Colors.neutral2,
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingVertical: 15,
+    paddingHorizontal: 10
+  },
   buttonText: {
     fontFamily: 'Roboto',
     fontSize: 15,
@@ -17,7 +24,7 @@ const TextStyles = StyleSheet.create({
   },
   languageText: {
     padding: 8,
-    color: Colors.whiteText
+    color: Colors.darkText
   },
   loginHeader: {
     fontSize: 25,

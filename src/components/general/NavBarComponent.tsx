@@ -1,0 +1,90 @@
+import React, { useState } from 'react'
+import { View, Text } from 'react-native'
+import { useDispatch } from 'react-redux'
+import { ParamListBase, Route } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { Icon } from 'react-native-elements'
+import { useTranslation } from 'react-i18next'
+import {
+  DispatchType,
+  setMessageState
+} from '../../stores'
+import Cs from '../../styles/ContainerStyles'
+import Bs from '../../styles/ButtonStyles'
+import Ts from '../../styles/TextStyles'
+import LanguageModalComponent from './LanguageModalComponent'
+import InstructionModalComponent from './InstructionModalComponent'
+import UserModalComponent from './UserModalComponent'
+
+type Props = {
+  navigation: NativeStackNavigationProp<ParamListBase, string>,
+  route: Route<string>
+}
+
+const NavBarComponent = (props: Props) => {
+
+  const { t } = useTranslation()
+
+  const [languageModalVisibility, setLanguageModalVisibility] = useState<boolean>(false)
+  const [infoModalVisibility, setInfoModalVisibility] = useState<boolean>(false)
+  const [userModalVisibility, setUserModalVisibility] = useState<boolean>(false)
+
+  const dispatch: DispatchType = useDispatch()
+
+  //const { isNew } = props.route.params
+
+  const title = () => {
+    if (props.route.name === 'login') {
+      return t('mobile vihko')
+    } else if (props.route.name === 'home') {
+      return t('mobile vihko')
+    } else if (props.route.name === 'map') {
+      return t('notification body').substring(0, t('notification body').length - 1)
+    } else if (props.route.name === 'observation') {
+      //return t(isNew ? 'add observation' : 'edit observation')
+      return t('edit observation')
+    } else if (props.route.name === 'document') {
+      return t('edit observation event')
+    } else if (props.route.name === 'overview') {
+      return t('event overview')
+    }
+  }
+
+  const homeButtonHandler = () => {
+    dispatch(setMessageState({
+      type: 'dangerConf',
+      messageContent: t('discard observation?'),
+      cancelLabel: t('cancel'),
+      okLabel: t('exit'),
+      onOk: () => {
+        props.navigation.navigate('home')
+      }
+    }))
+  }
+
+  return (
+    <View style={Cs.languageContainer}>
+      <Text style={Ts.headerTitle}>{title()}</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <Icon iconStyle={Bs.headerButton} name='language' type='material-icons' size={25} onPress={() => setLanguageModalVisibility(true)} />
+        <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => setInfoModalVisibility(true)} />
+        {props.route.name !== 'login' ?
+          <Icon iconStyle={Bs.headerButton} name='perm-identity' type='material-icons' size={25} onPress={() => setUserModalVisibility(true)} /> :
+          <Icon iconStyle={Bs.headerUnavailableButton} name='perm-identity' type='material-icons' size={25} onPress={() => null} />
+        }
+        {props.route.name !== 'login' && props.route.name !== 'home' ?
+          <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25} onPress={props.route.name !== 'observation' && props.route.name !== 'document' ?
+            () => props.navigation.navigate('home') :
+            () => homeButtonHandler()
+          } /> :
+          <Icon iconStyle={Bs.headerUnavailableButton} name='home' type='material-icons' size={25} onPress={() => null} />
+        }
+        <LanguageModalComponent isVisible={languageModalVisibility} onClose={() => setLanguageModalVisibility(false)} />
+        <InstructionModalComponent isVisible={infoModalVisibility} screen={props.route.name} onClose={() => setInfoModalVisibility(false)} />
+        <UserModalComponent isVisible={userModalVisibility} onClose={() => setUserModalVisibility(false)} navigation={props.navigation} />
+      </View>
+    </View>
+  )
+}
+
+export default NavBarComponent

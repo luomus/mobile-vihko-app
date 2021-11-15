@@ -151,8 +151,8 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       event.gatherings[1].geometry = convertMultiLineStringToGCWrappedLineString(event.gatherings[1].geometry)
     }
 
-    // //for each observation in observation event try to send images to server
-    // //using saveImages, and clean out local properties
+    //for each observation in observation event try to send images to server
+    //using saveImages, and clean out local properties
     try {
       let newUnits = await Promise.all(units.map(async (unit: Record<string, any>) => {
         let newUnit: Record<string, any>

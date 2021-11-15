@@ -1,6 +1,5 @@
-import React, { useState, useEffect, ReactChild } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, BackHandler } from 'react-native'
-import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './EventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
@@ -22,7 +21,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler, useClipboard } from '@react-native-community/hooks'
 import MessageComponent from '../general/MessageComponent'
-import { withNavigation } from 'react-navigation'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
@@ -35,9 +33,7 @@ type Props = {
   onLogout: () => void,
   onPressMap: () => void,
   onPressObservationEvent: (id: string) => void,
-  onPressFinishObservationEvent: (sourcePage: string) => void,
-  navigation: any,
-  children?: ReactChild
+  onPressFinishObservationEvent: (sourcePage: string) => void
 }
 
 const HomeComponent = (props: Props) => {
@@ -48,7 +44,6 @@ const HomeComponent = (props: Props) => {
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
   let logTimeout: NodeJS.Timeout | undefined
-
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationZone = useSelector((state: rootState) => state.observationZone)
@@ -219,7 +214,7 @@ const HomeComponent = (props: Props) => {
           eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
           unitId: null
         }))
-        props.onPressFinishObservationEvent('HomeComponent')
+        props.onPressFinishObservationEvent('home')
       }
     }))
   }
@@ -257,7 +252,6 @@ const HomeComponent = (props: Props) => {
       <>
         <ScrollView contentContainerStyle={Cs.contentAndVersionContainer}>
           <View style={Cs.homeContentContainer}>
-            <UserInfoComponent onLogout={props.onLogout} />
             {observing ?
               <UnfinishedEventComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
               :
@@ -285,7 +279,6 @@ const HomeComponent = (props: Props) => {
             </Text>
           </View>
         </ScrollView>
-        {props.children}
         <ZoneModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
           onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.45', zoneUsed) }}
           setLoading={setLoading} showError={showError} />
@@ -295,4 +288,4 @@ const HomeComponent = (props: Props) => {
   }
 }
 
-export default withNavigation(HomeComponent)
+export default HomeComponent

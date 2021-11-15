@@ -27,7 +27,7 @@ import { observationEventFields, JX519ObservationEventFields, JX652ObservationEv
 
 type Props = {
   onPressSubmit: () => void,
-  onPressObservationEvent: () => void,
+  onPressObservationEvent: (id: string) => void,
   onLogout: () => void,
   children?: ReactChild,
   sourcePage: string,
@@ -49,7 +49,6 @@ const EditObservationEventComponent = (props: Props) => {
   //reference for scrollView
   const scrollView = useRef<ScrollView | null>(null)
 
-  const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
   const schema = useSelector((state: rootState) => state.schema)
@@ -67,7 +66,7 @@ const EditObservationEventComponent = (props: Props) => {
 
   useBackHandler(() => {
     if (props.isFocused()) {
-      if (props.sourcePage === 'MapComponent') {
+      if (props.sourcePage === 'map') {
         props.onPressSubmit()
         return true
       }
@@ -128,11 +127,11 @@ const EditObservationEventComponent = (props: Props) => {
       //replace events with the modified copy
       try {
         await dispatch(replaceObservationEventById(editedEvent, observationId.eventId))
-        if (props.sourcePage !== 'ObservationEventComponent') {
+        if (props.sourcePage !== 'overview') {
           await dispatch(finishObservationEvent())
           setModalVisibility(true)
         } else {
-          props.onPressObservationEvent()
+          props.onPressObservationEvent(observationId?.eventId)
         }
         dispatch(clearObservationId())
       } catch (error) {
@@ -152,7 +151,7 @@ const EditObservationEventComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await dispatch(uploadObservationEvent(event?.id, credentials, i18n.language, isPublic))
+      await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
       showMessage(t('post success'))
       setForm(undefined)
       props.onPressSubmit()

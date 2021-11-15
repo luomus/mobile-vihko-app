@@ -1,51 +1,35 @@
-import React, { Component } from 'react'
-import Colors from '../styles/Colors'
+import React from 'react'
+import { CommonActions, ParamListBase } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import LoginComponent from '../components/login/LoginComponent'
-import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
-import { NavigationActions, StackActions } from 'react-navigation'
-import Cs from '../styles/ContainerStyles'
-import Bs from '../styles/ButtonStyles'
-import { View } from 'react-native'
-import { Icon } from 'react-native-elements'
 
-
-type Props  = {
-  navigation: NavigationStackProp<any, any>
+type Props = {
+  navigation: NativeStackNavigationProp<ParamListBase, string>
 }
 
-export default class LoginScreen extends Component<NavigationStackScreenProps<Props>>  {
-  static navigationOptions = ({ screenProps, navigation }: any) => ({
-    title: screenProps.t('mobile vihko'),
-    headerStyle: {
-      backgroundColor: Colors.primary5
-    },
-    headerTintColor: Colors.whiteText,
-    headerRight: () =>
-      <View style={Cs.languageContainer}>
-        <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => navigation.navigate('Info')}/>
-      </View>
-  })
+const HomeScreen = (props: Props) => {
 
-  render() {
-    return (
-      <LoginComponent
-        onSuccessfulLogin={() => {this.props.navigation.dispatch(
-          StackActions.reset({
+  const { dispatch } = props.navigation
+  return (
+    <LoginComponent
+      onSuccessfulLogin={() => {
+        dispatch(
+          CommonActions.reset({
             index: 0,
-            actions: [NavigationActions.navigate({
-              routeName: 'Home'
-            })]
+            routes: [{ name: 'home' }]
           })
-        )}}
-        onReset = {() => {this.props.navigation.dispatch(
-          StackActions.reset({
+        )
+      }}
+      onReset={() => {
+        dispatch(
+          CommonActions.reset({
             index: 0,
-            actions: [NavigationActions.navigate({
-              routeName: 'Login'
-            })]
+            routes: [{ name: 'login' }]
           })
-        )}}
-      />
-    )
-  }
+        )
+      }}
+    />
+  )
 }
+
+export default HomeScreen

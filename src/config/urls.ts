@@ -58,6 +58,11 @@ export const vihkoEn              = 'https://laji.fi/en/vihko'
 export const vihkoFi              = 'https://laji.fi/vihko'
 export const vihkoSv              = 'https://laji.fi/sv/vihko'
 
+//lolife
+export const lolifeEn             = 'https://laji.fi/en/project/MHL.45/about'
+export const lolifeFi             = 'https://laji.fi/project/MHL.45/about'
+export const lolifeSv             = 'https://laji.fi/sv/project/MHL.45/about'
+
 //laji.fi observations page
 export const lajiFI               = 'https://laji.fi/observation/list'
 export const lajiSV               = 'https://laji.fi/sv/observation/list'

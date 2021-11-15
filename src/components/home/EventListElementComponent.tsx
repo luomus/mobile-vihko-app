@@ -34,7 +34,7 @@ const EventListElementComponent = (props: Props) => {
   }, [i18n.language])
 
   return (
-    <View style={{ marginVertical: 5, width: '90%', height: 100, flex: 1 }}>
+    <View style={{ marginVertical: 5, width: '90%', height: 120, flex: 1 }}>
       <Shadow startColor={Colors.dangerShadow} finalColor={Colors.dangerShadow} distance={2} radius={5}
         offset={[0, 1]} paintInside={true} viewStyle={{ alignSelf: 'stretch' }}>
         <View style={[Cs.unsentEventsContainer, { backgroundColor: Colors.neutral2 }]} >

@@ -144,7 +144,7 @@ const MessageComponent = () => {
 
   return (
     <Modal isVisible={isVisible} onBackButtonPress={onBackButtonPress}>
-      <View style={Cs.messageAndInstructionsModalContainer}>
+      <View style={Cs.messageModalContainer}>
         {message.length <= 1 ?
           null :
           <Text style={Ts.alignedRightText}>

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, ReactChild } from 'react'
+import React, { useState, useEffect } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { MultiLineString, LineString } from 'geojson'
-import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
+import { MultiPolygon } from 'geojson'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -38,8 +38,7 @@ type Props = {
   onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
   onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
-  onPop: () => void,
-  children?: ReactChild
+  onPop: () => void
 }
 
 const MapComponent = (props: Props) => {
@@ -246,7 +245,7 @@ const MapComponent = (props: Props) => {
           eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
           unitId: null
         }))
-        props.onPressFinishObservationEvent('MapComponent')
+        props.onPressFinishObservationEvent('map')
       }
     }))
   }
@@ -261,7 +260,7 @@ const MapComponent = (props: Props) => {
       eventId,
       unitId
     }))
-    props.onPressEditing(true, 'MapComponent')
+    props.onPressEditing(true, 'map')
   }
 
   //preparations for opening the edit observation modal
@@ -302,22 +301,28 @@ const MapComponent = (props: Props) => {
   //draws user path to map
   const pathOverlay = () => {
 
-    if (path[path.length - 1]?.length >= 1 && position) {
-      const pathToDraw = path.map((subpath, index) => {
-        if (index === path.length - 1) {
-          return subpath.concat([[
-            position.coords.longitude,
-            position.coords.latitude,
-            0.0,
-            0.0,
-            false
-          ]])
-        }
+    if (path?.length >= 1 && position) {
+      const pathPolygon: MultiPolygon | undefined = pathPolygonConstructor(path, [
+        position.coords.longitude,
+        position.coords.latitude
+      ])
 
-        return subpath
-      })
+      // if (path[path.length - 1]?.length >= 1 && position) {
+      //   const pathToDraw = path.map((subpath, index) => {
+      //     if (index === path.length - 1) {
+      //       return subpath.concat([[
+      //         position.coords.longitude,
+      //         position.coords.latitude,
+      //         0.0,
+      //         0.0,
+      //         false
+      //       ]])
+      //     }
 
-      const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
+      //     return subpath
+      //   })
+
+      //   const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
 
       return pathPolygon ?
         <Geojson
@@ -475,7 +480,6 @@ const MapComponent = (props: Props) => {
           />
           : null
         }
-        {props.children}
         <MapModalComponent
           shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
           cancelObservation={cancelObservation} isVisible={modalVisibility}

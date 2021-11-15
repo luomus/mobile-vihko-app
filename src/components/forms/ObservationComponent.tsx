@@ -42,7 +42,7 @@ type Props = {
   sourcePage?: string,
   children?: ReactChild,
   isFocused: () => boolean,
-  goBack: (routeKey?: string | null | undefined) => boolean
+  goBack: () => void
 }
 
 const ObservationComponent = (props: Props) => {
@@ -82,6 +82,10 @@ const ObservationComponent = (props: Props) => {
       }))
     }
   }, [])
+
+  useEffect(() => {
+    onUninitializedForm()
+  }, [lang])
 
   useBackHandler(() => {
 
@@ -298,10 +302,9 @@ const ObservationComponent = (props: Props) => {
       await dispatch(replaceObservationById(editedUnit, observationId?.eventId, observationId?.unitId))
       dispatch(clearObservationLocation())
       dispatch(clearObservationId())
-
-      if (editing.originalSourcePage === 'MapComponent') {
+      if (editing.originalSourcePage === 'map') {
         props.toMap()
-      } else if (editing.originalSourcePage === 'ObservationEventComponent') {
+      } else if (editing.originalSourcePage === 'overview') {
         props.toObservationEvent(observationId?.eventId)
       }
 
@@ -346,9 +349,9 @@ const ObservationComponent = (props: Props) => {
       dispatch(clearObservationId())
       dispatch(clearObservationLocation())
 
-      if (editing.originalSourcePage === 'MapComponent') {
+      if (editing.originalSourcePage === 'map') {
         props.toMap()
-      } else if (editing.originalSourcePage === 'ObservationEventComponent') {
+      } else if (editing.originalSourcePage === 'overview') {
         props.toObservationEvent(observationId?.eventId)
       }
       dispatch(setEditing({
