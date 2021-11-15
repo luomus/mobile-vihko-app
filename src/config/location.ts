@@ -23,3 +23,9 @@ export const FINLAND_BOUNDS = [[36.783, 71.348], [15.316, 56.311]]
 
 //maximum velocity for the gps outlier filter in m/s
 export const MAX_VEL = 33.33
+
+//minumum accepted distance between path points in meters
+export const MIN_DIST = 10
+
+//maximum speed increase z-score/sigma for accepting a path point into the path
+export const Z_SCORE = 3

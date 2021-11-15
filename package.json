@@ -24,7 +24,7 @@
     "@types/react-native-simple-radio-button": "2.7.1",
     "@types/react-native-uuid": "2.0.0",
     "apollo-boost": "0.4.9",
-    "axios": "0.21.1",
+    "axios": "^0.24.0",
     "buffer": "6.0.3",
     "expo": "^43.0.0",
     "expo-file-system": "~13.0.3",

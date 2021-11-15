@@ -2,9 +2,51 @@ import { LocationObject } from 'expo-location'
 import { PathPoint } from '../stores'
 import * as math from 'mathjs'
 import haversine from 'haversine-distance'
-import { MAX_VEL } from '../config/location'
+import { MAX_VEL, MIN_DIST, Z_SCORE } from '../config/location'
+import { LineString, MultiLineString } from 'geojson'
+import moment from 'moment'
+import { lineStringConstructor } from './geoJSONHelper'
 
-export const gpsOutlierFilter = (path: PathPoint[], locations: LocationObject[]) => {
+const temporalOutlierFilter = (path: LineString | MultiLineString, dateEnd: string) => {
+  if (path.type === 'LineString') {
+    const newCoordinates: number[][] = []
+    path.coordinates.forEach(point => {
+      if (point[2] === -1 || moment(point[2]).isBefore(moment(dateEnd, moment.HTML5_FMT.DATETIME_LOCAL))) {
+        newCoordinates.push(point.slice(0, 2))
+      }
+    })
+    if (newCoordinates.length > 1) {
+      path.coordinates = newCoordinates
+      return path
+    }
+  } else {
+    const newCoordinates: number[][][] = []
+    path.coordinates.forEach(coords => {
+      const newCoords: number[][] = []
+      coords.forEach(point => {
+        if (point[2] === -1 || moment(point[2]).isBefore(moment(dateEnd, moment.HTML5_FMT.DATETIME_LOCAL))) {
+          newCoords.push(point.slice(0, 2))
+        }
+      })
+
+      if (newCoords.length > 1) {
+        newCoordinates.push(newCoords)
+      }
+    })
+
+    if (newCoordinates.length === 0) {
+      return
+    } else if (newCoordinates.length === 1) {
+      path = lineStringConstructor(newCoordinates[0])
+    } else {
+      path.coordinates = newCoordinates
+    }
+
+    return path
+  }
+}
+
+const gpsOutlierFilter = (path: PathPoint[], locations: LocationObject[]) => {
 
   const points: PathPoint[] = []
   const pathLength: number = path.length
@@ -19,6 +61,15 @@ export const gpsOutlierFilter = (path: PathPoint[], locations: LocationObject[])
 
     //filter out points with high inaccuracies first
     if (location.coords.accuracy && location.coords.accuracy >= 100) {
+      return
+    }
+
+    //filter out point that are closer to last accepted point than minimum
+    const lastShownPoint = [...path, ...points].reverse().find((point: PathPoint) => {
+      return !point[4]
+    })
+
+    if (lastShownPoint && haversine([lastShownPoint[0], lastShownPoint[1]], coords) < MIN_DIST) {
       return
     }
 
@@ -68,7 +119,7 @@ export const gpsOutlierFilter = (path: PathPoint[], locations: LocationObject[])
     const velocity = haversine(coords, [lastPoint[0], lastPoint[1]]) / (location.timestamp - lastPoint[3]) * 1000
     const zScore = (velocity - mean) / deviation
 
-    if (zScore < 3) {
+    if (zScore < Z_SCORE) {
       newPoint = [
         coords[0],
         coords[1],
@@ -99,3 +150,5 @@ export const gpsOutlierFilter = (path: PathPoint[], locations: LocationObject[])
 
   return points
 }
+
+export { temporalOutlierFilter, gpsOutlierFilter }

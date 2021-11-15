@@ -22,6 +22,7 @@ import { log } from '../../helpers/logger'
 import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from '../../helpers/uploadHelper'
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
 import { saveImages } from '../../helpers/imageHelper'
+import { temporalOutlierFilter } from '../../helpers/pathFilters'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -139,6 +140,28 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         await fetchFinland(event, lang)
       } else {
         await fetchForeign(event, lang)
+      }
+    }
+
+    //filter out linestring points which are after document endDate and remove timestamps from coordinates
+    if (event.gatherings[0].geometry?.type === 'LineString' || event.gatherings[0].geometry?.type === 'MultiLineString') {
+      const geometry = temporalOutlierFilter(event.gatherings[0].geometry, event.gatheringEvent.dateEnd)
+      if (geometry) {
+        event.gatherings[0].geometry = geometry
+      } else {
+        delete event.gatherings[0].geometry
+      }
+    }
+    if (event.gatherings[1]?.geometry?.type === 'LineString' || event.gatherings[1]?.geometry?.type === 'MultiLineString') {
+      const geometry = temporalOutlierFilter(event.gatherings[0].geometry, event.gatheringEvent.dateEnd)
+      if (geometry) {
+        event.gatherings[1].geometry = geometry
+      } else {
+        if (Object.keys(event.gatherings[1]).length > 1) {
+          delete event.gatherings[1].geometry
+        } else {
+          event.gatherings = [event.gatherings[0]]
+        }
       }
     }
 
