@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -9,34 +9,38 @@ interface Props {
   objectTitle: string,
   parentObjectTitle: string,
   keyboardType:
-    'default' |
-    'email-address' |
-    'numeric' |
-    'phone-pad' |
-    'visible-password' |
-    'ascii-capable' |
-    'numbers-and-punctuation' |
-    'url' |
-    'number-pad' |
-    'name-phone-pad' |
-    'decimal-pad' |
-    'twitter' |
-    'web-search' |
-    undefined,
+  'default' |
+  'email-address' |
+  'numeric' |
+  'phone-pad' |
+  'visible-password' |
+  'ascii-capable' |
+  'numbers-and-punctuation' |
+  'url' |
+  'number-pad' |
+  'name-phone-pad' |
+  'decimal-pad' |
+  'twitter' |
+  'web-search' |
+  undefined,
   defaultValue: string | number | undefined,
   isArrayItem: boolean,
   parentCallback: Function | undefined,
-  editable: boolean,
+  editable: boolean
 }
 
 const FormInputComponent = (props: Props) => {
 
+  const textInput = useRef<TextInput | null>(null)
+
   const [currentValue, setCurrentValue] = useState<string>(props.defaultValue ? props.defaultValue.toString() : '')
+
   const { register, setValue } = useFormContext()
 
   useEffect(() => {
-    if (!props.isArrayItem)
+    if (!props.isArrayItem) {
       initField()
+    }
   }, [])
 
   const parseInput = (input: string) => {
@@ -65,6 +69,7 @@ const FormInputComponent = (props: Props) => {
           setCurrentValue(text)
         }}
         defaultValue={currentValue}
+        ref={textInput}
       />
     </View>
   )

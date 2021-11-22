@@ -72,7 +72,11 @@ const LoginComponent = (props: Props) => {
 
   //logout user and reset reducers on fatal error
   const onFatalError = async () => {
-    await dispatch(logoutUser())
+    try {
+      await dispatch(logoutUser())
+    } catch (error) { //catch if logout fails
+      showError(error.message)
+    }
     dispatch(resetReducer())
     props.onReset()
   }
