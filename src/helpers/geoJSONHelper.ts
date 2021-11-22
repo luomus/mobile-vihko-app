@@ -71,12 +71,13 @@ const pathToLineStringConstructor = (path: any[]) => {
   if (path.length <= 0) {
     return
   } else if (path.length === 1) {
-    const coordinates: Array<[number, number]> = []
+    const coordinates: Array<[number, number, number]> = []
     path[0].forEach((point: PathPoint) => {
       if (!point[4]) {
         coordinates.push([
           point[0],
-          point[1]
+          point[1],
+          point[3],
         ])
       }
     })
@@ -87,15 +88,16 @@ const pathToLineStringConstructor = (path: any[]) => {
 
     return lineStringConstructor(coordinates)
   } else {
-    const coordinates: Array<Array<[number, number]>> = []
+    const coordinates: Array<Array<[number, number, number]>> = []
     path.forEach(line => {
-      const subCoordinates: Array<[number, number]> = []
+      const subCoordinates: Array<[number, number, number]> = []
 
-      line.forEach((point:PathPoint) => {
+      line.forEach((point: PathPoint) => {
         if (!point[4]) {
           subCoordinates.push([
             point[0],
-            point[1]
+            point[1],
+            point[3],
           ])
         }
       })
@@ -120,7 +122,7 @@ const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString) 
       point[0],
       point[1],
       0.0,
-      0.0,
+      point[2] || -1,
       false
     ])]
 
@@ -131,7 +133,7 @@ const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString) 
         point[0],
         point[1],
         0.0,
-        0.0,
+        point[2] || -1,
         false
       ])
     )
@@ -248,4 +250,18 @@ const convertLocationDataArrToLineString = (locations: LocationObject[]) => {
   return lineString
 }
 
-export { lineStringsToPathDeconstructor, latLngArrayConstructor, pathPolygonConstructor, wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng, convertLocationDataArrToLineString, pathToLineStringConstructor, convertMultiLineStringToGCWrappedLineString }
+export {
+  lineStringsToPathDeconstructor,
+  latLngArrayConstructor,
+  pathPolygonConstructor,
+  wrapGeometryInFC,
+  convertFC2GC,
+  convertGC2FC,
+  convertLatLngToPoint,
+  convertPointToLatLng,
+  convertLocationDataArrToLineString,
+  pathToLineStringConstructor,
+  convertMultiLineStringToGCWrappedLineString,
+  lineStringConstructor,
+  multiLineStringConstructor,
+}
