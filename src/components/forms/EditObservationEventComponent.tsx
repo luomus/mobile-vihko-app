@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { View, ScrollView } from 'react-native'
+import { View } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
   rootState,
   DispatchType,
@@ -47,7 +48,7 @@ const EditObservationEventComponent = (props: Props) => {
   const [sending, setSending] = useState<boolean>(false)
 
   //reference for scrollView
-  const scrollView = useRef<ScrollView | null>(null)
+  const scrollView = useRef<KeyboardAwareScrollView | null>(null)
 
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
@@ -205,13 +206,13 @@ const EditObservationEventComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.formContainer}>
-        <ScrollView ref={ scrollView }>
+        <KeyboardAwareScrollView ref={ scrollView }>
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               {form}
             </FormProvider>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
           <FloatingIconButtonComponent onPress={methods.handleSubmit(onSubmit)} />

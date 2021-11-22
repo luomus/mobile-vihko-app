@@ -1,6 +1,6 @@
 import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker } from './formComponentBuilders'
 import { get } from 'lodash'
-import { ScrollView } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParser'
 
 const Form = (
@@ -12,7 +12,7 @@ const Form = (
   additionalFields: Record<string, any> | null,
   fieldOrder: string[] | null = null,
   lang: string,
-  scrollView: React.MutableRefObject<ScrollView | null>
+  scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>
 ) => {
   let toReturn: any[] = []
 

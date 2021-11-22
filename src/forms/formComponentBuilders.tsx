@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import FormInputComponent from '../components/formComponents/FormInputComponent'
 import FormImagePickerComponent from '../components/formComponents/FormImagePickerComponent'
 import FormImageKeywordPickerComponent from '../components/formComponents/FormImagePickerKeywordComponent'
@@ -95,7 +95,7 @@ export const createImageKeywordPicker = (
 export const createArray = (
   title: string, objectTitle: string, parentObjectTitle: string, type: string,
   defaultValue: Array<string> | undefined, editable: boolean,
-  firstEditable: boolean, scrollView: React.MutableRefObject<ScrollView | null>
+  firstEditable: boolean, scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>
 ) => {
   return <FormArrayComponent
     key={parentObjectTitle} title={title} objectTitle={objectTitle} parentObjectTitle={parentObjectTitle}
@@ -133,15 +133,16 @@ export const createInputElement = (
     return <FormInputComponent
       key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
-      keyboardType='default'
-      isArrayItem={isArrayItem} parentCallback={callbackFunction} editable={editable}
+      keyboardType='default' isArrayItem={isArrayItem} parentCallback={callbackFunction}
+      editable={editable}
     />
   } else if (type === 'integer') {
     return <FormInputComponent
       key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='numeric'
-      isArrayItem={isArrayItem} parentCallback={callbackFunction} editable={editable}
+      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+      editable={editable}
     />
   }
 }

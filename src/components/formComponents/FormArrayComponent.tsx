@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -16,7 +17,7 @@ interface Props {
   defaultValue: Array<string> | undefined,
   editable: boolean,
   firstEditable: boolean,
-  scrollView: React.MutableRefObject<ScrollView | null>,
+  scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>,
   createInputElement: (
     title: string, objectTitle: string, parentObjectTitle: string,
     type: string, defaultValue: string | number | undefined, isArrayItem: boolean,
@@ -30,6 +31,7 @@ const FormArrayComponent = (props: Props) => {
   const { register, setValue, watch, getValues } = useFormContext()
   const [elementDictionary, setElementDictionary] = useState<Record<string, any>>({})
   const stateRef = useRef<Record<string, any>>()
+  const arrayRef = useRef<View | null>(null)
   stateRef.current = elementDictionary
 
   useEffect(() => {
@@ -104,10 +106,12 @@ const FormArrayComponent = (props: Props) => {
     const childDefaultValue = props.inputType === 'string' ? '' : undefined
 
     //create new input element
-    elements.push(props.createInputElement(
+
+    const newInputElement = props.createInputElement(
       childObjectTiltle, childObjectTiltle, props.parentObjectTitle,
       props.inputType, childDefaultValue, true, callbackFunction, props.editable
-    ))
+    )
+    elements.push(newInputElement)
     setInputElements(elements)
 
     //add new input field to elementDict
@@ -120,12 +124,17 @@ const FormArrayComponent = (props: Props) => {
     values.push(childDefaultValue)
     setValue(props.parentObjectTitle, values)
 
-    //scroll down, as the new element appears
-    if (props.scrollView !== null) {
-      setTimeout(() => {
-        props.scrollView.current?.scrollToEnd()
-      }, 100)
-    }
+    //measure height of the array component and scroll below it, so the new input element won't be hidden under other components
+    arrayRef.current?.measureInWindow((fx, fy, width, height) => {
+      const measurements = {
+        fx: fx,
+        fy: fy,
+        width: width,
+        height: height,
+      }
+
+      props.scrollView.current?.scrollToPosition(0, (measurements.fy + measurements.height), false)
+    })
   }
 
   //removes the last input element from form
@@ -158,7 +167,7 @@ const FormArrayComponent = (props: Props) => {
   }
 
   return (
-    <View style={Cs.padding10Container}>
+    <View style={Cs.padding10Container} collapsable={false} ref={arrayRef}>
       <Text>{props.title}</Text>
       <View style={Cs.formArrayInputListContainer}>
         {inputElements}
