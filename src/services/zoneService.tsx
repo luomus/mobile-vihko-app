@@ -7,7 +7,8 @@ const getZones = async () => {
     'collectionID': 'HR.2951',
     'includePublic': true,
     'includeUnits': false,
-    'access_token': accessToken
+    'access_token': accessToken,
+    'pageSize': 100
   }
 
   const fetchResult = await axios.get(getZonesUrl, { params })
