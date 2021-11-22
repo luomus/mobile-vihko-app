@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
-import { View, Picker, Text } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, TextInput, TouchableOpacityBase, TouchableOpacity } from 'react-native'
+import { Picker } from '@react-native-picker/picker'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +15,7 @@ import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
+import ModalFilterPicker from 'react-native-modal-filter-picker'
 import i18n from '../../languages/i18n'
 
 type Props = {
@@ -27,22 +29,29 @@ type Props = {
 const ZoneModalComponent = (props: Props) => {
 
   const { t } = useTranslation()
-
   const observationZone = useSelector((state: rootState) => state.observationZone)
-
   const dispatch: DispatchType = useDispatch()
+  const [ shown, setShown ] = useState<boolean>(false)
+  const [ options, setOptions ] = useState<Record<string, any>[]>([])
 
   useEffect(() => {
-    createZonesList()
-  }, [i18n.language])
+    setOptions(createZonesList())
+
+  }, [i18n.language, observationZone.zones])
 
   const createZonesList = () => {
     if (observationZone.zones.length <= 0) {
-      return <Picker.Item key={undefined} label={''} value={undefined} />
+      return [{
+        key: undefined,
+        label: ''
+      }]
     } else {
-      return observationZone.zones.map((region: Record<string, any>) =>
-        <Picker.Item key={region.id} label={region.name === '' ? t('no zone') : region.name} value={region.id} />
-      )
+      return observationZone.zones.map((region: Record<string, any>) => {
+        return {
+          key: region.id,
+          label: region.name === '' ? t('no zone') : region.name
+        }
+      })
     }
   }
 
@@ -80,13 +89,19 @@ const ZoneModalComponent = (props: Props) => {
           </Text>
           <View style={Cs.zoneEventLauncherContainer}>
             <View style={Cs.zonePickerContainer}>
-              <Picker
-                selectedValue={observationZone.currentZoneId}
-                onValueChange={(itemValue: string) => {
-                  dispatch(setCurrentObservationZone(itemValue))
-                }}>
-                {createZonesList()}
-              </Picker>
+              <TouchableOpacity onPress={() => setShown(true)}>
+                <Text>{options.find((option) => option.key === observationZone.currentZoneId)?.label}</Text>
+              </TouchableOpacity>
+              <ModalFilterPicker
+                visible={shown}
+                onSelect={(item: Record<string, any>) => {
+                  dispatch(setCurrentObservationZone(item.key))
+                  setShown(false)
+                }}
+                onCancel={() => setShown(false)}
+                options={options}
+                selectedOption={observationZone.currentZoneId}
+              />
             </View>
             <View style={Cs.padding5Container}>
               <ButtonComponent onPressFunction={() => refreshZonesList()} title={undefined}
