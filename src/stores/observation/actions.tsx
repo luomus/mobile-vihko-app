@@ -153,7 +153,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       }
     }
     if (event.gatherings[1]?.geometry?.type === 'LineString' || event.gatherings[1]?.geometry?.type === 'MultiLineString') {
-      const geometry = temporalOutlierFilter(event.gatherings[0].geometry, event.gatheringEvent.dateEnd)
+      const geometry = temporalOutlierFilter(event.gatherings[1].geometry, event.gatheringEvent.dateEnd)
       if (geometry) {
         event.gatherings[1].geometry = geometry
       } else {

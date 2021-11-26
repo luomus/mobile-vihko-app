@@ -19,7 +19,7 @@ const temporalOutlierFilter = (path: LineString | MultiLineString, dateEnd: stri
       path.coordinates = newCoordinates
       return path
     }
-  } else {
+  } else if (path.type === 'MultiLineString') {
     const newCoordinates: number[][][] = []
     path.coordinates.forEach(coords => {
       const newCoords: number[][] = []
@@ -42,6 +42,8 @@ const temporalOutlierFilter = (path: LineString | MultiLineString, dateEnd: stri
       path.coordinates = newCoordinates
     }
 
+    return path
+  } else {
     return path
   }
 }
