@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { View, ScrollView } from 'react-native'
+import { View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
   rootState,
   DispatchType,
@@ -56,7 +57,7 @@ const ObservationComponent = (props: Props) => {
   const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
 
   //reference for scrollView
-  const scrollView = useRef<ScrollView | null>(null)
+  const scrollView = useRef<KeyboardAwareScrollView | null>(null)
 
   const editing = useSelector((state: rootState) => state.editing)
   const observation = useSelector((state: rootState) => state.observation)
@@ -199,7 +200,7 @@ const ObservationComponent = (props: Props) => {
 
   //as autocomplete field is the only possible validation error, scroll to top when validation error occurs
   const onError = async () => {
-    scrollView?.current?.scrollTo({ y: 0, animated: false })
+    scrollView?.current?.scrollToPosition(0, 0, false)
   }
 
   const createNewObservation = async (data: { [key: string]: any }) => {
@@ -381,7 +382,7 @@ const ObservationComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.formContainer}>
-        <ScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
           {observationId ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => editObservationLocation()}
@@ -407,7 +408,7 @@ const ObservationComponent = (props: Props) => {
               {form}
             </FormProvider>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
         {props.children}
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>

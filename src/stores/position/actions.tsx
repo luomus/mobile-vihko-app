@@ -10,7 +10,7 @@ import {
   PathPoint,
   SET_FIRST_LOCATION
 } from './types'
-import { gpsOutlierFilter } from '../../helpers/gpsOutlierFilter'
+import { gpsOutlierFilter } from '../../helpers/pathFilters'
 
 export const updateLocation = (location: LocationObject | null): locationActionTypes => ({
   type: UPDATE_LOCATION,

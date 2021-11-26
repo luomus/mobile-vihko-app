@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking, View, Text } from 'react-native'
+import { Linking, ScrollView, View, Text } from 'react-native'
 import Modal from 'react-native-modal'
 import { Trans, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
@@ -9,7 +9,6 @@ import {
   privacyPolicyEn, privacyPolicyFi, termsOfServiceEn, termsOfServiceFi, termsOfServiceSv,
   vihkoEn, vihkoFi, vihkoSv, lolifeEn, lolifeFi, lolifeSv
 } from '../../config/urls'
-import { ScrollView } from 'react-native-gesture-handler'
 
 type Props = {
   isVisible: boolean,
