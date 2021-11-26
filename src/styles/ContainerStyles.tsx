@@ -119,10 +119,30 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   zonePickerContainer: {
+    height: 40,
     width: 240,
     borderColor: Colors.neutral5,
     borderWidth: 1,
+    marginTop: 5,
     marginLeft: 10
+  },
+  filterPickerContainer: {
+    flex: 1,
+    width: Dimensions.get('window').width * 0.95,
+    maxHeight: Dimensions.get('window').height * 0.95,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginTop: 5,
+  },
+  filterPickerOverlayContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   unfinishedEventButtonsContainer: {
     paddingHorizontal: 5,
