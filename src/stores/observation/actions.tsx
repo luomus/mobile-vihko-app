@@ -17,7 +17,7 @@ import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
-import { overlapsFinland } from '../../helpers/geometryHelper'
+import { createUnitBoundingBox, overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
 import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from '../../helpers/uploadHelper'
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
@@ -143,15 +143,36 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       }
     }
 
-    //filter out linestring points which are after document endDate and remove timestamps from coordinates
+    //filter out linestring points which are after document endDate and remove timestamps from coordinates,
+    //add bounding box or first recorded point as geometry to lolife forms if path gets completly removed
     if (event.gatherings[0].geometry?.type === 'LineString' || event.gatherings[0].geometry?.type === 'MultiLineString') {
       const geometry = temporalOutlierFilter(event.gatherings[0].geometry, event.gatheringEvent.dateEnd)
       if (geometry) {
         event.gatherings[0].geometry = geometry
       } else {
-        delete event.gatherings[0].geometry
+        if (event.formID !== 'MHL.45') {
+          delete event.gatherings[0].geometry
+        } else {
+          if (event.gatherings[0].units.length >= 1) {
+            event.gatherings[0].geometry = createUnitBoundingBox(event)
+          } else {
+            let firstLocation =
+              event.gatherings[0].geometry.type === 'LineString' ?
+                event.gatherings[0].geometry.coordinates[0] :
+                event.gatherings[0].geometry.coordinates[0][0]
+
+            event.gatherings[0].geometry = {
+              coordinates: [
+                firstLocation[1],
+                firstLocation[0]
+              ],
+              type: 'Point'
+            }
+          }
+        }
       }
     }
+
     if (event.gatherings[1]?.geometry?.type === 'LineString' || event.gatherings[1]?.geometry?.type === 'MultiLineString') {
       const geometry = temporalOutlierFilter(event.gatherings[1].geometry, event.gatheringEvent.dateEnd)
       if (geometry) {
