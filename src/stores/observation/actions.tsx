@@ -163,8 +163,8 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
 
             event.gatherings[0].geometry = {
               coordinates: [
-                firstLocation[1],
-                firstLocation[0]
+                firstLocation[0],
+                firstLocation[1]
               ],
               type: 'Point'
             }
