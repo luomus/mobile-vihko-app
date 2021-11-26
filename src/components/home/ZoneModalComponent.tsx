@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, TextInput, TouchableOpacityBase, TouchableOpacity } from 'react-native'
-import { Picker } from '@react-native-picker/picker'
+import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity } from 'react-native'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -31,8 +30,8 @@ const ZoneModalComponent = (props: Props) => {
   const { t } = useTranslation()
   const observationZone = useSelector((state: rootState) => state.observationZone)
   const dispatch: DispatchType = useDispatch()
-  const [ shown, setShown ] = useState<boolean>(false)
-  const [ options, setOptions ] = useState<Record<string, any>[]>([])
+  const [shown, setShown] = useState<boolean>(false)
+  const [options, setOptions] = useState<Record<string, any>[]>([])
 
   useEffect(() => {
     setOptions(createZonesList())
@@ -90,7 +89,7 @@ const ZoneModalComponent = (props: Props) => {
           <View style={Cs.zoneEventLauncherContainer}>
             <View style={Cs.zonePickerContainer}>
               <TouchableOpacity onPress={() => setShown(true)}>
-                <Text>{options.find((option) => option.key === observationZone.currentZoneId)?.label}</Text>
+                <Text style={{ alignSelf: 'flex-start', fontSize: 16, padding: 8 }}>{options.find((option) => option.key === observationZone.currentZoneId)?.label}</Text>
               </TouchableOpacity>
               <ModalFilterPicker
                 visible={shown}
@@ -101,6 +100,10 @@ const ZoneModalComponent = (props: Props) => {
                 onCancel={() => setShown(false)}
                 options={options}
                 selectedOption={observationZone.currentZoneId}
+                placeholderText={t('choose observation zone')}
+                overlayStyle={Cs.filterPickerOverlayContainer}
+                listContainerStyle={Cs.filterPickerContainer}
+                renderCancelButton={() => { return null }}
               />
             </View>
             <View style={Cs.padding5Container}>
