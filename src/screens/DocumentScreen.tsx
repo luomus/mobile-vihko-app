@@ -1,24 +1,26 @@
 import React from 'react'
 import { CommonActions, ParamListBase, Route } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import ObservationEventComponent from '../components/observationEvent/ObservationEventComponent'
+import DocumentComponent from '../components/forms/DocumentComponent'
 
 type Props = {
   navigation: NativeStackNavigationProp<ParamListBase, string>,
   route: Route<string>
 }
 
-const ObservationEventScreen = (props: Props) => {
+const DocumentScreen = (props: Props) => {
 
   const { dispatch, isFocused } = props.navigation
-  const { id } = props.route.params
+  const { sourcePage } = props.route.params
 
   return (
-    <ObservationEventComponent
-      id={id}
-      onPressHome={() => { props.navigation.navigate('home') }}
-      onPressObservation={(sourcePage?: string) => { props.navigation.navigate('observation', { sourcePage }) }}
-      onPressObservationEvent={(sourcePage?: string) => { props.navigation.navigate('document', { sourcePage }) }}
+    <DocumentComponent
+      onPressSubmit={() => {
+        props.navigation.navigate('home')
+      }}
+      onPressObservationEvent={(id: string) => {
+        props.navigation.navigate('overview', { id })
+      }}
       onLogout={() => {
         dispatch(
           CommonActions.reset({
@@ -27,9 +29,10 @@ const ObservationEventScreen = (props: Props) => {
           })
         )
       }}
+      sourcePage={sourcePage}
       isFocused={() => isFocused()}
     />
   )
 }
 
-export default ObservationEventScreen
+export default DocumentScreen

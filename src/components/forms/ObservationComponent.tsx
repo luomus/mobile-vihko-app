@@ -28,7 +28,7 @@ import uuid from 'react-native-uuid'
 import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
-import FloatingIconButtonComponent from './FloatingIconButtonComponent'
+import SaveButtonComponent from './SaveButtonComponent'
 import { JX519Fields, overrideJX519Fields, JX519FieldOrder, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
@@ -412,7 +412,7 @@ const ObservationComponent = (props: Props) => {
         {props.children}
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <FloatingIconButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
+          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
         </View>
       </View>
     )

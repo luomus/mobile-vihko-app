@@ -1,6 +1,6 @@
 import React from 'react'
 import i18n from '../../languages/i18n'
-import SchemaObjectComponent from '../../components/observationEvent/SchemaObjectComponent'
+import SchemaObjectComponent from '../../components/overview/SchemaObjectComponent'
 import { parsePathForFieldParams } from './SchemaToInputParser'
 import { get, set } from 'lodash'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'

@@ -232,7 +232,7 @@ const ContainerStyles = StyleSheet.create({
     margin: 5
   },
 
-  //observation event component
+  //overview component
   overviewBaseContainer: {
     padding: 10,
     flexDirection: 'column'
@@ -393,7 +393,7 @@ const ContainerStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
-  floatingButtonContainer: {
+  saveButtonContainer: {
     bottom: 0,
     position: 'absolute'
   }

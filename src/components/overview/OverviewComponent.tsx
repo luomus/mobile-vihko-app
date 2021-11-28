@@ -37,7 +37,7 @@ type Props = {
   children?: ReactChild
 }
 
-const ObservationEventComponent = (props: Props) => {
+const OverviewComponent = (props: Props) => {
 
   const [sending, setSending] = useState<boolean>(false)
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
@@ -185,28 +185,28 @@ const ObservationEventComponent = (props: Props) => {
                 dispatch(setObservationId(id))
                 props.onPressObservationEvent('overview')
               }}
-                title={undefined} height={40} width={45} buttonStyle={Bs.editEventButton}
+                title={undefined} height={40} width={45} buttonStyle={Bs.iconButton}
                 gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                 textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
               />
             </View>
             <View style={Cs.padding5Container}>
               <ButtonComponent onPressFunction={() => setModalVisibility(true)} title={undefined}
-                height={40} width={45} buttonStyle={Bs.sendEventButton}
+                height={40} width={45} buttonStyle={Bs.iconButton}
                 gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                 textStyle={Ts.buttonText} iconName={'send'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
               />
             </View>
             <View style={Cs.padding5Container}>
               <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={undefined}
-                height={40} width={45} buttonStyle={Bs.removeEventButton}
+                height={40} width={45} buttonStyle={Bs.iconButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
           </View>
         </View>
-        <Text style={Ts.observationText}>{t('observations')}:</Text>
+        <Text style={Ts.boldText}>{t('observations')}:</Text>
         {observations.map(observation =>
           <View key={observation.id}>
             <ObservationInfoComponent
@@ -222,7 +222,7 @@ const ObservationEventComponent = (props: Props) => {
                   dispatch(setObservationId(id))
                   props.onPressObservation('overview')
                 }}
-                  title={t('edit button')} height={40} width={120} buttonStyle={Bs.basicPrimaryButton}
+                  title={t('edit button')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
                   gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                   textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                 />
@@ -231,7 +231,7 @@ const ObservationEventComponent = (props: Props) => {
                 <ButtonComponent onPressFunction={() => {
                   showDeleteObservation(event.id, observation.id)
                 }}
-                  title={t('remove')} height={40} width={120} buttonStyle={Bs.basicNeutralButton}
+                  title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
                   gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                   textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
                 />
@@ -248,4 +248,4 @@ const ObservationEventComponent = (props: Props) => {
   }
 }
 
-export default ObservationEventComponent
+export default OverviewComponent

@@ -2,6 +2,21 @@ import { StyleSheet } from 'react-native'
 import Colors from './Colors'
 
 const TextStyles = StyleSheet.create({
+
+  //general
+  buttonText: {
+    fontFamily: 'Roboto',
+    fontSize: 15,
+    fontWeight: '400',
+    marginTop: 5
+  },
+  alignedRightText: {
+    textAlign: 'right',
+    alignSelf: 'stretch',
+    padding: 10
+  },
+
+  //navigation bar
   headerTitle: {
     color: Colors.neutral2,
     fontSize: 20,
@@ -9,23 +24,18 @@ const TextStyles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10
   },
-  buttonText: {
-    fontFamily: 'Roboto',
-    fontSize: 15,
-    fontWeight: '400',
-    marginTop: 5
-  },
-  infoText: {
-    fontSize: 18
-  },
-  speciesText: {
-    fontWeight: 'bold',
-    padding: 10
-  },
   languageText: {
     padding: 8,
     color: Colors.darkText
   },
+  zonePickerDescription: {
+    color: Colors.neutral7,
+    fontSize: 16,
+    paddingLeft: 10,
+    paddingBottom: 10
+  },
+
+  //login component
   loginHeader: {
     fontSize: 25,
   },
@@ -33,11 +43,21 @@ const TextStyles = StyleSheet.create({
     textAlign: 'center',
     padding: 10
   },
-  errorText: {
-    color: Colors.dangerButton2
+  loginLanguage: {
+    padding: 10
   },
-  observationText: {
-    fontWeight: 'bold'
+
+  //home component
+  formLauncherTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingVertical: 15,
+    paddingHorizontal: 25
+  },
+  formLauncherText: {
+    fontSize: 16,
+    paddingBottom: 25,
+    paddingHorizontal: 25
   },
   homeScreenTitle: {
     color: Colors.neutral9,
@@ -59,48 +79,6 @@ const TextStyles = StyleSheet.create({
     padding: 10,
     alignItems: 'flex-start',
     width: '100%'
-  },
-  loginLanguage: {
-    padding: 10
-  },
-  boldText: {
-    fontWeight: 'bold'
-  },
-  noImageText: {
-    color: Colors.neutral5
-  },
-  alignedRightText: {
-    textAlign: 'right',
-    alignSelf: 'stretch',
-    padding: 10
-  },
-  linkToLajiText: {
-    fontSize: 14,
-    fontWeight: 'bold'
-  },
-  centeredBold: {
-    fontSize: 15,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginBottom: 5
-  },
-  mapButtonsLeftTitle: {
-    fontSize: 16,
-    padding: 6
-  },
-  fontSizeFifteen: {
-    fontSize: 15
-  },
-  formLauncherTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    paddingVertical: 15,
-    paddingHorizontal: 25
-  },
-  formLauncherText: {
-    fontSize: 16,
-    paddingBottom: 25,
-    paddingHorizontal: 25
   },
   eventListElementTitle: {
     fontSize: 18,
@@ -129,11 +107,27 @@ const TextStyles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 10
   },
-  zonePickerDescription: {
-    color: Colors.neutral7,
+
+  //map component
+  centeredBold: {
+    fontSize: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginBottom: 5
+  },
+  mapButtonsLeftTitle: {
     fontSize: 16,
-    paddingLeft: 10,
-    paddingBottom: 10
+    padding: 6
+  },
+
+  //overview component
+  boldText: {
+    fontWeight: 'bold'
+  },
+
+  //form componenets
+  noImageText: {
+    color: Colors.neutral5
   }
 })
 

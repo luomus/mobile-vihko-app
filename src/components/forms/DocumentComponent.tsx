@@ -22,7 +22,7 @@ import MessageComponent from '../general/MessageComponent'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
-import FloatingIconButtonComponent from './FloatingIconButtonComponent'
+import SaveButtonComponent from './SaveButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import { observationEventFields, JX519ObservationEventFields, JX652ObservationEventFields } from '../../config/fields'
 
@@ -35,7 +35,7 @@ type Props = {
   isFocused: () => boolean
 }
 
-const EditObservationEventComponent = (props: Props) => {
+const DocumentComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
   const [event, setEvent] = useState<Record<string, any> | undefined>(undefined)
   const [form, setForm] = useState<Array<Element> | undefined>(undefined)
@@ -215,7 +215,7 @@ const EditObservationEventComponent = (props: Props) => {
         </KeyboardAwareScrollView>
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <FloatingIconButtonComponent onPress={methods.handleSubmit(onSubmit)} />
+          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit)} />
         </View>
         <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.onPressSubmit} sendObservationEvent={sendObservationEvent} />
         {props.children}
@@ -224,4 +224,4 @@ const EditObservationEventComponent = (props: Props) => {
   }
 }
 
-export default EditObservationEventComponent
+export default DocumentComponent

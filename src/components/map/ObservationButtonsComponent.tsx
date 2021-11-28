@@ -134,7 +134,7 @@ const ObservationButtonsComponent = (props: Props) => {
             {createRightSideButtonsList()}
             {createButton(
               t('cancel'),
-              Bs.endButton,
+              Bs.homeTextAndIconButton,
               () => props.cancelButton(),
               'neutral', undefined, undefined, 120
             )}
@@ -153,7 +153,7 @@ const ObservationButtonsComponent = (props: Props) => {
           )}
           {createButton(
             t('cancel'),
-            Bs.endButton,
+            Bs.homeTextAndIconButton,
             () => props.cancelButton(),
             'neutral', undefined, undefined, 120
           )}
