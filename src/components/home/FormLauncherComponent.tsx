@@ -48,32 +48,35 @@ const FormLauncherComponent = (props: Props) => {
     }
   }
 
-  return (
-    <View style={{ marginVertical: 5, width: '90%', height: 150 }}>
-      {
-        observing ?
-          <Shadow startColor={Colors.neutralShadow} finalColor={Colors.neutralShadow} distance={2} radius={5}
-            offset={[0, 1]} paintInside={true} viewStyle={{ alignSelf: 'stretch' }}>
-            <View style={[Cs.eventLauncherContainer, { backgroundColor: Colors.neutral3 }]}>
-              <TouchableOpacity onPress={() => null} activeOpacity={0.8}>
-                <Text style={[Ts.formLauncherTitle, { color: Colors.neutral6 }]}>{title}</Text>
-                <Text style={[Ts.formLauncherText, { color: Colors.neutral6 }]}>{description}</Text>
-              </TouchableOpacity>
+  if (observing) {
+    return (
+      <View style={{ marginVertical: 5, width: '90%' }}>
+        <Shadow startColor={Colors.neutralShadow} finalColor={Colors.neutralShadow} distance={2} radius={5}
+          offset={[0, 1]} paintInside={true} viewStyle={{ alignSelf: 'stretch' }}>
+          <TouchableOpacity onPress={() => null} activeOpacity={0.8}>
+            <View style={Cs.eventLauncherContainer}>
+              <Text style={[Ts.formLauncherTitle, { color: Colors.neutral6 }]}>{title}</Text>
+              <Text style={[Ts.formLauncherText, { color: Colors.neutral6 }]}>{description}</Text>
             </View>
-          </Shadow>
-          :
-          <Shadow startColor={Colors.primaryShadow} finalColor={Colors.primaryShadow} distance={2} radius={5}
-            offset={[0, 1]} paintInside={true} viewStyle={{ alignSelf: 'stretch' }}>
-            <View style={[Cs.eventLauncherContainer, { backgroundColor: Colors.neutral2 }]}>
-              <TouchableOpacity onPress={() => { handleBeginEvent() }} activeOpacity={0.8}>
-                <Text style={[Ts.formLauncherTitle, { color: Colors.primary5 }]}>{title}</Text>
-                <Text style={[Ts.formLauncherText, { color: Colors.neutral9 }]}>{description}</Text>
-              </TouchableOpacity>
+          </TouchableOpacity>
+        </Shadow>
+      </View>
+    )
+  } else {
+    return (
+      <View style={{ marginVertical: 5, width: '90%' }}>
+        <Shadow startColor={Colors.primaryShadow} finalColor={Colors.primaryShadow} distance={2} radius={5}
+          offset={[0, 1]} paintInside={true} viewStyle={{ alignSelf: 'stretch' }}>
+          <TouchableOpacity onPress={() => { handleBeginEvent() }} activeOpacity={0.8}>
+            <View style={Cs.eventLauncherContainer}>
+              <Text style={[Ts.formLauncherTitle, { color: Colors.primary5 }]}>{title}</Text>
+              <Text style={[Ts.formLauncherText, { color: Colors.neutral9 }]}>{description}</Text>
             </View>
-          </Shadow>
-      }
-    </View>
-  )
+          </TouchableOpacity>
+        </Shadow>
+      </View>
+    )
+  }
 }
 
 export default FormLauncherComponent

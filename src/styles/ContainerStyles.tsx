@@ -12,8 +12,7 @@ const ContainerStyles = StyleSheet.create({
   },
   contentAndVersionContainer: {
     flexGrow: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    flexDirection: 'column'
   },
   inputContainer: {
     width: '90%',
@@ -101,14 +100,16 @@ const ContainerStyles = StyleSheet.create({
     width: '90%'
   },
   eventLauncherContainer: {
-    height: '100%',
-    width: '100%',
+    backgroundColor: Colors.neutral3,
     borderRadius: 5,
+    minHeight: 150,
+    maxHeight: 500
   },
   unsentEventsContainer: {
-    height: '100%',
-    width: '100%',
+    backgroundColor: Colors.neutral3,
     borderRadius: 5,
+    minHeight: 120,
+    maxHeight: 300
   },
   continueEventContainer: {
     width: '90%',
