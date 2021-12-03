@@ -61,7 +61,8 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
     } catch (error) {
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       if (error.message?.includes('INVALID TOKEN')) {
         return Promise.reject({
@@ -114,7 +115,8 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
     } catch (error) {
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/save()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -136,7 +138,8 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
       await dispatch(deleteObservationEvent(newID))
       log.error({
         location: '/components/HomeComponent.tsx beginObservationEvent()/watchLocationAsync()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -171,7 +174,8 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     } catch (error) {
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       if (error.message?.includes('INVALID TOKEN')) {
         return Promise.reject({
@@ -191,7 +195,8 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     } catch (error) {
       log.error({
         location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',

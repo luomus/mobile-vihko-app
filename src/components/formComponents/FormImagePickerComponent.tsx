@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
-import { DispatchType, setMessageState } from '../../stores'
+import { rootState, DispatchType, setMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
@@ -24,6 +24,8 @@ const ImagePickerComponent = (props: Props) => {
   const { register, setValue, setError, clearErrors, formState } = useFormContext()
   const [images, setImages] = useState<Array<string>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
+
+  const credentials = useSelector((state: rootState) => state.credentials)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -65,7 +67,8 @@ const ImagePickerComponent = (props: Props) => {
       setError(props.objectTitle, { message: 'image attachment failure', type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerComponent attachImage()',
-        error: error
+        error: error,
+        user_id: credentials.user?.id
       })
       setTimeout(() => {
         clearErrors(props.objectTitle)

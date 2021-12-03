@@ -62,7 +62,9 @@ export const replaceObservationEvents = (events: Record<string, any>[]): observa
 })
 
 export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const { credentials } = getState()
+
     try {
       const observationEvents: Array<Object> = await storageService.fetch('observationEvents')
       if (observationEvents !== null) {
@@ -72,7 +74,8 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx initObservationEvents()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -95,7 +98,8 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx uploadObservationEvent()/netStatusChecker()',
-        error: 'Network error (no connection)'
+        error: 'Network error (no connection)',
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -109,7 +113,8 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     } catch (error) {
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       if (error.message?.includes('INVALID TOKEN')) {
         return Promise.reject({
@@ -137,9 +142,9 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
     if (!event.namedPlaceID || event.namedPlaceID === '') {
       if (overlapsFinland(event.gatherings[0].geometry)) {
-        await fetchFinland(event, lang)
+        await fetchFinland(event, lang, credentials)
       } else {
-        await fetchForeign(event, lang)
+        await fetchForeign(event, lang, credentials)
       }
     }
 
@@ -259,12 +264,14 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
           error: error,
-          data: event
+          data: event,
+          user_id: credentials.user.id
         })
       } else {
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
-          error: error
+          error: error,
+          user_id: credentials.user.id
         })
       }
 
@@ -285,7 +292,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
 
 export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+    const { credentials, observationEvent } = getState()
     const newEvents = observationEvent.events.concat(newEvent)
 
     try {
@@ -293,7 +300,8 @@ export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx newObservationEvent()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -308,7 +316,7 @@ export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<
 
 export const replaceObservationEventById = (newEvent: Record<string, any>, eventId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+    const { credentials, observationEvent } = getState()
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
         return newEvent
@@ -322,7 +330,8 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx replaceObservationEventById()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -338,7 +347,7 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
 
 export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+    const { credentials, observationEvent } = getState()
     const newEvents = observationEvent.events.filter((event: Record<string, any>) => event.id !== eventId)
 
     try {
@@ -346,7 +355,8 @@ export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx deleteObservationEvent()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -378,7 +388,7 @@ export const eventPathUpdate = (lineStringPath: LineString | MultiLineString | u
 
 export const newObservation = (unit: Record<string, any>, lineStringPath: MultiLineString | LineString | undefined): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+    const { credentials, observationEvent } = getState()
 
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
@@ -394,7 +404,8 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: MultiL
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx newObservation()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -409,7 +420,7 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: MultiL
 
 export const deleteObservation = (eventId: string, unitId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+    const { credentials, observationEvent } = getState()
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
         const newEvent = cloneDeep(event)
@@ -428,7 +439,8 @@ export const deleteObservation = (eventId: string, unitId: string): ThunkAction<
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx deleteObservation()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -443,7 +455,7 @@ export const deleteObservation = (eventId: string, unitId: string): ThunkAction<
 
 export const replaceLocationById = (geometry: Geometry, eventId: string, unitId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+    const { credentials, observationEvent } = getState()
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
         const newEvent = cloneDeep(event)
@@ -463,7 +475,8 @@ export const replaceLocationById = (geometry: Geometry, eventId: string, unitId:
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx replaceLocationById()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -478,7 +491,7 @@ export const replaceLocationById = (geometry: Geometry, eventId: string, unitId:
 
 export const replaceObservationById = (newUnit: Record<string, any>, eventId: string, unitId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+    const { credentials, observationEvent } = getState()
 
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
@@ -500,7 +513,8 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
     } catch (error) {
       log.error({
         location: '/stores/observation/actions.tsx replaceObservationById()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',

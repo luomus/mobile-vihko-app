@@ -6,6 +6,8 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import MiniMapComponent from './MiniMapComponent'
 import { JX519Fields, JX652Fields } from '../../config/fields'
+import { useSelector } from 'react-redux'
+import { rootState } from '../../stores'
 
 type Props = {
   event: Record<string, any>,
@@ -19,6 +21,8 @@ const ObservationInfoComponent = (props: Props) => {
 
   const [list, setList] = useState<Array<any> | null>(null)
   const { t } = useTranslation()
+
+  const credentials = useSelector((state: rootState) => state.credentials)
 
   const schemaUnits = props.eventSchema.schema?.properties?.gatherings?.items?.properties?.units
 
@@ -60,7 +64,7 @@ const ObservationInfoComponent = (props: Props) => {
       }
 
       if (schemaUnits && fields) {
-        setList(await createSchemaObjectComponents(props.observation, fields, schemaUnits))
+        setList(await createSchemaObjectComponents(props.observation, fields, schemaUnits, credentials))
       }
     }
 

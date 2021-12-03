@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView } from 'react-native'
 import { Icon } from 'react-native-elements'
 import RadioForm from 'react-native-simple-radio-button'
 import { useTranslation } from 'react-i18next'
-import { DispatchType, setMessageState } from '../../stores'
+import { rootState, DispatchType, setMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
@@ -34,6 +34,8 @@ const ImagePickerKeywordComponent = (props: Props) => {
   const { t } = useTranslation()
   const keywords: Record<string, any> = props.params
   const localized: string[] = props.params[props.lang]
+
+  const credentials = useSelector((state: rootState) => state.credentials)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -88,7 +90,8 @@ const ImagePickerKeywordComponent = (props: Props) => {
       setError(props.objectTitle, { message: 'image attachment failure', type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerKeywordComponent attachImage()',
-        error: error
+        error: error,
+        user_id: credentials.user?.id
       })
       setTimeout(() => {
         clearErrors(props.objectTitle)
