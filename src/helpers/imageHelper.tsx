@@ -102,7 +102,8 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
   } catch (error) {
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()/processImages()',
-      error: error
+      error: error,
+      user_id: credentials.user?.id
     })
     throw new Error(i18n.t('error processing images before sending'))
   }
@@ -133,7 +134,8 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
       location: '/helpers/imageHelper.tsx saveImages()',
       error: {
         types: invalidFileTypes,
-        message: 'Invalid file types'
+        message: 'Invalid file types',
+        user_id: credentials.user?.id
       }
     })
     throw new Error(`${i18n.t('incorrect format')} ${getAllowedMediaFormatsAsString()}.`)
@@ -141,7 +143,8 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()',
       error: {
-        message: 'Too large files.'
+        message: 'Too large files.',
+        user_id: credentials.user?.id
       }
     })
     throw new Error(`${i18n.t('oversized image')} ${getMaxFileSizeAsString()}.`)
@@ -151,9 +154,9 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
     } catch (error) {
       log.error({
         location: '/helpers/imageHelper.tsx saveImages()/sendImages()',
-        error: error
+        error: error,
+        user_id: credentials.user?.id
       })
-
       throw new Error(`${i18n.t('image post failure')} ${error.message}`)
     }
   }
@@ -195,7 +198,8 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
   } catch (error) {
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()/sendMetadata()',
-      error: error
+      error: error,
+      user_id: credentials.user?.id
     })
 
     throw new Error(`${i18n.t('metadata post failure')}  ${error.message}`)

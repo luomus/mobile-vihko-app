@@ -3,6 +3,7 @@ import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '
 import { centerOfBoundingBox, createCombinedGeometry } from './geometryHelper'
 import { log } from '../helpers/logger'
 import i18n from 'i18next'
+import { CredentialsType } from '../stores'
 
 //define whether the event will be released publicly or privately
 export const definePublicity = (event: Record<string, any>, isPublic: boolean): Record<string, any> => {
@@ -40,11 +41,11 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
 }
 
 //calls the helper function for fetching and processing locality details for finnish events
-export const fetchFinland = async (event: Record<string, any>, lang: string) => {
-  const localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang)
+export const fetchFinland = async (event: Record<string, any>, lang: string, credentials: CredentialsType) => {
+  const localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang, credentials)
   //if it turns out that country wasn't finland, fetch foreign
   if (localityDetails.status === 'fail') {
-    await fetchForeign(event, lang)
+    await fetchForeign(event, lang, credentials)
   } else {
     //inserts the fetched values to the event
     event.gatherings[0].biologicalProvince = localityDetails.biologicalProvince
@@ -54,7 +55,7 @@ export const fetchFinland = async (event: Record<string, any>, lang: string) => 
 }
 
 //calls the helper function for fetching and processing locality details for foreign country events
-export const fetchForeign = async (event: Record<string, any>, lang: string) => {
+export const fetchForeign = async (event: Record<string, any>, lang: string, credentials: CredentialsType) => {
   const boundingBox: Polygon | Point | null = createCombinedGeometry(event)
 
   //can't fetch foreign, unless there's a geometry for the event
@@ -62,7 +63,7 @@ export const fetchForeign = async (event: Record<string, any>, lang: string) => 
 
   //foreign country details are fetched based on the center point of combined bounding box
   const center = centerOfBoundingBox(boundingBox)
-  const localityDetails = await defineLocalityForeign(center, lang)
+  const localityDetails = await defineLocalityForeign(center, lang, credentials)
 
   //inserts the fetched values to the event
   event.gatherings[0].administrativeProvince = localityDetails.administrativeProvince
@@ -72,7 +73,9 @@ export const fetchForeign = async (event: Record<string, any>, lang: string) => 
 
 //if observation event was made in finland, this function will be called
 //and it processes the localities fetched from laji-api
-export const defineLocalityInFinland = async (geometry: MultiLineString | LineString | Point, lang: string): Promise<Record<string, string>> => {
+export const defineLocalityInFinland = async (geometry: MultiLineString | LineString | Point, lang: string,
+  credentials: CredentialsType): Promise<Record<string, string>> => {
+
   let localityDetails
 
   //call the service to fetch from Laji API
@@ -81,7 +84,8 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   } catch (error) {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
-      error: error
+      error: error,
+      user_id: credentials.user?.id
     })
     return Promise.reject({
       severity: 'low',
@@ -100,7 +104,8 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
       error: localityDetails.result.error_message,
-      data: geometry
+      data: geometry,
+      user_id: credentials.user?.id
     })
     return Promise.reject({
       severity: 'low',
@@ -139,7 +144,7 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
 
 //if observation event was made in a foreign country, this function will be called
 //and it processes the localities fetched from google geocoding api
-export const defineLocalityForeign = async (geometry: Point, lang: string): Promise<Record<string, string>> => {
+export const defineLocalityForeign = async (geometry: Point, lang: string, credentials: CredentialsType): Promise<Record<string, string>> => {
 
   let localityDetails
 
@@ -150,7 +155,8 @@ export const defineLocalityForeign = async (geometry: Point, lang: string): Prom
   } catch (error) {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityForeign()',
-      error: error
+      error: error,
+      user_id: credentials.user?.id
     })
     return Promise.reject({
       severity: 'low',

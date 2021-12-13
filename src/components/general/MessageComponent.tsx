@@ -113,7 +113,7 @@ const MessageComponent = () => {
   const primaryButton = (label: string, iconName: string): JSX.Element => {
     return (
       <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
-        height={40} width={120} buttonStyle={Bs.basicPrimaryButton}
+        height={40} width={120} buttonStyle={Bs.textAndIconButton}
         gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
         textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
       />
@@ -123,7 +123,7 @@ const MessageComponent = () => {
   const neutralButton = (label: string, iconName: string): JSX.Element => {
     return (
       <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
-        height={40} width={120} buttonStyle={Bs.basicNeutralButton}
+        height={40} width={120} buttonStyle={Bs.textAndIconButton}
         gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
         textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
       />

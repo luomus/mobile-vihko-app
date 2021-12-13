@@ -55,7 +55,7 @@
   "error saving new location": "Misslyckades att spara observations ny lokalitet på disken.",
   "error saving new observation": "Misslyckades att spara observationen på disken.",
   "event": "Observationstransaktion",
-  "event overview": "Transaktion översikt",
+  "event overview": "Översikt",
   "exit": "Utgång",
   "exit app?": "Är du säker på att du vill stoppa att observera och avsluta programmet?",
   "failed to check token": "Misslyckades att kolla upp inloggningsinformation från servern.",

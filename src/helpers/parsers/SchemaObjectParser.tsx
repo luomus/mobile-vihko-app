@@ -1,23 +1,26 @@
 import React from 'react'
 import i18n from '../../languages/i18n'
-import SchemaObjectComponent from '../../components/observationEvent/SchemaObjectComponent'
+import SchemaObjectComponent from '../../components/overview/SchemaObjectComponent'
 import { parsePathForFieldParams } from './SchemaToInputParser'
 import { get, set } from 'lodash'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import { log } from '../logger'
 import { parseDateForUI } from '../dateHelper'
+import { CredentialsType } from '../../stores'
 
-export const createSchemaObjectComponents = async (inputObject: Record<string, any>, fields: Array<string>, schema: Record<string, any>) => {
+export const createSchemaObjectComponents = async (inputObject: Record<string, any>, fields: Array<string>, schema: Record<string, any>,
+  credentials: CredentialsType) => {
 
   const returnArray: Array<any> = await Promise.all(
-    fields.map(async (field) => await parseObjectToComponents(field, inputObject, schema)))
+    fields.map(async (field) => await parseObjectToComponents(field, inputObject, schema, credentials)))
   return returnArray
 }
 
 const parseObjectToComponents = async (
   field: string,
   inputObject: Record<string, any>,
-  schema: Record<string, any>
+  schema: Record<string, any>,
+  credentials: CredentialsType
 ) => {
   if (field.includes('images')) {
     return null
@@ -61,7 +64,8 @@ const parseObjectToComponents = async (
         } catch (error) {
           log.error({
             location: '/parsers/SchemaObjectParser parseObjectToComponents()',
-            error: error
+            error: error,
+            user_id: credentials.user?.id
           })
         }
       }

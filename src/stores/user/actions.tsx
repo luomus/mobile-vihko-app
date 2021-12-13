@@ -39,14 +39,16 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
         })
         return Promise.reject({
           severity: 'fatal',
-          message: i18n.t('login timed out')
+          message: i18n.t('login timed out'),
+          user_id: 'undefined'
         })
       }
 
       //error from server
       log.error({
         location: '/stores/user/actions.tsx loginUser()',
-        error: netError
+        error: netError,
+        user_id: 'undefined'
       })
       return Promise.reject({
         severity: 'fatal',
@@ -62,7 +64,8 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
     } catch (locError) {
       log.error({
         location: '/stores/user/actions.tsx loginUser()',
-        error: locError
+        error: locError,
+        user_id: 'undefined'
       })
       return Promise.reject({
         severity: 'low',
@@ -88,7 +91,8 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx getPermissions()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -111,7 +115,8 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx getPermissions()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -137,7 +142,8 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx getMetadata()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -160,7 +166,8 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx getMetadata()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -184,7 +191,8 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx logoutUser()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -204,7 +212,8 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx logoutUser()',
-        error: error
+        error: error,
+        user_id: credentials.user.id
       })
       return Promise.reject({
         severity: 'low',
@@ -232,7 +241,8 @@ export const initLocalCredentials = (): ThunkAction<Promise<any>, any, void, use
     } catch (error) {
       log.error({
         location: '/stores/user/actions.tsx initLocalCredentials()',
-        error: error
+        error: error,
+        user_id: 'undefined'
       })
       return Promise.reject({
         severity: 'high',

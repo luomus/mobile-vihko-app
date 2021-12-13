@@ -202,7 +202,8 @@ const LoginComponent = (props: Props) => {
     } catch (error) {
       log.error({
         location: '/components/LoginComponent.tsx login()',
-        error: 'Network error (no connection)'
+        error: 'Network error (no connection)',
+        user_id: credentials.user?.id
       })
       setLoggingIn(false)
       showFatalError(`${t('critical error')}:\n${error.message}`)
@@ -216,7 +217,8 @@ const LoginComponent = (props: Props) => {
     } catch (error) {
       log.error({
         location: '/components/LoginComponent.tsx login()',
-        error: error
+        error: error,
+        user_id: credentials.user?.id
       })
       setLoggingIn(false)
       showFatalError(`${t('critical error')}:\n${t('getting temp token failed with')} ${error.message}`)
@@ -229,7 +231,8 @@ const LoginComponent = (props: Props) => {
     } catch (error) {
       log.error({
         location: 'components/LoginComponent.tsx login()',
-        error: error
+        error: error,
+        user_id: credentials.user?.id
       })
       setLoggingIn(false)
       showFatalError(`${t('critical error')}:\n${t('could not open browser for login')}`)

@@ -16,7 +16,9 @@ export const setSchema = (schemas: Record<string, any>): schemaActionTypes => ({
 })
 
 export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const { credentials } = getState()
+
     let languages: string[] = ['fi', 'en', 'sv']
     let schemas: Record<string, any> = {
       formID: formId,
@@ -45,7 +47,8 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
     } catch (error) {
       log.error({
         location: '/stores/schema/actions.tsx initSchema()/netStatusChecker()',
-        error: 'Network error (no connection)'
+        error: 'Network error (no connection)',
+        user_id: credentials.user.id
       })
       return Promise.reject([{
         severity: 'fatal',
@@ -105,7 +108,8 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',
             error: error,
-            details: 'While saving ' + lang + ' to AsyncStorage.'
+            details: 'While saving ' + lang + ' to AsyncStorage.',
+            user_id: credentials.user.id
           })
         }
 
@@ -128,7 +132,8 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',
             error: netError,
-            details: 'While downloading ' + lang + ' schema.'
+            details: 'While downloading ' + lang + ' schema.',
+            user_id: credentials.user.id
           })
 
           errors.push(langError)
@@ -141,7 +146,8 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
           log.error({
             location: '/stores/observation/actions.tsx initSchema()',
             error: locError,
-            details: 'While fetching ' + lang + ' from AsyncStorage.'
+            details: 'While fetching ' + lang + ' from AsyncStorage.',
+            user_id: credentials.user.id
           })
 
           errors.push(langError)

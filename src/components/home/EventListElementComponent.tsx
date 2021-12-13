@@ -34,16 +34,16 @@ const EventListElementComponent = (props: Props) => {
   }, [i18n.language])
 
   return (
-    <View style={{ marginVertical: 5, width: '90%', height: 120, flex: 1 }}>
+    <View style={{ marginVertical: 5, width: '90%' }}>
       <Shadow startColor={Colors.dangerShadow} finalColor={Colors.dangerShadow} distance={2} radius={5}
         offset={[0, 1]} paintInside={true} viewStyle={{ alignSelf: 'stretch' }}>
-        <View style={[Cs.unsentEventsContainer, { backgroundColor: Colors.neutral2 }]} >
-          <TouchableOpacity onPress={props.onPress} activeOpacity={0.8}>
+        <TouchableOpacity onPress={props.onPress} activeOpacity={0.8}>
+          <View style={Cs.unsentEventsContainer} >
             <Text style={[Ts.eventListElementTitle, { color: Colors.dangerButton1 }]}>{title}</Text>
             <Text style={Ts.eventListElementTextClear}>{parseDateForUI(dateBegin)} - {parseDateForUI(dateEnd)}</Text>
             <Text style={Ts.eventListElementTextFaded}>{t('observationsInList') + ': ' + observationCount + ' ' + (observationCount === 1 ? t('piece') : t('pieces'))}</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       </Shadow>
     </View>
   )

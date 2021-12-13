@@ -48,14 +48,14 @@ const UnfinishedEventComponent = (props: Props) => {
         <View style={Cs.unfinishedEventButtonsContainer}>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => props.onContinueObservationEvent()} title={t('continue')}
-              height={40} width={120} buttonStyle={Bs.continueButton}
+              height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'map-outline'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
             />
           </View>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('cancelObservation')}
-              height={40} width={120} buttonStyle={Bs.endButton}
+              height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'stop'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />

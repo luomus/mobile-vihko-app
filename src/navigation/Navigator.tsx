@@ -5,9 +5,9 @@ import { withTranslation } from 'react-i18next'
 import HomeScreen from '../screens/HomeScreen'
 import MapScreen from '../screens/MapScreen'
 import ObservationScreen from '../screens/ObservationScreen'
-import ObservationEventScreen from '../screens/ObservationEventScreen'
+import OverviewScreen from '../screens/OverviewScreen'
 import LoginScreen from '../screens/LoginScreen'
-import EditObservationEventScreen from '../screens/EditObservationEventScreen'
+import DocumentScreen from '../screens/DocumentScreen'
 import NavBarComponent from '../components/general/NavBarComponent'
 
 const Stack = createNativeStackNavigator()
@@ -27,8 +27,8 @@ const Navigator = () => {
         <Stack.Screen name='home' component={HomeScreen} options={navigationOptions} />
         <Stack.Screen name='map' component={MapScreen} options={navigationOptions} />
         <Stack.Screen name='observation' component={ObservationScreen} options={navigationOptions} />
-        <Stack.Screen name='overview' component={ObservationEventScreen} options={navigationOptions} />
-        <Stack.Screen name='document' component={EditObservationEventScreen} options={navigationOptions} />
+        <Stack.Screen name='overview' component={OverviewScreen} options={navigationOptions} />
+        <Stack.Screen name='document' component={DocumentScreen} options={navigationOptions} />
       </Stack.Navigator>
     </NavigationContainer>
   )

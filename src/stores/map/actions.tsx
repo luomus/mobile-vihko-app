@@ -39,7 +39,9 @@ export const clearCurrentObservationZone = (): mapActionTypes => ({
 })
 
 export const initObservationZones = (): ThunkAction<Promise<any>, any, void, mapActionTypes> => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const { credentials } = getState()
+
     let zones: ZoneType[]
     let error: Record<string, any> | null = null
 
@@ -57,7 +59,8 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
         }
         log.error({
           location: '/stores/map/actions.tsx initObservationZones()',
-          error: netError
+          error: netError,
+          user_id: credentials.user?.id
         })
       //if local copy does not exist inform user that no zones are available
       } catch (localError) {
@@ -67,7 +70,8 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
         }
         log.error({
           location: '/stores/map/actions.tsx initObservationZones()',
-          error: localError
+          error: localError,
+          user_id: credentials.user?.id
         })
         return Promise.reject(error)
       }
@@ -111,7 +115,8 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
         }
         log.error({
           location: '/stores/map/actions.tsx initObservationZones()',
-          error: localError
+          error: localError,
+          user_id: credentials.user?.id
         })
         return Promise.reject(error)
       }

@@ -14,6 +14,7 @@ import {
 } from '../../stores'
 import { stopLocationAsync } from '../../helpers/geolocationHelper'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
+import i18n from '../../languages/i18n'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
@@ -21,6 +22,7 @@ import Colors from '../../styles/Colors'
 import MessageComponent from '../general/MessageComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import SelectedButtonComponent from './SelectedButtonComponent'
 
 type Props = {
   isVisible: boolean,
@@ -69,19 +71,98 @@ const UserModalComponent = (props: Props) => {
   return (
     <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
       <View style={Cs.userModalContainer}>
-        <View>
-          <Text>
-            {credentials.user !== null ? t('loggedin') + ' ' + credentials.user.fullName : null}
-          </Text>
+        <View style={Cs.userDetailsContainer}>
+          <View>
+            <Text style={{ color: Colors.neutral9 }}>
+              {credentials.user !== null ? t('loggedin') + ' ' + credentials.user.fullName : null}
+            </Text>
+          </View>
+          <View style={Cs.logoutButtonContainer}>
+            <ButtonComponent onPressFunction={() => showLogoutDialoue()} title={undefined}
+              height={40} width={40} buttonStyle={Bs.logoutButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
+            />
+          </View>
+          <MessageComponent />
         </View>
-        <View style={Cs.logoutButtonContainer}>
-          <ButtonComponent onPressFunction={() => showLogoutDialoue()} title={undefined}
-            height={40} width={40} buttonStyle={Bs.logoutButton}
-            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
-          />
+        <Text
+          style={Ts.languageText}
+          onPress={() => {
+            i18n.changeLanguage('fi')
+            props.onClose()
+          }}
+        >
+          {t('select language')}:
+        </Text>
+        <View style={Cs.languageContainer}>
+          {i18n.language === 'fi' ?
+            <SelectedButtonComponent
+              onPress={() => {
+                i18n.changeLanguage('fi')
+                props.onClose()
+              }}
+              title={'FI'}
+            />
+            :
+            <ButtonComponent
+              onPressFunction={() => {
+                i18n.changeLanguage('fi')
+                props.onClose()
+              }}
+              title={'FI'} height={40} width={80} buttonStyle={Bs.logoutButton}
+              gradientColorStart={i18n.language === 'fi' ? Colors.primaryButton1 : Colors.neutralButton}
+              gradientColorEnd={i18n.language === 'fi' ? Colors.primaryButton2 : Colors.neutralButton}
+              shadowColor={i18n.language === 'fi' ? Colors.primaryShadow : Colors.neutralShadow}
+              textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+              contentColor={i18n.language === 'fi' ? Colors.whiteText : Colors.darkText}
+            />
+          }
+          {i18n.language === 'sv' ?
+            <SelectedButtonComponent
+              onPress={() => {
+                i18n.changeLanguage('sv')
+                props.onClose()
+              }}
+              title={'SV'}
+            />
+            :
+            <ButtonComponent
+              onPressFunction={() => {
+                i18n.changeLanguage('sv')
+                props.onClose()
+              }}
+              title={'SV'} height={40} width={80} buttonStyle={Bs.logoutButton}
+              gradientColorStart={i18n.language === 'sv' ? Colors.primaryButton1 : Colors.neutralButton}
+              gradientColorEnd={i18n.language === 'sv' ? Colors.primaryButton2 : Colors.neutralButton}
+              shadowColor={i18n.language === 'sv' ? Colors.primaryShadow : Colors.neutralShadow}
+              textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+              contentColor={i18n.language === 'sv' ? Colors.whiteText : Colors.darkText}
+            />
+          }
+          {i18n.language === 'en' ?
+            <SelectedButtonComponent
+              onPress={() => {
+                i18n.changeLanguage('en')
+                props.onClose()
+              }}
+              title={'EN'}
+            />
+            :
+            <ButtonComponent
+              onPressFunction={() => {
+                i18n.changeLanguage('en')
+                props.onClose()
+              }}
+              title={'EN'} height={40} width={80} buttonStyle={Bs.logoutButton}
+              gradientColorStart={i18n.language === 'en' ? Colors.primaryButton1 : Colors.neutralButton}
+              gradientColorEnd={i18n.language === 'en' ? Colors.primaryButton2 : Colors.neutralButton}
+              shadowColor={i18n.language === 'en' ? Colors.primaryShadow : Colors.neutralShadow}
+              textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+              contentColor={i18n.language === 'en' ? Colors.whiteText : Colors.darkText}
+            />
+          }
         </View>
-        <MessageComponent />
       </View>
     </Modal>
   )
