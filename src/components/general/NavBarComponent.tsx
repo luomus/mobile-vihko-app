@@ -12,7 +12,6 @@ import {
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
-import LanguageModalComponent from './LanguageModalComponent'
 import InstructionModalComponent from './InstructionModalComponent'
 import UserModalComponent from './UserModalComponent'
 
@@ -25,7 +24,6 @@ const NavBarComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const [languageModalVisibility, setLanguageModalVisibility] = useState<boolean>(false)
   const [infoModalVisibility, setInfoModalVisibility] = useState<boolean>(false)
   const [userModalVisibility, setUserModalVisibility] = useState<boolean>(false)
 
@@ -63,10 +61,11 @@ const NavBarComponent = (props: Props) => {
   }
 
   return (
-    <View style={Cs.languageContainer}>
-      <Text style={Ts.headerTitle}>{title()}</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-        <Icon iconStyle={Bs.headerButton} name='language' type='material-icons' size={25} onPress={() => setLanguageModalVisibility(true)} />
+    <View style={Cs.navBarContainer}>
+      <View style={{ flex: 6 }}>
+        <Text style={Ts.headerTitle}>{title()}</Text>
+      </View>
+      <View style={{ flex: 4, flexDirection: 'row', justifyContent: 'flex-end' }}>
         <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => setInfoModalVisibility(true)} />
         {props.route.name !== 'login' ?
           <Icon iconStyle={Bs.headerButton} name='perm-identity' type='material-icons' size={25} onPress={() => setUserModalVisibility(true)} /> :
@@ -79,7 +78,6 @@ const NavBarComponent = (props: Props) => {
           } /> :
           <Icon iconStyle={Bs.headerUnavailableButton} name='home' type='material-icons' size={25} onPress={() => null} />
         }
-        <LanguageModalComponent isVisible={languageModalVisibility} onClose={() => setLanguageModalVisibility(false)} />
         <InstructionModalComponent isVisible={infoModalVisibility} screen={props.route.name} onClose={() => setInfoModalVisibility(false)} />
         <UserModalComponent isVisible={userModalVisibility} onClose={() => setUserModalVisibility(false)} navigation={props.navigation} />
       </View>

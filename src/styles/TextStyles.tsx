@@ -26,7 +26,12 @@ const TextStyles = StyleSheet.create({
   },
   languageText: {
     padding: 8,
-    color: Colors.darkText
+    color: Colors.neutral9
+  },
+  languageButtonText: {
+    padding: 5,
+    alignSelf: 'center',
+    fontSize: 15,
   },
   zonePickerDescription: {
     color: Colors.neutral7,

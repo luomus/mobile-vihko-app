@@ -24,7 +24,7 @@ const customTransport: transportFunctionType = async (props: any) => {
 
   //send the error to the logger endpoint, and if it fails, write that error to the local log too
   try {
-    await sendError(props.rawMsg, user_id)
+    await sendError(JSON.stringify(props.rawMsg), user_id)
   } catch (error) {
     logs.shift()
     logs.push({

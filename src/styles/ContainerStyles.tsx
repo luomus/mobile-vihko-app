@@ -12,7 +12,8 @@ const ContainerStyles = StyleSheet.create({
   },
   contentAndVersionContainer: {
     flexGrow: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   inputContainer: {
     width: '90%',
@@ -26,14 +27,6 @@ const ContainerStyles = StyleSheet.create({
   messageModalContainer: {
     padding: 10,
     borderRadius: 10,
-    alignItems: 'center',
-    backgroundColor: Colors.neutral3
-  },
-  userModalContainer: {
-    padding: 10,
-    borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: Colors.neutral3
   },
@@ -52,12 +45,29 @@ const ContainerStyles = StyleSheet.create({
   },
 
   //navigation bar
-  languageContainer: {
+  navBarContainer: {
     backgroundColor: Colors.primary5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: 40
+  },
+  userModalContainer: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.neutral3
+  },
+  userDetailsContainer: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  languageContainer: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
 
   //login component

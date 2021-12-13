@@ -55,7 +55,7 @@
   "error saving new location": "Failed to save new location of the observation to storage.",
   "error saving new observation": "Failed to save observation to storage.",
   "event": "Observation event",
-  "event overview": "Event overview",
+  "event overview": "Overview",
   "exit": "Exit",
   "exit app?": "Are you sure that you want to quit the application?",
   "failed to check token": "Failed to check user token on server.",
