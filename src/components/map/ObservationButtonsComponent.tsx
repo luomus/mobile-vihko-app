@@ -136,7 +136,7 @@ const ObservationButtonsComponent = (props: Props) => {
               t('cancel'),
               Bs.homeTextAndIconButton,
               () => props.cancelButton(),
-              'neutral', undefined, undefined, 120
+              'neutral', undefined, undefined, schema.formID === 'MHL.45' ? 180 : 120
             )}
           </View>
         </View>

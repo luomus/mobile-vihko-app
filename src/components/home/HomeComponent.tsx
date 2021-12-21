@@ -138,6 +138,8 @@ const HomeComponent = (props: Props) => {
 
   const onBeginObservationEvent = async (formID: string, zoneUsed: boolean) => {
 
+    setLoading(true)
+
     //save the used form before beginning an event
     if (!observing) {
       await dispatch(switchSchema(formID))
@@ -167,6 +169,8 @@ const HomeComponent = (props: Props) => {
         }))
       }
     }
+
+    setLoading(false)
   }
 
   const onContinueObservationEvent = async () => {

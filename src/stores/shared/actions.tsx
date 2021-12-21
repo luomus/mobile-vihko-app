@@ -19,6 +19,7 @@ import {
   clearPath,
   setPath,
   setFirstLocation,
+  switchSchema,
   mapActionTypes,
   messageActionTypes,
   observationActionTypes,
@@ -163,6 +164,9 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
   return async (dispatch, getState) => {
     const { centered, credentials, observationEventInterrupted, observationEvent } = getState()
 
+    //switch schema
+    dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID))
+
     if (!observationEventInterrupted) {
       onPressMap()
       return Promise.resolve()
@@ -189,7 +193,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       })
     }
 
-    //atempt to start geolocation systems
+    //attempt to start geolocation systems
     try {
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), title, body)
     } catch (error) {
@@ -208,6 +212,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
     dispatch(setFirstZoom('not'))
+
     //set old path if exists
     const path: PathType | undefined = lineStringsToPathDeconstructor(observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry)
 

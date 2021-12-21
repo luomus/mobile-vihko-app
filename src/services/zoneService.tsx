@@ -8,7 +8,7 @@ const getZones = async () => {
     'includePublic': true,
     'includeUnits': false,
     'access_token': accessToken,
-    'pageSize': 100
+    'pageSize': 1000
   }
 
   const fetchResult = await axios.get(getZonesUrl, { params })

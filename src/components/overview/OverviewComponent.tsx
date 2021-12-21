@@ -16,6 +16,7 @@ import {
   deleteObservation,
   deleteObservationEvent,
   logoutUser,
+  switchSchema,
   resetReducer
 } from '../../stores'
 import { useTranslation } from 'react-i18next'
@@ -45,7 +46,6 @@ const OverviewComponent = (props: Props) => {
   const [observations, setObservations] = useState<Record<string, any>[] | null>(null)
   const [eventSchema, setEventSchema] = useState<Record<string, any> | null>(null)
 
-  const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
 
   const dispatch: DispatchType = useDispatch()
@@ -64,6 +64,7 @@ const OverviewComponent = (props: Props) => {
       if (searchedEvent === null) { return }
       const fetchedSchema = await storageService.fetch(`${searchedEvent.formID}${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
       setEventSchema(fetchedSchema)
+      dispatch(switchSchema(searchedEvent.formID))
     }
 
     initEventSchema()
@@ -133,7 +134,7 @@ const OverviewComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => props.onPressHome()
         }))
-      //log user out from the app if the token has expired
+        //log user out from the app if the token has expired
       } else {
         dispatch(setMessageState({
           type: 'err',
@@ -172,19 +173,22 @@ const OverviewComponent = (props: Props) => {
       <ScrollView contentContainerStyle={Cs.overviewBaseContainer}>
         <View style={Cs.overviewContentContainer}>
           <View style={Cs.overviewTextContainer}>
+            {event.gatherings[0].locality ? <Text>{t('locality')}: {event.gatherings[0].locality}</Text> : null}
+            {event.gatherings[0].localityDescription ? <Text>{t('locality description')}: {event.gatherings[0].localityDescription}</Text> : null}
             <Text>{t('dateBegin')}: {parseDateForUI(event.gatheringEvent.dateBegin)}</Text>
             <Text>{t('dateEnd')}: {parseDateForUI(event.gatheringEvent.dateEnd)}</Text>
           </View>
           <View style={Cs.overviewButtonsContainer}>
             <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={() => {
-                const id = {
-                  eventId: event.id,
-                  unitId: ''
-                }
-                dispatch(setObservationId(id))
-                props.onPressObservationEvent('overview')
-              }}
+              <ButtonComponent
+                onPressFunction={() => {
+                  const id = {
+                    eventId: event.id,
+                    unitId: ''
+                  }
+                  dispatch(setObservationId(id))
+                  props.onPressObservationEvent('overview')
+                }}
                 title={undefined} height={40} width={45} buttonStyle={Bs.iconButton}
                 gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                 textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
@@ -207,39 +211,46 @@ const OverviewComponent = (props: Props) => {
           </View>
         </View>
         <Text style={Ts.boldText}>{t('observations')}:</Text>
-        {observations.map(observation =>
-          <View key={observation.id}>
-            <ObservationInfoComponent
-              event={event}
-              observation={observation}
-              eventSchema={eventSchema}
-              editButton={
-                <ButtonComponent onPressFunction={() => {
-                  const id = {
-                    eventId: event.id,
-                    unitId: observation.id
-                  }
-                  dispatch(setObservationId(id))
-                  props.onPressObservation('overview')
-                }}
-                  title={t('edit button')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-                />
-              }
-              removeButton={
-                <ButtonComponent onPressFunction={() => {
-                  showDeleteObservation(event.id, observation.id)
-                }}
-                  title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-                />
-              }
-            />
-            <View style={{ padding: 5 }}></View>
-          </View>
-        )}
+        {observations.length !== 0 ?
+          observations.map(observation =>
+            <View key={observation.id}>
+              <ObservationInfoComponent
+                event={event}
+                observation={observation}
+                eventSchema={eventSchema}
+                editButton={
+                  <ButtonComponent
+                    onPressFunction={
+                      () => {
+                        const id = {
+                          eventId: event.id,
+                          unitId: observation.id
+                        }
+                        dispatch(setObservationId(id))
+                        props.onPressObservation('overview')
+                      }}
+                    title={t('edit button')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                    textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                  />
+                }
+                removeButton={
+                  <ButtonComponent
+                    onPressFunction={
+                      () => {
+                        showDeleteObservation(event.id, observation.id)
+                      }}
+                    title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+                    gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                    textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                  />
+                }
+              />
+              <View style={{ padding: 5 }}></View>
+            </View>
+          )
+          :
+          <Text>{t('no observations')}</Text>}
         {props.children}
         <SendEventModalComponent modalVisibility={modalVisibility} onCancel={setModalVisibility} sendObservationEvent={sendObservationEvent} />
         <MessageComponent />

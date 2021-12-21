@@ -24,7 +24,8 @@ import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import SaveButtonComponent from './SaveButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
-import { observationEventFields, JX519ObservationEventFields, JX652ObservationEventFields } from '../../config/fields'
+import { observationEventFields, JX519ObservationEventFields, JX652ObservationEventFields,
+  overrideObservationEventFields, overrideJX519ObservationEventFields, overrideJX652ObservationEventFields } from '../../config/fields'
 
 type Props = {
   onPressSubmit: () => void,
@@ -92,11 +93,11 @@ const DocumentComponent = (props: Props) => {
       let schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
       if (schema.formID === 'MHL.45') {
-        initForm(setForm, event, null, schemaWithoutUnits, null, observationEventFields, null, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, observationEventFields, overrideObservationEventFields, null, null, lang, scrollView)
       } else if (schema.formID === 'JX.519') {
-        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, null, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
-        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, null, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollView)
       }
     }
   }

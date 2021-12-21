@@ -1,14 +1,5 @@
 //this file defines which fields of schema are shown in different forms
 
-export const observationEventFields = [
-  'gatheringEvent_legPublic',
-  'secureLevel',
-  'gatheringEvent_dateBegin',
-  'gatheringEvent_dateEnd',
-  'gatherings_0_notes',
-  'keywords',
-]
-
 export const JX519ObservationEventFields = [
   'gatheringEvent_legPublic',
   'secureLevel',
@@ -91,6 +82,25 @@ export const overrideJX519Fields = {
       'Lintujen pesimisvarmuusindeksi',
       'Häckningsindex av fåglar',
       'Bird breeding category'
+    ]
+  },
+}
+
+export const overrideJX519ObservationEventFields = {
+  'secureLevel': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikan karkeistus',
+      'Plats skyddning',
+      'Location roughening'
+    ]
+  },
+  'gatherings_0_locality': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikannimet (kunta tallentuu automaattisesti)',
+      'Ortnamn (kommunen sparar automatiskt)',
+      'Locality names (municipality is saved automatically)'
     ]
   },
 }
@@ -205,10 +215,49 @@ export const overrideJX652Fields = {
   }
 }
 
+export const overrideJX652ObservationEventFields = {
+  'secureLevel': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikan karkeistus',
+      'Plats skyddning',
+      'Location roughening'
+    ]
+  },
+  'gatherings_0_locality': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikannimet (kunta tallentuu automaattisesti)',
+      'Ortnamn (kommunen sparar automatiskt)',
+      'Locality names (municipality is saved automatically)'
+    ]
+  },
+}
+
+export const observationEventFields = [
+  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_dateEnd',
+  'gatherings_0_notes',
+  'keywords',
+]
+
 export const lolifeObservationTypes: Record<string, string> = {
   lifeStage: 'flying squirrel',
   indirectObservationType: 'indirect observation type',
   nestType: 'nest'
+}
+
+export const overrideObservationEventFields = {
+  'secureLevel': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikan karkeistus',
+      'Plats skyddning',
+      'Location roughening'
+    ]
+  },
 }
 
 export const availableForms = ['JX.519', 'JX.652', 'MHL.45']
