@@ -36,7 +36,7 @@ const FormAutocompleteComponent = (props: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const { t } = useTranslation()
-  const { register, unregister, setValue, formState, watch, clearErrors, setError } = useFormContext()
+  const { register, unregister, setValue, formState, watch, clearErrors, setError, setFocus } = useFormContext()
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
 
@@ -64,6 +64,11 @@ const FormAutocompleteComponent = (props: Props) => {
       initAutocompleteOnMCode(props.defaultValue)
     }
   }, [])
+
+  //set focus into the autocomplete's input field so user can start typing immediately
+  useEffect(() => {
+    setFocus('autocompleteInput')
+  }, [setFocus])
 
   //this timeout clears taxon name -field's errors (and the error notification) in 5 sec
   useEffect(() => {
@@ -216,6 +221,7 @@ const FormAutocompleteComponent = (props: Props) => {
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch' }}>
         <TextInput
+          {...register('autocompleteInput')}
           style={{ borderColor: Colors.neutral5, borderWidth: 1, height: 40, width: '90%', padding: 10 }}
           onFocus={onFocus}
           onBlur={onBlur}
@@ -264,7 +270,7 @@ const FormAutocompleteComponent = (props: Props) => {
             renderItem: ({ item }) => {
               return (
                 <TouchableOpacity onPress={() => onSelection(item.data)}>
-                  {item.element}
+                  <Text style={{ paddingHorizontal: 10 }}>{item.element}</Text>
                 </TouchableOpacity>
               )
             }
