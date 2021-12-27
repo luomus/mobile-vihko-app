@@ -6,6 +6,7 @@ import FormImageKeywordPickerComponent from '../components/formComponents/FormIm
 import FormArrayComponent from '../components/formComponents/FormArrayComponent'
 import FormPickerItemComponent from '../components/formComponents/FormPickerItemComponent'
 import FormPickerComponent from '../components/formComponents/FormPickerComponent'
+import FormAtlasCodeComponent from '../components/formComponents/FormAtlasCodeComponent'
 import FormDateOptionsComponent from '../components/formComponents/FormDateOptionsComponent'
 import FormDatePickerComponent from '../components/formComponents/FormDatePickerComponent'
 import FormSwitchComponent from '../components/formComponents/FormSwitchComponent'
@@ -46,6 +47,15 @@ export const createPicker = (
   return <FormPickerComponent
     key={objectTitle} title={title} objectTitle={objectTitle} pickerItems={pickerItems}
     selectedValue={defaultValue !== '' ? defaultValue : pickerItems[0].props.value} //if default value exists, set that as selected value, otherwise set the value of first picker item
+  />
+}
+
+export const createAtlasCodeField = (
+  title: string, objectTitle: string, defaultValue: string, dictionary: { [key: string]: any }
+) => {
+
+  return <FormAtlasCodeComponent
+    key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue} dictionary={dictionary}
   />
 }
 

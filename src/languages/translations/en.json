@@ -37,6 +37,7 @@
   "edit observation": "Edit observation",
   "edit observation event": "Event details",
   "edit observations": "Edit observations",
+  "empty": "Empty",
   "en schema save to async failed": "Failed to save English schema to local storage.",
   "english": "English",
   "error deleting observation": "Failed to delete observation from storage.",

@@ -37,6 +37,7 @@
   "edit observation": "Redigera observationen",
   "edit observation event": "Transaktions detaljer",
   "edit observations": "Redigera observationen",
+  "empty": "Tom",
   "en schema save to async failed": "Misslyckades at spara engelska observationsscheman.",
   "english": "engelska",
   "error deleting observation": "Misslyckades att avlägsna observationen från disken.",

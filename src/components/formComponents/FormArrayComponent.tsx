@@ -106,7 +106,6 @@ const FormArrayComponent = (props: Props) => {
     const childDefaultValue = props.inputType === 'string' ? '' : undefined
 
     //create new input element
-
     const newInputElement = props.createInputElement(
       childObjectTiltle, childObjectTiltle, props.parentObjectTitle,
       props.inputType, childDefaultValue, true, callbackFunction, props.editable

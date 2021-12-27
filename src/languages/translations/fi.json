@@ -37,6 +37,7 @@
   "edit observation": "Muokkaa havaintoa",
   "edit observation event": "Tapahtuman tiedot",
   "edit observations": "Muokkaa havaintoja",
+  "empty": "Tyhjä",
   "en schema save to async failed": "Englanninkielisen havaintopohjan tallennus epäonnistui.",
   "english": "englanti",
   "error deleting observation": "Havainnon poistaminen levyltä epäonnistui.",

@@ -1,4 +1,4 @@
-import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker } from './formComponentBuilders'
+import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker, createAtlasCodeField } from './formComponentBuilders'
 import { get } from 'lodash'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParser'
@@ -95,6 +95,9 @@ const Form = (
         case 'inputTitleOverridden':
           createVisibleField(path, overrideFields[path].title, fieldIsArray, fieldTypeOfArray, fieldIsEnum,
             fieldEnumDict, fieldType, fieldDefaultValue, fieldBlacklist)
+          return
+        case 'atlasCodeField':
+          toReturn.push(createAtlasCodeField(fieldTitle, path, fieldDefaultValue, fieldEnumDict))
           return
       }
     }

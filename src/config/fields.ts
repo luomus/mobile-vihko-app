@@ -77,12 +77,7 @@ export const overrideJX519Fields = {
     ]
   },
   'atlasCode': {
-    field: 'inputTitleOverridden',
-    title: [
-      'Lintujen pesimisvarmuusindeksi',
-      'Häckningsindex av fåglar',
-      'Bird breeding category'
-    ]
+    field: 'atlasCodeField'
   },
 }
 
