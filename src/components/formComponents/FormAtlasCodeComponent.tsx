@@ -46,13 +46,31 @@ const FormAtlasCodeComponent = (props: Props) => {
   const renderListElements = () => {
     let elements = []
     for (let key of Object.keys(props.dictionary)) {
+
+      const atlasCode = getAtlasCode(props.dictionary[key])
+      let colorUnselected = Colors.atlasCodeWhiteButton
+      let colorSelected = Colors.neutral3
+
+      if (atlasCode[0] === '2' || atlasCode[0] === '3') {
+        colorUnselected = Colors.atlasCodeYellowButton1
+        colorSelected = Colors.atlasCodeYellowButton2
+      } else if (atlasCode[0] === '4' || atlasCode[0] === '5' || atlasCode[0] === '6') {
+        colorUnselected = Colors.atlasCodeGreenButton1
+        colorSelected = Colors.atlasCodeGreenButton2
+      } else if (atlasCode[0] === '7' || atlasCode[0] === '8') {
+        colorUnselected = Colors.atlasCodeBlueButton1
+        colorSelected = Colors.atlasCodeBlueButton2
+      }
+
       elements.push(
-        <View key={key} style={{ paddingVertical: 5, paddingRight: 5 }}>
+        <View key={key} style={{ paddingTop: 10, paddingRight: 10 }}>
           {
             selected === key ?
               <SelectedButtonComponent
                 onPress={() => null}
-                title={getAtlasCode(props.dictionary[key])}
+                title={atlasCode}
+                color={colorSelected}
+                textColor={Colors.chosenText}
               />
               :
               <ButtonComponent
@@ -61,11 +79,11 @@ const FormAtlasCodeComponent = (props: Props) => {
                   setValue(props.objectTitle, key)
                 }}
                 title={getAtlasCode(props.dictionary[key])} height={40} width={80} buttonStyle={Bs.logoutButton}
-                gradientColorStart={Colors.neutralButton}
-                gradientColorEnd={Colors.neutralButton}
+                gradientColorStart={colorUnselected}
+                gradientColorEnd={colorUnselected}
                 shadowColor={Colors.neutralShadow}
                 textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
-                contentColor={Colors.darkText}
+                contentColor={colorUnselected === Colors.atlasCodeBlueButton1 ? Colors.whiteText : Colors.darkText}
               />
           }
         </View>

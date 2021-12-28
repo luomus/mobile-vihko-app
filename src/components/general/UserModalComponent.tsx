@@ -103,6 +103,8 @@ const UserModalComponent = (props: Props) => {
                 props.onClose()
               }}
               title={'FI'}
+              color={Colors.neutral3}
+              textColor={Colors.darkText}
             />
             :
             <ButtonComponent
@@ -125,6 +127,8 @@ const UserModalComponent = (props: Props) => {
                 props.onClose()
               }}
               title={'SV'}
+              color={Colors.neutral3}
+              textColor={Colors.darkText}
             />
             :
             <ButtonComponent
@@ -147,6 +151,8 @@ const UserModalComponent = (props: Props) => {
                 props.onClose()
               }}
               title={'EN'}
+              color={Colors.neutral3}
+              textColor={Colors.darkText}
             />
             :
             <ButtonComponent
