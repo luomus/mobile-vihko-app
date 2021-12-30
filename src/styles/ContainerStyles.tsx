@@ -343,6 +343,17 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     width: '90%'
   },
+  atlasCodeChosenContainer: {
+    alignItems: 'center',
+    backgroundColor: Colors.neutral3,
+    borderColor: Colors.neutral5,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginVertical: 5,
+    padding: 5,
+    width: '100%'
+  },
   formPickerContainer: {
     borderColor: Colors.neutral5,
     borderWidth: 1,

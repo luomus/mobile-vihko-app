@@ -19,21 +19,21 @@ interface Props {
 
 const FormAtlasCodeComponent = (props: Props) => {
   const { register, setValue } = useFormContext()
-  const [selected, setSelected] = useState<string>('')
+  const [selectedKey, setSelectedKey] = useState<string | undefined>(undefined)
   const [elementList, setElementList] = useState<JSX.Element[] | undefined>([])
 
   const { t } = useTranslation()
 
   useEffect(() => {
     register(props.objectTitle)
-    setSelected(props.defaultValue)
+    if (props.defaultValue !== '') { setSelectedKey(props.defaultValue) }
     setValue(props.objectTitle, props.defaultValue)
     renderListElements()
   }, [])
 
   useEffect(() => {
     renderListElements()
-  }, [selected, i18n.language])
+  }, [selectedKey, i18n.language])
 
   const getAtlasCode = (value: string) => {
     if (value === '') {
@@ -48,34 +48,31 @@ const FormAtlasCodeComponent = (props: Props) => {
     for (let key of Object.keys(props.dictionary)) {
 
       const atlasCode = getAtlasCode(props.dictionary[key])
+
       let colorUnselected = Colors.atlasCodeWhiteButton
-      let colorSelected = Colors.neutral3
 
       if (atlasCode[0] === '2' || atlasCode[0] === '3') {
-        colorUnselected = Colors.atlasCodeYellowButton1
-        colorSelected = Colors.atlasCodeYellowButton2
+        colorUnselected = Colors.atlasCodeYellowButton
       } else if (atlasCode[0] === '4' || atlasCode[0] === '5' || atlasCode[0] === '6') {
-        colorUnselected = Colors.atlasCodeGreenButton1
-        colorSelected = Colors.atlasCodeGreenButton2
+        colorUnselected = Colors.atlasCodeGreenButton
       } else if (atlasCode[0] === '7' || atlasCode[0] === '8') {
-        colorUnselected = Colors.atlasCodeBlueButton1
-        colorSelected = Colors.atlasCodeBlueButton2
+        colorUnselected = Colors.atlasCodeBlueButton
       }
 
       elements.push(
         <View key={key} style={{ paddingTop: 10, paddingRight: 10 }}>
           {
-            selected === key ?
+            selectedKey === key ?
               <SelectedButtonComponent
                 onPress={() => null}
                 title={atlasCode}
-                color={colorSelected}
-                textColor={Colors.chosenText}
+                color={Colors.unavailableButton}
+                textColor={Colors.darkText}
               />
               :
               <ButtonComponent
                 onPressFunction={() => {
-                  setSelected(key)
+                  setSelectedKey(key)
                   setValue(props.objectTitle, key)
                 }}
                 title={getAtlasCode(props.dictionary[key])} height={40} width={80} buttonStyle={Bs.logoutButton}
@@ -83,7 +80,7 @@ const FormAtlasCodeComponent = (props: Props) => {
                 gradientColorEnd={colorUnselected}
                 shadowColor={Colors.neutralShadow}
                 textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
-                contentColor={colorUnselected === Colors.atlasCodeBlueButton1 ? Colors.whiteText : Colors.darkText}
+                contentColor={colorUnselected === Colors.atlasCodeBlueButton ? Colors.whiteText : Colors.darkText}
               />
           }
         </View>
@@ -96,6 +93,9 @@ const FormAtlasCodeComponent = (props: Props) => {
   return (
     <View style={Cs.padding10Container}>
       <Text>{props.title}</Text>
+      <View style={Cs.atlasCodeChosenContainer}>
+        <Text>{!selectedKey || selectedKey === '' ? t('no atlas code') : props.dictionary[selectedKey]}</Text>
+      </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {elementList}
       </View>

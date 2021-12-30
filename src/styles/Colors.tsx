@@ -32,16 +32,12 @@ export default {
   dangerShadow: '#8A0F0F50',
   unavailableButton: '#C0C0C0',
   atlasCodeWhiteButton: '#FFFFFF',
-  atlasCodeYellowButton1: '#D6E573',
-  atlasCodeYellowButton2: '#D5E856',
-  atlasCodeGreenButton1: '#66CC7A',
-  atlasCodeGreenButton2: '#3ED059',
-  atlasCodeBlueButton1: '#228AE6',
-  atlasCodeBlueButton2: '#066ABF',
+  atlasCodeYellowButton: '#D6E573',
+  atlasCodeGreenButton: '#66CC7A',
+  atlasCodeBlueButton: '#228AE6',
 
   //text colors
   whiteText: '#F8FFF5',
   darkText: '#5C6870',
   linkText: '#0000EE',
-  chosenText: '#FF6600',
 }
