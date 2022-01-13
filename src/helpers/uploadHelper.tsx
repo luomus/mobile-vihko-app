@@ -24,7 +24,7 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
   let modifiedEvent: Record<string, any> = event
 
   modifiedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
-    if (unit.images.length > 0) {
+    if (unit.images && unit.images.length > 0) {
       unit.recordBasis = 'MY.recordBasisHumanObservationPhoto'
     } else {
       unit.recordBasis = 'MY.recordBasisHumanObservation'

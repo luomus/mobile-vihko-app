@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-maps'
+import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile, Overlay } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
@@ -28,7 +28,7 @@ import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
-import { mapUrl as urlTemplate } from '../../config/urls'
+import { mapUrl as urlTemplate, gridUrl as gridTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
@@ -377,6 +377,23 @@ const MapComponent = (props: Props) => {
     : null
   )
 
+  const gridOverlay = () => {
+    return (
+      <>
+        {/* <Overlay
+          image={{ uri: '' }}
+          bounds={[[60, 25], [61, 26]]}
+        /> */}
+        <WMSTile
+          urlTemplate={gridTemplate}
+          tileSize={256}
+          opacity={1}
+          zIndex={5}
+        />
+      </>
+    )
+  }
+
   //draws past observations in same gatheringevent to map, markers are draggable
   const observationLocationsOverlay = () => {
     if (
@@ -440,7 +457,8 @@ const MapComponent = (props: Props) => {
           {locationOverlay()}
           {targetOverlay()}
           {pathOverlay()}
-          {tileOverlay()}
+          {/* {tileOverlay()} */}
+          {gridOverlay()}
           {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>

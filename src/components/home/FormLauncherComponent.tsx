@@ -29,6 +29,9 @@ const FormLauncherComponent = (props: Props) => {
     if (props.formID === 'JX.519') {
       setTitle(t('trip report form'))
       setDescription(t('instructions.mobilevihko.intro'))
+    } else if (props.formID === 'MHL.117') {
+      setTitle(t('bird atlas'))
+      setDescription(t('instructions.mobilevihko.intro.bird'))
     } else if (props.formID === 'JX.652') {
       setTitle(t('fungi atlas'))
       setDescription(t('instructions.mobilevihko.intro.fungi'))

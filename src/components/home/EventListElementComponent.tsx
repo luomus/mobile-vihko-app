@@ -26,6 +26,8 @@ const EventListElementComponent = (props: Props) => {
   useEffect(() => {
     if (props.observationEvent.formID === 'JX.519') {
       setTitle(t('trip report form'))
+    } else if (props.observationEvent.formID === 'MHL.117') {
+      setTitle(t('bird atlas'))
     } else if (props.observationEvent.formID === 'JX.652') {
       setTitle(t('fungi atlas'))
     } else {

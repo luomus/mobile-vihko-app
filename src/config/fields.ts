@@ -129,6 +129,74 @@ export const JX519FieldOrder = [
   'images'
 ]
 
+export const MHL117ObservationEventFields = [
+  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_completeList_completeListTaxonID',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_weather',
+  'gatherings_0_notes',
+  'keywords',
+]
+
+export const MHL117Fields = [
+  'identifications_0_taxon',
+  'atlasCode',
+  'count',
+  'notes',
+]
+
+export const overrideMHL117Fields = {
+  'identifications_0_taxon': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      valueField: 'identifications_0_taxon',
+      validation: {
+        required: {
+          value: true,
+          message: 'must not be empty'
+        },
+        minLength: {
+          value: 2,
+          message: 'must be at least 2 letters'
+        },
+      },
+      transform: {
+        'key': 'unitFact_autocompleteSelectedTaxonID',
+        'shownName': 'identifications_0_taxon',
+        'payload_informalTaxonGroups': 'informalTaxonGroups'
+      }
+    }
+  },
+  'atlasCode': {
+    field: 'atlasCodeField'
+  },
+}
+
+export const overrideMHL117ObservationEventFields = {
+  'secureLevel': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikan karkeistus',
+      'Plats skyddning',
+      'Location roughening'
+    ]
+  },
+  'gatherings_0_locality': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikannimet (kunta tallentuu automaattisesti)',
+      'Ortnamn (kommunen sparar automatiskt)',
+      'Locality names (municipality is saved automatically)'
+    ]
+  },
+}
+
 export const JX652ObservationEventFields = [
   'gatheringEvent_legPublic',
   'secureLevel',
@@ -255,6 +323,6 @@ export const overrideObservationEventFields = {
   },
 }
 
-export const availableForms = ['JX.519', 'JX.652', 'MHL.45']
+export const availableForms = ['JX.519', 'MHL.117', 'JX.652', 'MHL.45']
 
 export const useUiSchemaFields = ['MHL.45']

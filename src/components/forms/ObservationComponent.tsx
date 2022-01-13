@@ -29,7 +29,8 @@ import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import SaveButtonComponent from './SaveButtonComponent'
-import { JX519Fields, overrideJX519Fields, JX519FieldOrder, JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
+import { JX519Fields, overrideJX519Fields, JX519FieldOrder, MHL117Fields, overrideMHL117Fields,
+  JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
 type Props = {
@@ -173,6 +174,8 @@ const ObservationComponent = (props: Props) => {
         //trip form new observation
       } else if (schema.formID === 'JX.519') {
         initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
+      } else if (schema.formID === 'MHL.117') {
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, null, null, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
         initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
       }
@@ -184,6 +187,8 @@ const ObservationComponent = (props: Props) => {
         //trip form edit observation
       } else if (schema.formID === 'JX.519') {
         initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
+      } else if (schema.formID === 'MHL.117') {
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, null, null, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
         initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
       }

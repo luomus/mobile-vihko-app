@@ -207,7 +207,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         let newUnit: Record<string, any>
         let newImages
 
-        if (unit.images?.length > 0) {
+        if (unit.images && unit.images?.length > 0) {
           try {
             newImages = await saveImages(unit.images, credentials)
           } catch (error) {

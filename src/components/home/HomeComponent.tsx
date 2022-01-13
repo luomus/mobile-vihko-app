@@ -264,6 +264,8 @@ const HomeComponent = (props: Props) => {
             <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
             <FormLauncherComponent formID={'JX.519'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.519', zoneUsed) }}
               setModalVisibility={setModalVisibility} />
+            <FormLauncherComponent formID={'MHL.117'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.117', zoneUsed) }}
+              setModalVisibility={setModalVisibility} />
             <FormLauncherComponent formID={'JX.652'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.652', zoneUsed) }}
               setModalVisibility={setModalVisibility} />
             {

@@ -1,5 +1,16 @@
-//mapurl
+//map url
 export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
+
+//grid lines url
+export const gridUrl              = 'https://geoserver.laji.fi/ows?service=WMS&request=GetMap&layers=LajiMapData:YKJlines100,LajiMapData:YKJlines1000,LajiMapData:YKJlines10000,LajiMapData:YKJlines100000&styles=&format=image/png&transparent=true&version=1.1.1&width={width}&height={height}&srs=EPSG:4326&bbox={minX},{minY},{maxX},{maxY}'
+//= 'https://geoserver.laji.fi/ows?service=WMS&request=GetMap&layers=LajiMapData:YKJlines100,LajiMapData:YKJlines1000,LajiMapData:YKJlines10000,LajiMapData:YKJlines100000&styles=&format=image/png&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG:4326&bbox=25.15,60.20,25.20,60.25'
+//= 'https://geoserver.laji.fi/ows?service=WMS&request=GetMap&layers=LajiMapData:YKJlines100,LajiMapData:YKJlines1000,LajiMapData:YKJlines10000,LajiMapData:YKJlines100000&styles=&format=image/png&transparent=true&version=1.1.1&width={width}&height={height}&srs=EPSG:4326&bbox={minX},{minY},{maxX},{maxY}'
+//= 'https://geoserver.laji.fi/geoserver?service=WMS&request=GetMap&layers=LajiMapData:YKJlines100000&styles=&format=image/png&transparent=true&version=1.1.1&width={width}&height={height}&srs=EPSG:4326&bbox={minX},{minY},{maxX},{maxY}'
+//= 'https://geoserver.laji.fi/geoserver/LajiMapData/wms?service=WMS&version=1.1.0&request=GetMap&layers=LajiMapData:YKJlines100000&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:4326&styles=&format=image/png'
+
+//grid labels url
+//export const gridUrl              = 'https://geoserver.laji.fi/geoserver/LajiMapData/wms?service=WMS&version=1.1.0&request=GetMap&layers=LajiMapData:YKJlabels10000&bbox=27.857,6597226.034,799710.013,7796747.142&width=512&height=768&srs=EPSG:4326&styles=&format=image/svg%20xml'
+export const gridLabelsUrl        = 'https://geoserver.laji.fi/geoserver/LajiMapData/wms?service=WMS&version=1.1.0&request=GetMap&layers=LajiMapData:YKJlabels10000&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:4326&styles=&format=image/png&transparent=true'
 
 //prod api root url
 // const apiRoot                     = 'https://api.laji.fi/v0'
