@@ -19,9 +19,22 @@ const EventListElementComponent = (props: Props) => {
 
   const dateBegin = props.observationEvent.gatheringEvent.dateBegin
   const dateEnd = props.observationEvent.gatheringEvent.dateEnd
-  const observationCount = props.observationEvent.gatherings[0].units.length
 
   const [title, setTitle] = useState<string>(t('beginObservationTripForm'))
+
+  const observationCount = (): number => {
+    if (!props.observationEvent) {
+      return 0
+    } else if (props.observationEvent.formID !== 'MHL.117') {
+      return props.observationEvent.gatherings[0].units.length
+    } else {
+      let sum = 0
+      props.observationEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
+        if (unit.atlasCode) { sum += 1 }
+      })
+      return sum
+    }
+  }
 
   useEffect(() => {
     if (props.observationEvent.formID === 'JX.519') {
@@ -43,7 +56,7 @@ const EventListElementComponent = (props: Props) => {
           <View style={Cs.unsentEventsContainer} >
             <Text style={[Ts.eventListElementTitle, { color: Colors.dangerButton1 }]}>{title}</Text>
             <Text style={Ts.eventListElementTextClear}>{parseDateForUI(dateBegin)} - {parseDateForUI(dateEnd)}</Text>
-            <Text style={Ts.eventListElementTextFaded}>{t('observationsInList') + ': ' + observationCount + ' ' + (observationCount === 1 ? t('piece') : t('pieces'))}</Text>
+            <Text style={Ts.eventListElementTextFaded}>{t('observationsInList') + ': ' + observationCount() + ' ' + (observationCount() === 1 ? t('piece') : t('pieces'))}</Text>
           </View>
         </TouchableOpacity>
       </Shadow>

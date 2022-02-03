@@ -12,6 +12,8 @@ export const listOfHaversineNeighbors = (units: Array<Record<string, any>>, regi
 
   //for units, count the relative distance to the chosen point and add it to list of neighbors, if it's close enough
   const haversineNeighbors: Array<Record<string, any>> = units.filter((unit: Record<string, any>) => {
+    if (!unit.unitGathering) { return }
+
     //define the latlng coordinates of the compared unit
     const unitCoordinates: Array<number> = unit.unitGathering.geometry.coordinates
     const unitLatLng = {

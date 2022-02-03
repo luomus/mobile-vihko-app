@@ -191,7 +191,8 @@ const ContainerStyles = StyleSheet.create({
   stopObservingContainer: {
     padding: 5,
     backgroundColor: Colors.primary5,
-    justifyContent: 'flex-start'
+    justifyContent: 'space-between',
+    flexDirection: 'row'
   },
   mapContainer: {
     flex: 1,

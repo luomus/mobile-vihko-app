@@ -75,10 +75,7 @@ export const overrideJX519Fields = {
       'Tid',
       'Time'
     ]
-  },
-  'atlasCode': {
-    field: 'atlasCodeField'
-  },
+  }
 }
 
 export const overrideJX519ObservationEventFields = {
@@ -135,7 +132,6 @@ export const MHL117ObservationEventFields = [
   'gatheringEvent_dateBegin',
   'gatheringEvent_dateEnd',
   'gatheringEvent_completeList_completeListType',
-  'gatheringEvent_completeList_completeListTaxonID',
   'gatherings_0_locality',
   'gatherings_0_localityDescription',
   'gatherings_0_weather',
@@ -148,6 +144,7 @@ export const MHL117Fields = [
   'atlasCode',
   'count',
   'notes',
+  'images'
 ]
 
 export const overrideMHL117Fields = {
@@ -196,6 +193,32 @@ export const overrideMHL117ObservationEventFields = {
     ]
   },
 }
+
+export const additionalMHL117Fields = {
+  'unitGathering_geometry_radius': {
+    title: [
+      'Tarkkuus (m)',
+      'Noggrannhet (m)',
+      'Accuracy (m)'
+    ],
+    type: 'integer',
+    isArray: false,
+    typeOfArray: '',
+    isEnum: false,
+    enumDict: {},
+    defaultValue: undefined,
+    blacklist: null
+  }
+}
+
+export const MHL117FieldOrder = [
+  'identifications_0_taxon',
+  'atlasCode',
+  'count',
+  'unitGathering_geometry_radius',
+  'notes',
+  'images'
+]
 
 export const JX652ObservationEventFields = [
   'gatheringEvent_legPublic',

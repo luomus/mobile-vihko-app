@@ -11,22 +11,16 @@ type Props = {
 const ObservationScreen = (props: Props) => {
 
   const { navigate, push, isFocused } = props.navigation
-  const { fromMap, rules, defaults, sourcePage } = props.route.params
-
-  //handles situation where fromMap can purposefully be undefined
-  let fromMapVar = false
-  if (fromMap) {
-    fromMapVar = true
-  }
+  const { rules, defaults, sourcePage } = props.route.params
 
   return (
     <ObservationComponent
       toObservationEvent={(id: string) => navigate('overview', { id })}
       toMap={() => navigate('map')}
+      toList={() => navigate('list')}
       pushToMap={() => push('map')}
       rules={rules}
       defaults={defaults}
-      fromMap={fromMapVar}
       sourcePage={sourcePage}
       isFocused={isFocused}
       goBack={() => props.navigation.goBack()}

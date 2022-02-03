@@ -4,6 +4,7 @@ import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { omit } from 'lodash'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
   rootState,
@@ -29,18 +30,20 @@ import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import SaveButtonComponent from './SaveButtonComponent'
-import { JX519Fields, overrideJX519Fields, JX519FieldOrder, MHL117Fields, overrideMHL117Fields,
-  JX652Fields, overrideJX652Fields, additionalJX519Fields } from '../../config/fields'
+import {
+  JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, MHL117Fields, overrideMHL117Fields, MHL117FieldOrder, additionalMHL117Fields,
+  JX652Fields, overrideJX652Fields
+} from '../../config/fields'
 import Colors from '../../styles/Colors'
 
 type Props = {
   toObservationEvent: (id: string) => void,
   toMap: () => void,
+  toList: () => void,
   pushToMap: () => void,
   isNew?: boolean,
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
-  fromMap?: boolean,
   sourcePage?: string,
   children?: ReactChild,
   isFocused: () => boolean,
@@ -75,7 +78,7 @@ const ObservationComponent = (props: Props) => {
       init()
     }
 
-    //checks if we are coming from MapComponent or ObservationEventComponent
+    //checks which screen we are coming from
     if (props.sourcePage && !editing.started) {
       dispatch(setEditing({
         started: false,
@@ -171,11 +174,12 @@ const ObservationComponent = (props: Props) => {
       //flying squirrel edit observation
       if (observationState?.rules) {
         initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollView)
-        //trip form new observation
+        //trip form edit observation
       } else if (schema.formID === 'JX.519') {
         initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
       } else if (schema.formID === 'MHL.117') {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, null, null, lang, scrollView)
+        const additionalMHL117 = (props.sourcePage === 'list' || observationState?.id.includes('complete_list')) ? null : additionalMHL117Fields
+        initForm(setForm, observationState, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
         initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
       }
@@ -184,11 +188,12 @@ const ObservationComponent = (props: Props) => {
       //flying squirrel new observation
       if (props.rules) {
         initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollView)
-        //trip form edit observation
+        //trip form new observation
       } else if (schema.formID === 'JX.519') {
         initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
       } else if (schema.formID === 'MHL.117') {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, null, null, lang, scrollView)
+        const additionalMHL117 = (props.sourcePage === 'list' || observationState?.id.includes('complete_list')) ? null : additionalMHL117Fields
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
         initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
       }
@@ -214,7 +219,11 @@ const ObservationComponent = (props: Props) => {
     let newUnit: Record<string, any> = {}
 
     //add id and rules in use internally, destroyed before sending
-    set(newUnit, 'id', `observation_${uuid.v4()}`)
+    if (props.sourcePage !== 'list') {
+      set(newUnit, 'id', `observation_${uuid.v4()}`)
+    } else {
+      set(newUnit, 'id', `complete_list_${uuid.v4()}`)
+    }
 
     if (props.rules) {
       set(newUnit, 'rules', props.rules)
@@ -253,7 +262,11 @@ const ObservationComponent = (props: Props) => {
       await dispatch(newObservation(newUnit, pathToLineStringConstructor(path)))
       dispatch(clearObservationLocation())
       setSaving(false)
-      props.toMap()
+      if (editing.originalSourcePage === 'map') {
+        props.toMap()
+      } else if (editing.originalSourcePage === 'list') {
+        props.toList()
+      }
     } catch (error) {
       setSaving(false)
       dispatch(setMessageState({
@@ -312,6 +325,8 @@ const ObservationComponent = (props: Props) => {
         props.toMap()
       } else if (editing.originalSourcePage === 'overview') {
         props.toObservationEvent(observationId?.eventId)
+      } else if (editing.originalSourcePage === 'list') {
+        props.toList()
       }
 
       dispatch(setEditing({
@@ -351,14 +366,33 @@ const ObservationComponent = (props: Props) => {
 
     setSaving(true)
     try {
-      await dispatch(deleteObservation(observationId?.eventId, observationId?.unitId))
-      dispatch(clearObservationId())
-      dispatch(clearObservationLocation())
+      if (!observationState?.id.includes('complete_list')) {
+        await dispatch(deleteObservation(observationId?.eventId, observationId?.unitId))
+        dispatch(clearObservationId())
+        dispatch(clearObservationLocation())
+
+      //instead of deleting a complete list observation, just reset the fields
+      } else {
+        let emptyObservation = omit(observationState, 'atlasCode')
+        emptyObservation = omit(emptyObservation, 'count')
+        emptyObservation = omit(emptyObservation, 'notes')
+        emptyObservation = omit(emptyObservation, 'images')
+        try {
+          await dispatch(replaceObservationById(emptyObservation, observationId?.eventId, observationId?.unitId))
+        } catch (error) {
+          dispatch(setMessageState({
+            type: 'err',
+            messageContent: error.message
+          }))
+        }
+      }
 
       if (editing.originalSourcePage === 'map') {
         props.toMap()
       } else if (editing.originalSourcePage === 'overview') {
         props.toObservationEvent(observationId?.eventId)
+      } else if (editing.originalSourcePage === 'list') {
+        props.toList()
       }
       dispatch(setEditing({
         started: false,
@@ -388,7 +422,7 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <KeyboardAwareScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
-          {observationId ?
+          {observationId && !(schema.formID === 'MHL.117' && observationState?.id.includes('complete_list')) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => editObservationLocation()}
                 title={t('edit location')} height={40} width={150} buttonStyle={Bs.editObservationButton}
@@ -398,7 +432,7 @@ const ObservationComponent = (props: Props) => {
             </View>
             : null
           }
-          {observationId ?
+          {observationId && !(schema.formID === 'MHL.117' && !observationState?.atlasCode) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => handleRemove()}
                 title={t('delete')} height={40} width={150} buttonStyle={Bs.editObservationButton}

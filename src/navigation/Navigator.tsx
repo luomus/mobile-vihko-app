@@ -8,6 +8,7 @@ import ObservationScreen from '../screens/ObservationScreen'
 import OverviewScreen from '../screens/OverviewScreen'
 import LoginScreen from '../screens/LoginScreen'
 import DocumentScreen from '../screens/DocumentScreen'
+import ListScreen from '../screens/ListScreen'
 import NavBarComponent from '../components/general/NavBarComponent'
 
 const Stack = createNativeStackNavigator()
@@ -29,6 +30,7 @@ const Navigator = () => {
         <Stack.Screen name='observation' component={ObservationScreen} options={navigationOptions} />
         <Stack.Screen name='overview' component={OverviewScreen} options={navigationOptions} />
         <Stack.Screen name='document' component={DocumentScreen} options={navigationOptions} />
+        <Stack.Screen name='list' component={ListScreen} options={navigationOptions} />
       </Stack.Navigator>
     </NavigationContainer>
   )

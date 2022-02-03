@@ -54,8 +54,20 @@ const OverviewComponent = (props: Props) => {
 
   useEffect(() => {
     const searchedEvent: Record<string, any> | null = observationEvent.events.find(e => e.id === props.id) || null
-    const searchedObservations: Record<string, any>[] = searchedEvent?.gatherings[0]?.units || null
+    let searchedObservations: Record<string, any>[] = searchedEvent?.gatherings[0]?.units || null
+
     setEvent(searchedEvent)
+
+    if (searchedEvent && searchedEvent.formID === 'MHL.117') {
+      let filteredObservations: Record<string, any>[] = []
+      searchedObservations.forEach((observation) => {
+        if (observation.atlasCode) {
+          filteredObservations.push(observation)
+        }
+      })
+      searchedObservations = filteredObservations
+    }
+
     setObservations(searchedObservations)
 
     const lang = i18n.language

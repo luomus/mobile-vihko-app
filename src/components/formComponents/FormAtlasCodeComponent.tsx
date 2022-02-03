@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { View, Text } from 'react-native'
+import { useSelector } from 'react-redux'
+import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../languages/i18n'
+import { rootState } from '../../stores'
 import SelectedButtonComponent from '../general/SelectedButtonComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
+import FormPickerComponent from './FormPickerComponent'
 
 interface Props {
   title: string,
@@ -21,6 +24,8 @@ const FormAtlasCodeComponent = (props: Props) => {
   const { register, setValue } = useFormContext()
   const [selectedKey, setSelectedKey] = useState<string | undefined>(undefined)
   const [elementList, setElementList] = useState<JSX.Element[] | undefined>([])
+
+  const schema = useSelector((state: rootState) => state.schema)
 
   const { t } = useTranslation()
 
@@ -65,8 +70,9 @@ const FormAtlasCodeComponent = (props: Props) => {
             selectedKey === key ?
               <SelectedButtonComponent
                 onPress={() => null}
-                title={atlasCode}
+                title={atlasCode} height={40} width={80}
                 color={Colors.unavailableButton}
+                textStyle={Ts.languageAndAtlasCodeButtonText}
                 textColor={Colors.darkText}
               />
               :
