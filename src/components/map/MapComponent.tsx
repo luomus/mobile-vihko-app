@@ -29,7 +29,7 @@ import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
-import { mapUrl as urlTemplate, gridUrl as gridTemplate } from '../../config/urls'
+import { mapUrl as urlTemplate, gridUrl as gridTemplate, gridUrl } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
@@ -366,12 +366,8 @@ const MapComponent = (props: Props) => {
   const gridOverlay = () => {
     return (
       <>
-        {/* <Overlay
-          image={{ uri: '' }}
-          bounds={[[60, 25], [61, 26]]}
-        /> */}
         <WMSTile
-          urlTemplate={gridTemplate}
+          urlTemplate={gridUrl}
           tileSize={256}
           opacity={1}
           zIndex={5}
@@ -441,7 +437,7 @@ const MapComponent = (props: Props) => {
           {locationOverlay()}
           {targetOverlay()}
           {pathOverlay()}
-          {/* {tileOverlay()} */}
+          {tileOverlay()}
           {gridOverlay()}
           {zoneOverlay()}
           {observationLocationsOverlay()}
