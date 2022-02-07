@@ -70,6 +70,7 @@
   "failed to save updated permissions locally": "Kunde inte sparas möjliga ändringar av formulärtillstånder i programmet.",
   "failed to update permissions": "Misslyckades att ladda formulärtillstånd, används sparade tillstånder.",
   "fi schema save to async failed": "Misslyckades at spara finska observationsscheman.",
+  "filter species": "Filtrera arter",
   "finland": "Finland",
   "finnish": "finska",
   "flying squirrel": "Flygekorre",

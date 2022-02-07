@@ -178,7 +178,7 @@ const ObservationComponent = (props: Props) => {
       } else if (schema.formID === 'JX.519') {
         initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
       } else if (schema.formID === 'MHL.117') {
-        const additionalMHL117 = (props.sourcePage === 'list' || observationState?.id.includes('complete_list')) ? null : additionalMHL117Fields
+        const additionalMHL117 = observationState?.id.includes('complete_list') ? null : additionalMHL117Fields
         initForm(setForm, observationState, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
         initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
@@ -192,7 +192,7 @@ const ObservationComponent = (props: Props) => {
       } else if (schema.formID === 'JX.519') {
         initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
       } else if (schema.formID === 'MHL.117') {
-        const additionalMHL117 = (props.sourcePage === 'list' || observationState?.id.includes('complete_list')) ? null : additionalMHL117Fields
+        const additionalMHL117 = observationState?.id.includes('complete_list') ? null : additionalMHL117Fields
         initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollView)
       } else if (schema.formID === 'JX.652') {
         initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import SearchInput, { createFilter } from 'react-native-search-filter'
 import {
   rootState,
   DispatchType,
   setObservationId
 } from '../../stores'
+import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 import ActivityComponent from '../general/ActivityComponent'
 import ExtendedNavBarComponent from '../general/ExtendedNavBarComponent'
@@ -19,10 +22,13 @@ type Props = {
 const ListComponent = (props: Props) => {
 
   const [observed, setObserved] = useState<JSX.Element[] | undefined>(undefined)
+  const [search, setSearch] = useState<string>('')
 
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
 
   const dispatch: DispatchType = useDispatch()
+
+  const { t } = useTranslation()
 
   useEffect(() => {
     const units = observationEvent.events[observationEvent.events.length - 1].gatherings[0].units
@@ -36,6 +42,8 @@ const ListComponent = (props: Props) => {
         unpicked.push(observation)
       }
     })
+    picked.sort((a, b) => a.identifications[0].taxon.localeCompare(b.identifications[0].taxon))
+    unpicked.sort((a, b) => a.identifications[0].taxon.localeCompare(b.identifications[0].taxon))
     let combined = picked.concat(unpicked)
     let elements = combined.map((observation) => {
       return (
@@ -49,7 +57,7 @@ const ListComponent = (props: Props) => {
             }))
             props.onPressObservation('list')
           }}
-          key={observation.id}
+          key={observation.identifications[0].taxon}
           style={{ borderColor: Colors.neutral5, borderBottomWidth: 1, padding: 10 }}>
           <Text style={observation.atlasCode ? { fontWeight: 'bold', fontSize: 24 } : { fontSize: 24 }}>{observation.identifications[0].taxon}</Text>
         </TouchableOpacity>
@@ -63,11 +71,19 @@ const ListComponent = (props: Props) => {
       <ActivityComponent text={'loading'} />
     )
   } else {
+    const filteredObservations = observed.filter(createFilter(search, ['key']))
     return (
       <>
         <ExtendedNavBarComponent onPressMap={props.onPressMap} onPressList={undefined} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
         <View>
-          {observed}
+          <SearchInput
+            onChangeText={(term) => { setSearch(term) }}
+            style={Cs.listFilterContainer}
+            placeholder={t('filter species')}
+          />
+          <ScrollView>
+            {filteredObservations}
+          </ScrollView>
         </View>
       </>
     )

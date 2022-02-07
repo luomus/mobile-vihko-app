@@ -70,6 +70,7 @@
   "failed to save updated permissions locally": "Failed to save possible changes in form permission to the application.",
   "failed to update permissions": "Failed to load form permissions, previously saved permissions are used.",
   "fi schema save to async failed": "Failed to save Finnish schema to local storage.",
+  "filter species": "Filter species",
   "finland": "Finland",
   "finnish": "Finnish",
   "flying squirrel": "Flying squirrel",
