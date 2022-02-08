@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { View, Text, Picker } from 'react-native'
+import { View, Text } from 'react-native'
+import { Picker } from '@react-native-picker/picker'
 import Cs from '../../styles/ContainerStyles'
 
 interface Props {

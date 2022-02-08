@@ -246,12 +246,13 @@ const LoginComponent = (props: Props) => {
     return <>
       <ActivityComponent text={t('waiting for login')}>
         <View style={Bs.loginCancelButton}>
-          <ButtonComponent onPressFunction={
-            () => {
-              if (canceler) {
-                canceler()
-              }
-            }}
+          <ButtonComponent
+            onPressFunction={
+              () => {
+                if (canceler) {
+                  canceler()
+                }
+              }}
             title={t('cancel')} height={40} width={150} buttonStyle={Bs.loginCancelButton}
             gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
             textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}

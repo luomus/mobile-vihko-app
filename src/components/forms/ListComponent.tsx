@@ -75,7 +75,7 @@ const ListComponent = (props: Props) => {
     return (
       <>
         <ExtendedNavBarComponent onPressMap={props.onPressMap} onPressList={undefined} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
-        <View>
+        <View style={{ flex: 1 }}>
           <SearchInput
             onChangeText={(term) => { setSearch(term) }}
             style={Cs.listFilterContainer}

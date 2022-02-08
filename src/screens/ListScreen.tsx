@@ -1,5 +1,5 @@
 import React from 'react'
-import { CommonActions, ParamListBase, Route } from '@react-navigation/native'
+import { ParamListBase, Route } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import ListComponent from '../components/forms/ListComponent'
 

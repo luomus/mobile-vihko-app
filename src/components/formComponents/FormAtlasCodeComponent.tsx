@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
-import { useSelector } from 'react-redux'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../languages/i18n'
-import { rootState } from '../../stores'
 import { ErrorMessage } from '@hookform/error-message'
 import SelectedButtonComponent from '../general/SelectedButtonComponent'
 import ButtonComponent from '../general/ButtonComponent'
@@ -27,8 +25,6 @@ const FormAtlasCodeComponent = (props: Props) => {
   const [elementList, setElementList] = useState<JSX.Element[] | undefined>([])
 
   const { validation } = props.params
-
-  const schema = useSelector((state: rootState) => state.schema)
 
   const { t } = useTranslation()
 

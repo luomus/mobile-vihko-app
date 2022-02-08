@@ -15,6 +15,7 @@ import {
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
 } from './types'
+import { birdList } from '../../config/fields'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -270,7 +271,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         message: error.message
       })
     }
-
+    console.log(event)
     try {
       await postObservationEvent(event, credentials)
     } catch (error) {
@@ -544,48 +545,6 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
 export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { credentials, observationEvent } = getState()
-    const list = [
-      {
-        'key': 'MX.26277',
-        'value': 'kyhmyjoutsen'
-      },
-      {
-        'key': 'MX.26280',
-        'value': 'laulujoutsen'
-      },
-      {
-        'key': 'MX.26291',
-        'value': 'merihanhi'
-      },
-      {
-        'key': 'MX.26299',
-        'value': 'valkoposkihanhi'
-      },
-      {
-        'key': 'MX.26429',
-        'value': 'mustalintu'
-      },
-      {
-        'key': 'MX.26435',
-        'value': 'telkkä'
-      },
-      {
-        'key': 'MX.26438',
-        'value': 'uivelo'
-      },
-      {
-        'key': 'MX.26394',
-        'value': 'lapasorsa'
-      },
-      {
-        'key': 'MX.26364',
-        'value': 'harmaasorsa'
-      },
-      {
-        'key': 'MX.26366',
-        'value': 'tavi'
-      }
-    ]
 
     const mapInformalTaxonGroups = (informalTaxonGroups: Record<string, any>) => {
       return informalTaxonGroups.map((group: any) => {
@@ -596,11 +555,19 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
 
-    await Promise.all(list.map(async (item: Record<string, any>) => {
+    await Promise.all(birdList.map(async (item: Record<string, any>) => {
       let res = await getTaxonAutocomplete('taxon', item.key, null, lang, 1, null)
       let observation = {}
+      let name: string = ''
+      if (lang === 'fi') {
+        name = item.nameFI
+      } else if (lang === 'sv') {
+        name = item.nameSV
+      } else if (lang === 'en') {
+        name = item.nameEN
+      }
       set(observation, 'id', `complete_list_${uuid.v4()}`)
-      set(observation, 'identifications', [{ taxon: item.value }])
+      set(observation, 'identifications', [{ taxon: name }])
       set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
       set(observation, 'unitFact', { autocompleteSelectedTaxonID: res.result[0].key })
       newEvent.gatherings[0].units.push(observation)

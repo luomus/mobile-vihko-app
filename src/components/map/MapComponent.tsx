@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile, Overlay } from 'react-native-maps'
+import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
@@ -29,7 +29,7 @@ import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
-import { mapUrl as urlTemplate, gridUrl as gridTemplate, gridUrl } from '../../config/urls'
+import { mapUrl as urlTemplate, gridUrl as gridTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
@@ -367,7 +367,7 @@ const MapComponent = (props: Props) => {
     return (
       <>
         <WMSTile
-          urlTemplate={gridUrl}
+          urlTemplate={gridTemplate}
           tileSize={256}
           opacity={1}
           zIndex={5}
