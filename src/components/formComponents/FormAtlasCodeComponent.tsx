@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { View, Text } from 'react-native'
+import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../languages/i18n'
+import { ErrorMessage } from '@hookform/error-message'
 import SelectedButtonComponent from '../general/SelectedButtonComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -14,18 +15,26 @@ interface Props {
   title: string,
   objectTitle: string,
   defaultValue: string,
+  params: any,
   dictionary: { [key: string]: any }
 }
 
 const FormAtlasCodeComponent = (props: Props) => {
-  const { register, setValue } = useFormContext()
+  const { register, setValue, formState } = useFormContext()
   const [selectedKey, setSelectedKey] = useState<string | undefined>(undefined)
   const [elementList, setElementList] = useState<JSX.Element[] | undefined>([])
+
+  const { validation } = props.params
 
   const { t } = useTranslation()
 
   useEffect(() => {
-    register(props.objectTitle)
+    if (validation) {
+      register(props.objectTitle, validation)
+    } else {
+      register(props.objectTitle)
+    }
+
     if (props.defaultValue !== '') { setSelectedKey(props.defaultValue) }
     setValue(props.objectTitle, props.defaultValue)
     renderListElements()
@@ -65,8 +74,9 @@ const FormAtlasCodeComponent = (props: Props) => {
             selectedKey === key ?
               <SelectedButtonComponent
                 onPress={() => null}
-                title={atlasCode}
+                title={atlasCode} height={40} width={80}
                 color={Colors.unavailableButton}
+                textStyle={Ts.languageAndAtlasCodeButtonText}
                 textColor={Colors.darkText}
               />
               :
@@ -90,13 +100,23 @@ const FormAtlasCodeComponent = (props: Props) => {
     setElementList(elements)
   }
 
+  const errorMessageTranslation = (errorMessage: string): Element => {
+    const errorTranslation = t(errorMessage  + ' atlas code')
+    return <Text style={{ color: Colors.dangerButton2 }}>{errorTranslation}</Text>
+  }
+
   return (
     <View style={Cs.padding10Container}>
       <Text>{props.title}</Text>
+      <ErrorMessage
+        errors={formState.errors}
+        name={props.objectTitle}
+        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
+      />
       <View style={Cs.atlasCodeChosenContainer}>
         <Text>{!selectedKey || selectedKey === '' ? t('no atlas code') : props.dictionary[selectedKey]}</Text>
       </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+      <View style={Cs.atlasCodeSelectionContainer}>
         {elementList}
       </View>
     </View>

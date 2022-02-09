@@ -51,11 +51,11 @@ export const createPicker = (
 }
 
 export const createAtlasCodeField = (
-  title: string, objectTitle: string, defaultValue: string, dictionary: { [key: string]: any }
+  title: string, objectTitle: string, defaultValue: string, params: any, dictionary: { [key: string]: any }
 ) => {
 
   return <FormAtlasCodeComponent
-    key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue} dictionary={dictionary}
+    key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue} params={params} dictionary={dictionary}
   />
 }
 

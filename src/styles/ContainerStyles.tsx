@@ -191,7 +191,8 @@ const ContainerStyles = StyleSheet.create({
   stopObservingContainer: {
     padding: 5,
     backgroundColor: Colors.primary5,
-    justifyContent: 'flex-start'
+    justifyContent: 'space-between',
+    flexDirection: 'row'
   },
   mapContainer: {
     flex: 1,
@@ -292,6 +293,14 @@ const ContainerStyles = StyleSheet.create({
     marginTop: 5
   },
 
+  //list component
+  listFilterContainer: {
+    borderBottomWidth: 2,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    fontSize: 24
+  },
+
   //message component
   messageButtonsContainer: {
     alignSelf: 'center',
@@ -353,6 +362,10 @@ const ContainerStyles = StyleSheet.create({
     marginVertical: 5,
     padding: 5,
     width: '100%'
+  },
+  atlasCodeSelectionContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   },
   formPickerContainer: {
     borderColor: Colors.neutral5,

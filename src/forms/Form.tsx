@@ -97,7 +97,7 @@ const Form = (
             fieldEnumDict, fieldType, fieldDefaultValue, fieldBlacklist)
           return
         case 'atlasCodeField':
-          toReturn.push(createAtlasCodeField(fieldTitle, path, fieldDefaultValue, fieldEnumDict))
+          toReturn.push(createAtlasCodeField(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, fieldEnumDict))
           return
       }
     }

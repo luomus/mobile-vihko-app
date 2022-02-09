@@ -38,6 +38,7 @@ import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../
 import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
 import { clearGrid, setGrid } from '../position/actions'
+import { initCompleteList } from '../../stores/observation/actions'
 
 export const resetReducer = () => ({
   type: 'RESET_STORE'
@@ -128,6 +129,9 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
     }
 
     dispatch(replaceObservationEvents(newEvents))
+
+    //initialize complete list for bird atlas
+    if (schema.formID === 'MHL.117') { await dispatch(initCompleteList(lang)) }
 
     //attempt to start geolocation systems
     try {
@@ -245,7 +249,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { firstLocation, observationEvent, path, observationEventInterrupted } = getState()
+    const { firstLocation, observationEvent, path, observationEventInterrupted, schema } = getState()
 
     dispatch(setObservationEventInterrupted(false))
 
@@ -255,7 +259,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       const setBoundingBoxGeometry = () => {
         let geometry
 
-        if (event.gatherings[0].units.length >= 1) {
+        if (event.gatherings[0].units.length >= 1 && schema.formID !== 'MHL.117') {
           geometry = createUnitBoundingBox(event)
         } else {
           geometry = {

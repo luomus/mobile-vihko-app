@@ -102,8 +102,9 @@ const UserModalComponent = (props: Props) => {
                 i18n.changeLanguage('fi')
                 props.onClose()
               }}
-              title={'FI'}
+              title={'FI'} height={40} width={80}
               color={Colors.neutral3}
+              textStyle={Ts.languageAndAtlasCodeButtonText}
               textColor={Colors.darkText}
             />
             :
@@ -126,8 +127,9 @@ const UserModalComponent = (props: Props) => {
                 i18n.changeLanguage('sv')
                 props.onClose()
               }}
-              title={'SV'}
+              title={'SV'} height={40} width={80}
               color={Colors.neutral3}
+              textStyle={Ts.languageAndAtlasCodeButtonText}
               textColor={Colors.darkText}
             />
             :
@@ -150,8 +152,9 @@ const UserModalComponent = (props: Props) => {
                 i18n.changeLanguage('en')
                 props.onClose()
               }}
-              title={'EN'}
+              title={'EN'} height={40} width={80}
               color={Colors.neutral3}
+              textStyle={Ts.languageAndAtlasCodeButtonText}
               textColor={Colors.darkText}
             />
             :

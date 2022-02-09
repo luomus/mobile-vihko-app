@@ -15,6 +15,14 @@ const TextStyles = StyleSheet.create({
     alignSelf: 'stretch',
     padding: 10
   },
+  languageAndAtlasCodeButtonText: {
+    padding: 8,
+    fontSize: 15
+  },
+  mapToListButtonText: {
+    padding: 5,
+    fontSize: 15
+  },
 
   //navigation bar
   headerTitle: {
