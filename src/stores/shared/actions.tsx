@@ -32,11 +32,12 @@ import storageService from '../../services/storageService'
 import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser'
 import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
-import { stopLocationAsync, watchLocationAsync } from '../../helpers/geolocationHelper'
+import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync } from '../../helpers/geolocationHelper'
 import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
+import { clearGrid, setGrid } from '../position/actions'
 
 export const resetReducer = () => ({
   type: 'RESET_STORE'
@@ -45,7 +46,7 @@ export const resetReducer = () => ({
 export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEvent, observationZone, schema } = getState()
+    const { centered, credentials, observationEvent, observationZone, schema, grid } = getState()
     const userId = credentials?.user?.id
 
     const region: ZoneType | undefined = observationZone.zones.find((region: Record<string, any>) => {
@@ -106,6 +107,7 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
     const observationEventObject = {
       id: newID,
       formID: schema.formID,
+      grid: grid ? { n: grid.n, e: grid.e } : undefined,
       ...parsedObservationEvent
     }
 
@@ -166,6 +168,18 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 
     //switch schema
     dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID))
+
+    if (observationEvent.events[observationEvent.events.length - 1].grid) {
+      const grid = observationEvent.events[observationEvent.events.length - 1].grid
+      const location = await getCurrentLocation()
+      const ykjCoords = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
+
+      dispatch(setGrid({
+        n: grid.n,
+        e: grid.e,
+        pauseGridCheck: Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n
+      }))
+    }
 
     if (!observationEventInterrupted) {
       onPressMap()
@@ -305,6 +319,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(setObserving(false))
     dispatch(clearObservationLocation())
     dispatch(clearObservationId())
+    dispatch(clearGrid())
     dispatch(setFirstZoom('not'))
     dispatch(setFirstLocation([60.192059, 24.945831]))
     await stopLocationAsync(observationEventInterrupted)

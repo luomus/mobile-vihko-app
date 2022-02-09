@@ -27,6 +27,7 @@ import storageService from '../../services/storageService'
 import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
+import GridModalComponent from './GridModalComponent'
 
 type Props = {
   isFocused: () => boolean,
@@ -39,7 +40,8 @@ type Props = {
 const HomeComponent = (props: Props) => {
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
-  const [modalVisibility, setModalVisibility] = useState<boolean>(false)
+  const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
+  const [gridModalVisibility, setGridModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const { t } = useTranslation()
   const [data, setString] = useClipboard()
@@ -137,7 +139,6 @@ const HomeComponent = (props: Props) => {
   })
 
   const onBeginObservationEvent = async (formID: string, zoneUsed: boolean) => {
-
     setLoading(true)
 
     //save the used form before beginning an event
@@ -263,15 +264,15 @@ const HomeComponent = (props: Props) => {
             }
             <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
             <FormLauncherComponent formID={'JX.519'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.519', zoneUsed) }}
-              setModalVisibility={setModalVisibility} />
+              setModalVisibility={setZoneModalVisibility} />
             <FormLauncherComponent formID={'MHL.117'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.117', zoneUsed) }}
-              setModalVisibility={setModalVisibility} />
+              setModalVisibility={setGridModalVisibility} />
             <FormLauncherComponent formID={'JX.652'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.652', zoneUsed) }}
-              setModalVisibility={setModalVisibility} />
+              setModalVisibility={setZoneModalVisibility} />
             {
               credentials.permissions?.includes('HR.2951') ?
                 <FormLauncherComponent formID={'MHL.45'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.45', zoneUsed) }}
-                  setModalVisibility={setModalVisibility} />
+                  setModalVisibility={setZoneModalVisibility} />
                 : null
             }
             <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
@@ -285,8 +286,11 @@ const HomeComponent = (props: Props) => {
             </Text>
           </View>
         </ScrollView>
-        <ZoneModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
+        <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
           onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.45', zoneUsed) }}
+          setLoading={setLoading} showError={showError} />
+        <GridModalComponent modalVisibility={gridModalVisibility} setModalVisibility={setGridModalVisibility}
+          onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.117', zoneUsed) }}
           setLoading={setLoading} showError={showError} />
         <MessageComponent />
       </>

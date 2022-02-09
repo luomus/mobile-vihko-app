@@ -6,33 +6,30 @@ import {
   eventPathUpdate,
   resetReducer,
   ObservationEventType,
-  PathType
+  PathType,
+  setGridPause,
+  setMessageState
 } from './src/stores'
 import * as TaskManager from 'expo-task-manager'
-import './src/languages/i18n'
-import { LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/location'
-import { cleanupLocationAsync } from './src/helpers/geolocationHelper'
+import i18n from './src/languages/i18n'
+import { GRID_EDGE_DISTANCE, LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/location'
+import { cleanupLocationAsync, convertWGS84ToYKJ } from './src/helpers/geolocationHelper'
 import { pathToLineStringConstructor } from './src/helpers/geoJSONHelper'
 import { LineString, MultiLineString } from 'geojson'
 import Navigator from './src/navigation/Navigator'
-
-const App = () => {
-  useEffect(() => {
-    const { observationEventInterrupted } = store.getState()
-    cleanupLocationAsync(observationEventInterrupted)
-    store.dispatch(resetReducer())
-  }, [])
-
-  return (
-    <Provider store={ store }>
-      <Navigator />
-    </Provider>
-  )
-}
+import { GridType } from './src/stores/position/types'
+import { Vibration } from 'react-native'
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, error }) => {
+  const showAlert = (message: string) => {
+    store.dispatch(setMessageState({
+      type: 'err',
+      messageContent: message
+    }))
+  }
+
   if (locations) {
-    const { observationEvent, path }: {observationEvent: ObservationEventType, path: PathType} = store.getState()
+    const { observationEvent, path, grid }: {observationEvent: ObservationEventType, path: PathType, grid: GridType} = store.getState()
     store.dispatch(appendPath(locations))
 
     const indLast = observationEvent.events.length - 1
@@ -56,7 +53,36 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
     ) {
       store.dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
     }
+
+    if (observationEvent?.events[indLast]?.formID === 'MHL.117' && grid && locations[0]?.coords) {
+      const ykjCoords = convertWGS84ToYKJ([locations[0].coords.longitude, locations[0].coords.latitude])
+
+      if (!grid.pauseGridCheck && (ykjCoords[0] < grid.e * 10000 + GRID_EDGE_DISTANCE || ykjCoords[0] > grid.e * 10000 + 10000 - GRID_EDGE_DISTANCE
+        || ykjCoords[1] < grid.n * 10000 + GRID_EDGE_DISTANCE || ykjCoords[1] > grid.n * 10000 + 10000 - GRID_EDGE_DISTANCE)) {
+        store.dispatch(setGridPause(true))
+        Vibration.vibrate([500, 1000, 500, 1000, 500])
+        showAlert(i18n.t('leaving grid'))
+
+      } else if (grid.pauseGridCheck && !(ykjCoords[0] < grid.e * 10000 + GRID_EDGE_DISTANCE || ykjCoords[0] > grid.e * 10000 + 10000 - GRID_EDGE_DISTANCE
+        || ykjCoords[1] < grid.n * 10000 + GRID_EDGE_DISTANCE || ykjCoords[1] > grid.n * 10000 + 10000 - GRID_EDGE_DISTANCE)) {
+        store.dispatch(setGridPause(false))
+      }
+    }
   }
 })
+
+const App = () => {
+  useEffect(() => {
+    const { observationEventInterrupted } = store.getState()
+    cleanupLocationAsync(observationEventInterrupted)
+    store.dispatch(resetReducer())
+  }, [])
+
+  return (
+    <Provider store={ store }>
+      <Navigator />
+    </Provider>
+  )
+}
 
 export default App

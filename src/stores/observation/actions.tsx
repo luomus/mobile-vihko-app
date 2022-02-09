@@ -249,6 +249,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       }
 
       delete event.id
+      delete event.grid
 
     } catch (error) {
       return Promise.reject({

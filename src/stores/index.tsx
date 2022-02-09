@@ -50,7 +50,11 @@ import {
   appendPath,
   setPath,
   clearPath,
-  setFirstLocation
+  setFirstLocation,
+  setGrid,
+  clearGrid,
+  setGridCoords,
+  setGridPause,
 } from './position/actions'
 import {
   setSchema,
@@ -93,7 +97,8 @@ import {
 import {
   firstLocationReducer,
   pathReducer,
-  positionReducer
+  positionReducer,
+  gridReducer
 } from './position/reducers'
 import { schemaReducer } from './schema/reducers'
 import { credentialsReducer } from './user/reducers'
@@ -119,7 +124,8 @@ import {
   locationActionTypes,
   LocationType,
   PathType,
-  PathPoint
+  PathPoint,
+  GridType
 } from './position/types'
 import {
   schemaActionTypes,
@@ -150,6 +156,7 @@ interface rootState {
   observing: boolean,
   path: PathType,
   position: LocationType,
+  gid: GridType,
   region: Region,
   schema: SchemaType
 }
@@ -170,6 +177,7 @@ const appReducer = combineReducers({
   observing: observingReducer,
   path: pathReducer,
   position: positionReducer,
+  grid: gridReducer,
   region: regionReducer,
   schema: schemaReducer
 })
@@ -229,6 +237,10 @@ export {
   setPath,
   clearPath,
   setFirstLocation,
+  setGrid,
+  clearGrid,
+  setGridCoords,
+  setGridPause,
   setSchema,
   initSchema,
   switchSchema,

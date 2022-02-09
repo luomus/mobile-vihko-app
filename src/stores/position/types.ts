@@ -9,6 +9,11 @@ export const APPEND_PATH = 'APPEND_PATH'
 export const CLEAR_PATH = 'CLEAR_PATH'
 export const SET_PATH = 'SET_PATH'
 
+export const SET_GRID = 'SET_GRID'
+export const CLEAR_GRID = 'CLEAR_GRID'
+export const SET_COORDS = 'SET_COORDS'
+export const SET_PAUSE = 'SET_PAUSE'
+
 export type PathPoint = [
   number,
   number,
@@ -16,6 +21,12 @@ export type PathPoint = [
   number,
   boolean
 ]
+
+export type GridType = {
+  n: number,
+  e: number,
+  pauseGridCheck: boolean,
+} | null
 
 export type LocationType = LocationObject | null
 export type PathType = Array<Array<PathPoint>>
@@ -48,10 +59,33 @@ interface setPath {
   payload: PathType
 }
 
+interface setGrid {
+  type: typeof SET_GRID,
+  payload: GridType
+}
+
+interface clearGrid {
+  type: typeof CLEAR_GRID
+}
+
+interface setGridCoords {
+  type: typeof SET_COORDS,
+  payload: {n: number, e: number}
+}
+
+interface setGridPause {
+  type: typeof SET_PAUSE,
+  payload: boolean
+}
+
 export type locationActionTypes =
   clearLocation |
   updateLocation |
   setFirstLocation |
   appendPath |
   clearPath |
-  setPath
+  setPath |
+  setGrid |
+  clearGrid |
+  setGridCoords |
+  setGridPause

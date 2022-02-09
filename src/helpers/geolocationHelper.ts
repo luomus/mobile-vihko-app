@@ -1,6 +1,7 @@
 import * as Location from 'expo-location'
 import { LocationObject } from 'expo-location'
 import Colors from '../styles/Colors'
+import proj4 from 'proj4'
 import {
   LOCATION_BACKGROUND_TASK,
   LOCATION_ACCURACY,
@@ -12,6 +13,23 @@ import {
 } from '../config/location'
 
 let positionWatcher: null | { remove(): void } = null
+
+const convertWGS84ToYKJ = (coordinates: [number, number]) => {
+  const ykjProjection = '+proj=tmerc +lat_0=0 +lon_0=27 +k=1 +x_0=3500000 +y_0=0 +ellps=intl +towgs84=-96.0617,-82.4278,-121.7535,4.80107,0.34543,-1.37646,1.4964 +units=m +no_defs'
+  return proj4(ykjProjection, coordinates)
+}
+
+const getCurrentLocation = async () => {
+  let permission = await Location.requestForegroundPermissionsAsync()
+
+  if (permission.status === 'granted') {
+    return await Location.getCurrentPositionAsync({
+      accuracy: LOCATION_ACCURACY
+    })
+  } else {
+    throw new Error('Permission to access location denied.')
+  }
+}
 
 const watchLocationAsync = async (updateLocation: (location: LocationObject) => void, title: string, body: string) => {
   let permission = await Location.requestForegroundPermissionsAsync()
@@ -63,4 +81,4 @@ const cleanupLocationAsync = async (observationEventInterrupted: boolean) => {
   }
 }
 
-export { watchLocationAsync, stopLocationAsync, cleanupLocationAsync }
+export { watchLocationAsync, stopLocationAsync, cleanupLocationAsync, getCurrentLocation, convertWGS84ToYKJ }
