@@ -161,9 +161,14 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start'
   },
-  zonePickerButtonContainer: {
+  modalStartButtonContainer: {
     padding: 10,
     alignSelf: 'flex-start'
+  },
+  gridModalElementContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    padding: 10
   },
   eventsListContainer: {
     padding: 10,

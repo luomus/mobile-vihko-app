@@ -572,6 +572,12 @@ export const birdList = [
     'nameEN': 'Western Jackdaw'
   },
   {
+    'key': 'MX.34505',
+    'nameFI': 'pyrstötiainen',
+    'nameSV': 'stjärtmes',
+    'nameEN': 'Long-tailed Tit'
+  },
+  {
     'key': 'MX.37090',
     'nameFI': 'närhi',
     'nameSV': 'nötskrika',

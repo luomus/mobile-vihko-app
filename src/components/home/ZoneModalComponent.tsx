@@ -115,7 +115,7 @@ const ZoneModalComponent = (props: Props) => {
             </View>
           </View>
         </View>
-        <View style={Cs.zonePickerButtonContainer}>
+        <View style={Cs.modalStartButtonContainer}>
           <ButtonComponent onPressFunction={() => handleStartEvent()} title={t('beginObservation')}
             height={40} width={120} buttonStyle={Bs.beginButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}

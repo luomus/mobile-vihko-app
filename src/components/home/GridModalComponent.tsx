@@ -27,10 +27,10 @@ const GridModalComponent = (props: Props) => {
 
   const { t } = useTranslation()
   const dispatch: DispatchType = useDispatch()
-  const [ ownLocation, setOwnLocation ] = useState<[number, number]>([373, 777])
-  const [ northing, setNorthing ] = useState<string>('000')
-  const [ easting, setEasting ] = useState<string>('000')
-  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ownLocation, setOwnLocation] = useState<[number, number]>([373, 777])
+  const [northing, setNorthing] = useState<string>('000')
+  const [easting, setEasting] = useState<string>('000')
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const setLocation = async () => {
@@ -64,7 +64,7 @@ const GridModalComponent = (props: Props) => {
 
     if (n < 661 || n > 777 || e < 306 || e > 373) {
       props.setModalVisibility(false)
-      props.showError(t('current loation out of ykj bounds'))
+      props.showError(t('current location out of ykj bounds'))
       return
     }
 
@@ -95,13 +95,13 @@ const GridModalComponent = (props: Props) => {
           <Text style={Ts.homeScreenTitle}>
             {t('new observation event')}
           </Text>
-          { loading ?
+          {loading ?
             <ActivityIndicator size={25} color={Colors.primary5} /> :
             <>
-              <View style={Cs.zoneEventLauncherContainer}>
-                <Text>{`Your current location is ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`}</Text> 
+              <View style={Cs.gridModalElementContainer}>
+                <Text>{`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`}</Text>
               </View>
-              <View style={Cs.unfinishedEventButtonsContainer}>
+              <View style={Cs.gridModalElementContainer}>
                 <TextInput
                   style={Os.coordinateInput}
                   keyboardType='numeric'
@@ -118,7 +118,7 @@ const GridModalComponent = (props: Props) => {
             </>
           }
         </View>
-        <View style={Cs.zonePickerButtonContainer}>
+        <View style={Cs.modalStartButtonContainer}>
           <ButtonComponent disabled={loading} onPressFunction={() => handleStartEvent()} title={t('beginObservation')}
             height={40} width={120} buttonStyle={Bs.beginButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
