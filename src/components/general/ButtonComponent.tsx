@@ -6,7 +6,7 @@ import { Shadow } from 'react-native-shadow-2'
 
 type Props = {
   onPressFunction: () => any,
-  disabled: boolean | undefined,
+  disabled?: boolean | undefined,
   title: string | undefined,
   height: number,
   width: number,

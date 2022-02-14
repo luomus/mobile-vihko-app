@@ -211,6 +211,12 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'column'
   },
+  gridTitleContainer: {
+    padding: 5,
+    position: 'absolute',
+    top: '1%',
+    left: '1%'
+  },
   observationButtonsBaseContainer: {
     position: 'absolute',
     width: '98%',

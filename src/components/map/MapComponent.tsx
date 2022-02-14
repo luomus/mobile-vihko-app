@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
-import { View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon } from 'geojson'
 import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
@@ -53,6 +53,7 @@ const MapComponent = (props: Props) => {
   const centered = useSelector((state: rootState) => state.centered)
   const editing = useSelector((state: rootState) => state.editing)
   const firstZoom = useSelector((state: rootState) => state.firstZoom)
+  const grid = useSelector((state: rootState) => state.grid)
   const maptype = useSelector((state: rootState) => state.maptype)
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -60,6 +61,7 @@ const MapComponent = (props: Props) => {
   const path = useSelector((state: rootState) => state.path)
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
+  const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -416,7 +418,7 @@ const MapComponent = (props: Props) => {
 
   return (
     <>
-      <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList} onPressFinishObservationEvent={props.onPressFinishObservationEvent}/>
+      <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
       <View style={Cs.mapContainer}>
         <MapView
           ref={map => { mapView = map }}
@@ -442,6 +444,16 @@ const MapComponent = (props: Props) => {
           {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>
+        {schema.formID === 'MHL.117' ?
+          <View style={Cs.gridTitleContainer}>
+            <ButtonComponent onPressFunction={() => null} disabled={true} title={grid?.n + ':' + grid?.e}
+              height={35} width={75} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.boldButtonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+            />
+          </View>
+          : null
+        }
         <View style={Cs.mapButtonsContainer}>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}

@@ -66,6 +66,8 @@ const FormAtlasCodeComponent = (props: Props) => {
         colorUnselected = Colors.atlasCodeGreenButton
       } else if (atlasCode[0] === '7' || atlasCode[0] === '8') {
         colorUnselected = Colors.atlasCodeBlueButton
+      } else if (atlasCode[0] === 'T' || atlasCode[0] === 'E') {
+        continue
       }
 
       elements.push(

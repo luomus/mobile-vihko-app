@@ -146,6 +146,7 @@ interface rootState {
   editing: EditingType,
   firstLocation: number[],
   firstZoom: FirstZoomType,
+  grid: GridType,
   maptype: MapTypes,
   message: MessageType[],
   observation: Point | null,
@@ -156,7 +157,6 @@ interface rootState {
   observing: boolean,
   path: PathType,
   position: LocationType,
-  gid: GridType,
   region: Region,
   schema: SchemaType
 }
@@ -167,6 +167,7 @@ const appReducer = combineReducers({
   editing: editingReducer,
   firstLocation: firstLocationReducer,
   firstZoom: firstZoomReducer,
+  grid: gridReducer,
   maptype: maptypeReducer,
   message: messageReducer,
   observation: observationReducer,
@@ -177,7 +178,6 @@ const appReducer = combineReducers({
   observing: observingReducer,
   path: pathReducer,
   position: positionReducer,
-  grid: gridReducer,
   region: regionReducer,
   schema: schemaReducer
 })
