@@ -8,9 +8,14 @@ export const setDateForDocument = () => {
 }
 
 //parses date from format 'yyyy-MM-ddTHH:mm' to 'dd.MM.yyyy HH.mm'
-export const parseDateForUI = (date: string) => {
+export const parseDateForUI = (date: string, type?: string | undefined) => {
   if (date) {
-    return moment(date).format('DD.MM.YYYY HH.mm')
+    if (type === 'date')
+      return moment(date).format('DD.MM.YYYY')
+    else if (type === 'time')
+      return moment(date).format('HH.mm')
+    else
+      return moment(date).format('DD.MM.YYYY HH.mm')
   } else {
     return ''
   }
@@ -26,20 +31,30 @@ export const parseDateForDocument = (date: string) => {
 }
 
 //parses date from format 'dd.MM.yyyy HH.mm' to 'yyyy-MM-ddTHH:mm'
-export const parseFromLocalToISO = (date: string) => {
+export const parseFromLocalToISO = (date: string, type?: string | undefined) => {
   if (date) {
-    return moment(date, moment.HTML5_FMT.DATETIME_LOCAL).format()
+    if (type === 'date')
+      return moment(date, moment.HTML5_FMT.DATE).format()
+    else if (type === 'time')
+      return moment(date, moment.HTML5_FMT.TIME).format()
+    else
+      return moment(date, moment.HTML5_FMT.DATETIME_LOCAL).format()
   } else {
     return ''
   }
 }
 
 //parses date from format 'yyyy-MM-ddTHH:mm:ss.sssZ' to 'yyyy-MM-ddTHH:mm'
-export const parseDateFromISOToDocument = (dateObject: Date) => {
+export const parseDateFromISOToDocument = (dateObject: Date, type?: string | undefined) => {
   if (dateObject) {
     const date = dateObject.toISOString()
 
-    return moment(date).format('YYYY-MM-DDTHH:mm')
+    if (type === 'date')
+      return moment(date).format('YYYY-MM-DD')
+    else if (type === 'time')
+      return moment(date).format('HH:mm')
+    else
+      return moment(date).format('YYYY-MM-DDTHH:mm')
   } else {
     return ''
   }

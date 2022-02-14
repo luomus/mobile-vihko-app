@@ -272,7 +272,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         message: error.message
       })
     }
-    console.log(event)
+
     try {
       await postObservationEvent(event, credentials)
     } catch (error) {

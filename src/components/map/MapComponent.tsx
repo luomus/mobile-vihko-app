@@ -60,6 +60,7 @@ const MapComponent = (props: Props) => {
   const path = useSelector((state: rootState) => state.path)
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
+  const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -438,7 +439,7 @@ const MapComponent = (props: Props) => {
           {targetOverlay()}
           {pathOverlay()}
           {tileOverlay()}
-          {gridOverlay()}
+          {schema.formID === 'MHL.117' ? gridOverlay() : null}
           {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>

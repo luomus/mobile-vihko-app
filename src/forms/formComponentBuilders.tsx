@@ -120,19 +120,23 @@ export const createSwitch = (
   return <FormSwitchComponent key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue}/>
 }
 
+export const createDateTimePicker = (
+  title: string, objectTitle: string, parentObjectTitle: string,
+  pickerType: string | undefined, defaultValue: string,
+) => {
+  return <FormDatePickerComponent
+    key={objectTitle} title={title} objectTitle={objectTitle}
+    parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
+    keyboardType='default' pickerType={pickerType}
+  />
+}
+
 export const createInputElement = (
   title: string, objectTitle: string, parentObjectTitle: string,
   type: string, defaultValue: string | string | number,
   isArrayItem: boolean, callbackFunction: Function|undefined, editable: boolean
 ) => {
-  if ((objectTitle.includes('gatheringEvent_dateBegin') || objectTitle.includes('gatheringEvent_dateEnd')) && typeof defaultValue === 'string') {
-    return <FormDatePickerComponent
-      key={objectTitle} title={title} objectTitle={objectTitle}
-      parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
-      keyboardType='default'
-      isArrayItem={isArrayItem} parentCallback={callbackFunction}
-    />
-  } else if (objectTitle.includes('unitGathering_dateBegin') && typeof defaultValue === 'string') {
+  if (objectTitle.includes('unitGathering_dateBegin') && typeof defaultValue === 'string') {
     return <FormDateOptionsComponent
       key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
