@@ -440,7 +440,7 @@ const MapComponent = (props: Props) => {
           {targetOverlay()}
           {pathOverlay()}
           {tileOverlay()}
-          {gridOverlay()}
+          {schema.formID === 'MHL.117' ? gridOverlay() : null}
           {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>

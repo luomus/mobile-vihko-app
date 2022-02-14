@@ -89,7 +89,15 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
     set(observationEventDefaults, 'editors', [userId])
     set(observationEventDefaults, 'sourceID', sourceId)
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
-    set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], setDateForDocument())
+
+    const dateTime = setDateForDocument()
+    if (schema.formID === 'MHL.117') {
+      set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], dateTime.substring(0, 10))
+      set(observationEventDefaults, ['gatheringEvent', 'timeStart'], dateTime.substring(11, 16))
+
+    } else {
+      set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], dateTime)
+    }
 
     let parsedObservationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema[lang].schema)
 

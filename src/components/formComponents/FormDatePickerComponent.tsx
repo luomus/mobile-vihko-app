@@ -30,29 +30,30 @@ interface Props {
   'web-search' |
   undefined,
   defaultValue: string,
-  isArrayItem: boolean,
-  parentCallback: Function | undefined,
+  pickerType: string | undefined
 }
 
 const FormDatePickerComponent = (props: Props) => {
   const { register, setValue, watch } = useFormContext()
-  const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
-  const [currentDate, setCurrentDate] = useState<string>(props.defaultValue)
-  const [currentTime, setCurrentTime] = useState<string>(props.defaultValue)
+  const [currentValue, setCurrentValue] = useState<string>(props.defaultValue )
+  const [currentDate, setCurrentDate] = useState<string>(props.defaultValue )
+  const [currentTime, setCurrentTime] = useState<string>(props.defaultValue )
   const [showDate, setShowDate] = useState<boolean>(false)
   const [showTime, setShowTime] = useState<boolean>(false)
   const date = new Date()
   const dateBegin = watch('gatheringEvent_dateBegin')
   const dateEnd = watch('gatheringEvent_dateEnd')
+  const timeStart = watch('gatheringEvent_timeStart')
+  const timeEnd = watch('gatheringEvent_timeEnd')
 
   useEffect(() => {
     register(props.objectTitle)
 
     if (!currentValue || currentValue === '') {
-      setCurrentValue(parseDateFromISOToDocument(date))
-      onChangeDate(undefined, date)
-      onChangeTime(undefined, date)
-      setValue(props.objectTitle, parseDateFromISOToDocument(date))
+      setCurrentValue(parseDateFromISOToDocument(date, props.pickerType))
+      setCurrentDate(parseDateFromISOToDocument(date, props.pickerType))
+      setCurrentTime(parseDateFromISOToDocument(date, props.pickerType))
+      setValue(props.objectTitle, parseDateFromISOToDocument(date, props.pickerType))
     } else {
       setValue(props.objectTitle, currentValue)
     }
@@ -60,7 +61,9 @@ const FormDatePickerComponent = (props: Props) => {
 
   //every time date and time change, combine them so both values are updated
   useEffect(() => {
-    let combinedDate = currentDate.substring(0, 11) + currentTime.substring(11, 16)
+    let combinedDate = !props.pickerType ? currentDate.substring(0, 10) + 'T' + currentTime.substring(11, 16) :
+      props.pickerType === 'date' ? currentDate : currentTime
+
     //check if dateEnd time is set to be before dateBegin
     //if so, set dateEnd to be equal with dateBegin
     if (props.objectTitle.includes('dateEnd') && Date.parse(dateBegin) > Date.parse(combinedDate)) {
@@ -72,6 +75,17 @@ const FormDatePickerComponent = (props: Props) => {
       combinedDate = dateEnd
     }
 
+    //check if dateBegin equals dateEnd
+    //if yes, then ensure that selected time is after beginning time if end time is being selected and vice versa.
+    if (props.objectTitle.includes('time') && Date.parse(dateBegin) === Date.parse(dateEnd)) {
+      if (props.objectTitle.includes('End') && Date.parse(dateBegin + 'T' + timeStart) > Date.parse(dateEnd + 'T' + combinedDate)) {
+        combinedDate = timeStart
+      } else if (props.objectTitle.includes('Start') && Date.parse(dateBegin + 'T' + combinedDate) > Date.parse(dateEnd + 'T' + timeEnd)) {
+        combinedDate = timeEnd
+      }
+    }
+
+
     //set new value to register
     setValue(props.objectTitle, combinedDate)
 
@@ -81,13 +95,29 @@ const FormDatePickerComponent = (props: Props) => {
 
   const onChangeDate = (event: Event | undefined, date: Date | undefined) => {
     setShowDate(false)
-    setShowTime(true)
-    date !== undefined ? setCurrentDate(parseDateFromISOToDocument(date)) : null
+    props.pickerType === 'date' ? null : setShowTime(true)
+    date !== undefined ? setCurrentDate(parseDateFromISOToDocument(date, props.pickerType)) : null
   }
 
   const onChangeTime = (event: Event | undefined, date: Date | undefined) => {
     setShowTime(false)
-    date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date)) : null
+    date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date, props.pickerType)) : null
+  }
+
+  const onOpenDatePicker = () => {
+    if (props.pickerType === 'time') {
+      setShowTime(true)
+    } else {
+      setShowDate(true)
+    }
+  }
+
+  const createParseableTime = () => {
+    if (props.pickerType === 'time') {
+      return ((props.objectTitle.includes('timeStart') ? dateBegin : dateEnd) + 'T' + currentValue)
+    }
+
+    return currentValue
   }
 
   return (
@@ -96,10 +126,10 @@ const FormDatePickerComponent = (props: Props) => {
       <View style={Cs.datePickerContainer}>
         <TextInput
           style={Os.datePicker}
-          value={parseDateForUI(currentValue)}
+          value={parseDateForUI(createParseableTime(), props.pickerType)}
           editable={false}
         />
-        <ButtonComponent onPressFunction={() => setShowDate(true)}
+        <ButtonComponent onPressFunction={() => onOpenDatePicker()}
           title={undefined} height={40} width={45} buttonStyle={Bs.neutralIconButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
@@ -108,14 +138,14 @@ const FormDatePickerComponent = (props: Props) => {
       {showDate && (
         <View>
           <DateTimePicker
-            value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
+            value={currentValue ? new Date(parseFromLocalToISO(currentValue, props.pickerType)) : date}
             mode='date'
             onChange={onChangeDate}
             minimumDate={props.objectTitle.includes('dateEnd')
-              ? (dateBegin ? new Date(parseFromLocalToISO(dateBegin)) : undefined)
+              ? (dateBegin ? new Date(parseFromLocalToISO(dateBegin, props.pickerType)) : undefined)
               : undefined}
             maximumDate={props.objectTitle.includes('dateBegin')
-              ? (dateEnd ? new Date(parseFromLocalToISO(dateEnd)) : undefined)
+              ? (dateEnd ? new Date(parseFromLocalToISO(dateEnd, props.pickerType)) : undefined)
               : undefined}
           />
         </View>
@@ -123,7 +153,7 @@ const FormDatePickerComponent = (props: Props) => {
       {showTime && (
         <View>
           <DateTimePicker
-            value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
+            value={currentValue ? new Date(parseFromLocalToISO(createParseableTime())) : date}
             mode='time'
             onChange={onChangeTime}
           />
