@@ -12,7 +12,7 @@ export const LOCATION_MIN_X_INTERVALL = 5
 export const PATH_ACCURACY = 5
 
 //path minimum intervals of update
-export const PATH_MIN_T_INTERVALL = 5000
+export const PATH_MIN_T_INTERVALL = 500
 export const PATH_MIN_X_INTERVALL = 30
 
 //number of updates before path is added to observation event and saved to async
@@ -29,3 +29,6 @@ export const MIN_DIST = 10
 
 //maximum speed increase z-score/sigma for accepting a path point into the path
 export const Z_SCORE = 3
+
+//distance from 10km ykj grid square edge where warning is triggered
+export const GRID_EDGE_DISTANCE = 100

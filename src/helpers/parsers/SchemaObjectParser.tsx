@@ -55,7 +55,7 @@ const parseObjectToComponents = async (
       //API call for viewing substrateSpecies' name
       if (value !== null && value.includes('MX')) {
         try {
-          let response: Record<string, any> = await getTaxonAutocomplete('taxon', value, null, i18n.language, null)
+          let response: Record<string, any> = await getTaxonAutocomplete('taxon', value, null, i18n.language, 5, null)
           if (response.result[0].payload.vernacularName) {
             finalValue = response.result[0].payload.vernacularName
           } else if (response.result[0].payload.scientificName) {

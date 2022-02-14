@@ -10,10 +10,24 @@ const TextStyles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 5
   },
+  boldButtonText: {
+    fontFamily: 'Roboto',
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginTop: 5
+  },
   alignedRightText: {
     textAlign: 'right',
     alignSelf: 'stretch',
     padding: 10
+  },
+  languageAndAtlasCodeButtonText: {
+    padding: 8,
+    fontSize: 15
+  },
+  mapToListButtonText: {
+    padding: 5,
+    fontSize: 15
   },
 
   //navigation bar

@@ -50,7 +50,11 @@ import {
   appendPath,
   setPath,
   clearPath,
-  setFirstLocation
+  setFirstLocation,
+  setGrid,
+  clearGrid,
+  setGridCoords,
+  setGridPause,
 } from './position/actions'
 import {
   setSchema,
@@ -93,7 +97,8 @@ import {
 import {
   firstLocationReducer,
   pathReducer,
-  positionReducer
+  positionReducer,
+  gridReducer
 } from './position/reducers'
 import { schemaReducer } from './schema/reducers'
 import { credentialsReducer } from './user/reducers'
@@ -119,7 +124,8 @@ import {
   locationActionTypes,
   LocationType,
   PathType,
-  PathPoint
+  PathPoint,
+  GridType
 } from './position/types'
 import {
   schemaActionTypes,
@@ -140,6 +146,7 @@ interface rootState {
   editing: EditingType,
   firstLocation: number[],
   firstZoom: FirstZoomType,
+  grid: GridType,
   maptype: MapTypes,
   message: MessageType[],
   observation: Point | null,
@@ -160,6 +167,7 @@ const appReducer = combineReducers({
   editing: editingReducer,
   firstLocation: firstLocationReducer,
   firstZoom: firstZoomReducer,
+  grid: gridReducer,
   maptype: maptypeReducer,
   message: messageReducer,
   observation: observationReducer,
@@ -229,6 +237,10 @@ export {
   setPath,
   clearPath,
   setFirstLocation,
+  setGrid,
+  clearGrid,
+  setGridCoords,
+  setGridPause,
   setSchema,
   initSchema,
   switchSchema,

@@ -161,9 +161,14 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start'
   },
-  zonePickerButtonContainer: {
+  modalStartButtonContainer: {
     padding: 10,
     alignSelf: 'flex-start'
+  },
+  gridModalElementContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    padding: 10
   },
   eventsListContainer: {
     padding: 10,
@@ -191,7 +196,8 @@ const ContainerStyles = StyleSheet.create({
   stopObservingContainer: {
     padding: 5,
     backgroundColor: Colors.primary5,
-    justifyContent: 'flex-start'
+    justifyContent: 'space-between',
+    flexDirection: 'row'
   },
   mapContainer: {
     flex: 1,
@@ -204,6 +210,12 @@ const ContainerStyles = StyleSheet.create({
     right: '1%',
     alignSelf: 'flex-end',
     flexDirection: 'column'
+  },
+  gridTitleContainer: {
+    padding: 5,
+    position: 'absolute',
+    top: '1%',
+    left: '1%'
   },
   observationButtonsBaseContainer: {
     position: 'absolute',
@@ -292,6 +304,14 @@ const ContainerStyles = StyleSheet.create({
     marginTop: 5
   },
 
+  //list component
+  listFilterContainer: {
+    borderBottomWidth: 2,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    fontSize: 24
+  },
+
   //message component
   messageButtonsContainer: {
     alignSelf: 'center',
@@ -342,6 +362,21 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     width: '90%'
+  },
+  atlasCodeChosenContainer: {
+    alignItems: 'center',
+    backgroundColor: Colors.neutral3,
+    borderColor: Colors.neutral5,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginVertical: 5,
+    padding: 5,
+    width: '100%'
+  },
+  atlasCodeSelectionContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   },
   formPickerContainer: {
     borderColor: Colors.neutral5,

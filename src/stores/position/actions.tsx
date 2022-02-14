@@ -8,7 +8,12 @@ import {
   locationActionTypes,
   PathType,
   PathPoint,
-  SET_FIRST_LOCATION
+  SET_FIRST_LOCATION,
+  GridType,
+  SET_GRID,
+  CLEAR_GRID,
+  SET_COORDS,
+  SET_PAUSE,
 } from './types'
 import { gpsOutlierFilter } from '../../helpers/pathFilters'
 
@@ -56,4 +61,23 @@ export const clearPath = (): locationActionTypes => ({
 export const setFirstLocation = (coordinates: Array<number>): locationActionTypes => ({
   type: SET_FIRST_LOCATION,
   payload: coordinates
+})
+
+export const setGrid = (grid: GridType): locationActionTypes => ({
+  type: SET_GRID,
+  payload: grid
+})
+
+export const clearGrid = (): locationActionTypes => ({
+  type: CLEAR_GRID
+})
+
+export const setGridCoords = (coordinates: {n: number, e: number}): locationActionTypes => ({
+  type: SET_COORDS,
+  payload: coordinates
+})
+
+export const setGridPause = (state: boolean): locationActionTypes => ({
+  type: SET_PAUSE,
+  payload: state
 })

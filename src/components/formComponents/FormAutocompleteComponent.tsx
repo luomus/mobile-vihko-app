@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { useSelector } from 'react-redux'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
+import { rootState } from '../../stores'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import Autocomplete from 'react-native-autocomplete-input'
 import Cs from '../../styles/ContainerStyles'
@@ -34,9 +36,12 @@ const FormAutocompleteComponent = (props: Props) => {
   const [hideResult, setHideResult] = useState<boolean>(true)
   const [selected, setSelected] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [unitID, setUnitID] = useState<string>('')
+
+  const observationId = useSelector((state: rootState) => state.observationId)
 
   const { t } = useTranslation()
-  const { register, unregister, setValue, formState, watch, clearErrors, setError } = useFormContext()
+  const { register, unregister, setValue, formState, watch, clearErrors, setError, setFocus } = useFormContext()
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
 
@@ -65,6 +70,17 @@ const FormAutocompleteComponent = (props: Props) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (observationId) {
+      setUnitID(observationId.unitId)
+    }
+  }, [observationId])
+
+  //set focus into the autocomplete's input field so user can start typing immediately
+  useEffect(() => {
+    setFocus('autocompleteInput')
+  }, [setFocus])
+
   //this timeout clears taxon name -field's errors (and the error notification) in 5 sec
   useEffect(() => {
     if (Object.keys(formState.errors).length > 0) {
@@ -78,7 +94,7 @@ const FormAutocompleteComponent = (props: Props) => {
     try {
       setLoading(true)
 
-      let res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, setCancelToken)
+      let res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelToken)
 
       if (res.result[0]?.payload?.matchType === 'exactMatches') {
         const payload = res.result[0].payload
@@ -119,7 +135,6 @@ const FormAutocompleteComponent = (props: Props) => {
   const addSelectionToForm = (item: Record<string, any>) => {
     Object.keys(transform).forEach(key => {
       registerField(transform[key])
-
       if (key.includes('informalTaxonGroup')) {
         setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))), { shouldValidate: false })
       } else {
@@ -139,7 +154,7 @@ const FormAutocompleteComponent = (props: Props) => {
         cancel()
       }
 
-      let res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, setCancelToken)
+      let res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
 
       const autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
 
@@ -216,6 +231,7 @@ const FormAutocompleteComponent = (props: Props) => {
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch' }}>
         <TextInput
+          {...register('autocompleteInput')}
           style={{ borderColor: Colors.neutral5, borderWidth: 1, height: 40, width: '90%', padding: 10 }}
           onFocus={onFocus}
           onBlur={onBlur}
@@ -235,44 +251,51 @@ const FormAutocompleteComponent = (props: Props) => {
       </View>
     )
   }
-
-  return (
-    <View style={Cs.padding10Container}>
-      <Text>{props.title}</Text>
-      <ErrorMessage
-        errors={formState.errors}
-        name={valueField}
-        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
-      />
-      <View style={{ paddingBottom: 35 }}>
-        <Autocomplete
-          containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: props.index }}
-          data={options}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          defaultValue={query}
-          onChangeText={(text) => onQueryChange(text)}
-          hideResults={hideResult}
-          listStyle={{ paddingLeft: 15 }}
-          renderTextInput={({ onFocus, onBlur, onChangeText, defaultValue }) => {
-            return renderTextInput(onFocus, onBlur, onChangeText, defaultValue)
-          }}
-          flatListProps={{
-            keyboardShouldPersistTaps: 'always',
-            keyExtractor: (_, idx) => idx.toString(),
-            // eslint-disable-next-line react/display-name
-            renderItem: ({ item }) => {
-              return (
-                <TouchableOpacity onPress={() => onSelection(item.data)}>
-                  {item.element}
-                </TouchableOpacity>
-              )
-            }
-          }}
+  if (!unitID.includes('complete_list')) {
+    return (
+      <View style={Cs.padding10Container}>
+        <Text>{props.title}</Text>
+        <ErrorMessage
+          errors={formState.errors}
+          name={valueField}
+          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
         />
+        <View style={{ paddingBottom: 35 }}>
+          <Autocomplete
+            containerStyle={{ flex: 1, position: 'absolute', left: 0, right: 0, top: 0, zIndex: props.index }}
+            data={options}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            defaultValue={query}
+            onChangeText={(text) => onQueryChange(text)}
+            hideResults={hideResult}
+            listStyle={{ paddingLeft: 15 }}
+            renderTextInput={({ onFocus, onBlur, onChangeText, defaultValue }) => {
+              return renderTextInput(onFocus, onBlur, onChangeText, defaultValue)
+            }}
+            flatListProps={{
+              keyboardShouldPersistTaps: 'always',
+              keyExtractor: (_, idx) => idx.toString(),
+              // eslint-disable-next-line react/display-name
+              renderItem: ({ item }) => {
+                return (
+                  <TouchableOpacity onPress={() => onSelection(item.data)}>
+                    <Text style={{ paddingHorizontal: 10 }}>{item.element}</Text>
+                  </TouchableOpacity>
+                )
+              }
+            }}
+          />
+        </View>
       </View>
-    </View>
-  )
+    )
+  } else {
+    return (
+      <View style={Cs.padding10Container}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{t('species') + ': ' + query}</Text>
+      </View>
+    )
+  }
 }
 
 export default FormAutocompleteComponent

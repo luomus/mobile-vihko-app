@@ -35,7 +35,7 @@ const SendEventModalComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={'publish'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
-        { schema.formID !== 'MHL.45' &&
+        { schema.formID !== 'MHL.45' && schema.formID !== 'MHL.117' &&
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => { props.sendObservationEvent(false) }} title={t('send private')}
               height={40} width={200} buttonStyle={Bs.sendEventModalButton}

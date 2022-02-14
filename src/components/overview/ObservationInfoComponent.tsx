@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import MiniMapComponent from './MiniMapComponent'
-import { JX519Fields, JX652Fields } from '../../config/fields'
+import { JX519Fields, MHL117Fields, JX652Fields } from '../../config/fields'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 
@@ -59,6 +59,8 @@ const ObservationInfoComponent = (props: Props) => {
 
       } else if (props.event.formID === 'JX.519') {
         fields = JX519Fields
+      } else if (props.event.formID === 'MHL.117') {
+        fields = MHL117Fields
       } else if (props.event.formID === 'JX.652') {
         fields = JX652Fields
       }
@@ -76,7 +78,7 @@ const ObservationInfoComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.observationInfoContainer}>
-        <MiniMapComponent observation={props.observation} event={props.event} />
+        {props.observation.unitGathering ? <MiniMapComponent observation={props.observation} event={props.event} /> : null}
         {list}
         {props.observation.images !== undefined && props.observation.images.length > 0 ?
           <View>

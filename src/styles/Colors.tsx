@@ -31,9 +31,13 @@ export default {
   dangerButton2: '#A82424',
   dangerShadow: '#8A0F0F50',
   unavailableButton: '#C0C0C0',
+  atlasCodeWhiteButton: '#FFFFFF',
+  atlasCodeYellowButton: '#D6E573',
+  atlasCodeGreenButton: '#66CC7A',
+  atlasCodeBlueButton: '#228AE6',
 
   //text colors
   whiteText: '#F8FFF5',
   darkText: '#5C6870',
-  linkText: '#0000EE'
+  linkText: '#0000EE',
 }

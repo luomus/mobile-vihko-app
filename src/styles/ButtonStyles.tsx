@@ -119,7 +119,7 @@ const ButtonStyles = StyleSheet.create({
   stopObservingButton: {
     paddingBottom: 2,
     alignItems: 'center',
-    borderRadius: 5
+    borderRadius: 5,
   },
 
   //form components

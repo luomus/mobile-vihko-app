@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import MapView, { Marker, UrlTile, Region, LatLng, Geojson } from 'react-native-maps'
+import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
-import { View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon } from 'geojson'
 import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
@@ -21,6 +21,7 @@ import {
   setFirstLocation,
   setMessageState
 } from '../../stores'
+import ExtendedNavBarComponent from '../general/ExtendedNavBarComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
@@ -28,17 +29,18 @@ import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
-import { mapUrl as urlTemplate } from '../../config/urls'
+import { mapUrl as urlTemplate, gridUrl as gridTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
 
 type Props = {
   onPressHome: () => void,
-  onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>) => void,
-  onPressEditing: (fromMap?: boolean, sourcePage?: string) => void,
+  onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>, sourcePage?: string) => void,
+  onPressEditing: (sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
-  onPop: () => void
+  onPop: () => void,
+  onPressList: () => void
 }
 
 const MapComponent = (props: Props) => {
@@ -51,6 +53,7 @@ const MapComponent = (props: Props) => {
   const centered = useSelector((state: rootState) => state.centered)
   const editing = useSelector((state: rootState) => state.editing)
   const firstZoom = useSelector((state: rootState) => state.firstZoom)
+  const grid = useSelector((state: rootState) => state.grid)
   const maptype = useSelector((state: rootState) => state.maptype)
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -58,6 +61,7 @@ const MapComponent = (props: Props) => {
   const path = useSelector((state: rootState) => state.path)
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
+  const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -234,22 +238,6 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
-  const stopObserving = () => {
-    dispatch(setMessageState({
-      type: 'dangerConf',
-      messageContent: t('stop observing'),
-      okLabel: t('cancelObservation'),
-      cancelLabel: t('do not stop'),
-      onOk: () => {
-        dispatch(setObservationId({
-          eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
-          unitId: null
-        }))
-        props.onPressFinishObservationEvent('map')
-      }
-    }))
-  }
-
   //sets observation ids and shifts screen to observation edit page, parameter
   //in onPressEditing will tell edit page that observation is being modified
   //from map, enabling return to correct screen when editing is finished
@@ -260,7 +248,7 @@ const MapComponent = (props: Props) => {
       eventId,
       unitId
     }))
-    props.onPressEditing(true, 'map')
+    props.onPressEditing('map')
   }
 
   //preparations for opening the edit observation modal
@@ -377,6 +365,19 @@ const MapComponent = (props: Props) => {
     : null
   )
 
+  const gridOverlay = () => {
+    return (
+      <>
+        <WMSTile
+          urlTemplate={gridTemplate}
+          tileSize={256}
+          opacity={1}
+          zIndex={5}
+        />
+      </>
+    )
+  }
+
   //draws past observations in same gatheringevent to map, markers are draggable
   const observationLocationsOverlay = () => {
     if (
@@ -392,6 +393,10 @@ const MapComponent = (props: Props) => {
       .gatherings[0].units
 
     return units.map((unit: Record<string, any>) => {
+      if (!unit.unitGathering) {
+        return
+      }
+
       const coordinate = convertPointToLatLng(unit.unitGathering.geometry)
       const unitId = unit.id
       let color = unit.color
@@ -413,13 +418,7 @@ const MapComponent = (props: Props) => {
 
   return (
     <>
-      <View style={Cs.stopObservingContainer}>
-        <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop observation event')}
-          height={30} width={150} buttonStyle={Bs.stopObservingButton}
-          gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-          textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
-        />
-      </View>
+      <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
       <View style={Cs.mapContainer}>
         <MapView
           ref={map => { mapView = map }}
@@ -441,9 +440,20 @@ const MapComponent = (props: Props) => {
           {targetOverlay()}
           {pathOverlay()}
           {tileOverlay()}
+          {schema.formID === 'MHL.117' ? gridOverlay() : null}
           {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>
+        {schema.formID === 'MHL.117' ?
+          <View style={Cs.gridTitleContainer}>
+            <ButtonComponent onPressFunction={() => null} disabled={true} title={grid?.n + ':' + grid?.e}
+              height={35} width={75} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.boldButtonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+            />
+          </View>
+          : null
+        }
         <View style={Cs.mapButtonsContainer}>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}

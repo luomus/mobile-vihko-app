@@ -2,6 +2,8 @@ import { Point, Geometry, LineString, MultiLineString } from 'geojson'
 import { ThunkAction } from 'redux-thunk'
 import { clone, cloneDeep } from 'lodash'
 import i18n from 'i18next'
+import { set } from 'lodash'
+import uuid from 'react-native-uuid'
 import {
   observationActionTypes,
   SET_OBSERVATION,
@@ -11,8 +13,9 @@ import {
   REPLACE_OBSERVATION_EVENTS,
   CLEAR_OBSERVATION_EVENTS,
   SET_OBSERVATION_ID,
-  CLEAR_OBSERVATION_ID
+  CLEAR_OBSERVATION_ID,
 } from './types'
+import { birdList } from '../../config/fields'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -23,6 +26,7 @@ import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from '.
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
 import { saveImages } from '../../helpers/imageHelper'
 import { temporalOutlierFilter } from '../../helpers/pathFilters'
+import { getTaxonAutocomplete } from '../../services/autocompleteService'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -89,8 +93,8 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
   return async (dispatch, getState) => {
     const { credentials, observationEvent, schema } = getState()
 
-    let event = cloneDeep(observationEvent.events.find((event: Record<string, any>) => event.id === id))
-    let units = event.gatherings[0].units
+    let event: Record<string, any> = cloneDeep(observationEvent.events.find((event: Record<string, any>) => event.id === id))
+    let units: Record<string, any>[] = event.gatherings[0].units
 
     //check that internet can be reached
     try {
@@ -134,8 +138,19 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //define record basis for each unit, depending on whether the unit has images attached,
     //remove empty radius -fields
     //(skip this with flying squirrel form, which has already assigned the record basis)
-    if (schema.formID !== 'MHL.45') {
+    if (schema.formID !== 'MHL.45' && event.formID !== 'MHL.117') {
       event = loopThroughUnits(event)
+    }
+
+    //remove unused complete list observations from bird atlas events
+    if (event.formID === 'MHL.117') {
+      let filtered: Record<string, any>[] = []
+      units.forEach((observation: Record<string, any>) => {
+        if (observation.atlasCode) {
+          filtered.push(observation)
+        }
+      })
+      units = filtered
     }
 
     //if there isn't an observation zone, use APIs to get a proper locality name
@@ -207,7 +222,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         let newUnit: Record<string, any>
         let newImages
 
-        if (unit.images?.length > 0) {
+        if (unit.images && unit.images?.length > 0) {
           try {
             newImages = await saveImages(unit.images, credentials)
           } catch (error) {
@@ -249,6 +264,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       }
 
       delete event.id
+      delete event.grid
 
     } catch (error) {
       return Promise.reject({
@@ -524,5 +540,57 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
 
     dispatch(replaceObservationEvents(newEvents))
     return Promise.resolve()
+  }
+}
+
+export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+  return async (dispatch, getState) => {
+    const { credentials, observationEvent } = getState()
+
+    const mapInformalTaxonGroups = (informalTaxonGroups: Record<string, any>) => {
+      return informalTaxonGroups.map((group: any) => {
+        return typeof group === 'string' ? group : group.id
+      })
+    }
+
+    const newEvents = clone(observationEvent.events)
+    const newEvent = cloneDeep(newEvents.pop())
+
+    await Promise.all(birdList.map(async (item: Record<string, any>) => {
+      let res = await getTaxonAutocomplete('taxon', item.key, null, lang, 1, null)
+      let observation = {}
+      let name: string = ''
+      if (lang === 'fi') {
+        name = item.nameFI
+      } else if (lang === 'sv') {
+        name = item.nameSV
+      } else if (lang === 'en') {
+        name = item.nameEN
+      }
+      set(observation, 'id', `complete_list_${uuid.v4()}`)
+      set(observation, 'identifications', [{ taxon: name }])
+      set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
+      set(observation, 'unitFact', { autocompleteSelectedTaxonID: res.result[0].key })
+      newEvent.gatherings[0].units.push(observation)
+    }))
+
+    newEvents.push(newEvent)
+
+    try {
+      await storageService.save('observationEvents', newEvents)
+    } catch (error) {
+      log.error({
+        location: '/stores/observation/actions.tsx saveBirdList()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('error saving new observation')
+      })
+    }
+
+    dispatch(replaceObservationEvents(newEvents))
+    Promise.resolve()
   }
 }

@@ -29,6 +29,28 @@ const UnfinishedEventComponent = (props: Props) => {
     setUnfinishedEvent(observationEvent.events[observationEvent.events.length - 1])
   }, [observationEvent])
 
+  const observationCount = (): number => {
+    if (!unfinishedEvent) {
+      return 0
+    } else if (unfinishedEvent.formID !== 'MHL.117') {
+      return unfinishedEvent.gatherings[0].units.length
+    } else {
+      let sum = 0
+      unfinishedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
+        if (unit.atlasCode) { sum += 1 }
+      })
+      return sum
+    }
+  }
+
+  const displayDateTime = () => {
+    if (unfinishedEvent?.gatheringEvent?.timeStart) {
+      return parseDateForUI(unfinishedEvent.gatheringEvent.dateBegin + 'T' + unfinishedEvent.gatheringEvent.timeStart)
+    } else {
+      return parseDateForUI(unfinishedEvent?.gatheringEvent.dateBegin)
+    }
+  }
+
   if (unfinishedEvent === null) {
     return (
       <Text style={Ts.previousObservationsTitle}>{t('loading')}</Text>
@@ -42,8 +64,8 @@ const UnfinishedEventComponent = (props: Props) => {
             t('event')
           }
         </Text>
-        <Text style={Ts.unfinishedEventTextClear}>{t('started at') + ': ' + parseDateForUI(unfinishedEvent.gatheringEvent.dateBegin)}</Text>
-        <Text style={Ts.unfinishedEventTextFaded}>{t('observationsInList') + ': ' + unfinishedEvent.gatherings[0].units.length + ' ' +
+        <Text style={Ts.unfinishedEventTextClear}>{t('started at') + ': ' + displayDateTime()}</Text>
+        <Text style={Ts.unfinishedEventTextFaded}>{t('observationsInList') + ': ' + observationCount() + ' ' +
           (unfinishedEvent.gatherings[0].units.length === 1 ? t('piece') : t('pieces'))}</Text>
         <View style={Cs.unfinishedEventButtonsContainer}>
           <View style={Cs.padding5Container}>

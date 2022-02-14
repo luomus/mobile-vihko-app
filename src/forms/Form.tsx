@@ -1,4 +1,4 @@
-import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker } from './formComponentBuilders'
+import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker, createAtlasCodeField, createDateTimePicker } from './formComponentBuilders'
 import { get } from 'lodash'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParser'
@@ -96,6 +96,9 @@ const Form = (
           createVisibleField(path, overrideFields[path].title, fieldIsArray, fieldTypeOfArray, fieldIsEnum,
             fieldEnumDict, fieldType, fieldDefaultValue, fieldBlacklist)
           return
+        case 'atlasCodeField':
+          toReturn.push(createAtlasCodeField(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, fieldEnumDict))
+          return
       }
     }
 
@@ -155,6 +158,16 @@ const Form = (
       toReturn.push(createPicker(translatedTitle, path, defaultValue, enumDict, blacklist))
     } else if (type === 'boolean') {
       toReturn.push(createSwitch(translatedTitle, path, defaultValue))
+    } else if (path.includes('gatheringEvent_date')) {
+      let pickerType
+
+      if (fields.includes('gatheringEvent_timeStart') || fields.includes('gatheringEvent_timeEnd')) {
+        pickerType = 'date'
+      }
+
+      toReturn.push(createDateTimePicker(translatedTitle, path, '', pickerType, defaultValue))
+    } else if (path.includes('gatheringEvent_time')) {
+      toReturn.push(createDateTimePicker(translatedTitle, path, '', 'time', defaultValue))
     } else {
       toReturn.push(createInputElement(translatedTitle, path, '', type, defaultValue, false, undefined, true))
     }

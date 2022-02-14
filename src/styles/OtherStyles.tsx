@@ -2,6 +2,13 @@ import { StyleSheet, Dimensions } from 'react-native'
 import Colors from './Colors'
 
 const OtherStyles = StyleSheet.create({
+  coordinateInput: {
+    borderColor: Colors.neutral5,
+    borderWidth: 1,
+    height: 40,
+    width: '25%',
+    padding: 10
+  },
   textInput: {
     borderColor: Colors.neutral5,
     borderWidth: 1,

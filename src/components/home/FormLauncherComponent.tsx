@@ -29,6 +29,9 @@ const FormLauncherComponent = (props: Props) => {
     if (props.formID === 'JX.519') {
       setTitle(t('trip report form'))
       setDescription(t('instructions.mobilevihko.intro'))
+    } else if (props.formID === 'MHL.117') {
+      setTitle(t('bird atlas'))
+      setDescription(t('instructions.mobilevihko.intro.bird'))
     } else if (props.formID === 'JX.652') {
       setTitle(t('fungi atlas'))
       setDescription(t('instructions.mobilevihko.intro.fungi'))
@@ -39,8 +42,8 @@ const FormLauncherComponent = (props: Props) => {
   }, [i18n.language])
 
   const handleBeginEvent = () => {
-    //open zone modal if form is lolife and zones have been loaded successfully
-    if (props.formID === 'MHL.45' && observationZone.zones.length > 0) {
+    //open zone modal if form is lolife and zones have been loaded successfully, or the form is bird atlas
+    if ((props.formID === 'MHL.45' && observationZone.zones.length > 0) || props.formID === 'MHL.117') {
       props.setModalVisibility(true)
       //else start an event without zone
     } else {

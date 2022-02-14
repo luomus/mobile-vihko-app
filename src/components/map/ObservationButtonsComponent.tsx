@@ -114,13 +114,13 @@ const ObservationButtonsComponent = (props: Props) => {
       createButton(
         observation.button.label,
         Bs.observationButton,
-        () => props.confirmationButton(true, observation.rules, observation.button.default),
+        () => props.confirmationButton(true, observation.rules, observation.button.default, 'map'),
         'primary', undefined, undefined, 180
       )
     ) : createButton(
       '+ ' + t('observation'),
       Bs.observationButton,
-      () => props.confirmationButton(true),
+      () => props.confirmationButton(true, undefined, undefined, 'map'),
       'primary', undefined, undefined, 120
     )
   }
@@ -136,7 +136,7 @@ const ObservationButtonsComponent = (props: Props) => {
               t('cancel'),
               Bs.homeTextAndIconButton,
               () => props.cancelButton(),
-              'neutral', undefined, undefined, 120
+              'neutral', undefined, undefined, schema.formID === 'MHL.45' ? 180 : 120
             )}
           </View>
         </View>

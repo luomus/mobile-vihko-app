@@ -45,6 +45,8 @@ const NavBarComponent = (props: Props) => {
       return t('edit observation event')
     } else if (props.route.name === 'overview') {
       return t('event overview')
+    } else if (props.route.name === 'list') {
+      return t('notification body').substring(0, t('notification body').length - 1)
     }
   }
 

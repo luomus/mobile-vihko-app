@@ -1,5 +1,8 @@
-//mapurl
+//map url
 export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
+
+//grid lines and labels url
+export const gridUrl              = 'https://geoserver-dev.laji.fi/geoserver/LajiMapData/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&STYLES&LAYERS=LajiMapData%3AatlasGridsWGS84&SRS=EPSG%3A3857&WIDTH={width}&HEIGHT={height}&BBOX={minX}%2C{minY}%2C{maxX}%2C{maxY}'
 
 //prod api root url
 const apiRoot                     = 'https://api.laji.fi/v0'
@@ -70,6 +73,9 @@ export const lolifeSv             = 'https://laji.fi/sv/project/MHL.45/about'
 export const lajiFI               = 'https://laji.fi/observation/list'
 export const lajiSV               = 'https://laji.fi/sv/observation/list'
 export const lajiEN               = 'https://laji.fi/en/observation/list'
+
+//grid selection
+export const gridPreview          = 'https://laji.fi/map?overlayNames=ykjGrid,ykjGridLabels'
 
 //google geocoding api url
 export const googleGeocodingAPIURL = 'https://maps.googleapis.com/maps/api/geocode/json'

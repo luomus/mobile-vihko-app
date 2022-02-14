@@ -6,6 +6,7 @@ import FormImageKeywordPickerComponent from '../components/formComponents/FormIm
 import FormArrayComponent from '../components/formComponents/FormArrayComponent'
 import FormPickerItemComponent from '../components/formComponents/FormPickerItemComponent'
 import FormPickerComponent from '../components/formComponents/FormPickerComponent'
+import FormAtlasCodeComponent from '../components/formComponents/FormAtlasCodeComponent'
 import FormDateOptionsComponent from '../components/formComponents/FormDateOptionsComponent'
 import FormDatePickerComponent from '../components/formComponents/FormDatePickerComponent'
 import FormSwitchComponent from '../components/formComponents/FormSwitchComponent'
@@ -46,6 +47,15 @@ export const createPicker = (
   return <FormPickerComponent
     key={objectTitle} title={title} objectTitle={objectTitle} pickerItems={pickerItems}
     selectedValue={defaultValue !== '' ? defaultValue : pickerItems[0].props.value} //if default value exists, set that as selected value, otherwise set the value of first picker item
+  />
+}
+
+export const createAtlasCodeField = (
+  title: string, objectTitle: string, defaultValue: string, params: any, dictionary: { [key: string]: any }
+) => {
+
+  return <FormAtlasCodeComponent
+    key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue} params={params} dictionary={dictionary}
   />
 }
 
@@ -110,19 +120,23 @@ export const createSwitch = (
   return <FormSwitchComponent key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue}/>
 }
 
+export const createDateTimePicker = (
+  title: string, objectTitle: string, parentObjectTitle: string,
+  pickerType: string | undefined, defaultValue: string,
+) => {
+  return <FormDatePickerComponent
+    key={objectTitle} title={title} objectTitle={objectTitle}
+    parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
+    keyboardType='default' pickerType={pickerType}
+  />
+}
+
 export const createInputElement = (
   title: string, objectTitle: string, parentObjectTitle: string,
   type: string, defaultValue: string | string | number,
   isArrayItem: boolean, callbackFunction: Function|undefined, editable: boolean
 ) => {
-  if ((objectTitle.includes('gatheringEvent_dateBegin') || objectTitle.includes('gatheringEvent_dateEnd')) && typeof defaultValue === 'string') {
-    return <FormDatePickerComponent
-      key={objectTitle} title={title} objectTitle={objectTitle}
-      parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
-      keyboardType='default'
-      isArrayItem={isArrayItem} parentCallback={callbackFunction}
-    />
-  } else if (objectTitle.includes('unitGathering_dateBegin') && typeof defaultValue === 'string') {
+  if (objectTitle.includes('unitGathering_dateBegin') && typeof defaultValue === 'string') {
     return <FormDateOptionsComponent
       key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
