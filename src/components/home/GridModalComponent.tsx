@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TextInput, ActivityIndicator } from 'react-native'
+import { Linking, View, Text, TextInput, ActivityIndicator } from 'react-native'
 import Modal from 'react-native-modal'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +14,7 @@ import Ts from '../../styles/TextStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 import { convertWGS84ToYKJ, getCurrentLocation } from '../../helpers/geolocationHelper'
+import { gridPreview } from '../../config/urls'
 
 type Props = {
   modalVisibility: boolean,
@@ -114,6 +115,9 @@ const GridModalComponent = (props: Props) => {
                   value={easting}
                   onChangeText={setEasting}
                 />
+              </View>
+              <View style={Cs.gridModalElementContainer}>
+                <Text style={{ color: Colors.linkText }} onPress={() => Linking.openURL(gridPreview)}>{t('link to grid')}</Text>
               </View>
             </>
           }

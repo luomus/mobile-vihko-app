@@ -163,6 +163,22 @@ const OverviewComponent = (props: Props) => {
     setSending(false)
   }
 
+  const displayDateBegin = () => {
+    if (event?.gatheringEvent?.timeStart) {
+      return parseDateForUI(event.gatheringEvent.dateBegin + 'T' + event.gatheringEvent.timeStart)
+    } else {
+      return parseDateForUI(event?.gatheringEvent.dateBegin)
+    }
+  }
+
+  const displayDateEnd = () => {
+    if (event?.gatheringEvent?.timeStart) {
+      return parseDateForUI(event.gatheringEvent.dateEnd + 'T' + event.gatheringEvent.timeEnd)
+    } else {
+      return parseDateForUI(event?.gatheringEvent.dateEnd)
+    }
+  }
+
   //override back button to point to home screen in all cases
   useBackHandler(() => {
     if (props.isFocused()) {
@@ -187,8 +203,8 @@ const OverviewComponent = (props: Props) => {
           <View style={Cs.overviewTextContainer}>
             {event.gatherings[0].locality ? <Text>{t('locality')}: {event.gatherings[0].locality}</Text> : null}
             {event.gatherings[0].localityDescription ? <Text>{t('locality description')}: {event.gatherings[0].localityDescription}</Text> : null}
-            <Text>{t('dateBegin')}: {parseDateForUI(event.gatheringEvent.dateBegin)}</Text>
-            <Text>{t('dateEnd')}: {parseDateForUI(event.gatheringEvent.dateEnd)}</Text>
+            <Text>{t('dateBegin')}: {displayDateBegin()}</Text>
+            <Text>{t('dateEnd')}: {displayDateEnd()}</Text>
           </View>
           <View style={Cs.overviewButtonsContainer}>
             <View style={Cs.padding5Container}>

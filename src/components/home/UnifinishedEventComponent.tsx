@@ -43,6 +43,14 @@ const UnfinishedEventComponent = (props: Props) => {
     }
   }
 
+  const displayDateTime = () => {
+    if (unfinishedEvent?.gatheringEvent?.timeStart) {
+      return parseDateForUI(unfinishedEvent.gatheringEvent.dateBegin + 'T' + unfinishedEvent.gatheringEvent.timeStart)
+    } else {
+      return parseDateForUI(unfinishedEvent?.gatheringEvent.dateBegin)
+    }
+  }
+
   if (unfinishedEvent === null) {
     return (
       <Text style={Ts.previousObservationsTitle}>{t('loading')}</Text>
@@ -56,7 +64,7 @@ const UnfinishedEventComponent = (props: Props) => {
             t('event')
           }
         </Text>
-        <Text style={Ts.unfinishedEventTextClear}>{t('started at') + ': ' + parseDateForUI(unfinishedEvent.gatheringEvent.dateBegin)}</Text>
+        <Text style={Ts.unfinishedEventTextClear}>{t('started at') + ': ' + displayDateTime()}</Text>
         <Text style={Ts.unfinishedEventTextFaded}>{t('observationsInList') + ': ' + observationCount() + ' ' +
           (unfinishedEvent.gatherings[0].units.length === 1 ? t('piece') : t('pieces'))}</Text>
         <View style={Cs.unfinishedEventButtonsContainer}>

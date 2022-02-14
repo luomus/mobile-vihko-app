@@ -48,6 +48,15 @@ const EventListElementComponent = (props: Props) => {
     }
   }, [i18n.language])
 
+  const displayDateTime = () => {
+    if (props.observationEvent.gatheringEvent?.timeStart) {
+      return parseDateForUI(dateBegin + 'T' + props.observationEvent.gatheringEvent.timeStart) + ' - '
+      + parseDateForUI(dateEnd + 'T' + props.observationEvent.gatheringEvent.timeEnd)
+    } else {
+      return parseDateForUI(dateBegin) + ' - ' + parseDateForUI(dateEnd)
+    }
+  }
+
   return (
     <View style={{ marginVertical: 5, width: '90%' }}>
       <Shadow startColor={Colors.dangerShadow} finalColor={Colors.dangerShadow} distance={2} radius={5}
@@ -55,7 +64,7 @@ const EventListElementComponent = (props: Props) => {
         <TouchableOpacity onPress={props.onPress} activeOpacity={0.8}>
           <View style={Cs.unsentEventsContainer} >
             <Text style={[Ts.eventListElementTitle, { color: Colors.dangerButton1 }]}>{title}</Text>
-            <Text style={Ts.eventListElementTextClear}>{parseDateForUI(dateBegin)} - {parseDateForUI(dateEnd)}</Text>
+            <Text style={Ts.eventListElementTextClear}>{displayDateTime()}</Text>
             <Text style={Ts.eventListElementTextFaded}>{t('observationsInList') + ': ' + observationCount() + ' ' + (observationCount() === 1 ? t('piece') : t('pieces'))}</Text>
           </View>
         </TouchableOpacity>

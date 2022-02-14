@@ -51,6 +51,7 @@ const ListComponent = (props: Props) => {
           onPress={() => {
             const event = observationEvent.events[observationEvent.events.length - 1].id
             const unitIdentifier = observation.id
+            setSearch('')
             dispatch(setObservationId({
               eventId: event,
               unitId: unitIdentifier
