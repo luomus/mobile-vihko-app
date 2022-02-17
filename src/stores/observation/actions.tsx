@@ -166,14 +166,15 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //filter out linestring points which are after document endDate and remove timestamps from coordinates,
     //add bounding box or first recorded point as geometry to lolife forms if path gets completly removed
     if (event.gatherings[0].geometry?.type === 'LineString' || event.gatherings[0].geometry?.type === 'MultiLineString') {
-      const geometry = temporalOutlierFilter(event.gatherings[0].geometry, event.gatheringEvent.dateEnd)
+      const endDate = event.gatheringEvent.timeEnd ? event.gatheringEvent.dateEnd + 'T' + event.gatheringEvent.timeEnd : event.gatheringEvent.dateEnd
+      const geometry = temporalOutlierFilter(event.gatherings[0].geometry, endDate)
       if (geometry) {
         event.gatherings[0].geometry = geometry
       } else {
         if (event.formID !== 'MHL.45') {
           delete event.gatherings[0].geometry
         } else {
-          if (event.gatherings[0].units.length >= 1) {
+          if (event.gatherings[0].units.length >= 1 && event.formID !== 'MHL.117') {
             event.gatherings[0].geometry = createUnitBoundingBox(event)
           } else {
             let firstLocation =
