@@ -311,6 +311,11 @@ const ContainerStyles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 24
   },
+  clearIconContainer: {
+    position: 'absolute',
+    top: 8,
+    right: 22
+  },
 
   //message component
   messageButtonsContainer: {

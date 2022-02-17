@@ -3,6 +3,7 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import SearchInput, { createFilter } from 'react-native-search-filter'
+import { Icon } from 'react-native-elements'
 import {
   rootState,
   DispatchType,
@@ -42,8 +43,6 @@ const ListComponent = (props: Props) => {
         unpicked.push(observation)
       }
     })
-    picked.sort((a, b) => a.identifications[0].taxon.localeCompare(b.identifications[0].taxon))
-    unpicked.sort((a, b) => a.identifications[0].taxon.localeCompare(b.identifications[0].taxon))
     let combined = picked.concat(unpicked)
     let elements = combined.map((observation) => {
       return (
@@ -51,7 +50,6 @@ const ListComponent = (props: Props) => {
           onPress={() => {
             const event = observationEvent.events[observationEvent.events.length - 1].id
             const unitIdentifier = observation.id
-            setSearch('')
             dispatch(setObservationId({
               eventId: event,
               unitId: unitIdentifier
@@ -79,6 +77,13 @@ const ListComponent = (props: Props) => {
         <View style={{ flex: 1 }}>
           <SearchInput
             onChangeText={(term) => { setSearch(term) }}
+            clearIcon={<Icon
+              name='cancel'
+              type='material-icons'
+              color={Colors.dangerButton2}
+              size={26}
+            />}
+            clearIconViewStyles={Cs.clearIconContainer}
             style={Cs.listFilterContainer}
             placeholder={t('filter species')}
           />
