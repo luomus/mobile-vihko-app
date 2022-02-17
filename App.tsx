@@ -11,6 +11,7 @@ import {
   setMessageState
 } from './src/stores'
 import * as TaskManager from 'expo-task-manager'
+import { Vibration } from 'react-native'
 import i18n from './src/languages/i18n'
 import { GRID_EDGE_DISTANCE, LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/location'
 import { cleanupLocationAsync, convertWGS84ToYKJ } from './src/helpers/geolocationHelper'
@@ -18,7 +19,6 @@ import { pathToLineStringConstructor } from './src/helpers/geoJSONHelper'
 import { LineString, MultiLineString } from 'geojson'
 import Navigator from './src/navigation/Navigator'
 import { GridType } from './src/stores/position/types'
-import { Vibration } from 'react-native'
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, error }) => {
   const showAlert = (message: string) => {
