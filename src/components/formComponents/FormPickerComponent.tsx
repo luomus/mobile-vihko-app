@@ -26,6 +26,7 @@ const FormPickerComponent = (props: Props) => {
       <View style={Cs.formPickerContainer}>
         <Picker
           selectedValue={selected}
+          numberOfLines={10}
           onValueChange={itemValue => {
             setSelected(itemValue)
             setValue(props.objectTitle, itemValue)}

@@ -360,7 +360,16 @@ const ObservationComponent = (props: Props) => {
     }
   }
 
-  const handleRemove = async () => {
+  const showDelete = () => {
+    dispatch(setMessageState({
+      type: 'dangerConf',
+      messageContent: t('remove observation?'),
+      onOk: async () => await handleDelete(),
+      okLabel: t('delete')
+    }))
+  }
+
+  const handleDelete = async () => {
 
     if (!observationId) { return }
 
@@ -434,7 +443,7 @@ const ObservationComponent = (props: Props) => {
           }
           {observationId && !(schema.formID === 'MHL.117' && !observationState?.atlasCode) ?
             <View style={Cs.buttonContainer}>
-              <ButtonComponent onPressFunction={() => handleRemove()}
+              <ButtonComponent onPressFunction={() => showDelete()}
                 title={t('delete')} height={40} width={150} buttonStyle={Bs.editObservationButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
