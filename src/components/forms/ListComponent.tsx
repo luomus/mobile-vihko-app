@@ -37,7 +37,7 @@ const ListComponent = (props: Props) => {
     let picked: any[] = []
     let unpicked: any[] = []
     filtered.forEach((observation: Record<string, any>) => {
-      if (observation.atlasCode) {
+      if (observation.atlasCode || observation.count) {
         picked.push(observation)
       } else {
         unpicked.push(observation)
@@ -58,7 +58,10 @@ const ListComponent = (props: Props) => {
           }}
           key={observation.identifications[0].taxon}
           style={{ borderColor: Colors.neutral5, borderBottomWidth: 1, padding: 10 }}>
-          <Text style={observation.atlasCode ? { fontWeight: 'bold', fontSize: 24 } : { fontSize: 24 }}>{observation.identifications[0].taxon}</Text>
+          <Text style={(observation.atlasCode || observation.count) ?
+            { fontWeight: 'bold', fontSize: 24 } :
+            { fontSize: 24 }}>{observation.identifications[0].taxon}
+          </Text>
         </TouchableOpacity>
       )
     })

@@ -61,7 +61,7 @@ const OverviewComponent = (props: Props) => {
     if (searchedEvent && searchedEvent.formID === 'MHL.117') {
       let filteredObservations: Record<string, any>[] = []
       searchedObservations.forEach((observation) => {
-        if (observation.atlasCode) {
+        if (observation.atlasCode || observation.count) {
           filteredObservations.push(observation)
         }
       })

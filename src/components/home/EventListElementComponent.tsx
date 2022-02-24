@@ -30,7 +30,7 @@ const EventListElementComponent = (props: Props) => {
     } else {
       let sum = 0
       props.observationEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
-        if (unit.atlasCode) { sum += 1 }
+        if (unit.atlasCode || unit.count) { sum += 1 }
       })
       return sum
     }

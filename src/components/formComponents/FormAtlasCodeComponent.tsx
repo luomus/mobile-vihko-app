@@ -24,17 +24,10 @@ const FormAtlasCodeComponent = (props: Props) => {
   const [selectedKey, setSelectedKey] = useState<string | undefined>(undefined)
   const [elementList, setElementList] = useState<JSX.Element[] | undefined>([])
 
-  const { validation } = props.params
-
   const { t } = useTranslation()
 
   useEffect(() => {
-    if (validation) {
-      register(props.objectTitle, validation)
-    } else {
-      register(props.objectTitle)
-    }
-
+    register(props.objectTitle)
     if (props.defaultValue !== '') { setSelectedKey(props.defaultValue) }
     setValue(props.objectTitle, props.defaultValue)
     renderListElements()

@@ -173,16 +173,8 @@ export const overrideMHL117Fields = {
     }
   },
   'atlasCode': {
-    field: 'atlasCodeField',
-    params: {
-      validation: {
-        required: {
-          value: true,
-          message: 'must not be empty'
-        },
-      },
-    }
-  },
+    field: 'atlasCodeField'
+  }
 }
 
 export const overrideMHL117ObservationEventFields = {
