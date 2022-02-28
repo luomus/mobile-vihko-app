@@ -1,5 +1,5 @@
 import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker, createAtlasCodeField, createDateTimePicker } from './formComponentBuilders'
-import { get } from 'lodash'
+import { get, omit, set } from 'lodash'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParser'
 
@@ -74,7 +74,7 @@ const Form = (
     const fieldIsArray: boolean = fieldParams.isArray
     const fieldTypeOfArray: string = fieldParams.typeOfArray
     const fieldIsEnum: boolean = fieldParams.isEnum
-    const fieldEnumDict: Record<string, any> = fieldParams.enumDict
+    let fieldEnumDict: Record<string, any> = fieldParams.enumDict
     const fieldType: string = fieldParams.type
     let fieldDefaultValue: any = fieldParams.defaultValue
     let fieldBlacklist: string[] | null = null
@@ -98,6 +98,15 @@ const Form = (
           return
         case 'atlasCodeField':
           toReturn.push(createAtlasCodeField(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, fieldEnumDict))
+          return
+        case 'completeListField':
+          set(fieldEnumDict, 'empty', '')
+          fieldEnumDict = omit(fieldEnumDict, 'MY.completeListTypeCompleteWithBreedingStatus')
+          let objectOrder = {
+            'empty': '',
+          }
+          fieldEnumDict = Object.assign(objectOrder, fieldEnumDict) //sets empty as default, when user has not selected complete list value before
+          toReturn.push(createPicker(fieldTitle, path, fieldDefaultValue, fieldEnumDict, fieldBlacklist, overrideFields[path].params.validation))
           return
       }
     }

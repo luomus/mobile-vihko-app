@@ -142,6 +142,7 @@
   "mobile app": "Liituri",
   "mobile vihko": "Mobil Skrivbok",
   "must be at least 2 letters": "Arter namn måste vara minst 2 bokstav.",
+  "must choose list type": "Art listar fullständighet måste inte vara tom.",
   "must not be empty": "Arter namn måste inte vara tom.",
   "must not be empty atlas code": "Häckningsindex får inte vara tom.",
   "nest": "Bo",

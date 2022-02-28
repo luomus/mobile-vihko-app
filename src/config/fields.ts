@@ -186,6 +186,14 @@ export const overrideMHL117ObservationEventFields = {
       'Location roughening'
     ]
   },
+  'gatheringEvent_completeList_completeListType': {
+    field: 'completeListField',
+    params: {
+      validation: {
+        validate: value => value !== 'empty' || 'must choose list type'
+      }
+    }
+  },
   'gatherings_0_locality': {
     field: 'inputTitleOverridden',
     title: [

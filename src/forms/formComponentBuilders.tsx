@@ -32,7 +32,7 @@ export const createAutocompleteField = (
 export const createPicker = (
   title: string, objectTitle: string, defaultValue: string,
   dictionary: { [key: string]: any },
-  blacklist: string[] | null
+  blacklist: string[] | null, validation?: Record<string, any>
 ) => {
   const pickerItems = []
 
@@ -47,6 +47,7 @@ export const createPicker = (
   return <FormPickerComponent
     key={objectTitle} title={title} objectTitle={objectTitle} pickerItems={pickerItems}
     selectedValue={defaultValue !== '' ? defaultValue : pickerItems[0].props.value} //if default value exists, set that as selected value, otherwise set the value of first picker item
+    validation={validation}
   />
 }
 

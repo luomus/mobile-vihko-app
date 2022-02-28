@@ -142,6 +142,7 @@
   "mobile app": "Liituri",
   "mobile vihko": "Nature Notebook",
   "must be at least 2 letters": "Taxon name must be at least 2 letters.",
+  "must choose list type": "Complete list type must not be empty.",
   "must not be empty": "Taxon name must not be empty.",
   "must not be empty atlas code": "Atlas code must not be empty.",
   "nest": "Nest",
