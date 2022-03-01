@@ -94,13 +94,21 @@ const GridModalComponent = (props: Props) => {
       <View style={Cs.modalContainer}>
         <View style={{ alignSelf: 'flex-start' }}>
           <Text style={Ts.homeScreenTitle}>
-            {t('new observation event')}
+            {t('new trip')}
           </Text>
           {loading ?
             <ActivityIndicator size={25} color={Colors.primary5} /> :
             <>
               <View style={Cs.gridModalElementContainer}>
-                <Text>{`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`}</Text>
+                <Text>
+                  {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}. `}
+                  <Text
+                    style={{ color: Colors.linkText }}
+                    onPress={() => Linking.openURL(gridPreview + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
+                    {t('link to grid')}
+                  </Text>
+                  {`\n\n${t('grid selection instructions')}`}
+                </Text>
               </View>
               <View style={Cs.gridModalElementContainer}>
                 <TextInput
@@ -115,9 +123,6 @@ const GridModalComponent = (props: Props) => {
                   value={easting}
                   onChangeText={setEasting}
                 />
-              </View>
-              <View style={Cs.gridModalElementContainer}>
-                <Text style={{ color: Colors.linkText }} onPress={() => Linking.openURL(gridPreview)}>{t('link to grid')}</Text>
               </View>
             </>
           }
