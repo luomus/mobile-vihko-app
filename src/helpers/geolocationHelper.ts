@@ -64,7 +64,7 @@ const watchLocationAsyncAndroid = async (title: string, body: string) => {
         notificationColor: Colors.primary5
       }
     })
-  }, 5000)
+  }, 500)
 }
 
 const stopLocationAsync = async (observationEventInterrupted: boolean) => {

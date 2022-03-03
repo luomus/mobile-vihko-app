@@ -173,16 +173,8 @@ export const overrideMHL117Fields = {
     }
   },
   'atlasCode': {
-    field: 'atlasCodeField',
-    params: {
-      validation: {
-        required: {
-          value: true,
-          message: 'must not be empty'
-        },
-      },
-    }
-  },
+    field: 'atlasCodeField'
+  }
 }
 
 export const overrideMHL117ObservationEventFields = {
@@ -193,6 +185,14 @@ export const overrideMHL117ObservationEventFields = {
       'Plats skyddning',
       'Location roughening'
     ]
+  },
+  'gatheringEvent_completeList_completeListType': {
+    field: 'completeListField',
+    params: {
+      validation: {
+        validate: value => value !== 'empty' || 'must choose list type'
+      }
+    }
   },
   'gatherings_0_locality': {
     field: 'inputTitleOverridden',

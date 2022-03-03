@@ -46,9 +46,9 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
     }
 
     if (
-      (!lastGeometry && locationAccuracy <= 100) ||
-        (lastGeometry?.type === 'LineString' && pathSections > 1 && locationAccuracy <= 100) ||
-        (lastGeometry?.type === 'MultiLineString' && pathSections > lastGeometry.coordinates.length && locationAccuracy <= 100) ||
+      (!lastGeometry && locationAccuracy <= 50) ||
+        (lastGeometry?.type === 'LineString' && pathSections > 1 && locationAccuracy <= 50) ||
+        (lastGeometry?.type === 'MultiLineString' && pathSections > lastGeometry.coordinates.length && locationAccuracy <= 50) ||
         (coordinateLength && path[path.length - 1].length - coordinateLength > PATH_BACKUP_INTERVALL)
     ) {
       store.dispatch(eventPathUpdate(pathToLineStringConstructor(path)))

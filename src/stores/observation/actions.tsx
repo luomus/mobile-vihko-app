@@ -146,7 +146,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     if (event.formID === 'MHL.117') {
       let filtered: Record<string, any>[] = []
       units.forEach((observation: Record<string, any>) => {
-        if (observation.atlasCode) {
+        if (observation.atlasCode || observation.count) {
           filtered.push(observation)
         }
       })
@@ -556,7 +556,9 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
 
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
+    const observations: Record<string, any>[] = []
 
+    //fetch taxon details concurrently and initialize bird list observations
     await Promise.all(birdList.map(async (item: Record<string, any>) => {
       let res = await getTaxonAutocomplete('taxon', item.key, null, lang, 1, null)
       let observation = {}
@@ -572,9 +574,26 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
       set(observation, 'identifications', [{ taxon: name }])
       set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
       set(observation, 'unitFact', { autocompleteSelectedTaxonID: res.result[0].key })
-      newEvent.gatherings[0].units.push(observation)
+      observations.push(observation)
     }))
 
+    //get list or bird names in the correct order
+    const nameList = birdList.map((bird) => {
+      if (lang === 'fi') {
+        return bird.nameFI
+      } else if (lang === 'sv') {
+        return bird.nameSV
+      } else if (lang === 'en') {
+        return bird.nameEN
+      }
+    })
+
+    //sort the observations based on the correct order
+    observations.sort((a, b) => {
+      return nameList.indexOf(a.identifications[0].taxon) - nameList.indexOf(b.identifications[0].taxon)
+    })
+
+    newEvent.gatherings[0].units = observations
     newEvents.push(newEvent)
 
     try {

@@ -144,6 +144,20 @@ const TextStyles = StyleSheet.create({
     fontWeight: 'bold'
   },
 
+  //list component
+  listText: {
+    fontSize: 24
+  },
+  listBoldText: {
+    fontWeight: 'bold',
+    fontSize: 24
+  },
+  listBoldCenteredText: {
+    fontWeight: 'bold',
+    fontSize: 24,
+    paddingRight: 30
+  },
+
   //form componenets
   noImageText: {
     color: Colors.neutral5

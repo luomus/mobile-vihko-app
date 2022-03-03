@@ -28,7 +28,7 @@ import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
 import GridModalComponent from './GridModalComponent'
-
+import { get } from 'lodash'
 type Props = {
   isFocused: () => boolean,
   onLogout: () => void,

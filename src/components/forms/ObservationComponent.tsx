@@ -256,6 +256,7 @@ const ObservationComponent = (props: Props) => {
     if (color) {
       set(newUnit, 'color', color)
     }
+
     //add the new observation to latest event, clear location
     //and redirect to map after user oks message
     try {
@@ -285,7 +286,7 @@ const ObservationComponent = (props: Props) => {
     }
 
     //construct new observation (unit) from old observation, data and new location if present from form and images
-    let editedUnit = {}
+    let editedUnit: Record<string, any> = {}
 
     Object.keys(data).forEach(key => {
       if (!data[key]) {
@@ -314,6 +315,11 @@ const ObservationComponent = (props: Props) => {
     editedUnit = {
       ...observationState,
       ...editedUnit,
+    }
+
+    //for bird atlas list observations, set count to x, if atlasCode nor count is given
+    if (editedUnit.id.includes('complete_list') && !editedUnit.atlasCode && !editedUnit.count) {
+      set(editedUnit, 'count', 'X')
     }
 
     //replace original observation with edited one
@@ -360,7 +366,16 @@ const ObservationComponent = (props: Props) => {
     }
   }
 
-  const handleRemove = async () => {
+  const showDelete = () => {
+    dispatch(setMessageState({
+      type: 'dangerConf',
+      messageContent: t('remove observation?'),
+      onOk: async () => await handleDelete(),
+      okLabel: t('delete')
+    }))
+  }
+
+  const handleDelete = async () => {
 
     if (!observationId) { return }
 
@@ -432,9 +447,9 @@ const ObservationComponent = (props: Props) => {
             </View>
             : null
           }
-          {observationId && !(schema.formID === 'MHL.117' && !observationState?.atlasCode) ?
+          {observationId && !(schema.formID === 'MHL.117' && !observationState?.atlasCode && !observationState?.count) ?
             <View style={Cs.buttonContainer}>
-              <ButtonComponent onPressFunction={() => handleRemove()}
+              <ButtonComponent onPressFunction={() => showDelete()}
                 title={t('delete')} height={40} width={150} buttonStyle={Bs.editObservationButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
