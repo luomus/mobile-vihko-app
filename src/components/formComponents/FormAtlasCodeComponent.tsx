@@ -27,7 +27,7 @@ const FormAtlasCodeComponent = (props: Props) => {
 
   useEffect(() => {
     register(props.objectTitle)
-    if (props.defaultValue !== '') { setSelectedKey(props.defaultValue) }
+    setSelectedKey(props.defaultValue)
     setValue(props.objectTitle, props.defaultValue)
     renderListElements()
   }, [])
@@ -54,8 +54,6 @@ const FormAtlasCodeComponent = (props: Props) => {
     for (let key of Object.keys(props.dictionary)) {
 
       const atlasCode = getAtlasCode(props.dictionary[key])
-
-      if (atlasCode === t('empty')) { continue } //do not show empty atlasCode as an option
 
       elements.push(
         <View key={key} style={{ paddingTop: 10, paddingRight: 10 }}>
