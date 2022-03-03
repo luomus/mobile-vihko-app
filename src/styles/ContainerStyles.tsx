@@ -314,7 +314,15 @@ const ContainerStyles = StyleSheet.create({
   clearIconContainer: {
     position: 'absolute',
     top: 8,
-    right: 22
+    right: 34
+  },
+  listElementContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderColor: Colors.neutral5,
+    borderBottomWidth: 1,
+    padding: 10
   },
 
   //message component

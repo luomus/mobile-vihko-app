@@ -9,10 +9,12 @@ import {
   DispatchType,
   setObservationId
 } from '../../stores'
-import Cs from '../../styles/ContainerStyles'
-import Colors from '../../styles/Colors'
 import ActivityComponent from '../general/ActivityComponent'
 import ExtendedNavBarComponent from '../general/ExtendedNavBarComponent'
+import AtlasCodeStampComponent from '../general/AtlasCodeStampComponent'
+import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 
 type Props = {
   onPressMap: () => void,
@@ -57,11 +59,18 @@ const ListComponent = (props: Props) => {
             props.onPressObservation('list')
           }}
           key={observation.identifications[0].taxon}
-          style={{ borderColor: Colors.neutral5, borderBottomWidth: 1, padding: 10 }}>
-          <Text style={(observation.atlasCode || observation.count) ?
-            { fontWeight: 'bold', fontSize: 24 } :
-            { fontSize: 24 }}>{observation.identifications[0].taxon}
+          style={Cs.listElementContainer}
+        >
+          <Text style={(observation.atlasCode || observation.count) ? Ts.listBoldText : Ts.listText}>
+            {observation.identifications[0].taxon}
           </Text>
+          {
+            observation.atlasCode ?
+              <AtlasCodeStampComponent onPress={() => null} atlasKey={observation.atlasCode} />
+              : observation.count ?
+                <Text style={Ts.listBoldCenteredText}>{observation.count}</Text>
+                : null
+          }
         </TouchableOpacity>
       )
     })
