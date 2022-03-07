@@ -68,7 +68,9 @@ const ListComponent = (props: Props) => {
             observation.atlasCode ?
               <AtlasCodeStampComponent onPress={() => null} atlasKey={observation.atlasCode} />
               : observation.count ?
-                <Text style={Ts.listBoldCenteredText}>{observation.count}</Text>
+                <Text style={Ts.listBoldCenteredText}>
+                  { observation.count.length > 6 ? observation.count.substring(0, 5) + '...' : observation.count}
+                </Text>
                 : null
           }
         </TouchableOpacity>

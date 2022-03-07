@@ -289,7 +289,7 @@ const ObservationComponent = (props: Props) => {
     let editedUnit: Record<string, any> = {}
 
     Object.keys(data).forEach(key => {
-      if (!data[key]) {
+      if (!data[key] && key !== 'atlasCode') {
         return
       }
 
@@ -318,7 +318,7 @@ const ObservationComponent = (props: Props) => {
     }
 
     //for bird atlas list observations, set count to x, if atlasCode nor count is given
-    if (editedUnit.id.includes('complete_list') && !editedUnit.atlasCode && !editedUnit.count) {
+    if (editedUnit.id.includes('complete_list') && (!editedUnit.atlasCode || editedUnit.atlasCode === '') && !editedUnit.count) {
       set(editedUnit, 'count', 'X')
     }
 
