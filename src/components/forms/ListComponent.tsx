@@ -34,7 +34,8 @@ const ListComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    const units = observationEvent.events[observationEvent.events.length - 1].gatherings[0].units
+    const units = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.units
+    if (units === undefined) { return }
     const filtered = units.filter((unit: Record<string, any>) => unit.id.includes('complete_list'))
     let picked: any[] = []
     let unpicked: any[] = []
