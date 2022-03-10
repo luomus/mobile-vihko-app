@@ -75,8 +75,7 @@ export const lajiSV               = 'https://laji.fi/sv/observation/list'
 export const lajiEN               = 'https://laji.fi/en/observation/list'
 
 //grid selection
-export const gridPreview          = 'https://laji.fi/map?layers=maastokartta,atlasGrid?gridsquare='
-// export const gridPreview          = 'https://laji.fi/map?overlayNames=ykjGrid,ykjGridLabels'
+export const gridPreview          = 'https://laji.fi/map?layers=maastokartta,atlasGrid&gridsquare='
 
 //google geocoding api url
 export const googleGeocodingAPIURL = 'https://maps.googleapis.com/maps/api/geocode/json'
