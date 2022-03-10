@@ -280,7 +280,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       if (error.response?.status.toString() === '422') {
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
-          error: error,
+          error: error.response.data.error,
           data: event,
           user_id: credentials.user.id
         })
@@ -294,7 +294,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
 
       return Promise.reject({
         severity: 'low',
-        message: `${i18n.t('post failure')}  ${error.message}`
+        message: `${i18n.t('post failure')} ${error.message}`
       })
     }
 

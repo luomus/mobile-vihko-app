@@ -34,7 +34,8 @@ const ListComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    const units = observationEvent.events[observationEvent.events.length - 1].gatherings[0].units
+    const units = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.units
+    if (units === undefined) { return }
     const filtered = units.filter((unit: Record<string, any>) => unit.id.includes('complete_list'))
     let picked: any[] = []
     let unpicked: any[] = []
@@ -68,7 +69,9 @@ const ListComponent = (props: Props) => {
             observation.atlasCode ?
               <AtlasCodeStampComponent onPress={() => null} atlasKey={observation.atlasCode} />
               : observation.count ?
-                <Text style={Ts.listBoldCenteredText}>{observation.count}</Text>
+                <Text style={Ts.listBoldCenteredText}>
+                  { observation.count.length > 6 ? observation.count.substring(0, 5) + '...' : observation.count}
+                </Text>
                 : null
           }
         </TouchableOpacity>

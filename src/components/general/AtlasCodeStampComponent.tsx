@@ -30,7 +30,7 @@ const AtlasCodeStampComponent = (props: Props) => {
     const code = getAtlasCode(codeDictionary[props.atlasKey])
     setAtlasCode(code)
     setColor(getColor(code))
-  }, [])
+  }, [props.atlasKey])
 
   const getAtlasCode = (value: string) => {
     if (value === '') {
