@@ -341,8 +341,6 @@ const ObservationComponent = (props: Props) => {
         originalSourcePage: ''
       }))
 
-      dispatch(clearObservationId())
-
     } catch (error) {
       dispatch(setMessageState({
         type: 'err',
@@ -400,6 +398,7 @@ const ObservationComponent = (props: Props) => {
             messageContent: error.message
           }))
         }
+        dispatch(clearObservationId())
       }
 
       if (editing.originalSourcePage === 'map') {

@@ -40,4 +40,5 @@ export default {
   whiteText: '#F8FFF5',
   darkText: '#5C6870',
   linkText: '#0000EE',
+  blackText: '#000000'
 }
