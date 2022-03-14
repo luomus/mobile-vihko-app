@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
@@ -253,7 +253,7 @@ const FormAutocompleteComponent = (props: Props) => {
   }
   if (!unitID.includes('complete_list')) {
     return (
-      <View style={Cs.padding10Container}>
+      <View style={[Cs.padding10Container, { zIndex: Platform.OS === 'ios' ? props.index : undefined }]}>
         <Text>{props.title}</Text>
         <ErrorMessage
           errors={formState.errors}
