@@ -396,6 +396,14 @@ const ContainerStyles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10
   },
+  iOSPickerContainer: {
+    flexDirection: 'row',
+    minHeight: 40,
+    width: '100%',
+    borderColor: Colors.neutral5,
+    borderWidth: 1,
+    alignItems: 'center'
+  },
   datePickerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

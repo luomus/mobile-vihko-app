@@ -35,11 +35,13 @@ export const createPicker = (
   blacklist: string[] | null, validation?: Record<string, any>
 ) => {
   const pickerItems = []
+  const filteredDictionary: { [key: string]: any } = {}
 
   //create PickerItem for each key in dictionary object, exclude blacklisted items
   for (const key in dictionary) {
     if (!blacklist || !blacklist.includes(key)) {
       pickerItems.push(<FormPickerItemComponent key={key} label={dictionary[key]} value={key} />)
+      filteredDictionary[key] = dictionary[key]
     }
   }
 
@@ -47,7 +49,7 @@ export const createPicker = (
   return <FormPickerComponent
     key={objectTitle} title={title} objectTitle={objectTitle} pickerItems={pickerItems}
     selectedValue={defaultValue !== '' ? defaultValue : pickerItems[0].props.value} //if default value exists, set that as selected value, otherwise set the value of first picker item
-    validation={validation}
+    validation={validation} dictionary={filteredDictionary}
   />
 }
 

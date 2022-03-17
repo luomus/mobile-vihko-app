@@ -12,7 +12,8 @@ interface Props {
   objectTitle: string,
   pickerItems: Array<Object>,
   selectedValue: string | null,
-  validation?: Record<string, any>
+  validation?: Record<string, any>,
+  dictionary: { [key: string]: any }
 }
 
 const FormPickerComponent = (props: Props) => {
