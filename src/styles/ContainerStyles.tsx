@@ -194,7 +194,8 @@ const ContainerStyles = StyleSheet.create({
 
   //map component
   stopObservingContainer: {
-    padding: 5,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
     backgroundColor: Colors.primary5,
     justifyContent: 'space-between',
     flexDirection: 'row'
