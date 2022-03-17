@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon } from 'geojson'
 import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
@@ -422,7 +422,7 @@ const MapComponent = (props: Props) => {
       <View style={Cs.mapContainer}>
         <MapView
           ref={map => { mapView = map }}
-          provider={'google'}
+          provider={Platform.OS === 'android' ? 'google' : null}
           initialRegion={region}
           onPanDrag={() => stopCentering()}
           onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}
