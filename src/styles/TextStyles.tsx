@@ -1,17 +1,17 @@
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import Colors from './Colors'
 
 const TextStyles = StyleSheet.create({
 
   //general
   buttonText: {
-    fontFamily: 'Roboto',
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'Roboto',
     fontSize: 15,
     fontWeight: '400',
     marginTop: 5
   },
   boldButtonText: {
-    fontFamily: 'Roboto',
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'Roboto',
     fontSize: 15,
     fontWeight: 'bold',
     marginTop: 5

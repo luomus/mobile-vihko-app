@@ -15,6 +15,7 @@ import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 import { convertWGS84ToYKJ, getCurrentLocation } from '../../helpers/geolocationHelper'
 import { gridPreview } from '../../config/urls'
+import { getGridName } from '../../services/atlasService'
 
 type Props = {
   modalVisibility: boolean,
@@ -29,6 +30,7 @@ const GridModalComponent = (props: Props) => {
   const { t } = useTranslation()
   const dispatch: DispatchType = useDispatch()
   const [ownLocation, setOwnLocation] = useState<[number, number]>([373, 777])
+  const [locationName, setLocationName] = useState<string>('')
   const [northing, setNorthing] = useState<string>('000')
   const [easting, setEasting] = useState<string>('000')
   const [loading, setLoading] = useState<boolean>(false)
@@ -42,9 +44,8 @@ const GridModalComponent = (props: Props) => {
       } catch (err) {
         props.setModalVisibility(false)
         props.showError(`${t('unable to get current location')}: ${err}`)
-        return
-      } finally {
         setLoading(false)
+        return
       }
 
       const ykjLocation = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
@@ -52,6 +53,15 @@ const GridModalComponent = (props: Props) => {
       setOwnLocation(ykjLocation)
       setEasting(ykjLocation[0].toString().slice(0, 3))
       setNorthing(ykjLocation[1].toString().slice(0, 3))
+
+      try {
+        const gridDetails = await getGridName(ykjLocation[1].toString().slice(0, 3) + ':' + ykjLocation[0].toString().slice(0, 3))
+        setLocationName(gridDetails.name)
+      } catch (err) {
+        props.showError(`${t('failed to fetch grid name')}: ${err}`)
+      }
+
+      setLoading(false)
     }
 
     if (props.modalVisibility) {
@@ -101,7 +111,7 @@ const GridModalComponent = (props: Props) => {
             <>
               <View style={Cs.gridModalElementContainer}>
                 <Text>
-                  {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}. `}
+                  {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}, ${locationName}.\n\n`}
                   <Text
                     style={{ color: Colors.linkText }}
                     onPress={() => Linking.openURL(gridPreview + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>

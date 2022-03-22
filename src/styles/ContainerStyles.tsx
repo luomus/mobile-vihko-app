@@ -194,7 +194,8 @@ const ContainerStyles = StyleSheet.create({
 
   //map component
   stopObservingContainer: {
-    padding: 5,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
     backgroundColor: Colors.primary5,
     justifyContent: 'space-between',
     flexDirection: 'row'
@@ -395,6 +396,14 @@ const ContainerStyles = StyleSheet.create({
     borderColor: Colors.neutral5,
     borderWidth: 1,
     paddingHorizontal: 10
+  },
+  iOSPickerContainer: {
+    flexDirection: 'row',
+    minHeight: 40,
+    width: '100%',
+    borderColor: Colors.neutral5,
+    borderWidth: 1,
+    alignItems: 'center'
   },
   datePickerContainer: {
     flexDirection: 'row',

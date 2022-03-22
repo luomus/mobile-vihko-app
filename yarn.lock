@@ -1816,10 +1816,10 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-6.0.2.tgz"
   "version" "6.0.2"
 
-"@react-native-picker/picker@^2.2.1":
-  "integrity" "sha512-EC7yv22QLHlTfnbC1ez9IUdXTOh1W31x96Oir0PfskSGFFJMWWdLTg4VrcE2DsGLzbfjjkBk123c173vf2a5MQ=="
-  "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.2.1.tgz"
-  "version" "2.2.1"
+"@react-native-picker/picker@2.1.0":
+  "integrity" "sha512-iJ/QaDrBMBaW6cFuQyR3DXzcn2h7c5O7mGgmNLCBQHTTtLNBZR+Sxogy6YleFPeToNdysG5mTTkXqBmlWHMQqg=="
+  "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.1.0.tgz"
+  "version" "2.1.0"
 
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="
@@ -4147,6 +4147,13 @@
     "md5-file" "^3.2.3"
     "path-browserify" "^1.0.0"
     "url-parse" "^1.4.4"
+
+"expo-clipboard@~2.0.3":
+  "integrity" "sha512-fcv9rUFoKSMWknL4wJnln+DGnPQdYKYjILap58k9MPsywZ5Gp2PRI17oqMVyM9r/yIhsr5PKUsSGGIjvxUBYrA=="
+  "resolved" "https://registry.npmjs.org/expo-clipboard/-/expo-clipboard-2.0.3.tgz"
+  "version" "2.0.3"
+  dependencies:
+    "expo-modules-core" "~0.4.4"
 
 "expo-constants@~12.0.0":
   "integrity" "sha512-ErFNSl9C2Pfx0urv7aD9Ctq2M+It2khCjoN07vjSXJSFGvtejay/7UrK7xjn7/npDlcZokPp28tNS9AbmGDcgg=="

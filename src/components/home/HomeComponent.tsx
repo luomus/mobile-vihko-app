@@ -19,7 +19,8 @@ import {
   resetReducer
 } from '../../stores'
 import { useDispatch, useSelector } from 'react-redux'
-import { useBackHandler, useClipboard } from '@react-native-community/hooks'
+import { useBackHandler } from '@react-native-community/hooks'
+import * as Clipboard from 'expo-clipboard'
 import MessageComponent from '../general/MessageComponent'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
@@ -28,7 +29,7 @@ import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
 import GridModalComponent from './GridModalComponent'
-import { get } from 'lodash'
+
 type Props = {
   isFocused: () => boolean,
   onLogout: () => void,
@@ -44,7 +45,6 @@ const HomeComponent = (props: Props) => {
   const [gridModalVisibility, setGridModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const { t } = useTranslation()
-  const [data, setString] = useClipboard()
   let logTimeout: NodeJS.Timeout | undefined
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -231,7 +231,7 @@ const HomeComponent = (props: Props) => {
         messageContent: t('copy log to clipboard?'),
         okLabel: t('yes'),
         cancelLabel: t('no'),
-        onOk: () => setString(JSON.stringify(logs, null, '  '))
+        onOk: () => Clipboard.setString(JSON.stringify(logs, null, '  '))
       }))
     } else {
       dispatch(setMessageState({

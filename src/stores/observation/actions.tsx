@@ -146,7 +146,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     if (event.formID === 'MHL.117') {
       let filtered: Record<string, any>[] = []
       units.forEach((observation: Record<string, any>) => {
-        if (observation.atlasCode || observation.count) {
+        if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {
           filtered.push(observation)
         }
       })
