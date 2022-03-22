@@ -63,6 +63,7 @@
   "exit": "Poistu",
   "exit app?": "Haluatko varmasti keskeyttää havainnoinnin ja poistua sovelluksesta?",
   "failed to check token": "Kirjautumistietojen tarkastaminen palvelimella epäonnistui.",
+  "failed to fetch grid name": "Atlasruudun nimen hakeminen palvelimelta epäonnistui.",
   "failed to load credentials from local": "Käyttäjätietoja ei kyetty noutamaan paikallisesta tallennustilasta.",
   "failed to load credentials from server": "Kirjautuminen epäonnistui, käyttäjätietoja ei kyetty noutamaan palvelimelta.",
   "failed to load metadata": "Profiilitietojen lataaminen palvelimelta epäonnistui.",

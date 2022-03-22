@@ -63,6 +63,7 @@
   "exit": "Exit",
   "exit app?": "Are you sure that you want to quit the application?",
   "failed to check token": "Failed to check user token on server.",
+  "failed to fetch grid name": "Failed to fetch the Atlas grid's name from the server.",
   "failed to load credentials from local": "Failed to load user credentials from local storage.",
   "failed to load credentials from server": "Login failed, unable to retrieve user credentials from server.",
   "failed to load metadata": "Failed to load profile details from server.",

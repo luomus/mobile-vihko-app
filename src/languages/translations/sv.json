@@ -63,6 +63,7 @@
   "exit": "Utgång",
   "exit app?": "Är du säker på att du vill stoppa att observera och avsluta programmet?",
   "failed to check token": "Misslyckades att kolla upp inloggningsinformation från servern.",
+  "failed to fetch grid name": "Misslyckades att hämta Atlas områdets namn från servern.",
   "failed to load credentials from local": "Misslyckades att ladda användardata från lokalt minne.",
   "failed to load credentials from server": "Inloggningen misslyckades, användardata kunde inte hämtas från servern.",
   "failed to load metadata": "Misslyckades att ladda profilinformationen från servern.",
