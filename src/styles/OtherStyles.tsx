@@ -12,7 +12,7 @@ const OtherStyles = StyleSheet.create({
   textInput: {
     borderColor: Colors.neutral5,
     borderWidth: 1,
-    height: 40,
+    minHeight: 40,
     width: '100%',
     padding: 10
   },
@@ -54,7 +54,7 @@ const OtherStyles = StyleSheet.create({
   iOSPickerInput: {
     flex: 1,
     paddingHorizontal: 10,
-  } 
+  }
 })
 
 export default OtherStyles
