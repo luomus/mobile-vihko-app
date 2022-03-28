@@ -155,7 +155,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
 
     //if there isn't an observation zone, use APIs to get a proper locality name
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
-    if (!event.namedPlaceID || event.namedPlaceID === '') {
+    if (event.formID !== 'MHL.45') {
       if (overlapsFinland(event.gatherings[0].geometry)) {
         await fetchFinland(event, lang, credentials)
       } else {
