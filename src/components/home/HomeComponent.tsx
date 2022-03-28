@@ -241,6 +241,18 @@ const HomeComponent = (props: Props) => {
     }
   }
 
+  const showLaunchConfirmation = (formID: string) => {
+    let formTranslation = t('trip report form')
+    if (formID === 'JX.652') formTranslation = t('fungi atlas')
+    dispatch(setMessageState({
+      type: 'conf',
+      messageContent: t('do you want to start an event?') + ' ' + formTranslation + '?',
+      okLabel: t('beginObservation'),
+      cancelLabel: t('cancel'),
+      onOk: () => onBeginObservationEvent(formID, false)
+    }))
+  }
+
   const showError = (error: string) => {
     dispatch(setMessageState({
       type: 'err',
@@ -263,16 +275,12 @@ const HomeComponent = (props: Props) => {
               null
             }
             <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
-            <FormLauncherComponent formID={'JX.519'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.519', zoneUsed) }}
-              setModalVisibility={setZoneModalVisibility} />
-            <FormLauncherComponent formID={'MHL.117'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.117', zoneUsed) }}
-              setModalVisibility={setGridModalVisibility} />
-            <FormLauncherComponent formID={'JX.652'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('JX.652', zoneUsed) }}
-              setModalVisibility={setZoneModalVisibility} />
+            <FormLauncherComponent formID={'JX.519'} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
+            <FormLauncherComponent formID={'MHL.117'} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setGridModalVisibility} />
+            <FormLauncherComponent formID={'JX.652'} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
             {
               credentials.permissions?.includes('HR.2951') ?
-                <FormLauncherComponent formID={'MHL.45'} onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.45', zoneUsed) }}
-                  setModalVisibility={setZoneModalVisibility} />
+                <FormLauncherComponent formID={'MHL.45'} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
                 : null
             }
             <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>

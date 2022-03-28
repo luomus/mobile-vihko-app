@@ -274,7 +274,7 @@ const LoginComponent = (props: Props) => {
             <Text style={Ts.loginText}>{t('login text')}</Text>
           </View>
           <View style={Cs.loginButtonContainer}>
-            <ButtonComponent onPressFunction={login} title={t('login')}
+            <ButtonComponent onPressFunction={async () => await login()} title={t('login')}
               height={40} width={200} buttonStyle={Bs.loginButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}

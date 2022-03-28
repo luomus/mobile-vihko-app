@@ -162,8 +162,9 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   modalStartButtonContainer: {
-    padding: 10,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    padding: 5
   },
   gridModalElementContainer: {
     flexDirection: 'row',

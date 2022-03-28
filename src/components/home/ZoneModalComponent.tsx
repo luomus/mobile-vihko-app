@@ -116,11 +116,20 @@ const ZoneModalComponent = (props: Props) => {
           </View>
         </View>
         <View style={Cs.modalStartButtonContainer}>
-          <ButtonComponent onPressFunction={() => handleStartEvent()} title={t('beginObservation')}
-            height={40} width={120} buttonStyle={Bs.beginButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-          />
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => handleStartEvent()} title={t('beginObservation')}
+              height={40} width={120} buttonStyle={Bs.beginButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+            />
+          </View>
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
+              height={40} width={120} buttonStyle={Bs.beginButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
+          </View>
         </View>
       </View>
     </Modal>
