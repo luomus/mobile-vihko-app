@@ -13,7 +13,7 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
-import { convertWGS84ToYKJ, getCurrentLocation } from '../../helpers/geolocationHelper'
+import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
 import { gridPreview } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
 
@@ -30,7 +30,8 @@ const GridModalComponent = (props: Props) => {
   const { t } = useTranslation()
   const dispatch: DispatchType = useDispatch()
   const [ownLocation, setOwnLocation] = useState<[number, number]>([373, 777])
-  const [locationName, setLocationName] = useState<string>('')
+  const [gridName, setGridName] = useState<string>('')
+  const [gridCoords, setGridCoords] = useState<[number, number]>([373, 777])
   const [northing, setNorthing] = useState<string>('000')
   const [easting, setEasting] = useState<string>('000')
   const [loading, setLoading] = useState<boolean>(false)
@@ -56,7 +57,8 @@ const GridModalComponent = (props: Props) => {
 
       try {
         const gridDetails = await getGridName(ykjLocation[1].toString().slice(0, 3) + ':' + ykjLocation[0].toString().slice(0, 3))
-        setLocationName(gridDetails.name)
+        setGridName(gridDetails.name)
+        setGridCoords([parseInt(ykjLocation[1].toString().slice(0, 3)), parseInt(ykjLocation[0].toString().slice(0, 3))])
       } catch (err) {
         props.showError(`${t('failed to fetch grid name')}: ${err}`)
       }
@@ -85,12 +87,14 @@ const GridModalComponent = (props: Props) => {
       dispatch(setGrid({
         n: n,
         e: e,
+        geometry: YKJCoordinateIntoWGS84Grid(gridCoords[0], gridCoords[1]),
         pauseGridCheck: false
       }))
     } else {
       dispatch(setGrid({
         n: n,
         e: e,
+        geometry: YKJCoordinateIntoWGS84Grid(gridCoords[0], gridCoords[1]),
         pauseGridCheck: true
       }))
     }
@@ -111,7 +115,7 @@ const GridModalComponent = (props: Props) => {
             <>
               <View style={Cs.gridModalElementContainer}>
                 <Text>
-                  {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}, ${locationName}.\n\n`}
+                  {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}, ${gridName}.\n\n`}
                   <Text
                     style={{ color: Colors.linkText }}
                     onPress={() => Linking.openURL(gridPreview + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>

@@ -1,4 +1,5 @@
 import { LocationObject } from 'expo-location'
+import { Polygon } from 'geojson'
 
 export const CLEAR_LOCATION = 'CLEAR_LOCATION'
 export const UPDATE_LOCATION = 'UPDATE_LOCATION'
@@ -25,6 +26,7 @@ export type PathPoint = [
 export type GridType = {
   n: number,
   e: number,
+  geometry: Polygon | undefined,
   pauseGridCheck: boolean,
 } | null
 
