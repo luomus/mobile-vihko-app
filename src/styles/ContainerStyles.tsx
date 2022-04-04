@@ -162,8 +162,9 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   modalStartButtonContainer: {
-    padding: 10,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    padding: 5
   },
   gridModalElementContainer: {
     flexDirection: 'row',
@@ -306,11 +307,23 @@ const ContainerStyles = StyleSheet.create({
   },
 
   //list component
+  listContainer: {
+    flex: 1
+  },
   listFilterContainer: {
-    borderBottomWidth: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    borderBottomWidth: 2
+  },
+  listFilterInput: {
     paddingVertical: 5,
     paddingHorizontal: 10,
-    fontSize: 24
+    fontSize: 24,
+    flex: 1
+  },
+  listFilterIcon: {
+    paddingHorizontal: 10
   },
   clearIconContainer: {
     position: 'absolute',

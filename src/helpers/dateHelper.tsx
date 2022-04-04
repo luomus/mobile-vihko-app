@@ -11,11 +11,11 @@ export const setDateForDocument = () => {
 export const parseDateForUI = (date: string, type?: string | undefined) => {
   if (date) {
     if (type === 'date')
-      return moment(date).format('DD.MM.YYYY')
+      return moment(date, 'YYYY-MM-DDTHH:mm').format('DD.MM.YYYY')
     else if (type === 'time')
-      return moment(date).format('HH.mm')
+      return moment(date, 'YYYY-MM-DDTHH:mm').format('HH.mm')
     else
-      return moment(date).format('DD.MM.YYYY HH.mm')
+      return moment(date, 'YYYY-MM-DDTHH:mm').format('DD.MM.YYYY HH.mm')
   } else {
     return ''
   }
@@ -24,7 +24,7 @@ export const parseDateForUI = (date: string, type?: string | undefined) => {
 //parses date from format 'dd.MM.yyyy HH.mm' to 'yyyy-MM-ddTHH:mm'
 export const parseDateForDocument = (date: string) => {
   if (date) {
-    return moment(date).format('YYYY-MM-DDTHH:mm')
+    return moment(date, 'DD.MM.YYYY HH.mm').format('YYYY-MM-DDTHH:mm')
   } else {
     return ''
   }
@@ -50,11 +50,11 @@ export const parseDateFromISOToDocument = (dateObject: Date, type?: string | und
     const date = dateObject.toISOString()
 
     if (type === 'date')
-      return moment(date).format('YYYY-MM-DD')
+      return moment(date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('YYYY-MM-DD')
     else if (type === 'time')
-      return moment(date).format('HH:mm')
+      return moment(date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('HH:mm')
     else
-      return moment(date).format('YYYY-MM-DDTHH:mm')
+      return moment(date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('YYYY-MM-DDTHH:mm')
   } else {
     return ''
   }

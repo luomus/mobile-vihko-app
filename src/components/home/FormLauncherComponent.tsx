@@ -11,7 +11,7 @@ import Colors from '../../styles/Colors'
 
 type Props = {
   formID: string,
-  onBeginObservationEvent: (zoneUsed: boolean) => void,
+  showLaunchConfirmation: (formID: string) => void,
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -47,7 +47,7 @@ const FormLauncherComponent = (props: Props) => {
       props.setModalVisibility(true)
       //else start an event without zone
     } else {
-      props.onBeginObservationEvent(false)
+      props.showLaunchConfirmation(props.formID)
     }
   }
 

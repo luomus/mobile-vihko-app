@@ -2,37 +2,21 @@ import { ThunkAction } from 'redux-thunk'
 import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
-import {
-  toggleCentered,
-  setFirstZoom,
-  setCurrentObservationZone,
-  clearRegion,
-  clearObservationLocation,
-  deleteObservationEvent,
-  setObservationEventInterrupted,
-  replaceObservationEventById,
-  replaceObservationEvents,
-  setObserving,
-  clearObservationId,
-  clearLocation,
-  updateLocation,
-  clearPath,
-  setPath,
-  setFirstLocation,
-  switchSchema,
-  mapActionTypes,
-  messageActionTypes,
-  observationActionTypes,
-  locationActionTypes,
-  PathType,
-  ZoneType
-} from '../../stores'
+import { toggleCentered, setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
+import { clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
+  replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId } from '../../stores/observation/actions'
+import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
+import { switchSchema } from '../schema/actions'
+import { mapActionTypes, ZoneType } from '../map/types'
+import { messageActionTypes } from '../message/types'
+import { observationActionTypes } from '../observation/types'
+import { locationActionTypes, PathType } from '../position/types'
 import i18n from '../../languages/i18n'
 import storageService from '../../services/storageService'
 import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser'
 import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
-import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync } from '../../helpers/geolocationHelper'
+import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
 import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { sourceId } from '../../config/keys'
@@ -189,6 +173,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       dispatch(setGrid({
         n: grid.n,
         e: grid.e,
+        geometry: YKJCoordinateIntoWGS84Grid(grid.n, grid.e),
         pauseGridCheck: Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n
       }))
     }
@@ -257,7 +242,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { firstLocation, observationEvent, path, observationEventInterrupted, schema } = getState()
+    const { grid, firstLocation, observationEvent, path, observationEventInterrupted, schema } = getState()
 
     dispatch(setObservationEventInterrupted(false))
 
@@ -270,12 +255,16 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
         if (event.gatherings[0].units.length >= 1 && schema.formID !== 'MHL.117') {
           geometry = createUnitBoundingBox(event)
         } else {
-          geometry = {
-            coordinates: [
-              firstLocation[1],
-              firstLocation[0]
-            ],
-            type: 'Point'
+          if (firstLocation) {
+            geometry = {
+              coordinates: [
+                firstLocation[1],
+                firstLocation[0]
+              ],
+              type: 'Point'
+            }
+          } else if (schema.formID === 'MHL.117') {
+            geometry = grid.geometry
           }
         }
 

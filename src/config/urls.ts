@@ -41,7 +41,7 @@ export const getUserUrl           = `${apiRoot}/person/`
 export const personTokenUrl       = `${apiRoot}/person-token/`
 
 //grid name url
-export const gridNameUrl          = 'https://atlas-api-dev.rahtiapp.fi/api/v1/grid/'
+export const gridNameUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/grid/'
 
 //laji.fi
 export const lajiHomepageEn       = 'https://laji.fi/en'
