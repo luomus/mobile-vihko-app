@@ -2,31 +2,15 @@ import { ThunkAction } from 'redux-thunk'
 import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
-import {
-  toggleCentered,
-  setFirstZoom,
-  setCurrentObservationZone,
-  clearRegion,
-  clearObservationLocation,
-  deleteObservationEvent,
-  setObservationEventInterrupted,
-  replaceObservationEventById,
-  replaceObservationEvents,
-  setObserving,
-  clearObservationId,
-  clearLocation,
-  updateLocation,
-  clearPath,
-  setPath,
-  setFirstLocation,
-  switchSchema,
-  mapActionTypes,
-  messageActionTypes,
-  observationActionTypes,
-  locationActionTypes,
-  PathType,
-  ZoneType
-} from '../../stores'
+import { toggleCentered, setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
+import { clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
+  replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId } from '../../stores/observation/actions'
+import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
+import { switchSchema } from '../schema/actions'
+import { mapActionTypes, ZoneType } from '../map/types'
+import { messageActionTypes } from '../message/types'
+import { observationActionTypes } from '../observation/types'
+import { locationActionTypes, PathType } from '../position/types'
 import i18n from '../../languages/i18n'
 import storageService from '../../services/storageService'
 import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser'
