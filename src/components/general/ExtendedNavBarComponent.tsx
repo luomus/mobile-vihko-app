@@ -8,6 +8,7 @@ import {
   setObservationId,
   setMessageState
 } from '../../stores'
+import { forms } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -53,7 +54,7 @@ const ExtendedNavBarComponent = (props: Props) => {
         gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
         textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
       />
-      {schema.formID === 'MHL.117' ?
+      {schema.formID === forms.birdAtlas ?
         <View style={{ flexDirection: 'row' }}>
           <View style={{ paddingHorizontal: 2 }}>
             {props.onPressMap === undefined ?

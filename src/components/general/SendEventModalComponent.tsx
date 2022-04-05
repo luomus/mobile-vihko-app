@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
+import { fields, forms } from '../../config/fields'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -35,7 +36,7 @@ const SendEventModalComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={'publish'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
-        { schema.formID !== 'MHL.45' && schema.formID !== 'MHL.117' &&
+        { schema.formID !== forms.lolife && schema.formID !== forms.birdAtlas &&
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => { props.sendObservationEvent(false) }} title={t('send private')}
               height={40} width={200} buttonStyle={Bs.sendEventModalButton}

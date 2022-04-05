@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
-import { lolifeObservationTypes } from '../../config/fields'
+import { forms, lolifeObservationTypes } from '../../config/fields'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -34,7 +34,7 @@ const MapModalComponent = (props: Props) => {
           <ScrollView style={{ width: '100%' }}>
             {props.observationOptions.map(observation =>
               <View key={observation.id} style={Cs.mapModalItemContainer}>
-                { schema.formID !== 'MHL.45' ?
+                { schema.formID !== forms.lolife ?
                   <Text style={Ts.centeredBold}>{observation.identifications[0].taxon}</Text>
                   :
                   <Text style={Ts.centeredBold}>

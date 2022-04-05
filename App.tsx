@@ -19,6 +19,8 @@ import { pathToLineStringConstructor } from './src/helpers/geoJSONHelper'
 import { LineString, MultiLineString } from 'geojson'
 import Navigator from './src/navigation/Navigator'
 import { GridType } from './src/stores/position/types'
+import { forms } from './src/config/fields'
+import FormSwitchComponent from './src/components/formComponents/FormSwitchComponent'
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, error }) => {
   const showAlert = (message: string) => {
@@ -54,7 +56,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, e
       store.dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
     }
 
-    if (observationEvent?.events[indLast]?.formID === 'MHL.117' && grid && locations[0]?.coords) {
+    if (observationEvent?.events[indLast]?.formID === forms.birdAtlas && grid && locations[0]?.coords) {
       const ykjCoords = convertWGS84ToYKJ([locations[0].coords.longitude, locations[0].coords.latitude])
 
       if (!grid.pauseGridCheck && (ykjCoords[0] < grid.e * 10000 + GRID_EDGE_DISTANCE || ykjCoords[0] > grid.e * 10000 + 10000 - GRID_EDGE_DISTANCE

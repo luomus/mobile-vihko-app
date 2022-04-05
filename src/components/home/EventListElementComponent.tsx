@@ -4,6 +4,7 @@ import Ts from '../../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../languages/i18n'
 import { Shadow } from 'react-native-shadow-2'
+import { forms } from '../../config/fields'
 import { parseDateForUI } from '../../helpers/dateHelper'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
@@ -25,7 +26,7 @@ const EventListElementComponent = (props: Props) => {
   const observationCount = (): number => {
     if (!props.observationEvent) {
       return 0
-    } else if (props.observationEvent.formID !== 'MHL.117') {
+    } else if (props.observationEvent.formID !== forms.birdAtlas) {
       return props.observationEvent.gatherings[0].units.length
     } else {
       let sum = 0
@@ -37,11 +38,11 @@ const EventListElementComponent = (props: Props) => {
   }
 
   useEffect(() => {
-    if (props.observationEvent.formID === 'JX.519') {
+    if (props.observationEvent.formID === forms.tripForm) {
       setTitle(t('trip report form'))
-    } else if (props.observationEvent.formID === 'MHL.117') {
+    } else if (props.observationEvent.formID === forms.birdAtlas) {
       setTitle(t('bird atlas'))
-    } else if (props.observationEvent.formID === 'JX.652') {
+    } else if (props.observationEvent.formID === forms.fungiAtlas) {
       setTitle(t('fungi atlas'))
     } else {
       setTitle(t('mobile app'))

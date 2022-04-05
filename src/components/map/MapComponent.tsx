@@ -29,6 +29,7 @@ import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import ObservationButtonsComponent from './ObservationButtonsComponent'
+import { forms } from '../../config/fields'
 import { mapUrl as urlTemplate, gridUrl as gridTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
@@ -440,11 +441,11 @@ const MapComponent = (props: Props) => {
           {targetOverlay()}
           {pathOverlay()}
           {tileOverlay()}
-          {schema.formID === 'MHL.117' ? gridOverlay() : null}
+          {schema.formID === forms.birdAtlas ? gridOverlay() : null}
           {zoneOverlay()}
           {observationLocationsOverlay()}
         </MapView>
-        {schema.formID === 'MHL.117' ?
+        {schema.formID === forms.birdAtlas ?
           <View style={Cs.gridTitleContainer}>
             <ButtonComponent onPressFunction={() => null} disabled={true} title={grid?.n + ':' + grid?.e}
               height={35} width={100} buttonStyle={Bs.tileDetailsButton}

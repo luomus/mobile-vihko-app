@@ -21,6 +21,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import * as Clipboard from 'expo-clipboard'
+import { forms } from '../../config/fields'
 import MessageComponent from '../general/MessageComponent'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
@@ -62,7 +63,7 @@ const HomeComponent = (props: Props) => {
       isUnfinished = !observationEvent.events[length - 1].gatheringEvent.dateEnd
     }
 
-    let formID = 'JX.519'
+    let formID = forms.tripForm
 
     const initSchema = async () => {
       let formID = await storageService.fetch('formID')
@@ -74,7 +75,7 @@ const HomeComponent = (props: Props) => {
     if (isUnfinished) {
       dispatch(setObserving(true))
       dispatch(setObservationEventInterrupted(true))
-      if (formID === 'MHL.45') { dispatch(setCurrentObservationZone(getLastZoneId())) }
+      if (formID === forms.lolife) { dispatch(setCurrentObservationZone(getLastZoneId())) }
     }
   }, [])
 
@@ -243,7 +244,7 @@ const HomeComponent = (props: Props) => {
 
   const showLaunchConfirmation = (formID: string) => {
     let formTranslation = t('trip report form')
-    if (formID === 'JX.652') formTranslation = t('fungi atlas')
+    if (formID === forms.fungiAtlas) formTranslation = t('fungi atlas')
     dispatch(setMessageState({
       type: 'conf',
       messageContent: t('do you want to start an event?') + ' ' + formTranslation + '?',
@@ -275,12 +276,12 @@ const HomeComponent = (props: Props) => {
               null
             }
             <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
-            <FormLauncherComponent formID={'JX.519'} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
-            <FormLauncherComponent formID={'MHL.117'} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setGridModalVisibility} />
-            <FormLauncherComponent formID={'JX.652'} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
+            <FormLauncherComponent formID={forms.tripForm} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
+            <FormLauncherComponent formID={forms.birdAtlas} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setGridModalVisibility} />
+            <FormLauncherComponent formID={forms.fungiAtlas} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
             {
               credentials.permissions?.includes('HR.2951') ?
-                <FormLauncherComponent formID={'MHL.45'} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
+                <FormLauncherComponent formID={forms.lolife} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
                 : null
             }
             <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
@@ -295,10 +296,10 @@ const HomeComponent = (props: Props) => {
           </View>
         </ScrollView>
         <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
-          onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.45', zoneUsed) }}
+          onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent(forms.lolife, zoneUsed) }}
           setLoading={setLoading} showError={showError} />
         <GridModalComponent modalVisibility={gridModalVisibility} setModalVisibility={setGridModalVisibility}
-          onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent('MHL.117', zoneUsed) }}
+          onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent(forms.birdAtlas, zoneUsed) }}
           setLoading={setLoading} showError={showError} />
         <MessageComponent />
       </>

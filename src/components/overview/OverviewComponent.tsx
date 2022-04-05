@@ -7,6 +7,7 @@ import Bs from '../../styles/ButtonStyles'
 import Colors from '../../styles/Colors'
 import { useDispatch, useSelector } from 'react-redux'
 import i18n from '../../languages/i18n'
+import { forms } from '../../config/fields'
 import {
   rootState,
   DispatchType,
@@ -58,7 +59,7 @@ const OverviewComponent = (props: Props) => {
 
     setEvent(searchedEvent)
 
-    if (searchedEvent && searchedEvent.formID === 'MHL.117') {
+    if (searchedEvent && searchedEvent.formID === forms.birdAtlas) {
       let filteredObservations: Record<string, any>[] = []
       searchedObservations.forEach((observation) => {
         if (!(observation.id.includes('complete_list') && !observation.atlasCode  && !observation.count)) {

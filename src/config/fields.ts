@@ -2109,6 +2109,11 @@ export const birdList = [
   }
 ]
 
-export const availableForms = ['JX.519', 'MHL.117', 'JX.652', 'MHL.45']
+export const forms = {
+  tripForm: 'JX.519',
+  birdAtlas: 'MHL.117',
+  fungiAtlas: 'JX.652',
+  lolife: 'MHL.45'
+}
 
 export const useUiSchemaFields = ['MHL.45']

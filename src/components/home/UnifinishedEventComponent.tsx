@@ -3,6 +3,7 @@ import { View, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
+import { forms } from '../../config/fields'
 import { parseDateForUI } from '../../helpers/dateHelper'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -32,7 +33,7 @@ const UnfinishedEventComponent = (props: Props) => {
   const observationCount = (): number => {
     if (!unfinishedEvent) {
       return 0
-    } else if (unfinishedEvent.formID !== 'MHL.117') {
+    } else if (unfinishedEvent.formID !== forms.birdAtlas) {
       return unfinishedEvent.gatherings[0].units.length
     } else {
       let sum = 0

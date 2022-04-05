@@ -27,7 +27,7 @@ import MessageComponent from '../general/MessageComponent'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
-import { availableForms, useUiSchemaFields } from '../../config/fields'
+import { forms, useUiSchemaFields } from '../../config/fields'
 import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
@@ -121,7 +121,13 @@ const LoginComponent = (props: Props) => {
       showError(error.message)
     }
 
-    await Promise.all(availableForms.map(async formId => {
+    let formIDs = []
+
+    for (const id in forms) {
+      formIDs.push(forms[id])
+    }
+
+    await Promise.all(formIDs.map(async formId => {
       try {
         const useUiSchema = useUiSchemaFields.includes(formId)
 

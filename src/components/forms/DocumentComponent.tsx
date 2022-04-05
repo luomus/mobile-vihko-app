@@ -24,7 +24,7 @@ import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import SaveButtonComponent from './SaveButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
-import { observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
+import { forms, observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
   overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields, overrideJX652ObservationEventFields } from '../../config/fields'
 
 type Props = {
@@ -92,13 +92,13 @@ const DocumentComponent = (props: Props) => {
       const lang = i18n.language
       let schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
-      if (schema.formID === 'MHL.45') {
+      if (schema.formID === forms.lolife) {
         initForm(setForm, event, null, schemaWithoutUnits, null, observationEventFields, overrideObservationEventFields, null, null, lang, scrollView)
-      } else if (schema.formID === 'JX.519') {
+      } else if (schema.formID === forms.tripForm) {
         initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, lang, scrollView)
-      } else if (schema.formID === 'MHL.117') {
+      } else if (schema.formID === forms.birdAtlas) {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, null, lang, scrollView)
-      } else if (schema.formID === 'JX.652') {
+      } else if (schema.formID === forms.fungiAtlas) {
         initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollView)
       }
     }

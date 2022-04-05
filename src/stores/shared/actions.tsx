@@ -23,6 +23,7 @@ import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
 import { clearGrid, setGrid } from '../position/actions'
 import { initCompleteList } from '../../stores/observation/actions'
+import { forms } from '../../config/fields'
 
 export const resetReducer = () => ({
   type: 'RESET_STORE'
@@ -75,7 +76,7 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
 
     const dateTime = setDateForDocument()
-    if (schema.formID === 'MHL.117') {
+    if (schema.formID === forms.birdAtlas) {
       set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], dateTime.substring(0, 10))
       set(observationEventDefaults, ['gatheringEvent', 'timeStart'], dateTime.substring(11, 16))
 
@@ -123,7 +124,7 @@ export const beginObservationEvent = (onPressMap: () => void, zoneUsed: boolean,
     dispatch(replaceObservationEvents(newEvents))
 
     //initialize complete list for bird atlas
-    if (schema.formID === 'MHL.117') { await dispatch(initCompleteList(lang)) }
+    if (schema.formID === forms.birdAtlas) { await dispatch(initCompleteList(lang)) }
 
     //attempt to start geolocation systems
     try {
@@ -252,7 +253,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       const setBoundingBoxGeometry = () => {
         let geometry
 
-        if (event.gatherings[0].units.length >= 1 && schema.formID !== 'MHL.117') {
+        if (event.gatherings[0].units.length >= 1 && schema.formID !== forms.birdAtlas) {
           geometry = createUnitBoundingBox(event)
         } else {
           if (firstLocation) {
@@ -263,7 +264,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
               ],
               type: 'Point'
             }
-          } else if (schema.formID === 'MHL.117') {
+          } else if (schema.formID === forms.birdAtlas) {
             geometry = grid.geometry
           }
         }
@@ -278,7 +279,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       //remove duplicates from path
       lineStringPath = removeDuplicatesFromPath(lineStringPath)
 
-      if (lineStringPath && event.formID !== 'MHL.45') {
+      if (lineStringPath && event.formID !== forms.lolife) {
         event.gatherings[0].geometry = lineStringPath
 
       } else {
@@ -291,7 +292,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
           setBoundingBoxGeometry()
         }
 
-        if (event.formID === 'MHL.45') {
+        if (event.formID === forms.lolife) {
 
           if (lineStringPath) {
             if (event.gatherings[1]) {

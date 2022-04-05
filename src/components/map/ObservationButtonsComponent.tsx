@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { rootState } from '../../stores'
 import { listOfHaversineNeighbors } from '../../helpers/distanceHelper'
-import { useUiSchemaFields, lolifeObservationTypes } from '../../config/fields'
+import { forms, useUiSchemaFields, lolifeObservationTypes } from '../../config/fields'
 import i18n from '../../languages/i18n'
 
 interface BasicObject {
@@ -136,7 +136,7 @@ const ObservationButtonsComponent = (props: Props) => {
               t('cancel'),
               Bs.homeTextAndIconButton,
               () => props.cancelButton(),
-              'neutral', undefined, undefined, schema.formID === 'MHL.45' ? 180 : 120
+              'neutral', undefined, undefined, schema.formID === forms.lolife ? 180 : 120
             )}
           </View>
         </View>
