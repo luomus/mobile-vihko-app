@@ -20,7 +20,7 @@ interface Props {
 const FormPickerComponent = (props: Props) => {
   const { register, setValue, formState } = useFormContext()
   const [selected, setSelected] = useState(props.selectedValue === null ? null : props.dictionary[props.selectedValue])
-  const [pickerValues, setPickerValues] = useState<Array<string>>([]) 
+  const [pickerValues, setPickerValues] = useState<Array<string>>([])
 
   const { t } = useTranslation()
 
@@ -32,8 +32,8 @@ const FormPickerComponent = (props: Props) => {
     }
     setValue(props.objectTitle, props.selectedValue)
     let valueSet = []
-    for (const key in props.dictionary){
-        valueSet.push(props.dictionary[key])
+    for (const key in props.dictionary) {
+      valueSet.push(props.dictionary[key])
     }
     setPickerValues(valueSet)
   }, [])
@@ -66,11 +66,11 @@ const FormPickerComponent = (props: Props) => {
       />
       <View style={Cs.iOSPickerContainer}>
         <TextInput
-            style={Os.iOSPickerInput}
-            value={selected}
-            editable={false}
-            onPressIn={() => onPress()}
-            multiline
+          style={Os.iOSPickerInput}
+          value={selected}
+          editable={false}
+          onPressIn={() => onPress()}
+          multiline
         />
         <Icon
           name='arrow-drop-down'

@@ -20,9 +20,8 @@ import { LineString, MultiLineString } from 'geojson'
 import Navigator from './src/navigation/Navigator'
 import { GridType } from './src/stores/position/types'
 import { forms } from './src/config/fields'
-import FormSwitchComponent from './src/components/formComponents/FormSwitchComponent'
 
-TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, error }) => {
+TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations } }) => {
   const showAlert = (message: string) => {
     store.dispatch(setMessageState({
       type: 'err',

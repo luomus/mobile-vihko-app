@@ -19,7 +19,7 @@ interface Props {
 }
 
 const FormAtlasCodeComponent = (props: Props) => {
-  const { register, setValue, formState, getValues } = useFormContext()
+  const { register, setValue, formState } = useFormContext()
   const [selectedKey, setSelectedKey] = useState<string | undefined>(undefined)
   const [elementList, setElementList] = useState<JSX.Element[] | undefined>([])
 
