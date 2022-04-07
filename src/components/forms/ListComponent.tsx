@@ -107,11 +107,15 @@ const ListComponent = (props: Props) => {
               type='material-icons'
               color={Colors.dangerButton2}
               size={26}
-              onPress={() => setSearch('')}
+              onPress={() => {
+                textInput.current?.blur()
+                setSearch('')
+                textInput.current?.focus()
+              }}
               iconStyle={Cs.listFilterIcon}
             />
           </View>
-          <ScrollView>
+          <ScrollView keyboardShouldPersistTaps='always'>
             {filteredObservations}
           </ScrollView>
         </View>

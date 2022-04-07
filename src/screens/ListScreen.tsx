@@ -10,8 +10,6 @@ type Props = {
 
 const ListScreen = (props: Props) => {
 
-  // const { dispatch, isFocused } = props.navigation
-
   const { navigate } = props.navigation
   return (
     <ListComponent
