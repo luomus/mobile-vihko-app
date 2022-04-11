@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { createFilter } from 'react-native-search-filter'
 import { Icon } from 'react-native-elements'
+import { ParamListBase } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import {
   rootState,
   DispatchType,
@@ -19,7 +21,8 @@ import Colors from '../../styles/Colors'
 type Props = {
   onPressMap: () => void,
   onPressObservation: (sourcePage: string) => void,
-  onPressFinishObservationEvent: (sourcePage: string) => void
+  onPressFinishObservationEvent: (sourcePage: string) => void,
+  navigation: NativeStackNavigationProp<ParamListBase, string>
 }
 
 const ListComponent = (props: Props) => {
@@ -83,6 +86,18 @@ const ListComponent = (props: Props) => {
     })
     setObserved(elements)
   }, [observationEvent])
+
+  useEffect(() => {
+    if (textInput.current) {
+      const openKeyboard = props.navigation.addListener('focus', () => {
+        setTimeout(() => {
+          textInput.current?.focus()
+        }, 1000)
+      })
+
+      return openKeyboard
+    }
+  }, [props.navigation, textInput.current])
 
   if (!observed) {
     return (

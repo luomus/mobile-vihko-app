@@ -18,6 +18,7 @@ const ListScreen = (props: Props) => {
       onPressFinishObservationEvent={(sourcePage: string) => {
         props.navigation.navigate('document', { sourcePage })
       }}
+      navigation={props.navigation}
     />
   )
 }

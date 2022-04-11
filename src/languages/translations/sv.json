@@ -213,6 +213,5 @@
   "your current location is": "Din nuvarande plats är",
   "zone": "Observationsplats",
   "zone picker description": "Välja en tidigare skapad observationplats eller börja utan observationplats (kan läggas till senare).",
-  "zone save to async failed": "Misslyckades att spara observationsplatser till lokalt minne.",
-  "zoneInList": "Platsen"
+  "zone save to async failed": "Misslyckades att spara observationsplatser till lokalt minne."
 }

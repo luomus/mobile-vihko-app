@@ -213,6 +213,5 @@
   "your current location is": "Olet nyt ruudulla",
   "zone": "Seurantapaikka",
   "zone picker description": "Valitse aiemmin perustettu seurantapaikka tai aloita ilman seurantapaikkaa (voidaan lisätä myöhemmin).",
-  "zone save to async failed": "Havaintoalueiden tallennus laitteen tallennustilaan epäonnistui.",
-  "zoneInList": "Alue"
+  "zone save to async failed": "Havaintoalueiden tallennus laitteen tallennustilaan epäonnistui."
 }

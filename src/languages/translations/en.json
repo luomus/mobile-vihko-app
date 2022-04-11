@@ -213,6 +213,5 @@
   "your current location is": "Your current location is",
   "zone": "Observation locality",
   "zone picker description": "Choose a prestored location or start without a location (can be added later).",
-  "zone save to async failed": "Failed to save observation zones to local storage.",
-  "zoneInList": "Locality"
+  "zone save to async failed": "Failed to save observation zones to local storage."
 }
