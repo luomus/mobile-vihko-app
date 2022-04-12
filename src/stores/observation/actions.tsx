@@ -15,7 +15,8 @@ import {
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
 } from './types'
-import { birdList, forms } from '../../config/fields'
+import { forms } from '../../config/fields'
+import { getBirdList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -557,34 +558,35 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
     const observations: Record<string, any>[] = []
+    const birdList: Record<string, any>[] = await getBirdList()
 
     //fetch taxon details concurrently and initialize bird list observations
     await Promise.all(birdList.map(async (item: Record<string, any>) => {
-      let res = await getTaxonAutocomplete('taxon', item.key, null, lang, 1, null)
+      let res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
       let observation = {}
       let name: string = ''
       if (lang === 'fi') {
-        name = item.nameFI
+        name = item.vernacularName.fi
       } else if (lang === 'sv') {
-        name = item.nameSV
+        name = item.vernacularName.sv
       } else if (lang === 'en') {
-        name = item.nameEN
+        name = item.vernacularName.en
       }
       set(observation, 'id', `complete_list_${uuid.v4()}`)
       set(observation, 'identifications', [{ taxon: name }])
       set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
-      set(observation, 'unitFact', { autocompleteSelectedTaxonID: res.result[0].key })
+      set(observation, 'unitFact', { autocompleteSelectedTaxonID: res.result[0].id })
       observations.push(observation)
     }))
 
     //get list or bird names in the correct order
     const nameList = birdList.map((bird) => {
       if (lang === 'fi') {
-        return bird.nameFI
+        return bird.vernacularName.fi
       } else if (lang === 'sv') {
-        return bird.nameSV
+        return bird.vernacularName.sv
       } else if (lang === 'en') {
-        return bird.nameEN
+        return bird.vernacularName.en
       }
     })
 
