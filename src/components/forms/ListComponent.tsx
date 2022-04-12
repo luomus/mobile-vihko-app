@@ -87,6 +87,7 @@ const ListComponent = (props: Props) => {
     setObserved(elements)
   }, [observationEvent])
 
+  //opens the keyboard when returning from ObservationComponent
   useEffect(() => {
     if (textInput.current) {
       const openKeyboard = props.navigation.addListener('focus', () => {

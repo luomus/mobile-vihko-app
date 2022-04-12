@@ -21,7 +21,7 @@ const EventListElementComponent = (props: Props) => {
   const dateBegin = props.observationEvent.gatheringEvent.dateBegin
   const dateEnd = props.observationEvent.gatheringEvent.dateEnd
 
-  const [title, setTitle] = useState<string>(t('beginObservationTripForm'))
+  const [title, setTitle] = useState<string>(t('trip form'))
 
   const observationCount = (): number => {
     if (!props.observationEvent) {
@@ -39,13 +39,13 @@ const EventListElementComponent = (props: Props) => {
 
   useEffect(() => {
     if (props.observationEvent.formID === forms.tripForm) {
-      setTitle(t('trip report form'))
+      setTitle(t('trip form'))
     } else if (props.observationEvent.formID === forms.birdAtlas) {
       setTitle(t('bird atlas'))
     } else if (props.observationEvent.formID === forms.fungiAtlas) {
       setTitle(t('fungi atlas'))
     } else {
-      setTitle(t('mobile app'))
+      setTitle(t('lolife'))
     }
   }, [i18n.language])
 
@@ -66,7 +66,7 @@ const EventListElementComponent = (props: Props) => {
           <View style={Cs.unsentEventsContainer} >
             <Text style={[Ts.eventListElementTitle, { color: Colors.dangerButton1 }]}>{title}</Text>
             <Text style={Ts.eventListElementTextClear}>{displayDateTime()}</Text>
-            <Text style={Ts.eventListElementTextFaded}>{t('observationsInList') + ': ' + observationCount() + ' ' + (observationCount() === 1 ? t('piece') : t('pieces'))}</Text>
+            <Text style={Ts.eventListElementTextFaded}>{t('observations in list') + ': ' + observationCount() + ' ' + (observationCount() === 1 ? t('piece') : t('pieces'))}</Text>
           </View>
         </TouchableOpacity>
       </Shadow>

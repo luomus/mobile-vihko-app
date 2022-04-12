@@ -20,24 +20,24 @@ const FormLauncherComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const [title, setTitle] = useState<string>(t('beginObservationTripForm'))
-  const [description, setDescription] = useState<string>(t('instructions.mobilevihko.intro'))
+  const [title, setTitle] = useState<string>(t('trip form'))
+  const [description, setDescription] = useState<string>(t('instructions.trip.intro'))
 
   const observationZone = useSelector((state: rootState) => state.observationZone)
   const observing = useSelector((state: rootState) => state.observing)
 
   useEffect(() => {
     if (props.formID === forms.tripForm) {
-      setTitle(t('trip report form'))
-      setDescription(t('instructions.mobilevihko.intro'))
+      setTitle(t('trip form'))
+      setDescription(t('instructions.trip.intro'))
     } else if (props.formID === forms.birdAtlas) {
       setTitle(t('bird atlas'))
-      setDescription(t('instructions.mobilevihko.intro.bird'))
+      setDescription(t('instructions.bird.intro'))
     } else if (props.formID === forms.fungiAtlas) {
       setTitle(t('fungi atlas'))
-      setDescription(t('instructions.mobilevihko.intro.fungi'))
+      setDescription(t('instructions.fungi.intro'))
     } else {
-      setTitle(t('mobile app'))
+      setTitle(t('lolife'))
       setDescription(t('instructions.lolife.intro'))
     }
   }, [i18n.language])

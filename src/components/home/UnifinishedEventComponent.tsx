@@ -62,11 +62,11 @@ const UnfinishedEventComponent = (props: Props) => {
         <Text style={Ts.homeScreenTitle}>
           {observationEventInterrupted ?
             t('interrupted observation event') :
-            t('event')
+            t('ongoing event')
           }
         </Text>
         <Text style={Ts.unfinishedEventTextClear}>{t('started at') + ': ' + displayDateTime()}</Text>
-        <Text style={Ts.unfinishedEventTextFaded}>{t('observationsInList') + ': ' + observationCount() + ' ' +
+        <Text style={Ts.unfinishedEventTextFaded}>{t('observations in list') + ': ' + observationCount() + ' ' +
           (unfinishedEvent.gatherings[0].units.length === 1 ? t('piece') : t('pieces'))}</Text>
         <View style={Cs.unfinishedEventButtonsContainer}>
           <View style={Cs.padding5Container}>
@@ -77,7 +77,7 @@ const UnfinishedEventComponent = (props: Props) => {
             />
           </View>
           <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('cancelObservation')}
+            <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('cancel')}
               height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'stop'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}

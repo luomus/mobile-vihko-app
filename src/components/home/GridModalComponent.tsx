@@ -140,7 +140,7 @@ const GridModalComponent = (props: Props) => {
               </View>
               <View style={Cs.modalStartButtonContainer}>
                 <View style={Cs.padding5Container}>
-                  <ButtonComponent disabled={loading} onPressFunction={() => handleStartEvent()} title={t('beginObservation')}
+                  <ButtonComponent disabled={loading} onPressFunction={() => handleStartEvent()} title={t('start')}
                     height={40} width={120} buttonStyle={Bs.beginButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                     textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}

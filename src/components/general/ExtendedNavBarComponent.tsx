@@ -35,7 +35,7 @@ const ExtendedNavBarComponent = (props: Props) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
-      okLabel: t('cancelObservation'),
+      okLabel: t('stop'),
       cancelLabel: t('do not stop'),
       onOk: () => {
         dispatch(setObservationId({
@@ -49,7 +49,7 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   return (
     <View style={Cs.stopObservingContainer}>
-      <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop observation event')}
+      <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop')}
         height={30} width={100} buttonStyle={Bs.stopObservingButton}
         gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
         textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}

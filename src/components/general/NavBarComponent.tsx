@@ -37,16 +37,16 @@ const NavBarComponent = (props: Props) => {
     } else if (props.route.name === 'home') {
       return t('mobile vihko')
     } else if (props.route.name === 'map') {
-      return t('notification body').substring(0, t('notification body').length - 1)
+      return t('gps notification body').substring(0, t('gps notification body').length - 1)
     } else if (props.route.name === 'observation') {
       //return t(isNew ? 'add observation' : 'edit observation')
       return t('edit observation')
     } else if (props.route.name === 'document') {
-      return t('edit observation event')
+      return t('edit document')
     } else if (props.route.name === 'overview') {
       return t('event overview')
     } else if (props.route.name === 'list') {
-      return t('notification body').substring(0, t('notification body').length - 1)
+      return t('gps notification body').substring(0, t('gps notification body').length - 1)
     }
   }
 

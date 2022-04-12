@@ -87,7 +87,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
       return !pickerResult.cancelled
 
     } catch (error) {
-      setError(props.objectTitle, { message: 'image attachment failure', type: 'manual' })
+      setError(props.objectTitle, { message: t('image attachment failure'), type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerKeywordComponent attachImage()',
         error: error,

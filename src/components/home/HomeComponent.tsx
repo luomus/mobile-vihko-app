@@ -148,8 +148,8 @@ const HomeComponent = (props: Props) => {
       await storageService.save('formID', formID)
     }
 
-    const title: string = t('notification title')
-    const body: string = t('notification body')
+    const title: string = t('gps notification title')
+    const body: string = t('gps notification body')
 
     try {
       await dispatch(beginObservationEvent(props.onPressMap, zoneUsed, title, body))
@@ -177,8 +177,8 @@ const HomeComponent = (props: Props) => {
 
   const onContinueObservationEvent = async () => {
 
-    const title: string = t('notification title')
-    const body: string = t('notification body')
+    const title: string = t('gps notification title')
+    const body: string = t('gps notification body')
     try {
       await dispatch(continueObservationEvent(props.onPressMap, title, body))
     } catch (error) {
@@ -213,7 +213,7 @@ const HomeComponent = (props: Props) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('stop observing'),
-      okLabel: t('cancelObservation'),
+      okLabel: t('stop'),
       cancelLabel: t('do not stop'),
       onOk: () => {
         dispatch(setObservationId({
@@ -243,12 +243,12 @@ const HomeComponent = (props: Props) => {
   }
 
   const showLaunchConfirmation = (formID: string) => {
-    let formTranslation = t('trip report form')
+    let formTranslation = t('trip form')
     if (formID === forms.fungiAtlas) formTranslation = t('fungi atlas')
     dispatch(setMessageState({
       type: 'conf',
       messageContent: t('do you want to start an event?') + ' ' + formTranslation + '?',
-      okLabel: t('beginObservation'),
+      okLabel: t('start'),
       cancelLabel: t('cancel'),
       onOk: () => onBeginObservationEvent(formID, false)
     }))

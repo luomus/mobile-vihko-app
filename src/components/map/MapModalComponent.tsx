@@ -43,7 +43,7 @@ const MapModalComponent = (props: Props) => {
                 }
                 <View style={Cs.padding5Container}>
                   <ButtonComponent onPressFunction={() => props.shiftToEditPage(observationId.eventId, observation.id)}
-                    title={t('edit button')} height={40} width={120} buttonStyle={Bs.mapModalButton}
+                    title={t('edit')} height={40} width={120} buttonStyle={Bs.mapModalButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                     textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                   />
