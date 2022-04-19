@@ -70,7 +70,14 @@ const FormDateOptionsComponent = (props: Props) => {
 
   //every time date and time change, combine them so both values are updated
   useEffect(() => {
-    let combinedDate = currentDate.substring(0, 10) + 'T' + currentTime.substring(11, 16)
+    let combinedDate
+
+    if (currentTime && currentDate) {
+      combinedDate = currentDate.substring(0, 10) + 'T' + currentTime.substring(11, 16)
+    } else {
+      return
+    }
+
     //check if dateEnd time is set to be before dateBegin
     //if so, set dateEnd to be equal with dateBegin
     if (props.objectTitle.includes('dateEnd') && Date.parse(dateBegin) > Date.parse(combinedDate)) {
