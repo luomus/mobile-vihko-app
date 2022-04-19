@@ -142,7 +142,7 @@ const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString) 
   }
 }
 
-const pathPolygonConstructor = (coords: PathType, userLocation: number[]) => {
+const pathPolygonConstructor = (coords: PathType, userLocation: number[] | undefined) => {
   if (coords.length <= 0) {
     return
   }
@@ -165,7 +165,7 @@ const pathPolygonConstructor = (coords: PathType, userLocation: number[]) => {
 
 
   const subCoordinates: Position[] = []
-  coords.slice(-1)[0].forEach((point: PathPoint)  => {
+  coords.slice(-1)[0].forEach((point: PathPoint) => {
     if (!point[4]) {
       subCoordinates.push([
         point[0],
@@ -174,7 +174,7 @@ const pathPolygonConstructor = (coords: PathType, userLocation: number[]) => {
     }
   })
 
-  subCoordinates.push(userLocation)
+  if (userLocation) subCoordinates.push(userLocation)
 
   if (subCoordinates.length < 2) {
     return

@@ -11,7 +11,9 @@ import {
   SET_GRID,
   CLEAR_GRID,
   SET_COORDS,
-  SET_PAUSE
+  SET_PAUSE,
+  PAUSE,
+  UNPAUSE
 } from './types'
 
 const firstLocationReducer = (state: Array<number> = [60.192059, 	24.945831], action: locationActionTypes) => {
@@ -45,6 +47,17 @@ const positionReducer = (state: LocationType = null, action: locationActionTypes
   }
 }
 
+const pausedReducer = (state: boolean = false, action: locationActionTypes) => {
+  switch (action.type) {
+    case PAUSE:
+      return true
+    case UNPAUSE:
+      return false
+    default:
+      return state
+  }
+}
+
 const gridReducer = (state: GridType = null, action: locationActionTypes) => {
   switch (action.type) {
     case SET_GRID:
@@ -66,4 +79,4 @@ const gridReducer = (state: GridType = null, action: locationActionTypes) => {
   }
 }
 
-export { firstLocationReducer, pathReducer, positionReducer, gridReducer }
+export { firstLocationReducer, pathReducer, positionReducer, pausedReducer, gridReducer }
