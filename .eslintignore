@@ -3,7 +3,7 @@ assets/
 .circleci/
 .expo/
 .expo-shared/
-docs/
+bin/
 node_modules/
 LICENSE
 README.md

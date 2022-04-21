@@ -40,6 +40,9 @@ export const pollLoginUrl         = `${apiRoot}/login/check`
 export const getUserUrl           = `${apiRoot}/person/`
 export const personTokenUrl       = `${apiRoot}/person-token/`
 
+//bird list url
+export const birdListUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/taxon'
+
 //grid name url
 export const gridNameUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/grid/'
 

@@ -51,6 +51,8 @@ import {
   setPath,
   clearPath,
   setFirstLocation,
+  pause,
+  unpause,
   setGrid,
   clearGrid,
   setGridCoords,
@@ -98,6 +100,7 @@ import {
   firstLocationReducer,
   pathReducer,
   positionReducer,
+  pausedReducer,
   gridReducer
 } from './position/reducers'
 import { schemaReducer } from './schema/reducers'
@@ -156,6 +159,7 @@ interface rootState {
   observationZone: ObservationZonesType,
   observing: boolean,
   path: PathType,
+  paused: boolean,
   position: LocationType,
   region: Region,
   schema: SchemaType
@@ -177,6 +181,7 @@ const appReducer = combineReducers({
   observationZone: observationZoneReducer,
   observing: observingReducer,
   path: pathReducer,
+  paused: pausedReducer,
   position: positionReducer,
   region: regionReducer,
   schema: schemaReducer
@@ -237,6 +242,8 @@ export {
   setPath,
   clearPath,
   setFirstLocation,
+  pause,
+  unpause,
   setGrid,
   clearGrid,
   setGridCoords,

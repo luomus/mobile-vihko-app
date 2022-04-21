@@ -10,8 +10,6 @@ type Props = {
 
 const ListScreen = (props: Props) => {
 
-  // const { dispatch, isFocused } = props.navigation
-
   const { navigate } = props.navigation
   return (
     <ListComponent
@@ -20,6 +18,7 @@ const ListScreen = (props: Props) => {
       onPressFinishObservationEvent={(sourcePage: string) => {
         props.navigation.navigate('document', { sourcePage })
       }}
+      navigation={props.navigation}
     />
   )
 }

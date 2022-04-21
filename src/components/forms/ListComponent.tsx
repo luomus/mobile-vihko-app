@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { createFilter } from 'react-native-search-filter'
 import { Icon } from 'react-native-elements'
+import { ParamListBase } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import {
   rootState,
   DispatchType,
@@ -19,7 +21,8 @@ import Colors from '../../styles/Colors'
 type Props = {
   onPressMap: () => void,
   onPressObservation: (sourcePage: string) => void,
-  onPressFinishObservationEvent: (sourcePage: string) => void
+  onPressFinishObservationEvent: (sourcePage: string) => void,
+  navigation: NativeStackNavigationProp<ParamListBase, string>
 }
 
 const ListComponent = (props: Props) => {
@@ -27,6 +30,7 @@ const ListComponent = (props: Props) => {
   const [observed, setObserved] = useState<JSX.Element[] | undefined>(undefined)
   const [search, setSearch] = useState<string>('')
 
+  const scrollView = useRef<ScrollView | null>(null)
   const textInput = useRef<TextInput | null>(null)
 
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -62,6 +66,7 @@ const ListComponent = (props: Props) => {
             props.onPressObservation('list')
             textInput?.current?.clear()
             setSearch('')
+            scrollView.current?.scrollTo({ x: 0, y: 0, animated: false })
           }}
           key={observation.identifications[0].taxon}
           style={Cs.listElementContainer}
@@ -83,6 +88,19 @@ const ListComponent = (props: Props) => {
     })
     setObserved(elements)
   }, [observationEvent])
+
+  //opens the keyboard when returning from ObservationComponent
+  useEffect(() => {
+    if (textInput.current) {
+      const openKeyboard = props.navigation.addListener('focus', () => {
+        setTimeout(() => {
+          textInput.current?.focus()
+        }, 1000)
+      })
+
+      return openKeyboard
+    }
+  }, [props.navigation, textInput.current])
 
   if (!observed) {
     return (
@@ -107,11 +125,15 @@ const ListComponent = (props: Props) => {
               type='material-icons'
               color={Colors.dangerButton2}
               size={26}
-              onPress={() => setSearch('')}
+              onPress={() => {
+                textInput.current?.blur()
+                setSearch('')
+                textInput.current?.focus()
+              }}
               iconStyle={Cs.listFilterIcon}
             />
           </View>
-          <ScrollView>
+          <ScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
             {filteredObservations}
           </ScrollView>
         </View>

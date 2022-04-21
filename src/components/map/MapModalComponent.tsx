@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
-import { lolifeObservationTypes } from '../../config/fields'
+import { forms, lolifeObservationTypes } from '../../config/fields'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -34,7 +34,7 @@ const MapModalComponent = (props: Props) => {
           <ScrollView style={{ width: '100%' }}>
             {props.observationOptions.map(observation =>
               <View key={observation.id} style={Cs.mapModalItemContainer}>
-                { schema.formID !== 'MHL.45' ?
+                { schema.formID !== forms.lolife ?
                   <Text style={Ts.centeredBold}>{observation.identifications[0].taxon}</Text>
                   :
                   <Text style={Ts.centeredBold}>
@@ -43,7 +43,7 @@ const MapModalComponent = (props: Props) => {
                 }
                 <View style={Cs.padding5Container}>
                   <ButtonComponent onPressFunction={() => props.shiftToEditPage(observationId.eventId, observation.id)}
-                    title={t('edit button')} height={40} width={120} buttonStyle={Bs.mapModalButton}
+                    title={t('edit')} height={40} width={120} buttonStyle={Bs.mapModalButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                     textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                   />

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import MiniMapComponent from './MiniMapComponent'
-import { JX519Fields, MHL117Fields, JX652Fields } from '../../config/fields'
+import { forms, JX519Fields, MHL117Fields, JX652Fields } from '../../config/fields'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 
@@ -36,7 +36,7 @@ const ObservationInfoComponent = (props: Props) => {
       let fields: string[] | null = null
 
       //on the flying squirrel form, there's a logic in fetching the shown fields, other forms just check them from an array
-      if (props.event.formID === 'MHL.45') {
+      if (props.event.formID === forms.lolife) {
         const fieldScopes = props.eventSchema.uiSchemaParams?.unitFieldScopes
         const getFields = () => {
           const rules = props.observation.rules
@@ -57,11 +57,11 @@ const ObservationInfoComponent = (props: Props) => {
 
         fields = getFields()
 
-      } else if (props.event.formID === 'JX.519') {
+      } else if (props.event.formID === forms.tripForm) {
         fields = JX519Fields
-      } else if (props.event.formID === 'MHL.117') {
+      } else if (props.event.formID === forms.birdAtlas) {
         fields = MHL117Fields
-      } else if (props.event.formID === 'JX.652') {
+      } else if (props.event.formID === forms.fungiAtlas) {
         fields = JX652Fields
       }
 

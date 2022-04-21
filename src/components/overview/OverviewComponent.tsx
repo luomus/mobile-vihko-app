@@ -7,6 +7,7 @@ import Bs from '../../styles/ButtonStyles'
 import Colors from '../../styles/Colors'
 import { useDispatch, useSelector } from 'react-redux'
 import i18n from '../../languages/i18n'
+import { forms } from '../../config/fields'
 import {
   rootState,
   DispatchType,
@@ -58,7 +59,7 @@ const OverviewComponent = (props: Props) => {
 
     setEvent(searchedEvent)
 
-    if (searchedEvent && searchedEvent.formID === 'MHL.117') {
+    if (searchedEvent && searchedEvent.formID === forms.birdAtlas) {
       let filteredObservations: Record<string, any>[] = []
       searchedObservations.forEach((observation) => {
         if (!(observation.id.includes('complete_list') && !observation.atlasCode  && !observation.count)) {
@@ -203,8 +204,8 @@ const OverviewComponent = (props: Props) => {
           <View style={Cs.overviewTextContainer}>
             {event.gatherings[0].locality ? <Text>{t('locality')}: {event.gatherings[0].locality}</Text> : null}
             {event.gatherings[0].localityDescription ? <Text>{t('locality description')}: {event.gatherings[0].localityDescription}</Text> : null}
-            <Text>{t('dateBegin')}: {displayDateBegin()}</Text>
-            <Text>{t('dateEnd')}: {displayDateEnd()}</Text>
+            <Text>{t('date begin')}: {displayDateBegin()}</Text>
+            <Text>{t('date end')}: {displayDateEnd()}</Text>
           </View>
           <View style={Cs.overviewButtonsContainer}>
             <View style={Cs.padding5Container}>
@@ -257,7 +258,7 @@ const OverviewComponent = (props: Props) => {
                         dispatch(setObservationId(id))
                         props.onPressObservation('overview')
                       }}
-                    title={t('edit button')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+                    title={t('edit')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                     textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                   />

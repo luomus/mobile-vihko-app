@@ -74,7 +74,7 @@ const UserModalComponent = (props: Props) => {
         <View style={Cs.userDetailsContainer}>
           <View>
             <Text style={{ color: Colors.neutral9 }}>
-              {credentials.user !== null ? t('loggedin') + ' ' + credentials.user.fullName : null}
+              {credentials.user !== null ? t('logged in') + ' ' + credentials.user.fullName : null}
             </Text>
           </View>
           <View style={Cs.logoutButtonContainer}>

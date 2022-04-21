@@ -15,6 +15,9 @@ export const CLEAR_GRID = 'CLEAR_GRID'
 export const SET_COORDS = 'SET_COORDS'
 export const SET_PAUSE = 'SET_PAUSE'
 
+export const PAUSE = 'PAUSE'
+export const UNPAUSE = 'UNPAUSE'
+
 export type PathPoint = [
   number,
   number,
@@ -80,6 +83,14 @@ interface setGridPause {
   payload: boolean
 }
 
+interface pause {
+  type: typeof PAUSE
+}
+
+interface unpause {
+  type: typeof UNPAUSE
+}
+
 export type locationActionTypes =
   clearLocation |
   updateLocation |
@@ -90,4 +101,6 @@ export type locationActionTypes =
   setGrid |
   clearGrid |
   setGridCoords |
-  setGridPause
+  setGridPause |
+  pause |
+  unpause

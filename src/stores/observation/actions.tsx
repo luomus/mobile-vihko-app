@@ -15,7 +15,8 @@ import {
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
 } from './types'
-import { birdList } from '../../config/fields'
+import { forms } from '../../config/fields'
+import { getBirdList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -138,12 +139,12 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //define record basis for each unit, depending on whether the unit has images attached,
     //remove empty radius -fields
     //(skip this with flying squirrel form, which has already assigned the record basis)
-    if (schema.formID !== 'MHL.45' && event.formID !== 'MHL.117') {
+    if (schema.formID !== forms.lolife && event.formID !== forms.birdAtlas) {
       event = loopThroughUnits(event)
     }
 
     //remove unused complete list observations from bird atlas events
-    if (event.formID === 'MHL.117') {
+    if (event.formID === forms.birdAtlas) {
       let filtered: Record<string, any>[] = []
       units.forEach((observation: Record<string, any>) => {
         if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {
@@ -155,7 +156,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
 
     //if there isn't an observation zone, use APIs to get a proper locality name
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
-    if (event.formID !== 'MHL.45') {
+    if (event.formID !== forms.lolife) {
       if (overlapsFinland(event.gatherings[0].geometry)) {
         await fetchFinland(event, lang, credentials)
       } else {
@@ -171,10 +172,10 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       if (geometry) {
         event.gatherings[0].geometry = geometry
       } else {
-        if (event.formID !== 'MHL.45') {
+        if (event.formID !== forms.lolife) {
           delete event.gatherings[0].geometry
         } else {
-          if (event.gatherings[0].units.length >= 1 && event.formID !== 'MHL.117') {
+          if (event.gatherings[0].units.length >= 1 && event.formID !== forms.birdAtlas) {
             event.gatherings[0].geometry = createUnitBoundingBox(event)
           } else {
             let firstLocation =
@@ -251,7 +252,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       event.gatherings[0].units = newUnits
 
       if (event.gatherings[0].units.length < 1) {
-        if (event.formID !== 'MHL.45') {
+        if (event.formID !== forms.lolife) {
           event.gatherings[0].units.push({
             'taxonConfidence': 'MY.taxonConfidenceSure',
             'recordBasis': 'MY.recordBasisHumanObservation'
@@ -557,34 +558,35 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
     const observations: Record<string, any>[] = []
+    const birdList: Record<string, any>[] = await getBirdList()
 
     //fetch taxon details concurrently and initialize bird list observations
     await Promise.all(birdList.map(async (item: Record<string, any>) => {
-      let res = await getTaxonAutocomplete('taxon', item.key, null, lang, 1, null)
+      let res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
       let observation = {}
       let name: string = ''
       if (lang === 'fi') {
-        name = item.nameFI
+        name = item.vernacularName.fi
       } else if (lang === 'sv') {
-        name = item.nameSV
+        name = item.vernacularName.sv
       } else if (lang === 'en') {
-        name = item.nameEN
+        name = item.vernacularName.en
       }
       set(observation, 'id', `complete_list_${uuid.v4()}`)
       set(observation, 'identifications', [{ taxon: name }])
       set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
-      set(observation, 'unitFact', { autocompleteSelectedTaxonID: res.result[0].key })
+      set(observation, 'unitFact', { autocompleteSelectedTaxonID: res.result[0].id })
       observations.push(observation)
     }))
 
     //get list or bird names in the correct order
     const nameList = birdList.map((bird) => {
       if (lang === 'fi') {
-        return bird.nameFI
+        return bird.vernacularName.fi
       } else if (lang === 'sv') {
-        return bird.nameSV
+        return bird.vernacularName.sv
       } else if (lang === 'en') {
-        return bird.nameEN
+        return bird.vernacularName.en
       }
     })
 

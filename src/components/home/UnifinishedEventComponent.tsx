@@ -3,6 +3,7 @@ import { View, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
+import { forms } from '../../config/fields'
 import { parseDateForUI } from '../../helpers/dateHelper'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -32,7 +33,7 @@ const UnfinishedEventComponent = (props: Props) => {
   const observationCount = (): number => {
     if (!unfinishedEvent) {
       return 0
-    } else if (unfinishedEvent.formID !== 'MHL.117') {
+    } else if (unfinishedEvent.formID !== forms.birdAtlas) {
       return unfinishedEvent.gatherings[0].units.length
     } else {
       let sum = 0
@@ -61,22 +62,22 @@ const UnfinishedEventComponent = (props: Props) => {
         <Text style={Ts.homeScreenTitle}>
           {observationEventInterrupted ?
             t('interrupted observation event') :
-            t('event')
+            t('ongoing event')
           }
         </Text>
         <Text style={Ts.unfinishedEventTextClear}>{t('started at') + ': ' + displayDateTime()}</Text>
-        <Text style={Ts.unfinishedEventTextFaded}>{t('observationsInList') + ': ' + observationCount() + ' ' +
+        <Text style={Ts.unfinishedEventTextFaded}>{t('observations in list') + ': ' + observationCount() + ' ' +
           (unfinishedEvent.gatherings[0].units.length === 1 ? t('piece') : t('pieces'))}</Text>
         <View style={Cs.unfinishedEventButtonsContainer}>
           <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => props.onContinueObservationEvent()} title={t('continue')}
+            <ButtonComponent onPressFunction={() => props.onContinueObservationEvent()} title={t('to map')}
               height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'map-outline'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
             />
           </View>
           <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('cancelObservation')}
+            <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('cancel')}
               height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'stop'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}

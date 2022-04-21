@@ -32,7 +32,7 @@ import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import SaveButtonComponent from './SaveButtonComponent'
 import {
   JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, MHL117Fields, overrideMHL117Fields, MHL117FieldOrder, additionalMHL117Fields,
-  JX652Fields, overrideJX652Fields
+  JX652Fields, overrideJX652Fields, forms
 } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
@@ -175,12 +175,12 @@ const ObservationComponent = (props: Props) => {
       if (observationState?.rules) {
         initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollView)
         //trip form edit observation
-      } else if (schema.formID === 'JX.519') {
+      } else if (schema.formID === forms.tripForm) {
         initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
-      } else if (schema.formID === 'MHL.117') {
+      } else if (schema.formID === forms.birdAtlas) {
         const additionalMHL117 = observationState?.id.includes('complete_list') ? null : additionalMHL117Fields
         initForm(setForm, observationState, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollView)
-      } else if (schema.formID === 'JX.652') {
+      } else if (schema.formID === forms.fungiAtlas) {
         initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
       }
       //new observations
@@ -189,12 +189,12 @@ const ObservationComponent = (props: Props) => {
       if (props.rules) {
         initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollView)
         //trip form new observation
-      } else if (schema.formID === 'JX.519') {
+      } else if (schema.formID === forms.tripForm) {
         initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
-      } else if (schema.formID === 'MHL.117') {
+      } else if (schema.formID === forms.birdAtlas) {
         const additionalMHL117 = observationState?.id.includes('complete_list') ? null : additionalMHL117Fields
         initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollView)
-      } else if (schema.formID === 'JX.652') {
+      } else if (schema.formID === forms.fungiAtlas) {
         initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
       }
     }
@@ -436,7 +436,7 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <KeyboardAwareScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
-          {observationId && !(schema.formID === 'MHL.117' && observationState?.id.includes('complete_list')) ?
+          {observationId && !(schema.formID === forms.birdAtlas && observationState?.id.includes('complete_list')) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => editObservationLocation()}
                 title={t('edit location')} height={40} width={150} buttonStyle={Bs.editObservationButton}
@@ -446,7 +446,7 @@ const ObservationComponent = (props: Props) => {
             </View>
             : null
           }
-          {observationId && !(schema.formID === 'MHL.117' && !observationState?.atlasCode && !observationState?.count) ?
+          {observationId && !(schema.formID === forms.birdAtlas && !observationState?.atlasCode && !observationState?.count) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => showDelete()}
                 title={t('delete')} height={40} width={150} buttonStyle={Bs.editObservationButton}
