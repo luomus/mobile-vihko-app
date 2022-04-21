@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { View, Text } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ParamListBase, Route } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import {
+  rootState,
   DispatchType,
   setMessageState
 } from '../../stores'
@@ -29,6 +30,8 @@ const NavBarComponent = (props: Props) => {
 
   const dispatch: DispatchType = useDispatch()
 
+  const paused = useSelector((state: rootState) => state.paused)
+
   //const { isNew } = props.route.params
 
   const title = () => {
@@ -37,7 +40,7 @@ const NavBarComponent = (props: Props) => {
     } else if (props.route.name === 'home') {
       return t('mobile vihko')
     } else if (props.route.name === 'map') {
-      return t('gps notification body').substring(0, t('gps notification body').length - 1)
+      return paused ? t('path not tracked') : t('gps notification body').substring(0, t('gps notification body').length - 1)
     } else if (props.route.name === 'observation') {
       //return t(isNew ? 'add observation' : 'edit observation')
       return t('edit observation')
@@ -46,7 +49,7 @@ const NavBarComponent = (props: Props) => {
     } else if (props.route.name === 'overview') {
       return t('event overview')
     } else if (props.route.name === 'list') {
-      return t('gps notification body').substring(0, t('gps notification body').length - 1)
+      return paused ? t('path not tracked') : t('gps notification body').substring(0, t('gps notification body').length - 1)
     }
   }
 

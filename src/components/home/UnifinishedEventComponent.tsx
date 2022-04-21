@@ -70,7 +70,7 @@ const UnfinishedEventComponent = (props: Props) => {
           (unfinishedEvent.gatherings[0].units.length === 1 ? t('piece') : t('pieces'))}</Text>
         <View style={Cs.unfinishedEventButtonsContainer}>
           <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => props.onContinueObservationEvent()} title={t('continue')}
+            <ButtonComponent onPressFunction={() => props.onContinueObservationEvent()} title={t('to map')}
               height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'map-outline'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}

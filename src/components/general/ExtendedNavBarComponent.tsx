@@ -63,67 +63,82 @@ const ExtendedNavBarComponent = (props: Props) => {
   const pauseObserving = async () => {
     dispatch(setMessageState({
       type: 'dangerConf',
-      messageContent: t('stop observing'),
-      okLabel: 'Keskeytä',
-      cancelLabel: 'Älä keskeytä',
+      messageContent: t('pause tracking'),
+      okLabel: t('pause'),
+      cancelLabel: t('cancel'),
       onOk: async () => {
-        if (paused) {
-          const title: string = t('gps notification title')
-          const body: string = t('gps notification body')
+        const location: LocationType = await getCurrentLocation()
 
-          const path: PathType | undefined = lineStringsToPathDeconstructor(observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry)
+        dispatch(pause())
 
-          if (path) {
-            path.push([])
-            dispatch(setPath(path))
-          } else {
-            dispatch(setPath([[]]))
-          }
+        await dispatch(appendPath([location]))
 
-          try {
-            await watchBackgroundLocationAsync(title, body)
-          } catch (error) {
-            log.error({
-              location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
-              error: error,
-              user_id: credentials.user.id
-            })
-            return Promise.reject({
-              severity: 'low',
-              message: `${t('could not use gps so event was not started')} ${error.message}`
-            })
-          }
-
-          dispatch(unpause())
-        } else {
-          const location: LocationType = await getCurrentLocation()
-
-          dispatch(pause())
-
-          await dispatch(appendPath([location]))
-
-          if (path) {
-            await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
-          }
-
-          await stopBackgroundLocationAsync()
+        if (path) {
+          await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
         }
+
+        await stopBackgroundLocationAsync()
+      }
+    }))
+  }
+
+  const unpauseObserving = async () => {
+    dispatch(setMessageState({
+      type: 'dangerConf',
+      messageContent: t('unpause tracking'),
+      okLabel: t('continue'),
+      cancelLabel: t('cancel'),
+      onOk: async () => {
+        const title: string = t('gps notification title')
+        const body: string = t('gps notification body')
+
+        const path: PathType | undefined = lineStringsToPathDeconstructor(observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry)
+
+        if (path) {
+          path.push([])
+          dispatch(setPath(path))
+        } else {
+          dispatch(setPath([[]]))
+        }
+
+        try {
+          await watchBackgroundLocationAsync(title, body)
+        } catch (error) {
+          log.error({
+            location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
+            error: error,
+            user_id: credentials.user.id
+          })
+          return Promise.reject({
+            severity: 'low',
+            message: `${t('could not use gps so event was not started')} ${error.message}`
+          })
+        }
+
+        dispatch(unpause())
       }
     }))
   }
 
   return (
     <View style={Cs.stopObservingContainer}>
+      {/* <View style={{ flexDirection: 'row' }}>
+        <View style={{ paddingHorizontal: 2 }}> */}
       <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop')}
         height={30} width={100} buttonStyle={Bs.stopObservingButton}
         gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
         textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
       />
-      <ButtonComponent onPressFunction={async () => await pauseObserving()} title={'Keskeytä'}
-        height={30} width={100} buttonStyle={Bs.stopObservingButton}
-        gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
-      />
+      {/*</View>
+         <View style={{ paddingHorizontal: 2 }}>
+          <ButtonComponent onPressFunction={async () => { paused ? await unpauseObserving() : await pauseObserving() }}
+            title={ paused ? t('continue') : t('pause') }
+            height={30} width={100} buttonStyle={Bs.stopObservingButton}
+            gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+          />
+        </View>
+      </View> */}
       {schema.formID === forms.birdAtlas ?
         <View style={{ flexDirection: 'row' }}>
           <View style={{ paddingHorizontal: 2 }}>
