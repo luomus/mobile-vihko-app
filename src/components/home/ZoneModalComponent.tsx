@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
+import Checkbox from 'expo-checkbox'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +21,7 @@ import i18n from '../../languages/i18n'
 type Props = {
   modalVisibility: boolean,
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  onBeginObservationEvent: (zoneUsed: boolean) => void,
+  onBeginObservationEvent: (tracking: boolean) => void,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   showError: (error: string) => void
 }
@@ -32,6 +33,7 @@ const ZoneModalComponent = (props: Props) => {
   const dispatch: DispatchType = useDispatch()
   const [shown, setShown] = useState<boolean>(false)
   const [options, setOptions] = useState<Record<string, any>[]>([])
+  const [tracking, setTracking] = useState<boolean>(true)
 
   useEffect(() => {
     setOptions(createZonesList())
@@ -68,11 +70,7 @@ const ZoneModalComponent = (props: Props) => {
 
   const handleStartEvent = () => {
     props.setModalVisibility(false)
-    if (observationZone.currentZoneId === 'empty') {
-      props.onBeginObservationEvent(false)
-    } else {
-      props.onBeginObservationEvent(true)
-    }
+    props.onBeginObservationEvent(tracking)
   }
 
   return (
@@ -113,6 +111,15 @@ const ZoneModalComponent = (props: Props) => {
                 textStyle={Ts.buttonText} iconName={'refresh'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
+            <Checkbox
+              value={tracking}
+              onValueChange={setTracking}
+              style={{ padding: 5 }}
+              color={tracking ? Colors.primary5 : undefined}
+            />
+            <Text style={{ color: Colors.neutral7, padding: 5 }}>{t('path tracking')}</Text>
           </View>
           <View style={Cs.modalStartButtonContainer}>
             <View style={Cs.padding5Container}>

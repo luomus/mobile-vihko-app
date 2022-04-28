@@ -38,12 +38,12 @@ export const getCurrentLocation = async () => {
   }
 }
 
-export const watchLocationAsync = async (updateLocation: (location: LocationObject) => void, title: string, body: string) => {
+export const watchLocationAsync = async (updateLocation: (location: LocationObject) => void, title: string, body: string, tracking: boolean) => {
   let permission = await Location.requestForegroundPermissionsAsync()
 
   if (permission.status === 'granted') {
     await watchPositionAsync((location) => updateLocation(location))
-    await watchBackgroundLocationAsync(title, body)
+    if (tracking) await watchBackgroundLocationAsync(title, body)
   } else {
     throw new Error('Permission to access location denied.')
   }
@@ -74,10 +74,10 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
   }, 500)
 }
 
-export const stopLocationAsync = async (observationEventInterrupted: boolean) => {
+export const stopLocationAsync = async (observationEventInterrupted: boolean, paused: boolean) => {
   if (!observationEventInterrupted) {
     positionWatcher ? positionWatcher.remove() : null
-    await stopBackgroundLocationAsync()
+    if (!paused) await stopBackgroundLocationAsync()
   }
 }
 
@@ -85,10 +85,10 @@ export const stopBackgroundLocationAsync = async () => {
   await Location.stopLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
 }
 
-export const cleanupLocationAsync = async (observationEventInterrupted: boolean) => {
+export const cleanupLocationAsync = async (observationEventInterrupted: boolean, paused: boolean) => {
   const locationRunning = await Location.hasStartedLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
   if (locationRunning) {
-    await stopLocationAsync(observationEventInterrupted)
+    await stopLocationAsync(observationEventInterrupted, paused)
   }
 }
 
