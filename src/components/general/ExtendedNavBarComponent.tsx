@@ -50,11 +50,20 @@ const ExtendedNavBarComponent = (props: Props) => {
       messageContent: t('stop observing'),
       okLabel: t('stop'),
       cancelLabel: t('do not stop'),
-      onOk: () => {
+      onOk: async () => {
         dispatch(setObservationId({
           eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
           unitId: null
         }))
+
+        //save the path before stopping
+        const location: LocationType = await getCurrentLocation()
+        await dispatch(appendPath([location]))
+
+        if (path) {
+          await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+        }
+
         props.onPressFinishObservationEvent('map')
       }
     }))
@@ -122,23 +131,23 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   return (
     <View style={Cs.stopObservingContainer}>
-      {/* <View style={{ flexDirection: 'row' }}>
-        <View style={{ paddingHorizontal: 2 }}> */}
-      <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop')}
-        height={30} width={100} buttonStyle={Bs.stopObservingButton}
-        gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
-      />
-      {/*</View>
-         <View style={{ paddingHorizontal: 2 }}>
-          <ButtonComponent onPressFunction={async () => { paused ? await unpauseObserving() : await pauseObserving() }}
-            title={ paused ? t('continue') : t('pause') }
+      <View style={{ flexDirection: 'row' }}>
+        <View style={{ paddingHorizontal: 2 }}>
+          <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop')}
             height={30} width={100} buttonStyle={Bs.stopObservingButton}
             gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
           />
         </View>
-      </View> */}
+        <View style={{ paddingHorizontal: 2 }}>
+          <ButtonComponent onPressFunction={async () => { paused ? await unpauseObserving() : await pauseObserving() }}
+            title={paused ? t('continue') : t('pause')}
+            height={30} width={100} buttonStyle={Bs.stopObservingButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+          />
+        </View>
+      </View>
       {schema.formID === forms.birdAtlas ?
         <View style={{ flexDirection: 'row' }}>
           <View style={{ paddingHorizontal: 2 }}>

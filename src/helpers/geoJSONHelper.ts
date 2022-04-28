@@ -163,7 +163,6 @@ const pathPolygonConstructor = (coords: PathType, userLocation: number[] | undef
     })
   }
 
-
   const subCoordinates: Position[] = []
   coords.slice(-1)[0].forEach((point: PathPoint) => {
     if (!point[4]) {
@@ -176,14 +175,12 @@ const pathPolygonConstructor = (coords: PathType, userLocation: number[] | undef
 
   if (userLocation) subCoordinates.push(userLocation)
 
-  if (subCoordinates.length < 2) {
-    return
+  if (subCoordinates.length >= 2) {
+    coordinates.push([[
+      ...subCoordinates,
+      ...[...subCoordinates].reverse()
+    ]])
   }
-
-  coordinates.push([[
-    ...subCoordinates,
-    ...[...subCoordinates].reverse()
-  ]])
 
   const multiPolygon: MultiPolygon = {
     type: 'MultiPolygon',

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Linking, View, Text, TextInput, ActivityIndicator } from 'react-native'
+import Checkbox from 'expo-checkbox'
 import Modal from 'react-native-modal'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +21,7 @@ import { getGridName } from '../../services/atlasService'
 type Props = {
   modalVisibility: boolean,
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  onBeginObservationEvent: (zoneUsed: boolean) => void,
+  onBeginObservationEvent: (tracking: boolean) => void,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   showError: (error: string) => void
 }
@@ -35,6 +36,7 @@ const GridModalComponent = (props: Props) => {
   const [northing, setNorthing] = useState<string>('000')
   const [easting, setEasting] = useState<string>('000')
   const [loading, setLoading] = useState<boolean>(false)
+  const [tracking, setTracking] = useState<boolean>(true)
 
   useEffect(() => {
     const setLocation = async () => {
@@ -99,7 +101,7 @@ const GridModalComponent = (props: Props) => {
       }))
     }
 
-    props.onBeginObservationEvent(false)
+    props.onBeginObservationEvent(tracking)
   }
 
   return (
@@ -137,6 +139,15 @@ const GridModalComponent = (props: Props) => {
                   value={easting}
                   onChangeText={setEasting}
                 />
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
+                <Checkbox
+                  value={tracking}
+                  onValueChange={setTracking}
+                  style={{ padding: 5 }}
+                  color={tracking ? Colors.primary5 : undefined}
+                />
+                <Text style={{ color: Colors.neutral7, padding: 5 }}>{t('path tracking')}</Text>
               </View>
               <View style={Cs.modalStartButtonContainer}>
                 <View style={Cs.padding5Container}>

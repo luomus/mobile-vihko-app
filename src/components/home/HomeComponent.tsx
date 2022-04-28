@@ -7,6 +7,7 @@ import Ts from '../../styles/TextStyles'
 import {
   rootState,
   DispatchType,
+  LocationType,
   setCurrentObservationZone,
   setObserving,
   setObservationId,
@@ -16,7 +17,9 @@ import {
   beginObservationEvent,
   continueObservationEvent,
   logoutUser,
-  resetReducer
+  resetReducer,
+  appendPath,
+  eventPathUpdate
 } from '../../stores'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -30,6 +33,9 @@ import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
 import GridModalComponent from './GridModalComponent'
+import DefaultModalComponent from './DefaultModalComponent'
+import { getCurrentLocation } from '../../helpers/geolocationHelper'
+import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 
 type Props = {
   isFocused: () => boolean,
@@ -42,8 +48,10 @@ type Props = {
 const HomeComponent = (props: Props) => {
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
-  const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
+  const [tripModalVisibility, setTripModalVisibility] = useState<boolean>(false)
   const [gridModalVisibility, setGridModalVisibility] = useState<boolean>(false)
+  const [fungiModalVisibility, setFungiModalVisibility] = useState<boolean>(false)
+  const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const { t } = useTranslation()
   let logTimeout: NodeJS.Timeout | undefined
@@ -51,6 +59,7 @@ const HomeComponent = (props: Props) => {
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationZone = useSelector((state: rootState) => state.observationZone)
   const observing = useSelector((state: rootState) => state.observing)
+  const path = useSelector((state: rootState) => state.path)
   const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
@@ -139,7 +148,7 @@ const HomeComponent = (props: Props) => {
     return false
   })
 
-  const onBeginObservationEvent = async (formID: string, zoneUsed: boolean) => {
+  const onBeginObservationEvent = async (formID: string, tracking: boolean) => {
     setLoading(true)
 
     //save the used form before beginning an event
@@ -152,7 +161,7 @@ const HomeComponent = (props: Props) => {
     const body: string = t('gps notification body')
 
     try {
-      await dispatch(beginObservationEvent(props.onPressMap, zoneUsed, title, body))
+      await dispatch(beginObservationEvent(props.onPressMap, title, body, tracking))
     } catch (error) {
       if (error.severity === 'high') {
         dispatch(setMessageState({
@@ -175,12 +184,12 @@ const HomeComponent = (props: Props) => {
     setLoading(false)
   }
 
-  const onContinueObservationEvent = async () => {
+  const onContinueObservationEvent = async (tracking: boolean) => {
 
     const title: string = t('gps notification title')
     const body: string = t('gps notification body')
     try {
-      await dispatch(continueObservationEvent(props.onPressMap, title, body))
+      await dispatch(continueObservationEvent(props.onPressMap, title, body, tracking))
     } catch (error) {
       if (error.severity === 'high') {
         dispatch(setMessageState({
@@ -215,11 +224,20 @@ const HomeComponent = (props: Props) => {
       messageContent: t('stop observing'),
       okLabel: t('stop'),
       cancelLabel: t('do not stop'),
-      onOk: () => {
+      onOk: async () => {
         dispatch(setObservationId({
           eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
           unitId: null
         }))
+
+        //save the path before stopping
+        const location: LocationType = await getCurrentLocation()
+        await dispatch(appendPath([location]))
+
+        if (path) {
+          await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+        }
+
         props.onPressFinishObservationEvent('home')
       }
     }))
@@ -242,18 +260,6 @@ const HomeComponent = (props: Props) => {
     }
   }
 
-  const showLaunchConfirmation = (formID: string) => {
-    let formTranslation = t('trip form')
-    if (formID === forms.fungiAtlas) formTranslation = t('fungi atlas')
-    dispatch(setMessageState({
-      type: 'conf',
-      messageContent: t('do you want to start an event?') + ' ' + formTranslation + '?',
-      okLabel: t('start'),
-      cancelLabel: t('cancel'),
-      onOk: () => onBeginObservationEvent(formID, false)
-    }))
-  }
-
   const showError = (error: string) => {
     dispatch(setMessageState({
       type: 'err',
@@ -271,17 +277,18 @@ const HomeComponent = (props: Props) => {
         <ScrollView contentContainerStyle={Cs.contentAndVersionContainer}>
           <View style={Cs.homeContentContainer}>
             {observing ?
-              <UnfinishedEventComponent onContinueObservationEvent={onContinueObservationEvent} stopObserving={stopObserving} />
+              <UnfinishedEventComponent onContinueObservationEvent={(tracking: boolean) => { onContinueObservationEvent(tracking) }}
+                stopObserving={stopObserving} />
               :
               null
             }
             <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
-            <FormLauncherComponent formID={forms.tripForm} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
-            <FormLauncherComponent formID={forms.birdAtlas} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setGridModalVisibility} />
-            <FormLauncherComponent formID={forms.fungiAtlas} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
+            <FormLauncherComponent formID={forms.tripForm} setModalVisibility={setTripModalVisibility} />
+            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={setGridModalVisibility} />
+            <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={setFungiModalVisibility} />
             {
               credentials.permissions?.includes('HR.2951') ?
-                <FormLauncherComponent formID={forms.lolife} showLaunchConfirmation={showLaunchConfirmation} setModalVisibility={setZoneModalVisibility} />
+                <FormLauncherComponent formID={forms.lolife} setModalVisibility={setZoneModalVisibility} />
                 : null
             }
             <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
@@ -295,11 +302,15 @@ const HomeComponent = (props: Props) => {
             </Text>
           </View>
         </ScrollView>
-        <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
-          onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent(forms.lolife, zoneUsed) }}
-          setLoading={setLoading} showError={showError} />
+        <DefaultModalComponent modalVisibility={tripModalVisibility} setModalVisibility={setTripModalVisibility}
+          onBeginObservationEvent={(tracking: boolean) => { onBeginObservationEvent(forms.tripForm, tracking) }} formID={forms.tripForm} />
         <GridModalComponent modalVisibility={gridModalVisibility} setModalVisibility={setGridModalVisibility}
-          onBeginObservationEvent={(zoneUsed) => { onBeginObservationEvent(forms.birdAtlas, zoneUsed) }}
+          onBeginObservationEvent={(tracking: boolean) => { onBeginObservationEvent(forms.birdAtlas, tracking) }}
+          setLoading={setLoading} showError={showError} />
+        <DefaultModalComponent modalVisibility={fungiModalVisibility} setModalVisibility={setFungiModalVisibility}
+          onBeginObservationEvent={(tracking: boolean) => { onBeginObservationEvent(forms.fungiAtlas, tracking) }} formID={forms.fungiAtlas} />
+        <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
+          onBeginObservationEvent={(tracking: boolean) => { onBeginObservationEvent(forms.lolife, tracking) }}
           setLoading={setLoading} showError={showError} />
         <MessageComponent />
       </>
