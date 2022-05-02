@@ -356,15 +356,15 @@ const ContainerStyles = StyleSheet.create({
   //form components
   formContainer: {
     flex: 1,
-    flexDirection: 'column',
-    padding: 10
+    flexDirection: 'column'
   },
   formContentContainer: {
     justifyContent: 'space-between',
     marginBottom: Dimensions.get('screen').width * 0.125
   },
   formSaveButtonContainer: {
-    padding: 10,
+    borderTopWidth: 2,
+    borderColor: Colors.neutral6,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -475,8 +475,7 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'center'
   },
   saveButtonContainer: {
-    bottom: 0,
-    position: 'absolute'
+    bottom: 0
   }
 })
 

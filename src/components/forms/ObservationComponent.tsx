@@ -435,7 +435,7 @@ const ObservationComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.formContainer}>
-        <KeyboardAwareScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
+        <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollView}>
           {observationId && !(schema.formID === forms.birdAtlas && observationState?.id.includes('complete_list')) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => editObservationLocation()}

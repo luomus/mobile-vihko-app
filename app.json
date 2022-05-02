@@ -34,6 +34,9 @@
           "apiKey": ""
         }
       }
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#000000"
     }
   }
 }

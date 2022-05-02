@@ -210,7 +210,7 @@ const DocumentComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.formContainer}>
-        <KeyboardAwareScrollView ref={ scrollView }>
+        <KeyboardAwareScrollView style={Cs.padding10Container} ref={ scrollView }>
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               {form}
