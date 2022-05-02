@@ -42,9 +42,20 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
 
 //calls the helper function for fetching and processing locality details for finnish events
 export const fetchFinland = async (event: Record<string, any>, lang: string, credentials: CredentialsType) => {
-  const localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang, credentials)
+  let localityDetails
+  try {
+    localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang, credentials)
+  } catch (error) {
+    return Promise.reject({
+      severity: error.severity,
+      message: error.message
+    })
+  }
+
   //if it turns out that country wasn't finland, fetch foreign
-  if (localityDetails.status === 'fail') {
+  if (!localityDetails) {
+    return
+  } else if (localityDetails.status === 'fail') {
     await fetchForeign(event, lang, credentials)
   } else {
     //inserts the fetched values to the event
@@ -63,7 +74,15 @@ export const fetchForeign = async (event: Record<string, any>, lang: string, cre
 
   //foreign country details are fetched based on the center point of combined bounding box
   const center = centerOfBoundingBox(boundingBox)
-  const localityDetails = await defineLocalityForeign(center, lang, credentials)
+  let localityDetails
+  try {
+    localityDetails = await defineLocalityForeign(center, lang, credentials)
+  } catch (error) {
+    return Promise.reject({
+      severity: error.severity,
+      message: error.message
+    })
+  }
 
   //inserts the fetched values to the event
   event.gatherings[0].administrativeProvince = localityDetails.administrativeProvince

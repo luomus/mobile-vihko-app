@@ -167,6 +167,7 @@ const DocumentComponent = (props: Props) => {
           onOk: () => {
             setForm(undefined)
             props.onPressSubmit()
+            if (error.message.includes(t('locality failure'))) showMessage(t('post success'))
           }
         }))
       //log user out from the app if the token has expired

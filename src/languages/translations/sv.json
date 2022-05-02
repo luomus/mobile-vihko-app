@@ -92,7 +92,7 @@
   "loading": "Laddar...",
   "locality": "Ortnamn",
   "locality description": "Beskrivning av ort",
-  "locality failure": "Kunde inte definiera biogeografiska provinsen i servenrn.",
+  "locality failure": "Kunde inte definiera biogeografiska provinsen i servenrn. Den observationtransaktionen skickas utan ortsnamn.",
   "logged in": "Loggad in:",
   "login": "Logga in",
   "login text": "Logga in för att använda applikationen.",
