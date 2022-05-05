@@ -92,7 +92,7 @@
   "loading": "Ladataan...",
   "locality": "Paikannimet",
   "locality description": "Paikan kuvaus",
-  "locality failure": "Eliömaakunnan määrittely palvelimella epäonnistui.",
+  "locality failure": "Eliömaakunnan määrittely palvelimella epäonnistui. Havaintotapahtuma lähetetään palvelimelle ilman paikkanimeä.",
   "logged in": "Kirjautuneena:",
   "login": "Kirjaudu sisään",
   "login text": "Käyttääksesi sovellusta, sinun tulee kirjautua sisään.",

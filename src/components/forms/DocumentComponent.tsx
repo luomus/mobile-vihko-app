@@ -25,7 +25,9 @@ import ActivityComponent from '../general/ActivityComponent'
 import SaveButtonComponent from './SaveButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import { forms, observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
-  overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields, overrideJX652ObservationEventFields } from '../../config/fields'
+  overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields, overrideJX652ObservationEventFields,
+  MHL117ObservationEventFieldOrder
+} from '../../config/fields'
 
 type Props = {
   onPressSubmit: () => void,
@@ -97,11 +99,16 @@ const DocumentComponent = (props: Props) => {
       } else if (schema.formID === forms.tripForm) {
         initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, lang, scrollView)
       } else if (schema.formID === forms.birdAtlas) {
-        initForm(setForm, event, null, schemaWithoutUnits, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, MHL117ObservationEventFieldOrder, lang, scrollView)
       } else if (schema.formID === forms.fungiAtlas) {
         initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollView)
       }
     }
+  }
+
+  //as complete list field is the only possible validation error, scroll to top when validation error occurs
+  const onError = async () => {
+    scrollView?.current?.scrollToPosition(0, 0, false)
   }
 
   const onSubmit = async (data: { [key: string]: any }) => {
@@ -167,6 +174,7 @@ const DocumentComponent = (props: Props) => {
           onOk: () => {
             setForm(undefined)
             props.onPressSubmit()
+            if (error.message.includes(t('locality failure'))) showMessage(t('post success'))
           }
         }))
       //log user out from the app if the token has expired
@@ -209,7 +217,7 @@ const DocumentComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.formContainer}>
-        <KeyboardAwareScrollView ref={ scrollView }>
+        <KeyboardAwareScrollView style={Cs.padding10Container} ref={ scrollView }>
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               {form}
@@ -218,7 +226,7 @@ const DocumentComponent = (props: Props) => {
         </KeyboardAwareScrollView>
         <MessageComponent />
         <View style={Cs.formSaveButtonContainer}>
-          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit)} />
+          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
         </View>
         <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.onPressSubmit} sendObservationEvent={sendObservationEvent} />
         {props.children}

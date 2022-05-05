@@ -200,17 +200,17 @@ const ObservationComponent = (props: Props) => {
     }
   }
 
+  //as autocomplete field is the only possible validation error, scroll to top when validation error occurs
+  const onError = async () => {
+    scrollView?.current?.scrollToPosition(0, 0, false)
+  }
+
   const onSubmit = async (data: { [key: string]: any }) => {
     if (!observationState) {
       createNewObservation(data)
     } else {
       updateObservation(data)
     }
-  }
-
-  //as autocomplete field is the only possible validation error, scroll to top when validation error occurs
-  const onError = async () => {
-    scrollView?.current?.scrollToPosition(0, 0, false)
   }
 
   const createNewObservation = async (data: { [key: string]: any }) => {
@@ -435,7 +435,7 @@ const ObservationComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.formContainer}>
-        <KeyboardAwareScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
+        <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollView}>
           {observationId && !(schema.formID === forms.birdAtlas && observationState?.id.includes('complete_list')) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => editObservationLocation()}

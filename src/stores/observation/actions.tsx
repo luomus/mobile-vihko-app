@@ -154,13 +154,27 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       units = filtered
     }
 
+    let localityErrorMessage = ''
+
     //if there isn't an observation zone, use APIs to get a proper locality name
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
     if (event.formID !== forms.lolife) {
       if (overlapsFinland(event.gatherings[0].geometry)) {
-        await fetchFinland(event, lang, credentials)
+        try {
+          await fetchFinland(event, lang, credentials)
+        } catch (error) {
+          if (error.severity && error.severity === 'low') {
+            localityErrorMessage = error.message
+          }
+        }
       } else {
-        await fetchForeign(event, lang, credentials)
+        try {
+          await fetchForeign(event, lang, credentials)
+        } catch (error) {
+          if (error.severity && error.severity === 'low') {
+            localityErrorMessage = error.message
+          }
+        }
       }
     }
 
@@ -304,6 +318,14 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     } catch (error) {
       return Promise.reject(error)
     }
+
+    if (localityErrorMessage !== '') {
+      return Promise.reject({
+        severity: 'low',
+        message: localityErrorMessage
+      })
+    }
+
     return Promise.resolve()
   }
 }

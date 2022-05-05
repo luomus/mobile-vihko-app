@@ -230,6 +230,21 @@ export const MHL117FieldOrder = [
   'images'
 ]
 
+export const MHL117ObservationEventFieldOrder = [
+  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_weather',
+  'gatherings_0_notes',
+  'keywords',
+]
+
 export const JX652ObservationEventFields = [
   'gatheringEvent_legPublic',
   'secureLevel',

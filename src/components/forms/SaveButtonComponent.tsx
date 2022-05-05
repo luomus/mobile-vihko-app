@@ -11,7 +11,7 @@ type Props = {
 const SaveButtonComponent = (props: Props) => {
   return (
     <TouchableOpacity style={Cs.saveButtonContainer} onPress={props.onPress}>
-      <Icon reverse color={Colors.successButton1} name='done' type='material-icons' raised size={Dimensions.get('screen').width * 0.075}/>
+      <Icon reverse color={Colors.successButton1} name='done' type='material-icons' raised size={Dimensions.get('screen').width * 0.075} />
     </TouchableOpacity>
   )
 }
