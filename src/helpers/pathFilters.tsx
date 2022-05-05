@@ -11,7 +11,7 @@ const temporalOutlierFilter = (path: LineString | MultiLineString, dateEnd: stri
   if (path.type === 'LineString') {
     const newCoordinates: number[][] = []
     path.coordinates.forEach(point => {
-      if (point[2] === -1 || moment(point[2]).isBefore(moment(dateEnd, moment.HTML5_FMT.DATETIME_LOCAL))) {
+      if (point[2] === -1 || moment(point[2]).isBefore(moment(dateEnd, moment.HTML5_FMT.DATETIME_LOCAL).add(1, 'm'))) {
         newCoordinates.push(point.slice(0, 2))
       }
     })

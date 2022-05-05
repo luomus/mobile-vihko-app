@@ -363,8 +363,7 @@ const ContainerStyles = StyleSheet.create({
     marginBottom: Dimensions.get('screen').width * 0.125
   },
   formSaveButtonContainer: {
-    borderTopWidth: 2,
-    borderColor: Colors.neutral6,
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -475,7 +474,8 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'center'
   },
   saveButtonContainer: {
-    bottom: 0
+    bottom: 0,
+    position: 'absolute'
   }
 })
 
