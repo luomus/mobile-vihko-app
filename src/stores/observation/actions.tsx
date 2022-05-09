@@ -154,30 +154,6 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       units = filtered
     }
 
-    let localityErrorMessage = ''
-
-    //if there isn't an observation zone, use APIs to get a proper locality name
-    //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
-    if (event.formID !== forms.lolife) {
-      if (overlapsFinland(event.gatherings[0].geometry)) {
-        try {
-          await fetchFinland(event, lang, credentials)
-        } catch (error) {
-          if (error.severity && error.severity === 'low') {
-            localityErrorMessage = error.message
-          }
-        }
-      } else {
-        try {
-          await fetchForeign(event, lang, credentials)
-        } catch (error) {
-          if (error.severity && error.severity === 'low') {
-            localityErrorMessage = error.message
-          }
-        }
-      }
-    }
-
     //filter out linestring points which are after document endDate and remove timestamps from coordinates,
     //add bounding box or first recorded point as geometry to lolife forms if path gets completly removed
     if (event.gatherings[0].geometry?.type === 'LineString' || event.gatherings[0].geometry?.type === 'MultiLineString') {
@@ -218,6 +194,30 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
           delete event.gatherings[1].geometry
         } else {
           event.gatherings = [event.gatherings[0]]
+        }
+      }
+    }
+
+    let localityErrorMessage = ''
+
+    //if there isn't an observation zone, use APIs to get a proper locality name
+    //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
+    if (event.formID !== forms.lolife) {
+      if (overlapsFinland(event.gatherings[0].geometry)) {
+        try {
+          await fetchFinland(event, lang, credentials)
+        } catch (error) {
+          if (error.severity && error.severity === 'low') {
+            localityErrorMessage = error.message
+          }
+        }
+      } else {
+        try {
+          await fetchForeign(event, lang, credentials)
+        } catch (error) {
+          if (error.severity && error.severity === 'low') {
+            localityErrorMessage = error.message
+          }
         }
       }
     }
