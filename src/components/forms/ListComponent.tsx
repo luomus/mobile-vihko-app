@@ -30,7 +30,6 @@ const ListComponent = (props: Props) => {
   const [observed, setObserved] = useState<JSX.Element[] | undefined>(undefined)
   const [search, setSearch] = useState<string>('')
 
-  const scrollView = useRef<ScrollView | null>(null)
   const textInput = useRef<TextInput | null>(null)
 
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -66,7 +65,6 @@ const ListComponent = (props: Props) => {
             props.onPressObservation('list')
             textInput?.current?.clear()
             setSearch('')
-            scrollView.current?.scrollTo({ x: 0, y: 0, animated: false })
           }}
           key={observation.identifications[0].taxon}
           style={Cs.listElementContainer}
@@ -133,7 +131,7 @@ const ListComponent = (props: Props) => {
               iconStyle={Cs.listFilterIcon}
             />
           </View>
-          <ScrollView keyboardShouldPersistTaps='always' ref={scrollView}>
+          <ScrollView keyboardShouldPersistTaps='always'>
             {filteredObservations}
           </ScrollView>
         </View>
