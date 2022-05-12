@@ -281,6 +281,10 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
 
       delete event.id
       delete event.grid
+      if (event.namedPlaceID && event.namedPlaceID === 'empty') {
+        delete event.namedPlaceID
+        event.gatherings.pop()
+      }
 
     } catch (error) {
       return Promise.reject({
