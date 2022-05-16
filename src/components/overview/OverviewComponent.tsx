@@ -1,5 +1,5 @@
 import React, { useState, ReactChild, useEffect } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -62,7 +62,7 @@ const OverviewComponent = (props: Props) => {
     if (searchedEvent && searchedEvent.formID === forms.birdAtlas) {
       let filteredObservations: Record<string, any>[] = []
       searchedObservations.forEach((observation) => {
-        if (!(observation.id.includes('complete_list') && !observation.atlasCode  && !observation.count)) {
+        if (!(observation.id.includes('complete_list') && !observation.atlasCode && !observation.count)) {
           filteredObservations.push(observation)
         }
       })
@@ -189,17 +189,47 @@ const OverviewComponent = (props: Props) => {
     return false
   })
 
-  if (!event || !observations || !eventSchema) {
-    return (
-      <ActivityComponent text={t('loading')} />
-    )
-  } else if (sending) {
-    return (
-      <ActivityComponent text={t('sending')} />
-    )
-  } else {
-    return (
-      <ScrollView contentContainerStyle={Cs.overviewBaseContainer}>
+  const renderObservation = ({ item }) => (
+    <View key={item.id}>
+      <ObservationInfoComponent
+        event={event}
+        observation={item}
+        eventSchema={eventSchema}
+        editButton={
+          <ButtonComponent
+            onPressFunction={
+              () => {
+                const id = {
+                  eventId: event.id,
+                  unitId: item.id
+                }
+                dispatch(setObservationId(id))
+                props.onPressObservation('overview')
+              }}
+            title={t('edit')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+          />
+        }
+        removeButton={
+          <ButtonComponent
+            onPressFunction={
+              () => {
+                showDeleteObservation(event.id, item.id)
+              }}
+            title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          />
+        }
+      />
+      <View style={{ padding: 5 }}></View>
+    </View>
+  )
+
+  const ListHeader = () => {
+    if (event) {
+      return (
         <View style={Cs.overviewContentContainer}>
           <View style={Cs.overviewTextContainer}>
             {event.gatherings[0].locality ? <Text>{t('locality')}: {event.gatherings[0].locality}</Text> : null}
@@ -239,51 +269,34 @@ const OverviewComponent = (props: Props) => {
             </View>
           </View>
         </View>
-        <Text style={Ts.boldText}>{t('observations')}:</Text>
-        {observations.length !== 0 ?
-          observations.map(observation =>
-            <View key={observation.id}>
-              <ObservationInfoComponent
-                event={event}
-                observation={observation}
-                eventSchema={eventSchema}
-                editButton={
-                  <ButtonComponent
-                    onPressFunction={
-                      () => {
-                        const id = {
-                          eventId: event.id,
-                          unitId: observation.id
-                        }
-                        dispatch(setObservationId(id))
-                        props.onPressObservation('overview')
-                      }}
-                    title={t('edit')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                    textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-                  />
-                }
-                removeButton={
-                  <ButtonComponent
-                    onPressFunction={
-                      () => {
-                        showDeleteObservation(event.id, observation.id)
-                      }}
-                    title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-                    gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                    textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-                  />
-                }
-              />
-              <View style={{ padding: 5 }}></View>
-            </View>
-          )
-          :
-          <Text>{t('no observations')}</Text>}
+      )
+    } else {
+      return <></>
+    }
+  }
+
+  if (!event || !observations || !eventSchema) {
+    return (
+      <ActivityComponent text={t('loading')} />
+    )
+  } else if (sending) {
+    return (
+      <ActivityComponent text={t('sending')} />
+    )
+  } else {
+    return (
+      <>
+        <FlatList
+          data={observations}
+          renderItem={renderObservation}
+          ListHeaderComponent={ListHeader}
+          ListEmptyComponent={<Text>{t('no observations')}</Text>}
+          style={Cs.overviewBaseContainer}
+        />
         {props.children}
         <SendEventModalComponent modalVisibility={modalVisibility} onCancel={setModalVisibility} sendObservationEvent={sendObservationEvent} />
         <MessageComponent />
-      </ScrollView>
+      </>
     )
   }
 }

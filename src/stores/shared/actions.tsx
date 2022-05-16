@@ -289,7 +289,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
 
       } else {
 
-        if (event.namedPlaceID && event.namedPlaceID !== '') {
+        if (event.namedPlaceID && event.namedPlaceID !== 'empty' ) {
           event.gatherings[0].geometry = event.gatherings[1].geometry
         } else if (lineStringPath) {
           event.gatherings[0].geometry = lineStringPath

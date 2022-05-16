@@ -260,7 +260,8 @@ const ContainerStyles = StyleSheet.create({
   //overview component
   overviewBaseContainer: {
     padding: 10,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginBottom: 10
   },
   overviewContentContainer: {
     flexDirection: 'row',
