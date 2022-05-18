@@ -3,7 +3,7 @@ import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
 import { toggleCentered, setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
-import { eventPathUpdate, clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
+import { clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
   replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId } from '../../stores/observation/actions'
 import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation, pause } from '../position/actions'
 import { switchSchema } from '../schema/actions'
@@ -17,7 +17,7 @@ import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser
 import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
 import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
-import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
+import { createUnitBoundingBox, removeDuplicatesFromPath, setEventGeometry } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
@@ -248,69 +248,26 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { grid, firstLocation, observationEvent, path, paused, observationEventInterrupted, schema } = getState()
+    const { grid, firstLocation, observationEvent, path, paused, observationEventInterrupted } = getState()
 
     dispatch(setObservationEventInterrupted(false))
 
     let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
+    let lineStringPath = pathToLineStringConstructor(path)
+
+    //remove unused complete list observations from bird atlas events
+    if (event.formID === forms.birdAtlas) {
+      let filtered: Record<string, any>[] = []
+      event.gatherings[0].units.forEach((observation: Record<string, any>) => {
+        if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {
+          filtered.push(observation)
+        }
+      })
+      event.gatherings[0].units = filtered
+    }
 
     if (event) {
-      const setBoundingBoxGeometry = () => {
-        let geometry
-
-        if (event.gatherings[0].units.length >= 1 && schema.formID !== forms.birdAtlas) {
-          geometry = createUnitBoundingBox(event)
-        } else {
-          if (firstLocation) {
-            geometry = {
-              coordinates: [
-                firstLocation[1],
-                firstLocation[0]
-              ],
-              type: 'Point'
-            }
-          } else if (schema.formID === forms.birdAtlas) {
-            geometry = grid.geometry
-          }
-        }
-
-        if (geometry) {
-          event.gatherings[0].geometry = geometry
-        }
-      }
-
-      let lineStringPath = pathToLineStringConstructor(path)
-
-      //remove duplicates from path
-      lineStringPath = removeDuplicatesFromPath(lineStringPath)
-
-      if (lineStringPath && event.formID !== forms.lolife) {
-        event.gatherings[0].geometry = lineStringPath
-
-      } else {
-
-        if (event.namedPlaceID && event.namedPlaceID !== 'empty' ) {
-          event.gatherings[0].geometry = event.gatherings[1].geometry
-        } else if (lineStringPath) {
-          event.gatherings[0].geometry = lineStringPath
-        } else {
-          setBoundingBoxGeometry()
-        }
-
-        if (event.formID === forms.lolife) {
-
-          if (lineStringPath) {
-            if (event.gatherings[1]) {
-              event.gatherings[1].geometry = lineStringPath
-            } else {
-              event.gatherings.push({ geometry: lineStringPath })
-            }
-          } else {
-            event.gatherings = [event.gatherings[0]]
-          }
-
-        }
-      }
+      event = setEventGeometry(event, lineStringPath, firstLocation, grid)
 
       dispatch(clearPath())
       dispatch(clearLocation())
