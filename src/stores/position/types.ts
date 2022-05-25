@@ -30,6 +30,7 @@ export type GridType = {
   n: number,
   e: number,
   geometry: Polygon | undefined,
+  name: string,
   pauseGridCheck: boolean,
 } | null
 

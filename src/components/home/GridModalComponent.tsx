@@ -90,6 +90,7 @@ const GridModalComponent = (props: Props) => {
         n: n,
         e: e,
         geometry: YKJCoordinateIntoWGS84Grid(gridCoords[0], gridCoords[1]),
+        name: gridName,
         pauseGridCheck: false
       }))
     } else {
@@ -97,6 +98,7 @@ const GridModalComponent = (props: Props) => {
         n: n,
         e: e,
         geometry: YKJCoordinateIntoWGS84Grid(gridCoords[0], gridCoords[1]),
+        name: gridName,
         pauseGridCheck: true
       }))
     }

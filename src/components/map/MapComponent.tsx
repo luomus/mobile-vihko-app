@@ -34,6 +34,7 @@ import { mapUrl as urlTemplate, gridUrl as gridTemplate } from '../../config/url
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
+import AtlasModalComponent from './AtlasModalComponent'
 
 type Props = {
   onPressHome: () => void,
@@ -48,7 +49,8 @@ const MapComponent = (props: Props) => {
 
   const [mapLoaded, setMapLoaded] = useState(false)
   const [observationButtonsState, setObservationButtonsState] = useState('')
-  const [modalVisibility, setModalVisibility] = useState(false)
+  const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
+  const [mapModalVisibility, setMapModalVisibility] = useState(false)
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
 
   const centered = useSelector((state: rootState) => state.centered)
@@ -208,7 +210,7 @@ const MapComponent = (props: Props) => {
   }
 
   const showSubmitDelete = (eventId: string, unitId: string) => {
-    setModalVisibility(false)
+    setMapModalVisibility(false)
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation?'),
@@ -244,7 +246,7 @@ const MapComponent = (props: Props) => {
   //in onPressEditing will tell edit page that observation is being modified
   //from map, enabling return to correct screen when editing is finished
   const shiftToEditPage = (eventId: string, unitId: string) => {
-    setModalVisibility(false)
+    setMapModalVisibility(false)
     cancelObservation()
     dispatch(setObservationId({
       eventId,
@@ -254,18 +256,18 @@ const MapComponent = (props: Props) => {
   }
 
   //preparations for opening the edit observation modal
-  const openModal = (units: Array<Record<string, any>>, eventId: string): void => {
+  const openMapModal = (units: Array<Record<string, any>>, eventId: string): void => {
     dispatch(setObservationId({ eventId: eventId, unitId: null }))
     cancelObservation()
     stopCentering()
     //gets the list of nearby observations and saves them to a state, so they can be rendered in the modal
     setObservationOptions(units)
-    setModalVisibility(true)
+    setMapModalVisibility(true)
   }
 
   //preparations for closing the edit modal
-  const closeModal = (): void => {
-    setModalVisibility(false)
+  const closeMapModal = (): void => {
+    setMapModalVisibility(false)
     dispatch(clearObservationId())
   }
 
@@ -448,7 +450,7 @@ const MapComponent = (props: Props) => {
         </MapView>
         {schema.formID === forms.birdAtlas ?
           <View style={Cs.gridTitleContainer}>
-            <ButtonComponent onPressFunction={() => null} disabled={true} title={grid?.n + ':' + grid?.e}
+            <ButtonComponent onPressFunction={() => setAtlasModalVisibility(true)} title={grid?.n + ':' + grid?.e}
               height={35} width={100} buttonStyle={Bs.tileDetailsButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.boldButtonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
@@ -478,7 +480,7 @@ const MapComponent = (props: Props) => {
             confirmationButton={props.onPressObservation}
             cancelButton={cancelObservation}
             mode={observationButtonsState}
-            openModal={openModal}
+            openModal={openMapModal}
             shiftToEditPage={shiftToEditPage}
           />
           ||
@@ -487,16 +489,17 @@ const MapComponent = (props: Props) => {
             confirmationButton={changeObservationLocation}
             cancelButton={cancelEdit}
             mode={observationButtonsState}
-            openModal={openModal}
+            openModal={openMapModal}
             shiftToEditPage={shiftToEditPage}
           />
           : null
         }
         <MapModalComponent
           shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
-          cancelObservation={cancelObservation} isVisible={modalVisibility}
-          onBackButtonPress={closeModal} observationOptions={observationOptions} />
+          cancelObservation={cancelObservation} isVisible={mapModalVisibility}
+          onBackButtonPress={closeMapModal} observationOptions={observationOptions} />
         <MessageComponent />
+        <AtlasModalComponent isVisible={atlasModalVisibility} onBackButtonPress={() => { setAtlasModalVisibility(false) }} />
       </View>
     </>
   )
