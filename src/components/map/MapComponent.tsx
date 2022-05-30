@@ -65,7 +65,7 @@ const MapComponent = (props: Props) => {
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
   const schema = useSelector((state: rootState) => state.schema)
-  const paused = useSelector((state: rootState) => state.paused)
+  const tracking = useSelector((state: rootState) => state.tracking)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -294,10 +294,10 @@ const MapComponent = (props: Props) => {
   const pathOverlay = () => {
 
     if (path?.length >= 1 && position) {
-      const pathPolygon: MultiPolygon | undefined = pathPolygonConstructor(path, paused ? undefined : [
+      const pathPolygon: MultiPolygon | undefined = pathPolygonConstructor(path, tracking ? [
         position.coords.longitude,
         position.coords.latitude
-      ])
+      ] : undefined)
 
       // if (path[path.length - 1]?.length >= 1 && position) {
       //   const pathToDraw = path.map((subpath, index) => {

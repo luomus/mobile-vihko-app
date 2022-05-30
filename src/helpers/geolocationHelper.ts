@@ -74,10 +74,10 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
   }, 500)
 }
 
-export const stopLocationAsync = async (observationEventInterrupted: boolean, paused: boolean) => {
+export const stopLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
   if (!observationEventInterrupted) {
     positionWatcher ? positionWatcher.remove() : null
-    if (!paused) await stopBackgroundLocationAsync()
+    if (tracking) await stopBackgroundLocationAsync()
   }
 }
 
@@ -85,10 +85,10 @@ export const stopBackgroundLocationAsync = async () => {
   await Location.stopLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
 }
 
-export const cleanupLocationAsync = async (observationEventInterrupted: boolean, paused: boolean) => {
+export const cleanupLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
   const locationRunning = await Location.hasStartedLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
   if (locationRunning) {
-    await stopLocationAsync(observationEventInterrupted, paused)
+    await stopLocationAsync(observationEventInterrupted, tracking)
   }
 }
 

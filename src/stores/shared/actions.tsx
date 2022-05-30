@@ -5,7 +5,7 @@ import { LocationObject } from 'expo-location'
 import { toggleCentered, setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
 import { clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
   replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId } from '../../stores/observation/actions'
-import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation, pause } from '../position/actions'
+import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
 import { switchSchema } from '../schema/actions'
 import { mapActionTypes, ZoneType } from '../map/types'
 import { messageActionTypes } from '../message/types'
@@ -30,10 +30,10 @@ export const resetReducer = () => ({
   type: 'RESET_STORE'
 })
 
-export const beginObservationEvent = (onPressMap: () => void, title: string, body: string, tracking: boolean): ThunkAction<Promise<any>, any, void,
+export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEvent, observationZone, schema, grid } = getState()
+    const { centered, credentials, observationEvent, observationZone, schema, grid, tracking } = getState()
     const userId = credentials?.user?.id
 
     const region: ZoneType | undefined = observationZone.zones.find((region: Record<string, any>) => {
@@ -43,8 +43,6 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     if (!userId || (schema.formID === forms.lolife && !region)) {
       return
     }
-
-    if (!tracking) dispatch(pause())
 
     //check that person token isn't expired
     try {
@@ -162,12 +160,10 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
   }
 }
 
-export const continueObservationEvent = (onPressMap: () => void, title: string, body: string, tracking: boolean): ThunkAction<Promise<any>, any, void,
+export const continueObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEventInterrupted, observationEvent } = getState()
-
-    if (!tracking) dispatch(pause())
+    const { centered, credentials, observationEventInterrupted, observationEvent, tracking } = getState()
 
     //switch schema
     dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID))
@@ -251,7 +247,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { grid, firstLocation, observationEvent, path, paused, observationEventInterrupted } = getState()
+    const { grid, firstLocation, observationEvent, path, tracking, observationEventInterrupted } = getState()
 
     dispatch(setObservationEventInterrupted(false))
 
@@ -289,7 +285,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(clearGrid())
     dispatch(setFirstZoom('not'))
     dispatch(setFirstLocation([60.192059, 24.945831]))
-    await stopLocationAsync(observationEventInterrupted, paused)
+    await stopLocationAsync(observationEventInterrupted, tracking)
 
     return Promise.resolve()
   }

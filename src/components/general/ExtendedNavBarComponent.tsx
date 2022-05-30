@@ -12,9 +12,9 @@ import {
   eventPathUpdate,
   appendPath,
   LocationType,
-  pause,
-  unpause
+  setTracking
 } from '../../stores'
+import storageService from '../../services/storageService'
 import { forms } from '../../config/fields'
 import { getCurrentLocation, stopBackgroundLocationAsync, watchBackgroundLocationAsync } from '../../helpers/geolocationHelper'
 import { lineStringsToPathDeconstructor, pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
@@ -41,7 +41,7 @@ const ExtendedNavBarComponent = (props: Props) => {
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const path = useSelector((state: rootState) => state.path)
-  const paused = useSelector((state: rootState) => state.paused)
+  const tracking = useSelector((state: rootState) => state.tracking)
   const schema = useSelector((state: rootState) => state.schema)
 
   const stopObserving = () => {
@@ -78,7 +78,8 @@ const ExtendedNavBarComponent = (props: Props) => {
       onOk: async () => {
         const location: LocationType = await getCurrentLocation()
 
-        dispatch(pause())
+        dispatch(setTracking(false))
+        await storageService.save('tracking', false)
 
         await dispatch(appendPath([location]))
 
@@ -124,7 +125,8 @@ const ExtendedNavBarComponent = (props: Props) => {
           })
         }
 
-        dispatch(unpause())
+        dispatch(setTracking(true))
+        await storageService.save('tracking', true)
       }
     }))
   }
@@ -140,8 +142,8 @@ const ExtendedNavBarComponent = (props: Props) => {
           />
         </View>
         <View style={{ paddingHorizontal: 2 }}>
-          <ButtonComponent onPressFunction={async () => { paused ? await unpauseObserving() : await pauseObserving() }}
-            title={paused ? t('continue') : t('pause')}
+          <ButtonComponent onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
+            title={tracking ? t('pause') : t('continue')}
             height={30} width={100} buttonStyle={Bs.stopObservingButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}

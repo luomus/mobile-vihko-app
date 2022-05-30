@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { Linking, View, Text, TextInput, ActivityIndicator } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import Modal from 'react-native-modal'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
+  rootState,
   DispatchType,
-  setGrid
+  setGrid,
+  setTracking
 } from '../../stores'
+import storageService from '../../services/storageService'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -28,15 +31,18 @@ type Props = {
 
 const GridModalComponent = (props: Props) => {
 
-  const { t } = useTranslation()
-  const dispatch: DispatchType = useDispatch()
   const [ownLocation, setOwnLocation] = useState<[number, number]>([373, 777])
   const [gridName, setGridName] = useState<string>('')
   const [gridCoords, setGridCoords] = useState<[number, number]>([373, 777])
   const [northing, setNorthing] = useState<string>('000')
   const [easting, setEasting] = useState<string>('000')
   const [loading, setLoading] = useState<boolean>(false)
-  const [tracking, setTracking] = useState<boolean>(true)
+
+  const tracking = useSelector((state: rootState) => state.tracking)
+
+  const { t } = useTranslation()
+
+  const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
     const setLocation = async () => {
@@ -145,7 +151,10 @@ const GridModalComponent = (props: Props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
                 <Checkbox
                   value={tracking}
-                  onValueChange={setTracking}
+                  onValueChange={async (value: boolean) => {
+                    dispatch(setTracking(value))
+                    await storageService.save('tracking', value)
+                  }}
                   style={{ padding: 5 }}
                   color={tracking ? Colors.primary5 : undefined}
                 />

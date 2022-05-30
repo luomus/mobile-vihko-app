@@ -1,8 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, Text } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import Checkbox from 'expo-checkbox'
 import Modal from 'react-native-modal'
 import { useTranslation } from 'react-i18next'
+import {
+  rootState,
+  DispatchType,
+  setTracking
+} from '../../stores'
+import storageService from '../../services/storageService'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -19,9 +26,11 @@ type Props = {
 
 const DefaultModalComponent = (props: Props) => {
 
+  const tracking = useSelector((state: rootState) => state.tracking)
+
   const { t } = useTranslation()
 
-  const [tracking, setTracking] = useState<boolean>(true)
+  const dispatch: DispatchType = useDispatch()
 
   const handleStartEvent = () => {
     props.setModalVisibility(false)
@@ -48,7 +57,10 @@ const DefaultModalComponent = (props: Props) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
             <Checkbox
               value={tracking}
-              onValueChange={setTracking}
+              onValueChange={async (value: boolean) => {
+                dispatch(setTracking(value))
+                await storageService.save('tracking', value)
+              }}
               style={{ padding: 5 }}
               color={tracking ? Colors.primary5 : undefined}
             />
