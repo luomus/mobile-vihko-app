@@ -46,6 +46,12 @@ export const birdListUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/taxon'
 //grid name url
 export const gridNameUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/grid/'
 
+//version number url
+export const versionNumberUrl     = 'https://cdn.laji.fi/mobiilivihko/version.txt'
+
+//play store url
+export const playStoreUrl         = 'market://details?id=org.luomus.mobi'
+
 //laji.fi
 export const lajiHomepageEn       = 'https://laji.fi/en'
 export const lajiHomepageFi       = 'https://laji.fi'

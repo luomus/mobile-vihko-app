@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, BackHandler } from 'react-native'
+import { Linking, View, Text, ScrollView, BackHandler } from 'react-native'
 import ObservationEventListComponent from './EventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
@@ -26,10 +26,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import * as Clipboard from 'expo-clipboard'
 import { forms } from '../../config/fields'
+import { playStoreUrl } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
+import { getVersionNumber } from '../../services/versionService'
 import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
@@ -78,11 +80,26 @@ const HomeComponent = (props: Props) => {
     let formID = forms.tripForm
 
     const initSchema = async () => {
-      let formID = await storageService.fetch('formID')
+      const formID = await storageService.fetch('formID')
       await dispatch(switchSchema(formID))
     }
 
     initSchema()
+
+    const checkUpdates = async () => {
+      const versionNumber = await getVersionNumber()
+      if (versionNumber !== AppJSON.expo.version) {
+        dispatch(setMessageState({
+          type: 'conf',
+          messageContent: t('update app'),
+          cancelLabel: t('no'),
+          okLabel: t('yes'),
+          onOk: () => Linking.openURL(playStoreUrl)
+        }))
+      }
+    }
+
+    checkUpdates()
 
     if (isUnfinished) {
       dispatch(setObserving(true))
@@ -96,7 +113,7 @@ const HomeComponent = (props: Props) => {
         dispatch(setObservationEventInterrupted(true))
         if (formID === forms.lolife) { dispatch(setCurrentObservationZone(getLastZoneId())) }
 
-        let savedTrackingMode = await storageService.fetch('tracking')
+        const savedTrackingMode = await storageService.fetch('tracking')
 
         dispatch(setTracking(savedTrackingMode))
         await onContinueObservationEvent()
