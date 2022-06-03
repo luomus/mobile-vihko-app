@@ -1,4 +1,5 @@
 import { Point, LineString, Polygon, MultiLineString } from 'geojson'
+import moment from 'moment'
 import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../services/localityService'
 import { centerOfBoundingBox, createCombinedGeometry } from './geometryHelper'
 import { log } from '../helpers/logger'
@@ -32,7 +33,7 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
     if (unit.unitGathering.geometry.radius === '') {
       delete unit.unitGathering.geometry.radius
     }
-    if (unit.unitGathering.dateBegin === '') {
+    if (!unit.unitGathering.dateBegin || !(moment(unit.unitGathering.dateBegin).isValid())) {
       delete unit.unitGathering.dateBegin
     }
   })
