@@ -3,9 +3,9 @@ import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
 import { toggleCentered, setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
-import { eventPathUpdate, clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
+import { clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
   replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId } from '../../stores/observation/actions'
-import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation, pause } from '../position/actions'
+import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
 import { switchSchema } from '../schema/actions'
 import { mapActionTypes, ZoneType } from '../map/types'
 import { messageActionTypes } from '../message/types'
@@ -17,8 +17,9 @@ import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser
 import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
 import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
-import { createUnitBoundingBox, removeDuplicatesFromPath } from '../../helpers/geometryHelper'
+import { setEventGeometry } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
+import { getGridName } from '../../services/atlasService'
 import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
 import { clearGrid, setGrid } from '../position/actions'
@@ -29,10 +30,10 @@ export const resetReducer = () => ({
   type: 'RESET_STORE'
 })
 
-export const beginObservationEvent = (onPressMap: () => void, title: string, body: string, tracking: boolean): ThunkAction<Promise<any>, any, void,
+export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEvent, observationZone, schema, grid } = getState()
+    const { centered, credentials, observationEvent, observationZone, schema, grid, tracking } = getState()
     const userId = credentials?.user?.id
 
     const region: ZoneType | undefined = observationZone.zones.find((region: Record<string, any>) => {
@@ -42,8 +43,6 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     if (!userId || (schema.formID === forms.lolife && !region)) {
       return
     }
-
-    if (!tracking) dispatch(pause())
 
     //check that person token isn't expired
     try {
@@ -161,12 +160,10 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
   }
 }
 
-export const continueObservationEvent = (onPressMap: () => void, title: string, body: string, tracking: boolean): ThunkAction<Promise<any>, any, void,
+export const continueObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEventInterrupted, observationEvent } = getState()
-
-    if (!tracking) dispatch(pause())
+    const { centered, credentials, observationEventInterrupted, observationEvent, tracking } = getState()
 
     //switch schema
     dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID))
@@ -175,11 +172,13 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       const grid = observationEvent.events[observationEvent.events.length - 1].grid
       const location = await getCurrentLocation()
       const ykjCoords = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
+      const gridDetails = await getGridName(ykjCoords[1].toString().slice(0, 3) + ':' + ykjCoords[0].toString().slice(0, 3))
 
       dispatch(setGrid({
         n: grid.n,
         e: grid.e,
         geometry: YKJCoordinateIntoWGS84Grid(grid.n, grid.e),
+        name: gridDetails.name,
         pauseGridCheck: Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n
       }))
     }
@@ -248,69 +247,26 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { grid, firstLocation, observationEvent, path, paused, observationEventInterrupted, schema } = getState()
+    const { grid, firstLocation, observationEvent, path, tracking, observationEventInterrupted } = getState()
 
     dispatch(setObservationEventInterrupted(false))
 
     let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
+    let lineStringPath = pathToLineStringConstructor(path)
+
+    //remove unused complete list observations from bird atlas events
+    if (event.formID === forms.birdAtlas) {
+      let filtered: Record<string, any>[] = []
+      event.gatherings[0].units.forEach((observation: Record<string, any>) => {
+        if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {
+          filtered.push(observation)
+        }
+      })
+      event.gatherings[0].units = filtered
+    }
 
     if (event) {
-      const setBoundingBoxGeometry = () => {
-        let geometry
-
-        if (event.gatherings[0].units.length >= 1 && schema.formID !== forms.birdAtlas) {
-          geometry = createUnitBoundingBox(event)
-        } else {
-          if (firstLocation) {
-            geometry = {
-              coordinates: [
-                firstLocation[1],
-                firstLocation[0]
-              ],
-              type: 'Point'
-            }
-          } else if (schema.formID === forms.birdAtlas) {
-            geometry = grid.geometry
-          }
-        }
-
-        if (geometry) {
-          event.gatherings[0].geometry = geometry
-        }
-      }
-
-      let lineStringPath = pathToLineStringConstructor(path)
-
-      //remove duplicates from path
-      lineStringPath = removeDuplicatesFromPath(lineStringPath)
-
-      if (lineStringPath && event.formID !== forms.lolife) {
-        event.gatherings[0].geometry = lineStringPath
-
-      } else {
-
-        if (event.namedPlaceID && event.namedPlaceID !== 'empty' ) {
-          event.gatherings[0].geometry = event.gatherings[1].geometry
-        } else if (lineStringPath) {
-          event.gatherings[0].geometry = lineStringPath
-        } else {
-          setBoundingBoxGeometry()
-        }
-
-        if (event.formID === forms.lolife) {
-
-          if (lineStringPath) {
-            if (event.gatherings[1]) {
-              event.gatherings[1].geometry = lineStringPath
-            } else {
-              event.gatherings.push({ geometry: lineStringPath })
-            }
-          } else {
-            event.gatherings = [event.gatherings[0]]
-          }
-
-        }
-      }
+      event = setEventGeometry(event, lineStringPath, firstLocation, grid)
 
       dispatch(clearPath())
       dispatch(clearLocation())
@@ -329,7 +285,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(clearGrid())
     dispatch(setFirstZoom('not'))
     dispatch(setFirstLocation([60.192059, 24.945831]))
-    await stopLocationAsync(observationEventInterrupted, paused)
+    await stopLocationAsync(observationEventInterrupted, tracking)
 
     return Promise.resolve()
   }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, BackHandler } from 'react-native'
+import { Linking, View, Text, ScrollView, BackHandler } from 'react-native'
 import ObservationEventListComponent from './EventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
@@ -19,16 +19,19 @@ import {
   logoutUser,
   resetReducer,
   appendPath,
-  eventPathUpdate
+  eventPathUpdate,
+  setTracking
 } from '../../stores'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import * as Clipboard from 'expo-clipboard'
 import { forms } from '../../config/fields'
+import { playStoreUrl } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
+import { getVersionNumber } from '../../services/versionService'
 import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
@@ -65,6 +68,8 @@ const HomeComponent = (props: Props) => {
   const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
+    setLoading(true)
+
     const length = observationEvent.events.length
     let isUnfinished: boolean = false
 
@@ -75,17 +80,48 @@ const HomeComponent = (props: Props) => {
     let formID = forms.tripForm
 
     const initSchema = async () => {
-      let formID = await storageService.fetch('formID')
+      const formID = await storageService.fetch('formID')
       await dispatch(switchSchema(formID))
     }
 
     initSchema()
+
+    const checkUpdates = async () => {
+      const versionNumber = await getVersionNumber()
+      if (versionNumber !== AppJSON.expo.version) {
+        dispatch(setMessageState({
+          type: 'conf',
+          messageContent: t('update app'),
+          cancelLabel: t('no'),
+          okLabel: t('yes'),
+          onOk: () => Linking.openURL(playStoreUrl)
+        }))
+      }
+    }
+
+    checkUpdates()
 
     if (isUnfinished) {
       dispatch(setObserving(true))
       dispatch(setObservationEventInterrupted(true))
       if (formID === forms.lolife) { dispatch(setCurrentObservationZone(getLastZoneId())) }
     }
+
+    const initTracking = async () => {
+      if (isUnfinished) {
+        dispatch(setObserving(true))
+        dispatch(setObservationEventInterrupted(true))
+        if (formID === forms.lolife) { dispatch(setCurrentObservationZone(getLastZoneId())) }
+
+        const savedTrackingMode = await storageService.fetch('tracking')
+
+        dispatch(setTracking(savedTrackingMode))
+        await onContinueObservationEvent()
+      }
+    }
+
+    initTracking()
+    if (!isUnfinished) setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -148,7 +184,7 @@ const HomeComponent = (props: Props) => {
     return false
   })
 
-  const onBeginObservationEvent = async (formID: string, tracking: boolean) => {
+  const onBeginObservationEvent = async (formID: string) => {
     setLoading(true)
 
     //save the used form before beginning an event
@@ -161,7 +197,7 @@ const HomeComponent = (props: Props) => {
     const body: string = t('gps notification body')
 
     try {
-      await dispatch(beginObservationEvent(props.onPressMap, title, body, tracking))
+      await dispatch(beginObservationEvent(props.onPressMap, title, body))
     } catch (error) {
       if (error.severity === 'high') {
         dispatch(setMessageState({
@@ -184,12 +220,14 @@ const HomeComponent = (props: Props) => {
     setLoading(false)
   }
 
-  const onContinueObservationEvent = async (tracking: boolean) => {
+  const onContinueObservationEvent = async () => {
+    setLoading(true)
 
     const title: string = t('gps notification title')
     const body: string = t('gps notification body')
+
     try {
-      await dispatch(continueObservationEvent(props.onPressMap, title, body, tracking))
+      await dispatch(continueObservationEvent(props.onPressMap, title, body))
     } catch (error) {
       if (error.severity === 'high') {
         dispatch(setMessageState({
@@ -208,6 +246,8 @@ const HomeComponent = (props: Props) => {
         }))
       }
     }
+
+    setLoading(false)
   }
 
   const getLastZoneId = () => {
@@ -303,14 +343,14 @@ const HomeComponent = (props: Props) => {
           </View>
         </ScrollView>
         <DefaultModalComponent modalVisibility={tripModalVisibility} setModalVisibility={setTripModalVisibility}
-          onBeginObservationEvent={(tracking: boolean) => { onBeginObservationEvent(forms.tripForm, tracking) }} formID={forms.tripForm} />
+          onBeginObservationEvent={() => { onBeginObservationEvent(forms.tripForm) }} formID={forms.tripForm} />
         <GridModalComponent modalVisibility={gridModalVisibility} setModalVisibility={setGridModalVisibility}
-          onBeginObservationEvent={(tracking: boolean) => { onBeginObservationEvent(forms.birdAtlas, tracking) }}
+          onBeginObservationEvent={() => { onBeginObservationEvent(forms.birdAtlas) }}
           setLoading={setLoading} showError={showError} />
         <DefaultModalComponent modalVisibility={fungiModalVisibility} setModalVisibility={setFungiModalVisibility}
-          onBeginObservationEvent={(tracking: boolean) => { onBeginObservationEvent(forms.fungiAtlas, tracking) }} formID={forms.fungiAtlas} />
+          onBeginObservationEvent={() => { onBeginObservationEvent(forms.fungiAtlas) }} formID={forms.fungiAtlas} />
         <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
-          onBeginObservationEvent={(tracking: boolean) => { onBeginObservationEvent(forms.lolife, tracking) }}
+          onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={setLoading} showError={showError} />
         <MessageComponent />
       </>

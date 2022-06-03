@@ -15,8 +15,7 @@ export const CLEAR_GRID = 'CLEAR_GRID'
 export const SET_COORDS = 'SET_COORDS'
 export const SET_PAUSE = 'SET_PAUSE'
 
-export const PAUSE = 'PAUSE'
-export const UNPAUSE = 'UNPAUSE'
+export const SET_TRACKING = 'SET_TRACKING'
 
 export type PathPoint = [
   number,
@@ -30,6 +29,7 @@ export type GridType = {
   n: number,
   e: number,
   geometry: Polygon | undefined,
+  name: string,
   pauseGridCheck: boolean,
 } | null
 
@@ -83,12 +83,9 @@ interface setGridPause {
   payload: boolean
 }
 
-interface pause {
-  type: typeof PAUSE
-}
-
-interface unpause {
-  type: typeof UNPAUSE
+interface setTracking {
+  type: typeof SET_TRACKING,
+  payload: boolean
 }
 
 export type locationActionTypes =
@@ -102,5 +99,4 @@ export type locationActionTypes =
   clearGrid |
   setGridCoords |
   setGridPause |
-  pause |
-  unpause
+  setTracking

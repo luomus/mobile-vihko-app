@@ -143,17 +143,6 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       event = loopThroughUnits(event)
     }
 
-    //remove unused complete list observations from bird atlas events
-    if (event.formID === forms.birdAtlas) {
-      let filtered: Record<string, any>[] = []
-      units.forEach((observation: Record<string, any>) => {
-        if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {
-          filtered.push(observation)
-        }
-      })
-      units = filtered
-    }
-
     //filter out linestring points which are after document endDate and remove timestamps from coordinates,
     //add bounding box or first recorded point as geometry to lolife forms if path gets completly removed
     if (event.gatherings[0].geometry?.type === 'LineString' || event.gatherings[0].geometry?.type === 'MultiLineString') {

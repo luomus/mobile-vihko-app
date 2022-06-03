@@ -30,7 +30,7 @@ const NavBarComponent = (props: Props) => {
 
   const dispatch: DispatchType = useDispatch()
 
-  const paused = useSelector((state: rootState) => state.paused)
+  const tracking = useSelector((state: rootState) => state.tracking)
 
   //const { isNew } = props.route.params
 
@@ -40,7 +40,7 @@ const NavBarComponent = (props: Props) => {
     } else if (props.route.name === 'home') {
       return t('mobile vihko')
     } else if (props.route.name === 'map') {
-      return paused ? t('path not tracked') : t('gps notification body').substring(0, t('gps notification body').length - 1)
+      return tracking ? t('gps notification body').substring(0, t('gps notification body').length - 1) : t('path not tracked')
     } else if (props.route.name === 'observation') {
       //return t(isNew ? 'add observation' : 'edit observation')
       return t('edit observation')
@@ -49,7 +49,7 @@ const NavBarComponent = (props: Props) => {
     } else if (props.route.name === 'overview') {
       return t('event overview')
     } else if (props.route.name === 'list') {
-      return paused ? t('path not tracked') : t('gps notification body').substring(0, t('gps notification body').length - 1)
+      return tracking ? t('gps notification body').substring(0, t('gps notification body').length - 1) : t('path not tracked')
     }
   }
 

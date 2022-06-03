@@ -51,12 +51,11 @@ import {
   setPath,
   clearPath,
   setFirstLocation,
-  pause,
-  unpause,
   setGrid,
   clearGrid,
   setGridCoords,
   setGridPause,
+  setTracking,
 } from './position/actions'
 import {
   setSchema,
@@ -100,8 +99,8 @@ import {
   firstLocationReducer,
   pathReducer,
   positionReducer,
-  pausedReducer,
-  gridReducer
+  gridReducer,
+  trackingReducer
 } from './position/reducers'
 import { schemaReducer } from './schema/reducers'
 import { credentialsReducer } from './user/reducers'
@@ -159,10 +158,10 @@ interface rootState {
   observationZone: ObservationZonesType,
   observing: boolean,
   path: PathType,
-  paused: boolean,
   position: LocationType,
   region: Region,
-  schema: SchemaType
+  schema: SchemaType,
+  tracking: boolean
 }
 
 const appReducer = combineReducers({
@@ -181,10 +180,10 @@ const appReducer = combineReducers({
   observationZone: observationZoneReducer,
   observing: observingReducer,
   path: pathReducer,
-  paused: pausedReducer,
   position: positionReducer,
   region: regionReducer,
-  schema: schemaReducer
+  schema: schemaReducer,
+  tracking: trackingReducer
 })
 
 const rootReducer = (state: any, action: any) => {
@@ -242,12 +241,11 @@ export {
   setPath,
   clearPath,
   setFirstLocation,
-  pause,
-  unpause,
   setGrid,
   clearGrid,
   setGridCoords,
   setGridPause,
+  setTracking,
   setSchema,
   initSchema,
   switchSchema,

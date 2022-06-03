@@ -242,7 +242,7 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    padding: 10,
+    padding: 20,
     borderRadius: 10,
     backgroundColor: Colors.neutral3,
     width: '90%',

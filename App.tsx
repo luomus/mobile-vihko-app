@@ -74,8 +74,8 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations } })
 
 const App = () => {
   useEffect(() => {
-    const { observationEventInterrupted, paused } = store.getState()
-    cleanupLocationAsync(observationEventInterrupted, paused)
+    const { observationEventInterrupted, tracking } = store.getState()
+    cleanupLocationAsync(observationEventInterrupted, tracking)
     store.dispatch(resetReducer())
   }, [])
 

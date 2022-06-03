@@ -8,8 +8,10 @@ import {
   rootState,
   DispatchType,
   setCurrentObservationZone,
-  initObservationZones
+  initObservationZones,
+  setTracking
 } from '../../stores'
+import storageService from '../../services/storageService'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -28,12 +30,15 @@ type Props = {
 
 const ZoneModalComponent = (props: Props) => {
 
-  const { t } = useTranslation()
-  const observationZone = useSelector((state: rootState) => state.observationZone)
-  const dispatch: DispatchType = useDispatch()
   const [shown, setShown] = useState<boolean>(false)
   const [options, setOptions] = useState<Record<string, any>[]>([])
-  const [tracking, setTracking] = useState<boolean>(true)
+
+  const observationZone = useSelector((state: rootState) => state.observationZone)
+  const tracking = useSelector((state: rootState) => state.tracking)
+
+  const { t } = useTranslation()
+
+  const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
     setOptions(createZonesList())
@@ -115,7 +120,10 @@ const ZoneModalComponent = (props: Props) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
             <Checkbox
               value={tracking}
-              onValueChange={setTracking}
+              onValueChange={async (value: boolean) => {
+                dispatch(setTracking(value))
+                await storageService.save('tracking', value)
+              }}
               style={{ padding: 5 }}
               color={tracking ? Colors.primary5 : undefined}
             />

@@ -1,5 +1,46 @@
 import { Polygon, Point, LineString, MultiLineString } from 'geojson'
 import { FINLAND_BOUNDS } from '../config/location'
+import { forms } from '../config/fields'
+
+export const setEventGeometry = (event: Record<string, any>, lineStringPath: LineString | MultiLineString | undefined,
+  firstLocation: any, grid: any) => {
+
+  const eventHasNamedPlace = event.namedPlaceID && event.namedPlaceID !== 'empty'
+  const eventHasPath = lineStringPath !== undefined
+  const eventHasUnits = event.gatherings[0].units.length >= 1
+  const eventHasGrid = event.formID === forms.birdAtlas
+  const eventHasFirstLocation = firstLocation
+
+  if (eventHasNamedPlace) {
+    event.gatherings[0].geometry = event.gatherings[1].geometry
+  } else if (eventHasPath) {
+    event.gatherings[0].geometry = lineStringPath
+  } else if (eventHasUnits) {
+    event.gatherings[0].geometry = createUnitBoundingBox(event)
+  } else if (eventHasGrid) {
+    event.gatherings[0].geometry = grid.geometry
+  } else if (eventHasFirstLocation) {
+    event.gatherings[0].geometry = {
+      coordinates: [
+        firstLocation[1],
+        firstLocation[0]
+      ],
+      type: 'Point'
+    }
+  }
+
+  if (event.formID === forms.lolife) {
+    if (eventHasPath) {
+      if (event.gatherings[1]) {
+        event.gatherings[1].geometry = lineStringPath
+      } else {
+        event.gatherings.push({ geometry: lineStringPath })
+      }
+    }
+  }
+
+  return event
+}
 
 //makes preparations for creating a combined bounding box (from path and units) which is used for determining
 //center of bounding box for Google Geocoding API
@@ -142,7 +183,7 @@ export const overlapsFinland = (geometry: MultiLineString | LineString | Polygon
   //helper function that checks whether a single point is inside finnish boundaries
   const pointOverlapsFinland = (coordinates: Array<number>) => {
     if ((coordinates[0] < FINLAND_BOUNDS[0][0] && coordinates[0] > FINLAND_BOUNDS[1][0]) &&
-    (coordinates[1] < FINLAND_BOUNDS[0][1] && coordinates[1] > FINLAND_BOUNDS[1][1])) {
+      (coordinates[1] < FINLAND_BOUNDS[0][1] && coordinates[1] > FINLAND_BOUNDS[1][1])) {
       return true
     }
     return false

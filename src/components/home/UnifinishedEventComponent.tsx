@@ -1,7 +1,6 @@
 import React, { useState, useEffect, } from 'react'
 import { View, Text } from 'react-native'
 import { useSelector } from 'react-redux'
-import Checkbox from 'expo-checkbox'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import { forms } from '../../config/fields'
@@ -21,10 +20,10 @@ type Props = {
 const UnfinishedEventComponent = (props: Props) => {
 
   const [unfinishedEvent, setUnfinishedEvent] = useState<Record<string, any> | null>(null)
-  const [tracking, setTracking] = useState<boolean>(true)
 
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationEventInterrupted = useSelector((state: rootState) => state.observationEventInterrupted)
+  const tracking = useSelector((state: rootState) => state.tracking)
 
   const { t } = useTranslation()
 
@@ -70,15 +69,6 @@ const UnfinishedEventComponent = (props: Props) => {
         <Text style={Ts.unfinishedEventTextClear}>{t('started at') + ': ' + displayDateTime()}</Text>
         <Text style={Ts.unfinishedEventTextFaded}>{t('observations in list') + ': ' + observationCount() + ' ' +
           (unfinishedEvent.gatherings[0].units.length === 1 ? t('piece') : t('pieces'))}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
-          <Checkbox
-            value={tracking}
-            onValueChange={setTracking}
-            style={{ padding: 5 }}
-            color={tracking ? Colors.primary5 : undefined}
-          />
-          <Text style={{ color: Colors.neutral7, padding: 5 }}>{t('path tracking')}</Text>
-        </View>
         <View style={Cs.unfinishedEventButtonsContainer}>
           <View style={Cs.padding5Container}>
             <ButtonComponent onPressFunction={() => props.onContinueObservationEvent(tracking)} title={t('to map')}
