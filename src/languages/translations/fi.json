@@ -70,6 +70,8 @@
   "gps notification title": "Paikannus",
   "grid description": "Mobiilivihko varoittaa jos olet ylittämässä tämän ruudun reunoja. Tällöin havaintojen kirjaaminen kannattaa yleensä lopettaa ja kirjata uuden ruudun havainnot erikseen.\n\nHavaintoluetteloon merkitsemäsi havainnot tallentuvat sille ruudulle, jolla kulkemasi reitin keskipiste sijaitsee. Kartalle merkitsemäsi havainnot tallentuvat merkitsemääsi paikkaan.",
   "grid selection instructions": "Jos aiot retkeillä jollakin muulla ruudulla, vaihda ruudun numero tähän. Mobiilivihko varoittaa, jos olet ylittämässä valitsemasi ruudun rajoja.\n\nJos aiot retkeillä usealla ruudulla, kirjaa kunkin ruudun havainnot erillisinä retkinä.",
+  "grid warning 1": "Olet lähellä atlasruudun reunaa tai kulkenut rajan yli. Muista että kaikkien laijluetteloon merkittyjen havaintojen tulee olla ruudulta",
+  "grid warning 2": "Kartalle voi merkitä havaintoja mihin ruutuun tahansa.",
   "image attachment failure": "Virhe kuvan lisäämisessä",
   "image post failure": "Tallennus epäonnistui, kuvien tallennus epäonnistui,",
   "images": "Kuvat",

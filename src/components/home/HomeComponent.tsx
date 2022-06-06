@@ -49,6 +49,7 @@ type Props = {
 }
 
 const HomeComponent = (props: Props) => {
+
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
   const [tripModalVisibility, setTripModalVisibility] = useState<boolean>(false)
@@ -56,8 +57,7 @@ const HomeComponent = (props: Props) => {
   const [fungiModalVisibility, setFungiModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const { t } = useTranslation()
-  let logTimeout: NodeJS.Timeout | undefined
+
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationZone = useSelector((state: rootState) => state.observationZone)
@@ -66,6 +66,10 @@ const HomeComponent = (props: Props) => {
   const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
+
+  const { t } = useTranslation()
+
+  let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
     setLoading(true)

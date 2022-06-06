@@ -70,6 +70,8 @@
   "gps notification title": "Lokalisering",
   "grid description": "Mobil Skrivbok varnar dig om du korsar kanterna på denna ruta. I det här fallet är det vanligtvis en bra idé att sluta registrera observationer och registrera observationerna i en ny ruta separat.\n\nObservationerna du markerar i listan sparas på ruta där mitten av rutten du reser finns. Observationer du markerar på kartan sparas på den ruta du markerat.",
   "grid selection instructions": "Om du planerar att observera i en annan ruta, ändra rutnumret här. Mobil Skrivbok varnar dig ifall du överskrider gränserna för den ruta du har valt.\n\nOm du planerar att observera i flera rutor, registrera resultaten på varje ruta som separata resor.",
+  "grid warning 1": "Du är nära kanten av Atlasruta eller har passerat gränsen. Kom ihåg att alla observationer markerad i listan måste finnas på ruta",
+  "grid warning 2": "Du kan markera observationer på kartan i valfri ruta.",
   "image attachment failure": "Fel vid tilläggning av bild",
   "image post failure": "Sparandet misslyckades, bildernas sparande misslyckades,",
   "images": "Bilderna",
