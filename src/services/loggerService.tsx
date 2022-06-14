@@ -4,12 +4,14 @@ import { accessToken } from '../config/keys'
 import { brand, modelName, osName, osVersion } from 'expo-device'
 import AppJSON from '../../app.json'
 
-export const sendError = async (error: string, user_id: string) => {
+export const sendError = async (rawMsg: {}) => {
 
   const errorData = {
-    message: error,
+    message: rawMsg.error ? rawMsg.error.toString() : 'Unknown error.',
     meta: {
-      user_id: user_id,
+      data: rawMsg.data ? rawMsg.data : 'No data.',
+      location: rawMsg.location ? rawMsg.location : 'No location.',
+      user_id: rawMsg.user_id ? rawMsg.user_id : 'No user id.',
       device_info: brand + ' ' + modelName + ' / ' + osName + ' ' + osVersion,
       version: AppJSON.expo.version
     }
