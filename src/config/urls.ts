@@ -46,6 +46,12 @@ export const birdListUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/taxon'
 //grid name url
 export const gridNameUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/grid/'
 
+//grid preview url
+export const gridPreviewUrl       = 'https://laji.fi/map?layers=maastokartta,atlasGrid&gridsquare='
+
+//result service url
+export const resultServiceUrl     = 'https://tulokset.lintuatlas.fi/grid/'
+
 //version number url
 export const versionNumberUrl     = 'https://cdn.laji.fi/mobiilivihko/version.txt'
 
@@ -85,9 +91,6 @@ export const lolifeSv             = 'https://laji.fi/sv/project/MHL.45/about'
 export const lajiFI               = 'https://laji.fi/observation/list'
 export const lajiSV               = 'https://laji.fi/sv/observation/list'
 export const lajiEN               = 'https://laji.fi/en/observation/list'
-
-//grid selection
-export const gridPreview          = 'https://laji.fi/map?layers=maastokartta,atlasGrid&gridsquare='
 
 //google geocoding api url
 export const googleGeocodingAPIURL = 'https://maps.googleapis.com/maps/api/geocode/json'
