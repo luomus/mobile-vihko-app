@@ -31,7 +31,6 @@ import MessageComponent from '../general/MessageComponent'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
-import { getVersionNumber } from '../../services/versionService'
 import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
@@ -39,6 +38,7 @@ import GridModalComponent from './GridModalComponent'
 import DefaultModalComponent from './DefaultModalComponent'
 import { getCurrentLocation } from '../../helpers/geolocationHelper'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
+import { updateIsAvailable } from '../../helpers/versionHelper'
 
 type Props = {
   isFocused: () => boolean,
@@ -91,8 +91,7 @@ const HomeComponent = (props: Props) => {
     initSchema()
 
     const checkUpdates = async () => {
-      const versionNumber = await getVersionNumber()
-      if (versionNumber !== AppJSON.expo.version) {
+      if (await updateIsAvailable()) {
         dispatch(setMessageState({
           type: 'conf',
           messageContent: t('update app'),
