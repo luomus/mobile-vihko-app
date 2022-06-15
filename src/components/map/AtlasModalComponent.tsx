@@ -1,10 +1,12 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Linking, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { useTranslation } from 'react-i18next'
 import { rootState } from '../../stores'
+import { gridPreviewUrl, resultServiceUrl } from '../../config/urls'
 import Cs from '../../styles/ContainerStyles'
+import Colors from '../../styles/Colors'
 
 type Props = {
   isVisible: boolean,
@@ -20,7 +22,20 @@ const AtlasModalComponent = (props: Props) => {
   return (
     <Modal isVisible={props.isVisible} onBackButtonPress={props.onBackButtonPress} backdropOpacity={0.5} onBackdropPress={props.onBackButtonPress}>
       <View style={Cs.mapModalContainer}>
-        <Text>{t('you have chosen the grid') + ' ' + grid?.n + ':' + grid?.e + ' ' + grid?.name + '. ' + t('grid description')}</Text>
+        <Text>{t('you have chosen the grid') + ' ' + grid?.n + ':' + grid?.e + ' ' + grid?.name + '. ' + t('grid description')}
+          {'\n\n'}
+          <Text
+            style={{ color: Colors.linkText }}
+            onPress={() => Linking.openURL(gridPreviewUrl + `${grid?.n}:${grid?.e}`)}>
+            {t('link to grid')}
+          </Text>
+          {'\n\n'}
+          <Text
+            style={{ color: Colors.linkText }}
+            onPress={() => Linking.openURL(resultServiceUrl + `${grid?.n}:${grid?.e}`)}>
+            {t('link to result service')}
+          </Text>
+        </Text>
       </View>
     </Modal>
   )

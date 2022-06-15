@@ -31,7 +31,6 @@ import MessageComponent from '../general/MessageComponent'
 import ActivityComponent from '../general/ActivityComponent'
 import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
-import { getVersionNumber } from '../../services/versionService'
 import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
@@ -39,6 +38,7 @@ import GridModalComponent from './GridModalComponent'
 import DefaultModalComponent from './DefaultModalComponent'
 import { getCurrentLocation } from '../../helpers/geolocationHelper'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
+import { updateIsAvailable } from '../../helpers/versionHelper'
 
 type Props = {
   isFocused: () => boolean,
@@ -49,6 +49,7 @@ type Props = {
 }
 
 const HomeComponent = (props: Props) => {
+
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
   const [tripModalVisibility, setTripModalVisibility] = useState<boolean>(false)
@@ -56,8 +57,7 @@ const HomeComponent = (props: Props) => {
   const [fungiModalVisibility, setFungiModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const { t } = useTranslation()
-  let logTimeout: NodeJS.Timeout | undefined
+
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationZone = useSelector((state: rootState) => state.observationZone)
@@ -66,6 +66,10 @@ const HomeComponent = (props: Props) => {
   const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
+
+  const { t } = useTranslation()
+
+  let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
     setLoading(true)
@@ -87,8 +91,7 @@ const HomeComponent = (props: Props) => {
     initSchema()
 
     const checkUpdates = async () => {
-      const versionNumber = await getVersionNumber()
-      if (versionNumber !== AppJSON.expo.version) {
+      if (await updateIsAvailable()) {
         dispatch(setMessageState({
           type: 'conf',
           messageContent: t('update app'),

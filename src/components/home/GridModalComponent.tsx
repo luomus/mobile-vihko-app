@@ -18,7 +18,7 @@ import Ts from '../../styles/TextStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
-import { gridPreview } from '../../config/urls'
+import { gridPreviewUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
 
 type Props = {
@@ -128,8 +128,14 @@ const GridModalComponent = (props: Props) => {
                   {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}, ${gridName}.\n\n`}
                   <Text
                     style={{ color: Colors.linkText }}
-                    onPress={() => Linking.openURL(gridPreview + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
+                    onPress={() => Linking.openURL(gridPreviewUrl + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
                     {t('link to grid')}
+                  </Text>
+                  {'\n\n'}
+                  <Text
+                    style={{ color: Colors.linkText }}
+                    onPress={() => Linking.openURL(resultServiceUrl + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
+                    {t('link to result service')}
                   </Text>
                   {`\n\n${t('grid selection instructions')}`}
                 </Text>

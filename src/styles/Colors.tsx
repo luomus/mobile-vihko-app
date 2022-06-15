@@ -10,6 +10,7 @@ export default {
   primary3: '#BADFF7',
   primary4: '#7DBDE8',
   primary5: '#2691D9',
+  warning4: '#D1C000',
 
   //map screen colors
   pathColor: '#FF0000',

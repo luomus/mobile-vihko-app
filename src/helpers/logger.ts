@@ -14,17 +14,15 @@ const customTransport: transportFunctionType = async (props: any) => {
     }
   }
 
-  const user_id = props.rawMsg[0].user_id
-
   //push the error to the log
   logs.push({
     date: new Date(),
-    message: props.rawMsg
+    message: props.rawMsg[0]
   })
 
   //send the error to the logger endpoint, and if it fails, write that error to the local log too
   try {
-    await sendError(JSON.stringify(props.rawMsg), user_id)
+    await sendError(props.rawMsg[0])
   } catch (error) {
     logs.shift()
     logs.push({

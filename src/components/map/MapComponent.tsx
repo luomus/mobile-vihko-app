@@ -35,6 +35,7 @@ import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
 import AtlasModalComponent from './AtlasModalComponent'
+import GridWarningComponent from './GridWarningComponent'
 
 type Props = {
   onPressHome: () => void,
@@ -456,6 +457,10 @@ const MapComponent = (props: Props) => {
               textStyle={Ts.boldButtonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
             />
           </View>
+          : null
+        }
+        {schema.formID === forms.birdAtlas && grid?.pauseGridCheck ?
+          <GridWarningComponent />
           : null
         }
         <View style={Cs.mapButtonsContainer}>
