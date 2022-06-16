@@ -118,8 +118,9 @@ const ButtonStyles = StyleSheet.create({
   },
   tileDetailsButton: {
     paddingTop: 2,
+    paddingLeft: 5,
     borderRadius: 5,
-    alignItems: 'center'
+    flexDirection: 'row'
   },
   stopObservingButton: {
     paddingBottom: 2,
