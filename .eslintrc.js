@@ -8,6 +8,7 @@ module.exports = {
   'extends': [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:jest/recommended'
   ],
   'globals': {
     'Atomics': 'readonly',
