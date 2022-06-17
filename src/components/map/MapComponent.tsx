@@ -454,7 +454,7 @@ const MapComponent = (props: Props) => {
             <ButtonComponent onPressFunction={() => setAtlasModalVisibility(true)} title={grid?.n + ':' + grid?.e}
               height={35} width={100} buttonStyle={Bs.tileDetailsButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.boldButtonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+              textStyle={Ts.boldButtonText} iconName={'help'} iconType={'material-icons'} iconSize={20} contentColor={Colors.whiteText}
             />
           </View>
           : null

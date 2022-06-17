@@ -39,6 +39,7 @@ import DefaultModalComponent from './DefaultModalComponent'
 import { getCurrentLocation } from '../../helpers/geolocationHelper'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import { updateIsAvailable } from '../../helpers/versionHelper'
+import { getVersionNumber } from '../../services/versionService'
 
 type Props = {
   isFocused: () => boolean,
@@ -91,7 +92,10 @@ const HomeComponent = (props: Props) => {
     initSchema()
 
     const checkUpdates = async () => {
-      if (await updateIsAvailable()) {
+      const appVersion = AppJSON.expo.version
+      const latestVersion = await getVersionNumber()
+
+      if (await updateIsAvailable(appVersion, latestVersion)) {
         dispatch(setMessageState({
           type: 'conf',
           messageContent: t('update app'),

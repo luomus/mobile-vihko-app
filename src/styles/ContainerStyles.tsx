@@ -214,7 +214,8 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'column'
   },
   gridTitleContainer: {
-    padding: 5,
+    paddingLeft: 7,
+    paddingTop: 5,
     position: 'absolute',
     top: '1%',
     left: '1%'

@@ -7,18 +7,18 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
 
   const eventHasNamedPlace = event.namedPlaceID && event.namedPlaceID !== 'empty'
   const eventHasPath = lineStringPath !== undefined
-  const eventHasUnits = event.gatherings[0].units.length >= 1
   const eventHasGrid = event.formID === forms.birdAtlas
+  const eventHasUnits = event.gatherings[0].units.length >= 1
   const eventHasFirstLocation = firstLocation
 
   if (eventHasNamedPlace) {
     event.gatherings[0].geometry = event.gatherings[1].geometry
   } else if (eventHasPath) {
     event.gatherings[0].geometry = lineStringPath
-  } else if (eventHasUnits) {
-    event.gatherings[0].geometry = createUnitBoundingBox(event)
   } else if (eventHasGrid) {
     event.gatherings[0].geometry = grid.geometry
+  } else if (eventHasUnits) {
+    event.gatherings[0].geometry = createUnitBoundingBox(event)
   } else if (eventHasFirstLocation) {
     event.gatherings[0].geometry = {
       coordinates: [
