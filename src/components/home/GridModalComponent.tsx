@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Linking, View, Text, TextInput, ActivityIndicator } from 'react-native'
-import Checkbox from 'expo-checkbox'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
   rootState,
   DispatchType,
-  setGrid,
-  setTracking
+  setGrid
 } from '../../stores'
-import storageService from '../../services/storageService'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -153,18 +150,6 @@ const GridModalComponent = (props: Props) => {
                   value={easting}
                   onChangeText={setEasting}
                 />
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
-                <Checkbox
-                  value={tracking}
-                  onValueChange={async (value: boolean) => {
-                    dispatch(setTracking(value))
-                    await storageService.save('tracking', value)
-                  }}
-                  style={{ padding: 5 }}
-                  color={tracking ? Colors.primary5 : undefined}
-                />
-                <Text style={{ color: Colors.neutral7, padding: 5 }}>{t('path tracking')}</Text>
               </View>
               <View style={Cs.modalStartButtonContainer}>
                 <View style={Cs.padding5Container}>
