@@ -19,7 +19,6 @@ import { log } from '../../helpers/logger'
 import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
 import { setEventGeometry } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
-import { getGridName } from '../../services/atlasService'
 import { sourceId } from '../../config/keys'
 import userService from '../../services/userService'
 import { clearGrid, setGrid } from '../position/actions'
@@ -102,7 +101,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     const observationEventObject = {
       id: newID,
       formID: schema.formID,
-      grid: grid ? { n: grid.n, e: grid.e } : undefined,
+      grid: grid ? grid : undefined,
       ...parsedObservationEvent
     }
 
@@ -172,13 +171,12 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       const grid = observationEvent.events[observationEvent.events.length - 1].grid
       const location = await getCurrentLocation()
       const ykjCoords = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
-      const gridDetails = await getGridName(ykjCoords[1].toString().slice(0, 3) + ':' + ykjCoords[0].toString().slice(0, 3))
 
       dispatch(setGrid({
         n: grid.n,
         e: grid.e,
         geometry: YKJCoordinateIntoWGS84Grid(grid.n, grid.e),
-        name: gridDetails.name,
+        name: grid.name,
         pauseGridCheck: Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n
       }))
     }

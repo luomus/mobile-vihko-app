@@ -76,7 +76,7 @@ const GridModalComponent = (props: Props) => {
     }
   }, [props.modalVisibility])
 
-  const handleStartEvent = () => {
+  const handleStartEvent = async () => {
     const n = parseInt(northing)
     const e = parseInt(easting)
 
@@ -86,6 +86,8 @@ const GridModalComponent = (props: Props) => {
       return
     }
 
+    const gridDetails = await getGridName(n + ':' + e)
+
     props.setModalVisibility(false)
 
     if (e === Math.trunc(ownLocation[0] / 10000) && n === Math.trunc(ownLocation[1] / 10000)) {
@@ -93,7 +95,7 @@ const GridModalComponent = (props: Props) => {
         n: n,
         e: e,
         geometry: YKJCoordinateIntoWGS84Grid(gridCoords[0], gridCoords[1]),
-        name: gridName,
+        name: gridDetails.name,
         pauseGridCheck: false
       }))
     } else {
@@ -101,7 +103,7 @@ const GridModalComponent = (props: Props) => {
         n: n,
         e: e,
         geometry: YKJCoordinateIntoWGS84Grid(gridCoords[0], gridCoords[1]),
-        name: gridName,
+        name: gridDetails.name,
         pauseGridCheck: true
       }))
     }
@@ -153,7 +155,7 @@ const GridModalComponent = (props: Props) => {
               </View>
               <View style={Cs.modalStartButtonContainer}>
                 <View style={Cs.padding5Container}>
-                  <ButtonComponent disabled={loading} onPressFunction={() => handleStartEvent()} title={t('start')}
+                  <ButtonComponent disabled={loading} onPressFunction={async () => await handleStartEvent()} title={t('start')}
                     height={40} width={120} buttonStyle={Bs.beginButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                     textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
