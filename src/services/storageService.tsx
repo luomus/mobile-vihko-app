@@ -15,7 +15,7 @@ const fetch = async (key: string) => {
 }
 
 const getKeys = async () => {
-  const allKeys: Array<string> = await AsyncStorage.getAllKeys()
+  const allKeys: readonly string[] = await AsyncStorage.getAllKeys()
   return allKeys
 }
 

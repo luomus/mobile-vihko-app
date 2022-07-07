@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Linking, View, Text, ScrollView, BackHandler } from 'react-native'
 import ObservationEventListComponent from './EventListElementComponent'
-import { useTranslation } from 'react-i18next'
+import { TFunction, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import {
@@ -20,7 +20,12 @@ import {
   resetReducer,
   appendPath,
   eventPathUpdate,
-  setTracking
+  setTracking,
+  CredentialsType,
+  ObservationEventType,
+  ObservationZonesType,
+  PathType,
+  SchemaType
 } from '../../stores'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -66,27 +71,103 @@ const HomeComponent = (props: Props) => {
   const path = useSelector((state: rootState) => state.path)
   const schema = useSelector((state: rootState) => state.schema)
 
+  const { t } = useTranslation()
   const dispatch: DispatchType = useDispatch()
 
-  const { t } = useTranslation()
+  return <HomeComponentContainer
+    isFocused = {props.isFocused}
+    onLogout = {props.onLogout}
+    onPressMap = {props.onPressMap}
+    onPressObservationEvent = {props.onPressObservationEvent}
+    onPressFinishObservationEvent = {props.onPressFinishObservationEvent}
+
+    pressCounter = {pressCounter}
+    setPressCounter = {setPressCounter}
+    observationEvents = {observationEvents}
+    setObservationEvents = {setObservationEvents}
+    tripModalVisibility = {tripModalVisibility}
+    setTripModalVisibility = {setTripModalVisibility}
+    gridModalVisibility = {gridModalVisibility}
+    setGridModalVisibility = {setGridModalVisibility}
+    fungiModalVisibility = {fungiModalVisibility}
+    setFungiModalVisibility = {setFungiModalVisibility}
+    zoneModalVisibility = {zoneModalVisibility}
+    setZoneModalVisibility = {setZoneModalVisibility}
+    loading = {loading}
+    setLoading = {setLoading}
+
+    credentials = {credentials}
+    observationEvent = {observationEvent}
+    observationZone = {observationZone}
+    observing = {observing}
+    path = {path}
+    schema = {schema}
+
+    t = {t}
+    dispatch = {dispatch}
+    
+    fetch = {storageService.fetch}
+    save = {storageService.save}
+  />
+}
+
+type Props2 = {
+  isFocused: () => boolean,
+  onLogout: () => void,
+  onPressMap: () => void,
+  onPressObservationEvent: (id: string) => void,
+  onPressFinishObservationEvent: (sourcePage: string) => void,
+
+  pressCounter: number,
+  setPressCounter: React.Dispatch<React.SetStateAction<number>>,
+  observationEvents: Element[],
+  setObservationEvents: React.Dispatch<React.SetStateAction<Element[]>>,
+  tripModalVisibility: boolean,
+  setTripModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  gridModalVisibility: boolean,
+  setGridModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  fungiModalVisibility: boolean,
+  setFungiModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  zoneModalVisibility: boolean,
+  setZoneModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  loading: boolean,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+
+  credentials: CredentialsType,
+  observationEvent: ObservationEventType,
+  observationZone: ObservationZonesType,
+  observing: boolean,
+  path: PathType,
+  schema: SchemaType
+
+  t: TFunction,
+  dispatch: DispatchType,
+
+  fetch: (key: string) => Promise<any>,
+  save: (key: string, value: any) => Promise<void>
+}
+
+export const HomeComponentContainer = (
+  props: Props2
+) => {
 
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
-    setLoading(true)
+    props.setLoading(true)
 
-    const length = observationEvent.events.length
+    const length = props.observationEvent.events.length
     let isUnfinished: boolean = false
 
     if (length >= 1) {
-      isUnfinished = !observationEvent.events[length - 1].gatheringEvent.dateEnd
+      isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
     }
 
     let formID = forms.tripForm
 
     const initSchema = async () => {
-      const formID = await storageService.fetch('formID')
-      await dispatch(switchSchema(formID))
+      const formID = await props.fetch('formID')
+      await props.dispatch(switchSchema(formID))
     }
 
     initSchema()
@@ -96,11 +177,11 @@ const HomeComponent = (props: Props) => {
       const latestVersion = await getVersionNumber()
 
       if (await updateIsAvailable(appVersion, latestVersion)) {
-        dispatch(setMessageState({
+        props.dispatch(setMessageState({
           type: 'conf',
-          messageContent: t('update app'),
-          cancelLabel: t('no'),
-          okLabel: t('yes'),
+          messageContent: props.t('update app'),
+          cancelLabel: props.t('no'),
+          okLabel: props.t('yes'),
           onOk: () => Linking.openURL(playStoreUrl)
         }))
       }
@@ -109,79 +190,79 @@ const HomeComponent = (props: Props) => {
     checkUpdates()
 
     if (isUnfinished) {
-      dispatch(setObserving(true))
-      dispatch(setObservationEventInterrupted(true))
-      if (formID === forms.lolife) { dispatch(setCurrentObservationZone(getLastZoneId())) }
+      props.dispatch(setObserving(true))
+      props.dispatch(setObservationEventInterrupted(true))
+      if (formID === forms.lolife) { props.dispatch(setCurrentObservationZone(getLastZoneId())) }
     }
 
     const initTracking = async () => {
       if (isUnfinished) {
-        dispatch(setObserving(true))
-        dispatch(setObservationEventInterrupted(true))
-        if (formID === forms.lolife) { dispatch(setCurrentObservationZone(getLastZoneId())) }
+        props.dispatch(setObserving(true))
+        props.dispatch(setObservationEventInterrupted(true))
+        if (formID === forms.lolife) { props.dispatch(setCurrentObservationZone(getLastZoneId())) }
 
-        const savedTrackingMode = await storageService.fetch('tracking')
+        const savedTrackingMode = await props.fetch('tracking')
 
-        dispatch(setTracking(savedTrackingMode))
+        props.dispatch(setTracking(savedTrackingMode))
         await onContinueObservationEvent()
       }
     }
 
     initTracking()
-    if (!isUnfinished) setLoading(false)
+    if (!isUnfinished) props.setLoading(false)
   }, [])
 
   useEffect(() => {
     loadObservationEvents()
-  }, [observationEvent, observing, schema])
+  }, [props.observationEvent, props.observing, props.schema])
 
   useEffect(() => {
     //set first zone in array as selected zone to avoid undefined values
-    if (observationZone.currentZoneId === '' && observationZone.zones.length > 0) {
-      dispatch(setCurrentObservationZone(observationZone?.zones[0].id))
+    if (props.observationZone.currentZoneId === '' && props.observationZone.zones.length > 0) {
+      props.dispatch(setCurrentObservationZone(props.observationZone?.zones[0].id))
     }
-  }, [observationZone])
+  }, [props.observationZone])
 
   useEffect(() => {
-    if (pressCounter > 0 && !logTimeout) {
+    if (props.pressCounter > 0 && !logTimeout) {
       logTimeout = setTimeout(() => {
-        setPressCounter(0)
+        props.setPressCounter(0)
         logTimeout = undefined
       }, 5000)
     }
 
     const logHandler = async () => {
-      if (pressCounter === 5) {
-        const logs: any[] = await storageService.fetch('logs')
+      if (props.pressCounter === 5) {
+        const logs: any[] = await props.fetch('logs')
         clipboardConfirmation(logs)
-        setPressCounter(0)
+        props.setPressCounter(0)
       }
     }
 
     logHandler()
-  }, [pressCounter])
+  }, [props.pressCounter])
 
   const loadObservationEvents = () => {
     const events: Array<Element> = []
-    const indexLast: number = observationEvent.events.length - 1
-    observationEvent.events.forEach((event: Record<string, any>, index: number) => {
-      if (observing && index === indexLast) {
+    const indexLast: number = props.observationEvent.events.length - 1
+    props.observationEvent.events.forEach((event: Record<string, any>, index: number) => {
+      if (props.observing && index === indexLast) {
         return
       }
       events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
     })
 
-    setObservationEvents(events)
+    props.setObservationEvents(events)
   }
 
   //handle back press in homescreen by asking user if they wish to exit the app
   useBackHandler(() => {
-    if (props.isFocused() && observing) {
-      dispatch(setMessageState({
+    if (props.isFocused() && props.observing) {
+      props.dispatch(setMessageState({
         type: 'dangerConf',
-        messageContent: t('exit app?'),
-        cancelLabel: t('cancel'),
-        okLabel: t('exit'),
+        messageContent: props.t('exit app?'),
+        cancelLabel: props.t('cancel'),
+        okLabel: props.t('exit'),
         onOk: () => BackHandler.exitApp()
       }))
 
@@ -192,97 +273,97 @@ const HomeComponent = (props: Props) => {
   })
 
   const onBeginObservationEvent = async (formID: string) => {
-    setLoading(true)
+    props.setLoading(true)
 
     //save the used form before beginning an event
-    if (!observing) {
-      await dispatch(switchSchema(formID))
-      await storageService.save('formID', formID)
+    if (!props.observing) {
+      await props.dispatch(switchSchema(formID))
+      await props.save('formID', formID)
     }
 
-    const title: string = t('gps notification title')
-    const body: string = t('gps notification body')
+    const title: string = props.t('gps notification title')
+    const body: string = props.t('gps notification body')
 
     try {
-      await dispatch(beginObservationEvent(props.onPressMap, title, body))
+      await props.dispatch(beginObservationEvent(props.onPressMap, title, body))
     } catch (error) {
       if (error.severity === 'high') {
-        dispatch(setMessageState({
+        props.dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser())
-            dispatch(resetReducer())
+            props.dispatch(logoutUser())
+            props.dispatch(resetReducer())
           }
         }))
       } else {
-        dispatch(setMessageState({
+        props.dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
         }))
       }
     }
 
-    setLoading(false)
+    props.setLoading(false)
   }
 
   const onContinueObservationEvent = async () => {
-    setLoading(true)
+    props.setLoading(true)
 
-    const title: string = t('gps notification title')
-    const body: string = t('gps notification body')
+    const title: string = props.t('gps notification title')
+    const body: string = props.t('gps notification body')
 
     try {
-      await dispatch(continueObservationEvent(props.onPressMap, title, body))
+      await props.dispatch(continueObservationEvent(props.onPressMap, title, body))
     } catch (error) {
       if (error.severity === 'high') {
-        dispatch(setMessageState({
+        props.dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser())
-            dispatch(resetReducer())
+            props.dispatch(logoutUser())
+            props.dispatch(resetReducer())
           }
         }))
       } else {
-        dispatch(setMessageState({
+        props.dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
         }))
       }
     }
 
-    setLoading(false)
+    props.setLoading(false)
   }
 
   const getLastZoneId = () => {
-    const zone = observationZone.zones.find((zone: Record<string, any>) => {
-      return zone.name === observationEvent.events?.[observationEvent.events.length - 1].gatherings[1].locality
+    const zone = props.observationZone.zones.find((zone: Record<string, any>) => {
+      return zone.name === props.observationEvent.events?.[props.observationEvent.events.length - 1].gatherings[1].locality
     })
 
     return zone ? zone.id : ''
   }
 
   const stopObserving = () => {
-    dispatch(setMessageState({
+    props.dispatch(setMessageState({
       type: 'dangerConf',
-      messageContent: t('stop observing'),
-      okLabel: t('stop'),
-      cancelLabel: t('do not stop'),
+      messageContent: props.t('stop observing'),
+      okLabel: props.t('stop'),
+      cancelLabel: props.t('do not stop'),
       onOk: async () => {
-        dispatch(setObservationId({
-          eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
+        props.dispatch(setObservationId({
+          eventId: props.observationEvent?.events?.[props.observationEvent?.events?.length - 1].id,
           unitId: null
         }))
 
         //save the path before stopping
         const location: LocationType = await getCurrentLocation()
-        await dispatch(appendPath([location]))
+        await props.dispatch(appendPath([location]))
 
-        if (path) {
-          await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+        if (props.path) {
+          await props.dispatch(eventPathUpdate(pathToLineStringConstructor(props.path)))
         }
 
         props.onPressFinishObservationEvent('home')
@@ -292,29 +373,29 @@ const HomeComponent = (props: Props) => {
 
   const clipboardConfirmation = (logs: any[] | null) => {
     if (logs !== null && logs !== []) {
-      dispatch(setMessageState({
+      props.dispatch(setMessageState({
         type: 'dangerConf',
-        messageContent: t('copy log to clipboard?'),
-        okLabel: t('yes'),
-        cancelLabel: t('no'),
+        messageContent: props.t('copy log to clipboard?'),
+        okLabel: props.t('yes'),
+        cancelLabel: props.t('no'),
         onOk: () => Clipboard.setString(JSON.stringify(logs, null, '  '))
       }))
     } else {
-      dispatch(setMessageState({
+      props.dispatch(setMessageState({
         type: 'msg',
-        messageContent: t('no logs')
+        messageContent: props.t('no logs')
       }))
     }
   }
 
   const showError = (error: string) => {
-    dispatch(setMessageState({
+    props.dispatch(setMessageState({
       type: 'err',
       messageContent: error
     }))
   }
 
-  if (loading) {
+  if (props.loading) {
     return (
       <ActivityComponent text={'loading'} />
     )
@@ -323,42 +404,42 @@ const HomeComponent = (props: Props) => {
       <>
         <ScrollView contentContainerStyle={Cs.contentAndVersionContainer}>
           <View style={Cs.homeContentContainer}>
-            {observing ?
-              <UnfinishedEventComponent onContinueObservationEvent={(tracking: boolean) => { onContinueObservationEvent(tracking) }}
+            {props.observing ?
+              <UnfinishedEventComponent onContinueObservationEvent={() => { onContinueObservationEvent() }}
                 stopObserving={stopObserving} />
               :
               null
             }
-            <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
-            <FormLauncherComponent formID={forms.tripForm} setModalVisibility={setTripModalVisibility} />
-            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={setGridModalVisibility} />
-            <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={setFungiModalVisibility} />
+            <Text style={Ts.previousObservationsTitle}>{props.t('new observation event')}</Text>
+            <FormLauncherComponent formID={forms.tripForm} setModalVisibility={props.setTripModalVisibility} />
+            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={props.setGridModalVisibility} />
+            <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={props.setFungiModalVisibility} />
             {
-              credentials.permissions?.includes('HR.2951') ?
-                <FormLauncherComponent formID={forms.lolife} setModalVisibility={setZoneModalVisibility} />
+              props.credentials.permissions?.includes('HR.2951') ?
+                <FormLauncherComponent formID={forms.lolife} setModalVisibility={props.setZoneModalVisibility} />
                 : null
             }
-            <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
-            {observationEvents}
+            <Text style={Ts.previousObservationsTitle}>{props.t('previous observation events')}</Text>
+            {props.observationEvents}
           </View>
           <View style={Cs.versionContainer}>
             <Text
               style={Ts.alignedRightText}
-              onPress={() => setPressCounter(pressCounter + 1)}>
-              {t('version')} {AppJSON.expo.version}
+              onPress={() => props.setPressCounter(props.pressCounter + 1)}>
+              {props.t('version')} {AppJSON.expo.version}
             </Text>
           </View>
         </ScrollView>
-        <DefaultModalComponent modalVisibility={tripModalVisibility} setModalVisibility={setTripModalVisibility}
+        <DefaultModalComponent modalVisibility={props.tripModalVisibility} setModalVisibility={props.setTripModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.tripForm) }} formID={forms.tripForm} />
-        <GridModalComponent modalVisibility={gridModalVisibility} setModalVisibility={setGridModalVisibility}
+        <GridModalComponent modalVisibility={props.gridModalVisibility} setModalVisibility={props.setGridModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.birdAtlas) }}
-          setLoading={setLoading} showError={showError} />
-        <DefaultModalComponent modalVisibility={fungiModalVisibility} setModalVisibility={setFungiModalVisibility}
+          setLoading={props.setLoading} showError={showError} />
+        <DefaultModalComponent modalVisibility={props.fungiModalVisibility} setModalVisibility={props.setFungiModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.fungiAtlas) }} formID={forms.fungiAtlas} />
-        <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
+        <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
-          setLoading={setLoading} showError={showError} />
+          setLoading={props.setLoading} showError={showError} />
         <MessageComponent />
       </>
     )

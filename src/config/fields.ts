@@ -190,7 +190,7 @@ export const overrideMHL117ObservationEventFields = {
     field: 'completeListField',
     params: {
       validation: {
-        validate: value => value !== 'empty' || 'must choose list type'
+        validate: (value: string) => value !== 'empty' || 'must choose list type'
       }
     }
   },

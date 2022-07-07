@@ -169,6 +169,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
                 color={Colors.dangerButton2}
                 size={22}
                 onPress={() => { showRemoveImage(image.uri) }}
+                tvParallaxProperties={undefined}
               />
             </View>
           </ImageBackground>

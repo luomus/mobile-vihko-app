@@ -78,6 +78,7 @@ const FormPickerComponent = (props: Props) => {
           color={Colors.neutral7}
           size={22}
           onPress={() => onPress()}
+          tvParallaxProperties={undefined}
         />
       </View>
     </View>

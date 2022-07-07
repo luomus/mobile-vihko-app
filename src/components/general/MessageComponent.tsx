@@ -153,7 +153,7 @@ const MessageComponent = () => {
         }
         <View>
           {topMessage?.type === 'err' ?
-            <Icon type={'material-icons'} name={'report-problem'} color={'red'} size={50} />
+            <Icon type={'material-icons'} name={'report-problem'} color={'red'} size={50} tvParallaxProperties={undefined} />
             : null
           }
           <Text style={Cs.padding5Container}>
