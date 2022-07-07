@@ -15,7 +15,7 @@ import { log } from '../../helpers/logger'
 export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async dispatch => {
 
-    let credentials: CredentialsType | null = null
+    let credentials: CredentialsType
 
     try {
       //start polling for credentials from server, error thrown when timeout of 180 seconds reached,
@@ -181,7 +181,7 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
 
 export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async (dispatch, getState) => {
-    const { credentials, observationEventInterrupted, observing } = getState()
+    const { credentials, observationEventInterrupted, observing, tracking } = getState()
 
     //clear credentials
     try {
@@ -202,7 +202,7 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
 
     //stop recording when logging out
     if (observing) {
-      await stopLocationAsync(observationEventInterrupted)
+      await stopLocationAsync(observationEventInterrupted, tracking)
     }
 
     //logout from service

@@ -185,6 +185,10 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
         metadata = defaultMetadata
       }
 
+      if (!credentials.token) {
+        throw new Error('No credentials.')
+      }
+
       try {
         res = await sendMetadata(tempId, metadata, credentials.token)
       } catch (error) {

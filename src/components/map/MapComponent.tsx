@@ -286,6 +286,7 @@ const MapComponent = (props: Props) => {
         type={'materials-icons'}
         name={'my-location'}
         size={50}
+        tvParallaxProperties={undefined}
       />
     </Marker>
     : null

@@ -28,6 +28,7 @@ import { parseDateForUI } from '../../helpers/dateHelper'
 import ActivityComponent from '../general/ActivityComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
+import { log } from '../../helpers/logger'
 
 type Props = {
   id: string,
@@ -47,6 +48,7 @@ const OverviewComponent = (props: Props) => {
   const [observations, setObservations] = useState<Record<string, any>[] | null>(null)
   const [eventSchema, setEventSchema] = useState<Record<string, any> | null>(null)
 
+  const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
 
   const dispatch: DispatchType = useDispatch()
@@ -164,6 +166,23 @@ const OverviewComponent = (props: Props) => {
     setSending(false)
   }
 
+  const handleBugReport = () => {
+    dispatch(setMessageState({
+      type: 'conf',
+      messageContent: t('bug report'),
+      cancelLabel: t('do not submit'),
+      okLabel: t('submit'),
+      onOk: () => {
+        log.error({
+          location: '/components/overview/OverviewComponent.tsx handleBugReport()',
+          error: 'Bug Report',
+          data: event,
+          user_id: credentials.user?.id
+        })
+      }
+    }))
+  }
+
   const displayDateBegin = () => {
     if (event?.gatheringEvent?.timeStart) {
       return parseDateForUI(event.gatheringEvent.dateBegin + 'T' + event.gatheringEvent.timeStart)
@@ -265,6 +284,13 @@ const OverviewComponent = (props: Props) => {
                 height={40} width={45} buttonStyle={Bs.iconButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+            </View>
+            <View style={Cs.padding5Container}>
+              <ButtonComponent onPressFunction={() => handleBugReport()} title={undefined}
+                height={40} width={45} buttonStyle={Bs.iconButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'bug-report'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
           </View>

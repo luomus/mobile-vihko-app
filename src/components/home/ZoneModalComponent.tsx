@@ -31,7 +31,7 @@ type Props = {
 const ZoneModalComponent = (props: Props) => {
 
   const [shown, setShown] = useState<boolean>(false)
-  const [options, setOptions] = useState<Record<string, any>[]>([])
+  const [options, setOptions] = useState<{key: string, label: string}[]>([])
 
   const observationZone = useSelector((state: rootState) => state.observationZone)
   const tracking = useSelector((state: rootState) => state.tracking)
@@ -96,8 +96,8 @@ const ZoneModalComponent = (props: Props) => {
               </TouchableOpacity>
               <ModalFilterPicker
                 visible={shown}
-                onSelect={(item: Record<string, any>) => {
-                  dispatch(setCurrentObservationZone(item.key))
+                onSelect={(key: string) => {
+                  dispatch(setCurrentObservationZone(key))
                   setShown(false)
                 }}
                 onCancel={() => setShown(false)}
@@ -106,7 +106,6 @@ const ZoneModalComponent = (props: Props) => {
                 placeholderText={t('choose observation zone')}
                 overlayStyle={Cs.filterPickerOverlayContainer}
                 listContainerStyle={Cs.filterPickerContainer}
-                renderCancelButton={() => { return null }}
               />
             </View>
             <View style={Cs.padding5Container}>
