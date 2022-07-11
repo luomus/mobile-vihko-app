@@ -12,11 +12,13 @@ import {
   setObservationId
 } from '../../stores'
 import ActivityComponent from '../general/ActivityComponent'
-import ExtendedNavBarComponent from '../general/ExtendedNavBarComponent'
 import AtlasCodeStampComponent from '../general/AtlasCodeStampComponent'
+import ExtendedNavBarComponent from '../general/ExtendedNavBarComponent'
+import GridWarningComponent from '../general/GridWarningComponent'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
+import { forms } from '../../config/fields'
 
 type Props = {
   onPressMap: () => void,
@@ -32,7 +34,9 @@ const ListComponent = (props: Props) => {
 
   const textInput = useRef<TextInput | null>(null)
 
+  const grid = useSelector((state: rootState) => state.grid)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -141,6 +145,10 @@ const ListComponent = (props: Props) => {
             keyboardShouldPersistTaps={'always'}
           />
         </View>
+        {schema.formID === forms.birdAtlas && grid?.pauseGridCheck ?
+          <GridWarningComponent />
+          : null
+        }
       </>
     )
   }

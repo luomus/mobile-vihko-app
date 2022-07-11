@@ -35,7 +35,7 @@ import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import { Icon } from 'react-native-elements'
 import AtlasModalComponent from './AtlasModalComponent'
-import GridWarningComponent from './GridWarningComponent'
+import GridWarningComponent from '../general/GridWarningComponent'
 
 type Props = {
   onPressHome: () => void,
