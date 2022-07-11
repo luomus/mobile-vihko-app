@@ -97,7 +97,7 @@ const ZoneModalComponent = (props: Props) => {
               <ModalFilterPicker
                 visible={shown}
                 onSelect={(key: string) => {
-                  dispatch(setCurrentObservationZone(key))
+                  dispatch(setCurrentObservationZone(key.key))
                   setShown(false)
                 }}
                 onCancel={() => setShown(false)}
