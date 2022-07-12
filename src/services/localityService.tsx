@@ -1,14 +1,13 @@
 import { localityUrl, googleGeocodingAPIURL } from '../config/urls'
-import { accessToken } from '../config/keys'
+import { ACCESS_TOKEN, GEOCODING_API_KEY } from '@env'
 import axios from 'axios'
 import { LineString, MultiLineString, Point } from 'geojson'
-import { geocodingAPIKey } from '../config/keys'
 
 export const getLocalityDetailsFromLajiApi = async (geometry: MultiLineString | LineString | Point, lang: string) => {
 
   const params = {
     'lang': lang,
-    'access_token': accessToken
+    'access_token': ACCESS_TOKEN
   }
 
   const headers = {
@@ -33,7 +32,7 @@ export const getLocalityDetailsFromGoogleAPI = async (point: Point, lang: string
 
   const params = {
     'latlng': point.coordinates[1] + ',' + point.coordinates[0],
-    'key': geocodingAPIKey,
+    'key': GEOCODING_API_KEY,
     'language': lang
   }
 

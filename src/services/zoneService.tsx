@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { accessToken } from '../config/keys'
+import { ACCESS_TOKEN } from '@env'
 import { getZonesUrl } from '../config/urls'
 
 const getZones = async () => {
@@ -7,7 +7,7 @@ const getZones = async () => {
     'collectionID': 'HR.2951',
     'includePublic': true,
     'includeUnits': false,
-    'access_token': accessToken,
+    'access_token': ACCESS_TOKEN,
     'pageSize': 1000
   }
 

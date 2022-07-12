@@ -2,7 +2,7 @@ import ApolloClient, { gql } from 'apollo-boost'
 import axios from 'axios'
 import i18n from '../languages/i18n'
 import { graphqlUrl, postDocumentUrl } from '../config/urls'
-import { accessToken } from '../config/keys'
+import { ACCESS_TOKEN } from '@env'
 import { CredentialsType } from '../stores'
 
 interface BasicObject {
@@ -15,7 +15,7 @@ const setClient = (language: string) => {
     request: (operation) => {
       operation.setContext({
         headers: {
-          'Authorization': accessToken,
+          'Authorization': ACCESS_TOKEN,
           'Accept-Language': language
         }
       })
@@ -49,7 +49,7 @@ export const postObservationEvent = async (observationEvent: BasicObject, creden
 
   const params = {
     personToken: credentials.token,
-    access_token: accessToken,
+    access_token: ACCESS_TOKEN,
     validationErrorFormat: 'remote'
   }
 

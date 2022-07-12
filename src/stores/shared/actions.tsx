@@ -19,7 +19,7 @@ import { log } from '../../helpers/logger'
 import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
 import { setEventGeometry } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
-import { sourceId } from '../../config/keys'
+import { SOURCE_ID } from '@env'
 import userService from '../../services/userService'
 import { clearGrid, setGrid } from '../position/actions'
 import { initCompleteList } from '../../stores/observation/actions'
@@ -72,7 +72,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 
     let observationEventDefaults = {}
     set(observationEventDefaults, 'editors', [userId])
-    set(observationEventDefaults, 'sourceID', sourceId)
+    set(observationEventDefaults, 'sourceID', SOURCE_ID)
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
 
     const dateTime = setDateForDocument()

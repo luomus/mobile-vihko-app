@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { loggerUrl } from '../config/urls'
-import { accessToken } from '../config/keys'
+import { ACCESS_TOKEN } from '@env'
 import { brand, modelName, osName, osVersion } from 'expo-device'
 import AppJSON from '../../app.json'
 
@@ -22,7 +22,7 @@ export const sendError = async (rawMsg: {error: string|undefined, data: string|u
     errorData,
     {
       params: {
-        access_token: accessToken
+        access_token: ACCESS_TOKEN
       }
     }
   )

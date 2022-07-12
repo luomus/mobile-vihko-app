@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { getLoginUrl, pollLoginUrl, getUserUrl, personTokenUrl } from '../config/urls'
-import { accessToken } from '../config/keys'
+import { ACCESS_TOKEN } from '@env'
 import { CredentialsType } from '../stores'
 
 export const getTempTokenAndLoginUrl = async () => {
   const params = {
-    'access_token': accessToken
+    'access_token': ACCESS_TOKEN
   }
   const result = await axios.get(getLoginUrl, { params })
 
@@ -15,7 +15,7 @@ export const getTempTokenAndLoginUrl = async () => {
 export const postTmpToken = async (tmpToken: string) => {
   const params = {
     'tmpToken': tmpToken,
-    'access_token': accessToken
+    'access_token': ACCESS_TOKEN
   }
   try {
     const result = await axios.post(pollLoginUrl, null, { params })
@@ -29,7 +29,7 @@ export const postTmpToken = async (tmpToken: string) => {
 
 export const getUserByPersonToken = async (personToken: string) => {
   const params = {
-    'access_token': accessToken
+    'access_token': ACCESS_TOKEN
   }
   const fetchResult = await axios.get(getUserUrl + '/' + personToken, { params })
   return fetchResult.data
@@ -82,7 +82,7 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
 
 export const checkTokenValidity = async (personToken: string) => {
   const params = {
-    'access_token': accessToken
+    'access_token': ACCESS_TOKEN
   }
   const result = await axios.get(personTokenUrl + '/' + personToken, { params })
 
@@ -91,7 +91,7 @@ export const checkTokenValidity = async (personToken: string) => {
 
 export const getProfile = async (personToken: string) => {
   const params = {
-    'access_token': accessToken
+    'access_token': ACCESS_TOKEN
   }
   const result = await axios.get(getUserUrl + '/' + personToken + '/profile', { params })
 
@@ -100,7 +100,7 @@ export const getProfile = async (personToken: string) => {
 
 export const logout = async (credentials: CredentialsType) => {
   const params = {
-    'access_token': accessToken
+    'access_token': ACCESS_TOKEN
   }
   const result = await axios.delete(personTokenUrl + '/' + credentials.token, { params })
 
