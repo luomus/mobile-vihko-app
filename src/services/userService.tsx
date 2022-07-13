@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getLoginUrl, pollLoginUrl, getUserUrl, personTokenUrl } from '../config/urls'
-import { ACCESS_TOKEN } from '@env'
+import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
 
 export const getTempTokenAndLoginUrl = async () => {

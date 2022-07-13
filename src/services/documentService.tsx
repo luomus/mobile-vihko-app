@@ -2,7 +2,7 @@ import ApolloClient, { gql } from 'apollo-boost'
 import axios from 'axios'
 import i18n from '../languages/i18n'
 import { graphqlUrl, postDocumentUrl } from '../config/urls'
-import { ACCESS_TOKEN } from '@env'
+import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
 
 interface BasicObject {

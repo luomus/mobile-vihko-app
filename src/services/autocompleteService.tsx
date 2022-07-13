@@ -1,5 +1,5 @@
 import { autocompleteUrl } from '../config/urls'
-import { ACCESS_TOKEN } from '@env'
+import { ACCESS_TOKEN } from 'react-native-dotenv'
 import axios, { AxiosResponse, Canceler } from 'axios'
 
 const CancelToken = axios.CancelToken

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ACCESS_TOKEN } from '@env'
+import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { formPermissionUrl } from '../config/urls'
 
 export const getFormPermissions = async (personToken: string): Promise<{ result: { admins: string[], editors: string[] }}> => {

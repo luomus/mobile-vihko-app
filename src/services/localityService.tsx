@@ -1,5 +1,5 @@
 import { localityUrl, googleGeocodingAPIURL } from '../config/urls'
-import { ACCESS_TOKEN, GEOCODING_API_KEY } from '@env'
+import { ACCESS_TOKEN, GEOCODING_API_KEY } from 'react-native-dotenv'
 import axios from 'axios'
 import { LineString, MultiLineString, Point } from 'geojson'
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ACCESS_TOKEN } from '@env'
+import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { getZonesUrl } from '../config/urls'
 
 const getZones = async () => {

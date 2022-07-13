@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { postImageUrl } from '../config/urls'
-import { ACCESS_TOKEN } from '@env'
+import { ACCESS_TOKEN } from 'react-native-dotenv'
 
 export const sendImages = async (formDataBody: FormData, token: string) => {
   return await axios.post(

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { loggerUrl } from '../config/urls'
-import { ACCESS_TOKEN } from '@env'
+import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { brand, modelName, osName, osVersion } from 'expo-device'
 import AppJSON from '../../app.json'
 
