@@ -23,7 +23,7 @@ interface Props {
   'twitter' |
   'web-search' |
   undefined,
-  defaultValue: string | number | undefined,
+  defaultValue: string | number | Array<string> | undefined,
   isArrayItem: boolean,
   parentCallback: Function | undefined,
   editable: boolean

@@ -14,7 +14,7 @@ const MapScreen = (props: Props) => {
   return (
     <MapComponent
       onPressHome={() => navigate('home')}
-      onPressObservation={(isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>, sourcePage?: string) =>
+      onPressObservation={(isNew: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) =>
         navigate('observation', { isNew, rules, defaults, sourcePage })}
       onPressEditing={(sourcePage?: string) => navigate('observation', { sourcePage })}
       onPressFinishObservationEvent={(sourcePage: string) => {

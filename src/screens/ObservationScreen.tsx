@@ -1,11 +1,17 @@
 import React from 'react'
-import { ParamListBase, Route } from '@react-navigation/native'
+import { ParamListBase, RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import ObservationComponent from '../components/forms/ObservationComponent'
 
 type Props = {
   navigation: NativeStackNavigationProp<ParamListBase, string>,
-  route: Route<string>
+  route: RouteProp<{
+    observation: {
+      rules: Record<string, any> | undefined,
+      defaults: Record<string, any> | undefined,
+      sourcePage: string
+    }
+  }, 'observation'>
 }
 
 const ObservationScreen = (props: Props) => {

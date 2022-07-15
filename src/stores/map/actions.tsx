@@ -15,7 +15,7 @@ import { mapActionTypes,
   EditingType,
   FirstZoomType
 } from './types'
-import zoneController from '../../services/zoneService'
+import { getZones } from '../../services/zoneService'
 import storageService from '../../services/storageService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { log } from '../../helpers/logger'
@@ -48,7 +48,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
     //check connection exists and try to fetch observation zones from server
     try {
       await netStatusChecker()
-      zones = await zoneController.getZones()
+      zones = await getZones()
     } catch (netError) {
       try {
         //couldn't load zones from server. Check for local copy, if found inform user of use of local copy.

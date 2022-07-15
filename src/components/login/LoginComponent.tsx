@@ -275,7 +275,7 @@ const LoginComponent = (props: Props) => {
     return (
       <View style={Cs.contentAndVersionContainer}>
         <View style={Cs.loginContentContainer}>
-          <Text style={Ts.loginHeader}>{t('login')}</Text>
+          <Text style={Ts.loginHeader}>{t('mobile vihko')}</Text>
           <View style={Cs.inputContainer}>
             <Text style={Ts.loginText}>{t('login text')}</Text>
           </View>

@@ -20,7 +20,7 @@ interface Props {
   scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>,
   createInputElement: (
     title: string, objectTitle: string, parentObjectTitle: string,
-    type: string, defaultValue: string | number | undefined, isArrayItem: boolean,
+    type: string, defaultValue: string | number | Array<string> | undefined, isArrayItem: boolean,
     callbackFunction: Function | undefined, editable: boolean
   ) => JSX.Element | undefined
 }

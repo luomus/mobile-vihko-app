@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, ListRenderItem, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { createFilter } from 'react-native-search-filter'
@@ -72,7 +72,7 @@ const ListComponent = (props: Props) => {
     }
   }, [props.navigation, textInput.current])
 
-  const renderBird = ({ item }) => (
+  const renderBird: ListRenderItem<any> = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
         const event = observationEvent.events[observationEvent.events.length - 1].id

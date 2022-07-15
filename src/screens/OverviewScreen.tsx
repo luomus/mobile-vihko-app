@@ -1,11 +1,15 @@
 import React from 'react'
-import { CommonActions, ParamListBase, Route } from '@react-navigation/native'
+import { CommonActions, ParamListBase, RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import OverviewComponent from '../components/overview/OverviewComponent'
 
 type Props = {
   navigation: NativeStackNavigationProp<ParamListBase, string>,
-  route: Route<string>
+  route: RouteProp<{
+    overview: {
+      id: string
+    }
+  }, 'overview'>
 }
 
 const OverviewScreen = (props: Props) => {

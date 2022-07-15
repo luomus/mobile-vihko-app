@@ -1,5 +1,5 @@
 import React, { useState, ReactChild, useEffect } from 'react'
-import { FlatList, Text, View } from 'react-native'
+import { FlatList, ListRenderItem, Text, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -208,43 +208,48 @@ const OverviewComponent = (props: Props) => {
     return false
   })
 
-  const renderObservation = ({ item }) => (
-    <View key={item.id}>
-      <ObservationInfoComponent
-        event={event}
-        observation={item}
-        eventSchema={eventSchema}
-        editButton={
-          <ButtonComponent
-            onPressFunction={
-              () => {
-                const id = {
-                  eventId: event.id,
-                  unitId: item.id
-                }
-                dispatch(setObservationId(id))
-                props.onPressObservation('overview')
-              }}
-            title={t('edit')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-          />
-        }
-        removeButton={
-          <ButtonComponent
-            onPressFunction={
-              () => {
-                showDeleteObservation(event.id, item.id)
-              }}
-            title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-          />
-        }
-      />
-      <View style={{ padding: 5 }}></View>
-    </View>
-  )
+  const renderObservation: ListRenderItem<Record<string, any>> = ({ item }) => {
+
+    if (!event || !eventSchema) return null
+
+    return (
+      <View key={item.id}>
+        <ObservationInfoComponent
+          event={event}
+          observation={item}
+          eventSchema={eventSchema}
+          editButton={
+            <ButtonComponent
+              onPressFunction={
+                () => {
+                  const id = {
+                    eventId: event.id,
+                    unitId: item.id
+                  }
+                  dispatch(setObservationId(id))
+                  props.onPressObservation('overview')
+                }}
+              title={t('edit')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+            />
+          }
+          removeButton={
+            <ButtonComponent
+              onPressFunction={
+                () => {
+                  showDeleteObservation(event.id, item.id)
+                }}
+              title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
+          }
+        />
+        <View style={{ padding: 5 }}></View>
+      </View>
+    )
+  }
 
   const ListHeader = () => {
     if (event) {

@@ -39,7 +39,7 @@ import GridWarningComponent from '../general/GridWarningComponent'
 
 type Props = {
   onPressHome: () => void,
-  onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>, sourcePage?: string) => void,
+  onPressObservation: (isNew: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   onPressEditing: (sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
   onPop: () => void,
@@ -174,6 +174,12 @@ const MapComponent = (props: Props) => {
 
   //performs the zoom from initial region to user location
   const zoomFromFinlandToLocation = () => {
+
+    if (!position) {
+      setFirstZoom('zoomed')
+      return
+    }
+
     dispatch(setFirstZoom('zooming'))
 
     const coords: LatLng = { ...position.coords }
@@ -350,11 +356,10 @@ const MapComponent = (props: Props) => {
       z.geometry !== null
     )
 
-    return (zone ?
+    return (zone && zone.geometry ?
       <Geojson
         geojson={convertGC2FC(zone.geometry)}
         fillColor="#f002"
-        pinColor="#f00"
         strokeColor="#f00"
         strokeWidth={1}
       />

@@ -1,0 +1,1464 @@
+{
+    "data": {
+      "form": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "editors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Redigeringsrättigheter",
+              "excludeFromCopy": true
+            },
+            "secureLevel": {
+              "type": "string",
+              "enum": [
+                "MX.secureLevelNone",
+                "MX.secureLevelKM10"
+              ],
+              "enumNames": [
+                "Inte skyddad",
+                "10 km"
+              ],
+              "title": "Kontrollelar geografisk information är offentliga i detalj",
+              "excludeFromCopy": true,
+              "default": "MX.secureLevelNone"
+            },
+            "gatheringEvent": {
+              "type": "object",
+              "properties": {
+                "leg": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "",
+                  "excludeFromCopy": true
+                },
+                "legPublic": {
+                  "type": "boolean",
+                  "title": "Kontrollantnamn är offentliga",
+                  "excludeFromCopy": true,
+                  "default": false
+                },
+                "dateBegin": {
+                  "type": "string",
+                  "title": "Startdatum",
+                  "excludeFromCopy": true
+                },
+                "dateEnd": {
+                  "type": "string",
+                  "title": "Slutdatum",
+                  "excludeFromCopy": true
+                }
+              },
+              "required": [],
+              "title": ""
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Nyckelordet"
+            },
+            "gatherings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "geometry": {
+                    "type": "object",
+                    "properties": {},
+                    "title": "Coordinates"
+                  },
+                  "locality": {
+                    "type": "string",
+                    "title": ""
+                  },
+                  "notes": {
+                    "type": "string",
+                    "title": "Anteckningar"
+                  },
+                  "habitat": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "",
+                        "MY.habitatEnumValue1",
+                        "MY.habitatEnumValue2",
+                        "MY.habitatEnumValue3",
+                        "MY.habitatEnumValue4",
+                        "MY.habitatEnumValue5",
+                        "MY.habitatEnumValue6",
+                        "MY.habitatEnumValue7",
+                        "MY.habitatEnumValue8",
+                        "MY.habitatEnumValue9",
+                        "MY.habitatEnumValue10",
+                        "MY.habitatEnumValue11",
+                        "MY.habitatEnumValue12",
+                        "MY.habitatEnumValue13",
+                        "MY.habitatEnumValue14",
+                        "MY.habitatEnumValue15",
+                        "MY.habitatEnumValue16",
+                        "MY.habitatEnumValue17",
+                        "MY.habitatEnumValue18",
+                        "MY.habitatEnumValue19",
+                        "MY.habitatEnumValue20",
+                        "MY.habitatEnumValue21",
+                        "MY.habitatEnumValue22",
+                        "MY.habitatEnumValue23",
+                        "MY.habitatEnumValue24",
+                        "MY.habitatEnumValue25",
+                        "MY.habitatEnumValue26",
+                        "MY.habitatEnumValue27",
+                        "MY.habitatEnumValue28",
+                        "MY.habitatEnumValue29",
+                        "MY.habitatEnumValue30",
+                        "MY.habitatEnumValue31",
+                        "MY.habitatEnumValue32",
+                        "MY.habitatEnumValue33",
+                        "MY.habitatEnumValue34",
+                        "MY.habitatEnumValue35",
+                        "MY.habitatEnumValue36",
+                        "MY.habitatEnumValue87",
+                        "MY.habitatEnumValue37",
+                        "MY.habitatEnumValue38",
+                        "MY.habitatEnumValue39",
+                        "MY.habitatEnumValue40",
+                        "MY.habitatEnumValue41",
+                        "MY.habitatEnumValue42",
+                        "MY.habitatEnumValue43",
+                        "MY.habitatEnumValue44",
+                        "MY.habitatEnumValue45",
+                        "MY.habitatEnumValue46",
+                        "MY.habitatEnumValue47",
+                        "MY.habitatEnumValue48",
+                        "MY.habitatEnumValue49",
+                        "MY.habitatEnumValue50",
+                        "MY.habitatEnumValue51",
+                        "MY.habitatEnumValue52",
+                        "MY.habitatEnumValue53",
+                        "MY.habitatEnumValue54",
+                        "MY.habitatEnumValue55",
+                        "MY.habitatEnumValue56",
+                        "MY.habitatEnumValue57",
+                        "MY.habitatEnumValue58",
+                        "MY.habitatEnumValue59",
+                        "MY.habitatEnumValue60",
+                        "MY.habitatEnumValue61",
+                        "MY.habitatEnumValue62",
+                        "MY.habitatEnumValue63",
+                        "MY.habitatEnumValue64",
+                        "MY.habitatEnumValue65",
+                        "MY.habitatEnumValue66",
+                        "MY.habitatEnumValue67",
+                        "MY.habitatEnumValue68",
+                        "MY.habitatEnumValue69",
+                        "MY.habitatEnumValue70",
+                        "MY.habitatEnumValue71",
+                        "MY.habitatEnumValue72",
+                        "MY.habitatEnumValue73",
+                        "MY.habitatEnumValue74",
+                        "MY.habitatEnumValue75",
+                        "MY.habitatEnumValue76",
+                        "MY.habitatEnumValue77",
+                        "MY.habitatEnumValue78",
+                        "MY.habitatEnumValue79",
+                        "MY.habitatEnumValue80",
+                        "MY.habitatEnumValue81",
+                        "MY.habitatEnumValue82",
+                        "MY.habitatEnumValue83",
+                        "MY.habitatEnumValue84",
+                        "MY.habitatEnumValue85",
+                        "MY.habitatEnumValue86"
+                      ],
+                      "enumNames": [
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "title": ""
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Bilder",
+                    "excludeFromCopy": true
+                  },
+                  "gatheringType": {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "MY.gatheringTypeForagingArea",
+                      "MY.gatheringTypeBreedingAndRestingArea",
+                      "MY.gatheringTypeCavityTree",
+                      "MY.gatheringTypeDroppingsTree",
+                      "MY.gatheringTypeNestTree",
+                      "MY.gatheringTypeLolifeAccess",
+                      "MY.gatheringTypeLolifeCoreZone",
+                      "MY.gatheringTypeLolifeHabitatZone",
+                      "MY.gatheringTypeLolifeApplicableZone",
+                      "MY.gatheringTypeWaterbirdPoint",
+                      "MY.gatheringTypeWaterbirdRound"
+                    ],
+                    "enumNames": [
+                      "",
+                      "",
+                      "",
+                      "",
+                      "",
+                      "",
+                      "Vägbeskrivning",
+                      "Hjärtat",
+                      "Vardagsrum",
+                      "Tillämpligt område",
+                      "",
+                      ""
+                    ],
+                    "title": "Aluerajaus"
+                  },
+                  "units": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "count": {
+                          "type": "string",
+                          "title": "Antal"
+                        },
+                        "taxonConfidence": {
+                          "type": "string",
+                          "enum": [
+                            "MY.taxonConfidenceSure",
+                            "MY.taxonConfidenceUnsure"
+                          ],
+                          "enumNames": [
+                            "Säker",
+                            "Osäker"
+                          ],
+                          "title": "",
+                          "default": "MY.taxonConfidenceSure"
+                        },
+                        "notes": {
+                          "type": "string",
+                          "title": "Anteckningar"
+                        },
+                        "identifications": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "taxonID": {
+                                "type": "string",
+                                "title": "Laji",
+                                "default": "MX.48243"
+                              }
+                            },
+                            "required": []
+                          },
+                          "minItems": 1,
+                          "title": ""
+                        },
+                        "recordBasis": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.recordBasisPreservedSpecimen",
+                            "MY.recordBasisHumanObservationSeen",
+                            "MY.recordBasisHumanObservationPhoto",
+                            "MY.recordBasisHumanObservationVideo",
+                            "MY.recordBasisHumanObservationIndirect"
+                          ],
+                          "enumNames": [
+                            "",
+                            "Prov",
+                            "Sett",
+                            "Fotograferade",
+                            "Videobandad",
+                            "Indirekt observation (fotspår, avföring, etc)"
+                          ],
+                          "title": "Rekords typ"
+                        },
+                        "nestType": {
+                          "type": "string",
+                          "enum": [
+                            "MY.nestTypeTreeCavity",
+                            "MY.nestTypeTwig",
+                            "MY.nestTypeNestBox",
+                            "MY.nestTypeBuilding",
+                            "MY.nestTypeGroundCavity",
+                            "MY.nestTypeOther"
+                          ],
+                          "enumNames": [
+                            "Hål i ett träd",
+                            "Trädbo i ett träd",
+                            "En stativ i ett träd",
+                            "Byggnad",
+                            "Jord hål",
+                            "Andra, vad?"
+                          ],
+                          "title": "Boetyp"
+                        },
+                        "nestNotes": {
+                          "type": "string",
+                          "title": "Boet förlängning"
+                        },
+                        "nestCount": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "title": "Antal bon / hålrum"
+                        },
+                        "indirectObservationType": {
+                          "type": "string",
+                          "enum": [
+                            "MY.indirectObservationTypeFeces",
+                            "MY.indirectObservationTypeSnowTracks",
+                            "MY.indirectObservationTypeUrine",
+                            "MY.indirectObservationTypeFeasting",
+                            "MY.indirectObservationTypeFoodStock"
+                          ],
+                          "enumNames": [
+                            "Avföring",
+                            "Snö fotspår",
+                            "Spår av urin",
+                            "Skyndade att äta",
+                            "Matförvaring"
+                          ],
+                          "title": "Spår av"
+                        },
+                        "lifeStage": {
+                          "type": "string",
+                          "enum": [
+                            "MY.lifeStageDead",
+                            "MY.lifeStageAlive"
+                          ],
+                          "enumNames": [
+                            "död",
+                            "levande"
+                          ],
+                          "title": "Livsfas"
+                        },
+                        "unitGathering": {
+                          "type": "object",
+                          "properties": {
+                            "geometry": {
+                              "type": "object",
+                              "properties": {},
+                              "title": "Coordinates"
+                            }
+                          },
+                          "required": [],
+                          "title": ""
+                        },
+                        "unitFact": {
+                          "type": "object",
+                          "properties": {
+                            "lolifeDroppingsType": {
+                              "type": "string",
+                              "enum": [
+                                "",
+                                "MY.lolifeDroppingsTypeRock",
+                                "MY.lolifeDroppingsTypeTree",
+                                "MY.lolifeDroppingsTypeTreeGroup",
+                                "MY.lolifeDroppingsTypeOther"
+                              ],
+                              "enumNames": [
+                                "",
+                                "På stenen",
+                                "Enda träd",
+                                "Multi-tree grupp",
+                                "Annat, vänligen skicka information"
+                              ],
+                              "title": "Typ av paprikasikt"
+                            },
+                            "lolifeDroppingsCount": {
+                              "type": "string",
+                              "enum": [
+                                "",
+                                "MY.lolifeDroppingsCount1",
+                                "MY.lolifeDroppingsCount2",
+                                "MY.lolifeDroppingsCount3"
+                              ],
+                              "enumNames": [
+                                "",
+                                "",
+                                "",
+                                ""
+                              ],
+                              "title": "Spillning räknar"
+                            },
+                            "lolifeDroppingsQuality": {
+                              "type": "string",
+                              "enum": [
+                                "",
+                                "MY.lolifeDroppingsQuality1",
+                                "MY.lolifeDroppingsQuality2"
+                              ],
+                              "enumNames": [
+                                "",
+                                "",
+                                ""
+                              ],
+                              "title": "Spillningkvalitet"
+                            },
+                            "lolifeNestTree": {
+                              "type": "string",
+                              "enum": [
+                                "",
+                                "MX.38590",
+                                "MX.37812",
+                                "MX.37999",
+                                "MX.37993",
+                                "MX.38010",
+                                "MX.38008",
+                                "MY.lolifeNestTreeOther"
+                              ],
+                              "enumNames": [
+                                "",
+                                "asp",
+                                "gran",
+                                "glasbjörk",
+                                "vårtbjörk",
+                                "gråal",
+                                "klibbal",
+                                "Annat, beskriv i anteckningar"
+                              ],
+                              "title": "Trädarter"
+                            }
+                          },
+                          "required": [],
+                          "title": ""
+                        },
+                        "images": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "title": "Bilder",
+                          "excludeFromCopy": true
+                        }
+                      },
+                      "required": []
+                    },
+                    "uniqueItems": false,
+                    "title": "Observationer"
+                  },
+                  "biologicalProvince": {
+                    "type": "string",
+                    "title": "Biogeografisk provins"
+                  }
+                },
+                "required": []
+              },
+              "title": ""
+            }
+          },
+          "required": [
+            "gatherings"
+          ]
+        },
+        "uiSchema": {
+          "ui:shortcuts": {
+            "alt": {
+              "fn": "help",
+              "delay": 1
+            },
+            "alt+F5": {
+              "fn": "revalidate"
+            },
+            "Enter": {
+              "fn": "navigate"
+            },
+            "shift+Enter": {
+              "fn": "navigate",
+              "reverse": true
+            },
+            "ctrl+Enter": {
+              "fn": "textareaRowInsert"
+            },
+            "alt+ ": {
+              "fn": "navigate"
+            },
+            "alt+shift+ ": {
+              "fn": "navigate",
+              "reverse": true
+            },
+            "alt+n": {
+              "fn": "navigateArray"
+            },
+            "alt+p": {
+              "fn": "navigateArray",
+              "reverse": true
+            }
+          },
+          "ui:order": [
+            "gatheringEvent",
+            "gatherings"
+          ],
+          "ui:field": "InjectField",
+          "ui:options": {
+            "injections": {
+              "fields": [
+                "editors",
+                "secureLevel",
+                "keywords"
+              ],
+              "target": "gatheringEvent"
+            }
+          },
+          "gatheringEvent": {
+            "ui:field": "NestField",
+            "classNames": "well well-sm",
+            "ui:order": [
+              "*",
+              "legPublic",
+              "secureLevel",
+              "eventTime",
+              "keywords"
+            ],
+            "ui:options": {
+              "nests": {
+                "legEditor": {
+                  "fields": [
+                    "leg",
+                    "editors"
+                  ],
+                  "rootUiSchema": {
+                    "ui:field": "NestField",
+                    "ui:options": {
+                      "nests": {
+                        "_legEditor": {
+                          "fields": [
+                            "leg",
+                            "editors"
+                          ],
+                          "title": "",
+                          "rootUiSchema": {
+                            "ui:functions": [
+                              {
+                                "ui:field": "DependentBooleanField",
+                                "ui:options": {
+                                  "booleanField": "editors",
+                                  "booleanDefiner": "leg"
+                                }
+                              },
+                              {
+                                "ui:field": "ArrayCombinerField"
+                              }
+                            ],
+                            "ui:field": "TableField",
+                            "ui:options": {
+                              "specialRules": "legEditors",
+                              "ui:buttonsDesktopLayout": true,
+                              "buttons": [
+                                {
+                                  "fn": "add",
+                                  "label": "Lägg till en obvservatör"
+                                }
+                              ]
+                            },
+                            "items": {
+                              "ui:functions": {
+                                "ui:field": "ContextInjectionField",
+                                "ui:options": {
+                                  "injections": {
+                                    "/ui:options/rules/0/regexp": "/creator"
+                                  }
+                                }
+                              },
+                              "ui:field": "DependentDisableField",
+                              "ui:options": {
+                                "rules": [
+                                  {
+                                    "disableDefiner": "leg",
+                                    "disableField": "editors",
+                                    "regexp": "creator is injected here",
+                                    "inlineHelp": "Du måste ha redigeringsrättigheter.",
+                                    "disabledValueToDisplay": true
+                                  },
+                                  {
+                                    "disableDefiner": "leg",
+                                    "disableField": "editors",
+                                    "regexp": "^((?!(MA\\.\\d)).)*$"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "legEditorSizeFixer": {
+                          "fields": [
+                            "_legEditor"
+                          ],
+                          "title": "",
+                          "rootUiSchema": {
+                            "ui:grid": {
+                              "lg": 6,
+                              "md": 6,
+                              "sm": 9,
+                              "xs": 12
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "eventTime": {
+                  "fields": [
+                    "dateBegin",
+                    "dateEnd"
+                  ],
+                  "title": "",
+                  "rootUiSchema": {
+                    "ui:grid": {
+                      "lg": {
+                        "dateBegin": 3,
+                        "dateEnd": 2
+                      },
+                      "md": {
+                        "dateBegin": 4,
+                        "dateEnd": 2
+                      },
+                      "sm": {
+                        "dateBegin": 5,
+                        "dateEnd": 3
+                      },
+                      "xs": 12
+                    }
+                  }
+                }
+              }
+            },
+            "leg": {
+              "ui:widget": "AutosuggestWidget",
+              "ui:help": "@legHelp",
+              "ui:options": {
+                "autosuggestField": "friends",
+                "allowNonsuggestedValue": true,
+                "suggestionReceive": "key",
+                "preventTypingPattern": "^MA\\.\\d+$"
+              }
+            },
+            "dateBegin": {
+              "ui:widget": "DateTimeWidget",
+              "ui:options": {
+                "showButtons": true
+              }
+            },
+            "dateEnd": {
+              "ui:widget": "DateTimeWidget"
+            },
+            "legPublic": {
+              "ui:options": {
+                "allowUndefined": false
+              },
+              "ui:help": "Du kan gömma observatörsnamn om det behövs genom att välja \"Nej\". Observatörsnamnen är alltid synliga för auktoritativa medel."
+            }
+          },
+          "editors": {
+            "ui:help": "Om du rapporterar en identifierad användare som observatör och användaren har lagt till dig som en vän, kan du ge användaren rätt att ändra denna fältbesöksrapport. Förutom observationer från denna fältbesöksrapport visas till användaren bland hans/hennes egna observationer.",
+            "ui:options": {
+              "allowUndefined": false
+            }
+          },
+          "secureLevel": {
+            "ui:widget": "AnyToBooleanWidget",
+            "ui:help": "Genom att välja \"Nej\" kommer observationerna geografisk information att grovas till en 10 x 10 km² kvadrat i offentligt material. Den geografiska informationen kommer alltid att finnas tillgänglig för auktoritativa uppgifter i detalj. Bilder som är fästa vid grovade observationer är offentliga.",
+            "ui:options": {
+              "trueValue": "MX.secureLevelNone",
+              "falseValue": "MX.secureLevelKM10",
+              "allowUndefined": false
+            }
+          },
+          "keywords": {
+            "ui:field": "TagArrayField"
+          },
+          "gatherings": {
+            "items": {
+              "dateBegin": {
+                "ui:options": {
+                  "showButtons": true
+                },
+                "ui:widget": "DateTimeWidget"
+              },
+              "dateEnd": {
+                "ui:widget": "DateTimeWidget"
+              },
+              "geometry": {
+                "ui:field": "HiddenField"
+              },
+              "images": {
+                "ui:field": "ImageArrayField",
+                "ui:options": {
+                  "capturerVerbatimPath": "/gatheringEvent/leg"
+                }
+              },
+              "namedPlaceID": {
+                "ui:field": "HiddenField"
+              },
+              "locality": {
+                "ui:widget": "TextareaWidget"
+              },
+              "biologicalProvince": {
+                "ui:field": "HiddenField"
+              },
+              "taxonCensus": {
+                "items": {
+                  "censusTaxonID": {
+                    "ui:options": {
+                      "allowNonsuggestedValue": true,
+                      "autosuggestField": "taxon",
+                      "suggestionReceive": "key"
+                    },
+                    "ui:widget": "AutosuggestWidget"
+                  }
+                }
+              },
+              "ui:functions": [
+                {
+                  "ui:field": "ConditionalOnChangeField",
+                  "ui:options": {
+                    "rules": [
+                      {
+                        "transformations": {
+                          "units": []
+                        },
+                        "conditions": {
+                          "gatheringType": {
+                            "regexp": "MY.gatheringTypeCavityTree"
+                          }
+                        }
+                      },
+                      {
+                        "transformations": {
+                          "units": [
+                            {
+                              "identifications": [
+                                {
+                                  "taxonID": "MX.48243"
+                                }
+                              ],
+                              "recordBasis": "MY.recordBasisHumanObservationIndirect",
+                              "breeding": true
+                            }
+                          ]
+                        },
+                        "conditions": {
+                          "gatheringType": {
+                            "regexp": "MY.gatheringTypeNestTree"
+                          }
+                        }
+                      },
+                      {
+                        "transformations": {
+                          "units": [
+                            {
+                              "identifications": [
+                                {
+                                  "taxonID": "MX.48243"
+                                }
+                              ],
+                              "recordBasis": "MY.recordBasisHumanObservationIndirect"
+                            }
+                          ]
+                        },
+                        "conditions": {
+                          "gatheringType": {
+                            "regexp": "MY.gatheringTypeDroppingsTree"
+                          }
+                        }
+                      },
+                      {
+                        "transformations": {
+                          "units": [
+                            {
+                              "identifications": [
+                                {
+                                  "taxonID": "MX.48243"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "conditions": {
+                          "gatheringType": {
+                            "regexp": "^$"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "gatheringType": {
+                "ui:field": "HiddenField"
+              },
+              "units": {
+                "ui:field": "MultiArrayField",
+                "ui:options": {
+                  "groups": [
+                    {
+                      "rules": {
+                        "field": "lifeStage",
+                        "regexp": "^.+$"
+                      },
+                      "operations": {
+                        "type": "merge",
+                        "uiSchema": {
+                          "ui:title": "Observationer",
+                          "ui:options": {
+                            "buttons": [
+                              {
+                                "default": {
+                                  "lifeStage": "MY.lifeStageAlive"
+                                },
+                                "fn": "addPredefined",
+                                "glyph": "plus",
+                                "label": "Ny observation"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rules": {
+                        "field": "indirectObservationType",
+                        "regexp": "^(|MY.indirectObservationTypeFeces)$",
+                        "complement": true
+                      },
+                      "operations": {
+                        "type": "merge",
+                        "uiSchema": {
+                          "ui:title": "Spåra observationer",
+                          "ui:options": {
+                            "buttons": [
+                              {
+                                "default": {
+                                  "indirectObservationType": "MY.indirectObservationTypeSnowTracks",
+                                  "recordBasis": "MY.recordBasisHumanObservationIndirect"
+                                },
+                                "fn": "addPredefined",
+                                "glyph": "plus",
+                                "label": "Ny spår"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rules": {
+                        "field": "nestType",
+                        "regexp": "^.+$"
+                      },
+                      "operations": {
+                        "type": "merge",
+                        "uiSchema": {
+                          "ui:title": "Boobservationer",
+                          "ui:options": {
+                            "buttons": [
+                              {
+                                "default": {
+                                  "nestType": "MY.nestTypeTreeCavity",
+                                  "recordBasis": "MY.recordBasisHumanObservationIndirect"
+                                },
+                                "fn": "addPredefined",
+                                "glyph": "plus",
+                                "label": "Ny bo"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rules": {
+                        "field": "indirectObservationType",
+                        "regexp": "^MY.indirectObservationTypeFeces"
+                      },
+                      "operations": {
+                        "type": "merge",
+                        "uiSchema": {
+                          "ui:title": "Droppings observationer",
+                          "ui:options": {
+                            "buttons": [
+                              {
+                                "default": {
+                                  "indirectObservationType": "MY.indirectObservationTypeFeces",
+                                  "recordBasis": "MY.recordBasisHumanObservationIndirect"
+                                },
+                                "fn": "addPredefined",
+                                "glyph": "plus",
+                                "key": "3",
+                                "label": "Ny spillning"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "renderAdd": false
+                },
+                "items": {
+                  "ui:functions": [
+                    {
+                      "ui:field": "ConditionalUiSchemaField",
+                      "ui:options": {
+                        "cases": [
+                          {
+                            "operations": {
+                              "type": "merge",
+                              "uiSchema": {
+                                "ui:options": {
+                                  "color": "#9e713b"
+                                }
+                              }
+                            },
+                            "rules": {
+                              "field": "nestType",
+                              "regexp": "^.+$"
+                            }
+                          },
+                          {
+                            "operations": {
+                              "type": "merge",
+                              "uiSchema": {
+                                "ui:options": {
+                                  "color": "#b89220"
+                                }
+                              }
+                            },
+                            "rules": {
+                              "field": "indirectObservationType",
+                              "regexp": "^.+$"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ui:field": "FlatField",
+                      "ui:options": {
+                        "fields": [
+                          "unitFact"
+                        ]
+                      }
+                    },
+                    {
+                      "ui:field": "ScopeField",
+                      "ui:options": {
+                        "fields": [],
+                        "glyphFields": [
+                          {
+                            "glyph": "camera",
+                            "show": "images",
+                            "label": "Lägg till en foto",
+                            "open": false
+                          }
+                        ],
+                        "fieldScopes": {
+                          "lifeStage": {
+                            "+": {
+                              "fields": [
+                                "lifeStage",
+                                "count",
+                                "taxonConfidence",
+                                "recordBasis",
+                                "notes"
+                              ],
+                              "uiSchema": {
+                                "recordBasis": {
+                                  "ui:options": {
+                                    "filterType": "blacklist",
+                                    "filter": [
+                                      "MY.recordBasisHumanObservationIndirect"
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "nestType": {
+                            "+": {
+                              "fields": [
+                                "nestType",
+                                "nestNotes",
+                                "nestCount",
+                                "taxonConfidence",
+                                "unitFact_lolifeNestTree",
+                                "notes"
+                              ],
+                              "uiSchema": {
+                                "recordBasis": {
+                                  "ui:field": "HiddenField"
+                                },
+                                "ui:order": [
+                                  "nestType",
+                                  "nestNotes",
+                                  "nestCount",
+                                  "taxonConfidence",
+                                  "unitFact_lolifeNestTree",
+                                  "notes",
+                                  "*"
+                                ],
+                                "taxonConfidence": {
+                                  "ui:title": ""
+                                }
+                              }
+                            }
+                          },
+                          "indirectObservationType": {
+                            "+": {
+                              "fieldScopes": {
+                                "indirectObservationType": {
+                                  "MY.indirectObservationTypeFeces": {
+                                    "fields": [
+                                      "unitFact_lolifeDroppingsType",
+                                      "unitFact_lolifeDroppingsCount",
+                                      "unitFact_lolifeDroppingsQuality",
+                                      "unitFact_lolifeNestTree",
+                                      "notes"
+                                    ],
+                                    "uiSchema": {
+                                      "indirectObservationType": {
+                                        "ui:field": "HiddenField"
+                                      },
+                                      "ui:order": [
+                                        "unitFact_lolifeDroppingsType",
+                                        "unitFact_lolifeDroppingsCount",
+                                        "unitFact_lolifeDroppingsQuality",
+                                        "unitFact_lolifeNestTree",
+                                        "notes",
+                                        "*"
+                                      ]
+                                    }
+                                  },
+                                  "MY.indirectObservationTypeSnowTracks": {
+                                    "refs": [
+                                      "indirectObs"
+                                    ]
+                                  },
+                                  "MY.indirectObservationTypeUrine": {
+                                    "refs": [
+                                      "indirectObs"
+                                    ]
+                                  },
+                                  "MY.indirectObservationTypeFeasting": {
+                                    "refs": [
+                                      "indirectObs"
+                                    ]
+                                  },
+                                  "MY.indirectObservationTypeFoodStock": {
+                                    "refs": [
+                                      "indirectObs"
+                                    ]
+                                  }
+                                }
+                              },
+                              "uiSchema": {
+                                "recordBasis": {
+                                  "ui:field": "HiddenField"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "definitions": {
+                          "indirectObs": {
+                            "fields": [
+                              "indirectObservationType",
+                              "unitFact_lolifeNestTree",
+                              "notes"
+                            ],
+                            "uiSchema": {
+                              "indirectObservationType": {
+                                "ui:options": {
+                                  "filterType": "blacklist",
+                                  "filter": [
+                                    "MY.indirectObservationTypeFeces"
+                                  ]
+                                }
+                              },
+                              "ui:order": [
+                                "*",
+                                "indirectObservationType",
+                                "unitFact_lolifeNestTree",
+                                "notes"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "ui:field": "LocationChooserField",
+                  "ui:options": {
+                    "geometryField": "/unitGathering/geometry",
+                    "strategy": "lolifeUnit"
+                  },
+                  "images": {
+                    "ui:field": "ImageArrayField",
+                    "ui:options": {
+                      "capturerVerbatimPath": "/gatheringEvent/leg"
+                    }
+                  },
+                  "identifications": {
+                    "ui:field": "HiddenField"
+                  },
+                  "unitGathering": {
+                    "ui:field": "HiddenField"
+                  },
+                  "lifeStage": {
+                    "ui:widget": "AnyToBooleanWidget",
+                    "ui:options": {
+                      "label": "Vid liv?",
+                      "trueValue": "MY.lifeStageAlive",
+                      "falseValue": "MY.lifeStageDead",
+                      "allowUndefined": false
+                    }
+                  },
+                  "taxonConfidence": {
+                    "ui:widget": "AnyToBooleanWidget",
+                    "ui:options": {
+                      "trueValue": "MY.taxonConfidenceSure",
+                      "falseValue": "MY.taxonConfidenceUnsure",
+                      "allowUndefined": false
+                    }
+                  },
+                  "ui:grid": {
+                    "lg": {
+                      "taxonConfidence": 1,
+                      "count": 1,
+                      "*": 2
+                    },
+                    "md": {
+                      "taxonConfidence": 1,
+                      "count": 1,
+                      "*": 2
+                    },
+                    "sm": {
+                      "taxonConfidence": 2,
+                      "count": 1,
+                      "*": 2
+                    },
+                    "xs": 12
+                  },
+                  "ui:order": [
+                    "taxonConfidence",
+                    "recordBasis",
+                    "count",
+                    "lifeStage",
+                    "nestType",
+                    "nestNotes",
+                    "nestCount",
+                    "indirectObservationType",
+                    "lolifeDroppingsType",
+                    "lolifeDroppingsCount",
+                    "lolifeDroppingsQuality",
+                    "notes",
+                    "*"
+                  ]
+                }
+              },
+              "ui:order": [
+                "gatheringType",
+                "*",
+                "units"
+              ],
+              "ui:settings": [
+                "%additionalFields/scopeField_gatherings"
+              ],
+              "title": "",
+              "ui:grid": {
+                "xs": {
+                  "habitat": 6,
+                  "notes": 6,
+                  "locality": 12
+                }
+              }
+            },
+            "ui:field": "MapArrayField",
+            "ui:title": "",
+            "ui:options": {
+              "ui:buttonsDesktopLayout": true,
+              "buttons": [
+                {
+                  "glyph": "plus",
+                  "fn": "addPredefined",
+                  "key": "4",
+                  "label": "Habitatzon",
+                  "default": {
+                    "gatheringType": "MY.gatheringTypeLolifeHabitatZone"
+                  },
+                  "help": "",
+                  "tooltipPlacement": "left",
+                  "tooltipClass": "lg",
+                  "className": "text-left"
+                },
+                {
+                  "glyph": "plus",
+                  "fn": "addPredefined",
+                  "key": "3",
+                  "label": "Kärnzon",
+                  "default": {
+                    "gatheringType": "MY.gatheringTypeLolifeCoreZone"
+                  },
+                  "help": "",
+                  "tooltipPlacement": "left",
+                  "tooltipClass": "lg",
+                  "className": "text-left"
+                },
+                {
+                  "glyph": "plus",
+                  "fn": "addPredefined",
+                  "label": "Avels- och viloplats",
+                  "default": {
+                    "gatheringType": "MY.gatheringTypeBreedingAndRestingArea"
+                  },
+                  "help": "",
+                  "tooltipPlacement": "left",
+                  "tooltipClass": "lg",
+                  "className": "text-left"
+                },
+                {
+                  "glyph": "plus",
+                  "fn": "addPredefined",
+                  "key": "1",
+                  "label": "Foderområde",
+                  "default": {
+                    "gatheringType": "MY.gatheringTypeForagingArea"
+                  },
+                  "help": "",
+                  "tooltipPlacement": "left",
+                  "tooltipClass": "lg",
+                  "className": "text-left"
+                },
+                {
+                  "glyph": "plus",
+                  "fn": "addPredefined",
+                  "key": "2",
+                  "label": "Åtkomstväg",
+                  "default": {
+                    "gatheringType": "MY.gatheringTypeLolifeAccess"
+                  },
+                  "help": "",
+                  "tooltipPlacement": "left",
+                  "tooltipClass": "lg",
+                  "className": "text-left"
+                },
+                {
+                  "glyph": "plus",
+                  "fn": "addPredefined",
+                  "key": "5",
+                  "label": "Tillämplig zon",
+                  "default": {
+                    "gatheringType": "MY.gatheringTypeLolifeApplicableZone"
+                  },
+                  "help": "",
+                  "tooltipPlacement": "left",
+                  "tooltipClass": "lg",
+                  "className": "text-left"
+                },
+                {
+                  "glyph": "plus",
+                  "fn": "addPredefined",
+                  "key": "6",
+                  "label": "Landväg",
+                  "help": "",
+                  "tooltipPlacement": "left",
+                  "tooltipClass": "lg",
+                  "className": "text-left"
+                }
+              ],
+              "popupFields": [
+                {
+                  "field": "/gatheringType",
+                  "template": "title"
+                },
+                {
+                  "strategy": "lolifeUnit",
+                  "template": "title",
+                  "value": ""
+                },
+                {
+                  "text": "/gatheringType",
+                  "template": "description",
+                  "value": ""
+                }
+              ],
+              "titleFormat": "%{Title} %{idx}",
+              "mapOptions": {
+                "controls": {
+                  "draw": {
+                    "clear": true,
+                    "delete": true,
+                    "redo": false,
+                    "reverse": true,
+                    "undo": false
+                  }
+                }
+              },
+              "mapSizes": {
+                "lg": 8,
+                "md": 6,
+                "sm": 6,
+                "xs": 12
+              },
+              "minHeight": 435,
+              "propsToPassToInlineSchema": [
+                "formData"
+              ],
+              "resizeTimeout": 210,
+              "hasActive": false,
+              "geometryField": "geometry",
+              "geometryMapper": "lolife",
+              "nonRemovables": [
+                0
+              ],
+              "inlineUiSchemaRoot": {
+                "ui:functions": {
+                  "ui:field": "FilterArrayField",
+                  "ui:options": {
+                    "rules": {
+                      "idx": 0,
+                      "complement": true
+                    }
+                  }
+                },
+                "ui:field": "SingleActiveArrayField",
+                "ui:options": {
+                  "renderAdd": false,
+                  "confirmDelete": true,
+                  "headerFormatters": [
+                    {
+                      "field": "gatheringType",
+                      "default": "Landväg"
+                    },
+                    "lolife"
+                  ]
+                }
+              },
+              "belowUiSchemaRoot": {
+                "ui:field": "SingleItemArrayField",
+                "ui:options": {
+                  "activeIdx": 0
+                }
+              },
+              "belowFields": [
+                "units"
+              ],
+              "passActiveIdxToBelow": false
+            },
+            "ui:grid": {
+              "lg": 2,
+              "md": 2,
+              "sm": 2,
+              "xs": 12
+            },
+            "ui:settings": [
+              "/mapOptions/tileLayerName",
+              "/mapOptions/overlayNames",
+              "/mapOptions/tileLayerOpacity",
+              "/mapOptions/tileLayers"
+            ]
+          }
+        }
+      }
+    }
+  }

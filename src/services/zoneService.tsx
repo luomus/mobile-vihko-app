@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { getZonesUrl } from '../config/urls'
 
-const getZones = async () => {
+export const getZones = async () => {
   const params = {
     'collectionID': 'HR.2951',
     'includePublic': true,
@@ -14,5 +14,3 @@ const getZones = async () => {
   const fetchResult = await axios.get(getZonesUrl, { params })
   return fetchResult.data.results
 }
-
-export default { getZones }
