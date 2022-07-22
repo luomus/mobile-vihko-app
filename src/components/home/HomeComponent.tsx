@@ -367,7 +367,8 @@ export const HomeComponentContainer = (
         }
 
         props.onPressFinishObservationEvent('home')
-      }
+      },
+      testID: 'stopFromHomeMessage'
     }))
   }
 
@@ -378,7 +379,7 @@ export const HomeComponentContainer = (
         messageContent: props.t('copy log to clipboard?'),
         okLabel: props.t('yes'),
         cancelLabel: props.t('no'),
-        onOk: () => Clipboard.setString(JSON.stringify(logs, null, '  '))
+        onOk: async () => await Clipboard.setStringAsync(JSON.stringify(logs, null, '  '))
       }))
     } else {
       props.dispatch(setMessageState({

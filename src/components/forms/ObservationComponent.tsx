@@ -279,7 +279,6 @@ const ObservationComponent = (props: Props) => {
 
   const updateObservation = async (data: { [key: string]: any }) => {
     setSaving(true)
-
     if (!observationState || !observationId) {
       setSaving(false)
       return

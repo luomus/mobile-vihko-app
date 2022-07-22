@@ -143,9 +143,6 @@ const ObservationButtonsComponent = (props: Props) => {
       )
     }
     if (props.mode === 'changeLocation') {
-      let lang = i18n.language
-      const unitGroups = schema[lang]?.uiSchemaParams?.unitGroups
-
       return (
         <View style={Cs.rightButtonColumnContainer}>
           {createButton(

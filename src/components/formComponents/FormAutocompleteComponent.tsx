@@ -236,7 +236,9 @@ const FormAutocompleteComponent = (props: Props) => {
           onFocus={onFocus}
           onBlur={onBlur}
           onChangeText={onChangeText}
-          defaultValue={defaultValue}>
+          defaultValue={defaultValue}
+          testID={'autocomplete'}
+        >
         </TextInput>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           {loading ?

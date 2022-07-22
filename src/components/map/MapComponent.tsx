@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile } from 'react-native-maps'
+import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { Platform, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { MultiPolygon } from 'geojson'
-import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
+import { LineString, MultiLineString } from 'geojson'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -66,7 +66,6 @@ const MapComponent = (props: Props) => {
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
   const schema = useSelector((state: rootState) => state.schema)
-  const tracking = useSelector((state: rootState) => state.tracking)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -302,38 +301,35 @@ const MapComponent = (props: Props) => {
   const pathOverlay = () => {
 
     if (path?.length >= 1 && position) {
-      const pathPolygon: MultiPolygon | undefined = pathPolygonConstructor(path, tracking ? [
-        position.coords.longitude,
-        position.coords.latitude
-      ] : undefined)
 
-      // if (path[path.length - 1]?.length >= 1 && position) {
-      //   const pathToDraw = path.map((subpath, index) => {
-      //     if (index === path.length - 1) {
-      //       return subpath.concat([[
-      //         position.coords.longitude,
-      //         position.coords.latitude,
-      //         0.0,
-      //         0.0,
-      //         false
-      //       ]])
-      //     }
+      if (path[path.length - 1]?.length >= 1 && position) {
+        const pathToDraw = path.map((subpath, index) => {
+          if (index === path.length - 1) {
+            return subpath.concat([[
+              position.coords.longitude,
+              position.coords.latitude,
+              0.0,
+              0.0,
+              false
+            ]])
+          }
 
-      //     return subpath
-      //   })
+          return subpath
+        })
 
-      //   const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
+        const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
 
-      return pathPolygon ?
-        <Geojson
-          geojson={wrapGeometryInFC(pathPolygon)}
-          strokeWidth={5}
-          strokeColor={Colors.pathColor}
-        />
-        : null
+        return pathPolygon ?
+          <Geojson
+            geojson={wrapGeometryInFC(pathPolygon)}
+            strokeWidth={5}
+            strokeColor={Colors.pathColor}
+          />
+          : null
+      }
+
+      return null
     }
-
-    return null
   }
 
   //draws currently selected point to map & enables dragabilty to finetune its
@@ -433,7 +429,7 @@ const MapComponent = (props: Props) => {
       <View style={Cs.mapContainer}>
         <MapView
           ref={map => { mapView = map }}
-          provider={Platform.OS === 'android' ? 'google' : null}
+          provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
           initialRegion={region}
           onPanDrag={() => stopCentering()}
           onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}

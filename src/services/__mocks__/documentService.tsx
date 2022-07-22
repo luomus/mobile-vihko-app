@@ -10,31 +10,49 @@ import fungiAtlasEn from '../../schemas/fungiAtlasEn.json'
 import lolifeFi from '../../schemas/lolifeFi.json'
 import lolifeSv from '../../schemas/lolifeSv.json'
 import lolifeEn from '../../schemas/lolifeEn.json'
+import { CredentialsType } from '../../stores'
 
 export const getSchemas = async (language: string, formId: string) => {
   if (language === 'fi' && formId === 'JX.519') {
-    return tripFormFi
+    return tripFormFi.data.form
   } else if (language === 'sv' && formId === 'JX.519') {
-    return tripFormSv
+    return tripFormSv.data.form
   } else if (language === 'en' && formId === 'JX.519') {
-    return tripFormEn
+    return tripFormEn.data.form
   } else if (language === 'fi' && formId === 'MHL.117') {
-    return birdAtlasFi
+    return birdAtlasFi.data.form
   } else if (language === 'sv' && formId === 'MHL.117') {
-    return birdAtlasSv
+    return birdAtlasSv.data.form
   } else if (language === 'en' && formId === 'MHL.117') {
-    return birdAtlasEn
+    return birdAtlasEn.data.form
   } else if (language === 'fi' && formId === 'JX.652') {
-    return fungiAtlasFi
+    return fungiAtlasFi.data.form
   } else if (language === 'sv' && formId === 'JX.652') {
-    return fungiAtlasSv
+    return fungiAtlasSv.data.form
   } else if (language === 'en' && formId === 'JX.652') {
-    return fungiAtlasEn
+    return fungiAtlasEn.data.form
   } else if (language === 'fi' && formId === 'MHL.45') {
-    return lolifeFi
+    return lolifeFi.data.form
   } else if (language === 'sv' && formId === 'MHL.45') {
-    return lolifeSv
+    return lolifeSv.data.form
   } else if (language === 'en' && formId === 'MHL.45') {
-    return lolifeEn
+    return lolifeEn.data.form
   }
+}
+
+export const postObservationEvent = async (observationEvent: Record<string, any>, credentials: CredentialsType) => {
+
+  const unit = observationEvent.gatherings[0].units[0]
+
+  if (
+    observationEvent.formID !== 'JX.519' ||
+    observationEvent.editors !== ['MA.1'] ||
+    unit.identifications[0].taxon !== 'varis' ||
+    unit.count !== '1' ||
+    observationEvent.locality !== 'Etu-Töölö'
+  ) {
+    Promise.reject()
+  }
+
+  Promise.resolve()
 }

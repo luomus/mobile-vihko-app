@@ -75,3 +75,5 @@ export const getProfile = async () => {
 export const logout = async (credentials: CredentialsType) => {
   return {}
 }
+
+export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken, checkTokenValidity, getProfile, logout }

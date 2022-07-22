@@ -142,54 +142,6 @@ const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString) 
   }
 }
 
-const pathPolygonConstructor = (coords: PathType, userLocation: number[] | undefined) => {
-  if (coords.length <= 0) {
-    return
-  }
-
-  let coordinates: Position[][][] = []
-
-  if (coords.length > 1) {
-    coordinates = coords.slice(0, -1).map(points => {
-      const cleanedPoints = points.map(point => [
-        point[0],
-        point[1]
-      ])
-
-      return [[
-        ...cleanedPoints,
-        ...[...cleanedPoints].reverse()
-      ]]
-    })
-  }
-
-  const subCoordinates: Position[] = []
-  coords.slice(-1)[0].forEach((point: PathPoint) => {
-    if (!point[4]) {
-      subCoordinates.push([
-        point[0],
-        point[1]
-      ])
-    }
-  })
-
-  if (userLocation) subCoordinates.push(userLocation)
-
-  if (subCoordinates.length >= 2) {
-    coordinates.push([[
-      ...subCoordinates,
-      ...[...subCoordinates].reverse()
-    ]])
-  }
-
-  const multiPolygon: MultiPolygon = {
-    type: 'MultiPolygon',
-    coordinates: coordinates
-  }
-
-  return multiPolygon
-}
-
 const wrapGeometryInFC = (geometry: Geometry) => {
   const feature = featureConstructor(geometry)
 
@@ -250,7 +202,6 @@ const convertLocationDataArrToLineString = (locations: LocationObject[]) => {
 export {
   lineStringsToPathDeconstructor,
   latLngArrayConstructor,
-  pathPolygonConstructor,
   wrapGeometryInFC,
   convertFC2GC,
   convertGC2FC,

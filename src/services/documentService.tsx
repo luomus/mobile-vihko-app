@@ -5,10 +5,6 @@ import { graphqlUrl, postDocumentUrl } from '../config/urls'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
 
-interface BasicObject {
-  [key: string]: any
-}
-
 const setClient = (language: string) => {
   return new ApolloClient({
     uri: graphqlUrl,
@@ -42,7 +38,7 @@ export const getSchemas = async (language: string, formId: string) => {
   }
 }
 
-export const postObservationEvent = async (observationEvent: BasicObject, credentials: CredentialsType) => {
+export const postObservationEvent = async (observationEvent: Record<string, any>, credentials: CredentialsType) => {
   if (!credentials.token) {
     throw new Error(`${i18n.t('credentials missing')}`)
   }

@@ -2,9 +2,20 @@ import '@testing-library/jest-native/extend-expect'
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock'
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock.js'
 
+//react-hook-form
+global.window = {}
+global.window = global
+
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage)
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
+jest.mock('react-native-keyboard-aware-scroll-view', () => {
+  return {
+    KeyboardAwareScrollView: jest.fn().mockImplementation(({ children }) => children)
+  }
+})
 
+jest.mock('./src/components/map/MapComponent')
+jest.mock('./src/helpers/geolocationHelper')
 jest.mock('./src/services/atlasService')
 jest.mock('./src/services/autocompleteService')
 jest.mock('./src/services/documentService')
