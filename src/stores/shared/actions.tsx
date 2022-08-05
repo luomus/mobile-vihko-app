@@ -39,6 +39,8 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
       return region.id === observationZone.currentZoneId
     })
 
+    storageService.save('currentZoneId', observationZone.currentZoneId)
+
     if (!userId || (schema.formID === forms.lolife && !region)) {
       return
     }
@@ -166,6 +168,9 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 
     //switch schema
     dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID))
+
+    const currentObservationZone = await storageService.fetch('currentZoneId')
+    dispatch(setCurrentObservationZone(currentObservationZone))
 
     if (observationEvent.events[observationEvent.events.length - 1].grid) {
       const grid = observationEvent.events[observationEvent.events.length - 1].grid
