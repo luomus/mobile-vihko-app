@@ -1,7 +1,7 @@
 import Form from './Form'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-//called in component to initalize to ane of the forms
+//called in component to initalize to any of the forms
 export const initForm = (
   setForm: Function,
   defaults: any,
@@ -16,32 +16,33 @@ export const initForm = (
   scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>
 ) => {
 
-  if (!schema || (rules && !fieldScopes) || (!fields)) {
+  if (!schema) {
     setForm(null)
-    return
+  } else if (rules && !fieldScopes) {
+    setForm(null)
   } else if (!rules) {
-    setForm(Form(defaults, fields, null, schema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
-  } else {
-    if (fieldScopes === null) {
+    if (!fields) {
       setForm(null)
     } else {
-      const fieldScope = Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key: string) => {
-        const matches = new RegExp(rules.regexp).test(key)
-        if (rules.complement ? !matches : matches) {
-          return fieldScopes[rules.field][key]
-        } else {
-          return foundObject
-        }
-      }, null)
-
-      if (!fieldScope) {
-        return null
-      }
-
-      const fields = fieldScope?.fields.concat(['images'])
-      const blacklist = fieldScope?.blacklist
-
-      setForm(Form(defaults, fields, blacklist, schema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+      setForm(Form(defaults, fields, null, schema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
     }
+  } else {
+    if (fieldScopes === null) {
+      return
+    }
+    
+    const fieldScope = Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key: string) => {
+      const matches = new RegExp(rules.regexp).test(key)
+      if (rules.complement ? !matches : matches) {
+        return fieldScopes[rules.field][key]
+      } else {
+        return foundObject
+      }
+    }, null)
+
+    const fields = fieldScope?.fields.concat(['images'])
+    const blacklist = fieldScope?.blacklist
+
+    setForm(Form(defaults, fields, blacklist, schema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
   }
 }
