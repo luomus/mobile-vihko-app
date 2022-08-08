@@ -280,7 +280,8 @@ const FormAutocompleteComponent = (props: Props) => {
               keyExtractor: (_, idx) => idx.toString(),
               renderItem: ({ item }) => {
                 return (
-                  <TouchableOpacity onPress={() => onSelection(item.data)}>
+                  <TouchableOpacity onPress={() => onSelection(item.data)}
+                    style={{ backgroundColor: Colors.neutral5 }}>
                     <Text style={{ paddingHorizontal: 10 }}>{item.element}</Text>
                   </TouchableOpacity>
                 )
