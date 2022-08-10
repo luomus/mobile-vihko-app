@@ -281,7 +281,7 @@ const FormAutocompleteComponent = (props: Props) => {
               renderItem: ({ item }) => {
                 return (
                   <TouchableOpacity onPress={() => onSelection(item.data)}
-                    style={{ backgroundColor: Colors.neutral5 }}>
+                    style={{ backgroundColor: Colors.neutral2 }}>
                     <Text style={{ paddingHorizontal: 10 }}>{item.element}</Text>
                   </TouchableOpacity>
                 )
