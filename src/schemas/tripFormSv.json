@@ -1,0 +1,2584 @@
+{
+    "data": {
+      "form": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "editors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Redigeringsrättigheter"
+            },
+            "secureLevel": {
+              "type": "string",
+              "enum": [
+                "MX.secureLevelNone",
+                "MX.secureLevelKM10"
+              ],
+              "enumNames": [
+                "Inte skyddad",
+                "10 km"
+              ],
+              "title": "De exakta platsinformationen för observationen är offentliga",
+              "default": "MX.secureLevelNone"
+            },
+            "gatheringEvent": {
+              "type": "object",
+              "properties": {
+                "leg": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Observatörer"
+                },
+                "legPublic": {
+                  "type": "boolean",
+                  "title": "Observatörernas namn är offentliga",
+                  "default": true
+                },
+                "dateBegin": {
+                  "type": "string",
+                  "title": "Startdatum",
+                  "excludeFromCopy": true
+                },
+                "dateEnd": {
+                  "type": "string",
+                  "title": "Slutdatum",
+                  "excludeFromCopy": true
+                }
+              },
+              "required": [],
+              "title": ""
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Nyckelordet"
+            },
+            "gatherings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "dateBegin": {
+                    "type": "string",
+                    "title": "Startdatum",
+                    "excludeFromCopy": true
+                  },
+                  "dateEnd": {
+                    "type": "string",
+                    "title": "Slutdatum",
+                    "excludeFromCopy": true
+                  },
+                  "namedPlaceID": {
+                    "type": "string",
+                    "title": "Named place"
+                  },
+                  "geometry": {
+                    "type": "object",
+                    "properties": {},
+                    "title": "Coordinates"
+                  },
+                  "coordinateRadius": {
+                    "type": "string",
+                    "title": "Koordinera noggrannhet i meter"
+                  },
+                  "alt": {
+                    "type": "string",
+                    "title": "Höjd på meter"
+                  },
+                  "country": {
+                    "type": "string",
+                    "title": "Land"
+                  },
+                  "administrativeProvince": {
+                    "type": "string",
+                    "title": "Administrativ landskap"
+                  },
+                  "biologicalProvince": {
+                    "type": "string",
+                    "title": "Biogeografisk provins"
+                  },
+                  "municipality": {
+                    "type": "string",
+                    "title": "Kommun"
+                  },
+                  "locality": {
+                    "type": "string",
+                    "title": "Ortnamn"
+                  },
+                  "localityDescription": {
+                    "type": "string",
+                    "title": "Beskrivning av ort"
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Bilder av observationsplats",
+                    "excludeFromCopy": true
+                  },
+                  "habitat": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "",
+                        "MY.habitatEnumValue1",
+                        "MY.habitatEnumValue2",
+                        "MY.habitatEnumValue3",
+                        "MY.habitatEnumValue4",
+                        "MY.habitatEnumValue5",
+                        "MY.habitatEnumValue6",
+                        "MY.habitatEnumValue7",
+                        "MY.habitatEnumValue8",
+                        "MY.habitatEnumValue9",
+                        "MY.habitatEnumValue10",
+                        "MY.habitatEnumValue11",
+                        "MY.habitatEnumValue12",
+                        "MY.habitatEnumValue13",
+                        "MY.habitatEnumValue14",
+                        "MY.habitatEnumValue15",
+                        "MY.habitatEnumValue16",
+                        "MY.habitatEnumValue17",
+                        "MY.habitatEnumValue18",
+                        "MY.habitatEnumValue19",
+                        "MY.habitatEnumValue20",
+                        "MY.habitatEnumValue21",
+                        "MY.habitatEnumValue22",
+                        "MY.habitatEnumValue23",
+                        "MY.habitatEnumValue24",
+                        "MY.habitatEnumValue25",
+                        "MY.habitatEnumValue26",
+                        "MY.habitatEnumValue27",
+                        "MY.habitatEnumValue28",
+                        "MY.habitatEnumValue29",
+                        "MY.habitatEnumValue30",
+                        "MY.habitatEnumValue31",
+                        "MY.habitatEnumValue32",
+                        "MY.habitatEnumValue33",
+                        "MY.habitatEnumValue34",
+                        "MY.habitatEnumValue35",
+                        "MY.habitatEnumValue36",
+                        "MY.habitatEnumValue87",
+                        "MY.habitatEnumValue37",
+                        "MY.habitatEnumValue38",
+                        "MY.habitatEnumValue39",
+                        "MY.habitatEnumValue40",
+                        "MY.habitatEnumValue41",
+                        "MY.habitatEnumValue42",
+                        "MY.habitatEnumValue43",
+                        "MY.habitatEnumValue44",
+                        "MY.habitatEnumValue45",
+                        "MY.habitatEnumValue46",
+                        "MY.habitatEnumValue47",
+                        "MY.habitatEnumValue48",
+                        "MY.habitatEnumValue49",
+                        "MY.habitatEnumValue50",
+                        "MY.habitatEnumValue51",
+                        "MY.habitatEnumValue52",
+                        "MY.habitatEnumValue53",
+                        "MY.habitatEnumValue54",
+                        "MY.habitatEnumValue55",
+                        "MY.habitatEnumValue56",
+                        "MY.habitatEnumValue57",
+                        "MY.habitatEnumValue58",
+                        "MY.habitatEnumValue59",
+                        "MY.habitatEnumValue60",
+                        "MY.habitatEnumValue61",
+                        "MY.habitatEnumValue62",
+                        "MY.habitatEnumValue63",
+                        "MY.habitatEnumValue64",
+                        "MY.habitatEnumValue65",
+                        "MY.habitatEnumValue66",
+                        "MY.habitatEnumValue67",
+                        "MY.habitatEnumValue68",
+                        "MY.habitatEnumValue69",
+                        "MY.habitatEnumValue70",
+                        "MY.habitatEnumValue71",
+                        "MY.habitatEnumValue72",
+                        "MY.habitatEnumValue73",
+                        "MY.habitatEnumValue74",
+                        "MY.habitatEnumValue75",
+                        "MY.habitatEnumValue76",
+                        "MY.habitatEnumValue77",
+                        "MY.habitatEnumValue78",
+                        "MY.habitatEnumValue79",
+                        "MY.habitatEnumValue80",
+                        "MY.habitatEnumValue81",
+                        "MY.habitatEnumValue82",
+                        "MY.habitatEnumValue83",
+                        "MY.habitatEnumValue84",
+                        "MY.habitatEnumValue85",
+                        "MY.habitatEnumValue86"
+                      ],
+                      "enumNames": [
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "title": "biotop"
+                  },
+                  "habitatDescription": {
+                    "type": "string",
+                    "title": "Biotops beskrivning"
+                  },
+                  "weather": {
+                    "type": "string",
+                    "title": "Väder",
+                    "excludeFromCopy": true
+                  },
+                  "notes": {
+                    "type": "string",
+                    "title": "Anteckningar"
+                  },
+                  "samplingMethod": {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "MY.samplingMethodLight",
+                      "MY.samplingMethodLightTrap",
+                      "MY.samplingMethodTrap",
+                      "MY.samplingMethodMalaise",
+                      "MY.samplingMethodPitfall",
+                      "MY.samplingMethodWindowtrap",
+                      "MY.samplingMethodYellowWindowTrap",
+                      "MY.samplingMethodPantrap",
+                      "MY.samplingMethodYellowpan",
+                      "MY.samplingMethodYellowtrap",
+                      "MY.samplingMethodFeromonetrap",
+                      "MY.samplingMethodBaittrap",
+                      "MY.samplingMethodBait",
+                      "MY.samplingMethodNet",
+                      "MY.samplingMethodSweeping",
+                      "MY.samplingMethodCarnet",
+                      "MY.samplingMethodMistnet",
+                      "MY.samplingMethodBoard",
+                      "MY.samplingMethodReared",
+                      "MY.samplingMethodExovo",
+                      "MY.samplingMethodElarva",
+                      "MY.samplingMethodEpupa",
+                      "MY.samplingMethodEclectortrap",
+                      "MY.samplingMethodHand",
+                      "MY.samplingMethodSifting",
+                      "MY.samplingMethodSoilsample",
+                      "MY.samplingMethodDropping",
+                      "MY.samplingMethodWashing",
+                      "MY.samplingMethodDigging",
+                      "MY.samplingMethodDiving",
+                      "MY.samplingMethodDrag",
+                      "MY.samplingMethodTriangleDrag",
+                      "MY.samplingMethodFishNet",
+                      "MY.samplingMethodElectrofishing",
+                      "MY.samplingMethodAngleFishing",
+                      "MY.samplingMethodFishTrap",
+                      "MY.samplingMethodSeine",
+                      "MY.samplingMethodTrawling",
+                      "MY.samplingMethodBeamTrawl",
+                      "MY.samplingMethodDungTrap",
+                      "MY.samplingMethodTrunkWindowTrap",
+                      "MY.samplingMethodDiverInsectTrap",
+                      "MY.samplingMethodAquaticEmergenceTrap",
+                      "MY.samplingMethodWaterBucket",
+                      "MY.samplingMethodTrampling",
+                      "MY.samplingMethodWaterSieve",
+                      "MY.samplingMethodOther"
+                    ],
+                    "enumNames": [
+                      "",
+                      "Ljus",
+                      "Ljusfälla",
+                      "Fälla (generisk)",
+                      "Malaise-fälla",
+                      "Fallfälla",
+                      "Barriärfälla",
+                      "Gulbarriärfälla",
+                      "Skålfälla",
+                      "Gulskål",
+                      "Limfälla",
+                      "Feromonfälla",
+                      "Betefälla",
+                      "Bete (utan fälla)",
+                      "Håv",
+                      "Slaghåv",
+                      "Bilhåv",
+                      "Fågelnät",
+                      "Brädefälla",
+                      "Odlad",
+                      "Odlad från ägget",
+                      "Odlad från larven",
+                      "Odlad från puppan",
+                      "Eklektor",
+                      "Handsamling",
+                      "Sållning",
+                      "Jordprov",
+                      "Bankning",
+                      "Tvättning",
+                      "Grävning",
+                      "Dykning",
+                      "Dragg",
+                      "Triangeldragg",
+                      "Fisknät",
+                      "Elfiske",
+                      "Mete",
+                      "Katse eller ryssja",
+                      "Not",
+                      "Trålning",
+                      "Bomtrål",
+                      "Gödselfälla",
+                      "Fönsterfälla för trädstammar",
+                      "Dykarbaggefälla",
+                      "Kläckningsfälla för vatteninsekter",
+                      "Vattenhink",
+                      "Trampning",
+                      "Vattensållning",
+                      "Övrig"
+                    ],
+                    "title": "Insamlingsmetod"
+                  },
+                  "samplingMethodNotes": {
+                    "type": "string",
+                    "title": "Ancteckningar om insamlingsmetod"
+                  },
+                  "observationDays": {
+                    "type": "integer",
+                    "title": "Observationsdagar"
+                  },
+                  "observationMinutes": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "title": "Observeringsminuter"
+                  },
+                  "trapCount": {
+                    "type": "integer",
+                    "title": "Antal fällor"
+                  },
+                  "taxonCensus": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "censusTaxonID": {
+                          "type": "string",
+                          "title": "Räknad taxon"
+                        },
+                        "taxonCensusType": {
+                          "type": "string",
+                          "enum": [
+                            "MY.taxonCensusTypeCounted",
+                            "MY.taxonCensusTypeEstimated",
+                            "MY.taxonCensusTypeNotCounted"
+                          ],
+                          "enumNames": [
+                            "Alla arter har identifierats och räknats",
+                            "Alla arter identifierats, individsantal beräknad",
+                            "Alla arter identifierats, individsantal icke beräknad"
+                          ],
+                          "title": "Räkningens fullständighet"
+                        }
+                      },
+                      "required": [
+                        "taxonCensusType"
+                      ]
+                    },
+                    "title": "Completely recorded taxon"
+                  },
+                  "units": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "count": {
+                          "type": "string",
+                          "title": "Antal"
+                        },
+                        "maleIndividualCount": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "title": "Individantal av hane"
+                        },
+                        "femaleIndividualCount": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "title": "Individantal av hone"
+                        },
+                        "sex": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.sexM",
+                            "MY.sexF",
+                            "MY.sexW",
+                            "MY.sexU",
+                            "MY.sexN",
+                            "MY.sexX",
+                            "MY.sexE",
+                            "MY.sexC"
+                          ],
+                          "enumNames": [
+                            "",
+                            "hane",
+                            "hona",
+                            "arbetare",
+                            "okänd",
+                            "inte tillämpbar",
+                            "gynandromorf",
+                            "olika kön",
+                            "kontroversiell"
+                          ],
+                          "title": "Kön"
+                        },
+                        "notes": {
+                          "type": "string",
+                          "title": "Anteckningar"
+                        },
+                        "taxonConfidence": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.taxonConfidenceSure",
+                            "MY.taxonConfidenceUnsure",
+                            "MY.taxonConfidenceSubspeciesUnsure"
+                          ],
+                          "enumNames": [
+                            "",
+                            "Säker",
+                            "Osäker",
+                            "Underart osäker"
+                          ],
+                          "title": "Säkerhet av bestämningen",
+                          "default": "MY.taxonConfidenceSure"
+                        },
+                        "recordBasis": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.recordBasisPreservedSpecimen",
+                            "MY.recordBasisHumanObservation",
+                            "MY.recordBasisHumanObservationHandled",
+                            "MY.recordBasisHumanObservationPhoto",
+                            "MY.recordBasisHumanObservationAudio",
+                            "MY.recordBasisHumanObservationIndirect",
+                            "MY.recordBasisMachineObservationVideo",
+                            "MY.recordBasisMachineObservationAudio"
+                          ],
+                          "enumNames": [
+                            "",
+                            "Prov",
+                            "Observation",
+                            "Behandlad (fasttagit, inte bevarad)",
+                            "Fotograferade",
+                            "Ljudsatt",
+                            "Indirekt observation (fotspår, avföring, etc)",
+                            "Maskinobservation, video",
+                            "Maskinobservation, audio"
+                          ],
+                          "title": "Rekords typ",
+                          "default": "MY.recordBasisHumanObservation"
+                        },
+                        "samplingMethod": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.samplingMethodLight",
+                            "MY.samplingMethodLightTrap",
+                            "MY.samplingMethodTrap",
+                            "MY.samplingMethodMalaise",
+                            "MY.samplingMethodPitfall",
+                            "MY.samplingMethodWindowtrap",
+                            "MY.samplingMethodYellowWindowTrap",
+                            "MY.samplingMethodPantrap",
+                            "MY.samplingMethodYellowpan",
+                            "MY.samplingMethodYellowtrap",
+                            "MY.samplingMethodFeromonetrap",
+                            "MY.samplingMethodBaittrap",
+                            "MY.samplingMethodBait",
+                            "MY.samplingMethodNet",
+                            "MY.samplingMethodSweeping",
+                            "MY.samplingMethodCarnet",
+                            "MY.samplingMethodMistnet",
+                            "MY.samplingMethodBoard",
+                            "MY.samplingMethodReared",
+                            "MY.samplingMethodExovo",
+                            "MY.samplingMethodElarva",
+                            "MY.samplingMethodEpupa",
+                            "MY.samplingMethodEclectortrap",
+                            "MY.samplingMethodHand",
+                            "MY.samplingMethodSifting",
+                            "MY.samplingMethodSoilsample",
+                            "MY.samplingMethodDropping",
+                            "MY.samplingMethodWashing",
+                            "MY.samplingMethodDigging",
+                            "MY.samplingMethodDiving",
+                            "MY.samplingMethodDrag",
+                            "MY.samplingMethodTriangleDrag",
+                            "MY.samplingMethodFishNet",
+                            "MY.samplingMethodElectrofishing",
+                            "MY.samplingMethodAngleFishing",
+                            "MY.samplingMethodFishTrap",
+                            "MY.samplingMethodSeine",
+                            "MY.samplingMethodTrawling",
+                            "MY.samplingMethodBeamTrawl",
+                            "MY.samplingMethodDungTrap",
+                            "MY.samplingMethodTrunkWindowTrap",
+                            "MY.samplingMethodDiverInsectTrap",
+                            "MY.samplingMethodAquaticEmergenceTrap",
+                            "MY.samplingMethodWaterBucket",
+                            "MY.samplingMethodTrampling",
+                            "MY.samplingMethodWaterSieve",
+                            "MY.samplingMethodOther"
+                          ],
+                          "enumNames": [
+                            "",
+                            "Ljus",
+                            "Ljusfälla",
+                            "Fälla (generisk)",
+                            "Malaise-fälla",
+                            "Fallfälla",
+                            "Barriärfälla",
+                            "Gulbarriärfälla",
+                            "Skålfälla",
+                            "Gulskål",
+                            "Limfälla",
+                            "Feromonfälla",
+                            "Betefälla",
+                            "Bete (utan fälla)",
+                            "Håv",
+                            "Slaghåv",
+                            "Bilhåv",
+                            "Fågelnät",
+                            "Brädefälla",
+                            "Odlad",
+                            "Odlad från ägget",
+                            "Odlad från larven",
+                            "Odlad från puppan",
+                            "Eklektor",
+                            "Handsamling",
+                            "Sållning",
+                            "Jordprov",
+                            "Bankning",
+                            "Tvättning",
+                            "Grävning",
+                            "Dykning",
+                            "Dragg",
+                            "Triangeldragg",
+                            "Fisknät",
+                            "Elfiske",
+                            "Mete",
+                            "Katse eller ryssja",
+                            "Not",
+                            "Trålning",
+                            "Bomtrål",
+                            "Gödselfälla",
+                            "Fönsterfälla för trädstammar",
+                            "Dykarbaggefälla",
+                            "Kläckningsfälla för vatteninsekter",
+                            "Vattenhink",
+                            "Trampning",
+                            "Vattensållning",
+                            "Övrig"
+                          ],
+                          "title": "Insamlingsmetod"
+                        },
+                        "samplingMethodNotes": {
+                          "type": "string",
+                          "title": "Ancteckningar om insamlingsmetod"
+                        },
+                        "preservation": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "",
+                              "MY.preservationPressed",
+                              "MY.preservationDry",
+                              "MY.preservationCriticalPointDrying",
+                              "MY.preservationPinned",
+                              "MY.preservationGlued",
+                              "MY.preservationLiquid",
+                              "MY.preservationEthanol",
+                              "MY.preservationEthanolPure",
+                              "MY.preservationEthanol70",
+                              "MY.preservationEthanol80",
+                              "MY.preservationEthanol80Pure",
+                              "MY.preservationEthanol96",
+                              "MY.preservationEthanolDenatured",
+                              "MY.preservationEthanolFormalin",
+                              "MY.preservationEthanolExFormalin",
+                              "MY.preservationFormalin",
+                              "MY.preservationBouinSolution",
+                              "MY.preservationPampelsFluid",
+                              "MY.preservationGlycerol",
+                              "MY.preservationParaffin",
+                              "MY.preservationMercuricChloride",
+                              "MY.preservationCryopreserved",
+                              "MY.preservationFrozen",
+                              "MY.preservationFrozenMinus80C",
+                              "MY.preservationFreezeDried",
+                              "MY.preservationGoldPlated",
+                              "MY.preservationActiveCulture",
+                              "MY.preservationLiving",
+                              "MY.preservationSlide",
+                              "MY.preservationSlideCanadaBalsam",
+                              "MY.preservationSlideEuparal",
+                              "MY.preservationSlidePolyviol",
+                              "MY.preservationStuffed",
+                              "MY.preservationCast",
+                              "MY.preservationPlastinated",
+                              "MY.preservationFrozenMinus80CAndEthanolMinus20C"
+                            ],
+                            "enumNames": [
+                              "",
+                              "Torr och pressad",
+                              "Torrprov",
+                              "Kritiskt punkt torkning",
+                              "Nålad",
+                              "Limmad",
+                              "Vätska (ospecificerad)",
+                              "Etanol (okänd %)",
+                              "Etanol (okänd %) ren",
+                              "Etanol 70 %",
+                              "Etanol 80 %",
+                              "Etanol 80 % ren",
+                              "Etanol 96 %",
+                              "Etalol denaturerad",
+                              "Etanol och formalin",
+                              "Etanol, ex formalin",
+                              "Formalin",
+                              "Bouin's lösning",
+                              "Pampels vätska",
+                              "Glycerol",
+                              "Paraffin",
+                              "Sublimat",
+                              "Frysförvarad",
+                              "Fryst",
+                              "Fryst -80 °C",
+                              "Frystorkad",
+                              "Förgylld",
+                              "Kultur",
+                              "Levande",
+                              "Objektglas",
+                              "Objektglas, kanadabalsam",
+                              "Objektglas, Euparal",
+                              "Objektglas, Polyviol",
+                              "Fylld",
+                              "Avgjutning",
+                              "",
+                              "Fryst -80 °C och etanol -20 °C (duplikat)"
+                            ]
+                          },
+                          "uniqueItems": true,
+                          "title": "Konserveringsmetod"
+                        },
+                        "wild": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.wildWild",
+                            "MY.wildUnknown",
+                            "MY.wildNonWild"
+                          ],
+                          "enumNames": [
+                            "",
+                            "Vild",
+                            "Okänd",
+                            "Inte vild"
+                          ],
+                          "title": "Nativstatus"
+                        },
+                        "breeding": {
+                          "type": "boolean",
+                          "title": "Häckning"
+                        },
+                        "hostID": {
+                          "type": "string",
+                          "title": "Värdens artidentifierare"
+                        },
+                        "checklistID": {
+                          "type": "string",
+                          "title": "Artlista",
+                          "enum": [
+                            "",
+                            "MR.1"
+                          ],
+                          "enumNames": [
+                            "",
+                            "Finlands artdatacenters bemästra checklista"
+                          ],
+                          "default": ""
+                        },
+                        "atlasCode": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.atlasCodeEnum1",
+                            "MY.atlasCodeEnum2",
+                            "MY.atlasCodeEnum3",
+                            "MY.atlasCodeEnum4",
+                            "MY.atlasCodeEnum5",
+                            "MY.atlasCodeEnum6",
+                            "MY.atlasCodeEnum61",
+                            "MY.atlasCodeEnum62",
+                            "MY.atlasCodeEnum63",
+                            "MY.atlasCodeEnum64",
+                            "MY.atlasCodeEnum65",
+                            "MY.atlasCodeEnum66",
+                            "MY.atlasCodeEnum7",
+                            "MY.atlasCodeEnum71",
+                            "MY.atlasCodeEnum72",
+                            "MY.atlasCodeEnum73",
+                            "MY.atlasCodeEnum74",
+                            "MY.atlasCodeEnum75",
+                            "MY.atlasCodeEnum8",
+                            "MY.atlasCodeEnum81",
+                            "MY.atlasCodeEnum82"
+                          ],
+                          "enumNames": [
+                            "",
+                            "1 Osannolik häckning; Art observerad som vistats i rutan under häckningstid, men som högst sannolikt inte häckar där.",
+                            "2 Möjlig häckning; Ensam fågel observerad en gång (t.ex. sjungande eller spelande hane) i för arten typisk häckningsbiotop, och artens häckning i rutan är möjlig.",
+                            "3 Möjlig häckning; Par observerat en gång i lämplig häckningsbiotop, och artens häckning i rutan är möjlig.",
+                            "4 Möjlig häckning; Sjungande, spelande eller uppträdande hane observerad på samma plats (dvs. på ett bestående revir) under flera dagar.",
+                            "5 Möjlig häckning; Observerats hona eller par på samma plats under flera dagar.",
+                            "6 Sannolik häckning; Fågel eller par setts",
+                            "61 Sannolik häckning; Fågel eller par setts återkommande besöka en sannolik boplats",
+                            "62 Sannolik häckning; Fågel eller par setts bygga bo",
+                            "63 Sannolik häckning; Fågel eller par setts varna för att bo eller kull uppenbarligen är i närheten",
+                            "64 Sannolik häckning; Fågel eller par setts spelande vingskadad",
+                            "65 Sannolik häckning; Fågel eller par setts anfalla",
+                            "66 Sannolik häckning; Fågel eller par setts bo iakttaget med samma års bobyggnadsmaterial eller födorester; men ej säkra bevis på ägg eller ungar",
+                            "7 Säker häckning; Indirekt bevis på säker häckning konstaterat",
+                            "71 Säker häckning; Indirekt bevis på säker häckning konstaterat bo iakttaget där häckning ägt rum detta år, då boet innehöll ägg eller äggskal, lämningar av ungar, rester av fjäderslidor el. dyl",
+                            "72 Säker häckning; Indirekt bevis på säker häckning konstaterat: fågel iakttagen som besöker bo på ett sätt som klart pekar på häckning (ägg eller ungar dock ej sedda; t.ex. fåglar häckande i håligheter eller högt)",
+                            "73 Säker häckning; Indirekt bevis på säker häckning konstaterat: nyligen flygga ungar eller dunungar observerade, när dessa kan anses vara födda i rutan",
+                            "74 Säker häckning; Indirekt bevis på säker häckning konstaterat: förälder iakttagen bärande föda till ungar, eller ungars avföring; boet kan antas ligga inom rutan",
+                            "75 Säker häckning; Indirekt bevis på säker häckning konstaterat: förälder sedd ruvande i boet",
+                            "8 Säker häckning; Direkt bevis på säker häckning konstaterat",
+                            "81 Säker häckning; Direkt bevis på säker häckning konstaterat: ungars läten hörda från boet",
+                            "82 Säker häckning; Direkt bevis på säker häckning konstaterat: bo iakttaget med ägg eller ungar"
+                          ],
+                          "title": "Häckningsindex"
+                        },
+                        "twitched": {
+                          "type": "boolean",
+                          "title": "Bongat"
+                        },
+                        "plantLifeStage": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.plantLifeStageSterile",
+                            "MY.plantLifeStageFertile",
+                            "MY.plantLifeStageSeed",
+                            "MY.plantLifeStageSprout",
+                            "MY.plantLifeStageBud",
+                            "MY.plantLifeStageFlower",
+                            "MY.plantLifeStageWitheredFlower",
+                            "MY.plantLifeStageRipeningFruit",
+                            "MY.plantLifeStageRipeFruit",
+                            "MY.plantLifeStageDeadSprout",
+                            "MY.plantLifeStageSubterranean",
+                            "MY.plantLifeStageLivingPlant",
+                            "MY.plantLifeStageDeadPlant"
+                          ],
+                          "enumNames": [
+                            "",
+                            "steril",
+                            "bördig",
+                            "frö / spor / frukt",
+                            "skott",
+                            "knopp",
+                            "blomma",
+                            "vissnad blomma",
+                            "mognande frö / frukt / spor",
+                            "mogen frö / frukt / spor",
+                            "död skott",
+                            "knöl / lök / rot",
+                            "levande växt",
+                            "död växt"
+                          ],
+                          "title": "Växtens livsfas"
+                        },
+                        "plantStatusCode": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.plantStatusCodeL",
+                            "MY.plantStatusCodeA",
+                            "MY.plantStatusCodeAV",
+                            "MY.plantStatusCodeAOV",
+                            "MY.plantStatusCodeAN",
+                            "MY.plantStatusCodeANV",
+                            "MY.plantStatusCodeANS",
+                            "MY.plantStatusCodeT",
+                            "MY.plantStatusCodeTV",
+                            "MY.plantStatusCodeTOV",
+                            "MY.plantStatusCodeTNV",
+                            "MY.plantStatusCodeTNS",
+                            "MY.plantStatusCodeV",
+                            "MY.plantStatusCodeOV",
+                            "MY.plantStatusCodeN",
+                            "MY.plantStatusCodeNV",
+                            "MY.plantStatusCodeNS",
+                            "MY.plantStatusCodeE",
+                            "MY.plantStatusCodeTE",
+                            "MY.plantStatusCodeTVE",
+                            "MY.plantStatusCodeTOVE",
+                            "MY.plantStatusCodeTNVE",
+                            "MY.plantStatusCodeTNSE",
+                            "MY.plantStatusCodeTN",
+                            "MY.plantStatusCodeTNE",
+                            "MY.plantStatusCodeR",
+                            "MY.plantStatusCodeC",
+                            "MY.plantStatusCodeH",
+                            "MY.plantStatusCodeG",
+                            "MY.plantStatusCodeF"
+                          ],
+                          "enumNames": [
+                            "",
+                            "L",
+                            "A",
+                            "AV",
+                            "AOV",
+                            "AN",
+                            "ANV",
+                            "ANS",
+                            "T",
+                            "TV",
+                            "TOV",
+                            "TNV",
+                            "TNS",
+                            "V",
+                            "OV",
+                            "N",
+                            "NV",
+                            "NS",
+                            "E",
+                            "TE",
+                            "TVE",
+                            "TOVE",
+                            "TNVE",
+                            "TNSE",
+                            "TN",
+                            "TNE",
+                            "R",
+                            "C",
+                            "H",
+                            "G",
+                            "F"
+                          ],
+                          "title": "Växtens statuskod"
+                        },
+                        "lifeStage": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.lifeStageEgg",
+                            "MY.lifeStageLarva",
+                            "MY.lifeStagePupa",
+                            "MY.lifeStageJuvenile",
+                            "MY.lifeStageNymph",
+                            "MY.lifeStageSubimago",
+                            "MY.lifeStageImmature",
+                            "MY.lifeStageAdult",
+                            "MY.lifeStageFertile",
+                            "MY.lifeStageSterile",
+                            "MY.lifeStageTadpole",
+                            "MY.lifeStageDead",
+                            "MY.lifeStageAlive",
+                            "MY.lifeStageEmbryo",
+                            "MY.lifeStageSubadult",
+                            "MY.lifeStageMature",
+                            "MY.lifeStagePullus",
+                            "MY.lifeStageHatchedEgg",
+                            "MY.lifeStageHatchedPupa",
+                            "MY.lifeStageGall",
+                            "MY.lifeStageMarks"
+                          ],
+                          "enumNames": [
+                            "",
+                            "ägg",
+                            "larv",
+                            "puppa",
+                            "juvenil",
+                            "nymf",
+                            "subimago",
+                            "omogen",
+                            "vuxen",
+                            "fertil",
+                            "steril",
+                            "grodyngel",
+                            "död",
+                            "levande",
+                            "embryo eller foster",
+                            "subadult",
+                            "könsmogen",
+                            "unge (fåglar)",
+                            "kläckt ägg",
+                            "kläckt ägg",
+                            "gallbildning",
+                            "spår"
+                          ],
+                          "title": "Livsfas"
+                        },
+                        "hostInformalNameString": {
+                          "type": "string",
+                          "title": "Värdart"
+                        },
+                        "substrateSpecies": {
+                          "type": "string",
+                          "title": "Substrat (art)"
+                        },
+                        "smell": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.smellNotSmelled",
+                            "MY.smellNoSmelled",
+                            "MY.smellWeak",
+                            "MY.smellModerate",
+                            "MY.smellStrong"
+                          ],
+                          "enumNames": [
+                            "",
+                            "Inte luktat",
+                            "Ingen lukt",
+                            "Lätt",
+                            "Måttlig",
+                            "Stark"
+                          ],
+                          "title": "Lukt"
+                        },
+                        "smellNotes": {
+                          "type": "string",
+                          "title": "Anteckningar av lukt"
+                        },
+                        "taste": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.tasteNotTasted",
+                            "MY.tasteNoTaste",
+                            "MY.tasteWeak",
+                            "MY.tasteModerate",
+                            "MY.tasteStrong"
+                          ],
+                          "enumNames": [
+                            "",
+                            "Inte smakat",
+                            "Ingen smak",
+                            "Svag",
+                            "Måttlig",
+                            "Stark"
+                          ],
+                          "title": "Smak"
+                        },
+                        "tasteNotes": {
+                          "type": "string",
+                          "title": "Anteckningar av smak"
+                        },
+                        "informalTaxonGroups": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "title": "Informal taxon groups"
+                        },
+                        "images": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "title": "Bilder"
+                        },
+                        "identifications": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "taxon": {
+                                "type": "string",
+                                "title": "Arter"
+                              },
+                              "det": {
+                                "type": "string",
+                                "title": "Det."
+                              },
+                              "detDate": {
+                                "type": "string",
+                                "title": "Bestämningsdatum"
+                              },
+                              "identificationBasis": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "",
+                                    "MY.identificationBasisSeen",
+                                    "MY.identificationBasisHeard",
+                                    "MY.identificationBasisHandled",
+                                    "MY.identificationBasisMedia",
+                                    "MY.identificationBasisFreshSpecimen",
+                                    "MY.identificationBasisPreservedSpecimen",
+                                    "MY.identificationBasisMicroscope",
+                                    "MY.identificationBasisSpores",
+                                    "MY.identificationBasisChemical",
+                                    "MY.identificationBasisGenitals",
+                                    "MY.identificationBasisGenitalPreparate",
+                                    "MY.identificationBasisDNA"
+                                  ],
+                                  "enumNames": [
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "DNA"
+                                  ]
+                                },
+                                "uniqueItems": true,
+                                "title": "Bestämningsgrund"
+                              }
+                            },
+                            "required": []
+                          },
+                          "minItems": 1,
+                          "title": ""
+                        },
+                        "unitGathering": {
+                          "type": "object",
+                          "properties": {
+                            "geometry": {
+                              "type": "object",
+                              "properties": {},
+                              "title": "Coordinates"
+                            },
+                            "dateBegin": {
+                              "type": "string",
+                              "title": "Startdatum"
+                            },
+                            "dateEnd": {
+                              "type": "string",
+                              "title": "Slutdatum",
+                              "excludeFromCopy": true
+                            },
+                            "habitatIUCN": {
+                              "type": "string",
+                              "title": "Biotop"
+                            },
+                            "habitatDescription": {
+                              "type": "string",
+                              "title": "Biotops beskrivning"
+                            },
+                            "substrate": {
+                              "type": "string",
+                              "title": "Anteckningar av substrat"
+                            }
+                          },
+                          "required": [],
+                          "title": ""
+                        },
+                        "unitFact": {
+                          "type": "object",
+                          "properties": {
+                            "autocompleteSelectedTaxonID": {
+                              "type": "string",
+                              "title": "MY.autocompleteSelectedTaxonID"
+                            }
+                          },
+                          "required": [],
+                          "title": ""
+                        },
+                        "birdPlumage": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.birdPlumageAd",
+                            "MY.birdPlumageEijp",
+                            "MY.birdPlumageImm",
+                            "MY.birdPlumageJp",
+                            "MY.birdPlumageJuv",
+                            "MY.birdPlumageNpuk",
+                            "MY.birdPlumagePull",
+                            "MY.birdPlumageSubad",
+                            "MY.birdPlumageTp",
+                            "MY.birdPlumageVp",
+                            "MY.birdPlumagePep",
+                            "MY.birdPlumageSs"
+                          ],
+                          "enumNames": [
+                            "",
+                            "ad (adult)",
+                            "eijp (annan än praktdräkt)",
+                            "imm (inte könsmogen)",
+                            "jp (praktdräkt)",
+                            "juv (1. fullständiga dräkten)",
+                            "n-puk (honfärgad)",
+                            "pull (dununge)",
+                            "subad (dräkt mellan juv och ad)",
+                            "tp (vinterdräkt)",
+                            "vp (bytesdräkt)",
+                            "pep",
+                            "ss"
+                          ],
+                          "title": "Fågelkläder"
+                        },
+                        "birdAge": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.birdAgePp",
+                            "MY.birdAgePm",
+                            "MY.birdAgeFl",
+                            "MY.birdAgePlus1kv",
+                            "MY.birdAge1Kv",
+                            "MY.birdAgePlus2Kv",
+                            "MY.birdAge2kv",
+                            "MY.birdAgePlus3Kv",
+                            "MY.birdAge3Kv",
+                            "MY.birdAgePlus4Kv",
+                            "MY.birdAge4Kv",
+                            "MY.birdAgePlus5Kv",
+                            "MY.birdAge5Kv",
+                            "MY.birdAgePlus6Kv",
+                            "MY.birdAge6Kv",
+                            "MY.birdAgePlus7Kv",
+                            "MY.birdAge7Kv",
+                            "MY.birdAgePlus8Kv",
+                            "MY.birdAge8Kv"
+                          ],
+                          "enumNames": [
+                            "",
+                            "pp (bounge)",
+                            "pm (unge i fält)",
+                            "fl (fullvuxen)",
+                            "+1kv (äldre än 1. kalenderår)",
+                            "1kv (1. kalenderår)",
+                            "+2kv (äldre än 2. kalendarår)",
+                            "2kv (2. kalendarår)",
+                            "+3kv",
+                            "3kv",
+                            "+4kv",
+                            "4kv",
+                            "+5kv",
+                            "5kv",
+                            "+6kv",
+                            "+6kv",
+                            "+7kv",
+                            "7kv",
+                            "+8kv",
+                            "8kv"
+                          ],
+                          "title": "Fågelåldern"
+                        },
+                        "movingStatus": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "title": "Fågelns status"
+                        },
+                        "distance": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.distanceOverFlight",
+                            "MY.distanceNear",
+                            "MY.distanceQuiteFar",
+                            "MY.distanceFar",
+                            "MY.distanceVeryFar"
+                          ],
+                          "enumNames": [
+                            "",
+                            "flög över eller bredvid",
+                            "närä",
+                            "ganska långt borta",
+                            "långt borta",
+                            "väldigt långt borta"
+                          ],
+                          "title": "Distans"
+                        },
+                        "movingDirection": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.movingDirectionN",
+                            "MY.movingDirectionNNE",
+                            "MY.movingDirectionNE",
+                            "MY.movingDirectionENE",
+                            "MY.movingDirectionE",
+                            "MY.movingDirectionESE",
+                            "MY.movingDirectionSE",
+                            "MY.movingDirectionSSE",
+                            "MY.MovingDirectionS",
+                            "MY.movingDirectionSSW",
+                            "MY.movingDirectionSW",
+                            "MY.movingDirectionWSW",
+                            "MY.movingDirectionW",
+                            "MY.movingDirectionWNW",
+                            "MY.movingDirectionNW",
+                            "MY.movingDirectionNNW"
+                          ],
+                          "enumNames": [
+                            "",
+                            "nord",
+                            "nordnordost",
+                            "nordost",
+                            "ostnordost",
+                            "öst",
+                            "ostsydost",
+                            "sydost",
+                            "sydsydost",
+                            "söder",
+                            "sydsydväst",
+                            "sydväst",
+                            "västsydväst",
+                            "väster",
+                            "västnordväst",
+                            "nordväst",
+                            "nordnordväst"
+                          ],
+                          "title": "Rörelseriktning"
+                        },
+                        "batBehavior": {
+                          "type": "string",
+                          "enum": [
+                            "",
+                            "MY.batBehaviorHibernating",
+                            "MY.batBehaviorRoosting",
+                            "MY.batBehaviorHunting",
+                            "MY.batBehaviorDead"
+                          ],
+                          "enumNames": [
+                            "",
+                            "hibernerande",
+                            "i daggömma",
+                            "jagande",
+                            "död"
+                          ],
+                          "title": "fladdermöss aktivitet"
+                        },
+                        "keywords": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "title": "Samling/Nyckelord"
+                        },
+                        "additionalIDs": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "title": "Övriga id"
+                        },
+                        "areaInSquareMeters": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "title": "förekomstområde (m²)"
+                        },
+                        "audio": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "title": "Inspelningar"
+                        }
+                      },
+                      "required": []
+                    },
+                    "excludeFromCopy": true,
+                    "uniqueItems": false,
+                    "minItems": 1,
+                    "title": "Observationer"
+                  }
+                },
+                "required": []
+              },
+              "title": ""
+            }
+          },
+          "required": [
+            "gatherings"
+          ]
+        },
+        "uiSchema": {
+          "ui:shortcuts": {
+            "alt": {
+              "fn": "help",
+              "delay": 1
+            },
+            "alt+F5": {
+              "fn": "revalidate"
+            },
+            "Enter": {
+              "fn": "navigate"
+            },
+            "shift+Enter": {
+              "fn": "navigate",
+              "reverse": true
+            },
+            "ctrl+Enter": {
+              "fn": "textareaRowInsert"
+            },
+            "alt+ ": {
+              "fn": "navigate"
+            },
+            "alt+shift+ ": {
+              "fn": "navigate",
+              "reverse": true
+            },
+            "alt+PageDown": {
+              "fn": "navigateArray",
+              "target": "root_gatherings",
+              "targetLabel": "plats"
+            },
+            "alt+PageUp": {
+              "fn": "navigateArray",
+              "reverse": true,
+              "target": "root_gatherings",
+              "targetLabel": "plats"
+            },
+            "alt+ArrowRight": {
+              "fn": "navigateArray",
+              "target": "root_gatherings",
+              "targetLabel": "plats"
+            },
+            "alt+ArrowLeft": {
+              "fn": "navigateArray",
+              "reverse": true,
+              "target": "root_gatherings",
+              "targetLabel": "plats"
+            },
+            "alt+ArrowUp": {
+              "fn": "navigateArray",
+              "reverse": true,
+              "target": "root_gatherings_%{context[\"root_gatherings.activeIdx\"]}_units",
+              "targetLabel": "observation"
+            },
+            "alt+ArrowDown": {
+              "fn": "navigateArray",
+              "target": "root_gatherings_%{context[\"root_gatherings.activeIdx\"]}_units",
+              "targetLabel": "observation"
+            },
+            "alt+h": {
+              "fn": "navigateArray",
+              "reverse": true,
+              "target": "root_gatherings",
+              "targetLabel": "plats"
+            },
+            "alt+j": {
+              "fn": "navigateArray",
+              "target": "root_gatherings_%{context[\"root_gatherings.activeIdx\"]}_units",
+              "targetLabel": "observation"
+            },
+            "alt+k": {
+              "fn": "navigateArray",
+              "reverse": true,
+              "target": "root_gatherings_%{context[\"root_gatherings.activeIdx\"]}_units",
+              "targetLabel": "observation"
+            },
+            "alt+l": {
+              "fn": "navigateArray",
+              "target": "root_gatherings",
+              "targetLabel": "plats"
+            },
+            "alt+n": {
+              "fn": "navigateArray"
+            },
+            "alt+p": {
+              "fn": "navigateArray",
+              "reverse": true
+            },
+            "alt+Insert": {
+              "fn": "insert"
+            },
+            "alt+i": {
+              "fn": "insert"
+            },
+            "alt+Delete": {
+              "fn": "delete"
+            },
+            "alt+d": {
+              "fn": "delete"
+            },
+            "alt+u": {
+              "fn": "insert",
+              "target": "root_gatherings_%{context[\"root_gatherings.activeIdx\"]}_units",
+              "targetLabel": "@unitShortcutInsertHelp"
+            },
+            "alt+g": {
+              "fn": "insert",
+              "target": "root_gatherings",
+              "targetLabel": "@gatheringShortcutInsertHelp"
+            },
+            "alt+t": {
+              "fn": "autosuggestToggle"
+            }
+          },
+          "ui:order": [
+            "gatheringEvent",
+            "gatherings"
+          ],
+          "ui:field": "InjectField",
+          "ui:options": {
+            "injections": {
+              "fields": [
+                "editors",
+                "secureLevel",
+                "keywords"
+              ],
+              "target": "gatheringEvent"
+            }
+          },
+          "gatheringEvent": {
+            "ui:field": "NestField",
+            "classNames": "well well-sm",
+            "ui:order": [
+              "*",
+              "legPublic",
+              "secureLevel",
+              "eventTime",
+              "keywords"
+            ],
+            "ui:options": {
+              "nests": {
+                "legEditor": {
+                  "fields": [
+                    "leg",
+                    "editors"
+                  ],
+                  "rootUiSchema": {
+                    "ui:field": "NestField",
+                    "ui:options": {
+                      "nests": {
+                        "_legEditor": {
+                          "fields": [
+                            "leg",
+                            "editors"
+                          ],
+                          "title": "",
+                          "rootUiSchema": {
+                            "ui:functions": [
+                              {
+                                "ui:field": "DependentBooleanField",
+                                "ui:options": {
+                                  "booleanField": "editors",
+                                  "booleanDefiner": "leg"
+                                }
+                              },
+                              {
+                                "ui:field": "ArrayCombinerField"
+                              }
+                            ],
+                            "ui:field": "TableField",
+                            "ui:options": {
+                              "specialRules": "legEditors",
+                              "ui:buttonsDesktopLayout": true,
+                              "buttons": [
+                                {
+                                  "fn": "add",
+                                  "label": "Lägg till en obvservatör"
+                                }
+                              ]
+                            },
+                            "items": {
+                              "ui:functions": {
+                                "ui:field": "ContextInjectionField",
+                                "ui:options": {
+                                  "injections": {
+                                    "/ui:options/rules/0/regexp": "^%{/creator}$"
+                                  }
+                                }
+                              },
+                              "ui:field": "DependentDisableField",
+                              "ui:options": {
+                                "rules": [
+                                  {
+                                    "disableDefiner": "leg",
+                                    "disableField": "editors",
+                                    "regexp": "creator is injected here",
+                                    "inlineHelp": "Du måste ha redigeringsrättigheter.",
+                                    "disabledValueToDisplay": true
+                                  },
+                                  {
+                                    "disableDefiner": "leg",
+                                    "disableField": "editors",
+                                    "regexp": "^((?!(MA\\.\\d)).)*$"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "legEditorSizeFixer": {
+                          "fields": [
+                            "_legEditor"
+                          ],
+                          "title": "",
+                          "rootUiSchema": {
+                            "ui:grid": {
+                              "lg": 6,
+                              "md": 6,
+                              "sm": 9,
+                              "xs": 12
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "eventTime": {
+                  "fields": [
+                    "dateBegin",
+                    "dateEnd"
+                  ],
+                  "title": "",
+                  "rootUiSchema": {
+                    "ui:grid": {
+                      "lg": {
+                        "dateBegin": 3,
+                        "dateEnd": 2
+                      },
+                      "md": {
+                        "dateBegin": 4,
+                        "dateEnd": 2
+                      },
+                      "sm": {
+                        "dateBegin": 5,
+                        "dateEnd": 3
+                      },
+                      "xs": 12
+                    }
+                  }
+                }
+              }
+            },
+            "leg": {
+              "ui:widget": "AutosuggestWidget",
+              "ui:help": "Du kan lägga till din väns användarnamn som observatör och observationen visas också i hans eller hennes egna observationer. Autoslutför föreslår namnen på dina verifierade vänner. Du kan också lägga till andra observatörer genom att skriva deras namn, även om de inte är dina vänner. Då visas en röd triangel med namnet. Välj \"Ja\" för att låta dina vänner redigera formuläret. Du kan fråga en annan användare som din vän på din profilsida. Din profil öppnas genom att klicka på ditt användarnamn till höger i den högsta fältet. Sök efter din vän genom att söka på profilsidan och välj \"Lägg till som vän\". När han eller hon har bekräftat din begäran i sin egen profil är ni vänner och ni kan till exempel i Skrivbok-tjänsten rapportera gemensamma observationer.",
+              "ui:options": {
+                "autosuggestField": "friends",
+                "allowNonsuggestedValue": true,
+                "suggestionReceive": "key",
+                "preventTypingPattern": "^MA\\.\\d+$"
+              }
+            },
+            "dateBegin": {
+              "ui:widget": "DateTimeWidget",
+              "ui:options": {
+                "showButtons": true
+              }
+            },
+            "dateEnd": {
+              "ui:widget": "DateTimeWidget"
+            },
+            "legPublic": {
+              "ui:options": {
+                "allowUndefined": false
+              },
+              "ui:help": "Om det behövs kan du dölja namnen på observatörerna från den öppna data genom att välja alternativet \"Nej\". Namnen på observatörerna är alltid tillgängliga för myndigheterna."
+            }
+          },
+          "editors": {
+            "ui:help": "Om du rapporterar en identifierad användare som observatör och användaren har lagt till dig som en vän, kan du ge användaren rätt att ändra denna fältbesöksrapport. Förutom observationer från denna fältbesöksrapport visas till användaren bland hans/hennes egna observationer.",
+            "ui:options": {
+              "allowUndefined": false
+            }
+          },
+          "secureLevel": {
+            "ui:widget": "AnyToBooleanWidget",
+            "ui:help": "Om du väljer \"Nej\" diffuseras observationens platsdata i en 10 x 10 km2 kartruta i det öppna i materialet. Den exakta platsen för observationen är alltid tillgänglig för myndigheterna. För diffuserade observationer bifogade foton är offentliga.",
+            "ui:options": {
+              "trueValue": "MX.secureLevelNone",
+              "falseValue": "MX.secureLevelKM10",
+              "allowUndefined": false
+            }
+          },
+          "keywords": {
+            "ui:field": "TagArrayField",
+            "ui:help": "Du kan ange dina egna nyckelord för inlämningen för att göra det lättare att söka i observationerna. T.ex. \"field-route\" eller \"backyard-forest\"."
+          },
+          "gatherings": {
+            "ui:functions": [
+              {
+                "ui:field": "NamedPlaceChooserField"
+              }
+            ],
+            "ui:field": "MapArrayField",
+            "ui:settings": [
+              "/mapOptions/tileLayerName",
+              "/mapOptions/overlayNames",
+              "/mapOptions/tileLayerOpacity",
+              "/mapOptions/tileLayers"
+            ],
+            "ui:options": {
+              "mapOptions": {
+                "controls": {
+                  "draw": {
+                    "clear": true,
+                    "delete": true,
+                    "reverse": true,
+                    "undo": false,
+                    "redo": false,
+                    "upload": true,
+                    "copy": true
+                  }
+                }
+              },
+              "geometryField": "geometry",
+              "geometryMapper": "units",
+              "mapSizes": {
+                "lg": 8,
+                "md": 6,
+                "sm": 6,
+                "xs": 12
+              },
+              "buttons": [
+                {
+                  "fn": "add",
+                  "label": "Lägg till en plats"
+                }
+              ],
+              "popupFields": [
+                {
+                  "field": "/units/[idx]/identifications/0/taxon"
+                },
+                {
+                  "field": "/units/[idx]/sex"
+                },
+                {
+                  "field": "/units/[idx]/notes"
+                }
+              ],
+              "belowFields": [
+                "units"
+              ],
+              "belowUiSchemaRoot": {
+                "ui:field": "SingleItemArrayField",
+                "ui:title": "Plats %{idx} observationer",
+                "ui:options": {
+                  "titleClassName": "lg"
+                }
+              },
+              "inlineUiSchemaRoot": {
+                "ui:field": "SingleActiveArrayField",
+                "ui:title": "Plats %{idx}",
+                "ui:options": {
+                  "renderer": "accordion",
+                  "headerFormatters": [
+                    "units",
+                    "namedPlace"
+                  ],
+                  "popupFields": [
+                    {
+                      "field": "units",
+                      "mapper": "units",
+                      "label": "Observationer"
+                    },
+                    {
+                      "field": "localityDescription"
+                    }
+                  ],
+                  "confirmDelete": true
+                }
+              },
+              "propsToPassToInlineSchema": [
+                "formData"
+              ],
+              "minHeight": 435,
+              "resizeTimeout": 210,
+              "renderButtonsBelow": true,
+              "buttonsTitle": "Lägg till en ny plats",
+              "emptyHelp": "Börja rapportera observationer genom att dra observationsplatsen på kartan"
+            },
+            "items": {
+              "ui:functions": [
+                {
+                  "ui:field": "GeocoderField",
+                  "ui:options": {
+                    "updateOnlyEmpty": true,
+                    "button": true
+                  }
+                },
+                {
+                  "ui:field": "NamedPlaceSaverField"
+                }
+              ],
+              "ui:field": "NestField",
+              "ui:options": {
+                "nests": {
+                  "eventTime": {
+                    "title": "",
+                    "fields": [
+                      "dateBegin",
+                      "dateEnd"
+                    ],
+                    "rootUiSchema": {
+                      "ui:grid": {
+                        "lg": {
+                          "dateBegin": 6,
+                          "dateEnd": 3
+                        },
+                        "md": {
+                          "dateBegin": 7,
+                          "dateEnd": 4
+                        },
+                        "sm": 12,
+                        "xs": 12
+                      }
+                    }
+                  },
+                  "placeWrapper": {
+                    "title": "Information av observationsplats",
+                    "fields": [
+                      "country",
+                      "administrativeProvince",
+                      "biologicalProvince",
+                      "municipality",
+                      "locality",
+                      "localityDescription",
+                      "coordinateRadius",
+                      "alt",
+                      "images",
+                      "weather",
+                      "eventTime",
+                      "notes",
+                      "namedPlaceID",
+                      "samplingMethod",
+                      "samplingMethodNotes",
+                      "habitat",
+                      "habitatDescription",
+                      "observationDays",
+                      "observationMinutes",
+                      "trapCount",
+                      "taxonCensus"
+                    ],
+                    "rootUiSchema": {
+                      "ui:field": "ScopeField",
+                      "ui:settings": [
+                        "%additionalFields/scopeField_gatherings"
+                      ],
+                      "ui:options": {
+                        "includeAdditionalFieldsChooserButton": true,
+                        "additionalsPersistenceKey": "gatherings",
+                        "fields": [
+                          "locality",
+                          "localityDescription",
+                          "weather",
+                          "notes",
+                          "namedPlaceID"
+                        ],
+                        "glyphFields": [
+                          {
+                            "glyph": "camera",
+                            "show": "images",
+                            "label": "Lägg till en foto",
+                            "open": false
+                          }
+                        ],
+                        "titles": {
+                          "eventTime": "Tid"
+                        }
+                      },
+                      "ui:order": [
+                        "country",
+                        "administrativeProvince",
+                        "biologicalProvince",
+                        "municipality",
+                        "locality",
+                        "localityDescription",
+                        "coordinateRadius",
+                        "alt",
+                        "images",
+                        "habitat",
+                        "habitatDescription",
+                        "weather",
+                        "eventTime",
+                        "notes",
+                        "geometry",
+                        "namedPlaceID",
+                        "samplingMethod",
+                        "samplingMethodNotes",
+                        "observationDays",
+                        "observationMinutes",
+                        "trapCount",
+                        "taxonCensus"
+                      ]
+                    }
+                  }
+                },
+                "buttonsNest": "placeWrapper"
+              },
+              "ui:order": [
+                "*",
+                "units"
+              ],
+              "geometry": {
+                "ui:field": "HiddenField"
+              },
+              "namedPlaceID": {
+                "ui:field": "HiddenField"
+              },
+              "images": {
+                "ui:field": "ImageArrayField",
+                "ui:options": {
+                  "capturerVerbatimPath": "/gatheringEvent/leg"
+                }
+              },
+              "dateBegin": {
+                "ui:widget": "DateTimeWidget",
+                "ui:options": {
+                  "showButtons": true
+                }
+              },
+              "dateEnd": {
+                "ui:widget": "DateTimeWidget"
+              },
+              "taxonCensus": {
+                "items": {
+                  "censusTaxonID": {
+                    "ui:widget": "AutosuggestWidget",
+                    "ui:options": {
+                      "autosuggestField": "taxon",
+                      "allowNonsuggestedValue": true,
+                      "suggestionReceive": "key"
+                    }
+                  }
+                }
+              },
+              "municipality": {
+                "ui:functions": [
+                  {
+                    "ui:field": "StringToArrayField",
+                    "ui:options": {
+                      "delimiter": ", "
+                    }
+                  },
+                  {
+                    "ui:field": "TagArrayField"
+                  }
+                ]
+              },
+              "biologicalProvince": {
+                "ui:functions": [
+                  {
+                    "ui:field": "StringToArrayField",
+                    "ui:options": {
+                      "delimiter": ", "
+                    }
+                  },
+                  {
+                    "ui:field": "TagArrayField"
+                  }
+                ]
+              },
+              "administrativeProvince": {
+                "ui:functions": [
+                  {
+                    "ui:field": "StringToArrayField",
+                    "ui:options": {
+                      "delimiter": ", "
+                    }
+                  },
+                  {
+                    "ui:field": "TagArrayField"
+                  }
+                ]
+              },
+              "units": {
+                "ui:childFunctions": {
+                  "ui:field": "FlatField",
+                  "ui:options": {
+                    "fields": [
+                      "identifications",
+                      "unitGathering",
+                      "unitFact"
+                    ]
+                  }
+                },
+                "ui:functions": [
+                  {
+                    "ui:field": "UnitListShorthandArrayField"
+                  }
+                ],
+                "ui:field": "SingleActiveArrayField",
+                "ui:title": "",
+                "ui:options": {
+                  "renderer": "table",
+                  "normalRenderingTreshold": "sm",
+                  "activeHeightOffset": -6,
+                  "confirmDelete": true,
+                  "buttons": [
+                    {
+                      "fn": "add",
+                      "label": "Lägg till en observation",
+                      "variant": "primary"
+                    },
+                    {
+                      "fn": "copy",
+                      "label": "Kopiera observationen",
+                      "type": "whitelist",
+                      "filter": [
+                        "recordBasis",
+                        "informalTaxonGroups",
+                        "taxonConfidence",
+                        "lifeStage",
+                        "preservation",
+                        "plantLifeStage",
+                        "breeding",
+                        "atlasCode",
+                        "twitched",
+                        "wild",
+                        "identifications_0_det",
+                        "identifications_0_detDate",
+                        "identifications_0_identificationBasis",
+                        "samplingMethod",
+                        "samplingMethodNotes",
+                        "unitGathering_habitatIUCN",
+                        "unitGathering_habitatDescription",
+                        "unitGathering_dateBegin",
+                        "unitGathering_dateEnd"
+                      ]
+                    }
+                  ],
+                  "formatters": {
+                    "identifications_0_taxon": {
+                      "formatter": "unknownTaxon",
+                      "idField": "unitFact_autocompleteSelectedTaxonID"
+                    }
+                  },
+                  "idToScrollAfterAdd": "root_gatherings_%{context[\"root_gatherings.activeIdx\"]}_units-add",
+                  "tableActiveItemClassNames": "panel panel-body gray"
+                },
+                "items": {
+                  "ui:functions": [
+                    {
+                      "ui:field": "AutosuggestField",
+                      "ui:settings": [
+                        "%toggled/AUTOSUGGEST_FIELD_TOGGLE_PERSISTENCE_unit",
+                        "%taxonGroupID/AUTOSUGGEST_FIELD_PERSISTENCE_units_informalTaxonGroup"
+                      ],
+                      "ui:options": {
+                        "autosuggestField": "taxon",
+                        "allowNonsuggestedValue": true,
+                        "suggestionInputField": "identifications_0_taxon",
+                        "suggestionValueField": "unitFact_autocompleteSelectedTaxonID",
+                        "suggestionValueParse": "autocompleteSelectedName || value",
+                        "suggestionReceivers": {
+                          "identifications_0_taxon": "autocompleteSelectedName || value",
+                          "informalTaxonGroups": "$taxonGroup",
+                          "unitFact_autocompleteSelectedTaxonID": "key"
+                        },
+                        "inputTransformer": {
+                          "regexp": "^(.*)\\?$",
+                          "transformations": {
+                            "taxonConfidence": "MY.taxonConfidenceUnsure"
+                          }
+                        },
+                        "informalTaxonGroups": "informalTaxonGroups",
+                        "informalTaxonGroupPersistenceKey": "units_informalTaxonGroup",
+                        "query": {
+                          "informalTaxonGroup": {
+                            "parser": "arrayJoin",
+                            "field": "informalTaxonGroups"
+                          }
+                        },
+                        "toggleable": {
+                          "autosuggestField": "unit",
+                          "query": {
+                            "includeNonMatching": true,
+                            "matchType": "exact,partial"
+                          },
+                          "selectOnlyOne": true,
+                          "nonMatchingBeforeUnsuggested": true
+                        },
+                        "togglePersistenceKey": "unit",
+                        "autocopy": {
+                          "type": "whitelist",
+                          "filter": [
+                            "recordBasis",
+                            "informalTaxonGroups",
+                            "taxonConfidence",
+                            "lifeStage",
+                            "preservation",
+                            "plantLifeStage",
+                            "breeding",
+                            "atlasCode",
+                            "twitched",
+                            "wild",
+                            "identifications_0_det",
+                            "identifications_0_detDate",
+                            "identifications_0_identificationBasis",
+                            "samplingMethod",
+                            "samplingMethodNotes",
+                            "unitGathering_habitatIUCN",
+                            "unitGathering_habitatDescription",
+                            "unitGathering_dateBegin",
+                            "unitGathering_dateEnd"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "ui:field": "AutosuggestField",
+                      "ui:options": {
+                        "autosuggestField": "taxon",
+                        "allowNonsuggestedValue": true,
+                        "suggestionInputField": "hostInformalNameString",
+                        "suggestionValueField": "hostID",
+                        "suggestionReceivers": {
+                          "hostInformalNameString": "value",
+                          "hostID": "key"
+                        }
+                      }
+                    },
+                    {
+                      "ui:field": "ScopeField",
+                      "ui:settings": [
+                        "%additionalFields/scopeField_gathering_unit_informalTaxonGroups"
+                      ],
+                      "ui:options": {
+                        "additionalsGroupingPath": "/fieldScopes/informalTaxonGroups",
+                        "additionalsGroupingOrderer": "informalTaxonGroups",
+                        "additionalsGroupsTranslator": "taxonGroups",
+                        "additionalsPersistenceField": "informalTaxonGroups",
+                        "additionalPersistenceContextKey": "AUTOSUGGEST_FIELD_PERSISTENCE_units_informalTaxonGroup",
+                        "additionalsPersistenceKey": "gathering_unit_informalTaxonGroups",
+                        "taxonField": "identifications_0_taxon",
+                        "includeAdditionalFieldsChooserButton": true,
+                        "glyphFields": [
+                          {
+                            "glyph": "camera",
+                            "show": "images",
+                            "label": "Lägg till en foto",
+                            "open": true
+                          },
+                          {
+                            "glyph": "headphones",
+                            "show": "audio",
+                            "label": "Lägg till en inspelningen",
+                            "open": false
+                          }
+                        ],
+                        "fields": [
+                          "unitFact_autocompleteSelectedTaxonID",
+                          "identifications_0_taxon",
+                          "count",
+                          "notes",
+                          "informalTaxonGroups",
+                          "taxonConfidence",
+                          "recordBasis"
+                        ],
+                        "fieldScopes": {
+                          "informalTaxonGroups": {
+                            "*": {
+                              "title": "Alla",
+                              "additionalFields": [
+                                "identifications_0_det",
+                                "identifications_0_detDate",
+                                "identifications_0_identificationBasis",
+                                "sex",
+                                "unitGathering_dateBegin",
+                                "unitGathering_dateEnd",
+                                "unitGathering_habitatIUCN",
+                                "unitGathering_habitatDescription",
+                                "preservation",
+                                "samplingMethod",
+                                "samplingMethodNotes",
+                                "breeding",
+                                "maleIndividualCount",
+                                "femaleIndividualCount",
+                                "wild",
+                                "checklistID",
+                                "keywords",
+                                "additionalIDs"
+                              ]
+                            },
+                            "MVL.1": {
+                              "defaultFields": [
+                                "sex",
+                                "birdPlumage",
+                                "birdAge",
+                                "movingStatus",
+                                "movingDirection",
+                                "breeding",
+                                "atlasCode",
+                                "twitched",
+                                "distance"
+                              ],
+                              "additionalFields": [
+                                "birdPlumage",
+                                "birdAge",
+                                "movingStatus",
+                                "movingDirection",
+                                "atlasCode",
+                                "twitched",
+                                "distance"
+                              ],
+                              "uiSchema": {
+                                "ui:order": [
+                                  "identifications_0_taxon",
+                                  "count",
+                                  "sex",
+                                  "birdPlumage",
+                                  "birdAge",
+                                  "movingStatus",
+                                  "movingDirection",
+                                  "breeding",
+                                  "atlasCode",
+                                  "twitched",
+                                  "distance",
+                                  "notes",
+                                  "*",
+                                  "images",
+                                  "audio"
+                                ],
+                                "ui:grid": {
+                                  "rows": null
+                                }
+                              }
+                            },
+                            "MVL.343": {
+                              "defaultFields": [
+                                "plantLifeStage",
+                                "plantStatusCode",
+                                "wild"
+                              ],
+                              "additionalFields": [
+                                "plantLifeStage",
+                                "plantStatusCode",
+                                "areaInSquareMeters"
+                              ]
+                            },
+                            "MVL.232": {
+                              "defaultFields": [
+                                "unitGathering_habitatIUCN",
+                                "unitGathering_habitatDescription",
+                                "identifications_0_det",
+                                "identifications_0_identificationBasis",
+                                "identifications_0_detDate",
+                                "lifeStage",
+                                "hostInformalNameString",
+                                "sex",
+                                "maleIndividualCount",
+                                "femaleIndividualCount",
+                                "preservation",
+                                "samplingMethod"
+                              ],
+                              "additionalFields": [
+                                "lifeStage",
+                                "hostInformalNameString"
+                              ],
+                              "uiSchema": {
+                                "ui:order": [
+                                  "identifications_0_taxon",
+                                  "count",
+                                  "maleIndividualCount",
+                                  "femaleIndividualCount",
+                                  "sex",
+                                  "lifeStage",
+                                  "samplingMethod",
+                                  "preservation",
+                                  "unitGathering_habitatIUCN",
+                                  "unitGathering_habitatDescription",
+                                  "identifications_0_det",
+                                  "identifications_0_detDate",
+                                  "identifications_0_identificationBasis",
+                                  "notes",
+                                  "hostInformalNameString",
+                                  "*",
+                                  "images",
+                                  "audio"
+                                ],
+                                "ui:grid": {
+                                  "rows": null
+                                },
+                                "lifeStage": {
+                                  "ui:title": "Utvecklingsstadie"
+                                },
+                                "hostInformalNameString": {
+                                  "ui:title": "Värdart eller näringsart"
+                                }
+                              }
+                            },
+                            "MVL.233": {
+                              "title": "Svampar",
+                              "additionalFields": [
+                                "unitGathering_substrate",
+                                "substrateSpecies",
+                                "smell",
+                                "smellNotes",
+                                "taste",
+                                "tasteNotes"
+                              ]
+                            },
+                            "MVL.187": {
+                              "defaultFields": [
+                                "sex",
+                                "identifications_0_identificationBasis",
+                                "lifeStage",
+                                "batBehavior"
+                              ],
+                              "additionalFields": [
+                                "batBehavior"
+                              ],
+                              "uiSchema": {
+                                "ui:order": [
+                                  "identifications_0_taxon",
+                                  "count",
+                                  "sex",
+                                  "lifeStage",
+                                  "batBehavior",
+                                  "taxonConfidence",
+                                  "recordBasis",
+                                  "identifications_0_identificationBasis",
+                                  "notes",
+                                  "*",
+                                  "images",
+                                  "audio"
+                                ],
+                                "lifeStage": {
+                                  "ui:options": {
+                                    "filterType": "whitelist",
+                                    "filter": [
+                                      "MY.lifeStageJuvenile",
+                                      "MY.lifeStageSubimago",
+                                      "MY.lifeStageAdult"
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "idToScroll": "root_gatherings_%{context[\"root_gatherings.activeIdx\"]}_units-add"
+                      }
+                    },
+                    {
+                      "ui:field": "LocationChooserField",
+                      "ui:options": {
+                        "taxonField": "identifications_0_taxon",
+                        "geometryField": "unitGathering_geometry",
+                        "maxShapes": -1,
+                        "mapOptions": {
+                          "polygon": true,
+                          "polyline": true,
+                          "rectangle": true,
+                          "circle": true
+                        }
+                      }
+                    }
+                  ],
+                  "classNames": "well well-sm",
+                  "ui:order": [
+                    "identifications",
+                    "count",
+                    "notes",
+                    "informalTaxonGroups",
+                    "taxonConfidence",
+                    "recordBasis",
+                    "sex",
+                    "unitGathering_dateBegin",
+                    "unitGathering_dateEnd",
+                    "unitGathering_habitatIUCN",
+                    "unitGathering_habitatDescription",
+                    "preservation",
+                    "samplingMethod",
+                    "samplingMethodNotes",
+                    "breeding",
+                    "maleIndividualCount",
+                    "femaleIndividualCount",
+                    "wild",
+                    "checklistID",
+                    "atlasCode",
+                    "twitched",
+                    "plantLifeStage",
+                    "plantStatusCode",
+                    "lifeStage",
+                    "areaInSquareMeters",
+                    "hostInformalNameString",
+                    "unitGathering_substrate",
+                    "substrateSpecies",
+                    "smell",
+                    "smellNotes",
+                    "taste",
+                    "tasteNotes",
+                    "*",
+                    "images",
+                    "audio"
+                  ],
+                  "ui:annotations": {
+                    "container": "modal",
+                    "adminOnly": true,
+                    "add": {
+                      "type": "MAN.typeOpinion",
+                      "filter": {
+                        "filterType": "blacklist",
+                        "filter": [
+                          "opinion"
+                        ]
+                      },
+                      "uiSchema": {
+                        "annotationClass": {
+                          "ui:widget": "AnyToBooleanWidget",
+                          "ui:options": {
+                            "trueValue": "MAN.annotationClassReliable",
+                            "falseValue": "MAN.annotationClassUnreliable",
+                            "allowUndefined": false
+                          }
+                        }
+                      },
+                      "formData": {
+                        "annotationClass": "MAN.annotationClassReliable"
+                      }
+                    }
+                  },
+                  "ui:grid": {
+                    "lg": {
+                      "identifications_0_taxon": 3,
+                      "count": 1,
+                      "notes": 2,
+                      "taxonConfidence": 2,
+                      "recordBasis": 2,
+                      "identifications_0_identificationBasis": 2,
+                      "unitGathering_dateBegin": 3,
+                      "unitGathering_dateEnd": 3,
+                      "*": 2
+                    },
+                    "md": {
+                      "identifications_0_taxon": 3,
+                      "count": 1,
+                      "notes": 3,
+                      "taxonConfidence": 2,
+                      "recordBasis": 2,
+                      "identifications_0_identificationBasis": 2,
+                      "unitGathering_dateBegin": 3,
+                      "unitGathering_dateEnd": 3,
+                      "identifications_0_detDate": 3,
+                      "twitched": 3,
+                      "breeding": 3,
+                      "*": 2
+                    },
+                    "sm": {
+                      "identifications_0_taxon": 4,
+                      "count": 2,
+                      "identifications_0_identificationBasis": 6,
+                      "unitGathering_dateBegin": 4,
+                      "unitGathering_dateEnd": 4,
+                      "notes": 5,
+                      "*": 4
+                    },
+                    "xs": 12,
+                    "rows": [
+                      [
+                        "identifications_0_taxon",
+                        "taxonConfidence",
+                        "recordBasis",
+                        "count",
+                        "notes"
+                      ]
+                    ]
+                  },
+                  "identifications": {
+                    "items": {
+                      "detDate": {
+                        "ui:widget": "DateWidget",
+                        "ui:options": {
+                          "allowOnlyYear": true
+                        }
+                      }
+                    }
+                  },
+                  "informalTaxonGroups": {
+                    "ui:field": "HiddenField"
+                  },
+                  "images": {
+                    "ui:field": "ImageArrayField",
+                    "ui:options": {
+                      "capturerVerbatimPath": "/gatheringEvent/leg",
+                      "sideEffects": {
+                        "/../recordBasis": "MY.recordBasisHumanObservationPhoto"
+                      }
+                    }
+                  },
+                  "audio": {
+                    "ui:field": "AudioArrayField",
+                    "ui:options": {
+                      "capturerVerbatimPath": "/gatheringEvent/leg",
+                      "sideEffects": {
+                        "/../recordBasis": "MY.recordBasisHumanObservationAudio"
+                      }
+                    }
+                  },
+                  "unitGathering": {
+                    "geometry": {
+                      "ui:field": "HiddenField"
+                    },
+                    "dateBegin": {
+                      "ui:widget": "DateTimeWidget"
+                    },
+                    "dateEnd": {
+                      "ui:widget": "DateTimeWidget"
+                    }
+                  },
+                  "recordBasis": {
+                    "ui:options": {
+                      "filterType": "whitelist",
+                      "filter": [
+                        "",
+                        "MY.recordBasisHumanObservationPhoto",
+                        "MY.recordBasisPreservedSpecimen",
+                        "MY.recordBasisHumanObservationHandled",
+                        "MY.recordBasisHumanObservation",
+                        "MY.recordBasisHumanObservationAudio",
+                        "MY.recordBasisHumanObservationIndirect"
+                      ],
+                      "order": [
+                        "",
+                        "MY.recordBasisHumanObservation",
+                        "MY.recordBasisHumanObservationPhoto",
+                        "MY.recordBasisPreservedSpecimen",
+                        "MY.recordBasisHumanObservationHandled",
+                        "MY.recordBasisHumanObservationAudio",
+                        "MY.recordBasisHumanObservationIndirect"
+                      ]
+                    }
+                  },
+                  "substrateSpecies": {
+                    "ui:widget": "AutosuggestWidget",
+                    "ui:options": {
+                      "autosuggestField": "taxon",
+                      "allowNonsuggestedValue": true,
+                      "suggestionReceive": "key"
+                    }
+                  },
+                  "unitFact": {
+                    "autocompleteSelectedTaxonID": {
+                      "ui:widget": "HiddenWidget"
+                    }
+                  },
+                  "hostID": {
+                    "ui:widget": "HiddenWidget"
+                  },
+                  "movingStatus": {
+                    "ui:field": "EnumRangeArrayField",
+                    "ui:options": {
+                      "range": "MY.birdBehaviorEnum"
+                    }
+                  },
+                  "keywords": {
+                    "ui:field": "TagArrayField"
+                  },
+                  "additionalIDs": {
+                    "ui:field": "TagArrayField"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile } from 'react-native-maps'
+import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { Platform, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon } from 'geojson'
-import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathToLineStringConstructor, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -39,7 +39,7 @@ import GridWarningComponent from '../general/GridWarningComponent'
 
 type Props = {
   onPressHome: () => void,
-  onPressObservation: (isNew: boolean, rules: Record<string, any>, defaults: Record<string, any>, sourcePage?: string) => void,
+  onPressObservation: (isNew: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   onPressEditing: (sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
   onPop: () => void,
@@ -174,6 +174,12 @@ const MapComponent = (props: Props) => {
 
   //performs the zoom from initial region to user location
   const zoomFromFinlandToLocation = () => {
+
+    if (!position) {
+      setFirstZoom('zoomed')
+      return
+    }
+
     dispatch(setFirstZoom('zooming'))
 
     const coords: LatLng = { ...position.coords }
@@ -350,11 +356,10 @@ const MapComponent = (props: Props) => {
       z.geometry !== null
     )
 
-    return (zone ?
+    return (zone && zone.geometry ?
       <Geojson
         geojson={convertGC2FC(zone.geometry)}
         fillColor="#f002"
-        pinColor="#f00"
         strokeColor="#f00"
         strokeWidth={1}
       />
@@ -428,7 +433,7 @@ const MapComponent = (props: Props) => {
       <View style={Cs.mapContainer}>
         <MapView
           ref={map => { mapView = map }}
-          provider={Platform.OS === 'android' ? 'google' : null}
+          provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
           initialRegion={region}
           onPanDrag={() => stopCentering()}
           onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}

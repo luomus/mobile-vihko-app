@@ -293,4 +293,3 @@ describe('HomeComponent', () => {
     expect(setZoneModalVisibility).toHaveBeenCalledTimes(1)
   })
 })
-

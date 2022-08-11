@@ -139,6 +139,7 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
           errors.push(langError)
 
         } catch (locError) {
+
           langError = {
             severity: 'high',
             message: `${i18n.t(`error loading ${lang} schema from server and internal`)} ${netError.message}`

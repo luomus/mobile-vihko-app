@@ -86,7 +86,7 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
     //try to fetch users form permissions to join into the credentials
     try {
       const permissions = await getFormPermissions(credentials.token)
-      permissionsArr = [...permissions.result.admins, ...permissions.result.editors]
+      permissionsArr = [...permissions.admins, ...permissions.editors]
 
     } catch (error) {
       log.error({

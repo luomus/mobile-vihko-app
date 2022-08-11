@@ -1,11 +1,15 @@
 import React from 'react'
-import { CommonActions, ParamListBase, Route } from '@react-navigation/native'
+import { CommonActions, ParamListBase, RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import DocumentComponent from '../components/forms/DocumentComponent'
 
 type Props = {
   navigation: NativeStackNavigationProp<ParamListBase, string>,
-  route: Route<string>
+  route: RouteProp<{
+    document: {
+      sourcePage: string
+    }
+  }, 'document'>
 }
 
 const DocumentScreen = (props: Props) => {

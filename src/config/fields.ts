@@ -371,7 +371,7 @@ export const overrideObservationEventFields = {
   },
 }
 
-export const forms = {
+export const forms: Record<string, any> = {
   tripForm: 'JX.519',
   birdAtlas: 'MHL.117',
   fungiAtlas: 'JX.652',

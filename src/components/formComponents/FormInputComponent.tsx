@@ -23,7 +23,7 @@ interface Props {
   'twitter' |
   'web-search' |
   undefined,
-  defaultValue: string | number | undefined,
+  defaultValue: string | number | Array<string> | undefined,
   isArrayItem: boolean,
   parentCallback: Function | undefined,
   editable: boolean
@@ -71,6 +71,7 @@ const FormInputComponent = (props: Props) => {
         defaultValue={currentValue}
         ref={textInput}
         multiline
+        testID={props.title}
       />
     </View>
   )

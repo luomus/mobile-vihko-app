@@ -32,10 +32,10 @@ const MiniMapComponent = (props: Props) => {
   }
 
   const region: Region = {
-    'latitude': props.observation.unitGathering.geometry.coordinates[1],
-    'latitudeDelta': 0.00300000000000000,
-    'longitude': props.observation.unitGathering.geometry.coordinates[0],
-    'longitudeDelta': 0.00300000000000000,
+    latitude: props.observation.unitGathering.geometry.coordinates[1],
+    latitudeDelta: 0.00300000000000000,
+    longitude: props.observation.unitGathering.geometry.coordinates[0],
+    longitudeDelta: 0.00300000000000000,
   }
 
   return (

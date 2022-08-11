@@ -1,7 +1,7 @@
 import Form from './Form'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-//called in component to initalize to ane of the forms
+//called in component to initalize to any of the forms
 export const initForm = (
   setForm: Function,
   defaults: any,
@@ -20,13 +20,17 @@ export const initForm = (
     setForm(null)
   } else if (rules && !fieldScopes) {
     setForm(null)
-  } else if (!rules && !fields) {
-    setForm(null)
-  }
-
-  if (!rules) {
-    setForm(Form(defaults, fields, null, schema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+  } else if (!rules) {
+    if (!fields) {
+      setForm(null)
+    } else {
+      setForm(Form(defaults, fields, null, schema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+    }
   } else {
+    if (fieldScopes === null) {
+      return
+    }
+    
     const fieldScope = Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key: string) => {
       const matches = new RegExp(rules.regexp).test(key)
       if (rules.complement ? !matches : matches) {
@@ -35,10 +39,6 @@ export const initForm = (
         return foundObject
       }
     }, null)
-
-    if (!fieldScope) {
-      return null
-    }
 
     const fields = fieldScope?.fields.concat(['images'])
     const blacklist = fieldScope?.blacklist

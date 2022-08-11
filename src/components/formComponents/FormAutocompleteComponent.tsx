@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ActivityIndicator, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, NativeSyntheticEvent, Platform, Text, TextInput, TextInputFocusEventData, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
@@ -223,10 +223,10 @@ const FormAutocompleteComponent = (props: Props) => {
   }
 
   const renderTextInput = (
-    onFocus: () => void,
-    onBlur: () => void,
-    onChangeText: () => void,
-    defaultValue: string
+    onFocus: ((e: NativeSyntheticEvent<TextInputFocusEventData>) => void) | undefined,
+    onBlur: ((e: NativeSyntheticEvent<TextInputFocusEventData>) => void) | undefined,
+    onChangeText: ((text: string) => void) | undefined,
+    defaultValue: string | undefined
   ) => {
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch' }}>
@@ -236,7 +236,9 @@ const FormAutocompleteComponent = (props: Props) => {
           onFocus={onFocus}
           onBlur={onBlur}
           onChangeText={onChangeText}
-          defaultValue={defaultValue}>
+          defaultValue={defaultValue}
+          testID={'autocomplete'}
+        >
         </TextInput>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           {loading ?
@@ -276,10 +278,10 @@ const FormAutocompleteComponent = (props: Props) => {
             flatListProps={{
               keyboardShouldPersistTaps: 'always',
               keyExtractor: (_, idx) => idx.toString(),
-              // eslint-disable-next-line react/display-name
               renderItem: ({ item }) => {
                 return (
-                  <TouchableOpacity onPress={() => onSelection(item.data)}>
+                  <TouchableOpacity onPress={() => onSelection(item.data)}
+                    style={{ backgroundColor: Colors.neutral2 }}>
                     <Text style={{ paddingHorizontal: 10 }}>{item.element}</Text>
                   </TouchableOpacity>
                 )

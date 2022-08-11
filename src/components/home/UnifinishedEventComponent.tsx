@@ -82,6 +82,7 @@ const UnfinishedEventComponent = (props: Props) => {
               height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'stop'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              testID={'stopFromHomeComponent'}
             />
           </View>
         </View>

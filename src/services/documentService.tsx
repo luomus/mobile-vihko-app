@@ -2,12 +2,8 @@ import ApolloClient, { gql } from 'apollo-boost'
 import axios from 'axios'
 import i18n from '../languages/i18n'
 import { graphqlUrl, postDocumentUrl } from '../config/urls'
-import { accessToken } from '../config/keys'
+import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
-
-interface BasicObject {
-  [key: string]: any
-}
 
 const setClient = (language: string) => {
   return new ApolloClient({
@@ -15,7 +11,7 @@ const setClient = (language: string) => {
     request: (operation) => {
       operation.setContext({
         headers: {
-          'Authorization': accessToken,
+          'Authorization': ACCESS_TOKEN,
           'Accept-Language': language
         }
       })
@@ -42,14 +38,14 @@ export const getSchemas = async (language: string, formId: string) => {
   }
 }
 
-export const postObservationEvent = async (observationEvent: BasicObject, credentials: CredentialsType) => {
+export const postObservationEvent = async (observationEvent: Record<string, any>, credentials: CredentialsType) => {
   if (!credentials.token) {
     throw new Error(`${i18n.t('credentials missing')}`)
   }
 
   const params = {
     personToken: credentials.token,
-    access_token: accessToken,
+    access_token: ACCESS_TOKEN,
     validationErrorFormat: 'remote'
   }
 

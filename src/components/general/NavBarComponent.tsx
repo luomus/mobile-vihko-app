@@ -82,7 +82,7 @@ const NavBarComponent = (props: Props) => {
             () => homeButtonHandler()
           }
           tvParallaxProperties={undefined} /> :
-          <Icon iconStyle={Bs.headerUnavailableButton} name='home' type='material-icons' size={25} onPress={() => null} tvParallaxProperties={undefined} />
+          <Icon iconStyle={Bs.headerUnavailableButton} name='home' type='material-icons' size={25} onPress={() => null} tvParallaxProperties={undefined} testID={'homeButton'} />
         }
         <InstructionModalComponent isVisible={infoModalVisibility} screen={props.route.name} onClose={() => setInfoModalVisibility(false)} />
         <UserModalComponent isVisible={userModalVisibility} onClose={() => setUserModalVisibility(false)} navigation={props.navigation} />

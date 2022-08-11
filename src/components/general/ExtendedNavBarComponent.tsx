@@ -117,7 +117,7 @@ const ExtendedNavBarComponent = (props: Props) => {
           log.error({
             location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
             error: error,
-            user_id: credentials.user.id
+            user_id: credentials.user ? credentials.user.id : 'No user id.'
           })
           return Promise.reject({
             severity: 'low',

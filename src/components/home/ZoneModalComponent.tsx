@@ -17,8 +17,8 @@ import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
-import ModalFilterPicker from 'react-native-modal-filter-picker'
 import i18n from '../../languages/i18n'
+import ZoneFilterPickerComponent from './ZoneFilterPickerComponent'
 
 type Props = {
   modalVisibility: boolean,
@@ -94,18 +94,16 @@ const ZoneModalComponent = (props: Props) => {
               <TouchableOpacity onPress={() => setShown(true)}>
                 <Text style={{ alignSelf: 'flex-start', fontSize: 16, padding: 8 }}>{options.find((option) => option.key === observationZone.currentZoneId)?.label}</Text>
               </TouchableOpacity>
-              <ModalFilterPicker
+              <ZoneFilterPickerComponent
                 visible={shown}
                 onSelect={(key: string) => {
-                  dispatch(setCurrentObservationZone(key.key))
+                  dispatch(setCurrentObservationZone(key))
                   setShown(false)
                 }}
                 onCancel={() => setShown(false)}
                 options={options}
                 selectedOption={observationZone.currentZoneId}
                 placeholderText={t('choose observation zone')}
-                overlayStyle={Cs.filterPickerOverlayContainer}
-                listContainerStyle={Cs.filterPickerContainer}
               />
             </View>
             <View style={Cs.padding5Container}>

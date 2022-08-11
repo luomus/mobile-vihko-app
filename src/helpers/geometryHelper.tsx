@@ -18,12 +18,21 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
   } else if (eventHasGrid) {
     event.gatherings[0].geometry = grid.geometry
   } else if (eventHasUnits) {
-    event.gatherings[0].geometry = createUnitBoundingBox(event)
+    event.gatherings[0].geometry = createUnitBoundingBox(event.gatherings[0].units)
   } else if (eventHasFirstLocation) {
     event.gatherings[0].geometry = {
       coordinates: [
         firstLocation[1],
         firstLocation[0]
+      ],
+      type: 'Point'
+    }
+  //coordinates of luomus as the last option
+  } else {
+    event.gatherings[0].geometry = {
+      coordinates: [
+        24.931409060955048,
+        60.17128187292611
       ],
       type: 'Point'
     }
@@ -42,24 +51,95 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
   return event
 }
 
-//makes preparations for creating a combined bounding box (from path and units) which is used for determining
-//center of bounding box for Google Geocoding API
-export const createCombinedGeometry = (event: Record<string, any>): Polygon | Point | null => {
+//this is called in HomeComponent, if there was no path geometry
+//creates a bounding box from unit geometries
+export const createUnitBoundingBox = (units: Record<string, any>): Polygon | Point => {
 
-  //if event's geometry is a bounding box, it means that it doesn't have a path, so there's no point to make a combined BB
-  if (event.gatherings[0].geometry.type === 'Polygon') {
-    return event.gatherings[0].geometry
+  //return a point, in case there's only one observation
+  if (units.length === 1) {
+    return {
+      type: 'Point',
+      coordinates: units[0].unitGathering.geometry.coordinates
+    }
   }
 
   //makes an array of unit coordinates
-  const points: Array<Array<number>> = event.gatherings[0].units.map((unit: Record<string, any>) => {
+  const points: Array<Array<number>> = units.map((unit: Record<string, any>) => {
     return unit.unitGathering.geometry.coordinates
   })
 
-  //calls createCombinedBoundingBox, which actually returns the BB
-  let returnValue: Polygon | Point | null = createCombinedBoundingBox(points, event.gatherings[0])
+  //returns a bounding box based on unit coordinates
+  let boundingBox: Record<string, any> = calculateBoundingBoxBoundaries(points)
 
-  return returnValue
+  return {
+    type: 'Polygon',
+    coordinates: [[
+      [boundingBox.maxLng, boundingBox.maxLat],
+      [boundingBox.minLng, boundingBox.maxLat],
+      [boundingBox.minLng, boundingBox.minLat],
+      [boundingBox.maxLng, boundingBox.minLat],
+      [boundingBox.maxLng, boundingBox.maxLat],
+    ]]
+  }
+}
+
+//makes preparations for creating a combined bounding box (from path and units) which is used for determining
+//center of bounding box for Google Geocoding API
+export const centerOfGeometry = (geometry: any, units: Array<Record<string, any>>): Point | null => {
+
+  //if event's geometry is a bounding box, it means that it doesn't have a path, so there's no point to make a combined BB
+  if (geometry.type !== 'LineString' && geometry.type !== 'MultiLineString') {
+    return centerOfBoundingBox(geometry)
+  }
+
+  //makes an array of unit coordinates
+  const points: Array<Array<number>> = units.map((unit: Record<string, any>) => {
+    return unit.unitGathering.geometry.coordinates
+  })
+
+  //creates a combined bounding box (from path and units) that is required for Google Geocoding API's center point
+  //notice that the case where there isn't a path is already handled in createCombinedGeometry!
+  let boundingBox: Record<string, any>
+  let pathPoints: Array<Array<number>> = []
+
+  //extract the points from path LineString or MultiLineString
+  if (geometry.type === 'LineString') {
+    pathPoints = geometry.coordinates
+  } else if (geometry.type === 'MultiLineString') {
+    geometry.coordinates.forEach((coords: Array<Array<number>>) => {
+      pathPoints.push(...coords)
+    })
+  }
+
+  //if there is no unit geometries (and there is a path, as !path scenario was handled in createCombinedGeometry)
+  //create bounding box from only path geometry, else use unit and path geometries to create BB
+  if (!points) {
+    if (pathPoints.length === 0) {
+      return null
+    }
+
+    boundingBox = calculateBoundingBoxBoundaries(pathPoints)
+  } else {
+    const combinedCoordinates: Array<Array<number>> = [
+      ...points,
+      ...pathPoints
+    ]
+
+    boundingBox = calculateBoundingBoxBoundaries(combinedCoordinates)
+  }
+
+  const combinedBoundingBox: Polygon = {
+    type: 'Polygon',
+    coordinates: [[
+      [boundingBox.maxLng, boundingBox.maxLat],
+      [boundingBox.minLng, boundingBox.maxLat],
+      [boundingBox.minLng, boundingBox.minLat],
+      [boundingBox.maxLng, boundingBox.minLat],
+      [boundingBox.maxLng, boundingBox.maxLat],
+    ]]
+  }
+
+  return centerOfBoundingBox(combinedBoundingBox)
 }
 
 //takes list of coordinates as input and outputs max/min lng/lat of the created BB of coordinates
@@ -100,80 +180,24 @@ const calculateBoundingBoxBoundaries = (coordinates: Array<Array<number>>): Reco
   return boundingBox
 }
 
-//this is called in HomeComponent, if there was no path geometry
-//creates a bounding box from unit geometries
-export const createUnitBoundingBox = (event: Record<string, any>): Polygon | Point => {
+//returns the center point of a bounding box
+export const centerOfBoundingBox = (geometry: Polygon | Point): Point => {
 
-  //return a point, in case there's only one observation
-  if (event.gatherings[0].units.length === 1) {
-    return {
-      type: 'Point',
-      coordinates: event.gatherings[0].units[0].unitGathering.geometry.coordinates
-    }
+  //if the input is a point, return the input
+  if (geometry.type === 'Point') {
+    return geometry
   }
 
-  //makes an array of unit coordinates
-  const points: Array<Array<number>> = event.gatherings[0].units.map((unit: Record<string, any>) => {
-    return unit.unitGathering.geometry.coordinates
-  })
+  //find out the max/min lng/lat of the BB
+  const boundingBox = calculateBoundingBoxBoundaries(geometry.coordinates[0])
 
-  //returns a bounding box based on unit coordinates
-  let boundingBox: Record<string, any> = calculateBoundingBoxBoundaries(points)
+  //count the average of lng and lat to find out the center point
+  let avgLng = (boundingBox.maxLng + boundingBox.minLng) / 2
+  let avgLat = (boundingBox.maxLat + boundingBox.minLat) / 2
 
   return {
-    type: 'Polygon',
-    coordinates: [[
-      [boundingBox.maxLng, boundingBox.maxLat],
-      [boundingBox.minLng, boundingBox.maxLat],
-      [boundingBox.minLng, boundingBox.minLat],
-      [boundingBox.maxLng, boundingBox.minLat],
-      [boundingBox.maxLng, boundingBox.maxLat],
-    ]]
-  }
-}
-
-//creates a combined bounding box (from path and units) that is required for Google Geocoding API's center point
-//notice that the case where there isn't a path is already handled in createCombinedGeometry!
-const createCombinedBoundingBox = (points: Array<Array<number>>, gatheringsZero: Record<string, any>): Polygon | Point | null => {
-
-  let boundingBox: Record<string, any>
-  let pathPoints: Array<Array<number>> = []
-
-  //extract the points from path LineString or MultiLineString
-  if (gatheringsZero.geometry.type === 'LineString') {
-    pathPoints = gatheringsZero.geometry.coordinates
-  } else if (gatheringsZero.geometry.type === 'MultiLineString') {
-    gatheringsZero.geometry.coordinates.forEach((coords: Array<Array<number>>) => {
-      pathPoints.push(...coords)
-    })
-  }
-
-  //if there is no unit geometries (and there is a path, as !path scenario was handled in createCombinedGeometry)
-  //create bounding box from only path geometry, else use unit and path geometries to create BB
-  if (!points) {
-    if (pathPoints.length === 0) {
-      return null
-    }
-
-    boundingBox = calculateBoundingBoxBoundaries(pathPoints)
-  } else {
-    const combinedCoordinates: Array<Array<number>> = [
-      ...points,
-      ...pathPoints
-    ]
-
-    boundingBox = calculateBoundingBoxBoundaries(combinedCoordinates)
-  }
-
-  return {
-    type: 'Polygon',
-    coordinates: [[
-      [boundingBox.maxLng, boundingBox.maxLat],
-      [boundingBox.minLng, boundingBox.maxLat],
-      [boundingBox.minLng, boundingBox.minLat],
-      [boundingBox.maxLng, boundingBox.minLat],
-      [boundingBox.maxLng, boundingBox.maxLat],
-    ]]
+    type: 'Point',
+    coordinates: [avgLng, avgLat]
   }
 }
 
@@ -233,27 +257,6 @@ export const overlapsFinland = (geometry: MultiLineString | LineString | Polygon
   }
 
   return true
-}
-
-//returns the center point of a bounding box
-export const centerOfBoundingBox = (geometry: Polygon | Point): Point => {
-
-  //if the input is a point, return the input
-  if (geometry.type === 'Point') {
-    return geometry
-  }
-
-  //find out the max/min lng/lat of the BB
-  const boundingBox = calculateBoundingBoxBoundaries(geometry.coordinates[0])
-
-  //count the average of lng and lat to find out the center point
-  let avgLng = (boundingBox.maxLng + boundingBox.minLng) / 2
-  let avgLat = (boundingBox.maxLat + boundingBox.minLat) / 2
-
-  return {
-    type: 'Point',
-    coordinates: [avgLng, avgLat]
-  }
 }
 
 export const removeDuplicatesFromPath = (lineString: LineString | MultiLineString | undefined): LineString | MultiLineString | undefined => {

@@ -56,6 +56,7 @@ const DocumentComponent = (props: Props) => {
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
   const schema = useSelector((state: rootState) => state.schema)
+  const message = useSelector((state: rootState) => state.message)
 
   const dispatch: DispatchType = useDispatch()
 

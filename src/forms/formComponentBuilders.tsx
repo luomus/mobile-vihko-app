@@ -136,7 +136,7 @@ export const createDateTimePicker = (
 
 export const createInputElement = (
   title: string, objectTitle: string, parentObjectTitle: string,
-  type: string, defaultValue: string | string | number,
+  type: string, defaultValue: string | number | Array<string> | undefined,
   isArrayItem: boolean, callbackFunction: Function|undefined, editable: boolean
 ) => {
   if (objectTitle.includes('unitGathering_dateBegin') && typeof defaultValue === 'string') {
