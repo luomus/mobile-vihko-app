@@ -7,91 +7,129 @@ import {
 import { getSchemas } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import { parseUiSchemaToObservations } from '../../helpers/parsers/UiSchemaParser'
-import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { log } from '../../helpers/logger'
+import { useUiSchemaFields } from '../../config/fields'
 
 export const setSchema = (schemas: Record<string, any>): schemaActionTypes => ({
   type: SET_SCHEMA,
   payload: schemas
 })
 
-export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
+export const initSchemas = (formIDs: Array<string>): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
   return async (dispatch, getState) => {
     const { credentials } = getState()
 
     let languages: string[] = ['fi', 'en', 'sv']
-    let schemas: Record<string, any> = {
-      formID: formId,
-      fi: null,
-      en: null,
-      sv: null
-    }
-    let storageKeys: Record<string, string> = {
-      fi: `${formId}Fi`,
-      en: `${formId}En`,
-      sv: `${formId}Sv`
-    }
 
-    //try to load schemas from server, else case if error try to load schemas
-    //from internal storage
-    let errors: Record<string, any>[] = []
-    let errorFatal: Record<string, boolean> = {
-      fi: false,
-      en: false,
-      sv: false
+    interface schemaErrors {
+      formID: string,
+      errors: {
+        unsuccessfullyDownloadedLanguages: Array<string>,
+        unsuccessfullyStorageFetchedLanguages: Array<string>,
+        unsuccessfullyParsedLanguages: Array<string>,
+        unsuccessfullyStorageSavedLanguages: Array<string>
+      }
     }
 
-    //check that internet can be reached
-    try {
-      await netStatusChecker()
-    } catch (error) {
-      log.error({
-        location: '/stores/schema/actions.tsx initSchema()/netStatusChecker()',
-        error: 'Network error (no connection)',
-        user_id: credentials.user.id
-      })
-      return Promise.reject([{
-        severity: 'fatal',
-        message: error.message
-      }])
-    }
+    let schemaErrorsList: Array<schemaErrors> = []
 
-    //loop over each language initializing field parameters for each and schema for first existing
-    for (let lang of languages) {
-      let tempSchemas = null
-      let langError: Record<string, string> | null = null
+    let sumOfUnsuccessfullyDownloadedLanguages: number = 0
+    let sumOfUnsuccessfullyStorageFetchedLanguages: number = 0
+    let sumOfUnsuccessfullyParsedLanguages: number = 0
+    let sumOfUnsuccessfullyStorageSavedLanguages: number = 0
 
-      try {
-        //try loading schema and uiSchema from server
-        tempSchemas = await getSchemas(lang, formId)
+    let errors: Record<string, any> = []
+
+    for (let formID of formIDs) {
+
+      let schemas: Record<string, any> = {
+        formID: formID,
+        fi: null,
+        en: null,
+        sv: null
+      }
+
+      let storageKeys: Record<string, string> = {
+        fi: `${formID}Fi`,
+        en: `${formID}En`,
+        sv: `${formID}Sv`
+      }
+
+      let schemaErrors: schemaErrors = {
+        formID: formID,
+        errors: {
+          unsuccessfullyDownloadedLanguages: [],
+          unsuccessfullyStorageFetchedLanguages: [],
+          unsuccessfullyParsedLanguages: [],
+          unsuccessfullyStorageSavedLanguages: []
+        }
+      }
+
+      const useUiSchema = useUiSchemaFields.includes(formID)
+
+      //loop over each language initializing field parameters for each and schema for first existing
+      for (let language of languages) {
+        let fetchedSchema = null
+
+        try {
+          //try loading schema and uiSchema from server
+          fetchedSchema = await getSchemas(language, formID)
+
+        } catch (downloadError) {
+          try {
+            //try loading schema from internal storage, if success inform user
+            //of use of old stored version, if error warn user of total failure
+            schemas[language] = await storageService.fetch(storageKeys[language])
+
+            //warn user of using internally stored schema
+            schemaErrors.errors.unsuccessfullyDownloadedLanguages.push(language)
+            sumOfUnsuccessfullyDownloadedLanguages++
+            log.error({
+              location: '/stores/observation/actions.tsx initSchemas()',
+              error: downloadError,
+              details: 'While fetching ' + formID + ' ' + language + ' from the server.',
+              user_id: credentials.user.id
+            })
+          } catch (storageFetchError) {
+            schemaErrors.errors.unsuccessfullyStorageFetchedLanguages.push(language)
+            sumOfUnsuccessfullyStorageFetchedLanguages++
+            log.error({
+              location: '/stores/observation/actions.tsx initSchemas()',
+              error: storageFetchError,
+              details: 'While fetching ' + formID + ' ' + language + ' from the storage.',
+              user_id: credentials.user.id
+            })
+            continue
+          }
+        }
 
         //fresh schema was fetched from net, try to parse necessary parameters and values for input creation from it
-        if (tempSchemas) {
+        if (fetchedSchema) {
           let uiSchemaParams
 
           if (useUiSchema) {
-            uiSchemaParams = parseUiSchemaToObservations(tempSchemas.uiSchema)
+            uiSchemaParams = parseUiSchemaToObservations(fetchedSchema.uiSchema)
 
             //if parsing fails warn user that language is unusable
             if (!uiSchemaParams) {
-              errors.push({
-                severity: 'high',
-                message: i18n.t(`could not parse ${lang} uiSchema to input`)
+              schemaErrors.errors.unsuccessfullyParsedLanguages.push(language)
+              sumOfUnsuccessfullyParsedLanguages++
+              log.error({
+                location: '/stores/observation/actions.tsx initSchemas()',
+                details: 'While parsing ' + formID + ' ' + language + '.',
+                user_id: credentials.user.id
               })
-
-              errorFatal[lang] = true
               continue
             }
-          }
 
-          if (useUiSchema) {
-            schemas[lang] = {
-              schema: tempSchemas.schema,
+            schemas[language] = {
+              schema: fetchedSchema.schema,
               uiSchemaParams: uiSchemaParams
             }
+
           } else {
-            schemas[lang] = {
-              schema: tempSchemas.schema,
+            schemas[language] = {
+              schema: fetchedSchema.schema,
             }
           }
         }
@@ -99,84 +137,115 @@ export const initSchema = (useUiSchema: boolean, formId: string): ThunkAction<Pr
         //try to store schema to internal storage for use as backup, if schemas are from server (i.e. first try-catch has not set any error),
         //if fails set error message
         try {
-          await storageService.save(storageKeys[lang], schemas[lang])
-        } catch (error) {
-          langError = {
-            severity: 'low',
-            message: i18n.t(`${lang} schema save to async failed`)
-          }
+          await storageService.save(storageKeys[language], schemas[language])
+        } catch (storageSaveError) {
+          schemaErrors.errors.unsuccessfullyStorageSavedLanguages.push(language)
+          sumOfUnsuccessfullyStorageSavedLanguages++
           log.error({
-            location: '/stores/observation/actions.tsx initSchema()',
-            error: error,
-            details: 'While saving ' + lang + ' to AsyncStorage.',
+            location: '/stores/observation/actions.tsx initSchemas()',
+            error: storageSaveError,
+            details: 'While saving ' + formID + ' ' + language + ' to storage.',
             user_id: credentials.user.id
           })
-        }
-
-        //if error was met push into errors-array for eventual return to user
-        if (langError) {
-          errors.push(langError)
-        }
-
-      } catch (netError) {
-        try {
-          //try loading schema from internal storage, if success inform user
-          //of use of old stored version, if error warn user of total failure
-          schemas[lang] = await storageService.fetch(storageKeys[lang])
-
-          //warn user of using internally stored schema
-          langError = {
-            severity: 'low',
-            message: `${i18n.t(`error loading ${lang} schema from server`)} ${netError.message}`
-          }
-          log.error({
-            location: '/stores/observation/actions.tsx initSchema()',
-            error: netError,
-            details: 'While downloading ' + lang + ' schema.',
-            user_id: credentials.user.id
-          })
-
-          errors.push(langError)
-
-        } catch (locError) {
-
-          langError = {
-            severity: 'high',
-            message: `${i18n.t(`error loading ${lang} schema from server and internal`)} ${netError.message}`
-          }
-          log.error({
-            location: '/stores/observation/actions.tsx initSchema()',
-            error: locError,
-            details: 'While fetching ' + lang + ' from AsyncStorage.',
-            user_id: credentials.user.id
-          })
-
-          errors.push(langError)
-          errorFatal[lang] = true
-          continue
         }
       }
+
+      schemaErrorsList.push(schemaErrors)
+
+      //schema and field parameters to correct language choice
+      dispatch(setSchema(schemas))
     }
 
-    //check if every language suffered fatal errors resulting in no usable schemas or form parameter collections
-    if (Object.keys(errorFatal).every(key => errorFatal[key])) {
-      let fatalError: Record<string, any> = [{
+    if (sumOfUnsuccessfullyStorageFetchedLanguages === 12) {
+      return Promise.reject([{
         severity: 'fatal',
         message: i18n.t('could not load any schemas')
-      }]
+      }])
 
-      errors = errors.concat(fatalError)
+    } else {
 
-      return Promise.reject(errors)
+      const createErrorMessageContent = (
+        tripFormLanguages?: Array<string>,
+        birdAtlasLanguages?: Array<string>,
+        fungiAtlasLanguages?: Array<string>,
+        lolifeLanguages?: Array<string>
+      ) => {
+        let messageParagraphs: Array<string> = []
+
+        const tripFormParagraph = tripFormLanguages ? (tripFormLanguages.length > 0 ? (i18n.t('trip form') + ' ' + i18n.t('in languages') + ': ' + tripFormLanguages.join(', ')) : undefined) : undefined
+        const birdAtlasParagraph = birdAtlasLanguages ? (birdAtlasLanguages.length > 0 ? (i18n.t('bird atlas') + ' ' + i18n.t('in languages') + ': ' + birdAtlasLanguages.join(', ')) : undefined) : undefined
+        const fungiAtlasParagraph = fungiAtlasLanguages ? (fungiAtlasLanguages.length > 0 ? (i18n.t('fungi atlas') + ' ' + i18n.t('in languages') + ': ' + fungiAtlasLanguages.join(', ')) : undefined) : undefined
+        const lolifeParagraph = lolifeLanguages ? (lolifeLanguages.length > 0 ? (i18n.t('lolife') + ' ' + i18n.t('in languages') + ': ' + lolifeLanguages.join(', ')) : undefined) : undefined
+
+        if (tripFormParagraph) messageParagraphs.push(tripFormParagraph)
+        if (birdAtlasParagraph) messageParagraphs.push(birdAtlasParagraph)
+        if (fungiAtlasParagraph) messageParagraphs.push(fungiAtlasParagraph)
+        if (lolifeParagraph) messageParagraphs.push(lolifeParagraph)
+
+        if (messageParagraphs.length > 0) {
+          let messageContent = '\n'
+
+          messageParagraphs.forEach(paragraph => {
+            messageContent += ('\n' + paragraph)
+          })
+
+          return messageContent
+        } else {
+          return ''
+        }
+      }
+
+      if (sumOfUnsuccessfullyStorageFetchedLanguages) {
+        errors.push({
+          severity: 'high',
+          message: i18n.t('failed to load schema from server and storage') + createErrorMessageContent(
+            schemaErrorsList.find(schema => schema.formID === 'JX.519')?.errors.unsuccessfullyStorageFetchedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'MHL.117')?.errors.unsuccessfullyStorageFetchedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'JX.652')?.errors.unsuccessfullyStorageFetchedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'MHL.45')?.errors.unsuccessfullyStorageFetchedLanguages
+          )
+        })
+      }
+      if (sumOfUnsuccessfullyDownloadedLanguages > 0) {
+        errors.push({
+          severity: 'low',
+          message: i18n.t('failed to load schema from server') + createErrorMessageContent(
+            schemaErrorsList.find(schema => schema.formID === 'JX.519')?.errors.unsuccessfullyDownloadedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'MHL.117')?.errors.unsuccessfullyDownloadedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'JX.652')?.errors.unsuccessfullyDownloadedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'MHL.45')?.errors.unsuccessfullyDownloadedLanguages
+          )
+        })
+      }
+      if (sumOfUnsuccessfullyParsedLanguages > 0) {
+        errors.push({
+          severity: 'high',
+          message: i18n.t('failed to parse uiSchema to input') + createErrorMessageContent(
+            schemaErrorsList.find(schema => schema.formID === 'JX.519')?.errors.unsuccessfullyParsedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'MHL.117')?.errors.unsuccessfullyParsedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'JX.652')?.errors.unsuccessfullyParsedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'MHL.45')?.errors.unsuccessfullyParsedLanguages
+          )
+        })
+      }
+      if (sumOfUnsuccessfullyStorageSavedLanguages > 0) {
+        errors.push({
+          severity: 'low',
+          message: i18n.t('failed to save schema to storage') + createErrorMessageContent(
+            schemaErrorsList.find(schema => schema.formID === 'JX.519')?.errors.unsuccessfullyStorageSavedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'MHL.117')?.errors.unsuccessfullyStorageSavedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'JX.652')?.errors.unsuccessfullyStorageSavedLanguages,
+            schemaErrorsList.find(schema => schema.formID === 'MHL.45')?.errors.unsuccessfullyStorageSavedLanguages
+          )
+        })
+      }
     }
-
-    //schema and field parameters to correct language choice
-    dispatch(setSchema(schemas))
 
     //if non-fatal errors present reject and send errors
     if (errors.length > 0) {
       return Promise.reject(errors)
     }
+
     return Promise.resolve()
   }
 }

@@ -8,7 +8,7 @@ import {
   DispatchType,
   initObservationZones,
   initObservationEvents,
-  initSchema,
+  initSchemas,
   resetReducer,
   loginUser,
   logoutUser,
@@ -27,7 +27,7 @@ import MessageComponent from '../general/MessageComponent'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
-import { forms, useUiSchemaFields } from '../../config/fields'
+import { forms } from '../../config/fields'
 import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
@@ -127,31 +127,21 @@ const LoginComponent = (props: Props) => {
       formIDs.push(forms[id])
     }
 
-    await Promise.all(formIDs.map(async formId => {
-      try {
-        const useUiSchema = useUiSchemaFields.includes(formId)
+    try {
+      await dispatch(initSchemas(formIDs))
+    } catch (errors) {
+      if (errors[errors.length - 1].severity === 'fatal') {
+        showFatalError(`${t('critical error')}:\n${errors[errors.length - 1].message}`)
+        setLoggingIn(false)
+        return
 
-        await dispatch(initSchema(useUiSchema, formId))
-      } catch (errors) {
-        if (errors[errors.length - 1].severity === 'fatal') {
-          errors.forEach((error: Record<string, any>, index: number) => {
-            if (index === errors.length - 1) {
-              showFatalError(`${t('critical error')}:\n${error.message}`)
-            } else {
-              showError(error.message)
-            }
-          })
-          setLoggingIn(false)
-          return
-
-        } else {
-          errors.forEach((error: Record<string, any>) => {
-            showError(error.message)
-          })
-        }
+      } else {
+        errors.forEach((error: Record<string, any>) => {
+          showError(error.message)
+        })
       }
-    })
-    )
+    }
+
 
     //keep the following two action calls here, there will be errors if they're moved above
     try {
