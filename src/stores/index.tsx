@@ -59,7 +59,7 @@ import {
 } from './position/actions'
 import {
   setSchema,
-  initSchema,
+  initSchemas,
   switchSchema
 } from './schema/actions'
 import {
@@ -247,7 +247,7 @@ export {
   setGridPause,
   setTracking,
   setSchema,
-  initSchema,
+  initSchemas,
   switchSchema,
   resetReducer,
   beginObservationEvent,

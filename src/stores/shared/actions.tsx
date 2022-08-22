@@ -3,8 +3,10 @@ import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
 import { toggleCentered, setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
-import { clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
-  replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId } from '../../stores/observation/actions'
+import {
+  clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
+  replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId
+} from '../../stores/observation/actions'
 import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
 import { switchSchema } from '../schema/actions'
 import { mapActionTypes, ZoneType } from '../map/types'
@@ -17,13 +19,14 @@ import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser
 import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
 import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
-import { setEventGeometry } from '../../helpers/geometryHelper'
+import { removeDuplicatesFromPath, setEventGeometry } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { SOURCE_ID } from 'react-native-dotenv'
 import userService from '../../services/userService'
 import { clearGrid, setGrid } from '../position/actions'
 import { initCompleteList } from '../../stores/observation/actions'
 import { forms } from '../../config/fields'
+import { temporalOutlierFilter } from '../../helpers/pathFilters'
 
 export const resetReducer = () => ({
   type: 'RESET_STORE'
@@ -266,6 +269,12 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
         }
       })
       event.gatherings[0].units = filtered
+    }
+
+    if (lineStringPath?.type === 'LineString' || lineStringPath?.type === 'MultiLineString') {
+      lineStringPath = removeDuplicatesFromPath(lineStringPath)
+      const endDate = event.gatheringEvent.timeEnd ? event.gatheringEvent.dateEnd + 'T' + event.gatheringEvent.timeEnd : event.gatheringEvent.dateEnd
+      lineStringPath ? lineStringPath = temporalOutlierFilter(lineStringPath, endDate) : null
     }
 
     if (event) {
