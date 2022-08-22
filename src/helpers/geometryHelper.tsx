@@ -27,7 +27,7 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
       ],
       type: 'Point'
     }
-  //coordinates of luomus as the last option
+    //coordinates of luomus as the last option
   } else {
     event.gatherings[0].geometry = {
       coordinates: [
@@ -38,13 +38,11 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
     }
   }
 
-  if (event.formID === forms.lolife) {
-    if (eventHasPath) {
-      if (event.gatherings[1]) {
-        event.gatherings[1].geometry = lineStringPath
-      } else {
-        event.gatherings.push({ geometry: lineStringPath })
-      }
+  if (eventHasNamedPlace && eventHasPath) {
+    if (event.gatherings[1]) {
+      event.gatherings[1].geometry = lineStringPath
+    } else {
+      event.gatherings.push({ geometry: lineStringPath })
     }
   }
 
