@@ -1,7 +1,5 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import uuid from 'react-native-uuid'
-
 
 interface Converter {
   (data: Record<string, any>, uery: string): {data: Record<string, any>, element: JSX.Element}

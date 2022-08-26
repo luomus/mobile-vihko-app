@@ -7,7 +7,7 @@
       "android",
       "ios"
     ],
-    "version": "1.3.18",
+    "version": "1.3.19",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -28,7 +28,7 @@
     },
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 45,
+      "versionCode": 46,
       "config": {
         "googleMaps": {
           "apiKey": ""
