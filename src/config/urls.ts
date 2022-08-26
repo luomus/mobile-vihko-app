@@ -1,44 +1,40 @@
+import { API_URL } from 'react-native-dotenv'
+
 //map url
 export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
 //grid lines and labels url
 export const gridUrl              = 'https://geoserver-dev.laji.fi/geoserver/LajiMapData/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&STYLES&LAYERS=LajiMapData%3AatlasGridsWGS84&SRS=EPSG%3A3857&WIDTH={width}&HEIGHT={height}&BBOX={minX}%2C{minY}%2C{maxX}%2C{maxY}'
 
-//prod api root url
-const apiRoot                     = 'https://api.laji.fi/v0'
-
-//dev api root url
-// const apiRoot                     = 'https://apitest.laji.fi/v0'
-
 //graphql url
-export const graphqlUrl           = `${apiRoot}/graphql`
+export const graphqlUrl           = `${API_URL}/graphql`
 
 //documents url
-export const postDocumentUrl      = `${apiRoot}/documents`
+export const postDocumentUrl      = `${API_URL}/documents`
 
 //image urls
-export const postImageUrl         = `${apiRoot}/images`
+export const postImageUrl         = `${API_URL}/images`
 
 //autocomplete url
-export const autocompleteUrl      = `${apiRoot}/autocomplete/`
+export const autocompleteUrl      = `${API_URL}/autocomplete/`
 
 //locality url
-export const localityUrl          = `${apiRoot}/coordinates/location`
+export const localityUrl          = `${API_URL}/coordinates/location`
 
 //logger url
-export const loggerUrl            = `${apiRoot}/logger/error`
+export const loggerUrl            = `${API_URL}/logger/error`
 
 //form permission url
-export const formPermissionUrl    = `${apiRoot}/formPermissions`
+export const formPermissionUrl    = `${API_URL}/formPermissions`
 
 //observation zone urls
-export const getZonesUrl          = `${apiRoot}/named-places`
+export const getZonesUrl          = `${API_URL}/named-places`
 
 //login urls
-export const getLoginUrl          = `${apiRoot}/login`
-export const pollLoginUrl         = `${apiRoot}/login/check`
-export const getUserUrl           = `${apiRoot}/person/`
-export const personTokenUrl       = `${apiRoot}/person-token/`
+export const getLoginUrl          = `${API_URL}/login`
+export const pollLoginUrl         = `${API_URL}/login/check`
+export const getUserUrl           = `${API_URL}/person/`
+export const personTokenUrl       = `${API_URL}/person-token/`
 
 //bird list url
 export const birdListUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/taxon'

@@ -218,6 +218,9 @@ const DocumentComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.formContainer}>
+        <View style={Cs.formSaveButtonContainer}>
+          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
+        </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} ref={ scrollView }>
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
@@ -226,9 +229,6 @@ const DocumentComponent = (props: Props) => {
           </View>
         </KeyboardAwareScrollView>
         <MessageComponent />
-        <View style={Cs.formSaveButtonContainer}>
-          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
-        </View>
         <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.onPressSubmit} sendObservationEvent={sendObservationEvent} />
         {props.children}
       </View>

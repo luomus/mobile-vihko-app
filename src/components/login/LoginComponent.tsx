@@ -108,6 +108,8 @@ const LoginComponent = (props: Props) => {
   }
 
   const initializeApp = async () => {
+    const connected = await checkNetworkStatus()
+    if (!connected) return
 
     try {
       await dispatch(initObservationZones())
@@ -192,19 +194,8 @@ const LoginComponent = (props: Props) => {
     setLoggingIn(true)
     let result
 
-    //check that internet can be reached
-    try {
-      await netStatusChecker()
-    } catch (error) {
-      log.error({
-        location: '/components/LoginComponent.tsx login()',
-        error: 'Network error (no connection)',
-        user_id: credentials.user?.id
-      })
-      setLoggingIn(false)
-      showFatalError(`${t('critical error')}:\n${error.message}`)
-      return
-    }
+    const connected = await checkNetworkStatus()
+    if (!connected) return
 
     //attempt to get temporary login url for webview
     try {
@@ -236,6 +227,33 @@ const LoginComponent = (props: Props) => {
 
     await pollLogin(result.tmpToken)
     await storageService.remove(tmpTokenKey)
+  }
+
+  //check that internet can be reached
+  const checkNetworkStatus = async (): Promise<boolean> => {
+    const delay = (milliseconds: number) => {
+      return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+
+    try {
+      await netStatusChecker()
+    } catch (error) {
+      await delay(5000)
+
+      try {
+        await netStatusChecker()
+      } catch (error) {
+        log.error({
+          location: '/components/LoginComponent.tsx login()',
+          error: 'Network error (no connection)',
+          user_id: credentials.user?.id
+        })
+        setLoggingIn(false)
+        showFatalError(`${t('critical error')}:\n${error.message}`)
+        return false
+      }
+    }
+    return true
   }
 
   if (polling) {

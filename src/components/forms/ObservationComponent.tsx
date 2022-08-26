@@ -434,6 +434,9 @@ const ObservationComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.formContainer}>
+        <View style={Cs.formSaveButtonContainer}>
+          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
+        </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollView}>
           {observationId && !(schema.formID === forms.birdAtlas && observationState?.id.includes('complete_list')) ?
             <View style={Cs.buttonContainer}>
@@ -463,9 +466,6 @@ const ObservationComponent = (props: Props) => {
         </KeyboardAwareScrollView>
         {props.children}
         <MessageComponent />
-        <View style={Cs.formSaveButtonContainer}>
-          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
-        </View>
       </View>
     )
   }
