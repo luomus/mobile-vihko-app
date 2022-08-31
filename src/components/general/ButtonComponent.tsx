@@ -25,9 +25,11 @@ type Props = {
 const ButtonComponent = (props: Props) => {
 
   return (
-    <Shadow startColor={props.shadowColor} finalColor={props.shadowColor} distance={0} radius={5}
-      sides={['bottom']} offset={[0, 2]} paintInside={true}>
-      <TouchableOpacity onPress={props.onPressFunction} disabled={props.disabled} activeOpacity={0.8} testID={props.testID}>
+    <Shadow startColor={props.shadowColor} endColor={props.shadowColor} distance={0}
+      sides={{ 'start': false, 'end': false, 'top': false, 'bottom': true }} offset={[0, 2]}
+      paintInside={true} style={{ borderRadius: 5 }}>
+      <TouchableOpacity onPress={props.onPressFunction} disabled={props.disabled} activeOpacity={0.8}
+        testID={props.testID}>
         <LinearGradient start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
           colors={[props.gradientColorStart, props.gradientColorEnd]} style={[ props.buttonStyle, { width: props.width, height: props.height } ]}>
           { props.iconName ?

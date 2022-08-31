@@ -46,7 +46,7 @@ export const postObservationEvent = async (observationEvent: Record<string, any>
 
   if (
     observationEvent.formID !== 'JX.519' ||
-    observationEvent.editors !== ['MA.1'] ||
+    observationEvent.editors[0] !== 'MA.1' ||
     unit.identifications[0].taxon !== 'varis' ||
     unit.count !== '1' ||
     observationEvent.locality !== 'Etu-Töölö'

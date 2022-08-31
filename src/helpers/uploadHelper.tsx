@@ -46,7 +46,7 @@ export const fetchFinland = async (event: Record<string, any>, lang: string, cre
   let localityDetails
   try {
     localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang, credentials)
-  } catch (error) {
+  } catch (error: any) {
     return Promise.reject({
       severity: error.severity,
       message: error.message
@@ -78,7 +78,7 @@ export const fetchForeign = async (event: Record<string, any>, lang: string, cre
   let localityDetails
   try {
     localityDetails = await defineLocalityForeign(center, lang, credentials)
-  } catch (error) {
+  } catch (error: any) {
     return Promise.reject({
       severity: error.severity,
       message: error.message
@@ -101,7 +101,7 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   //call the service to fetch from Laji API
   try {
     localityDetails = await getLocalityDetailsFromLajiApi(geometry, lang)
-  } catch (error) {
+  } catch (error: any) {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
       error: error,
@@ -172,7 +172,7 @@ export const defineLocalityForeign = async (geometry: Point, lang: string, crede
   try {
     const response = await getLocalityDetailsFromGoogleAPI(geometry, lang)
     localityDetails = response.data.results
-  } catch (error) {
+  } catch (error: any) {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityForeign()',
       error: error,

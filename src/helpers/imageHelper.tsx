@@ -151,7 +151,7 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
   } else {
     try {
       res = await sendImages(formDataBody, credentials.token)
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/helpers/imageHelper.tsx saveImages()/sendImages()',
         error: error,
@@ -199,7 +199,7 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
     }))
 
     return idArr
-  } catch (error) {
+  } catch (error: any) {
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()/sendMetadata()',
       error: error,

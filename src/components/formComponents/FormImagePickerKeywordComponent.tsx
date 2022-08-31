@@ -193,7 +193,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
         <ErrorMessage
           errors={formState.errors}
           name={props.objectTitle}
-          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
+          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
         />
         <View style={{ paddingLeft: 10 }}>
           <Text>{props.title}</Text>
@@ -232,7 +232,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
         <ErrorMessage
           errors={formState.errors}
           name={props.objectTitle}
-          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
+          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
         />
         <View style={{ paddingLeft: 10 }}>
           <Text>{props.title}</Text>

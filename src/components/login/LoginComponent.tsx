@@ -74,7 +74,7 @@ const LoginComponent = (props: Props) => {
   const onFatalError = async () => {
     try {
       await dispatch(logoutUser())
-    } catch (error) { //catch if logout fails
+    } catch (error: any) { //catch if logout fails
       showError(error.message)
     }
     dispatch(resetReducer())
@@ -87,7 +87,7 @@ const LoginComponent = (props: Props) => {
 
     try {
       await dispatch(initLocalCredentials())
-    } catch (error) {
+    } catch (error: any) {
 
       //failed to fetch credentials from storage
       if (error?.severity) {
@@ -113,13 +113,13 @@ const LoginComponent = (props: Props) => {
 
     try {
       await dispatch(initObservationZones())
-    } catch (error) {
+    } catch (error: any) {
       showError(error.message)
     }
 
     try {
       await dispatch(initObservationEvents())
-    } catch (error) {
+    } catch (error: any) {
       showError(error.message)
     }
 
@@ -131,7 +131,7 @@ const LoginComponent = (props: Props) => {
 
     try {
       await dispatch(initSchemas(formIDs))
-    } catch (errors) {
+    } catch (errors: any) {
       if (errors[errors.length - 1].severity === 'fatal') {
         showFatalError(`${t('critical error')}:\n${errors[errors.length - 1].message}`)
         setLoggingIn(false)
@@ -148,13 +148,13 @@ const LoginComponent = (props: Props) => {
     //keep the following two action calls here, there will be errors if they're moved above
     try {
       await dispatch(getPermissions())
-    } catch (error) {
+    } catch (error: any) {
       showError(error.message)
     }
 
     try {
       await dispatch(getMetadata())
-    } catch (error) {
+    } catch (error: any) {
       showError(error.message)
     }
 
@@ -166,7 +166,7 @@ const LoginComponent = (props: Props) => {
     try {
       setPolling(true)
       await dispatch(loginUser(tmpToken, setCanceler))
-    } catch (error) {
+    } catch (error: any) {
 
       //stop polling if user canceled the login
       if (error.canceled) {
@@ -201,7 +201,7 @@ const LoginComponent = (props: Props) => {
     try {
       result = await getTempTokenAndLoginUrl()
       await storageService.save(tmpTokenKey, result.tmpToken)
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/components/LoginComponent.tsx login()',
         error: error,
@@ -242,7 +242,7 @@ const LoginComponent = (props: Props) => {
 
       try {
         await netStatusChecker()
-      } catch (error) {
+      } catch (error: any) {
         log.error({
           location: '/components/LoginComponent.tsx login()',
           error: 'Network error (no connection)',

@@ -99,7 +99,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //check that internet can be reached
     try {
       await netStatusChecker()
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/stores/observation/actions.tsx uploadObservationEvent()/netStatusChecker()',
         error: 'Network error (no connection)',
@@ -114,7 +114,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //check that person token isn't expired
     try {
       await userService.checkTokenValidity(credentials.token)
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error,
@@ -150,7 +150,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       if (overlapsFinland(event.gatherings[0].geometry)) {
         try {
           await fetchFinland(event, lang, credentials)
-        } catch (error) {
+        } catch (error: any) {
           if (error.severity && error.severity === 'low') {
             localityErrorMessage = error.message
           }
@@ -158,7 +158,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       } else {
         try {
           await fetchForeign(event, lang, credentials)
-        } catch (error) {
+        } catch (error: any) {
           if (error.severity && error.severity === 'low') {
             localityErrorMessage = error.message
           }
@@ -230,7 +230,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         event.gatherings.pop()
       }
 
-    } catch (error) {
+    } catch (error: any) {
       return Promise.reject({
         severity: 'low',
         message: error.message
@@ -239,7 +239,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
 
     try {
       await postObservationEvent(event, credentials)
-    } catch (error) {
+    } catch (error: any) {
       if (error.response?.status.toString() === '422') {
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',

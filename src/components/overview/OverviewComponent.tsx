@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import MessageComponent from '../general/MessageComponent'
-import { parseDateForUI } from '../../helpers/dateHelper'
+import { parseDateFromDocumentToUI } from '../../helpers/dateHelper'
 import ActivityComponent from '../general/ActivityComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
@@ -105,7 +105,7 @@ const OverviewComponent = (props: Props) => {
   const handleDeleteObservation = async (eventId: string, unitId: string) => {
     try {
       await dispatch(deleteObservation(eventId, unitId))
-    } catch (error) {
+    } catch (error: any) {
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
@@ -127,7 +127,7 @@ const OverviewComponent = (props: Props) => {
     try {
       await dispatch(deleteObservationEvent(eventId))
       props.onPressHome()
-    } catch (error) {
+    } catch (error: any) {
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
@@ -142,7 +142,7 @@ const OverviewComponent = (props: Props) => {
       await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
       showMessage(t('post success'))
       props.onPressHome()
-    } catch (error) {
+    } catch (error: any) {
       if (error.message !== t('user token has expired')) {
         dispatch(setMessageState({
           type: 'err',
@@ -185,17 +185,17 @@ const OverviewComponent = (props: Props) => {
 
   const displayDateBegin = () => {
     if (event?.gatheringEvent?.timeStart) {
-      return parseDateForUI(event.gatheringEvent.dateBegin + 'T' + event.gatheringEvent.timeStart)
+      return parseDateFromDocumentToUI(event.gatheringEvent.dateBegin + 'T' + event.gatheringEvent.timeStart)
     } else {
-      return parseDateForUI(event?.gatheringEvent.dateBegin)
+      return parseDateFromDocumentToUI(event?.gatheringEvent.dateBegin)
     }
   }
 
   const displayDateEnd = () => {
     if (event?.gatheringEvent?.timeStart) {
-      return parseDateForUI(event.gatheringEvent.dateEnd + 'T' + event.gatheringEvent.timeEnd)
+      return parseDateFromDocumentToUI(event.gatheringEvent.dateEnd + 'T' + event.gatheringEvent.timeEnd)
     } else {
-      return parseDateForUI(event?.gatheringEvent.dateEnd)
+      return parseDateFromDocumentToUI(event?.gatheringEvent.dateEnd)
     }
   }
 

@@ -38,7 +38,7 @@ const FormSwitchComponent = (props: Props) => {
             true: Colors.primary5
           }}>
         </Switch>
-        {setValue(props.objectTitle, selected)}
+        <>{setValue(props.objectTitle, selected)}</>
       </View>
     </View>
   )

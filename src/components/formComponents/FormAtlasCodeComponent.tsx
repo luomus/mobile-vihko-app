@@ -90,7 +90,7 @@ const FormAtlasCodeComponent = (props: Props) => {
       <ErrorMessage
         errors={formState.errors}
         name={props.objectTitle}
-        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
+        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
       />
       <View style={Cs.atlasCodeChosenContainer}>
         <Text>{!selectedKey || selectedKey === '' ? t('no atlas code') : props.dictionary[selectedKey]}</Text>

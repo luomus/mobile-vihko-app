@@ -268,7 +268,7 @@ const ObservationComponent = (props: Props) => {
       } else if (editing.originalSourcePage === 'list') {
         props.toList()
       }
-    } catch (error) {
+    } catch (error: any) {
       setSaving(false)
       dispatch(setMessageState({
         type: 'err',
@@ -340,7 +340,7 @@ const ObservationComponent = (props: Props) => {
         originalSourcePage: ''
       }))
 
-    } catch (error) {
+    } catch (error: any) {
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
@@ -391,7 +391,7 @@ const ObservationComponent = (props: Props) => {
         emptyObservation = omit(emptyObservation, 'images')
         try {
           await dispatch(replaceObservationById(emptyObservation, observationId?.eventId, observationId?.unitId))
-        } catch (error) {
+        } catch (error: any) {
           dispatch(setMessageState({
             type: 'err',
             messageContent: error.message
@@ -412,7 +412,7 @@ const ObservationComponent = (props: Props) => {
         locChanged: false,
         originalSourcePage: ''
       }))
-    } catch (error) {
+    } catch (error: any) {
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
@@ -460,7 +460,7 @@ const ObservationComponent = (props: Props) => {
           }
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
-              {form}
+              <>{form}</>
             </FormProvider>
           </View>
         </KeyboardAwareScrollView>

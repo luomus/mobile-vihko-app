@@ -103,8 +103,8 @@ const FormAutocompleteComponent = (props: Props) => {
         setQuery(payload.matchingName)
       }
 
-    } catch (err) {
-      if (!err.isCanceled) {
+    } catch (error: any) {
+      if (!error.isCanceled) {
         setError(valueField, { message: t('autocomplete network error'), type: 'manual' })
       }
     } finally {
@@ -166,8 +166,8 @@ const FormAutocompleteComponent = (props: Props) => {
       }
 
       cancel = undefined
-    } catch (err) {
-      if (!err.isCanceled) {
+    } catch (error: any) {
+      if (!error.isCanceled) {
         setError(valueField, { message: t('autocomplete network error'), type: 'manual' })
       }
     } finally {
@@ -260,7 +260,7 @@ const FormAutocompleteComponent = (props: Props) => {
         <ErrorMessage
           errors={formState.errors}
           name={valueField}
-          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
+          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
         />
         <View style={{ paddingBottom: 35 }}>
           <Autocomplete

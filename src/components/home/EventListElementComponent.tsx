@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import i18n from '../../languages/i18n'
 import { Shadow } from 'react-native-shadow-2'
 import { forms } from '../../config/fields'
-import { parseDateForUI } from '../../helpers/dateHelper'
+import { parseDateFromDocumentToUI } from '../../helpers/dateHelper'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 
@@ -51,17 +51,17 @@ const EventListElementComponent = (props: Props) => {
 
   const displayDateTime = () => {
     if (props.observationEvent.gatheringEvent?.timeStart) {
-      return parseDateForUI(dateBegin + 'T' + props.observationEvent.gatheringEvent.timeStart) + ' - '
-      + parseDateForUI(dateEnd + 'T' + props.observationEvent.gatheringEvent.timeEnd)
+      return parseDateFromDocumentToUI(dateBegin + 'T' + props.observationEvent.gatheringEvent.timeStart) + ' - '
+      + parseDateFromDocumentToUI(dateEnd + 'T' + props.observationEvent.gatheringEvent.timeEnd)
     } else {
-      return parseDateForUI(dateBegin) + ' - ' + parseDateForUI(dateEnd)
+      return parseDateFromDocumentToUI(dateBegin) + ' - ' + parseDateFromDocumentToUI(dateEnd)
     }
   }
 
   return (
     <View style={{ marginVertical: 5, width: '90%' }}>
-      <Shadow startColor={Colors.dangerShadow} finalColor={Colors.dangerShadow} distance={2} radius={5}
-        offset={[0, 1]} paintInside={true} viewStyle={{ alignSelf: 'stretch' }}>
+      <Shadow startColor={Colors.dangerShadow} endColor={Colors.dangerShadow} distance={2}
+        offset={[0, 1]} paintInside={true} style={{ alignSelf: 'stretch', borderRadius: 5 }}>
         <TouchableOpacity onPress={props.onPress} activeOpacity={0.8}>
           <View style={Cs.unsentEventsContainer} >
             <Text style={[Ts.eventListElementTitle, { color: Colors.dangerButton1 }]}>{title}</Text>

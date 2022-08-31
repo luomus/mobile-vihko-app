@@ -146,7 +146,7 @@ const DocumentComponent = (props: Props) => {
           props.onPressObservationEvent(observationId?.eventId)
         }
         dispatch(clearObservationId())
-      } catch (error) {
+      } catch (error: any) {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
@@ -167,7 +167,7 @@ const DocumentComponent = (props: Props) => {
       showMessage(t('post success'))
       setForm(undefined)
       props.onPressSubmit()
-    } catch (error) {
+    } catch (error: any) {
       if (error.message !== t('user token has expired')) {
         dispatch(setMessageState({
           type: 'err',
@@ -224,7 +224,7 @@ const DocumentComponent = (props: Props) => {
         <KeyboardAwareScrollView style={Cs.padding10Container} ref={ scrollView }>
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
-              {form}
+              <>{form}</>
             </FormProvider>
           </View>
         </KeyboardAwareScrollView>

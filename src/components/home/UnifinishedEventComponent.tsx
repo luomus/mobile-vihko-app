@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import { forms } from '../../config/fields'
-import { parseDateForUI } from '../../helpers/dateHelper'
+import { parseDateFromDocumentToUI } from '../../helpers/dateHelper'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
@@ -47,9 +47,9 @@ const UnfinishedEventComponent = (props: Props) => {
 
   const displayDateTime = () => {
     if (unfinishedEvent?.gatheringEvent?.timeStart) {
-      return parseDateForUI(unfinishedEvent.gatheringEvent.dateBegin + 'T' + unfinishedEvent.gatheringEvent.timeStart)
+      return parseDateFromDocumentToUI(unfinishedEvent.gatheringEvent.dateBegin + 'T' + unfinishedEvent.gatheringEvent.timeStart)
     } else {
-      return parseDateForUI(unfinishedEvent?.gatheringEvent.dateBegin)
+      return parseDateFromDocumentToUI(unfinishedEvent?.gatheringEvent.dateBegin)
     }
   }
 

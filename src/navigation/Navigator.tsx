@@ -11,7 +11,25 @@ import DocumentScreen from '../screens/DocumentScreen'
 import ListScreen from '../screens/ListScreen'
 import NavBarComponent from '../components/general/NavBarComponent'
 
-const Stack = createNativeStackNavigator()
+type RootStackParamList = {
+  login: undefined,
+  home: undefined,
+  map: undefined,
+  observation: {
+    rules: Record<string, any> | undefined,
+    defaults: Record<string, any> | undefined,
+    sourcePage: string
+  },
+  overview: {
+    id: string
+  },
+  document: {
+    sourcePage: string
+  },
+  list: undefined
+}
+
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const navigationOptions: NativeStackNavigationOptions = {
   header: function Header ({ navigation, route }) {

@@ -51,7 +51,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     //check that person token isn't expired
     try {
       await userService.checkTokenValidity(credentials.token)
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error,
@@ -139,7 +139,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         body,
         tracking
       )
-    } catch (error) {
+    } catch (error: any) {
       //delete the new event if gps can't be launched
       await dispatch(deleteObservationEvent(newID))
       log.error({
@@ -197,7 +197,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     //check that person token isn't expired
     try {
       await userService.checkTokenValidity(credentials.token)
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error,
@@ -218,7 +218,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     //attempt to start geolocation systems
     try {
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), title, body, tracking)
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
         error: error,

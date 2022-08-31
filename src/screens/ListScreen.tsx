@@ -4,8 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import ListComponent from '../components/forms/ListComponent'
 
 type Props = {
-  navigation: NativeStackNavigationProp<ParamListBase, string>,
-  route: Route<string>
+  navigation: NativeStackNavigationProp<ParamListBase, string>
 }
 
 const ListScreen = (props: Props) => {

@@ -113,7 +113,7 @@ const ExtendedNavBarComponent = (props: Props) => {
 
         try {
           await watchBackgroundLocationAsync(title, body)
-        } catch (error) {
+        } catch (error: any) {
           log.error({
             location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
             error: error,

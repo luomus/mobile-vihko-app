@@ -8,7 +8,7 @@ import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument, sameDay } from '../../helpers/dateHelper'
+import { parseDateFromDocumentToUI, parseDateFromDocumentToFullISO, parseDateFromDateObjectToDocument, sameDay } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -63,7 +63,7 @@ const FormDateOptionsComponent = (props: Props) => {
     }
 
     //when observing in the same day as when the event was started, do not give option to pick date
-    if (sameDay(observationEvent.events[observationEvent.events.length - 1].gatheringEvent.dateBegin, parseDateFromISOToDocument(date))) {
+    if (sameDay(observationEvent.events[observationEvent.events.length - 1].gatheringEvent.dateBegin, parseDateFromDateObjectToDocument(date))) {
       setDifferentDay(false)
     }
   }, [])
@@ -97,17 +97,17 @@ const FormDateOptionsComponent = (props: Props) => {
   }, [currentDate, currentTime])
 
   const onLockIntoCurrentDate = () => {
-    setCurrentValue(parseDateFromISOToDocument(date))
+    setCurrentValue(parseDateFromDateObjectToDocument(date))
     onChangeDate(undefined, date)
     onChangeTime(undefined, date)
-    setValue(props.objectTitle, parseDateFromISOToDocument(date))
+    setValue(props.objectTitle, parseDateFromDateObjectToDocument(date))
     setSelected(true)
   }
 
   const onChangeDate = (event: Event | undefined, date: Date | undefined) => {
     setShowDate(false)
     setShowTime(true)
-    date !== undefined ? setCurrentDate(parseDateFromISOToDocument(date)) : null
+    date !== undefined ? setCurrentDate(parseDateFromDateObjectToDocument(date)) : null
   }
 
   const onChangeTime = (event: Event | undefined, date: Date | undefined) => {
@@ -119,7 +119,7 @@ const FormDateOptionsComponent = (props: Props) => {
       setCurrentDate(observationEvent.events[observationEvent.events.length - 1].gatheringEvent.dateBegin)
     }
 
-    date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date)) : null
+    date !== undefined ? setCurrentTime(parseDateFromDateObjectToDocument(date)) : null
 
     if (date !== undefined) {
       setSelected(true)
@@ -160,7 +160,7 @@ const FormDateOptionsComponent = (props: Props) => {
         <View style={Cs.datePickerContainer}>
           <TextInput
             style={Os.datePicker}
-            value={parseDateForUI(currentValue)}
+            value={parseDateFromDocumentToUI(currentValue)}
             editable={false}
           />
           <ButtonComponent onPressFunction={() => clearDateAndTime()}
@@ -173,12 +173,12 @@ const FormDateOptionsComponent = (props: Props) => {
       {showDate && (
         <View>
           <DateTimePicker
-            value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
+            value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue)) : date}
             mode='time'
             onChange={onChangeTime}
           />
           <DateTimePicker
-            value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
+            value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue)) : date}
             mode='date'
             onChange={onChangeDate}
           />
@@ -187,7 +187,7 @@ const FormDateOptionsComponent = (props: Props) => {
       {showTime && (
         <View>
           <DateTimePicker
-            value={currentValue ? new Date(parseFromLocalToISO(currentValue)) : date}
+            value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue)) : date}
             mode='time'
             onChange={onChangeTime}
           />

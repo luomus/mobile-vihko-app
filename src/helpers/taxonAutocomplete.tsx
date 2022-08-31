@@ -115,13 +115,13 @@ export const convert = (data: Record<string, any>, query: string) => {
 
 const renderScientificName = (scientificName: string, query: string) => {
   return (
-    <Text style={{ fontStyle: 'italic', fontSize: 15 }}>{addBolding(scientificName, query, true)}</Text>
+    <Text style={{ fontStyle: 'italic', fontSize: 15 }}><>{addBolding(scientificName, query, true)}</></Text>
   )
 }
 
 const renderOtherName = (otherName: string, query: string) => {
   return (
-    <Text>{addBolding(otherName, query, false)}</Text>
+    <Text><>{addBolding(otherName, query, false)}</></Text>
   )
 }
 

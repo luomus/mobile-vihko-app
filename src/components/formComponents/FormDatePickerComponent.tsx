@@ -6,7 +6,7 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import ButtonComponent from '../general/ButtonComponent'
-import { parseDateForUI, parseFromLocalToISO, parseDateFromISOToDocument } from '../../helpers/dateHelper'
+import { parseDateFromDocumentToUI, parseDateFromDocumentToFullISO, parseDateFromDateObjectToDocument } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
 
@@ -50,10 +50,10 @@ const FormDatePickerComponent = (props: Props) => {
     register(props.objectTitle)
 
     if (!currentValue || currentValue === '') {
-      setCurrentValue(parseDateFromISOToDocument(date, props.pickerType))
-      setCurrentDate(parseDateFromISOToDocument(date, props.pickerType))
-      setCurrentTime(parseDateFromISOToDocument(date, props.pickerType))
-      setValue(props.objectTitle, parseDateFromISOToDocument(date, props.pickerType))
+      setCurrentValue(parseDateFromDateObjectToDocument(date, props.pickerType))
+      setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType))
+      setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType))
+      setValue(props.objectTitle, parseDateFromDateObjectToDocument(date, props.pickerType))
     } else {
       setValue(props.objectTitle, currentValue)
     }
@@ -96,12 +96,12 @@ const FormDatePickerComponent = (props: Props) => {
   const onChangeDate = (event: Event | undefined, date: Date | undefined) => {
     setShowDate(false)
     props.pickerType === 'date' ? null : setShowTime(true)
-    date !== undefined ? setCurrentDate(parseDateFromISOToDocument(date, props.pickerType)) : null
+    date !== undefined ? setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
   }
 
   const onChangeTime = (event: Event | undefined, date: Date | undefined) => {
     setShowTime(false)
-    date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date, props.pickerType)) : null
+    date !== undefined ? setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
   }
 
   const onOpenDatePicker = () => {
@@ -126,7 +126,7 @@ const FormDatePickerComponent = (props: Props) => {
       <View style={Cs.datePickerContainer}>
         <TextInput
           style={Os.datePicker}
-          value={parseDateForUI(createParseableTime(), props.pickerType)}
+          value={parseDateFromDocumentToUI(createParseableTime(), props.pickerType)}
           editable={false}
         />
         <ButtonComponent onPressFunction={() => onOpenDatePicker()}
@@ -138,14 +138,14 @@ const FormDatePickerComponent = (props: Props) => {
       {showDate && (
         <View>
           <DateTimePicker
-            value={currentValue ? new Date(parseFromLocalToISO(currentValue, props.pickerType)) : date}
+            value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue, props.pickerType)) : date}
             mode='date'
             onChange={onChangeDate}
             minimumDate={props.objectTitle.includes('dateEnd')
-              ? (dateBegin ? new Date(parseFromLocalToISO(dateBegin, props.pickerType)) : undefined)
+              ? (dateBegin ? new Date(parseDateFromDocumentToFullISO(dateBegin, props.pickerType)) : undefined)
               : undefined}
             maximumDate={props.objectTitle.includes('dateBegin')
-              ? (dateEnd ? new Date(parseFromLocalToISO(dateEnd, props.pickerType)) : undefined)
+              ? (dateEnd ? new Date(parseDateFromDocumentToFullISO(dateEnd, props.pickerType)) : undefined)
               : undefined}
           />
         </View>
@@ -153,7 +153,7 @@ const FormDatePickerComponent = (props: Props) => {
       {showTime && (
         <View>
           <DateTimePicker
-            value={currentValue ? new Date(parseFromLocalToISO(createParseableTime())) : date}
+            value={currentValue ? new Date(parseDateFromDocumentToFullISO(createParseableTime())) : date}
             mode='time'
             onChange={onChangeTime}
           />

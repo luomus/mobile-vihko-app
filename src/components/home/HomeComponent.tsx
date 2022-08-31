@@ -75,39 +75,39 @@ const HomeComponent = (props: Props) => {
   const dispatch: DispatchType = useDispatch()
 
   return <HomeComponentContainer
-    isFocused = {props.isFocused}
-    onLogout = {props.onLogout}
-    onPressMap = {props.onPressMap}
-    onPressObservationEvent = {props.onPressObservationEvent}
-    onPressFinishObservationEvent = {props.onPressFinishObservationEvent}
+    isFocused={props.isFocused}
+    onLogout={props.onLogout}
+    onPressMap={props.onPressMap}
+    onPressObservationEvent={props.onPressObservationEvent}
+    onPressFinishObservationEvent={props.onPressFinishObservationEvent}
 
-    pressCounter = {pressCounter}
-    setPressCounter = {setPressCounter}
-    observationEvents = {observationEvents}
-    setObservationEvents = {setObservationEvents}
-    tripModalVisibility = {tripModalVisibility}
-    setTripModalVisibility = {setTripModalVisibility}
-    gridModalVisibility = {gridModalVisibility}
-    setGridModalVisibility = {setGridModalVisibility}
-    fungiModalVisibility = {fungiModalVisibility}
-    setFungiModalVisibility = {setFungiModalVisibility}
-    zoneModalVisibility = {zoneModalVisibility}
-    setZoneModalVisibility = {setZoneModalVisibility}
-    loading = {loading}
-    setLoading = {setLoading}
+    pressCounter={pressCounter}
+    setPressCounter={setPressCounter}
+    observationEvents={observationEvents}
+    setObservationEvents={setObservationEvents}
+    tripModalVisibility={tripModalVisibility}
+    setTripModalVisibility={setTripModalVisibility}
+    gridModalVisibility={gridModalVisibility}
+    setGridModalVisibility={setGridModalVisibility}
+    fungiModalVisibility={fungiModalVisibility}
+    setFungiModalVisibility={setFungiModalVisibility}
+    zoneModalVisibility={zoneModalVisibility}
+    setZoneModalVisibility={setZoneModalVisibility}
+    loading={loading}
+    setLoading={setLoading}
 
-    credentials = {credentials}
-    observationEvent = {observationEvent}
-    observationZone = {observationZone}
-    observing = {observing}
-    path = {path}
-    schema = {schema}
+    credentials={credentials}
+    observationEvent={observationEvent}
+    observationZone={observationZone}
+    observing={observing}
+    path={path}
+    schema={schema}
 
-    t = {t}
-    dispatch = {dispatch}
-    
-    fetch = {storageService.fetch}
-    save = {storageService.save}
+    t={t}
+    dispatch={dispatch}
+
+    fetch={storageService.fetch}
+    save={storageService.save}
   />
 }
 
@@ -286,7 +286,7 @@ export const HomeComponentContainer = (
 
     try {
       await props.dispatch(beginObservationEvent(props.onPressMap, title, body))
-    } catch (error) {
+    } catch (error: any) {
       if (error.severity === 'high') {
         props.dispatch(setMessageState({
           type: 'err',
@@ -316,7 +316,7 @@ export const HomeComponentContainer = (
 
     try {
       await props.dispatch(continueObservationEvent(props.onPressMap, title, body))
-    } catch (error) {
+    } catch (error: any) {
       if (error.severity === 'high') {
         props.dispatch(setMessageState({
           type: 'err',
@@ -373,7 +373,7 @@ export const HomeComponentContainer = (
   }
 
   const clipboardConfirmation = (logs: any[] | null) => {
-    if (logs !== null && logs !== []) {
+    if (logs !== null && logs.length > 0) {
       props.dispatch(setMessageState({
         type: 'dangerConf',
         messageContent: props.t('copy log to clipboard?'),
@@ -405,23 +405,29 @@ export const HomeComponentContainer = (
       <>
         <ScrollView contentContainerStyle={Cs.contentAndVersionContainer}>
           <View style={Cs.homeContentContainer}>
-            {props.observing ?
-              <UnfinishedEventComponent onContinueObservationEvent={() => { onContinueObservationEvent() }}
-                stopObserving={stopObserving} />
-              :
-              null
-            }
+            <>
+              {props.observing ?
+                <UnfinishedEventComponent onContinueObservationEvent={() => { onContinueObservationEvent() }}
+                  stopObserving={stopObserving} />
+                :
+                null
+              }
+            </>
             <Text style={Ts.previousObservationsTitle}>{props.t('new observation event')}</Text>
             <FormLauncherComponent formID={forms.tripForm} setModalVisibility={props.setTripModalVisibility} />
             <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={props.setGridModalVisibility} />
             <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={props.setFungiModalVisibility} />
-            {
-              props.credentials.permissions?.includes('HR.2951') ?
-                <FormLauncherComponent formID={forms.lolife} setModalVisibility={props.setZoneModalVisibility} />
-                : null
-            }
+            <>
+              {
+                props.credentials.permissions?.includes('HR.2951') ?
+                  <FormLauncherComponent formID={forms.lolife} setModalVisibility={props.setZoneModalVisibility} />
+                  : null
+              }
+            </>
             <Text style={Ts.previousObservationsTitle}>{props.t('previous observation events')}</Text>
-            {props.observationEvents}
+            <>
+              {props.observationEvents}
+            </>
           </View>
           <View style={Cs.versionContainer}>
             <Text

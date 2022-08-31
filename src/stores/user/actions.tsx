@@ -24,7 +24,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
       dispatch(setCredentials(credentials))
 
     //in case of error, credentials stay null
-    } catch (netError) {
+    } catch (netError: any) {
 
       //login canceled
       if (netError.canceled) {
@@ -88,7 +88,7 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
       const permissions = await getFormPermissions(credentials.token)
       permissionsArr = [...permissions.admins, ...permissions.editors]
 
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/stores/user/actions.tsx getPermissions()',
         error: error,
@@ -139,7 +139,7 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
       const profile = await getProfile(credentials.token)
       metadata = profile.settings?.defaultMediaMetadata
 
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/stores/user/actions.tsx getMetadata()',
         error: error,
@@ -209,7 +209,7 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
     try {
       await userService.logout(credentials)
 
-    } catch (error) {
+    } catch (error: any) {
       log.error({
         location: '/stores/user/actions.tsx logoutUser()',
         error: error,

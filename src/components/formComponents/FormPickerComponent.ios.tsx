@@ -62,7 +62,7 @@ const FormPickerComponent = (props: Props) => {
       <ErrorMessage
         errors={formState.errors}
         name={props.objectTitle}
-        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
+        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
       />
       <View style={Cs.iOSPickerContainer}>
         <TextInput
