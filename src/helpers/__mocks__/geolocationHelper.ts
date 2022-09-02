@@ -1,9 +1,6 @@
 import { LocationObject } from 'expo-location'
 import proj4 from 'proj4'
 import { Polygon } from 'geojson'
-import { GRID_EDGE_DISTANCE } from '../../config/location'
-
-let positionWatcher: null | { remove(): void } = null
 
 export const convertWGS84ToYKJ = (coordinates: [number, number]) => {
   const ykjProjection = '+proj=tmerc +lat_0=0 +lon_0=27 +k=1 +x_0=3500000 +y_0=0 +ellps=intl +towgs84=-96.0617,-82.4278,-121.7535,4.80107,0.34543,-1.37646,1.4964 +units=m +no_defs'
@@ -59,10 +56,10 @@ export const cleanupLocationAsync = async (observationEventInterrupted: boolean,
 }
 
 export const YKJCoordinateIntoWGS84Grid = (northing: number, easting: number): Polygon => {
-  const easting1 = easting * 10000 + GRID_EDGE_DISTANCE
-  const easting2 = easting * 10000 + 10000 - GRID_EDGE_DISTANCE
-  const northing1 = northing * 10000 + GRID_EDGE_DISTANCE
-  const northing2 = northing * 10000 + 10000 - GRID_EDGE_DISTANCE
+  const easting1 = easting * 10000
+  const easting2 = easting * 10000 + 10000
+  const northing1 = northing * 10000
+  const northing2 = northing * 10000 + 10000
 
   const northWestCorner = convertYKJToWGS84([easting1, northing2])
   const northEastCorner = convertYKJToWGS84([easting2, northing2])

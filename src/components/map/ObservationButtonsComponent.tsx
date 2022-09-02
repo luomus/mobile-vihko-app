@@ -8,7 +8,7 @@ import Colors from '../../styles/Colors'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { rootState } from '../../stores'
-import { listOfHaversineNeighbors } from '../../helpers/distanceHelper'
+import { listOfHaversineNeighbors } from '../../helpers/geometryHelper'
 import { forms, useUiSchemaFields, lolifeObservationTypes } from '../../config/fields'
 import i18n from '../../languages/i18n'
 

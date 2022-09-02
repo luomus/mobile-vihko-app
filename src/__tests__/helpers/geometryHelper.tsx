@@ -1,6 +1,6 @@
 import { LineString, MultiLineString, Point, Polygon } from 'geojson'
 import { omit } from 'lodash'
-import { centerOfBoundingBox, centerOfGeometry, createUnitBoundingBox, overlapsFinland, removeDuplicatesFromPath, setEventGeometry } from '../../helpers/geometryHelper'
+import { centerOfBoundingBox, centerOfGeometry, createUnitBoundingBox, listOfHaversineNeighbors, overlapsFinland, removeDuplicatesFromPath, setEventGeometry } from '../../helpers/geometryHelper'
 
 describe('setEventGeometry', () => {
   it('sets named place as geometry if event has a named place', () => {
@@ -1315,5 +1315,221 @@ describe('removeDuplicatesFromPath', () => {
     multiLineString.coordinates[1].pop()
 
     expect(filteredMultiLineString).toEqual(multiLineString)
+  })
+})
+
+describe('listOfHaversineNeighbors', () => {
+  it('successfully returns a unit that is nearby', () => {
+    const units: Array<Record<string, any>> = [
+      {
+        'count': '1',
+        'id': 'observation_b0f65bf0-3277-4ff6-af85-bb202bb50f5a',
+        'identifications': [
+          {
+            'taxon': 'varis'
+          }
+        ],
+        'images': [],
+        'informalTaxonGroups': [
+          'MVL.1'
+        ],
+        'recordBasis': 'MY.recordBasisHumanObservation',
+        'taxonConfidence': 'MY.taxonConfidenceSure',
+        'unitFact': {
+          'autocompleteSelectedTaxonID': 'MX.73566'
+        },
+        'unitGathering': {
+          'dateBegin': '2022-09-02T08:56',
+          'geometry': {
+            'coordinates': [
+              24.96699258685112,
+              60.2036944970577
+            ],
+            'type': 'Point'
+          }
+        }
+      }
+    ]
+
+    const region: Record<string, any> = {
+      'latitude': 60.202864360915825,
+      'latitudeDelta': 0.011652797109057644,
+      'longitude': 24.964063111692663,
+      'longitudeDelta': 0.013816393911838531
+    }
+
+    const point: Point = {
+      'coordinates': [
+        24.96699258685112,
+        60.2036944970577
+      ],
+      'type': 'Point'
+    }
+
+    const neighbors = listOfHaversineNeighbors(units, region, point)
+
+    expect(neighbors).toEqual(units)
+  })
+
+  it('does not return a unit that is afar', () => {
+    const units: Array<Record<string, any>> = [
+      {
+        'count': '1',
+        'id': 'observation_521574b1-26f4-4716-9dc8-c9a83cf1ae5c',
+        'identifications': [
+          {
+            'taxon': 'teeri'
+          }
+        ],
+        'images': [],
+        'informalTaxonGroups': [
+          'MVL.1'
+        ],
+        'recordBasis': 'MY.recordBasisHumanObservation',
+        'taxonConfidence': 'MY.taxonConfidenceSure',
+        'unitFact': {
+          'autocompleteSelectedTaxonID': 'MX.26926'
+        },
+        'unitGathering': {
+          'dateBegin': '2022-09-02T08:57',
+          'geometry': {
+            'coordinates': [
+              24.961248636245724,
+              60.20105620486077
+            ],
+            'type': 'Point'
+          }
+        }
+      }
+    ]
+
+    const region: Record<string, any> = {
+      'latitude': 60.202864360915825,
+      'latitudeDelta': 0.011652797109057644,
+      'longitude': 24.964063111692663,
+      'longitudeDelta': 0.013816393911838531
+    }
+
+    const point: Point = {
+      'coordinates': [
+        24.96699258685112,
+        60.2036944970577
+      ],
+      'type': 'Point'
+    }
+
+    const neighbors = listOfHaversineNeighbors(units, region, point)
+
+    expect(neighbors).toEqual([])
+  })
+
+  it('successfully returns only the units that are nearby', () => {
+    const units: Array<Record<string, any>> = [
+      {
+        'count': '1',
+        'id': 'observation_b0f65bf0-3277-4ff6-af85-bb202bb50f5a',
+        'identifications': [
+          {
+            'taxon': 'varis'
+          }
+        ],
+        'images': [],
+        'informalTaxonGroups': [
+          'MVL.1'
+        ],
+        'recordBasis': 'MY.recordBasisHumanObservation',
+        'taxonConfidence': 'MY.taxonConfidenceSure',
+        'unitFact': {
+          'autocompleteSelectedTaxonID': 'MX.73566'
+        },
+        'unitGathering': {
+          'dateBegin': '2022-09-02T08:56',
+          'geometry': {
+            'coordinates': [
+              24.96699258685112,
+              60.2036944970577
+            ],
+            'type': 'Point'
+          }
+        }
+      },
+      {                                                                                               
+        "count": "1",                                                                                        
+        "id": "observation_72eb993a-790c-4824-82fa-a029a092e339",                                                                                                                                                      
+        "identifications": [                                                                           
+          {                                                                                           
+            "taxon": "varpunen"                                                                             
+          }                                                                                                 
+        ],                                                                                                   
+        "images": [],                                                                                  
+        "informalTaxonGroups": [                                                                       
+          "MVL.1"                                                                                           
+        ],                                                                                                   
+        "recordBasis": "MY.recordBasisHumanObservation",                                                     
+        "taxonConfidence": "MY.taxonConfidenceSure",                                                         
+        "unitFact": {                                                                                 
+          "autocompleteSelectedTaxonID": "MX.36573"                                                         
+        },                                                                                                   
+        "unitGathering": {                                                                            
+          "dateBegin": "2022-09-02T08:56",              
+          "geometry": {
+            "coordinates": [
+              24.968156665563583,
+              60.20408868151458
+            ],
+            "type": "Point"
+          }
+        }
+      },
+      {
+        'count': '1',
+        'id': 'observation_521574b1-26f4-4716-9dc8-c9a83cf1ae5c',
+        'identifications': [
+          {
+            'taxon': 'teeri'
+          }
+        ],
+        'images': [],
+        'informalTaxonGroups': [
+          'MVL.1'
+        ],
+        'recordBasis': 'MY.recordBasisHumanObservation',
+        'taxonConfidence': 'MY.taxonConfidenceSure',
+        'unitFact': {
+          'autocompleteSelectedTaxonID': 'MX.26926'
+        },
+        'unitGathering': {
+          'dateBegin': '2022-09-02T08:57',
+          'geometry': {
+            'coordinates': [
+              24.961248636245724,
+              60.20105620486077
+            ],
+            'type': 'Point'
+          }
+        }
+      }
+    ]
+
+    const point: Point = {
+      'coordinates': [
+        24.96699258685112,
+        60.2036944970577
+      ],
+      'type': 'Point'
+    }
+
+    const region: Record<string, any> = {
+      'latitude': 60.202864360915825,
+      'latitudeDelta': 0.011652797109057644,
+      'longitude': 24.964063111692663,
+      'longitudeDelta': 0.013816393911838531
+    }
+
+    const neighbors = listOfHaversineNeighbors(units, region, point)
+
+    units.pop()
+
+    expect(neighbors).toEqual(units)
   })
 })

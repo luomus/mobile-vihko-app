@@ -12,7 +12,6 @@ import {
   PATH_MIN_T_INTERVALL,
   PATH_MIN_X_INTERVALL
 } from '../config/location'
-import { GRID_EDGE_DISTANCE } from '../config/location'
 
 let positionWatcher: null | { remove(): void } = null
 
@@ -93,10 +92,10 @@ export const cleanupLocationAsync = async (observationEventInterrupted: boolean,
 }
 
 export const YKJCoordinateIntoWGS84Grid = (northing: number, easting: number): Polygon => {
-  const easting1 = easting * 10000 + GRID_EDGE_DISTANCE
-  const easting2 = easting * 10000 + 10000 - GRID_EDGE_DISTANCE
-  const northing1 = northing * 10000 + GRID_EDGE_DISTANCE
-  const northing2 = northing * 10000 + 10000 - GRID_EDGE_DISTANCE
+  const easting1 = easting * 10000
+  const easting2 = easting * 1000 + 1000
+  const northing1 = northing * 1000
+  const northing2 = northing * 1000 + 1000
 
   const northWestCorner = convertYKJToWGS84([easting1, northing2])
   const northEastCorner = convertYKJToWGS84([easting2, northing2])

@@ -37,24 +37,24 @@ describe('parseDateFromDocumentToUI', () => {
 })
 
 describe('parseDateFromDocumentToFullISO', () => {
-  it('returns the given date in the ISO format', () => {
+  it('returns the given date in the full ISO format', () => {
     const date = '2022-08-29T14:12'
     const type = 'date'
     const parsedDate = parseDateFromDocumentToFullISO(date, type)
     expect(parsedDate).toEqual('2022-08-29T00:00:00+03:00')
   })
 
-  it('returns the given time in the ISO format', () => {
+  it('returns the given time in the full ISO format', () => {
     const date = new Date()
     let isoDate = date.toISOString()
-    isoDate = isoDate.substring(0, isoDate.lastIndexOf('T') + 1)
-    isoDate += '14:12'
+    const dateOnly = isoDate.substring(0, isoDate.lastIndexOf('T') + 1)
+    isoDate = dateOnly + '14:12'
     const type = 'time'
     const parsedTime = parseDateFromDocumentToFullISO(isoDate, type)
-    expect(parsedTime).toEqual('2022-08-31T20:12:00+03:00')
+    expect(parsedTime).toEqual(dateOnly + '20:12:00+03:00')
   })
 
-  it('returns the given date and time in the ISO format', () => {
+  it('returns the given date and time in the full ISO format', () => {
     const date = '2022-08-29T14:12'
     const parsedDate = parseDateFromDocumentToFullISO(date)
     expect(parsedDate).toEqual('2022-08-29T14:12:00+03:00')
