@@ -43,7 +43,7 @@ const FormLauncherComponent = (props: Props) => {
   if (observing) {
     return (
       <View style={{ marginVertical: 5, width: '90%' }}>
-        <Shadow startColor={Colors.neutralShadow} endColor={Colors.neutralShadow} distance={2} 
+        <Shadow startColor={Colors.neutralShadow} endColor={Colors.neutralShadow} distance={2}
           offset={[0, 1]} paintInside={true}>
           <TouchableOpacity onPress={() => null} activeOpacity={0.8} style={{ borderRadius: 5, alignSelf: 'stretch' }}>
             <View style={Cs.eventLauncherContainer}>

@@ -1,8 +1,8 @@
 import React from 'react'
 import { fireEvent } from '@testing-library/react-native'
-import { CredentialsType, ObservationZonesType, store } from "../../../stores"
+import { CredentialsType, ObservationZonesType, store } from '../../../stores'
 import i18n from 'i18next'
-import { HomeComponentContainer } from "../../../components/home/HomeComponent"
+import { HomeComponentContainer } from '../../../components/home/HomeComponent'
 import { renderWithProviders } from '../../../helpers/testHelper'
 
 describe('HomeComponent', () => {
@@ -46,28 +46,28 @@ describe('HomeComponent', () => {
     const observationEvent = {
       events: [
         {
-          "editors": [
-            "MA.1",
+          'editors': [
+            'MA.1',
           ],
-          "formID": "MHL.117",
-          "gatheringEvent": {
-            "completeList": {
-              "completeListTaxonID": "MX.37580",
-              "completeListType": "MY.completeListTypeComplete",
+          'formID': 'MHL.117',
+          'gatheringEvent': {
+            'completeList': {
+              'completeListTaxonID': 'MX.37580',
+              'completeListType': 'MY.completeListTypeComplete',
             },
-            "dateBegin": "2022-06-14",
-            "dateEnd": "2022-06-14",
-            "leg": [
-              "MA.1",
+            'dateBegin': '2022-06-14',
+            'dateEnd': '2022-06-14',
+            'leg': [
+              'MA.1',
             ],
-            "legPublic": true,
-            "timeEnd": "14:13",
-            "timeStart": "14:12",
+            'legPublic': true,
+            'timeEnd': '14:13',
+            'timeStart': '14:12',
           },
-          "gatherings": [
+          'gatherings': [
             {
-              "geometry": {
-                "coordinates": [
+              'geometry': {
+                'coordinates': [
                   [
                     [
                       25.008844370894142,
@@ -91,46 +91,46 @@ describe('HomeComponent', () => {
                     ],
                   ],
                 ],
-                "type": "Polygon",
+                'type': 'Polygon',
               },
-              "locality": "",
-              "localityDescription": "",
-              "notes": "",
-              "units": [],
-              "weather": "",
+              'locality': '',
+              'localityDescription': '',
+              'notes': '',
+              'units': [],
+              'weather': '',
             },
           ],
-          "grid": {
-            "e": 339,
-            "n": 668,
+          'grid': {
+            'e': 339,
+            'n': 668,
           },
-          "id": "observationEvent_f50a3a13-14d3-40db-871f-71aefc7314c5",
-          "keywords": [],
-          "secureLevel": "MX.secureLevelNone",
+          'id': 'observationEvent_f50a3a13-14d3-40db-871f-71aefc7314c5',
+          'keywords': [],
+          'secureLevel': 'MX.secureLevelNone',
         },
         {
-          "editors": [
-            "MA.2718",
+          'editors': [
+            'MA.2718',
           ],
-          "formID": "MHL.117",
-          "gatheringEvent": {
-            "completeList": {
-              "completeListTaxonID": "MX.37580",
-              "completeListType": "MY.completeListTypeComplete",
+          'formID': 'MHL.117',
+          'gatheringEvent': {
+            'completeList': {
+              'completeListTaxonID': 'MX.37580',
+              'completeListType': 'MY.completeListTypeComplete',
             },
-            "dateBegin": "2022-06-15",
-            "dateEnd": "2022-06-15",
-            "leg": [
-              "MA.2718",
+            'dateBegin': '2022-06-15',
+            'dateEnd': '2022-06-15',
+            'leg': [
+              'MA.2718',
             ],
-            "legPublic": true,
-            "timeEnd": "12:35",
-            "timeStart": "12:35",
+            'legPublic': true,
+            'timeEnd': '12:35',
+            'timeStart': '12:35',
           },
-          "gatherings": [
+          'gatherings': [
             {
-              "geometry": {
-                "coordinates": [
+              'geometry': {
+                'coordinates': [
                   [
                     25.0915132,
                     60.240932,
@@ -147,75 +147,75 @@ describe('HomeComponent', () => {
                     1655285730000,
                   ],
                 ],
-                "type": "LineString",
+                'type': 'LineString',
               },
-              "locality": "",
-              "localityDescription": "",
-              "notes": "",
-              "units": [
+              'locality': '',
+              'localityDescription': '',
+              'notes': '',
+              'units': [
                 {
-                  "atlasCode": "MY.atlasCodeEnum4",
-                  "id": "observation_fd729197-b4a2-4cee-9815-0012be7e2e87",
-                  "identifications": [
+                  'atlasCode': 'MY.atlasCodeEnum4',
+                  'id': 'observation_fd729197-b4a2-4cee-9815-0012be7e2e87',
+                  'identifications': [
                     {
-                      "taxon": "teeri",
+                      'taxon': 'teeri',
                     },
                   ],
-                  "images": [],
-                  "informalTaxonGroups": [
-                    "MVL.1",
+                  'images': [],
+                  'informalTaxonGroups': [
+                    'MVL.1',
                   ],
-                  "recordBasis": "MY.recordBasisHumanObservation",
-                  "taxonConfidence": "MY.taxonConfidenceSure",
-                  "unitFact": {
-                    "autocompleteSelectedTaxonID": "MX.26926",
+                  'recordBasis': 'MY.recordBasisHumanObservation',
+                  'taxonConfidence': 'MY.taxonConfidenceSure',
+                  'unitFact': {
+                    'autocompleteSelectedTaxonID': 'MX.26926',
                   },
-                  "unitGathering": {
-                    "geometry": {
-                      "coordinates": [
+                  'unitGathering': {
+                    'geometry': {
+                      'coordinates': [
                         25.08925974369049,
                         60.24130593208832,
                       ],
-                      "type": "Point",
+                      'type': 'Point',
                     },
                   },
                 },
               ],
-              "weather": "",
+              'weather': '',
             },
           ],
-          "grid": {
-            "e": 339,
-            "n": 668,
+          'grid': {
+            'e': 339,
+            'n': 668,
           },
-          "id": "observationEvent_7bbceefb-b6dc-4567-98ab-da9402864558",
-          "keywords": [],
-          "secureLevel": "MX.secureLevelNone",
+          'id': 'observationEvent_7bbceefb-b6dc-4567-98ab-da9402864558',
+          'keywords': [],
+          'secureLevel': 'MX.secureLevelNone',
         },
       ]
     }
     const observationZone: ObservationZonesType = {
       currentZoneId: 'empty',
       zones: [{
-        "geometry": null,
-        "id": "empty",
-        "name": "",
+        'geometry': null,
+        'id': 'empty',
+        'name': '',
       },
       {
-        "geometry": {
-          "geometries": [
+        'geometry': {
+          'geometries': [
             {
-              "coordinates": [
+              'coordinates': [
                 23.811532,
                 63.693702,
               ],
-              "type": "Point",
+              'type': 'Point',
             },
           ],
-          "type": "GeometryCollection",
+          'type': 'GeometryCollection',
         },
-        "id": "MNP.49248",
-        "name": "E2E tests (DO NOT DELETE!)",
+        'id': 'MNP.49248',
+        'name': 'E2E tests (DO NOT DELETE!)',
       }
       ]
     }

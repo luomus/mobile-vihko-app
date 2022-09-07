@@ -1,4 +1,4 @@
-import { CredentialsType } from "../../stores"
+import { CredentialsType } from '../../stores'
 
 export const getTempTokenAndLoginUrl = async () => {
   return {
@@ -46,9 +46,9 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
 
 export const checkTokenValidity = async (personToken: string) => {
   return {
-    "next": "",
-    "personId": "MA.1",
-    "target": "KE.1141",
+    'next': '',
+    'personId': 'MA.1',
+    'target': 'KE.1141',
   }
 }
 
@@ -63,7 +63,7 @@ export const getProfile = async () => {
     'profileKey': 'aVX0EJiEGbEmaIvp',
     'settings': {
       'defaultMediaMetadata': {
-      'capturerVerbatim': 'Test Testman',
+        'capturerVerbatim': 'Test Testman',
         'intellectualOwner': 'Test Testman',
         'intellectualRights': 'MZ.intellectualRightsCC-BY-4.0',
       }

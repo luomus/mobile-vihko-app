@@ -1453,31 +1453,31 @@ describe('listOfHaversineNeighbors', () => {
           }
         }
       },
-      {                                                                                               
-        "count": "1",                                                                                        
-        "id": "observation_72eb993a-790c-4824-82fa-a029a092e339",                                                                                                                                                      
-        "identifications": [                                                                           
-          {                                                                                           
-            "taxon": "varpunen"                                                                             
-          }                                                                                                 
-        ],                                                                                                   
-        "images": [],                                                                                  
-        "informalTaxonGroups": [                                                                       
-          "MVL.1"                                                                                           
-        ],                                                                                                   
-        "recordBasis": "MY.recordBasisHumanObservation",                                                     
-        "taxonConfidence": "MY.taxonConfidenceSure",                                                         
-        "unitFact": {                                                                                 
-          "autocompleteSelectedTaxonID": "MX.36573"                                                         
-        },                                                                                                   
-        "unitGathering": {                                                                            
-          "dateBegin": "2022-09-02T08:56",              
-          "geometry": {
-            "coordinates": [
+      {
+        'count': '1',
+        'id': 'observation_72eb993a-790c-4824-82fa-a029a092e339',
+        'identifications': [
+          {
+            'taxon': 'varpunen'
+          }
+        ],
+        'images': [],
+        'informalTaxonGroups': [
+          'MVL.1'
+        ],
+        'recordBasis': 'MY.recordBasisHumanObservation',
+        'taxonConfidence': 'MY.taxonConfidenceSure',
+        'unitFact': {
+          'autocompleteSelectedTaxonID': 'MX.36573'
+        },
+        'unitGathering': {
+          'dateBegin': '2022-09-02T08:56',
+          'geometry': {
+            'coordinates': [
               24.968156665563583,
               60.20408868151458
             ],
-            "type": "Point"
+            'type': 'Point'
           }
         }
       },

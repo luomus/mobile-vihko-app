@@ -1,3 +1,3 @@
 export const getVersionNumber = async () => {
-    return '1.3.16'
+  return '1.3.16'
 }

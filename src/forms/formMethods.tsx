@@ -30,7 +30,7 @@ export const initForm = (
     if (fieldScopes === null) {
       return
     }
-    
+
     const fieldScope = Object.keys(fieldScopes[rules.field]).reduce((foundObject: Record<string, any> | null, key: string) => {
       const matches = new RegExp(rules.regexp).test(key)
       if (rules.complement ? !matches : matches) {

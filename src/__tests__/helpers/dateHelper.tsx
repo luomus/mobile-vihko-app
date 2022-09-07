@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { parseDateFromDocumentToUI, parseDateFromDateObjectToDocument, parseDateFromDocumentToFullISO, sameDay, setDateForDocument } from "../../helpers/dateHelper"
+import { parseDateFromDocumentToUI, parseDateFromDateObjectToDocument, parseDateFromDocumentToFullISO, sameDay, setDateForDocument } from '../../helpers/dateHelper'
 
 describe('setDateForDocument', () => {
   it('returns a date in ISO format', () => {
@@ -95,7 +95,7 @@ describe('sameDay', () => {
     const secondDate = '2022-08-29T15:06'
     expect(sameDay(firstDate, secondDate)).toBeTruthy()
   })
-  
+
   it('returns false when the dates are from different days', () => {
     const firstDate = '2022-08-27T14:12'
     const secondDate = '2022-08-29T15:06'

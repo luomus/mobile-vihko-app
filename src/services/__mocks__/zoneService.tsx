@@ -2,16 +2,16 @@
 export const getZones = async () => {
   return [
     {
-      "id": "MNP.39004",
-      "municipality": [
-        "ML.660"
+      'id': 'MNP.39004',
+      'municipality': [
+        'ML.660'
       ],
-      "geometry": {
-        "type": "GeometryCollection",
-        "geometries": [
+      'geometry': {
+        'type': 'GeometryCollection',
+        'geometries': [
           {
-            "type": "Polygon",
-            "coordinates": [
+            'type': 'Polygon',
+            'coordinates': [
               [
                 [
                   25.023613,
@@ -94,32 +94,32 @@ export const getZones = async () => {
           }
         ]
       },
-      "collectionID": "HR.2951",
-      "name": "Mölylän metsä",
-      "locality": "Länsi-Herttoniemi, Vanhankaupunginlahti",
-      "prepopulatedDocument": {
-        "id": "JX.294524",
-        "formID": "MHL.45",
-        "editors": [
-          "MA.2718"
+      'collectionID': 'HR.2951',
+      'name': 'Mölylän metsä',
+      'locality': 'Länsi-Herttoniemi, Vanhankaupunginlahti',
+      'prepopulatedDocument': {
+        'id': 'JX.294524',
+        'formID': 'MHL.45',
+        'editors': [
+          'MA.2718'
         ],
-        "secureLevel": "MX.secureLevelNone",
-        "gatheringEvent": {
-          "leg": [
-            "MA.2718"
+        'secureLevel': 'MX.secureLevelNone',
+        'gatheringEvent': {
+          'leg': [
+            'MA.2718'
           ],
-          "dateBegin": "2022-07-11T12:47",
-          "legPublic": false,
-          "dateEnd": "2022-07-11T12:48"
+          'dateBegin': '2022-07-11T12:47',
+          'legPublic': false,
+          'dateEnd': '2022-07-11T12:48'
         },
-        "gatherings": [
+        'gatherings': [
           {
-            "geometry": {
-              "type": "GeometryCollection",
-              "geometries": [
+            'geometry': {
+              'type': 'GeometryCollection',
+              'geometries': [
                 {
-                  "type": "Polygon",
-                  "coordinates": [
+                  'type': 'Polygon',
+                  'coordinates': [
                     [
                       [
                         25.023613,
@@ -204,12 +204,12 @@ export const getZones = async () => {
             }
           },
           {
-            "geometry": {
-              "type": "GeometryCollection",
-              "geometries": [
+            'geometry': {
+              'type': 'GeometryCollection',
+              'geometries': [
                 {
-                  "type": "Polygon",
-                  "coordinates": [
+                  'type': 'Polygon',
+                  'coordinates': [
                     [
                       [
                         25.023613,
@@ -292,37 +292,37 @@ export const getZones = async () => {
                 }
               ]
             },
-            "locality": "Mölylän metsä"
+            'locality': 'Mölylän metsä'
           }
         ],
-        "namedPlaceID": "MNP.39004",
-        "keywords": [],
-        "publicityRestrictions": "MZ.publicityRestrictionsPublic",
-        "sourceID": "KE.1141",
-        "collectionID": "HR.2951",
-        "creator": "MA.2718",
-        "editor": "MA.2718",
-        "dateEdited": "2022-07-11T12:48:37+03:00",
-        "dateCreated": "2022-07-11T12:48:37+03:00"
+        'namedPlaceID': 'MNP.39004',
+        'keywords': [],
+        'publicityRestrictions': 'MZ.publicityRestrictionsPublic',
+        'sourceID': 'KE.1141',
+        'collectionID': 'HR.2951',
+        'creator': 'MA.2718',
+        'editor': 'MA.2718',
+        'dateEdited': '2022-07-11T12:48:37+03:00',
+        'dateCreated': '2022-07-11T12:48:37+03:00'
       },
-      "public": true,
-      "owners": [
-        "MA.9"
+      'public': true,
+      'owners': [
+        'MA.9'
       ],
-      "@type": "MNP.namedPlace",
-      "@context": "https://store-dev.luomus.fi/json-ld-context/MNP.namedPlace.json"
+      '@type': 'MNP.namedPlace',
+      '@context': 'https://store-dev.luomus.fi/json-ld-context/MNP.namedPlace.json'
     },
     {
-      "id": "MNP.38187",
-      "municipality": [
-        "ML.660"
+      'id': 'MNP.38187',
+      'municipality': [
+        'ML.660'
       ],
-      "geometry": {
-        "type": "GeometryCollection",
-        "geometries": [
+      'geometry': {
+        'type': 'GeometryCollection',
+        'geometries': [
           {
-            "type": "Polygon",
-            "coordinates": [
+            'type': 'Polygon',
+            'coordinates': [
               [
                 [
                   25.090203,
@@ -369,31 +369,31 @@ export const getZones = async () => {
           }
         ]
       },
-      "collectionID": "HR.2951",
-      "name": "Koskenhaanpuisto",
-      "prepopulatedDocument": {
-        "id": "JX.285276",
-        "formID": "MHL.45",
-        "editors": [
-          "MA.2718"
+      'collectionID': 'HR.2951',
+      'name': 'Koskenhaanpuisto',
+      'prepopulatedDocument': {
+        'id': 'JX.285276',
+        'formID': 'MHL.45',
+        'editors': [
+          'MA.2718'
         ],
-        "secureLevel": "MX.secureLevelNone",
-        "gatheringEvent": {
-          "leg": [
-            "MA.2718"
+        'secureLevel': 'MX.secureLevelNone',
+        'gatheringEvent': {
+          'leg': [
+            'MA.2718'
           ],
-          "dateBegin": "2022-05-18T12:05",
-          "legPublic": false,
-          "dateEnd": "2022-05-18T12:07"
+          'dateBegin': '2022-05-18T12:05',
+          'legPublic': false,
+          'dateEnd': '2022-05-18T12:07'
         },
-        "gatherings": [
+        'gatherings': [
           {
-            "geometry": {
-              "type": "GeometryCollection",
-              "geometries": [
+            'geometry': {
+              'type': 'GeometryCollection',
+              'geometries': [
                 {
-                  "type": "Polygon",
-                  "coordinates": [
+                  'type': 'Polygon',
+                  'coordinates': [
                     [
                       [
                         25.090203,
@@ -442,9 +442,9 @@ export const getZones = async () => {
             }
           },
           {
-            "geometry": {
-              "type": "LineString",
-              "coordinates": [
+            'geometry': {
+              'type': 'LineString',
+              'coordinates': [
                 [
                   25.09185,
                   60.2406833
@@ -495,25 +495,25 @@ export const getZones = async () => {
                 ]
               ]
             },
-            "locality": "Koskenhaanpuisto"
+            'locality': 'Koskenhaanpuisto'
           }
         ],
-        "namedPlaceID": "MNP.38187",
-        "keywords": [],
-        "publicityRestrictions": "MZ.publicityRestrictionsPublic",
-        "sourceID": "KE.1141",
-        "collectionID": "HR.2951",
-        "creator": "MA.2718",
-        "editor": "MA.2718",
-        "dateEdited": "2022-05-18T12:07:18+03:00",
-        "dateCreated": "2022-05-18T12:07:18+03:00"
+        'namedPlaceID': 'MNP.38187',
+        'keywords': [],
+        'publicityRestrictions': 'MZ.publicityRestrictionsPublic',
+        'sourceID': 'KE.1141',
+        'collectionID': 'HR.2951',
+        'creator': 'MA.2718',
+        'editor': 'MA.2718',
+        'dateEdited': '2022-05-18T12:07:18+03:00',
+        'dateCreated': '2022-05-18T12:07:18+03:00'
       },
-      "public": true,
-      "owners": [
-        "MA.2718"
+      'public': true,
+      'owners': [
+        'MA.2718'
       ],
-      "@type": "MNP.namedPlace",
-      "@context": "https://store-dev.luomus.fi/json-ld-context/MNP.namedPlace.json"
+      '@type': 'MNP.namedPlace',
+      '@context': 'https://store-dev.luomus.fi/json-ld-context/MNP.namedPlace.json'
     }
   ]
 }

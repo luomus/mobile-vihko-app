@@ -12,15 +12,6 @@ const geometryCollectionConstructor = (geometries: Geometry[]) => {
   return geometryCollection
 }
 
-const featureCollectionConstructor = (features: Feature[]) => {
-  const featureCollection: FeatureCollection = {
-    type: 'FeatureCollection',
-    features: features
-  }
-
-  return featureCollection
-}
-
 const featureConstructor = (geometry: Geometry) => {
   const feature: Feature = {
     type: 'Feature',
@@ -29,6 +20,15 @@ const featureConstructor = (geometry: Geometry) => {
   }
 
   return feature
+}
+
+const featureCollectionConstructor = (features: Feature[]) => {
+  const featureCollection: FeatureCollection = {
+    type: 'FeatureCollection',
+    features: features
+  }
+
+  return featureCollection
 }
 
 const pointConstructor = (lng: number, lat: number) => {
@@ -82,9 +82,7 @@ const pathToLineStringConstructor = (path: any[]) => {
       }
     })
 
-    if (coordinates.length < 2) {
-      return
-    }
+    if (coordinates.length < 2) return
 
     return lineStringConstructor(coordinates)
   } else {
@@ -107,15 +105,13 @@ const pathToLineStringConstructor = (path: any[]) => {
       }
     })
 
+    if (coordinates.length < 1) return
+
     return multiLineStringConstructor(coordinates)
   }
 }
 
 const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString) => {
-
-  if (geometry === undefined) {
-    return undefined
-  }
 
   if (geometry.type === 'LineString') {
     const path: PathType = [geometry.coordinates.map(point => [
@@ -248,7 +244,12 @@ const convertLocationDataArrToLineString = (locations: LocationObject[]) => {
 }
 
 export {
-  lineStringsToPathDeconstructor,
+  geometryCollectionConstructor,
+  featureConstructor,
+  featureCollectionConstructor,
+  pointConstructor,
+  latLngConstructor,
+  lineStringsToPathDeconstructor, 
   latLngArrayConstructor,
   pathPolygonConstructor,
   wrapGeometryInFC,

@@ -1,8 +1,9 @@
 {
   "expo": {
     "name": "Mobile-Vihko",
-    "slug": "Mobile-Vihko",
+    "slug": "mobile-vihko-app",
     "privacy": "public",
+    "owner": "luomus",
     "platforms": [
       "android",
       "ios"
