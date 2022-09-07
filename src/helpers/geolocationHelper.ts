@@ -93,9 +93,9 @@ export const cleanupLocationAsync = async (observationEventInterrupted: boolean,
 
 export const YKJCoordinateIntoWGS84Grid = (northing: number, easting: number): Polygon => {
   const easting1 = easting * 10000
-  const easting2 = easting * 1000 + 1000
-  const northing1 = northing * 1000
-  const northing2 = northing * 1000 + 1000
+  const easting2 = easting * 10000 + 10000
+  const northing1 = northing * 10000
+  const northing2 = northing * 10000 + 10000
 
   const northWestCorner = convertYKJToWGS84([easting1, northing2])
   const northEastCorner = convertYKJToWGS84([easting2, northing2])
