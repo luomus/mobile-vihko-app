@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Mobile-Vihko",
+    "name": "Mobiilivihko",
     "slug": "mobile-vihko-app",
     "privacy": "public",
     "owner": "luomus",
@@ -10,11 +10,11 @@
     ],
     "version": "1.3.19",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appIcon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashscreen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFFFFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -34,6 +34,15 @@
         "googleMaps": {
           "apiKey": ""
         }
+      },
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/appIcon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "334626ac-7ade-4e01-988c-428696a37913"
       }
     }
   }
