@@ -4,6 +4,7 @@ import i18n from '../languages/i18n'
 import { graphqlUrl, postDocumentUrl } from '../config/urls'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
+import AppJSON from '../../app.json'
 
 const setClient = (language: string) => {
   return new ApolloClient({
@@ -12,7 +13,8 @@ const setClient = (language: string) => {
       operation.setContext({
         headers: {
           'Authorization': ACCESS_TOKEN,
-          'Accept-Language': language
+          'Accept-Language': language,
+          'User-Agent': 'Mobiilivihko/' + AppJSON.expo.version
         }
       })
     }
