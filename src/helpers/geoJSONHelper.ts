@@ -111,9 +111,12 @@ const pathToLineStringConstructor = (path: any[]) => {
   }
 }
 
-const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString) => {
+const lineStringsToPathDeconstructor = (geometry: LineString | MultiLineString | undefined) => {
 
-  if (geometry.type === 'LineString') {
+  if (!geometry) {
+    return undefined
+
+  } else if (geometry.type === 'LineString') {
     const path: PathType = [geometry.coordinates.map(point => [
       point[0],
       point[1],
