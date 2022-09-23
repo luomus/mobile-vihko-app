@@ -49,8 +49,7 @@ const ContainerStyles = StyleSheet.create({
     backgroundColor: Colors.primary5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 40
+    alignItems: 'center'
   },
   userModalContainer: {
     padding: 10,

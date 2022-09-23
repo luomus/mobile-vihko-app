@@ -195,7 +195,7 @@ const wrapGeometryInFC = (geometry: Geometry) => {
   return featureCollectionConstructor([feature])
 }
 
-const latLngArrayConstructor = (points: any[]) => {
+const latLngArrayConstructor = (points: Array<Array<number>>) => {
   if (points.length <= 1) {
     return null
   }
@@ -236,12 +236,12 @@ const convertPointToLatLng = (point: Point) => {
   return latlng
 }
 
-const convertLocationDataArrToLineString = (locations: LocationObject[]) => {
+const convertLocationDataArrayToLineString = (locations: LocationObject[]) => {
   const points: any[] = []
 
-  locations.forEach(location => points.push([location.coords.longitude, location.coords.latitude]))
+  locations.forEach(location => points.push([location.coords.longitude, location.coords.latitude, 0, location.timestamp, false]))
 
-  const lineString = pathToLineStringConstructor(points)
+  const lineString = pathToLineStringConstructor([points])
 
   return lineString
 }
@@ -252,7 +252,7 @@ export {
   featureCollectionConstructor,
   pointConstructor,
   latLngConstructor,
-  lineStringsToPathDeconstructor, 
+  lineStringsToPathDeconstructor,
   latLngArrayConstructor,
   pathPolygonConstructor,
   wrapGeometryInFC,
@@ -260,7 +260,7 @@ export {
   convertGC2FC,
   convertLatLngToPoint,
   convertPointToLatLng,
-  convertLocationDataArrToLineString,
+  convertLocationDataArrayToLineString,
   pathToLineStringConstructor,
   convertMultiLineStringToGCWrappedLineString,
   lineStringConstructor,

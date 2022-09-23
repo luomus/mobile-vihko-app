@@ -1,5 +1,7 @@
-import { Feature, GeometryCollection, LineString, MultiLineString, MultiPolygon } from 'geojson'
-import { convertMultiLineStringToGCWrappedLineString, featureCollectionConstructor, featureConstructor, geometryCollectionConstructor, latLngConstructor, lineStringConstructor, lineStringsToPathDeconstructor, multiLineStringConstructor, pathToLineStringConstructor, pointConstructor, wrapGeometryInFC } from '../../helpers/geoJSONHelper'
+import { LocationObject } from 'expo-location'
+import { Feature, FeatureCollection, GeometryCollection, LineString, MultiLineString, MultiPolygon, Point } from 'geojson'
+import { LatLng } from 'react-native-maps'
+import { convertFC2GC, convertGC2FC, convertLatLngToPoint, convertLocationDataArrayToLineString, convertMultiLineStringToGCWrappedLineString, convertPointToLatLng, featureCollectionConstructor, featureConstructor, geometryCollectionConstructor, latLngArrayConstructor, latLngConstructor, lineStringConstructor, lineStringsToPathDeconstructor, multiLineStringConstructor, pathToLineStringConstructor, pointConstructor, wrapGeometryInFC } from '../../helpers/geoJSONHelper'
 
 describe('geometryCollectionConstructor', () => {
   it('merged geometries into a collection', () => {
@@ -760,6 +762,270 @@ describe('wrapGeometryInFC', () => {
   })
 })
 
+describe('latLngArrayConstructor', () => {
+  it('returns the corresponding array of LatLng values when given an array of coordinates', () => {
+    const lineString: LineString = {
+      coordinates: [
+        [
+          24.9656933,
+          60.203925,
+          1662368728279
+        ],
+        [
+          24.9654753,
+          60.203663,
+          1662368734037
+        ],
+        [
+          24.9652415,
+          60.2034186,
+          1662368736971
+        ],
+        [
+          24.9649214,
+          60.2031093,
+          1662368741034
+        ],
+        [
+          24.9646123,
+          60.202864,
+          1662368745369
+        ]
+      ],
+      type: 'LineString'
+    }
+
+    const latLngArray: LatLng[] = [
+      {
+        latitude: 60.203925,
+        longitude: 24.9656933
+      },
+      {
+        latitude: 60.203663,
+        longitude: 24.9654753
+      },
+      {
+        latitude: 60.2034186,
+        longitude: 24.9652415
+      },
+      {
+        latitude: 60.2031093,
+        longitude: 24.9649214
+      },
+      {
+        latitude: 60.202864,
+        longitude: 24.9646123
+      }
+    ]
+
+    expect(latLngArrayConstructor(lineString.coordinates)).toEqual(latLngArray)
+  })
+})
+
+describe('convertGC2FC', () => {
+  it('converts a GeometryCollection into a FeatureCollection', () => {
+    const geometryCollection: GeometryCollection = {
+      'geometries': [
+        {
+          'coordinates': [
+            [
+              24.9656933,
+              60.203925
+            ],
+            [
+              24.9654808,
+              60.2036669
+            ],
+            [
+              24.9651723,
+              60.2033507
+            ],
+            [
+              24.9648622,
+              60.2030614
+            ],
+            [
+              24.9644759,
+              60.202764
+            ]
+          ],
+          'type': 'LineString'
+        },
+        {
+          'coordinates': [
+            [
+              24.9665596,
+              60.1999047
+            ],
+            [
+              24.9670436,
+              60.1996417
+            ]
+          ],
+          'type': 'LineString'
+        }
+      ],
+      'type': 'GeometryCollection'
+    }
+
+    const featureCollection: FeatureCollection = {
+      'features': [
+        {
+          'geometry': {
+            'coordinates': [
+              [
+                24.9656933,
+                60.203925
+              ],
+              [
+                24.9654808,
+                60.2036669
+              ],
+              [
+                24.9651723,
+                60.2033507
+              ],
+              [
+                24.9648622,
+                60.2030614
+              ],
+              [
+                24.9644759,
+                60.202764
+              ]
+            ],
+            'type': 'LineString'
+          },
+          properties: {},
+          type: 'Feature'
+        },
+        {
+          'geometry': {
+            'coordinates': [
+              [
+                24.9665596,
+                60.1999047
+              ],
+              [
+                24.9670436,
+                60.1996417
+              ]
+            ],
+            'type': 'LineString'
+          },
+          properties: {},
+          type: 'Feature'
+        }
+      ],
+      'type': 'FeatureCollection'
+    }
+
+    expect(convertGC2FC(geometryCollection)).toEqual(featureCollection)
+  })
+})
+
+describe('convertFC2GC', () => {
+  it('converts a FeatureCollection into a GeometryCollection', () => {
+    const featureCollection: FeatureCollection = {
+      'features': [
+        {
+          'geometry': {
+            'coordinates': [
+              [
+                24.9656933,
+                60.203925
+              ],
+              [
+                24.9654808,
+                60.2036669
+              ],
+              [
+                24.9651723,
+                60.2033507
+              ],
+              [
+                24.9648622,
+                60.2030614
+              ],
+              [
+                24.9644759,
+                60.202764
+              ]
+            ],
+            'type': 'LineString'
+          },
+          properties: {},
+          type: 'Feature'
+        },
+        {
+          'geometry': {
+            'coordinates': [
+              [
+                24.9665596,
+                60.1999047
+              ],
+              [
+                24.9670436,
+                60.1996417
+              ]
+            ],
+            'type': 'LineString'
+          },
+          properties: {},
+          type: 'Feature'
+        }
+      ],
+      'type': 'FeatureCollection'
+    }
+
+    const geometryCollection: GeometryCollection = {
+      'geometries': [
+        {
+          'coordinates': [
+            [
+              24.9656933,
+              60.203925
+            ],
+            [
+              24.9654808,
+              60.2036669
+            ],
+            [
+              24.9651723,
+              60.2033507
+            ],
+            [
+              24.9648622,
+              60.2030614
+            ],
+            [
+              24.9644759,
+              60.202764
+            ]
+          ],
+          'type': 'LineString'
+        },
+        {
+          'coordinates': [
+            [
+              24.9665596,
+              60.1999047
+            ],
+            [
+              24.9670436,
+              60.1996417
+            ]
+          ],
+          'type': 'LineString'
+        }
+      ],
+      'type': 'GeometryCollection'
+    }
+
+    expect(convertFC2GC(featureCollection)).toEqual(geometryCollection)
+  })
+})
+
 describe('convertMultiLineStringToGCWrappedLineString', () => {
   it('converts MultiLineString to GeometryCollection', () => {
     const multiLineString: MultiLineString = {
@@ -845,5 +1111,143 @@ describe('convertMultiLineStringToGCWrappedLineString', () => {
     }
 
     expect(convertMultiLineStringToGCWrappedLineString(multiLineString)).toEqual(geometryCollection)
+  })
+})
+
+describe('convertLatLngToPoint', () => {
+  it('successfully converts a LatLng object into a Point', () => {
+    const latLng: LatLng = {
+      latitude: 60.203925,
+      longitude: 24.9656933
+    }
+
+    const point: Point = {
+      coordinates: [
+        24.9656933,
+        60.203925
+      ],
+      type: 'Point'
+    }
+
+    expect(convertLatLngToPoint(latLng)).toEqual(point)
+  })
+})
+
+describe('convertPointToLatLng', () => {
+  it('successfully converts a Point object into a LatLng', () => {
+    const point: Point = {
+      coordinates: [
+        24.9656933,
+        60.203925
+      ],
+      type: 'Point'
+    }
+
+    const latLng: LatLng = {
+      latitude: 60.203925,
+      longitude: 24.9656933
+    }
+
+    expect(convertPointToLatLng(point)).toEqual(latLng)
+  })
+})
+
+describe('convertLocationDataArrayToLineString', () => {
+  it('converts Expo LocationObject into a LineString', () => {
+    const locationObject: LocationObject[] = [
+      {
+        coords: {
+          latitude: 60.203925,
+          longitude: 24.9656933,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null
+        },
+        timestamp: 1662368728279
+      },
+      {
+        coords: {
+          latitude: 60.203663,
+          longitude: 24.9654753,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null
+        },
+        timestamp: 1662368734037
+      },
+      {
+        coords: {
+          latitude: 60.2034186,
+          longitude: 24.9652415,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null
+        },
+        timestamp: 1662368736971
+      },
+      {
+        coords: {
+          latitude: 60.2031093,
+          longitude: 24.9649214,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null
+        },
+        timestamp: 1662368741034
+      },
+      {
+        coords: {
+          latitude: 60.202864,
+          longitude: 24.9646123,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null
+        },
+        timestamp: 1662368745369
+      }
+    ]
+
+    const lineString: LineString = {
+      coordinates: [
+        [
+          24.9656933,
+          60.203925,
+          1662368728279
+        ],
+        [
+          24.9654753,
+          60.203663,
+          1662368734037
+        ],
+        [
+          24.9652415,
+          60.2034186,
+          1662368736971
+        ],
+        [
+          24.9649214,
+          60.2031093,
+          1662368741034
+        ],
+        [
+          24.9646123,
+          60.202864,
+          1662368745369
+        ]
+      ],
+      type: 'LineString'
+    }
+
+    expect(convertLocationDataArrayToLineString(locationObject)).toEqual(lineString)
   })
 })
