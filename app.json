@@ -25,7 +25,13 @@
     "ios": {
       "bundleIdentifier": "com.luomus.mobi",
       "buildNumber": "1.0.0",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      }
     },
     "android": {
       "package": "org.luomus.mobi",

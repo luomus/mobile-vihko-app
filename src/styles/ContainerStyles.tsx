@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { Dimensions, Platform, StyleSheet } from 'react-native'
 import Colors from './Colors'
 
 const ContainerStyles = StyleSheet.create({
@@ -49,7 +49,8 @@ const ContainerStyles = StyleSheet.create({
     backgroundColor: Colors.primary5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: Platform.OS === 'ios' ? 40 : 0
   },
   userModalContainer: {
     padding: 10,

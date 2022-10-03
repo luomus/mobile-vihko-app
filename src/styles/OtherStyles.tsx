@@ -14,7 +14,8 @@ const OtherStyles = StyleSheet.create({
     borderWidth: 1,
     minHeight: 40,
     width: '100%',
-    padding: 10
+    padding: 10,
+    textAlignVertical: 'center'
   },
   observationTextInput: {
     borderColor: Colors.neutral5,

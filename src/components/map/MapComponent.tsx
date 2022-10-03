@@ -327,7 +327,7 @@ const MapComponent = (props: Props) => {
       return pathPolygon ?
         <Geojson
           geojson={wrapGeometryInFC(pathPolygon)}
-          strokeWidth={5}
+          strokeWidth={Platform.OS === 'ios' ? 2 : 5}
           strokeColor={Colors.pathColor}
         />
         : null
@@ -344,7 +344,19 @@ const MapComponent = (props: Props) => {
       coordinate={convertPointToLatLng(observation)}
       onDragEnd={(event) => markObservation(event.nativeEvent.coordinate)}
       zIndex={4}
-    />
+    >
+      {
+        Platform.OS === 'ios' ?
+          <Icon
+            type={'materials-icons'}
+            name={'location-pin'}
+            size={45}
+            color={'red'}
+            tvParallaxProperties={undefined}
+          />
+          : null
+      }
+    </Marker>
     : null
   )
 
@@ -422,7 +434,19 @@ const MapComponent = (props: Props) => {
           coordinate={coordinate}
           pinColor={color}
           zIndex={3}
-        />
+        >
+          {
+            Platform.OS === 'ios' ?
+              <Icon
+                type={'materials-icons'}
+                name={'location-pin'}
+                size={45}
+                color={color}
+                tvParallaxProperties={undefined}
+              />
+              : null
+          }
+        </Marker>
       )
     })
   }
