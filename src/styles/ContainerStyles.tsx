@@ -50,7 +50,7 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: Platform.OS === 'ios' ? 40 : 0
+    paddingTop: Platform.OS === 'ios' ? 40 : 0
   },
   userModalContainer: {
     padding: 10,

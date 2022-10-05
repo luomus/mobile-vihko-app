@@ -44,8 +44,8 @@ const FormLauncherComponent = (props: Props) => {
     return (
       <View style={{ marginVertical: 5, width: '90%' }}>
         <Shadow startColor={Colors.neutralShadow} endColor={Colors.neutralShadow} distance={2}
-          offset={[0, 1]} paintInside={true}>
-          <TouchableOpacity onPress={() => null} activeOpacity={0.8} style={{ borderRadius: 5, alignSelf: 'stretch' }}>
+          offset={[0, 1]} paintInside={true} style={{ alignSelf: 'stretch', borderRadius: 5 }}>
+          <TouchableOpacity onPress={() => null} activeOpacity={0.8}>
             <View style={Cs.eventLauncherContainer}>
               <Text style={[Ts.formLauncherTitle, { color: Colors.neutral6 }]}>{title}</Text>
               <Text style={[Ts.formLauncherText, { color: Colors.neutral6 }]}>{description}</Text>

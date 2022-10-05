@@ -327,7 +327,7 @@ const MapComponent = (props: Props) => {
       return pathPolygon ?
         <Geojson
           geojson={wrapGeometryInFC(pathPolygon)}
-          strokeWidth={Platform.OS === 'ios' ? 2 : 5}
+          strokeWidth={Platform.OS === 'ios' ? 3 : 5}
           strokeColor={Colors.pathColor}
         />
         : null
