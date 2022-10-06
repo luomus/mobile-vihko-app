@@ -57,7 +57,7 @@ const ExtendedNavBarComponent = (props: Props) => {
         }))
 
         //save the path before stopping
-        const location: LocationType = await getCurrentLocation()
+        const location: LocationType = await getCurrentLocation(true)
         await dispatch(appendPath([location]))
 
         if (path) {
@@ -76,7 +76,7 @@ const ExtendedNavBarComponent = (props: Props) => {
       okLabel: t('pause'),
       cancelLabel: t('cancel'),
       onOk: async () => {
-        const location: LocationType = await getCurrentLocation()
+        const location: LocationType = await getCurrentLocation(true)
 
         dispatch(setTracking(false))
         await storageService.save('tracking', false)

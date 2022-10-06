@@ -25,10 +25,18 @@ export const convertYKJToWGS84 = (coordinates: [number, number]) => {
   return proj4(ykjProjection, 'WGS84', coordinates)
 }
 
-export const getCurrentLocation = async () => {
+export const getCurrentLocation = async (usePreviousLocation?: boolean) => {
   let permission = await Location.requestForegroundPermissionsAsync()
 
   if (permission.status === 'granted') {
+    if (usePreviousLocation) {
+      const previousLocation = await Location.getLastKnownPositionAsync({
+        requiredAccuracy: LOCATION_ACCURACY
+      })
+
+      if (previousLocation !== null) return previousLocation
+    }
+
     return await Location.getCurrentPositionAsync({
       accuracy: LOCATION_ACCURACY
     })

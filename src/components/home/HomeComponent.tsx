@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Linking, View, Text, ScrollView, BackHandler } from 'react-native'
+import { Linking, View, Text, ScrollView, BackHandler, Platform } from 'react-native'
 import ObservationEventListComponent from './EventListElementComponent'
 import { TFunction, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
@@ -187,7 +187,7 @@ export const HomeComponentContainer = (
       }
     }
 
-    checkUpdates()
+    if (Platform.OS === 'android') checkUpdates()
 
     if (isUnfinished) {
       props.dispatch(setObserving(true))
@@ -359,7 +359,7 @@ export const HomeComponentContainer = (
         }))
 
         //save the path before stopping
-        const location: LocationType = await getCurrentLocation()
+        const location: LocationType = await getCurrentLocation(true)
         await props.dispatch(appendPath([location]))
 
         if (props.path) {

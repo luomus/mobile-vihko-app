@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import { Platform, View } from 'react-native'
+import { Icon } from 'react-native-elements'
 import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
-import { Platform, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon } from 'geojson'
-import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathToLineStringConstructor, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -33,7 +34,6 @@ import { forms } from '../../config/fields'
 import { mapUrl as urlTemplate, gridUrl as gridTemplate } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
-import { Icon } from 'react-native-elements'
 import AtlasModalComponent from './AtlasModalComponent'
 import GridWarningComponent from '../general/GridWarningComponent'
 
@@ -351,7 +351,7 @@ const MapComponent = (props: Props) => {
             type={'materials-icons'}
             name={'location-pin'}
             size={45}
-            color={'red'}
+            color={Colors.pathColor}
             tvParallaxProperties={undefined}
           />
           : null

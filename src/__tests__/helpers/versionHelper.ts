@@ -9,7 +9,11 @@ describe('versionHelper', () => {
     await expect(updateIsAvailable('1.0.5', '1.0.5')).resolves.toBeFalsy()
   })
 
-  it('returns false when version is newer than the production version', async () => {
+  it('returns false when version is newer than the production version (patch)', async () => {
     await expect(updateIsAvailable('1.0.6', '1.0.5')).resolves.toBeFalsy()
+  })
+
+  it('returns false when version is newer than the production version (major)', async () => {
+    await expect(updateIsAvailable('1.4.0', '1.3.22')).resolves.toBeFalsy()
   })
 })

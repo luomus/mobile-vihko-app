@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { ActionSheetIOS, View, Text, TextInput } from 'react-native'
+import { ActionSheetIOS, View, Text, TextInput, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
@@ -64,12 +64,12 @@ const FormPickerComponent = (props: Props) => {
         name={props.objectTitle}
         render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
       />
-      <View style={Cs.iOSPickerContainer}>
+      <TouchableOpacity onPress={() => onPress()} style={Cs.iOSPickerContainer}>
         <TextInput
           style={Os.iOSPickerInput}
           value={selected}
           editable={false}
-          onPressIn={() => onPress()}
+          onPressOut={() => onPress()}
           multiline
         />
         <Icon
@@ -77,10 +77,9 @@ const FormPickerComponent = (props: Props) => {
           type='material-icons'
           color={Colors.neutral7}
           size={22}
-          onPress={() => onPress()}
           tvParallaxProperties={undefined}
         />
-      </View>
+      </TouchableOpacity>
     </View>
   )
 }
