@@ -30,10 +30,10 @@ export const parseObjectForFieldParams = (inputObject: Record<string, any>) => {
   let typeOfArray: string = ''
   let defaultValue: string | number | boolean = ''
 
-  const formEnumDict = (enumKey: string[], enumNames: string[]) => {
+  const formEnumDict = (oneOf: { const: string, title: string }[]) => {
     let dict: { [key: string]: any } = {}
-    enumKey.forEach((k: string, index: number) => {
-      dict[k] = enumNames[index]
+    oneOf.forEach((entry: { const: string, title: string }) => {
+      dict[entry.const] = entry.title
     })
 
     return dict
@@ -49,13 +49,9 @@ export const parseObjectForFieldParams = (inputObject: Record<string, any>) => {
         isArray = true
         typeOfArray = inputObject.items.type
       }
-    } else if (key === 'enum') {
+    } else if (key === 'oneOf') {
       isEnum = true
-      if (inputObject.enumNames && inputObject.enumNames.length > 0) {
-        enumDict = formEnumDict(inputObject.enum, inputObject.enumNames)
-      } else {
-        enumDict = formEnumDict(inputObject.enum, inputObject.enum)
-      }
+      enumDict = formEnumDict(inputObject.oneOf)
     } else if (key === 'default') {
       defaultValue = inputObject.default
     }

@@ -124,7 +124,7 @@ const unitColorExtractor = (inputObject: Record<string, any>) => {
 
 export const parseUiSchemaToObservations = (uiSchema: Record<string, any>) => {
   //locate object containing information for observations, eg. units
-  const units = locateNextInstanceOf('units', uiSchema)
+  const units = uiSchema.gatherings.items.units
 
   //locate groups-field containig information on observation types and their ui construction,
   //extract button labels, observation types etc.
