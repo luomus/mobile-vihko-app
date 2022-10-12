@@ -32,7 +32,7 @@ const MiniMapComponent = (props: Props) => {
         {
           Platform.OS === 'ios' ?
             <Icon
-              type={'materials-icons'}
+              type={'material-icons'}
               name={'location-pin'}
               size={45}
               color={Colors.observationColor}

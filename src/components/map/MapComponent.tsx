@@ -289,7 +289,7 @@ const MapComponent = (props: Props) => {
       zIndex={3}
       anchor={{ x: 0.5, y: 0.5 }}>
       <Icon
-        type={'materials-icons'}
+        type={'material-icons'}
         name={'my-location'}
         size={50}
         tvParallaxProperties={undefined}
@@ -348,7 +348,7 @@ const MapComponent = (props: Props) => {
       {
         Platform.OS === 'ios' ?
           <Icon
-            type={'materials-icons'}
+            type={'material-icons'}
             name={'location-pin'}
             size={45}
             color={Colors.pathColor}
@@ -438,7 +438,7 @@ const MapComponent = (props: Props) => {
           {
             Platform.OS === 'ios' ?
               <Icon
-                type={'materials-icons'}
+                type={'material-icons'}
                 name={'location-pin'}
                 size={45}
                 color={color}

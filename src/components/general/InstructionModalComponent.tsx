@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking, ScrollView, View, Text } from 'react-native'
+import { Image, Linking, ScrollView, Text, View } from 'react-native'
 import Modal from 'react-native-modal'
 import { Trans, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
@@ -93,6 +93,21 @@ const InstructionModalComponent = (props: Props) => {
           <Text>
             <Trans i18nKey={'instructions.' + props.screen} components={links} />
           </Text>
+          <Image
+            resizeMode={'contain'}
+            source={require('../../../assets/finbif.png')}
+            style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
+          />
+          <Image
+            resizeMode={'contain'}
+            source={require('../../../assets/hy.png')}
+            style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
+          />
+          <Image
+            resizeMode={'contain'}
+            source={require('../../../assets/life.png')}
+            style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
+          />
         </ScrollView>
       </View>
     </Modal>
