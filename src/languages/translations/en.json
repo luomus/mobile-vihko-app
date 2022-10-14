@@ -125,6 +125,7 @@
   "path tracking": "Path tracking",
   "pause": "Pause",
   "pause tracking": "Do you want to temporarily pause route tracking?",
+  "person token is given for a different app": "Login details refer to a different app.",
   "piece": "pc",
   "pieces": "pcs",
   "post failure": "Sending the observation event to the server has failed, if the problem repeats constantly, contact: helpdesk@laji.fi,",

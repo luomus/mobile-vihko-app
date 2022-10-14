@@ -24,18 +24,16 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
       dispatch(setCredentials(credentials))
 
     //in case of error, credentials stay null
-    } catch (netError: any) {
+    } catch (error: any) {
 
-      //login canceled
-      if (netError.canceled) {
+      if (error.canceled) {
         return Promise.reject({ canceled: true })
       }
 
-      //timeout
-      if (netError.timeout) {
+      if (error.timeout) {
         log.error({
           location: '/stores/user/actions.tsx loginUser()',
-          error: netError
+          error: error
         })
         return Promise.reject({
           severity: 'fatal',
@@ -44,15 +42,29 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
         })
       }
 
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'low',
+          message: i18n.t('user token has expired')
+        })
+      }
+
+      if (error.message?.includes('WRONG SOURCE')) {
+        return Promise.reject({
+          severity: 'fatal',
+          message: i18n.t('person token is given for a different app')
+        })
+      }
+
       //error from server
       log.error({
         location: '/stores/user/actions.tsx loginUser()',
-        error: netError,
+        error: error,
         user_id: 'undefined'
       })
       return Promise.reject({
         severity: 'fatal',
-        message: `${i18n.t('failed to load credentials from server')} ${netError.message}`
+        message: `${i18n.t('failed to load credentials from server')} ${error.message}`
       })
     }
 

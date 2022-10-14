@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getLoginUrl, pollLoginUrl, getUserUrl, personTokenUrl } from '../config/urls'
-import { ACCESS_TOKEN } from 'react-native-dotenv'
+import { ACCESS_TOKEN, SOURCE_ID } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
 
 export const getTempTokenAndLoginUrl = async () => {
@@ -53,6 +53,7 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
       const result = await postTmpToken(tmpToken)
       if (result.token) {
         try {
+          await checkTokenValidity(result.token)
           const userData = await getUserByPersonToken(result.token)
           clearInterval(poller)
           clearTimeout(timeout)
@@ -84,7 +85,10 @@ export const checkTokenValidity = async (personToken: string) => {
   const params = {
     'access_token': ACCESS_TOKEN
   }
+
   const result = await axios.get(personTokenUrl + '/' + personToken, { params })
+
+  if (result.data.target !== SOURCE_ID) throw new Error('WRONG SOURCE')
 
   return result.data
 }

@@ -125,6 +125,7 @@
   "path tracking": "Reitin seuranta",
   "pause": "Tauko",
   "pause tracking": "Haluatko laittaa reitin seurannan väliaikaisesti tauolle?",
+  "person token is given for a different app": "Kirjautumistiedot viittaavat toiseen sovellukseen.",
   "piece": "kpl",
   "pieces": "kpl",
   "post failure": "Havaintotapahtuman lähettäminen palvelimelle epäonnistui, jos ongelma tapahtuu toistuvasti, ota yhteyttä: helpdesk@laji.fi,",

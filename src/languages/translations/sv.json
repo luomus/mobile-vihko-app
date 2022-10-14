@@ -125,6 +125,7 @@
   "path tracking": "Spårning av rutten",
   "pause": "Avbryt",
   "pause tracking": "Vill du avbryta spårningen av rutten?",
+  "person token is given for a different app": "Inloggningsuppgifter hänvisar till en annan applikation.",
   "piece": "st",
   "pieces": "st",
   "post failure": "Misslyckades med att skicka observationsuppsättningen till servern, ifall problemet upprepas ständigt, kontakta: helpdesk@laji.fi,",

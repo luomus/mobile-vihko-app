@@ -63,6 +63,12 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
           message: i18n.t('user token has expired')
         })
       }
+      if (error.message?.includes('WRONG SOURCE')) {
+        return Promise.reject({
+          severity: 'low',
+          message: i18n.t('person token is given for a different app')
+        })
+      }
       return Promise.reject({
         severity: 'low',
         message: `${i18n.t('failed to check token')} ${error.message}`
@@ -207,6 +213,12 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
         return Promise.reject({
           severity: 'high',
           message: i18n.t('user token has expired')
+        })
+      }
+      if (error.message?.includes('WRONG SOURCE')) {
+        return Promise.reject({
+          severity: 'low',
+          message: i18n.t('person token is given for a different app')
         })
       }
       return Promise.reject({
