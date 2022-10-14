@@ -122,13 +122,13 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       })
       if (error.message?.includes('INVALID TOKEN')) {
         return Promise.reject({
-          severity: 'low',
+          severity: 'high',
           message: i18n.t('user token has expired')
         })
       }
       if (error.message?.includes('WRONG SOURCE')) {
         return Promise.reject({
-          severity: 'low',
+          severity: 'high',
           message: i18n.t('person token is given for a different app')
         })
       }

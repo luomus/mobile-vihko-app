@@ -168,7 +168,7 @@ const DocumentComponent = (props: Props) => {
       setForm(undefined)
       props.onPressSubmit()
     } catch (error: any) {
-      if (error.message !== t('user token has expired')) {
+      if (error.severity === 'low') {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,

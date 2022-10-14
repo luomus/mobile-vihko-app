@@ -143,7 +143,7 @@ const OverviewComponent = (props: Props) => {
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error: any) {
-      if (error.message !== t('user token has expired')) {
+      if (error.severity === 'low') {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,

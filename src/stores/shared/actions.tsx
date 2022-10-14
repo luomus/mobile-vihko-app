@@ -65,7 +65,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
       }
       if (error.message?.includes('WRONG SOURCE')) {
         return Promise.reject({
-          severity: 'low',
+          severity: 'high',
           message: i18n.t('person token is given for a different app')
         })
       }
@@ -217,7 +217,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       }
       if (error.message?.includes('WRONG SOURCE')) {
         return Promise.reject({
-          severity: 'low',
+          severity: 'high',
           message: i18n.t('person token is given for a different app')
         })
       }
