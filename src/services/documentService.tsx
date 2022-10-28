@@ -25,7 +25,7 @@ export const getSchemas = async (language: string, formId: string) => {
   const client = setClient(language)
   const query = gql`
     query {
-      form(id: "${formId}") {
+      form(id: "${formId}", format: "schema") {
         schema
         uiSchema
       }

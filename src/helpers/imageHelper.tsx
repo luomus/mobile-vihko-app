@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system'
+import * as MediaLibrary from 'expo-media-library'
 import i18n from 'i18next'
 import { CredentialsType } from '../stores'
 import { sendImages, sendMetadata } from '../services/imageService'
@@ -114,18 +115,20 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
 
   const formDataBody = new FormData()
 
-  imageFiles.forEach(image => {
+  Promise.all(imageFiles.map(async image => {
     if (!isValidFileType(image.type)) {
       if (!invalidFileTypes.includes(image.type)) {
         invalidFileTypes.push(image.type)
       }
       invalidFile = true
+      await MediaLibrary.saveToLibraryAsync(image.uri)
     } else if (!isValidFileSize(image.size)) {
       fileTooLarge = true
+      await MediaLibrary.saveToLibraryAsync(image.uri)
     } else {
       formDataBody.append('data', image)
     }
-  })
+  }))
 
   let res = null
 
@@ -138,7 +141,10 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
         user_id: credentials.user?.id
       }
     })
-    throw new Error(`${i18n.t('incorrect format')} ${getAllowedMediaFormatsAsString()}.`)
+    return Promise.reject({
+      severity: 'low',
+      message: `${i18n.t('incorrect format')} ${getAllowedMediaFormatsAsString()}.`
+    })
   } else if (fileTooLarge) {
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()',
@@ -147,7 +153,10 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
         user_id: credentials.user?.id
       }
     })
-    throw new Error(`${i18n.t('oversized image')} ${getMaxFileSizeAsString()}.`)
+    return Promise.reject({
+      severity: 'low',
+      message: `${i18n.t('oversized image')} ${getMaxFileSizeAsString()}.`
+    })
   } else {
     try {
       res = await sendImages(formDataBody, credentials.token)

@@ -181,6 +181,8 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       event.gatherings[1].geometry = convertMultiLineStringToGCWrappedLineString(event.gatherings[1].geometry)
     }
 
+    let imageErrorMessage = ''
+
     //for each observation in observation event try to send images to server
     //using saveImages, and clean out local properties
     try {
@@ -191,8 +193,12 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         if (unit.images && unit.images?.length > 0) {
           try {
             newImages = await saveImages(unit.images, credentials)
-          } catch (error) {
-            return Promise.reject(error)
+          } catch (error: any) {
+            if (error.severity && error.severity === 'low') {
+              imageErrorMessage = error.message
+            } else {
+              return Promise.reject(error)
+            }
           }
 
           newUnit = {
@@ -277,6 +283,13 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       return Promise.reject({
         severity: 'low',
         message: localityErrorMessage
+      })
+    }
+
+    if (imageErrorMessage !== '') {
+      return Promise.reject({
+        severity: 'low',
+        message: imageErrorMessage
       })
     }
 
