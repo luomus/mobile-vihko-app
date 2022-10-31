@@ -80,7 +80,7 @@ export const isValidFileSize = (size: number) => {
   return size <= MAX_FILE_SIZE
 }
 
-export const saveImages = async (images: any, credentials: CredentialsType) => {
+export const saveImages = async (images: Array<any>, credentials: CredentialsType) => {
 
   if (!credentials.token) {
     return
@@ -109,6 +109,12 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
     throw new Error(i18n.t('error processing images before sending'))
   }
 
+  if (typeof images?.[0] === 'object') {
+    for (let i = 0; i < imageFiles.length; i++) {
+      imageFiles[i] = { ...imageFiles[i], fromGallery: images[i].fromGallery }
+    }
+  }
+
   let invalidFile = (images.length <= 0)
   let invalidFileTypes: string[] = []
   let fileTooLarge = false
@@ -120,11 +126,19 @@ export const saveImages = async (images: any, credentials: CredentialsType) => {
       if (!invalidFileTypes.includes(image.type)) {
         invalidFileTypes.push(image.type)
       }
+
       invalidFile = true
-      await MediaLibrary.saveToLibraryAsync(image.uri)
+
+      if (!image.fromGallery) {
+        await MediaLibrary.saveToLibraryAsync(image.uri)
+      }
     } else if (!isValidFileSize(image.size)) {
+
       fileTooLarge = true
-      await MediaLibrary.saveToLibraryAsync(image.uri)
+
+      if (!image.fromGallery) {
+        await MediaLibrary.saveToLibraryAsync(image.uri)
+      }
     } else {
       formDataBody.append('data', image)
     }

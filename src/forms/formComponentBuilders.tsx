@@ -77,7 +77,7 @@ export const createHidden = (
 export const createImagePicker = (
   title: string,
   objectTitle: string,
-  defaultValue: Array<string>,
+  defaultValue: Array<Record<string, any>>,
 ) => {
   return <FormImagePickerComponent
     key={objectTitle}

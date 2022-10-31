@@ -17,12 +17,12 @@ import { ErrorMessage } from '@hookform/error-message'
 type Props = {
   title: string,
   objectTitle: string,
-  defaultValue: Array<string>
+  defaultValue: Array<Record<string, any>>
 }
 
 const ImagePickerComponent = (props: Props) => {
   const { register, setValue, setError, clearErrors, formState } = useFormContext()
-  const [images, setImages] = useState<Array<string>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
+  const [images, setImages] = useState<Array<Record<string, any>>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const { t } = useTranslation()
 
   const credentials = useSelector((state: rootState) => state.credentials)
@@ -48,18 +48,26 @@ const ImagePickerComponent = (props: Props) => {
       }
 
       let pickerResult: ImagePicker.ImagePickerResult
+      let fromGallery: boolean = false
 
       if (useCamera) {
         pickerResult = await ImagePicker.launchCameraAsync()
       } else {
         pickerResult = await ImagePicker.launchImageLibraryAsync()
+        fromGallery = true
       }
 
       if (!pickerResult.cancelled) {
         let uri = pickerResult.uri
 
-        setImages(images.concat(uri))
-        setValue(props.objectTitle, images.concat(uri))
+        setImages(images.concat({
+          uri: uri,
+          fromGallery: fromGallery
+        }))
+        setValue(props.objectTitle, images.concat({
+          uri: uri,
+          fromGallery: fromGallery
+        }))
       }
 
       return !pickerResult.cancelled
@@ -84,19 +92,19 @@ const ImagePickerComponent = (props: Props) => {
     return attachImage(true)
   }
 
-  const removeImage = (image: string) => {
-    const updatedImages = images.filter(i => i !== image)
+  const removeImage = (uri: string) => {
+    const updatedImages = images.filter(i => i.uri !== uri)
     setImages(updatedImages)
     setValue(props.objectTitle, updatedImages)
   }
 
-  const showRemoveImage = (image: string) => {
+  const showRemoveImage = (uri: string) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('delete image?'),
       okLabel: t('delete'),
       cancelLabel: t('cancel'),
-      onOk: () => removeImage(image)
+      onOk: () => removeImage(uri)
     }))
   }
 
@@ -106,10 +114,10 @@ const ImagePickerComponent = (props: Props) => {
   }
 
   const renderImages = () => {
-    return images.map((image: string) =>
-      <View key={image} style={Cs.imageContainer}>
+    return images.map((image: Record<string, any>) =>
+      <View key={image.uri} style={Cs.imageContainer}>
         <ImageBackground
-          source={{ uri: image }}
+          source={{ uri: image.uri }}
           style={{ width: 150, height: 150 }}
         >
           <View style={Cs.deleteImageIconContainer}>
@@ -118,7 +126,7 @@ const ImagePickerComponent = (props: Props) => {
               type='material-icons'
               color={Colors.dangerButton2}
               size={22}
-              onPress={() => { showRemoveImage(image) }}
+              onPress={() => { showRemoveImage(image.uri) }}
               tvParallaxProperties={undefined}
             />
           </View>

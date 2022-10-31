@@ -89,7 +89,7 @@ const ObservationInfoComponent = (props: Props) => {
             </View>
             <ScrollView horizontal={true} style={Cs.observationListElementImageContainer}>
               {props.observation.images.map((image: any) => {
-                let uri = ''
+                let uri = '' // change this to "let uri = image.uri" after users have had time to update the app
                 if (typeof image === 'object') {
                   uri = image.uri
                 } else {
