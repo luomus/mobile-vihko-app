@@ -8,8 +8,8 @@ type Props = {
   onPressFunction: () => any,
   disabled?: boolean | undefined,
   title: string | undefined,
-  height: number,
-  width: number,
+  height: number | undefined,
+  width: number | undefined,
   buttonStyle: StyleProp<ViewStyle>,
   gradientColorStart: string,
   gradientColorEnd: string,
@@ -27,7 +27,7 @@ const ButtonComponent = (props: Props) => {
   return (
     <Shadow startColor={props.shadowColor} endColor={props.shadowColor} distance={0}
       sides={{ 'start': false, 'end': false, 'top': false, 'bottom': true }} offset={[0, 2]}
-      paintInside={true} style={{ borderRadius: 5 }}>
+      paintInside={true} style={{ borderRadius: 5, width: '100%' }}>
       <TouchableOpacity onPress={props.onPressFunction} disabled={props.disabled} activeOpacity={0.8}
         testID={props.testID}>
         <LinearGradient start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}

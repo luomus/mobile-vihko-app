@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { rootState } from '../../stores'
 import { listOfHaversineNeighbors } from '../../helpers/geometryHelper'
-import { forms, useUiSchemaFields, lolifeObservationTypes } from '../../config/fields'
+import { useUiSchemaFields, lolifeObservationTypes } from '../../config/fields'
 import i18n from '../../languages/i18n'
 
 interface BasicObject {
@@ -34,7 +34,7 @@ const ObservationButtonsComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const createButton = (title: string, buttonStyle: StyleProp<ViewStyle>, onPress: () => void, styleType: string,
-    iconName: string | undefined, iconType: string | undefined, width: number) => {
+    iconName: string | undefined, iconType: string | undefined, width: number | undefined) => {
     return (
       <View key={title} style={Cs.padding5Container}>
         <ButtonComponent onPressFunction={() => onPress()} title={title}
@@ -57,17 +57,15 @@ const ObservationButtonsComponent = (props: Props) => {
 
     if (haversineNeighbors.length >= 4) {
       return (
-        (
-          <View style={Cs.leftButtonColumnContainer}>
-            <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
-            {createButton(
-              haversineNeighbors.length + ' ' + t('observation count'),
-              Bs.observationNeighborsButton,
-              () => props.openModal(haversineNeighbors, eventId),
-              'neutral', 'edit', 'material-icons', 150
-            )}
-          </View>
-        )
+        <View style={Cs.leftButtonColumnContainer}>
+          <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
+          {createButton(
+            haversineNeighbors.length + ' ' + t('observation count'),
+            Bs.observationNeighborsButton,
+            () => props.openModal(haversineNeighbors, eventId),
+            'primary', 'edit', 'material-icons', 150
+          )}
+        </View>
       )
     } else if (haversineNeighbors.length >= 1) {
       if (useUiSchemaFields.includes(schema.formID)) {
@@ -115,13 +113,13 @@ const ObservationButtonsComponent = (props: Props) => {
         observation.button.label,
         Bs.observationButton,
         () => props.confirmationButton(true, observation.rules, observation.button.default, 'map'),
-        'primary', undefined, undefined, 180
+        'primary', undefined, undefined, undefined
       )
     ) : createButton(
       '+ ' + t('observation'),
       Bs.observationButton,
       () => props.confirmationButton(true, undefined, undefined, 'map'),
-      'primary', undefined, undefined, 120
+      'primary', undefined, undefined, undefined
     )
   }
 
@@ -136,7 +134,7 @@ const ObservationButtonsComponent = (props: Props) => {
               t('cancel'),
               Bs.homeTextAndIconButton,
               () => props.cancelButton(),
-              'neutral', undefined, undefined, schema.formID === forms.lolife ? 180 : 120
+              'neutral', undefined, undefined, undefined
             )}
           </View>
         </View>

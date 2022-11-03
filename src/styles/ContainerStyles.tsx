@@ -234,10 +234,11 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'flex-start',
     backgroundColor: Colors.neutral3,
     borderRadius: 5,
-    width: '50%'
+    maxWidth: '45%'
   },
   rightButtonColumnContainer: {
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
+    maxWidth: '55%'
   },
   mapModalContainer: {
     alignSelf: 'center',
@@ -277,7 +278,6 @@ const ContainerStyles = StyleSheet.create({
   overviewButtonsContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    width: '20%'
   },
   observationInfoContainer: {
     padding: 5,
