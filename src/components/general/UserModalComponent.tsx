@@ -23,6 +23,7 @@ import MessageComponent from '../general/MessageComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import SelectedButtonComponent from './SelectedButtonComponent'
+import { saveLanguage } from '../../helpers/languageHelper'
 
 type Props = {
   isVisible: boolean,
@@ -90,8 +91,8 @@ const UserModalComponent = (props: Props) => {
         </View>
         <Text
           style={Ts.languageText}
-          onPress={() => {
-            i18n.changeLanguage('fi')
+          onPress={async () => {
+            await saveLanguage('fi')
             props.onClose()
           }}
         >
@@ -100,8 +101,8 @@ const UserModalComponent = (props: Props) => {
         <View style={Cs.languageContainer}>
           {i18n.language === 'fi' ?
             <SelectedButtonComponent
-              onPress={() => {
-                i18n.changeLanguage('fi')
+              onPress={async () => {
+                await saveLanguage('fi')
                 props.onClose()
               }}
               title={'FI'} height={40} width={80}
@@ -111,8 +112,8 @@ const UserModalComponent = (props: Props) => {
             />
             :
             <ButtonComponent
-              onPressFunction={() => {
-                i18n.changeLanguage('fi')
+              onPressFunction={async () => {
+                await saveLanguage('fi')
                 props.onClose()
               }}
               title={'FI'} height={40} width={80} buttonStyle={Bs.logoutButton}
@@ -125,8 +126,8 @@ const UserModalComponent = (props: Props) => {
           }
           {i18n.language === 'sv' ?
             <SelectedButtonComponent
-              onPress={() => {
-                i18n.changeLanguage('sv')
+              onPress={async () => {
+                await saveLanguage('sv')
                 props.onClose()
               }}
               title={'SV'} height={40} width={80}
@@ -136,8 +137,8 @@ const UserModalComponent = (props: Props) => {
             />
             :
             <ButtonComponent
-              onPressFunction={() => {
-                i18n.changeLanguage('sv')
+              onPressFunction={async () => {
+                await saveLanguage('sv')
                 props.onClose()
               }}
               title={'SV'} height={40} width={80} buttonStyle={Bs.logoutButton}
@@ -150,8 +151,8 @@ const UserModalComponent = (props: Props) => {
           }
           {i18n.language === 'en' ?
             <SelectedButtonComponent
-              onPress={() => {
-                i18n.changeLanguage('en')
+              onPress={async () => {
+                await saveLanguage('en')
                 props.onClose()
               }}
               title={'EN'} height={40} width={80}
@@ -161,8 +162,8 @@ const UserModalComponent = (props: Props) => {
             />
             :
             <ButtonComponent
-              onPressFunction={() => {
-                i18n.changeLanguage('en')
+              onPressFunction={async() => {
+                await saveLanguage('en')
                 props.onClose()
               }}
               title={'EN'} height={40} width={80} buttonStyle={Bs.logoutButton}

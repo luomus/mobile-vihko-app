@@ -31,6 +31,7 @@ import { forms } from '../../config/fields'
 import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
+import { initLanguage, saveLanguage } from '../../helpers/languageHelper'
 
 type Props = {
   onSuccessfulLogin: () => void,
@@ -144,7 +145,6 @@ const LoginComponent = (props: Props) => {
       }
     }
 
-
     //keep the following two action calls here, there will be errors if they're moved above
     try {
       await dispatch(getPermissions())
@@ -157,6 +157,8 @@ const LoginComponent = (props: Props) => {
     } catch (error: any) {
       showError(error.message)
     }
+
+    await initLanguage()
 
     props.onSuccessfulLogin()
     setLoggingIn(false)
@@ -295,9 +297,9 @@ const LoginComponent = (props: Props) => {
             />
           </View>
           <View style={Cs.loginLanguageContainer}>
-            <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('fi')}>FI</Text>
-            <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('sv')}>SV</Text>
-            <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('en')}>EN</Text>
+            <Text style={Ts.loginLanguage} onPress={async () => await saveLanguage('fi')}>FI</Text>
+            <Text style={Ts.loginLanguage} onPress={async () => await saveLanguage('sv')}>SV</Text>
+            <Text style={Ts.loginLanguage} onPress={async () => await saveLanguage('en')}>EN</Text>
           </View>
         </View>
         {props.children}
