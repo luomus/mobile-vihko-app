@@ -30,6 +30,7 @@ type Props = {
 const ListComponent = (props: Props) => {
 
   const [observed, setObserved] = useState<any[] | undefined>(undefined)
+  const [taxaOnMap, setTaxaOnMap] = useState<string[]>([])
   const [search, setSearch] = useState<string>('')
 
   const textInput = useRef<TextInput | null>(null)
@@ -43,18 +44,27 @@ const ListComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    const units = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.units
+    const units: Record<string, any>[] = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.units
     if (units === undefined) { return }
-    const filtered = units.filter((unit: Record<string, any>) => unit.id.includes('complete_list'))
-    let picked: any[] = []
-    let unpicked: any[] = []
+
+    const filtered: Record<string, any>[] = units.filter((unit: Record<string, any>) => unit.id.includes('complete_list'))
+
+    const taxaOnMap: string[] = units
+      .filter((unit: Record<string, any>) => !unit.id.includes('complete_list'))
+      .map((unit: Record<string, any>) => unit.identifications[0].taxon)
+    setTaxaOnMap(taxaOnMap)
+
+    let picked: Record<string, any>[] = []
+    let unpicked: Record<string, any>[] = []
+
     filtered.forEach((observation: Record<string, any>) => {
-      if (observation.atlasCode || observation.count) {
+      if (observation.atlasCode || observation.count || taxaOnMap.includes(observation.identifications[0].taxon)) {
         picked.push(observation)
       } else {
         unpicked.push(observation)
       }
     })
+
     let combined = picked.concat(unpicked)
     setObserved(combined)
   }, [observationEvent])
@@ -98,7 +108,15 @@ const ListComponent = (props: Props) => {
             <Text style={Ts.listBoldCenteredText}>
               {item.count.length > 6 ? item.count.substring(0, 5) + '...' : item.count}
             </Text>
-            : null
+            : taxaOnMap.includes(item.identifications[0].taxon) ?
+              <Icon
+                type={'material-icons'}
+                name={'location-pin'}
+                size={30}
+                color={Colors.neutral5}
+                tvParallaxProperties={undefined}
+              />
+              : null
       }
     </TouchableOpacity>
   )
