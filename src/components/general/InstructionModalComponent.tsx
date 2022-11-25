@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, Linking, ScrollView, Text, View } from 'react-native'
 import Modal from 'react-native-modal'
+import { Icon } from 'react-native-elements'
 import { Trans, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
@@ -90,6 +91,15 @@ const InstructionModalComponent = (props: Props) => {
     <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
       <View style={Cs.messageModalContainer}>
         <ScrollView style={{ margin: 10 }}>
+          <Icon
+            type={'material-icons'}
+            name={'cancel'}
+            size={30}
+            color={Colors.dangerButton2}
+            containerStyle={Cs.modalCloseContainer}
+            onPress={() => props.onClose()}
+            tvParallaxProperties={undefined}
+          />
           <Text>
             <Trans i18nKey={'instructions.' + props.screen} components={links} />
           </Text>

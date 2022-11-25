@@ -43,6 +43,9 @@ const ContainerStyles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: Colors.neutral2
   },
+  modalCloseContainer: {
+    alignSelf: 'flex-end'
+  },
 
   //navigation bar
   navBarContainer: {
@@ -58,7 +61,9 @@ const ContainerStyles = StyleSheet.create({
     backgroundColor: Colors.neutral3
   },
   userDetailsContainer: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+    paddingTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'

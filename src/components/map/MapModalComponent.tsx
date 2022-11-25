@@ -2,6 +2,7 @@ import React from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
+import { Icon } from 'react-native-elements'
 import { rootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import { forms, lolifeObservationTypes } from '../../config/fields'
@@ -31,14 +32,23 @@ const MapModalComponent = (props: Props) => {
     observationId ?
       <Modal isVisible={props.isVisible} onBackButtonPress={props.onBackButtonPress} backdropOpacity={0.5} onBackdropPress={props.onBackButtonPress}>
         <View style={Cs.mapModalContainer}>
+          <Icon
+            type={'material-icons'}
+            name={'cancel'}
+            size={30}
+            color={Colors.dangerButton2}
+            containerStyle={Cs.modalCloseContainer}
+            onPress={() => props.onBackButtonPress()}
+            tvParallaxProperties={undefined}
+          />
           <ScrollView style={{ width: '100%' }}>
             {props.observationOptions.map(observation =>
               <View key={observation.id} style={Cs.mapModalItemContainer}>
-                { schema.formID !== forms.lolife ?
+                {schema.formID !== forms.lolife ?
                   <Text style={Ts.centeredBold}>{observation.identifications[0].taxon}</Text>
                   :
                   <Text style={Ts.centeredBold}>
-                    { lolifeObservationTypes[observation.rules.field] ? t(lolifeObservationTypes[observation.rules.field]) : t('flying squirrel') }
+                    {lolifeObservationTypes[observation.rules.field] ? t(lolifeObservationTypes[observation.rules.field]) : t('flying squirrel')}
                   </Text>
                 }
                 <View style={Cs.padding5Container}>

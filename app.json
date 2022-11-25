@@ -24,7 +24,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.luomus.mobi",
-      "buildNumber": "1.0.1",
+      "buildNumber": "1.0.2",
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": [

@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
+import { Icon } from 'react-native-elements'
 import { CommonActions, ParamListBase } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import {
@@ -74,6 +75,15 @@ const UserModalComponent = (props: Props) => {
   return (
     <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
       <View style={Cs.userModalContainer}>
+        <Icon
+          type={'material-icons'}
+          name={'cancel'}
+          size={30}
+          color={Colors.dangerButton2}
+          containerStyle={Cs.modalCloseContainer}
+          onPress={() => props.onClose()}
+          tvParallaxProperties={undefined}
+        />
         <View style={Cs.userDetailsContainer}>
           <View>
             <Text style={{ color: Colors.neutral9 }}>
@@ -162,7 +172,7 @@ const UserModalComponent = (props: Props) => {
             />
             :
             <ButtonComponent
-              onPressFunction={async() => {
+              onPressFunction={async () => {
                 await saveLanguage('en')
                 props.onClose()
               }}
