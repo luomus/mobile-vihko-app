@@ -324,7 +324,7 @@ const ContainerStyles = StyleSheet.create({
     borderBottomWidth: 2
   },
   listFilterInput: {
-    paddingVertical: 5,
+    paddingVertical: 15,
     paddingHorizontal: 10,
     fontSize: 24,
     flex: 1
@@ -336,6 +336,9 @@ const ContainerStyles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 34
+  },
+  listSorterContainer: {
+    borderBottomWidth: 2
   },
   listElementContainer: {
     flexDirection: 'row',

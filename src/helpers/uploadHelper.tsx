@@ -19,7 +19,6 @@ export const definePublicity = (event: Record<string, any>, isPublic: boolean): 
   return modifiedEvent
 }
 
-//define record basis for each unit, depending on whether the unit has images attached
 export const loopThroughUnits = (event: Record<string, any>): Record<string, any> => {
 
   let modifiedEvent: Record<string, any> = event
@@ -35,6 +34,19 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
     }
     if (!unit.unitGathering.dateBegin || !(moment(unit.unitGathering.dateBegin).isValid())) {
       delete unit.unitGathering.dateBegin
+    }
+  })
+
+  return modifiedEvent
+}
+
+export const loopThroughBirdUnits = (event: Record<string, any>): Record<string, any> => {
+
+  let modifiedEvent: Record<string, any> = event
+
+  modifiedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
+    if (unit.scientificName) {
+      delete unit.scientificName
     }
   })
 

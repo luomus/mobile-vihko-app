@@ -1,7 +1,7 @@
 import React from 'react'
-import { ParamListBase, Route } from '@react-navigation/native'
+import { ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import ListComponent from '../components/forms/ListComponent'
+import ListComponent from '../components/list/ListComponent'
 
 type Props = {
   navigation: NativeStackNavigationProp<ParamListBase, string>

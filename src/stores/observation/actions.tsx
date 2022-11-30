@@ -23,7 +23,7 @@ import userService from '../../services/userService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
-import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign } from '../../helpers/uploadHelper'
+import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign, loopThroughBirdUnits } from '../../helpers/uploadHelper'
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
 import { saveImages } from '../../helpers/imageHelper'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
@@ -141,11 +141,10 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //define whether the event will be released publicly or privately
     event = definePublicity(event, isPublic)
 
-    //define record basis for each unit, depending on whether the unit has images attached,
-    //remove empty radius -fields
-    //(skip this with flying squirrel form, which has already assigned the record basis)
     if (schema.formID !== forms.lolife && event.formID !== forms.birdAtlas) {
       event = loopThroughUnits(event)
+    } else if (event.formID === forms.birdAtlas) {
+      event = loopThroughBirdUnits(event)
     }
 
     let localityErrorMessage = ''
@@ -564,6 +563,7 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
       set(observation, 'id', `complete_list_${uuid.v4()}`)
       set(observation, 'identifications', [{ taxon: name }])
       set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
+      set(observation, 'scientificName', item.scientificName)
       set(observation, 'unitFact', { autocompleteSelectedTaxonID: item.id })
       observations.push(observation)
     }))

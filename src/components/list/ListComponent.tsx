@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { FlatList, ListRenderItem, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import { createFilter } from 'react-native-search-filter'
 import { Icon } from 'react-native-elements'
 import { ParamListBase } from '@react-navigation/native'
@@ -19,6 +18,8 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { forms } from '../../config/fields'
+import ListSorterComponent from './ListSorterComponent'
+import ListFilterComponent from './ListFilterComponent'
 
 type Props = {
   onPressMap: () => void,
@@ -30,7 +31,11 @@ type Props = {
 const ListComponent = (props: Props) => {
 
   const [observed, setObserved] = useState<any[] | undefined>(undefined)
+  const [observedUnedited, setObservedUnedited] = useState<any[] | undefined>(undefined)
+  const [filteredObservations, setFilteredObservations] = useState<any[] | undefined>(undefined)
   const [taxaOnMap, setTaxaOnMap] = useState<string[]>([])
+  const [picked, setPicked] = useState<Record<string, any>[]>([])
+  const [unpicked, setUnpicked] = useState<Record<string, any>[]>([])
   const [search, setSearch] = useState<string>('')
 
   const textInput = useRef<TextInput | null>(null)
@@ -40,8 +45,6 @@ const ListComponent = (props: Props) => {
   const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
-
-  const { t } = useTranslation()
 
   useEffect(() => {
     const units: Record<string, any>[] = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.units
@@ -54,33 +57,35 @@ const ListComponent = (props: Props) => {
       .map((unit: Record<string, any>) => unit.identifications[0].taxon)
     setTaxaOnMap(taxaOnMap)
 
-    let picked: Record<string, any>[] = []
-    let unpicked: Record<string, any>[] = []
+    let pickedTemp: Record<string, any>[] = []
+    let unpickedTemp: Record<string, any>[] = []
 
     filtered.forEach((observation: Record<string, any>) => {
       if (observation.atlasCode || observation.count || taxaOnMap.includes(observation.identifications[0].taxon)) {
-        picked.push(observation)
+        pickedTemp.push(observation)
       } else {
-        unpicked.push(observation)
+        unpickedTemp.push(observation)
       }
     })
 
-    let combined = picked.concat(unpicked)
+    let combined = pickedTemp.concat(unpickedTemp)
+
+    setPicked(pickedTemp)
+    setUnpicked(unpickedTemp)
     setObserved(combined)
+    setObservedUnedited(combined)
   }, [observationEvent])
 
-  //opens the keyboard when returning from ObservationComponent
   useEffect(() => {
-    if (textInput.current) {
-      const openKeyboard = props.navigation.addListener('focus', () => {
-        setTimeout(() => {
-          textInput.current?.focus()
-        }, 1000)
-      })
+    updateList()
+  }, [search, observed])
 
-      return openKeyboard
+  const updateList = () => {
+    if (!observed) return
+    else {
+      setFilteredObservations(observed.filter(createFilter(search, ['identifications.0.taxon'])))
     }
-  }, [props.navigation, textInput.current])
+  }
 
   const renderBird: ListRenderItem<any> = ({ item }) => (
     <TouchableOpacity
@@ -98,7 +103,8 @@ const ListComponent = (props: Props) => {
       key={item.key}
       style={Cs.listElementContainer}
     >
-      <Text style={(item.atlasCode || item.count) ? Ts.listBoldText : Ts.listText}>
+      <Text style={(item.atlasCode || item.count || taxaOnMap.includes(item.identifications[0].taxon)) ?
+        Ts.listBoldText : Ts.listText}>
         {item.identifications[0].taxon}
       </Text>
       {
@@ -122,28 +128,21 @@ const ListComponent = (props: Props) => {
   )
 
   const ListHeader = (
-    <View style={Cs.listFilterContainer}>
-      <TextInput
-        value={search}
-        onChangeText={setSearch}
-        placeholder={t('filter species')}
-        style={Cs.listFilterInput}
-        ref={textInput}
+    <>
+      <ListFilterComponent
+        search={search}
+        setSearch={setSearch}
+        textInput={textInput}
+        navigation={props.navigation}
       />
-      <Icon
-        name='cancel'
-        type='material-icons'
-        color={Colors.dangerButton2}
-        size={26}
-        onPress={() => {
-          textInput.current?.blur()
-          setSearch('')
-          textInput.current?.focus()
-        }}
-        iconStyle={Cs.listFilterIcon}
-        tvParallaxProperties={undefined}
+      <ListSorterComponent
+        setObserved={setObserved}
+        updateList={updateList}
+        observedUnedited={observedUnedited}
+        picked={picked}
+        unpicked={unpicked}
       />
-    </View>
+    </>
   )
 
   if (!observed) {
@@ -151,7 +150,6 @@ const ListComponent = (props: Props) => {
       <ActivityComponent text={'loading'} />
     )
   } else {
-    const filteredObservations = observed.filter(createFilter(search, ['identifications.0.taxon']))
     return (
       <>
         <ExtendedNavBarComponent onPressMap={props.onPressMap} onPressList={undefined} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
