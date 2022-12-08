@@ -1,5 +1,11 @@
 import moment from 'moment'
-import { parseDateFromDocumentToUI, parseDateFromDateObjectToDocument, parseDateFromDocumentToFullISO, sameDay, setDateForDocument } from '../../helpers/dateHelper'
+import {
+  parseDateFromDocumentToUI,
+  parseDateFromDateObjectToDocument,
+  parseDateFromDocumentToFullISO,
+  sameDay,
+  setDateForDocument
+} from '../../helpers/dateHelper'
 
 describe('setDateForDocument', () => {
   it('returns a date in ISO format', () => {
@@ -41,7 +47,7 @@ describe('parseDateFromDocumentToFullISO', () => {
     const date = '2022-08-29T14:12'
     const type = 'date'
     const parsedDate = parseDateFromDocumentToFullISO(date, type)
-    expect(parsedDate).toEqual('2022-08-29T00:00:00+03:00')
+    expect(['2022-08-29T00:00:00+02:00', '2022-08-29T00:00:00+03:00']).toContain(parsedDate)
   })
 
   it('returns the given time in the full ISO format', () => {
@@ -51,13 +57,13 @@ describe('parseDateFromDocumentToFullISO', () => {
     isoDate = dateOnly + '14:12'
     const type = 'time'
     const parsedTime = parseDateFromDocumentToFullISO(isoDate, type)
-    expect(parsedTime).toEqual(dateOnly + '20:12:00+03:00')
+    expect([dateOnly + '20:12:00+02:00', dateOnly + '20:12:00+03:00']).toContain(parsedTime)
   })
 
   it('returns the given date and time in the full ISO format', () => {
     const date = '2022-08-29T14:12'
     const parsedDate = parseDateFromDocumentToFullISO(date)
-    expect(parsedDate).toEqual('2022-08-29T14:12:00+03:00')
+    expect(['2022-08-29T14:12:00+02:00', '2022-08-29T14:12:00+03:00']).toContain(parsedDate)
   })
 
   it('returns an empty string if input is not a valid date', () => {
