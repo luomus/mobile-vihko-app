@@ -12,6 +12,7 @@ import {
   PATH_MIN_T_INTERVALL,
   PATH_MIN_X_INTERVALL
 } from '../config/location'
+import i18n from '../languages/i18n'
 
 let positionWatcher: null | { remove(): void } = null
 
@@ -26,13 +27,25 @@ export const convertYKJToWGS84 = (coordinates: [number, number]) => {
 }
 
 export const getCurrentLocation = async (usePreviousLocation?: boolean) => {
-  let permission = await Location.requestForegroundPermissionsAsync()
+  let permission: Location.LocationPermissionResponse | undefined = undefined
+
+  try {
+    permission = await Location.requestForegroundPermissionsAsync()
+  } catch (error: any) {
+    throw new Error(i18n.t('failed to request foreground permissions'))
+  }
 
   if (permission.status === 'granted') {
     if (usePreviousLocation) {
-      const previousLocation = await Location.getLastKnownPositionAsync({
-        requiredAccuracy: LOCATION_ACCURACY
-      })
+      let previousLocation: Location.LocationObject | null = null
+
+      try {
+        previousLocation = await Location.getLastKnownPositionAsync({
+          requiredAccuracy: LOCATION_ACCURACY
+        })
+      } catch (error: any) {
+        throw new Error(i18n.t('failed to get previous location'))
+      }
 
       if (previousLocation !== null) return previousLocation
     }
@@ -41,44 +54,72 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean) => {
       accuracy: LOCATION_ACCURACY
     })
   } else {
-    throw new Error('Permission to access location denied.')
+    throw new Error(i18n.t('permission to access location denied'))
   }
 }
 
 export const watchLocationAsync = async (updateLocation: (location: LocationObject) => void, title: string, body: string, tracking: boolean) => {
-  let permission = await Location.requestForegroundPermissionsAsync()
+  let permission: Location.LocationPermissionResponse | undefined = undefined
 
-  if (permission.status === 'granted') {
-    await watchPositionAsync((location) => updateLocation(location))
-    if (tracking) await watchBackgroundLocationAsync(title, body)
+  try {
+    permission = await Location.requestForegroundPermissionsAsync()
+  } catch (error: any) {
+    throw new Error(i18n.t('failed to request foreground permissions'))
+  }
+
+  if (permission?.status === 'granted') {
+    try {
+      await watchPositionAsync((location) => updateLocation(location))
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+
+    if (tracking) {
+      try {
+        await watchBackgroundLocationAsync(title, body)
+      } catch (error: any) {
+        throw new Error(error.message)
+      }
+    }
   } else {
-    throw new Error('Permission to access location denied.')
+    throw new Error(i18n.t('permission to access location denied'))
   }
 }
 
 export const watchPositionAsync = async (updateLocation: (location: LocationObject) => void) => {
-  positionWatcher = await Location.watchPositionAsync({
-    accuracy: LOCATION_ACCURACY,
-    distanceInterval: LOCATION_MIN_X_INTERVALL,
-    timeInterval: LOCATION_MIN_T_INTERVALL,
-  }, (location) => {
-    return updateLocation(location)
-  })
+  try {
+    positionWatcher = await Location.watchPositionAsync({
+      accuracy: LOCATION_ACCURACY,
+      distanceInterval: LOCATION_MIN_X_INTERVALL,
+      timeInterval: LOCATION_MIN_T_INTERVALL,
+    }, (location) => {
+      return updateLocation(location)
+    })
+  } catch (error: any) {
+    throw new Error(i18n.t('failed to watch position'))
+  }
 }
 
 export const watchBackgroundLocationAsync = async (title: string, body: string) => {
-  setTimeout(async () => {
-    await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
-      accuracy: PATH_ACCURACY,
-      distanceInterval: PATH_MIN_X_INTERVALL,
-      timeInterval: PATH_MIN_T_INTERVALL,
-      foregroundService: {
-        notificationTitle: title,
-        notificationBody: body,
-        notificationColor: Colors.primary5
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
+          accuracy: PATH_ACCURACY,
+          distanceInterval: PATH_MIN_X_INTERVALL,
+          timeInterval: PATH_MIN_T_INTERVALL,
+          foregroundService: {
+            notificationTitle: title,
+            notificationBody: body,
+            notificationColor: Colors.primary5
+          }
+        })
+        resolve('')
+      } catch (error: any) {
+        reject({ message: i18n.t('failed to watch background location') })
       }
-    })
-  }, 500)
+    }, 500)
+  })
 }
 
 export const stopLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
