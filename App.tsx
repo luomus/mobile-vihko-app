@@ -20,6 +20,7 @@ import { LineString, MultiLineString } from 'geojson'
 import Navigator from './src/navigation/Navigator'
 import { GridType } from './src/stores/position/types'
 import { forms } from './src/config/fields'
+import { captureException } from './src/helpers/sentry'
 
 LogBox.ignoreLogs(['EventEmitter.removeListener'])
 
@@ -81,11 +82,20 @@ const App = () => {
     store.dispatch(resetReducer())
   }, [])
 
-  return (
-    <Provider store={ store }>
-      <Navigator />
-    </Provider>
-  )
+  try {
+    return (
+      <Provider store={ store }>
+        <Navigator />
+      </Provider>
+    )
+  } catch (e) {
+    captureException(e)
+    return (
+      <Provider store={ store }>
+        <Navigator />
+      </Provider>
+    )
+  }
 }
 
 export default App
