@@ -11,7 +11,7 @@ import {
   setMessageState
 } from './src/stores'
 import * as TaskManager from 'expo-task-manager'
-import { Vibration } from 'react-native'
+import { LogBox, Vibration } from 'react-native'
 import i18n from './src/languages/i18n'
 import { GRID_EDGE_DISTANCE, LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/location'
 import { cleanupLocationAsync, convertWGS84ToYKJ } from './src/helpers/geolocationHelper'
@@ -20,6 +20,16 @@ import { LineString, MultiLineString } from 'geojson'
 import Navigator from './src/navigation/Navigator'
 import { GridType } from './src/stores/position/types'
 import { forms } from './src/config/fields'
+import * as Sentry from 'sentry-expo';
+import { SENTRY_DSN } from 'react-native-dotenv'
+
+LogBox.ignoreLogs(["EventEmitter.removeListener"]);
+
+Sentry.init({
+  dsn: SENTRY_DSN,
+  enableInExpoDevelopment: true,
+  debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations } }) => {
   const showAlert = (message: string) => {

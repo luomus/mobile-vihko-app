@@ -3,6 +3,7 @@ import { loggerUrl } from '../config/urls'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { brand, modelName, osName, osVersion } from 'expo-device'
 import AppJSON from '../../app.json'
+import * as Sentry from 'sentry-expo';
 
 export const sendError = async (rawMsg: {error: string|undefined, data: string|undefined, location: string|undefined, user_id: string|undefined}) => {
 
@@ -16,6 +17,8 @@ export const sendError = async (rawMsg: {error: string|undefined, data: string|u
       version: AppJSON.expo.version
     }
   }
+
+  Sentry.Native.captureException(errorData);
 
   return await axios.post(
     loggerUrl,
