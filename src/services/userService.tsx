@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { get, post, axiosDelete } from '../helpers/axiosHelper'
 import { getLoginUrl, pollLoginUrl, getUserUrl, personTokenUrl } from '../config/urls'
 import { ACCESS_TOKEN, SOURCE_ID } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
@@ -7,7 +7,7 @@ export const getTempTokenAndLoginUrl = async () => {
   const params = {
     'access_token': ACCESS_TOKEN
   }
-  const result = await axios.get(getLoginUrl, { params })
+  const result = await get(getLoginUrl, { params })
 
   return result.data
 }
@@ -18,7 +18,7 @@ export const postTmpToken = async (tmpToken: string) => {
     'access_token': ACCESS_TOKEN
   }
   try {
-    const result = await axios.post(pollLoginUrl, null, { params })
+    const result = await post(pollLoginUrl, null, { params })
     //successfully received the token
     return result.data
   } catch (error) {
@@ -31,7 +31,7 @@ export const getUserByPersonToken = async (personToken: string) => {
   const params = {
     'access_token': ACCESS_TOKEN
   }
-  const fetchResult = await axios.get(getUserUrl + '/' + personToken, { params })
+  const fetchResult = await get(getUserUrl + '/' + personToken, { params })
   return fetchResult.data
 }
 
@@ -86,7 +86,7 @@ export const checkTokenValidity = async (personToken: string) => {
     'access_token': ACCESS_TOKEN
   }
 
-  const result = await axios.get(personTokenUrl + '/' + personToken, { params })
+  const result = await get(personTokenUrl + '/' + personToken, { params })
 
   if (result.data.target !== SOURCE_ID) throw new Error('WRONG SOURCE')
 
@@ -97,7 +97,7 @@ export const getProfile = async (personToken: string) => {
   const params = {
     'access_token': ACCESS_TOKEN
   }
-  const result = await axios.get(getUserUrl + '/' + personToken + '/profile', { params })
+  const result = await get(getUserUrl + '/' + personToken + '/profile', { params })
 
   return result.data
 }
@@ -106,7 +106,7 @@ export const logout = async (credentials: CredentialsType) => {
   const params = {
     'access_token': ACCESS_TOKEN
   }
-  const result = await axios.delete(personTokenUrl + '/' + credentials.token, { params })
+  const result = await axiosDelete(personTokenUrl + '/' + credentials.token, { params })
 
   return result.data
 }

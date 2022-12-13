@@ -20,13 +20,20 @@ export const sendError = async (rawMsg: {error: string|undefined, data: string|u
 
   captureException(errorData)
 
-  return await axios.post(
-    loggerUrl,
-    errorData,
-    {
-      params: {
-        access_token: ACCESS_TOKEN
+  try {
+    return await axios.post(
+      loggerUrl,
+      errorData,
+      {
+        params: {
+          access_token: ACCESS_TOKEN
+        }
       }
-    }
-  )
+    )
+  } catch (e) {
+    captureException({
+      message: 'loggerService error: ' + e,
+      meta: errorData.meta
+    })
+  }
 }

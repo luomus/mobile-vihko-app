@@ -1,6 +1,6 @@
 import { localityUrl, googleGeocodingAPIURL } from '../config/urls'
 import { ACCESS_TOKEN, GEOCODING_API_KEY } from 'react-native-dotenv'
-import axios from 'axios'
+import { get, post } from '../helpers/axiosHelper'
 import { LineString, MultiLineString, Point } from 'geojson'
 
 export const getLocalityDetailsFromLajiApi = async (geometry: MultiLineString | LineString | Point, lang: string) => {
@@ -14,7 +14,7 @@ export const getLocalityDetailsFromLajiApi = async (geometry: MultiLineString | 
     'Accept': 'application/json'
   }
 
-  const result = await axios.post(
+  const result = await post(
     localityUrl,
     geometry,
     {
@@ -36,7 +36,7 @@ export const getLocalityDetailsFromGoogleAPI = async (point: Point, lang: string
     'language': lang
   }
 
-  const result = await axios.get(googleGeocodingAPIURL, {
+  const result = await get(googleGeocodingAPIURL, {
     params
   })
 
