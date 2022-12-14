@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { get } from '../helpers/axiosHelper'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { getZonesUrl } from '../config/urls'
 
@@ -11,6 +11,6 @@ export const getZones = async () => {
     'pageSize': 1000
   }
 
-  const fetchResult = await axios.get(getZonesUrl, { params })
+  const fetchResult = await get(getZonesUrl, { params })
   return fetchResult.data.results
 }

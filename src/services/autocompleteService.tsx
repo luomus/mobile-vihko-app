@@ -1,5 +1,6 @@
 import { autocompleteUrl } from '../config/urls'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
+import { get } from '../helpers/axiosHelper'
 import axios, { AxiosResponse, Canceler } from 'axios'
 
 const CancelToken = axios.CancelToken
@@ -31,13 +32,13 @@ export const getTaxonAutocomplete = async (target: string, q: string, filters: R
     let result: AxiosResponse<any>
 
     if (setCancelToken !== null) {
-      result = await axios.get(autocompleteUrl + target, {
+      result = await get(autocompleteUrl + target, {
         params,
         headers,
         cancelToken: new CancelToken((c) => setCancelToken(c))
       })
     } else {
-      result = await axios.get(autocompleteUrl + target, {
+      result = await get(autocompleteUrl + target, {
         params,
         headers
       })

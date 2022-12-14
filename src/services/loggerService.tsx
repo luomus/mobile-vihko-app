@@ -3,6 +3,7 @@ import { loggerUrl } from '../config/urls'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { brand, modelName, osName, osVersion } from 'expo-device'
 import AppJSON from '../../app.json'
+import { captureException } from '../helpers/sentry'
 
 export const sendError = async (rawMsg: {error: string|undefined, data: string|undefined, location: string|undefined, user_id: string|undefined}) => {
 
@@ -17,13 +18,22 @@ export const sendError = async (rawMsg: {error: string|undefined, data: string|u
     }
   }
 
-  return await axios.post(
-    loggerUrl,
-    errorData,
-    {
-      params: {
-        access_token: ACCESS_TOKEN
+  captureException(errorData)
+
+  try {
+    return await axios.post(
+      loggerUrl,
+      errorData,
+      {
+        params: {
+          access_token: ACCESS_TOKEN
+        }
       }
-    }
-  )
+    )
+  } catch (e) {
+    captureException({
+      message: 'loggerService error: ' + e,
+      meta: errorData.meta
+    })
+  }
 }

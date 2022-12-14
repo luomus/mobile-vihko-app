@@ -58,6 +58,19 @@
       "eas": {
         "projectId": "334626ac-7ade-4e01-988c-428696a37913"
       }
-    }
+    },
+    "hooks": {
+      "postPublish": [{
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "luomus",
+            "project": "mobiilivihko",
+            "authToken": "SENTRY_AUTH_TOKEN"
+          }
+      }]
+    },
+    "plugins": [
+      "sentry-expo"
+    ]
   }
 }

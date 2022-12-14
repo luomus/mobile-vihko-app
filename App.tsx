@@ -11,7 +11,7 @@ import {
   setMessageState
 } from './src/stores'
 import * as TaskManager from 'expo-task-manager'
-import { Vibration } from 'react-native'
+import { LogBox, Vibration } from 'react-native'
 import i18n from './src/languages/i18n'
 import { GRID_EDGE_DISTANCE, LOCATION_BACKGROUND_TASK, PATH_BACKUP_INTERVALL } from './src/config/location'
 import { cleanupLocationAsync, convertWGS84ToYKJ } from './src/helpers/geolocationHelper'
@@ -20,6 +20,9 @@ import { LineString, MultiLineString } from 'geojson'
 import Navigator from './src/navigation/Navigator'
 import { GridType } from './src/stores/position/types'
 import { forms } from './src/config/fields'
+import { captureException } from './src/helpers/sentry'
+
+LogBox.ignoreLogs(['EventEmitter.removeListener'])
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations } }) => {
   const showAlert = (message: string) => {
@@ -79,11 +82,20 @@ const App = () => {
     store.dispatch(resetReducer())
   }, [])
 
-  return (
-    <Provider store={ store }>
-      <Navigator />
-    </Provider>
-  )
+  try {
+    return (
+      <Provider store={ store }>
+        <Navigator />
+      </Provider>
+    )
+  } catch (e) {
+    captureException(e)
+    return (
+      <Provider store={ store }>
+        <Navigator />
+      </Provider>
+    )
+  }
 }
 
 export default App

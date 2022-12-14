@@ -1,9 +1,9 @@
-import axios from 'axios'
+import { post } from '../helpers/axiosHelper'
 import { postImageUrl } from '../config/urls'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
 
 export const sendImages = async (formDataBody: FormData, token: string) => {
-  return await axios.post(
+  return await post(
     postImageUrl,
     formDataBody,
     {
@@ -16,7 +16,7 @@ export const sendImages = async (formDataBody: FormData, token: string) => {
 }
 
 export const sendMetadata = async (tempId: string, metadata: object, token: string) => {
-  return await axios.post(
+  return await post(
     postImageUrl + '/' + tempId,
     JSON.stringify(metadata),
     {
