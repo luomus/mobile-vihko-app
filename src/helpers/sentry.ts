@@ -8,5 +8,9 @@ Sentry.init({
 })
 
 export const captureException = e => {
-  Sentry.Native.captureException(e)
+  if (__DEV__) {
+    console.error(e)
+  } else {
+    Sentry.Native.captureException(e)
+  }
 }
