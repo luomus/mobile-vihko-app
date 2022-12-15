@@ -121,7 +121,7 @@ const ExtendedNavBarComponent = (props: Props) => {
           })
           return Promise.reject({
             severity: 'low',
-            message: `${t('could not use gps so event was not started')} ${error.message}`
+            message: `${t('could not use gps so event was not started')} ${error}`
           })
         }
 

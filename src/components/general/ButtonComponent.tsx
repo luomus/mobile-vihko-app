@@ -19,7 +19,8 @@ type Props = {
   iconType: string | undefined,
   iconSize: number | undefined,
   contentColor: string,
-  testID?: string
+  testID?: string,
+  textWidth?: number
 }
 
 const ButtonComponent = (props: Props) => {
@@ -36,7 +37,7 @@ const ButtonComponent = (props: Props) => {
             <Icon name={ props.iconName } type={ props.iconType } color={ props.contentColor } size={ props.iconSize } containerStyle={{ marginTop: 5 }} tvParallaxProperties={undefined} />
             : null
           }
-          <Text style={[ props.textStyle, { color: props.contentColor } ]}>{props.title ? ' ' + props.title : ''}</Text>
+          <Text style={[ props.textStyle, { color: props.contentColor }, { width: props.textWidth } ]} numberOfLines={1}>{props.title ? ' ' + props.title : ''}</Text>
         </LinearGradient>
       </TouchableOpacity>
     </Shadow>
