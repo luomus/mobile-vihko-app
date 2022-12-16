@@ -34,7 +34,7 @@ const ObservationButtonsComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const createButton = (title: string, buttonStyle: StyleProp<ViewStyle>, onPress: () => void, styleType: string,
-    iconName: string | undefined, iconType: string | undefined, width: number | undefined) => {
+    iconName: string | undefined, iconType: string | undefined, width: number | undefined, textWidth?: number | undefined) => {
     return (
       <View key={title} style={Cs.padding5Container}>
         <ButtonComponent onPressFunction={() => onPress()} title={title}
@@ -44,6 +44,7 @@ const ObservationButtonsComponent = (props: Props) => {
           shadowColor={styleType === 'primary' ? Colors.primaryShadow : Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={iconName} iconType={iconType} iconSize={22}
           contentColor={styleType === 'primary' ? Colors.whiteText : Colors.darkText}
+          textWidth={textWidth}
         />
       </View>
     )
@@ -92,10 +93,10 @@ const ObservationButtonsComponent = (props: Props) => {
             <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
             {haversineNeighbors?.map((neighbor: Record<string, any>) =>
               createButton(
-                neighbor.identifications[0].taxon.length > 14 ? neighbor.identifications[0].taxon.substring(0, 12) + '...' : neighbor.identifications[0].taxon,
+                neighbor.identifications[0].taxon,
                 Bs.observationNeighborsButton,
                 () => props.shiftToEditPage(eventId, neighbor.id),
-                'primary', 'edit', 'material-icons', 150
+                'primary', 'edit', 'material-icons', 150, 110,
               )
             )}
           </View>

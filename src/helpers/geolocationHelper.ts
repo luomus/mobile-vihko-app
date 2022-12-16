@@ -101,25 +101,18 @@ export const watchPositionAsync = async (updateLocation: (location: LocationObje
 }
 
 export const watchBackgroundLocationAsync = async (title: string, body: string) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(async () => {
-      try {
-        await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
-          accuracy: PATH_ACCURACY,
-          distanceInterval: PATH_MIN_X_INTERVALL,
-          timeInterval: PATH_MIN_T_INTERVALL,
-          foregroundService: {
-            notificationTitle: title,
-            notificationBody: body,
-            notificationColor: Colors.primary5
-          }
-        })
-        resolve('')
-      } catch (error: any) {
-        reject({ message: i18n.t('failed to watch background location') })
+  setTimeout(async () => {
+    await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
+      accuracy: PATH_ACCURACY,
+      distanceInterval: PATH_MIN_X_INTERVALL,
+      timeInterval: PATH_MIN_T_INTERVALL,
+      foregroundService: {
+        notificationTitle: title,
+        notificationBody: body,
+        notificationColor: Colors.primary5
       }
-    }, 500)
-  })
+    })
+  }, 500)
 }
 
 export const stopLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {

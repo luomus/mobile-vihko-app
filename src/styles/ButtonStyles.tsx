@@ -90,7 +90,7 @@ const ButtonStyles = StyleSheet.create({
     paddingBottom: 5,
     paddingLeft: 10,
     paddingRight: 10,
-    borderRadius: 5
+    borderRadius: 5,
   },
   observationNeighborsButton: {
     paddingTop: 5,

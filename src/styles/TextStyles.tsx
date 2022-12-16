@@ -136,7 +136,8 @@ const TextStyles = StyleSheet.create({
   },
   mapButtonsLeftTitle: {
     fontSize: 16,
-    padding: 6
+    padding: 6,
+    fontWeight: '500'
   },
 
   //overview component
