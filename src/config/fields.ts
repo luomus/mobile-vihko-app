@@ -355,7 +355,7 @@ export const observationEventFields = [
 ]
 
 export const lolifeObservationTypes: Record<string, string> = {
-  lifeStage: 'flying squirrel',
+  alive: 'flying squirrel',
   indirectObservationType: 'indirect observation type',
   nestType: 'nest'
 }
