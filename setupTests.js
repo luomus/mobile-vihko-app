@@ -14,7 +14,6 @@ jest.mock('react-native-keyboard-aware-scroll-view', () => {
   }
 })
 
-jest.mock('./src/components/map/MapComponent')
 jest.mock('./src/helpers/geolocationHelper')
 jest.mock('./src/services/atlasService')
 jest.mock('./src/services/autocompleteService')
