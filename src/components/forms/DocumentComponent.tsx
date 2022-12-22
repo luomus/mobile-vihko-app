@@ -14,7 +14,8 @@ import {
   uploadObservationEvent,
   setMessageState,
   logoutUser,
-  resetReducer
+  resetReducer,
+  clearPath
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import { set, get, merge, mergeWith, omit } from 'lodash'
@@ -24,10 +25,15 @@ import i18n from '../../languages/i18n'
 import ActivityComponent from '../general/ActivityComponent'
 import SaveButtonComponent from './SaveButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
-import { forms, observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
-  overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields, overrideJX652ObservationEventFields,
-  MHL117ObservationEventFieldOrder
+import {
+  forms, observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
+  overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields,
+  overrideJX652ObservationEventFields, MHL117ObservationEventFieldOrder
 } from '../../config/fields'
+import ButtonComponent from '../general/ButtonComponent'
+import Bs from '../../styles/ButtonStyles'
+import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 
 type Props = {
   onPressSubmit: () => void,
@@ -55,8 +61,8 @@ const DocumentComponent = (props: Props) => {
 
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
+  const path = useSelector((state: rootState) => state.path)
   const schema = useSelector((state: rootState) => state.schema)
-  const message = useSelector((state: rootState) => state.message)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -129,7 +135,7 @@ const DocumentComponent = (props: Props) => {
       })
 
       const customizer = (target: any, replacer: any) => {
-        if (Array.isArray(replacer) && !(( target && typeof target[0] === 'object') || typeof replacer[0] === 'object')) {
+        if (Array.isArray(replacer) && !((target && typeof target[0] === 'object') || typeof replacer[0] === 'object')) {
           return replacer
         }
       }
@@ -178,7 +184,7 @@ const DocumentComponent = (props: Props) => {
             if (error.message.includes(t('locality failure'))) showMessage(t('post success'))
           }
         }))
-      //log user out from the app if the token has expired
+        //log user out from the app if the token has expired
       } else {
         dispatch(setMessageState({
           type: 'err',
@@ -193,6 +199,14 @@ const DocumentComponent = (props: Props) => {
     }
 
     setSending(false)
+  }
+
+  const deletePath = () => {
+    dispatch(setMessageState({
+      type: 'dangerConf',
+      messageContent: t('delete path description'),
+      onOk: () => dispatch(clearPath())
+    }))
   }
 
   const showMessage = (content: string) => {
@@ -221,7 +235,17 @@ const DocumentComponent = (props: Props) => {
         <View style={Cs.formSaveButtonContainer}>
           <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
         </View>
-        <KeyboardAwareScrollView style={Cs.padding10Container} ref={ scrollView }>
+        <KeyboardAwareScrollView style={Cs.padding10Container} ref={scrollView}>
+          {!(path.length === 1 && path[0].length === 0) ?
+            <View style={Cs.buttonContainer}>
+              <ButtonComponent onPressFunction={() => deletePath()}
+                title={t('delete path')} height={40} width={150} buttonStyle={Bs.editObservationButton}
+                gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+              />
+            </View>
+            : null
+          }
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               <>{form}</>
