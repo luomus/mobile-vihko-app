@@ -456,6 +456,7 @@ const MapComponent = (props: Props) => {
       <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
       <View style={Cs.mapContainer}>
         <MapView
+          testID="map-view"
           ref={map => { mapView = map }}
           provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
           initialRegion={region}
@@ -495,14 +496,14 @@ const MapComponent = (props: Props) => {
         }
         <View style={Cs.mapButtonsContainer}>
           <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
+            <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
               height={50} width={50} buttonStyle={Bs.mapIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
             />
           </View>
           <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => centerMapAnim()} title={undefined}
+            <ButtonComponent testID="center-map-btn" onPressFunction={() => centerMapAnim()} title={undefined}
               height={50} width={50} buttonStyle={Bs.mapIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
