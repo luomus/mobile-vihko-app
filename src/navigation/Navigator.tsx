@@ -37,11 +37,10 @@ const navigationOptions: NativeStackNavigationOptions = {
   }
 }
 
-const Navigator = () => {
-
+const Navigator = ({ initialRoute = 'login' }: {initialRoute: any}) => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='login'>
+      <Stack.Navigator initialRouteName={ initialRoute }>
         <Stack.Screen name='login' component={LoginScreen} options={navigationOptions} />
         <Stack.Screen name='home' component={HomeScreen} options={navigationOptions} />
         <Stack.Screen name='map' component={MapScreen} options={navigationOptions} />
