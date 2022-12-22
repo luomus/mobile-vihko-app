@@ -36,11 +36,6 @@
     "android": {
       "package": "org.luomus.mobi",
       "versionCode": 50,
-      "config": {
-        "googleMaps": {
-          "apiKey": ""
-        }
-      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIcon.png",
         "backgroundColor": "#FFFFFF"

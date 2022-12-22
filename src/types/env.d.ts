@@ -4,4 +4,5 @@ declare module 'react-native-dotenv' {
   export const SOURCE_ID: string
   export const GEOCODING_API_KEY: string
   export const SENTRY_DSN: string
+  export const GOOGLE_MAPS_API_KEY: string
 }
