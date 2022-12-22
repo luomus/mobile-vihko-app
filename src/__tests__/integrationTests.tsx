@@ -3,6 +3,15 @@ import { fireEvent, waitFor, within } from '@testing-library/react-native'
 import Navigator from '../navigation/Navigator'
 import { renderWithProviders } from '../helpers/testHelper'
 
+let testPressLocation = {
+  nativeEvent: {
+    coordinate: {
+      latitude: 60.17102521395383,
+      longitude: 24.931066744029522
+    }
+  }
+}
+
 describe('Application', () => {
   it('creates and posts an event successfully', async () => {
     const { getByText, getByTestId, getAllByTestId } = renderWithProviders(<Navigator initialRoute='login'/>)
@@ -27,8 +36,8 @@ describe('Application', () => {
 
     //MapComponent
     await waitFor(() => {
-      expect(getByText('Merkitse piste')).toBeDefined()
-      fireEvent.press(getByText('Merkitse piste'))
+      expect(getByTestId('map-view')).toBeDefined()
+      fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
     })
 
     //ObservationButtonsComponent
@@ -49,7 +58,7 @@ describe('Application', () => {
 
     //MapComponent
     await waitFor(() => {
-      expect(getByText('Merkitse piste')).toBeDefined()
+      expect(getByTestId('map-view')).toBeDefined()
       expect(getByTestId('homeButton')).toBeDefined()
       fireEvent.press(getByTestId('homeButton'))
     })
