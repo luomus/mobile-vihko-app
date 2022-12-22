@@ -32,10 +32,12 @@ SOURCE_ID=<DEV_SOURCE_ID>
 // SOURCE_ID=<PROD_SOURCE_ID>
 
 GEOCODING_API_KEY=<GEOCODING_API_KEY>
+GOOGLE_MAPS_API_KEY=<GOOGLE_MAPS_API_KEY>
+SENTRY_AUTH_TOKEN=<SENTRY_AUTH_TOKEN>
 SENTRY_DSN=<SENTRY_DSN>
 ```
 
-Start the app for development with `expo start --tunnel` and scan the QR-code from the terminal with the Expo mobile app or open it into an emulator from the terminal by pressing 'a' (might require to have an emulator already running on Android Studio).
+Start the app for development with `npx expo start --tunnel` and scan the QR-code from the terminal with the Expo mobile app or open it into an emulator from the terminal by pressing 'a' (might require to have an emulator already running on Android Studio).
 
 ### Build process
 

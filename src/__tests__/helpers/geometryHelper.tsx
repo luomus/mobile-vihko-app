@@ -31,10 +31,10 @@ describe('setEventGeometry', () => {
                 },
               ],
               'images': [],
-              'lifeStage': 'MY.lifeStageAlive',
+              'alive': true,
               'recordBasis': 'MY.recordBasisHumanObservationSeen',
               'rules': {
-                'field': 'lifeStage',
+                'field': 'alive',
                 'regexp': '^.+$',
               },
               'taxonConfidence': 'MY.taxonConfidenceSure',

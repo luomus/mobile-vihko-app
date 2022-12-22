@@ -1,1464 +1,1732 @@
 {
-    "data": {
-      "form": {
-        "schema": {
-          "type": "object",
-          "properties": {
-            "editors": {
-              "type": "array",
-              "items": {
-                "type": "string"
+  "data": {
+    "form": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "editors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Muokkausoikeus"
+          },
+          "secureLevel": {
+            "type": "string",
+            "oneOf": [
+              {
+                "const": "MX.secureLevelNone",
+                "title": "Ei karkeistettu"
               },
-              "title": "Muokkausoikeus",
-              "excludeFromCopy": true
+              {
+                "const": "MX.secureLevelKM10",
+                "title": "10 km"
+              }
+            ],
+            "title": "Havainnon tarkat paikkatiedot ovat julkisia",
+            "default": "MX.secureLevelNone"
+          },
+          "gatheringEvent": {
+            "type": "object",
+            "properties": {
+              "leg": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Havainnoijat"
+              },
+              "legPublic": {
+                "type": "boolean",
+                "title": "Havainnoijien nimet ovat julkisia",
+                "default": false
+              },
+              "dateBegin": {
+                "type": "string",
+                "title": "Alku"
+              },
+              "dateEnd": {
+                "type": "string",
+                "title": "Loppu"
+              }
             },
-            "secureLevel": {
-              "type": "string",
-              "enum": [
-                "MX.secureLevelNone",
-                "MX.secureLevelKM10"
-              ],
-              "enumNames": [
-                "Ei karkeistettu",
-                "10 km"
-              ],
-              "title": "Havainnon tarkat paikkatiedot ovat julkisia",
-              "excludeFromCopy": true,
-              "default": "MX.secureLevelNone"
+            "required": [],
+            "title": ""
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "gatheringEvent": {
+            "title": "Avainsanat"
+          },
+          "gatherings": {
+            "type": "array",
+            "items": {
               "type": "object",
               "properties": {
-                "leg": {
+                "geometry": {
+                  "type": "object",
+                  "properties": {},
+                  "title": "Koordinaatit"
+                },
+                "locality": {
+                  "type": "string",
+                  "title": "Kuvaus"
+                },
+                "notes": {
+                  "type": "string",
+                  "title": "Lisätiedot"
+                },
+                "habitat": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "oneOf": [
+                      {
+                        "const": "",
+                        "title": ""
+                      },
+                      {
+                        "const": "MY.habitatEnumValue1",
+                        "title": "Metsät"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue2",
+                        "title": "Kangasmetsät"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue3",
+                        "title": "Tuore kangas"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue4",
+                        "title": "Lehtomainen kangas"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue5",
+                        "title": "Kuivahko kangas"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue6",
+                        "title": "Karukkokangas"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue7",
+                        "title": "Lehdot"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue8",
+                        "title": "Kuiva lehto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue9",
+                        "title": "Tuore lehto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue10",
+                        "title": "Kostea lehto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue11",
+                        "title": "Jalopuulehto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue12",
+                        "title": "Tunturikoivulehto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue13",
+                        "title": "Tunturikoivikko, ei lehto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue14",
+                        "title": "Suot"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue15",
+                        "title": "Avosuot"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue16",
+                        "title": "Letto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue17",
+                        "title": "Neva"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue18",
+                        "title": "Avoluhta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue19",
+                        "title": "Puustoiset suot"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue20",
+                        "title": "Räme"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue21",
+                        "title": "Korpi"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue22",
+                        "title": "Pensaikkoluhta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue23",
+                        "title": "Metsäluhta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue24",
+                        "title": "Vedet"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue25",
+                        "title": "Lähteikkö"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue26",
+                        "title": "Puro tai noro (kausikuiva)"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue27",
+                        "title": "Rannat"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue28",
+                        "title": "Tulvametsä ja metsäluhta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue29",
+                        "title": "Rantapensaikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue30",
+                        "title": "Luhtaranta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue31",
+                        "title": "Niittyranta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue32",
+                        "title": "Ruovikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue33",
+                        "title": "Sora-, somerikko- tai kivikkoranta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue34",
+                        "title": "Hietikkoranta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue35",
+                        "title": "Avoin tulvaranta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue36",
+                        "title": "Kalliot ja kivikot"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue87",
+                        "title": "Karut tai keskiravinteinen kalliot (\"tavalliset kalliot\")"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue37",
+                        "title": "Jäkäläkallio tai -kivikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue38",
+                        "title": "Varpu-heinäkallio tai -kivikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue39",
+                        "title": "Niukkapuustoinen kallio tai kivikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue40",
+                        "title": "Kalliometsä"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue41",
+                        "title": "Kalkkikallio tai -louhos, myös paljas kalkkimaa"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue42",
+                        "title": "Serpentiinikallio tai -maa"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue43",
+                        "title": "Kallioketo"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue44",
+                        "title": "Tunturipaljakat"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue45",
+                        "title": "Tunturikangas"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue46",
+                        "title": "Tunturiniitty"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue47",
+                        "title": "Lumenviipymä"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue48",
+                        "title": "Tunturikangaspensaikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue49",
+                        "title": "Paljakan lähteikkö tai tihkupinta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue50",
+                        "title": "Paljakan kallio tai kivikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue51",
+                        "title": "Paljakan suo"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue52",
+                        "title": "Paljakan järvi tai lampi (sis. ranta)"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue53",
+                        "title": "Paljakan virtavesi (sis. ranta)"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue54",
+                        "title": "Jyrkänne tai pahta"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue55",
+                        "title": "Perinneympäristöt tai muut ihmisen muuttamat ympäristöt"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue56",
+                        "title": "Perinneympäristöt"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue57",
+                        "title": "Kuiva niitty tai keto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue58",
+                        "title": "Nummi"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue59",
+                        "title": "Tuore niitty"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue60",
+                        "title": "Hakamaa, lehdesniitty tai metsälaidun"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue61",
+                        "title": "Kostea niitty (muu kuin rantaniitty)"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue62",
+                        "title": "Suoniitty"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue63",
+                        "title": "Kallioketo"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue64",
+                        "title": "Oja tai muu kaivanto  (sis. ojanpientareet, metsäojat)"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue65",
+                        "title": "Tienvieri (piennar, luiska) ja -pohja"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue66",
+                        "title": "Viljelymaat"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue67",
+                        "title": "Pelto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue68",
+                        "title": "Kylvönurmi"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue69",
+                        "title": "Puu- tai pensasviljelmä"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue70",
+                        "title": "Hylätty pelto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue71",
+                        "title": "Puistot, pihamaat, puutarhat"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue72",
+                        "title": "Puisto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue73",
+                        "title": "Kartanopuisto"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue74",
+                        "title": "Hautausmaa"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue75",
+                        "title": "Pihamaa"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue76",
+                        "title": "Puutarha"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue77",
+                        "title": "Avoin nurmialue"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue78",
+                        "title": "Pensaikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue79",
+                        "title": "Uuselinympäristöt"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue80",
+                        "title": "Tienvieri (piennar, luiska) ja -pohja"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue81",
+                        "title": "Maankaatopaikka"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue82",
+                        "title": "Täyttömaa-alue"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue83",
+                        "title": "Hiekka- tai sorakuoppa"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue84",
+                        "title": "Turpeennostoalue"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue85",
+                        "title": "Louhos- tai kaivosalue"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue86",
+                        "title": "Joutomaa (sis. satamat, ratapihat)"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue88",
+                        "title": "Meri"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue89",
+                        "title": "Murtovesi"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue90",
+                        "title": "Karu järvi tai lampi"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue91",
+                        "title": "Rehevä järvi tai lampi"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue92",
+                        "title": "Lampare tai allikko"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue93",
+                        "title": "Joki"
+                      },
+                      {
+                        "const": "MY.habitatEnumValue94",
+                        "title": "Koski"
+                      }
+                    ]
+                  },
+                  "uniqueItems": true,
+                  "title": "Habitaatti"
+                },
+                "images": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "title": "Havainnoijat",
-                  "excludeFromCopy": true
+                  "title": "Kuvat"
                 },
-                "legPublic": {
-                  "type": "boolean",
-                  "title": "Havainnoijien nimet ovat julkisia",
-                  "excludeFromCopy": true,
-                  "default": false
-                },
-                "dateBegin": {
+                "gatheringType": {
                   "type": "string",
-                  "title": "Alku",
-                  "excludeFromCopy": true
-                },
-                "dateEnd": {
-                  "type": "string",
-                  "title": "Loppu",
-                  "excludeFromCopy": true
-                }
-              },
-              "required": [],
-              "title": ""
-            },
-            "keywords": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "title": "Avainsanat"
-            },
-            "gatherings": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "geometry": {
-                    "type": "object",
-                    "properties": {},
-                    "title": "Koordinaatit"
-                  },
-                  "locality": {
-                    "type": "string",
-                    "title": "Kuvaus"
-                  },
-                  "notes": {
-                    "type": "string",
-                    "title": "Lisätiedot"
-                  },
-                  "habitat": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "enum": [
-                        "",
-                        "MY.habitatEnumValue1",
-                        "MY.habitatEnumValue2",
-                        "MY.habitatEnumValue3",
-                        "MY.habitatEnumValue4",
-                        "MY.habitatEnumValue5",
-                        "MY.habitatEnumValue6",
-                        "MY.habitatEnumValue7",
-                        "MY.habitatEnumValue8",
-                        "MY.habitatEnumValue9",
-                        "MY.habitatEnumValue10",
-                        "MY.habitatEnumValue11",
-                        "MY.habitatEnumValue12",
-                        "MY.habitatEnumValue13",
-                        "MY.habitatEnumValue14",
-                        "MY.habitatEnumValue15",
-                        "MY.habitatEnumValue16",
-                        "MY.habitatEnumValue17",
-                        "MY.habitatEnumValue18",
-                        "MY.habitatEnumValue19",
-                        "MY.habitatEnumValue20",
-                        "MY.habitatEnumValue21",
-                        "MY.habitatEnumValue22",
-                        "MY.habitatEnumValue23",
-                        "MY.habitatEnumValue24",
-                        "MY.habitatEnumValue25",
-                        "MY.habitatEnumValue26",
-                        "MY.habitatEnumValue27",
-                        "MY.habitatEnumValue28",
-                        "MY.habitatEnumValue29",
-                        "MY.habitatEnumValue30",
-                        "MY.habitatEnumValue31",
-                        "MY.habitatEnumValue32",
-                        "MY.habitatEnumValue33",
-                        "MY.habitatEnumValue34",
-                        "MY.habitatEnumValue35",
-                        "MY.habitatEnumValue36",
-                        "MY.habitatEnumValue87",
-                        "MY.habitatEnumValue37",
-                        "MY.habitatEnumValue38",
-                        "MY.habitatEnumValue39",
-                        "MY.habitatEnumValue40",
-                        "MY.habitatEnumValue41",
-                        "MY.habitatEnumValue42",
-                        "MY.habitatEnumValue43",
-                        "MY.habitatEnumValue44",
-                        "MY.habitatEnumValue45",
-                        "MY.habitatEnumValue46",
-                        "MY.habitatEnumValue47",
-                        "MY.habitatEnumValue48",
-                        "MY.habitatEnumValue49",
-                        "MY.habitatEnumValue50",
-                        "MY.habitatEnumValue51",
-                        "MY.habitatEnumValue52",
-                        "MY.habitatEnumValue53",
-                        "MY.habitatEnumValue54",
-                        "MY.habitatEnumValue55",
-                        "MY.habitatEnumValue56",
-                        "MY.habitatEnumValue57",
-                        "MY.habitatEnumValue58",
-                        "MY.habitatEnumValue59",
-                        "MY.habitatEnumValue60",
-                        "MY.habitatEnumValue61",
-                        "MY.habitatEnumValue62",
-                        "MY.habitatEnumValue63",
-                        "MY.habitatEnumValue64",
-                        "MY.habitatEnumValue65",
-                        "MY.habitatEnumValue66",
-                        "MY.habitatEnumValue67",
-                        "MY.habitatEnumValue68",
-                        "MY.habitatEnumValue69",
-                        "MY.habitatEnumValue70",
-                        "MY.habitatEnumValue71",
-                        "MY.habitatEnumValue72",
-                        "MY.habitatEnumValue73",
-                        "MY.habitatEnumValue74",
-                        "MY.habitatEnumValue75",
-                        "MY.habitatEnumValue76",
-                        "MY.habitatEnumValue77",
-                        "MY.habitatEnumValue78",
-                        "MY.habitatEnumValue79",
-                        "MY.habitatEnumValue80",
-                        "MY.habitatEnumValue81",
-                        "MY.habitatEnumValue82",
-                        "MY.habitatEnumValue83",
-                        "MY.habitatEnumValue84",
-                        "MY.habitatEnumValue85",
-                        "MY.habitatEnumValue86"
-                      ],
-                      "enumNames": [
-                        "",
-                        "Metsät",
-                        "Kangasmetsät",
-                        "Tuore kangas",
-                        "Lehtomainen kangas",
-                        "Kuivahko kangas",
-                        "Karukkokangas",
-                        "Lehdot",
-                        "Kuiva lehto",
-                        "Tuore lehto",
-                        "Kostea lehto",
-                        "Jalopuulehto",
-                        "Tunturikoivulehto",
-                        "Tunturikoivikko, ei lehto",
-                        "Suot",
-                        "Avosuot",
-                        "Letto",
-                        "Neva",
-                        "Avoluhta",
-                        "Puustoiset suot",
-                        "Räme",
-                        "Korpi",
-                        "Pensaikkoluhta",
-                        "Metsäluhta",
-                        "Vedet",
-                        "Lähteikkö",
-                        "Puro tai noro (kausikuiva)",
-                        "Rannat",
-                        "Tulvametsä ja metsäluhta",
-                        "Rantapensaikko",
-                        "Luhtaranta",
-                        "Niittyranta",
-                        "Ruovikko",
-                        "Sora-, somerikko- tai kivikkoranta",
-                        "Hietikkoranta",
-                        "Avoin tulvaranta",
-                        "Kalliot ja kivikot",
-                        "Karut tai keskiravinteinen kalliot (\"tavalliset kalliot\")",
-                        "Jäkäläkallio tai -kivikko",
-                        "Varpu-heinäkallio tai -kivikko",
-                        "Niukkapuustoinen kallio tai kivikko",
-                        "Kalliometsä",
-                        "Kalkkikallio tai -louhos, myös paljas kalkkimaa",
-                        "Serpentiinikallio tai -maa",
-                        "Kallioketo",
-                        "Tunturipaljakat",
-                        "Tunturikangas",
-                        "Tunturiniitty",
-                        "Lumenviipymä",
-                        "Tunturikangaspensaikko",
-                        "Paljakan lähteikkö tai tihkupinta",
-                        "Paljakan kallio tai kivikko",
-                        "Paljakan suo",
-                        "Paljakan järvi tai lampi (sis. ranta)",
-                        "Paljakan virtavesi (sis. ranta)",
-                        "Jyrkänne tai pahta",
-                        "Perinneympäristöt tai muut ihmisen muuttamat ympäristöt",
-                        "Perinneympäristöt",
-                        "Kuiva niitty tai keto",
-                        "Nummi",
-                        "Tuore niitty",
-                        "Hakamaa, lehdesniitty tai metsälaidun",
-                        "Kostea niitty (muu kuin rantaniitty)",
-                        "Suoniitty",
-                        "Kallioketo",
-                        "Oja tai muu kaivanto  (sis. ojanpientareet, metsäojat)",
-                        "Tienvieri (piennar, luiska) ja -pohja",
-                        "Viljelymaat",
-                        "Pelto",
-                        "Kylvönurmi",
-                        "Puu- tai pensasviljelmä",
-                        "Hylätty pelto",
-                        "Puistot, pihamaat, puutarhat",
-                        "Puisto",
-                        "Kartanopuisto",
-                        "Hautausmaa",
-                        "Pihamaa",
-                        "Puutarha",
-                        "Avoin nurmialue",
-                        "Pensaikko",
-                        "Uuselinympäristöt",
-                        "Tienvieri (piennar, luiska) ja -pohja",
-                        "Maankaatopaikka",
-                        "Täyttömaa-alue",
-                        "Hiekka- tai sorakuoppa",
-                        "Turpeennostoalue",
-                        "Louhos- tai kaivosalue",
-                        "Joutomaa (sis. satamat, ratapihat)"
-                      ]
+                  "oneOf": [
+                    {
+                      "const": "",
+                      "title": ""
                     },
-                    "uniqueItems": true,
-                    "title": "Habitaatti"
-                  },
-                  "images": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                    {
+                      "const": "MY.gatheringTypeForagingArea",
+                      "title": "Ruokailualue"
                     },
-                    "title": "Kuvat",
-                    "excludeFromCopy": true
-                  },
-                  "gatheringType": {
-                    "type": "string",
-                    "enum": [
-                      "",
-                      "MY.gatheringTypeForagingArea",
-                      "MY.gatheringTypeBreedingAndRestingArea",
-                      "MY.gatheringTypeCavityTree",
-                      "MY.gatheringTypeDroppingsTree",
-                      "MY.gatheringTypeNestTree",
-                      "MY.gatheringTypeLolifeAccess",
-                      "MY.gatheringTypeLolifeCoreZone",
-                      "MY.gatheringTypeLolifeHabitatZone",
-                      "MY.gatheringTypeLolifeApplicableZone",
-                      "MY.gatheringTypeWaterbirdPoint",
-                      "MY.gatheringTypeWaterbirdRound"
-                    ],
-                    "enumNames": [
-                      "",
-                      "Ruokailualue",
-                      "Lisääntymis- ja levähdyspaikka",
-                      "Kolopuu",
-                      "Papanapuu",
-                      "Pesäpuu",
-                      "Kulkuyhteys",
-                      "Ydinalue",
-                      "Elinpiiri",
-                      "Soveltuva alue",
-                      "Piste",
-                      "Kierto"
-                    ],
-                    "title": "Aluerajaus"
-                  },
-                  "units": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "count": {
-                          "type": "string",
-                          "title": "Määrä"
-                        },
-                        "taxonConfidence": {
-                          "type": "string",
-                          "enum": [
-                            "MY.taxonConfidenceSure",
-                            "MY.taxonConfidenceUnsure"
-                          ],
-                          "enumNames": [
-                            "Varma",
-                            "Epävarma"
-                          ],
-                          "title": "Onko määritys varma?",
-                          "default": "MY.taxonConfidenceSure"
-                        },
-                        "notes": {
-                          "type": "string",
-                          "title": "Lisätiedot"
-                        },
-                        "identifications": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "taxonID": {
-                                "type": "string",
-                                "title": "Laji",
-                                "default": "MX.48243"
-                              }
-                            },
-                            "required": []
-                          },
-                          "minItems": 1,
-                          "title": ""
-                        },
-                        "recordBasis": {
-                          "type": "string",
-                          "enum": [
-                            "",
-                            "MY.recordBasisPreservedSpecimen",
-                            "MY.recordBasisHumanObservationSeen",
-                            "MY.recordBasisHumanObservationPhoto",
-                            "MY.recordBasisHumanObservationVideo",
-                            "MY.recordBasisHumanObservationIndirect"
-                          ],
-                          "enumNames": [
-                            "",
-                            "Näyte",
-                            "Nähty",
-                            "Valokuvattu",
-                            "Videoitu",
-                            "Epäsuora havainto (jäljet, ulosteet, yms)"
-                          ],
-                          "title": "Havainnointitapa"
-                        },
-                        "nestType": {
-                          "type": "string",
-                          "enum": [
-                            "MY.nestTypeTreeCavity",
-                            "MY.nestTypeTwig",
-                            "MY.nestTypeNestBox",
-                            "MY.nestTypeBuilding",
-                            "MY.nestTypeGroundCavity",
-                            "MY.nestTypeOther"
-                          ],
-                          "enumNames": [
-                            "Kolopesä puussa",
-                            "Risupesä puussa",
-                            "Pönttö puussa",
-                            "Rakennus",
-                            "Maakolo",
-                            "Muu, mikä?"
-                          ],
-                          "title": "Pesän tyyppi"
-                        },
-                        "nestNotes": {
-                          "type": "string",
-                          "title": "Pesän tarkenne"
-                        },
-                        "nestCount": {
-                          "type": "integer",
-                          "minimum": 0,
-                          "title": "Pesien/kolojen määrä"
-                        },
-                        "indirectObservationType": {
-                          "type": "string",
-                          "enum": [
-                            "MY.indirectObservationTypeFeces",
-                            "MY.indirectObservationTypeSnowTracks",
-                            "MY.indirectObservationTypeUrine",
-                            "MY.indirectObservationTypeFeasting",
-                            "MY.indirectObservationTypeFoodStock"
-                          ],
-                          "enumNames": [
-                            "Ulostetta",
-                            "Lumijälkiä",
-                            "Virtsajälkiä",
-                            "Syönnöksiä",
-                            "Ruokavarasto"
-                          ],
-                          "title": "Jälkiä"
-                        },
-                        "lifeStage": {
-                          "type": "string",
-                          "enum": [
-                            "MY.lifeStageDead",
-                            "MY.lifeStageAlive"
-                          ],
-                          "enumNames": [
-                            "kuollut",
-                            "elävä"
-                          ],
-                          "title": "Elinvaihe"
-                        },
-                        "unitGathering": {
-                          "type": "object",
-                          "properties": {
-                            "geometry": {
-                              "type": "object",
-                              "properties": {},
-                              "title": "Koordinaatit"
-                            }
-                          },
-                          "required": [],
-                          "title": ""
-                        },
-                        "unitFact": {
-                          "type": "object",
-                          "properties": {
-                            "lolifeDroppingsType": {
-                              "type": "string",
-                              "enum": [
-                                "",
-                                "MY.lolifeDroppingsTypeRock",
-                                "MY.lolifeDroppingsTypeTree",
-                                "MY.lolifeDroppingsTypeTreeGroup",
-                                "MY.lolifeDroppingsTypeOther"
-                              ],
-                              "enumNames": [
-                                "",
-                                "Kiven päällä",
-                                "Yksittäinen puu",
-                                "Monen puun ryhmä",
-                                "Muu, kirjaa lisätietoihin"
-                              ],
-                              "title": "Papanahavainnon tyyppi"
-                            },
-                            "lolifeDroppingsCount": {
-                              "type": "string",
-                              "enum": [
-                                "",
-                                "MY.lolifeDroppingsCount1",
-                                "MY.lolifeDroppingsCount2",
-                                "MY.lolifeDroppingsCount3"
-                              ],
-                              "enumNames": [
-                                "",
-                                "Muutama",
-                                "Kymmeniä",
-                                "Satoja"
-                              ],
-                              "title": "Papanamäärä"
-                            },
-                            "lolifeDroppingsQuality": {
-                              "type": "string",
-                              "enum": [
-                                "",
-                                "MY.lolifeDroppingsQuality1",
-                                "MY.lolifeDroppingsQuality2"
-                              ],
-                              "enumNames": [
-                                "",
-                                "Vanhoja",
-                                "Tuoreita"
-                              ],
-                              "title": "Papanoiden laatu"
-                            },
-                            "lolifeNestTree": {
-                              "type": "string",
-                              "enum": [
-                                "",
-                                "MX.38590",
-                                "MX.37812",
-                                "MX.37999",
-                                "MX.37993",
-                                "MX.38010",
-                                "MX.38008",
-                                "MY.lolifeNestTreeOther"
-                              ],
-                              "enumNames": [
-                                "",
-                                "metsähaapa",
-                                "metsäkuusi",
-                                "hieskoivu",
-                                "rauduskoivu",
-                                "harmaaleppä",
-                                "tervaleppä",
-                                "Muu, kirjoita lisätietoihin"
-                              ],
-                              "title": "Puulaji"
-                            }
-                          },
-                          "required": [],
-                          "title": ""
-                        },
-                        "images": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
-                          "title": "Kuvat",
-                          "excludeFromCopy": true
-                        }
-                      },
-                      "required": []
+                    {
+                      "const": "MY.gatheringTypeBreedingAndRestingArea",
+                      "title": "Lisääntymis- ja levähdyspaikka"
                     },
-                    "uniqueItems": false,
-                    "title": "Havainnot"
-                  },
-                  "biologicalProvince": {
-                    "type": "string",
-                    "title": "Eliömaakunta"
-                  }
-                },
-                "required": []
-              },
-              "title": ""
-            }
-          },
-          "required": [
-            "gatherings"
-          ]
-        },
-        "uiSchema": {
-          "ui:shortcuts": {
-            "alt": {
-              "fn": "help",
-              "delay": 1
-            },
-            "alt+F5": {
-              "fn": "revalidate"
-            },
-            "Enter": {
-              "fn": "navigate"
-            },
-            "shift+Enter": {
-              "fn": "navigate",
-              "reverse": true
-            },
-            "ctrl+Enter": {
-              "fn": "textareaRowInsert"
-            },
-            "alt+ ": {
-              "fn": "navigate"
-            },
-            "alt+shift+ ": {
-              "fn": "navigate",
-              "reverse": true
-            },
-            "alt+n": {
-              "fn": "navigateArray"
-            },
-            "alt+p": {
-              "fn": "navigateArray",
-              "reverse": true
-            }
-          },
-          "ui:order": [
-            "gatheringEvent",
-            "gatherings"
-          ],
-          "ui:field": "InjectField",
-          "ui:options": {
-            "injections": {
-              "fields": [
-                "editors",
-                "secureLevel",
-                "keywords"
-              ],
-              "target": "gatheringEvent"
-            }
-          },
-          "gatheringEvent": {
-            "ui:field": "NestField",
-            "classNames": "well well-sm",
-            "ui:order": [
-              "*",
-              "legPublic",
-              "secureLevel",
-              "eventTime",
-              "keywords"
-            ],
-            "ui:options": {
-              "nests": {
-                "legEditor": {
-                  "fields": [
-                    "leg",
-                    "editors"
+                    {
+                      "const": "MY.gatheringTypeCavityTree",
+                      "title": "Kolopuu"
+                    },
+                    {
+                      "const": "MY.gatheringTypeDroppingsTree",
+                      "title": "Papanapuu"
+                    },
+                    {
+                      "const": "MY.gatheringTypeNestTree",
+                      "title": "Pesäpuu"
+                    },
+                    {
+                      "const": "MY.gatheringTypeLolifeAccess",
+                      "title": "Kulkuyhteys"
+                    },
+                    {
+                      "const": "MY.gatheringTypeLolifeCoreZone",
+                      "title": "Ydinalue"
+                    },
+                    {
+                      "const": "MY.gatheringTypeLolifeHabitatZone",
+                      "title": "Elinpiiri"
+                    },
+                    {
+                      "const": "MY.gatheringTypeLolifeApplicableZone",
+                      "title": "Soveltuva alue"
+                    },
+                    {
+                      "const": "MY.gatheringTypeWaterbirdPoint",
+                      "title": "Piste"
+                    },
+                    {
+                      "const": "MY.gatheringTypeWaterbirdRound",
+                      "title": "Kierto"
+                    }
                   ],
-                  "rootUiSchema": {
-                    "ui:field": "NestField",
-                    "ui:options": {
-                      "nests": {
-                        "_legEditor": {
-                          "fields": [
-                            "leg",
-                            "editors"
-                          ],
-                          "title": "",
-                          "rootUiSchema": {
-                            "ui:functions": [
-                              {
-                                "ui:field": "DependentBooleanField",
-                                "ui:options": {
-                                  "booleanField": "editors",
-                                  "booleanDefiner": "leg"
-                                }
-                              },
-                              {
-                                "ui:field": "ArrayCombinerField"
-                              }
-                            ],
-                            "ui:field": "TableField",
-                            "ui:options": {
-                              "specialRules": "legEditors",
-                              "ui:buttonsDesktopLayout": true,
-                              "buttons": [
-                                {
-                                  "fn": "add",
-                                  "label": "Lisää laskija"
-                                }
-                              ]
-                            },
-                            "items": {
-                              "ui:functions": {
-                                "ui:field": "ContextInjectionField",
-                                "ui:options": {
-                                  "injections": {
-                                    "/ui:options/rules/0/regexp": "/creator"
-                                  }
-                                }
-                              },
-                              "ui:field": "DependentDisableField",
-                              "ui:options": {
-                                "rules": [
-                                  {
-                                    "disableDefiner": "leg",
-                                    "disableField": "editors",
-                                    "regexp": "creator is injected here",
-                                    "inlineHelp": "Sinulla täytyy olla muokkausoikeus.",
-                                    "disabledValueToDisplay": true
-                                  },
-                                  {
-                                    "disableDefiner": "leg",
-                                    "disableField": "editors",
-                                    "regexp": "^((?!(MA\\.\\d)).)*$"
-                                  }
-                                ]
-                              }
+                  "title": "Aluerajaus"
+                },
+                "units": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "string",
+                        "title": "Määrä"
+                      },
+                      "taxonConfidence": {
+                        "type": "string",
+                        "oneOf": [
+                          {
+                            "const": "MY.taxonConfidenceSure",
+                            "title": "Varma"
+                          },
+                          {
+                            "const": "MY.taxonConfidenceUnsure",
+                            "title": "Epävarma"
+                          }
+                        ],
+                        "title": "Onko määritys varma?",
+                        "default": "MY.taxonConfidenceSure"
+                      },
+                      "notes": {
+                        "type": "string",
+                        "title": "Lisätiedot"
+                      },
+                      "identifications": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "taxonID": {
+                              "type": "string",
+                              "title": "Laji",
+                              "default": "MX.48243"
                             }
+                          },
+                          "required": []
+                        },
+                        "minItems": 1,
+                        "title": ""
+                      },
+                      "recordBasis": {
+                        "type": "string",
+                        "oneOf": [
+                          {
+                            "const": "",
+                            "title": ""
+                          },
+                          {
+                            "const": "MY.recordBasisPreservedSpecimen",
+                            "title": "Näyte"
+                          },
+                          {
+                            "const": "MY.recordBasisHumanObservationSeen",
+                            "title": "Nähty"
+                          },
+                          {
+                            "const": "MY.recordBasisHumanObservationPhoto",
+                            "title": "Valokuvattu"
+                          },
+                          {
+                            "const": "MY.recordBasisHumanObservationVideo",
+                            "title": "Videoitu"
+                          },
+                          {
+                            "const": "MY.recordBasisHumanObservationIndirect",
+                            "title": "Epäsuora havainto (jäljet, ulosteet, yms)"
+                          }
+                        ],
+                        "title": "Havainnointitapa"
+                      },
+                      "nestType": {
+                        "type": "string",
+                        "oneOf": [
+                          {
+                            "const": "MY.nestTypeTreeCavity",
+                            "title": "Kolopesä puussa"
+                          },
+                          {
+                            "const": "MY.nestTypeTwig",
+                            "title": "Risupesä puussa"
+                          },
+                          {
+                            "const": "MY.nestTypeNestBox",
+                            "title": "Pönttö puussa"
+                          },
+                          {
+                            "const": "MY.nestTypeBuilding",
+                            "title": "Rakennus"
+                          },
+                          {
+                            "const": "MY.nestTypeGroundCavity",
+                            "title": "Maakolo"
+                          },
+                          {
+                            "const": "MY.nestTypeOther",
+                            "title": "Muu, mikä?"
+                          }
+                        ],
+                        "title": "Pesän tyyppi"
+                      },
+                      "nestNotes": {
+                        "type": "string",
+                        "title": "Pesän tarkenne"
+                      },
+                      "nestCount": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "title": "Pesien/kolojen määrä"
+                      },
+                      "indirectObservationType": {
+                        "type": "string",
+                        "oneOf": [
+                          {
+                            "const": "MY.indirectObservationTypeFeces",
+                            "title": "Ulostetta"
+                          },
+                          {
+                            "const": "MY.indirectObservationTypeSnowTracks",
+                            "title": "Lumijälkiä"
+                          },
+                          {
+                            "const": "MY.indirectObservationTypeUrine",
+                            "title": "Virtsajälkiä"
+                          },
+                          {
+                            "const": "MY.indirectObservationTypeFeasting",
+                            "title": "Syönnöksiä"
+                          },
+                          {
+                            "const": "MY.indirectObservationTypeFoodStock",
+                            "title": "Ruokavarasto"
+                          }
+                        ],
+                        "title": "Jälkiä"
+                      },
+                      "alive": {
+                        "type": "boolean",
+                        "title": "Elossa"
+                      },
+                      "unitGathering": {
+                        "type": "object",
+                        "properties": {
+                          "geometry": {
+                            "type": "object",
+                            "properties": {},
+                            "title": "Koordinaatit"
                           }
                         },
-                        "legEditorSizeFixer": {
-                          "fields": [
-                            "_legEditor"
-                          ],
-                          "title": "",
-                          "rootUiSchema": {
-                            "ui:grid": {
-                              "lg": 6,
-                              "md": 6,
-                              "sm": 9,
-                              "xs": 12
+                        "required": [],
+                        "title": ""
+                      },
+                      "unitFact": {
+                        "type": "object",
+                        "properties": {
+                          "lolifeDroppingsType": {
+                            "type": "string",
+                            "oneOf": [
+                              {
+                                "const": "",
+                                "title": ""
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsTypeRock",
+                                "title": "Kiven päällä"
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsTypeTree",
+                                "title": "Yksittäinen puu"
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsTypeTreeGroup",
+                                "title": "Monen puun ryhmä"
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsTypeOther",
+                                "title": "Muu, kirjaa lisätietoihin"
+                              }
+                            ],
+                            "title": "Papanahavainnon tyyppi"
+                          },
+                          "lolifeDroppingsCount": {
+                            "type": "string",
+                            "oneOf": [
+                              {
+                                "const": "",
+                                "title": ""
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsCount1",
+                                "title": "Muutama"
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsCount2",
+                                "title": "Kymmeniä"
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsCount3",
+                                "title": "Satoja"
+                              }
+                            ],
+                            "title": "Papanamäärä"
+                          },
+                          "lolifeDroppingsQuality": {
+                            "type": "string",
+                            "oneOf": [
+                              {
+                                "const": "",
+                                "title": ""
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsQuality1",
+                                "title": "Vanhoja"
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsQuality2",
+                                "title": "Tuoreita"
+                              }
+                            ],
+                            "title": "Papanoiden laatu"
+                          },
+                          "lolifeNestTree": {
+                            "type": "string",
+                            "oneOf": [
+                              {
+                                "const": "",
+                                "title": ""
+                              },
+                              {
+                                "const": "MX.38590",
+                                "title": "metsähaapa"
+                              },
+                              {
+                                "const": "MX.37812",
+                                "title": "metsäkuusi"
+                              },
+                              {
+                                "const": "MX.37999",
+                                "title": "hieskoivu"
+                              },
+                              {
+                                "const": "MX.37993",
+                                "title": "rauduskoivu"
+                              },
+                              {
+                                "const": "MX.38010",
+                                "title": "harmaaleppä"
+                              },
+                              {
+                                "const": "MX.38008",
+                                "title": "tervaleppä"
+                              },
+                              {
+                                "const": "MY.lolifeNestTreeOther",
+                                "title": "Muu, kirjoita lisätietoihin"
+                              }
+                            ],
+                            "title": "Puulaji"
+                          }
+                        },
+                        "required": [],
+                        "title": ""
+                      },
+                      "images": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "title": "Kuvat"
+                      }
+                    },
+                    "required": []
+                  },
+                  "uniqueItems": false,
+                  "title": "Havainnot"
+                },
+                "biologicalProvince": {
+                  "type": "string",
+                  "title": "Eliömaakunta"
+                }
+              },
+              "required": []
+            },
+            "title": ""
+          }
+        },
+        "required": [
+          "gatherings"
+        ]
+      },
+      "uiSchema": {
+        "ui:shortcuts": {
+          "alt": {
+            "fn": "help",
+            "delay": 1
+          },
+          "alt+F5": {
+            "fn": "revalidate"
+          },
+          "Enter": {
+            "fn": "navigate"
+          },
+          "shift+Enter": {
+            "fn": "navigate",
+            "reverse": true
+          },
+          "ctrl+Enter": {
+            "fn": "textareaRowInsert"
+          },
+          "alt+ ": {
+            "fn": "navigate"
+          },
+          "alt+shift+ ": {
+            "fn": "navigate",
+            "reverse": true
+          },
+          "alt+n": {
+            "fn": "navigateArray"
+          },
+          "alt+p": {
+            "fn": "navigateArray",
+            "reverse": true
+          }
+        },
+        "ui:order": [
+          "gatheringEvent",
+          "gatherings"
+        ],
+        "ui:field": "InjectField",
+        "ui:options": {
+          "injections": {
+            "fields": [
+              "editors",
+              "secureLevel",
+              "keywords"
+            ],
+            "target": "gatheringEvent"
+          }
+        },
+        "gatheringEvent": {
+          "ui:field": "NestField",
+          "ui:classNames": "well well-sm",
+          "ui:order": [
+            "*",
+            "legPublic",
+            "secureLevel",
+            "eventTime",
+            "keywords"
+          ],
+          "ui:options": {
+            "nests": {
+              "legEditor": {
+                "fields": [
+                  "leg",
+                  "editors"
+                ],
+                "rootUiSchema": {
+                  "ui:field": "NestField",
+                  "ui:options": {
+                    "nests": {
+                      "_legEditor": {
+                        "fields": [
+                          "leg",
+                          "editors"
+                        ],
+                        "title": "",
+                        "rootUiSchema": {
+                          "ui:functions": [
+                            {
+                              "ui:field": "DependentBooleanField",
+                              "ui:options": {
+                                "booleanField": "editors",
+                                "booleanDefiner": "leg"
+                              }
+                            },
+                            {
+                              "ui:field": "ArrayCombinerField"
                             }
+                          ],
+                          "ui:field": "TableField",
+                          "ui:options": {
+                            "specialRules": "legEditors",
+                            "ui:buttonsDesktopLayout": true,
+                            "buttons": [
+                              {
+                                "fn": "add",
+                                "label": "Lisää laskija"
+                              }
+                            ]
+                          },
+                          "items": {
+                            "ui:functions": {
+                              "ui:field": "ContextInjectionField",
+                              "ui:options": {
+                                "injections": {
+                                  "/ui:options/rules/0/regexp": "/creator"
+                                }
+                              }
+                            },
+                            "ui:field": "DependentDisableField",
+                            "ui:options": {
+                              "rules": [
+                                {
+                                  "disableDefiner": "leg",
+                                  "disableField": "editors",
+                                  "regexp": "creator is injected here",
+                                  "inlineHelp": "Sinulla täytyy olla muokkausoikeus.",
+                                  "disabledValueToDisplay": true
+                                },
+                                {
+                                  "disableDefiner": "leg",
+                                  "disableField": "editors",
+                                  "regexp": "^((?!(MA\\.\\d)).)*$"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "legEditorSizeFixer": {
+                        "fields": [
+                          "_legEditor"
+                        ],
+                        "title": "",
+                        "rootUiSchema": {
+                          "ui:grid": {
+                            "lg": 6,
+                            "md": 6,
+                            "sm": 9,
+                            "xs": 12
                           }
                         }
                       }
                     }
                   }
-                },
-                "eventTime": {
-                  "fields": [
-                    "dateBegin",
-                    "dateEnd"
-                  ],
-                  "title": "",
-                  "rootUiSchema": {
-                    "ui:grid": {
-                      "lg": {
-                        "dateBegin": 3,
-                        "dateEnd": 2
-                      },
-                      "md": {
-                        "dateBegin": 4,
-                        "dateEnd": 2
-                      },
-                      "sm": {
-                        "dateBegin": 5,
-                        "dateEnd": 3
-                      },
-                      "xs": 12
-                    }
+                }
+              },
+              "eventTime": {
+                "fields": [
+                  "dateBegin",
+                  "dateEnd"
+                ],
+                "title": "",
+                "rootUiSchema": {
+                  "ui:grid": {
+                    "lg": {
+                      "dateBegin": 3,
+                      "dateEnd": 2
+                    },
+                    "md": {
+                      "dateBegin": 4,
+                      "dateEnd": 2
+                    },
+                    "sm": {
+                      "dateBegin": 5,
+                      "dateEnd": 3
+                    },
+                    "xs": 12
                   }
                 }
               }
+            }
+          },
+          "leg": {
+            "ui:widget": "AutosuggestWidget",
+            "ui:help": "Voit lisätä kaverisi käyttäjätunnuksen havainnoijaksi, jolloin havainto näkyy myös hänen omissa havainnoissaan. Automaattinen tekstin täydennys ehdottaa vahvistettujen kavereittesi nimiä. Voit myös lisätä muita havainnoijia kirjoittamalla heidän nimensä, vaikkeivat he olisi kavereitasi, tällöin näytetään punainen kolmio nimen kohdalla. Voit antaa kavereille oikeuden muokata lomaketta valitsemalla \"Kyllä\". Voit pyytää toista käyttäjää kaveriksesi profiilisivullasi. Profiilisi aukeaa klikkaamalla omaa käyttäjätunnustasi oikealla yläpalkissa. Etsi kaverisi nimellä hakemalla profiilisivulta ja valitse \"Lisää kaveriksi\". Sen jälkeen kun hän on vahvistanut pyyntösi omassa profiilissaan, olette kavereita ja voitte esim. Vihko-palvelussa tallentaa yhteisiä havaintoja.",
+            "ui:options": {
+              "autosuggestField": "friends",
+              "allowNonsuggestedValue": true,
+              "suggestionReceive": "key",
+              "preventTypingPattern": "^MA\\.\\d+$"
+            }
+          },
+          "dateBegin": {
+            "ui:widget": "DateTimeWidget",
+            "ui:options": {
+              "showButtons": true
+            }
+          },
+          "dateEnd": {
+            "ui:widget": "DateTimeWidget"
+          },
+          "legPublic": {
+            "ui:options": {
+              "allowUndefined": false
             },
-            "leg": {
-              "ui:widget": "AutosuggestWidget",
-              "ui:help": "Voit lisätä kaverisi käyttäjätunnuksen havainnoijaksi, jolloin havainto näkyy myös hänen omissa havainnoissaan. Automaattinen tekstin täydennys ehdottaa vahvistettujen kavereittesi nimiä. Voit myös lisätä muita havainnoijia kirjoittamalla heidän nimensä, vaikkeivat he olisi kavereitasi, tällöin näytetään punainen kolmio nimen kohdalla. Voit antaa kavereille oikeuden muokata lomaketta valitsemalla \"Kyllä\". Voit pyytää toista käyttäjää kaveriksesi profiilisivullasi. Profiilisi aukeaa klikkaamalla omaa käyttäjätunnustasi oikealla yläpalkissa. Etsi kaverisi nimellä hakemalla profiilisivulta ja valitse \"Lisää kaveriksi\". Sen jälkeen kun hän on vahvistanut pyyntösi omassa profiilissaan, olette kavereita ja voitte esim. Vihko-palvelussa tallentaa yhteisiä havaintoja.",
-              "ui:options": {
-                "autosuggestField": "friends",
-                "allowNonsuggestedValue": true,
-                "suggestionReceive": "key",
-                "preventTypingPattern": "^MA\\.\\d+$"
-              }
-            },
+            "ui:help": "Tarvittaessa voit piilottaa havainnoijien nimet avoimesta aineistosta valitsemalla \"Ei\"-vaihtoehdon. Havainnoijien nimet ovat aina viranomaisten käytettävissä."
+          }
+        },
+        "editors": {
+          "ui:help": "Jos lisäät tälle lomakkeelle uuden havainnoijan, joka on profiilissasi luokiteltu kaveriksesi, voit antaa hänelle oikeuden muokata retkikertomusta. Muokkausoikeuden haltijoille kaikki lomakkeeseen tallennetut havainnot näkyvät myös heidän omina havaintoinaan.",
+          "ui:options": {
+            "allowUndefined": false
+          }
+        },
+        "secureLevel": {
+          "ui:widget": "AnyToBooleanWidget",
+          "ui:help": "Valitsemalla \"Ei\"-vaihtoehdon havainnon paikkatiedot karkeistetaan 10 x 10 km² karttaruutuun avoimessa aineistossa. Havainnon tarkat paikkatiedot ovat aina viranomaisten käytettävissä. Karkeistettuihin havaintoihin liitetyt valokuvat ovat julkisia.",
+          "ui:options": {
+            "trueValue": "MX.secureLevelNone",
+            "falseValue": "MX.secureLevelKM10",
+            "allowUndefined": false
+          }
+        },
+        "keywords": {
+          "ui:field": "TagArrayField"
+        },
+        "gatherings": {
+          "items": {
             "dateBegin": {
-              "ui:widget": "DateTimeWidget",
               "ui:options": {
                 "showButtons": true
-              }
+              },
+              "ui:widget": "DateTimeWidget"
             },
             "dateEnd": {
               "ui:widget": "DateTimeWidget"
             },
-            "legPublic": {
+            "geometry": {
+              "ui:field": "HiddenField"
+            },
+            "images": {
+              "ui:field": "ImageArrayField",
               "ui:options": {
-                "allowUndefined": false
-              },
-              "ui:help": "Tarvittaessa voit piilottaa havainnoijien nimet avoimesta aineistosta valitsemalla \"Ei\"-vaihtoehdon. Havainnoijien nimet ovat aina viranomaisten käytettävissä."
-            }
-          },
-          "editors": {
-            "ui:help": "Jos lisäät tälle lomakkeelle uuden havainnoijan, joka on profiilissasi luokiteltu kaveriksesi, voit antaa hänelle oikeuden muokata retkikertomusta. Muokkausoikeuden haltijoille kaikki lomakkeeseen tallennetut havainnot näkyvät myös heidän omina havaintoinaan.",
-            "ui:options": {
-              "allowUndefined": false
-            }
-          },
-          "secureLevel": {
-            "ui:widget": "AnyToBooleanWidget",
-            "ui:help": "Valitsemalla \"Ei\"-vaihtoehdon havainnon paikkatiedot karkeistetaan 10 x 10 km² karttaruutuun avoimessa aineistossa. Havainnon tarkat paikkatiedot ovat aina viranomaisten käytettävissä. Karkeistettuihin havaintoihin liitetyt valokuvat ovat julkisia.",
-            "ui:options": {
-              "trueValue": "MX.secureLevelNone",
-              "falseValue": "MX.secureLevelKM10",
-              "allowUndefined": false
-            }
-          },
-          "keywords": {
-            "ui:field": "TagArrayField"
-          },
-          "gatherings": {
-            "items": {
-              "dateBegin": {
-                "ui:options": {
-                  "showButtons": true
-                },
-                "ui:widget": "DateTimeWidget"
-              },
-              "dateEnd": {
-                "ui:widget": "DateTimeWidget"
-              },
-              "geometry": {
-                "ui:field": "HiddenField"
-              },
-              "images": {
-                "ui:field": "ImageArrayField",
-                "ui:options": {
-                  "capturerVerbatimPath": "/gatheringEvent/leg"
-                }
-              },
-              "namedPlaceID": {
-                "ui:field": "HiddenField"
-              },
-              "locality": {
-                "ui:widget": "TextareaWidget"
-              },
-              "biologicalProvince": {
-                "ui:field": "HiddenField"
-              },
-              "taxonCensus": {
-                "items": {
-                  "censusTaxonID": {
-                    "ui:options": {
-                      "allowNonsuggestedValue": true,
-                      "autosuggestField": "taxon",
-                      "suggestionReceive": "key"
-                    },
-                    "ui:widget": "AutosuggestWidget"
-                  }
-                }
-              },
-              "ui:functions": [
-                {
-                  "ui:field": "ConditionalOnChangeField",
+                "capturerVerbatimPath": "/gatheringEvent/leg"
+              }
+            },
+            "namedPlaceID": {
+              "ui:field": "HiddenField"
+            },
+            "locality": {
+              "ui:widget": "TextareaWidget"
+            },
+            "biologicalProvince": {
+              "ui:field": "HiddenField"
+            },
+            "taxonCensus": {
+              "items": {
+                "censusTaxonID": {
                   "ui:options": {
-                    "rules": [
-                      {
-                        "transformations": {
-                          "units": []
-                        },
-                        "conditions": {
-                          "gatheringType": {
-                            "regexp": "MY.gatheringTypeCavityTree"
-                          }
-                        }
-                      },
-                      {
-                        "transformations": {
-                          "units": [
-                            {
-                              "identifications": [
-                                {
-                                  "taxonID": "MX.48243"
-                                }
-                              ],
-                              "recordBasis": "MY.recordBasisHumanObservationIndirect",
-                              "breeding": true
-                            }
-                          ]
-                        },
-                        "conditions": {
-                          "gatheringType": {
-                            "regexp": "MY.gatheringTypeNestTree"
-                          }
-                        }
-                      },
-                      {
-                        "transformations": {
-                          "units": [
-                            {
-                              "identifications": [
-                                {
-                                  "taxonID": "MX.48243"
-                                }
-                              ],
-                              "recordBasis": "MY.recordBasisHumanObservationIndirect"
-                            }
-                          ]
-                        },
-                        "conditions": {
-                          "gatheringType": {
-                            "regexp": "MY.gatheringTypeDroppingsTree"
-                          }
-                        }
-                      },
-                      {
-                        "transformations": {
-                          "units": [
-                            {
-                              "identifications": [
-                                {
-                                  "taxonID": "MX.48243"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        "conditions": {
-                          "gatheringType": {
-                            "regexp": "^$"
-                          }
-                        }
-                      }
-                    ]
-                  }
+                    "allowNonsuggestedValue": true,
+                    "autosuggestField": "taxon",
+                    "suggestionReceive": "key"
+                  },
+                  "ui:widget": "AutosuggestWidget"
                 }
-              ],
-              "gatheringType": {
-                "ui:field": "HiddenField"
-              },
-              "units": {
-                "ui:field": "MultiArrayField",
+              }
+            },
+            "ui:functions": [
+              {
+                "ui:field": "ConditionalOnChangeField",
                 "ui:options": {
-                  "groups": [
+                  "rules": [
                     {
-                      "rules": {
-                        "field": "lifeStage",
-                        "regexp": "^.+$"
+                      "transformations": {
+                        "units": []
                       },
-                      "operations": {
-                        "type": "merge",
-                        "uiSchema": {
-                          "ui:title": "Havainnot",
-                          "ui:options": {
-                            "buttons": [
-                              {
-                                "default": {
-                                  "lifeStage": "MY.lifeStageAlive"
-                                },
-                                "fn": "addPredefined",
-                                "glyph": "plus",
-                                "label": "Lisää havainto"
-                              }
-                            ]
-                          }
+                      "conditions": {
+                        "gatheringType": {
+                          "regexp": "MY.gatheringTypeCavityTree"
                         }
                       }
                     },
                     {
-                      "rules": {
-                        "field": "indirectObservationType",
-                        "regexp": "^(|MY.indirectObservationTypeFeces)$",
-                        "complement": true
-                      },
-                      "operations": {
-                        "type": "merge",
-                        "uiSchema": {
-                          "ui:title": "Jälkihavainnot",
-                          "ui:options": {
-                            "buttons": [
+                      "transformations": {
+                        "units": [
+                          {
+                            "identifications": [
                               {
-                                "default": {
-                                  "indirectObservationType": "MY.indirectObservationTypeSnowTracks",
-                                  "recordBasis": "MY.recordBasisHumanObservationIndirect"
-                                },
-                                "fn": "addPredefined",
-                                "glyph": "plus",
-                                "label": "Lisää jälkihavainto"
+                                "taxonID": "MX.48243"
                               }
-                            ]
+                            ],
+                            "recordBasis": "MY.recordBasisHumanObservationIndirect",
+                            "breeding": true
                           }
+                        ]
+                      },
+                      "conditions": {
+                        "gatheringType": {
+                          "regexp": "MY.gatheringTypeNestTree"
                         }
                       }
                     },
                     {
-                      "rules": {
-                        "field": "nestType",
-                        "regexp": "^.+$"
-                      },
-                      "operations": {
-                        "type": "merge",
-                        "uiSchema": {
-                          "ui:title": "Pesähavainnot",
-                          "ui:options": {
-                            "buttons": [
+                      "transformations": {
+                        "units": [
+                          {
+                            "identifications": [
                               {
-                                "default": {
-                                  "nestType": "MY.nestTypeTreeCavity",
-                                  "recordBasis": "MY.recordBasisHumanObservationIndirect"
-                                },
-                                "fn": "addPredefined",
-                                "glyph": "plus",
-                                "label": "Lisää pesä"
+                                "taxonID": "MX.48243"
                               }
-                            ]
+                            ],
+                            "recordBasis": "MY.recordBasisHumanObservationIndirect"
                           }
+                        ]
+                      },
+                      "conditions": {
+                        "gatheringType": {
+                          "regexp": "MY.gatheringTypeDroppingsTree"
                         }
                       }
                     },
                     {
-                      "rules": {
-                        "field": "indirectObservationType",
-                        "regexp": "^MY.indirectObservationTypeFeces"
-                      },
-                      "operations": {
-                        "type": "merge",
-                        "uiSchema": {
-                          "ui:title": "Papanahavainnot",
-                          "ui:options": {
-                            "buttons": [
+                      "transformations": {
+                        "units": [
+                          {
+                            "identifications": [
                               {
-                                "default": {
-                                  "indirectObservationType": "MY.indirectObservationTypeFeces",
-                                  "recordBasis": "MY.recordBasisHumanObservationIndirect"
-                                },
-                                "fn": "addPredefined",
-                                "glyph": "plus",
-                                "key": "3",
-                                "label": "Lisää papanahavainto"
+                                "taxonID": "MX.48243"
                               }
                             ]
                           }
+                        ]
+                      },
+                      "conditions": {
+                        "gatheringType": {
+                          "regexp": "^$"
                         }
                       }
                     }
-                  ],
-                  "renderAdd": false
-                },
-                "items": {
-                  "ui:functions": [
-                    {
-                      "ui:field": "ConditionalUiSchemaField",
-                      "ui:options": {
-                        "cases": [
-                          {
-                            "operations": {
-                              "type": "merge",
-                              "uiSchema": {
-                                "ui:options": {
-                                  "color": "#9e713b"
-                                }
+                  ]
+                }
+              }
+            ],
+            "gatheringType": {
+              "ui:field": "HiddenField"
+            },
+            "units": {
+              "ui:field": "MultiArrayField",
+              "ui:options": {
+                "groups": [
+                  {
+                    "rules": {
+                      "field": "alive",
+                      "regexp": "^.+$"
+                    },
+                    "operations": {
+                      "type": "merge",
+                      "uiSchema": {
+                        "ui:title": "Havainnot",
+                        "ui:options": {
+                          "buttons": [
+                            {
+                              "default": {
+                                "alive": true
+                              },
+                              "fn": "addPredefined",
+                              "glyph": "plus",
+                              "label": "Lisää havainto"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "rules": {
+                      "field": "indirectObservationType",
+                      "regexp": "^(|MY.indirectObservationTypeFeces)$",
+                      "complement": true
+                    },
+                    "operations": {
+                      "type": "merge",
+                      "uiSchema": {
+                        "ui:title": "Jälkihavainnot",
+                        "ui:options": {
+                          "buttons": [
+                            {
+                              "default": {
+                                "indirectObservationType": "MY.indirectObservationTypeSnowTracks",
+                                "recordBasis": "MY.recordBasisHumanObservationIndirect"
+                              },
+                              "fn": "addPredefined",
+                              "glyph": "plus",
+                              "label": "Lisää jälkihavainto"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "rules": {
+                      "field": "nestType",
+                      "regexp": "^.+$"
+                    },
+                    "operations": {
+                      "type": "merge",
+                      "uiSchema": {
+                        "ui:title": "Pesähavainnot",
+                        "ui:options": {
+                          "buttons": [
+                            {
+                              "default": {
+                                "nestType": "MY.nestTypeTreeCavity",
+                                "recordBasis": "MY.recordBasisHumanObservationIndirect"
+                              },
+                              "fn": "addPredefined",
+                              "glyph": "plus",
+                              "label": "Lisää pesä"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "rules": {
+                      "field": "indirectObservationType",
+                      "regexp": "^MY.indirectObservationTypeFeces"
+                    },
+                    "operations": {
+                      "type": "merge",
+                      "uiSchema": {
+                        "ui:title": "Papanahavainnot",
+                        "ui:options": {
+                          "buttons": [
+                            {
+                              "default": {
+                                "indirectObservationType": "MY.indirectObservationTypeFeces",
+                                "recordBasis": "MY.recordBasisHumanObservationIndirect"
+                              },
+                              "fn": "addPredefined",
+                              "glyph": "plus",
+                              "key": "3",
+                              "label": "Lisää papanahavainto"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ],
+                "renderAdd": false
+              },
+              "items": {
+                "ui:functions": [
+                  {
+                    "ui:field": "ConditionalUiSchemaField",
+                    "ui:options": {
+                      "cases": [
+                        {
+                          "operations": {
+                            "type": "merge",
+                            "uiSchema": {
+                              "ui:options": {
+                                "color": "#9e713b"
                               }
-                            },
-                            "rules": {
-                              "field": "nestType",
-                              "regexp": "^.+$"
                             }
                           },
-                          {
-                            "operations": {
-                              "type": "merge",
-                              "uiSchema": {
-                                "ui:options": {
-                                  "color": "#b89220"
-                                }
-                              }
-                            },
-                            "rules": {
-                              "field": "indirectObservationType",
-                              "regexp": "^.+$"
-                            }
+                          "rules": {
+                            "field": "nestType",
+                            "regexp": "^.+$"
                           }
-                        ]
-                      }
-                    },
-                    {
-                      "ui:field": "FlatField",
-                      "ui:options": {
-                        "fields": [
-                          "unitFact"
-                        ]
-                      }
-                    },
-                    {
-                      "ui:field": "ScopeField",
-                      "ui:options": {
-                        "fields": [],
-                        "glyphFields": [
-                          {
-                            "glyph": "camera",
-                            "show": "images",
-                            "label": "Lisää valokuva",
-                            "open": false
-                          }
-                        ],
-                        "fieldScopes": {
-                          "lifeStage": {
-                            "+": {
-                              "fields": [
-                                "lifeStage",
-                                "count",
-                                "taxonConfidence",
-                                "recordBasis",
-                                "notes"
-                              ],
-                              "uiSchema": {
-                                "recordBasis": {
-                                  "ui:options": {
-                                    "filterType": "blacklist",
-                                    "filter": [
-                                      "MY.recordBasisHumanObservationIndirect"
-                                    ]
-                                  }
-                                }
+                        },
+                        {
+                          "operations": {
+                            "type": "merge",
+                            "uiSchema": {
+                              "ui:options": {
+                                "color": "#b89220"
                               }
                             }
                           },
-                          "nestType": {
-                            "+": {
-                              "fields": [
+                          "rules": {
+                            "field": "indirectObservationType",
+                            "regexp": "^.+$"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "ui:field": "FlatField",
+                    "ui:options": {
+                      "fields": [
+                        "unitFact"
+                      ]
+                    }
+                  },
+                  {
+                    "ui:field": "ScopeField",
+                    "ui:options": {
+                      "fields": [],
+                      "glyphFields": [
+                        {
+                          "glyph": "camera",
+                          "show": "images",
+                          "label": "Lisää valokuva",
+                          "open": false
+                        }
+                      ],
+                      "fieldScopes": {
+                        "alive": {
+                          "+": {
+                            "fields": [
+                              "alive",
+                              "count",
+                              "taxonConfidence",
+                              "recordBasis",
+                              "notes"
+                            ],
+                            "uiSchema": {
+                              "recordBasis": {
+                                "ui:options": {
+                                  "filterType": "blacklist",
+                                  "filter": [
+                                    "MY.recordBasisHumanObservationIndirect"
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "nestType": {
+                          "+": {
+                            "fields": [
+                              "nestType",
+                              "nestNotes",
+                              "nestCount",
+                              "taxonConfidence",
+                              "unitFact_lolifeNestTree",
+                              "notes"
+                            ],
+                            "uiSchema": {
+                              "recordBasis": {
+                                "ui:field": "HiddenField"
+                              },
+                              "ui:order": [
                                 "nestType",
                                 "nestNotes",
                                 "nestCount",
                                 "taxonConfidence",
                                 "unitFact_lolifeNestTree",
-                                "notes"
+                                "notes",
+                                "*"
                               ],
-                              "uiSchema": {
-                                "recordBasis": {
-                                  "ui:field": "HiddenField"
-                                },
-                                "ui:order": [
-                                  "nestType",
-                                  "nestNotes",
-                                  "nestCount",
-                                  "taxonConfidence",
-                                  "unitFact_lolifeNestTree",
-                                  "notes",
-                                  "*"
-                                ],
-                                "taxonConfidence": {
-                                  "ui:title": "Onko varmasti liito-oravan pesä?"
-                                }
-                              }
-                            }
-                          },
-                          "indirectObservationType": {
-                            "+": {
-                              "fieldScopes": {
-                                "indirectObservationType": {
-                                  "MY.indirectObservationTypeFeces": {
-                                    "fields": [
-                                      "unitFact_lolifeDroppingsType",
-                                      "unitFact_lolifeDroppingsCount",
-                                      "unitFact_lolifeDroppingsQuality",
-                                      "unitFact_lolifeNestTree",
-                                      "notes"
-                                    ],
-                                    "uiSchema": {
-                                      "indirectObservationType": {
-                                        "ui:field": "HiddenField"
-                                      },
-                                      "ui:order": [
-                                        "unitFact_lolifeDroppingsType",
-                                        "unitFact_lolifeDroppingsCount",
-                                        "unitFact_lolifeDroppingsQuality",
-                                        "unitFact_lolifeNestTree",
-                                        "notes",
-                                        "*"
-                                      ]
-                                    }
-                                  },
-                                  "MY.indirectObservationTypeSnowTracks": {
-                                    "refs": [
-                                      "indirectObs"
-                                    ]
-                                  },
-                                  "MY.indirectObservationTypeUrine": {
-                                    "refs": [
-                                      "indirectObs"
-                                    ]
-                                  },
-                                  "MY.indirectObservationTypeFeasting": {
-                                    "refs": [
-                                      "indirectObs"
-                                    ]
-                                  },
-                                  "MY.indirectObservationTypeFoodStock": {
-                                    "refs": [
-                                      "indirectObs"
-                                    ]
-                                  }
-                                }
-                              },
-                              "uiSchema": {
-                                "recordBasis": {
-                                  "ui:field": "HiddenField"
-                                }
+                              "taxonConfidence": {
+                                "ui:title": "Onko varmasti liito-oravan pesä?"
                               }
                             }
                           }
                         },
-                        "definitions": {
-                          "indirectObs": {
-                            "fields": [
+                        "indirectObservationType": {
+                          "+": {
+                            "fieldScopes": {
+                              "indirectObservationType": {
+                                "MY.indirectObservationTypeFeces": {
+                                  "fields": [
+                                    "unitFact_lolifeDroppingsType",
+                                    "unitFact_lolifeDroppingsCount",
+                                    "unitFact_lolifeDroppingsQuality",
+                                    "unitFact_lolifeNestTree",
+                                    "notes"
+                                  ],
+                                  "uiSchema": {
+                                    "indirectObservationType": {
+                                      "ui:field": "HiddenField"
+                                    },
+                                    "ui:order": [
+                                      "unitFact_lolifeDroppingsType",
+                                      "unitFact_lolifeDroppingsCount",
+                                      "unitFact_lolifeDroppingsQuality",
+                                      "unitFact_lolifeNestTree",
+                                      "notes",
+                                      "*"
+                                    ]
+                                  }
+                                },
+                                "MY.indirectObservationTypeSnowTracks": {
+                                  "refs": [
+                                    "indirectObs"
+                                  ]
+                                },
+                                "MY.indirectObservationTypeUrine": {
+                                  "refs": [
+                                    "indirectObs"
+                                  ]
+                                },
+                                "MY.indirectObservationTypeFeasting": {
+                                  "refs": [
+                                    "indirectObs"
+                                  ]
+                                },
+                                "MY.indirectObservationTypeFoodStock": {
+                                  "refs": [
+                                    "indirectObs"
+                                  ]
+                                }
+                              }
+                            },
+                            "uiSchema": {
+                              "recordBasis": {
+                                "ui:field": "HiddenField"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "definitions": {
+                        "indirectObs": {
+                          "fields": [
+                            "indirectObservationType",
+                            "unitFact_lolifeNestTree",
+                            "notes"
+                          ],
+                          "uiSchema": {
+                            "indirectObservationType": {
+                              "ui:options": {
+                                "filterType": "blacklist",
+                                "filter": [
+                                  "MY.indirectObservationTypeFeces"
+                                ]
+                              }
+                            },
+                            "ui:order": [
+                              "*",
                               "indirectObservationType",
                               "unitFact_lolifeNestTree",
                               "notes"
-                            ],
-                            "uiSchema": {
-                              "indirectObservationType": {
-                                "ui:options": {
-                                  "filterType": "blacklist",
-                                  "filter": [
-                                    "MY.indirectObservationTypeFeces"
-                                  ]
-                                }
-                              },
-                              "ui:order": [
-                                "*",
-                                "indirectObservationType",
-                                "unitFact_lolifeNestTree",
-                                "notes"
-                              ]
-                            }
+                            ]
                           }
                         }
                       }
                     }
-                  ],
-                  "ui:field": "LocationChooserField",
+                  }
+                ],
+                "ui:field": "LocationChooserField",
+                "ui:options": {
+                  "geometryField": "/unitGathering/geometry",
+                  "strategy": "lolifeUnit"
+                },
+                "images": {
+                  "ui:field": "ImageArrayField",
                   "ui:options": {
-                    "geometryField": "/unitGathering/geometry",
-                    "strategy": "lolifeUnit"
+                    "capturerVerbatimPath": "/gatheringEvent/leg"
+                  }
+                },
+                "identifications": {
+                  "ui:field": "HiddenField"
+                },
+                "unitGathering": {
+                  "ui:field": "HiddenField"
+                },
+                "alive": {
+                  "ui:options": {
+                    "allowUndefined": false
+                  }
+                },
+                "taxonConfidence": {
+                  "ui:widget": "AnyToBooleanWidget",
+                  "ui:options": {
+                    "trueValue": "MY.taxonConfidenceSure",
+                    "falseValue": "MY.taxonConfidenceUnsure",
+                    "allowUndefined": false
+                  }
+                },
+                "ui:grid": {
+                  "lg": {
+                    "taxonConfidence": 1,
+                    "count": 1,
+                    "*": 2
                   },
-                  "images": {
-                    "ui:field": "ImageArrayField",
-                    "ui:options": {
-                      "capturerVerbatimPath": "/gatheringEvent/leg"
-                    }
+                  "md": {
+                    "taxonConfidence": 1,
+                    "count": 1,
+                    "*": 2
                   },
-                  "identifications": {
-                    "ui:field": "HiddenField"
+                  "sm": {
+                    "taxonConfidence": 2,
+                    "count": 1,
+                    "*": 2
                   },
-                  "unitGathering": {
-                    "ui:field": "HiddenField"
-                  },
-                  "lifeStage": {
-                    "ui:widget": "AnyToBooleanWidget",
-                    "ui:options": {
-                      "label": "Elossa?",
-                      "trueValue": "MY.lifeStageAlive",
-                      "falseValue": "MY.lifeStageDead",
-                      "allowUndefined": false
-                    }
-                  },
-                  "taxonConfidence": {
-                    "ui:widget": "AnyToBooleanWidget",
-                    "ui:options": {
-                      "trueValue": "MY.taxonConfidenceSure",
-                      "falseValue": "MY.taxonConfidenceUnsure",
-                      "allowUndefined": false
-                    }
-                  },
-                  "ui:grid": {
-                    "lg": {
-                      "taxonConfidence": 1,
-                      "count": 1,
-                      "*": 2
-                    },
-                    "md": {
-                      "taxonConfidence": 1,
-                      "count": 1,
-                      "*": 2
-                    },
-                    "sm": {
-                      "taxonConfidence": 2,
-                      "count": 1,
-                      "*": 2
-                    },
-                    "xs": 12
-                  },
-                  "ui:order": [
-                    "taxonConfidence",
-                    "recordBasis",
-                    "count",
-                    "lifeStage",
-                    "nestType",
-                    "nestNotes",
-                    "nestCount",
-                    "indirectObservationType",
-                    "lolifeDroppingsType",
-                    "lolifeDroppingsCount",
-                    "lolifeDroppingsQuality",
-                    "notes",
-                    "*"
-                  ]
-                }
+                  "xs": 12
+                },
+                "ui:order": [
+                  "taxonConfidence",
+                  "recordBasis",
+                  "count",
+                  "alive",
+                  "nestType",
+                  "nestNotes",
+                  "nestCount",
+                  "indirectObservationType",
+                  "lolifeDroppingsType",
+                  "lolifeDroppingsCount",
+                  "lolifeDroppingsQuality",
+                  "notes",
+                  "*"
+                ]
+              }
+            },
+            "ui:order": [
+              "gatheringType",
+              "*",
+              "units"
+            ],
+            "ui:settings": [
+              "%additionalFields/scopeField_gatherings"
+            ],
+            "title": "Havaintopaikan tiedot",
+            "ui:grid": {
+              "xs": {
+                "habitat": 6,
+                "notes": 6,
+                "locality": 12
+              }
+            }
+          },
+          "ui:field": "MapArrayField",
+          "ui:title": "",
+          "ui:options": {
+            "ui:buttonsDesktopLayout": true,
+            "buttons": [
+              {
+                "glyph": "plus",
+                "fn": "addPredefined",
+                "key": "4",
+                "label": "Elinpiiri",
+                "default": {
+                  "gatheringType": "MY.gatheringTypeLolifeHabitatZone"
+                },
+                "help": "Liito-orava on tyypillisesti kuusivaltaisten metsien laji, mutta elää myös lehtipuuvaltaisilla alueilla. Se ei tule toimeen aivan yksipuolisissa kuusikoissa, eikä myöskään pesi nuorissa metsissä. Erityisesti tiheän kannan alueilla sekä taajama-alueilla elinpiirit voivat kuitenkin olla melko <strong>vaihtelevia</strong>. <strong>Sopivien pesäpaikkojen</strong> lisäksi liito-oravan elinpiirillä <strong>on oltava riittävästi ravintopuita.</strong> Liito-oravat voivat käyttää nuoria metsiä, siemenpuuasentoon hakattuja aukkoja, varttuneita taimikoita ja muita puustoltaan vaihtelevia alueita <strong>ruokailuun ja liikkumiseen.</strong> Puuttomat hakkuuaukot ja nuoret taimikot ovat liito-oravalle avoimiin alueisiin verrattavia, suojattomia alueita. Aikuiset liito-oravat elävät <strong>koko ikänsä samalla elinpiirillä,</strong> jolla ne käyttävät <strong>useita vaihtoehtoisia pesäpaikkoja.</strong> Naaraiden elinpiiri on keskimäärin 8 ha ja koiraiden 60 ha. Naaraat elävät lähes aina toisistaan erillisillä elinpiireillä, kun taas <strong>koiraiden elinpiirit voivat olla osin päällekkäisiä.</strong> Saman <strong>koiraan laajan elinpiirin sisällä voi olla useita naaraiden elinpiirejä.</strong>",
+                "tooltipPlacement": "left",
+                "tooltipClass": "lg",
+                "className": "text-left"
               },
-              "ui:order": [
-                "gatheringType",
-                "*",
-                "units"
-              ],
-              "ui:settings": [
-                "%additionalFields/scopeField_gatherings"
-              ],
-              "title": "Havaintopaikan tiedot",
-              "ui:grid": {
-                "xs": {
-                  "habitat": 6,
-                  "notes": 6,
-                  "locality": 12
+              {
+                "glyph": "plus",
+                "fn": "addPredefined",
+                "key": "3",
+                "label": "Ydinalue",
+                "default": {
+                  "gatheringType": "MY.gatheringTypeLolifeCoreZone"
+                },
+                "help": "Liito-oravan elinpiirin sisällä voidaan tunnistaa ns. <strong>ydinalueita</strong>. Ne ovat niitä <strong>elinpiirin osia</strong>, joita <strong>liito-orava käyttää eniten.</strong> Liito-orava merkitsee nämä alueet yleensä voimakkaasti, jolloin ne havaitaan helposti oikeaan aikaan tehdyissä papanakartoituksissa. <strong>Yhdellä naaraalla voi olla elinpiirillään yksi tai useampi ydinalue.</strong> Elinpiirin ydinalueet ovat <strong>useimmiten kuusivaltaisia </strong>ja niillä on <strong>kolohaapoja ja/tai risupesiä, tai </strong>ne ovat <strong>lehtipuuvaltaisia ruokailualueita.</strong> Kaupungeissa ydinalueet voivat kuitenkin sijoittua monipuolisemmin erilaisiin ympäristöihin, jolloin niitä voi löytyä <strong>myös asuntokortteleista.</strong> Ydinalueen <strong>pinta-ala vaihtelee</strong> tapauskohtaisesti, mutta <strong>useimmiten</strong> se on luonnonsuojelulain tarkoittamaa <strong>lisääntymis- ja levähdyspaikkaa laajempi.</strong> Osittain tai kokonaan asuntokortteleihin sijoittuvilla elinpiirin ydinalueilla, jotka eivät sisälly lisääntymis- ja levähdyspaikkoihin, tavoitteena on säilyttää liito-oravalle merkitykselliset puut ja riittävä puustoisuus.",
+                "tooltipPlacement": "left",
+                "tooltipClass": "lg",
+                "className": "text-left"
+              },
+              {
+                "glyph": "plus",
+                "fn": "addPredefined",
+                "label": "Lisääntymis- ja levähdyspaikka",
+                "default": {
+                  "gatheringType": "MY.gatheringTypeBreedingAndRestingArea"
+                },
+                "help": "Lisääntymis- ja levähdyspaikat ovat lajin elinympäristön <strong>(elinpiirin)</strong> osia. Luonnonsuojelulain tarkoittamalla liito-oravan <strong>lisääntymispaikalla liito-orava saa poikasia. Levähdyspaikassa</strong> yöaktiivinen liito-orava <strong>viettää päivänsä.</strong> Lisääntymis- ja levähdyspaikka <strong>käsittää pesäpuun tai muun pesäpaikan.</strong> Lisääntymis- ja levähdyspaikan käsitteeseen <strong>luetaan myös pesän välittömässä läheisyydessä olevat suojaa ja ravintoa tarjoavat puut.</strong>",
+                "tooltipPlacement": "left",
+                "tooltipClass": "lg",
+                "className": "text-left"
+              },
+              {
+                "glyph": "plus",
+                "fn": "addPredefined",
+                "key": "1",
+                "label": "Ruokailualue",
+                "default": {
+                  "gatheringType": "MY.gatheringTypeForagingArea"
+                },
+                "help": "Rajattu alue, joka on yleensä lehtipuustoinen metsänkohta (leppä, haapa, koivu, muu lehtipuusto; joskus keskittymä esim. pellon/vesistön reunametsä). Todennettu käyttö kohdalta löytyvien papanahavaintojen perusteella/oletettu käyttö lähellä sijaitsevien papanapuiden perusteella. Ruokailupaikalle voidaan myös merkitä ruokailupuita. <strong>Ruokailualue</strong> on yksi <strong>ydinalueen</strong> luokka.",
+                "tooltipPlacement": "left",
+                "tooltipClass": "lg",
+                "className": "text-left"
+              },
+              {
+                "glyph": "plus",
+                "fn": "addPredefined",
+                "key": "2",
+                "label": "Kulkuyhteys",
+                "default": {
+                  "gatheringType": "MY.gatheringTypeLolifeAccess"
+                },
+                "help": "Kulkuyhteydellä tarkoitetaan <strong>yhteyttä esim. lisääntymis- ja levähdyspaikan ja ruokailualueen välillä.</strong> Taajama-alueilla liito-oravien tarvitsemia kulkuyhteyksiä on usein rajallisesti ja niiden säilymiseen tulee kiinnittää erityistä huomiota. Liito-oravan elinmahdollisuuksille on <strong>välttämätöntä</strong> lisääntymis- ja levähdyspaikkojen ja ravintopuiden säilymisen lisäksi se, <strong>että yksilöt pystyvät</strong> suojautumaan ja <strong>liikkumaan alueelta toiselle ravinnonhaussaan ja lisääntymisaikana.</strong> Siksi liito-oravan elinpiireillä tulee olla liikkumiseen ja suojautumiseen soveltuvaa puustoa sekä ravintoa tarjoavia lehtipuita. Liito-orava kykenee liitämään 20–30 metriä leveiden aukeiden alojen yli. Liidon pituuteen vaikuttavat puuston korkeus ja maaston korkeuserot. Kulkuyhteys voidaan muodostaa puista myös siten, että puut ovat korkeintaan puun pituuden etäisyydellä toisistaan.",
+                "tooltipPlacement": "left",
+                "tooltipClass": "lg",
+                "className": "text-left"
+              },
+              {
+                "glyph": "plus",
+                "fn": "addPredefined",
+                "key": "5",
+                "label": "Soveltuva alue",
+                "default": {
+                  "gatheringType": "MY.gatheringTypeLolifeApplicableZone"
+                },
+                "help": "Kaavoituksessa luontoselvitysten tarve painottuu tiedossa olevien liito-oravan elinalueiden varmistamiseen ja <strong>liito-oravalle soveltuvien elinympäristöjen tunnistamiseen</strong> niiden alueiden osalta, joissa yleiskaava esittää muutoksia olemassa olevaan tilanteeseen. Lajien yksittäisten lisääntymis- ja levähdyspaikkojen selvittäminen jää tällöin tehtäväksi mahdollisen yksityiskohtaisemman kaavoituksen yhteydessä. Selvitystarpeet ovat sen sijaan erilaisia esimerkiksi rantayleiskaavassa, jossa rantarakentamiseen varattavilta alueilta tarvitaan rakentamisen sijoittamista varten hyvinkin yksityiskohtaista tietoa luonnonarvoista.",
+                "tooltipPlacement": "left",
+                "tooltipClass": "lg",
+                "className": "text-left"
+              },
+              {
+                "glyph": "plus",
+                "fn": "addPredefined",
+                "key": "6",
+                "label": "Maastossa kuljettu reitti",
+                "help": "Reitti, jota pitkin seurantaa tekevä henkilö on kulkenut ja tallentanut seurantaan liittyvää tietoa.",
+                "tooltipPlacement": "left",
+                "tooltipClass": "lg",
+                "className": "text-left"
+              }
+            ],
+            "popupFields": [
+              {
+                "field": "/gatheringType",
+                "template": "title"
+              },
+              {
+                "strategy": "lolifeUnit",
+                "template": "title",
+                "value": "Klikkaa vierittääksesi näkyville"
+              },
+              {
+                "text": "/gatheringType",
+                "template": "description",
+                "value": "Klikkaa vierittääksesi näkyville"
+              }
+            ],
+            "titleFormat": "%{Title} %{idx}",
+            "mapOptions": {
+              "controls": {
+                "draw": {
+                  "clear": true,
+                  "delete": true,
+                  "redo": false,
+                  "reverse": true,
+                  "undo": false
                 }
               }
             },
-            "ui:field": "MapArrayField",
-            "ui:title": "",
-            "ui:options": {
-              "ui:buttonsDesktopLayout": true,
-              "buttons": [
-                {
-                  "glyph": "plus",
-                  "fn": "addPredefined",
-                  "key": "4",
-                  "label": "Elinpiiri",
-                  "default": {
-                    "gatheringType": "MY.gatheringTypeLolifeHabitatZone"
-                  },
-                  "help": "Liito-orava on tyypillisesti kuusivaltaisten metsien laji, mutta elää myös lehtipuuvaltaisilla alueilla. Se ei tule toimeen aivan yksipuolisissa kuusikoissa, eikä myöskään pesi nuorissa metsissä. Erityisesti tiheän kannan alueilla sekä taajama-alueilla elinpiirit voivat kuitenkin olla melko <strong>vaihtelevia</strong>. <strong>Sopivien pesäpaikkojen</strong> lisäksi liito-oravan elinpiirillä <strong>on oltava riittävästi ravintopuita.</strong> Liito-oravat voivat käyttää nuoria metsiä, siemenpuuasentoon hakattuja aukkoja, varttuneita taimikoita ja muita puustoltaan vaihtelevia alueita <strong>ruokailuun ja liikkumiseen.</strong> Puuttomat hakkuuaukot ja nuoret taimikot ovat liito-oravalle avoimiin alueisiin verrattavia, suojattomia alueita. Aikuiset liito-oravat elävät <strong>koko ikänsä samalla elinpiirillä,</strong> jolla ne käyttävät <strong>useita vaihtoehtoisia pesäpaikkoja.</strong> Naaraiden elinpiiri on keskimäärin 8 ha ja koiraiden 60 ha. Naaraat elävät lähes aina toisistaan erillisillä elinpiireillä, kun taas <strong>koiraiden elinpiirit voivat olla osin päällekkäisiä.</strong> Saman <strong>koiraan laajan elinpiirin sisällä voi olla useita naaraiden elinpiirejä.</strong>",
-                  "tooltipPlacement": "left",
-                  "tooltipClass": "lg",
-                  "className": "text-left"
-                },
-                {
-                  "glyph": "plus",
-                  "fn": "addPredefined",
-                  "key": "3",
-                  "label": "Ydinalue",
-                  "default": {
-                    "gatheringType": "MY.gatheringTypeLolifeCoreZone"
-                  },
-                  "help": "Liito-oravan elinpiirin sisällä voidaan tunnistaa ns. <strong>ydinalueita</strong>. Ne ovat niitä <strong>elinpiirin osia</strong>, joita <strong>liito-orava käyttää eniten.</strong> Liito-orava merkitsee nämä alueet yleensä voimakkaasti, jolloin ne havaitaan helposti oikeaan aikaan tehdyissä papanakartoituksissa. <strong>Yhdellä naaraalla voi olla elinpiirillään yksi tai useampi ydinalue.</strong> Elinpiirin ydinalueet ovat <strong>useimmiten kuusivaltaisia </strong>ja niillä on <strong>kolohaapoja ja/tai risupesiä, tai </strong>ne ovat <strong>lehtipuuvaltaisia ruokailualueita.</strong> Kaupungeissa ydinalueet voivat kuitenkin sijoittua monipuolisemmin erilaisiin ympäristöihin, jolloin niitä voi löytyä <strong>myös asuntokortteleista.</strong> Ydinalueen <strong>pinta-ala vaihtelee</strong> tapauskohtaisesti, mutta <strong>useimmiten</strong> se on luonnonsuojelulain tarkoittamaa <strong>lisääntymis- ja levähdyspaikkaa laajempi.</strong> Osittain tai kokonaan asuntokortteleihin sijoittuvilla elinpiirin ydinalueilla, jotka eivät sisälly lisääntymis- ja levähdyspaikkoihin, tavoitteena on säilyttää liito-oravalle merkitykselliset puut ja riittävä puustoisuus.",
-                  "tooltipPlacement": "left",
-                  "tooltipClass": "lg",
-                  "className": "text-left"
-                },
-                {
-                  "glyph": "plus",
-                  "fn": "addPredefined",
-                  "label": "Lisääntymis- ja levähdyspaikka",
-                  "default": {
-                    "gatheringType": "MY.gatheringTypeBreedingAndRestingArea"
-                  },
-                  "help": "Lisääntymis- ja levähdyspaikat ovat lajin elinympäristön <strong>(elinpiirin)</strong> osia. Luonnonsuojelulain tarkoittamalla liito-oravan <strong>lisääntymispaikalla liito-orava saa poikasia. Levähdyspaikassa</strong> yöaktiivinen liito-orava <strong>viettää päivänsä.</strong> Lisääntymis- ja levähdyspaikka <strong>käsittää pesäpuun tai muun pesäpaikan.</strong> Lisääntymis- ja levähdyspaikan käsitteeseen <strong>luetaan myös pesän välittömässä läheisyydessä olevat suojaa ja ravintoa tarjoavat puut.</strong>",
-                  "tooltipPlacement": "left",
-                  "tooltipClass": "lg",
-                  "className": "text-left"
-                },
-                {
-                  "glyph": "plus",
-                  "fn": "addPredefined",
-                  "key": "1",
-                  "label": "Ruokailualue",
-                  "default": {
-                    "gatheringType": "MY.gatheringTypeForagingArea"
-                  },
-                  "help": "Rajattu alue, joka on yleensä lehtipuustoinen metsänkohta (leppä, haapa, koivu, muu lehtipuusto; joskus keskittymä esim. pellon/vesistön reunametsä). Todennettu käyttö kohdalta löytyvien papanahavaintojen perusteella/oletettu käyttö lähellä sijaitsevien papanapuiden perusteella. Ruokailupaikalle voidaan myös merkitä ruokailupuita. <strong>Ruokailualue</strong> on yksi <strong>ydinalueen</strong> luokka.",
-                  "tooltipPlacement": "left",
-                  "tooltipClass": "lg",
-                  "className": "text-left"
-                },
-                {
-                  "glyph": "plus",
-                  "fn": "addPredefined",
-                  "key": "2",
-                  "label": "Kulkuyhteys",
-                  "default": {
-                    "gatheringType": "MY.gatheringTypeLolifeAccess"
-                  },
-                  "help": "Kulkuyhteydellä tarkoitetaan <strong>yhteyttä esim. lisääntymis- ja levähdyspaikan ja ruokailualueen välillä.</strong> Taajama-alueilla liito-oravien tarvitsemia kulkuyhteyksiä on usein rajallisesti ja niiden säilymiseen tulee kiinnittää erityistä huomiota. Liito-oravan elinmahdollisuuksille on <strong>välttämätöntä</strong> lisääntymis- ja levähdyspaikkojen ja ravintopuiden säilymisen lisäksi se, <strong>että yksilöt pystyvät</strong> suojautumaan ja <strong>liikkumaan alueelta toiselle ravinnonhaussaan ja lisääntymisaikana.</strong> Siksi liito-oravan elinpiireillä tulee olla liikkumiseen ja suojautumiseen soveltuvaa puustoa sekä ravintoa tarjoavia lehtipuita. Liito-orava kykenee liitämään 20–30 metriä leveiden aukeiden alojen yli. Liidon pituuteen vaikuttavat puuston korkeus ja maaston korkeuserot. Kulkuyhteys voidaan muodostaa puista myös siten, että puut ovat korkeintaan puun pituuden etäisyydellä toisistaan.",
-                  "tooltipPlacement": "left",
-                  "tooltipClass": "lg",
-                  "className": "text-left"
-                },
-                {
-                  "glyph": "plus",
-                  "fn": "addPredefined",
-                  "key": "5",
-                  "label": "Soveltuva alue",
-                  "default": {
-                    "gatheringType": "MY.gatheringTypeLolifeApplicableZone"
-                  },
-                  "help": "Kaavoituksessa luontoselvitysten tarve painottuu tiedossa olevien liito-oravan elinalueiden varmistamiseen ja <strong>liito-oravalle soveltuvien elinympäristöjen tunnistamiseen</strong> niiden alueiden osalta, joissa yleiskaava esittää muutoksia olemassa olevaan tilanteeseen. Lajien yksittäisten lisääntymis- ja levähdyspaikkojen selvittäminen jää tällöin tehtäväksi mahdollisen yksityiskohtaisemman kaavoituksen yhteydessä. Selvitystarpeet ovat sen sijaan erilaisia esimerkiksi rantayleiskaavassa, jossa rantarakentamiseen varattavilta alueilta tarvitaan rakentamisen sijoittamista varten hyvinkin yksityiskohtaista tietoa luonnonarvoista.",
-                  "tooltipPlacement": "left",
-                  "tooltipClass": "lg",
-                  "className": "text-left"
-                },
-                {
-                  "glyph": "plus",
-                  "fn": "addPredefined",
-                  "key": "6",
-                  "label": "Maastossa kuljettu reitti",
-                  "help": "Reitti, jota pitkin seurantaa tekevä henkilö on kulkenut ja tallentanut seurantaan liittyvää tietoa.",
-                  "tooltipPlacement": "left",
-                  "tooltipClass": "lg",
-                  "className": "text-left"
-                }
-              ],
-              "popupFields": [
-                {
-                  "field": "/gatheringType",
-                  "template": "title"
-                },
-                {
-                  "strategy": "lolifeUnit",
-                  "template": "title",
-                  "value": "Klikkaa vierittääksesi näkyville"
-                },
-                {
-                  "text": "/gatheringType",
-                  "template": "description",
-                  "value": "Klikkaa vierittääksesi näkyville"
-                }
-              ],
-              "titleFormat": "%{Title} %{idx}",
-              "mapOptions": {
-                "controls": {
-                  "draw": {
-                    "clear": true,
-                    "delete": true,
-                    "redo": false,
-                    "reverse": true,
-                    "undo": false
-                  }
-                }
-              },
-              "mapSizes": {
-                "lg": 8,
-                "md": 6,
-                "sm": 6,
-                "xs": 12
-              },
-              "minHeight": 435,
-              "propsToPassToInlineSchema": [
-                "formData"
-              ],
-              "resizeTimeout": 210,
-              "hasActive": false,
-              "geometryField": "geometry",
-              "geometryMapper": "lolife",
-              "nonRemovables": [
-                0
-              ],
-              "inlineUiSchemaRoot": {
-                "ui:functions": {
-                  "ui:field": "FilterArrayField",
-                  "ui:options": {
-                    "rules": {
-                      "idx": 0,
-                      "complement": true
-                    }
-                  }
-                },
-                "ui:field": "SingleActiveArrayField",
-                "ui:options": {
-                  "renderAdd": false,
-                  "confirmDelete": true,
-                  "headerFormatters": [
-                    {
-                      "field": "gatheringType",
-                      "default": "Maastossa kuljettu reitti"
-                    },
-                    "lolife"
-                  ]
-                }
-              },
-              "belowUiSchemaRoot": {
-                "ui:field": "SingleItemArrayField",
-                "ui:options": {
-                  "activeIdx": 0
-                }
-              },
-              "belowFields": [
-                "units"
-              ],
-              "passActiveIdxToBelow": false
-            },
-            "ui:grid": {
-              "lg": 2,
-              "md": 2,
-              "sm": 2,
+            "mapSizes": {
+              "lg": 8,
+              "md": 6,
+              "sm": 6,
               "xs": 12
             },
-            "ui:settings": [
-              "/mapOptions/tileLayerName",
-              "/mapOptions/overlayNames",
-              "/mapOptions/tileLayerOpacity",
-              "/mapOptions/tileLayers"
-            ]
-          }
+            "minHeight": 435,
+            "propsToPassToInlineSchema": [
+              "formData"
+            ],
+            "resizeTimeout": 210,
+            "hasActive": false,
+            "geometryField": "geometry",
+            "geometryMapper": "lolife",
+            "nonRemovables": [
+              0
+            ],
+            "inlineUiSchemaRoot": {
+              "ui:functions": {
+                "ui:field": "FilterArrayField",
+                "ui:options": {
+                  "rules": {
+                    "idx": 0,
+                    "complement": true
+                  }
+                }
+              },
+              "ui:field": "SingleActiveArrayField",
+              "ui:options": {
+                "renderAdd": false,
+                "confirmDelete": true,
+                "headerFormatters": [
+                  {
+                    "field": "gatheringType",
+                    "default": "Maastossa kuljettu reitti"
+                  },
+                  "lolife"
+                ]
+              }
+            },
+            "belowUiSchemaRoot": {
+              "ui:field": "SingleItemArrayField",
+              "ui:options": {
+                "activeIdx": 0
+              }
+            },
+            "belowFields": [
+              "units"
+            ],
+            "passActiveIdxToBelow": false
+          },
+          "ui:grid": {
+            "lg": 2,
+            "md": 2,
+            "sm": 2,
+            "xs": 12
+          },
+          "ui:settings": [
+            "/mapOptions/tileLayerName",
+            "/mapOptions/overlayNames",
+            "/mapOptions/tileLayerOpacity",
+            "/mapOptions/tileLayers"
+          ]
         }
       }
     }
   }
+}

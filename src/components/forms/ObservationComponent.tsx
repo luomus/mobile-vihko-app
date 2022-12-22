@@ -230,7 +230,7 @@ const ObservationComponent = (props: Props) => {
     }
 
     Object.keys(data).forEach(key => {
-      if (!data[key]) {
+      if (data[key] === undefined || data[key] === null) {
         return
       }
 
@@ -288,7 +288,7 @@ const ObservationComponent = (props: Props) => {
     let editedUnit: Record<string, any> = {}
 
     Object.keys(data).forEach(key => {
-      if (!data[key] && key !== 'atlasCode') {
+      if ((data[key] === undefined || data[key] === null) && key !== 'atlasCode') {
         return
       }
 
