@@ -55,14 +55,7 @@
       }
     },
     "hooks": {
-      "postPublish": [{
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "luomus",
-            "project": "mobiilivihko",
-            "authToken": "SENTRY_AUTH_TOKEN"
-          }
-      }]
+      "postPublish": []
     },
     "plugins": [
       "sentry-expo"
