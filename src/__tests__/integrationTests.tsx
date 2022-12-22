@@ -5,7 +5,7 @@ import { renderWithProviders } from '../helpers/testHelper'
 
 describe('Application', () => {
   it('creates and posts an event successfully', async () => {
-    const { getByText, getByTestId, getAllByTestId } = renderWithProviders(<Navigator />)
+    const { getByText, getByTestId, getAllByTestId } = renderWithProviders(<Navigator initialRoute='login'/>)
 
     //LoginComponent
     await waitFor(() => {
