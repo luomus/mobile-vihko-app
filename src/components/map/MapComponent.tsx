@@ -15,7 +15,6 @@ import {
   clearObservationId,
   deleteObservation,
   setRegion,
-  toggleCentered,
   setFirstZoom,
   setEditing,
   setFirstLocation,
@@ -47,14 +46,14 @@ type Props = {
 
 const MapComponent = (props: Props) => {
 
+  const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
+  const [centered, setCentered] = useState(true)
   const [mapLoaded, setMapLoaded] = useState(false)
+  const [mapModalVisibility, setMapModalVisibility] = useState(false)
   const [mapType, setMapType] = useState<MapType>('terrain')
   const [observationButtonsState, setObservationButtonsState] = useState('')
-  const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
-  const [mapModalVisibility, setMapModalVisibility] = useState(false)
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
 
-  const centered = useSelector((state: rootState) => state.centered)
   const editing = useSelector((state: rootState) => state.editing)
   const firstZoom = useSelector((state: rootState) => state.firstZoom)
   const grid = useSelector((state: rootState) => state.grid)
@@ -149,15 +148,14 @@ const MapComponent = (props: Props) => {
 
   //centers the map on user and sets the centering flag to true
   const centerMapAnim = () => {
-    centered ? null : dispatch(toggleCentered())
-
+    if (!centered) { setCentered(true) }
     followUser()
   }
 
   //releases mapcenter from userlocation on moving the map or tapping one of the
   //markers
   const stopCentering = () => {
-    centered ? dispatch(toggleCentered()) : null
+    if (centered) { setCentered(false) }
   }
 
   //updates region reducer once map has stopped moving

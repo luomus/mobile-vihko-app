@@ -10,7 +10,6 @@ import thunk, { ThunkDispatch } from 'redux-thunk'
 import {
   setRegion,
   clearRegion,
-  toggleCentered,
   setEditing,
   setFirstZoom,
   setCurrentObservationZone,
@@ -79,7 +78,6 @@ import {
 
 //reducers
 import {
-  centeringReducer,
   editingReducer,
   firstZoomReducer,
   observationZoneReducer,
@@ -141,7 +139,6 @@ import { Point } from 'geojson'
 import { Region } from 'react-native-maps'
 
 interface rootState {
-  centered: boolean,
   credentials: CredentialsType,
   editing: EditingType,
   firstLocation: number[],
@@ -162,7 +159,6 @@ interface rootState {
 }
 
 const appReducer = combineReducers({
-  centered: centeringReducer,
   credentials: credentialsReducer,
   editing: editingReducer,
   firstLocation: firstLocationReducer,
@@ -202,7 +198,6 @@ export type { DispatchType }
 export {
   setRegion,
   clearRegion,
-  toggleCentered,
   setEditing,
   setFirstZoom,
   setCurrentObservationZone,

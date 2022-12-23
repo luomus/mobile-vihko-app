@@ -3,7 +3,6 @@ import { ThunkAction } from 'redux-thunk'
 import i18n from '../../languages/i18n'
 import { mapActionTypes,
   ZoneType,
-  TOGGLE_CENTERED,
   SET_FIRST_ZOOM,
   SET_CURRENT_OBS_ZONE,
   CLEAR_CURRENT_OBS_ZONE,
@@ -130,10 +129,6 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
 export const getObservationZonesSuccess = (zones: any[]): mapActionTypes => ({
   type: GET_OBS_ZONES_SUCCESS,
   payload: zones
-})
-
-export const toggleCentered = (): mapActionTypes => ({
-  type: TOGGLE_CENTERED
 })
 
 export const setEditing = (editing: EditingType): mapActionTypes => ({

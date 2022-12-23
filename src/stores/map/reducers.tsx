@@ -2,7 +2,6 @@ import {
   mapActionTypes,
   EditingType,
   ObservationZonesType,
-  TOGGLE_CENTERED,
   SET_EDITING,
   SET_FIRST_ZOOM,
   CLEAR_CURRENT_OBS_ZONE,
@@ -27,17 +26,6 @@ const initRegionState = {
 const initZoneState: ObservationZonesType = {
   currentZoneId: '',
   zones: []
-}
-
-const centeringReducer = (state: boolean = true, action : mapActionTypes) => {
-  let newState
-  switch (action.type) {
-    case TOGGLE_CENTERED:
-      newState = !state
-      return newState
-    default:
-      return state
-  }
 }
 
 const editingReducer = (state: EditingType = initEditingState, action: mapActionTypes) => {
@@ -94,7 +82,6 @@ const regionReducer = (state: Region = initRegionState, action: mapActionTypes) 
 }
 
 export {
-  centeringReducer,
   editingReducer,
   firstZoomReducer,
   observationZoneReducer,

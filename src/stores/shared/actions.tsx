@@ -2,7 +2,7 @@ import { ThunkAction } from 'redux-thunk'
 import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
-import { toggleCentered, setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
+import { setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
 import {
   clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
   replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId
@@ -35,7 +35,7 @@ export const resetReducer = () => ({
 export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEvent, observationZone, schema, grid, tracking } = getState()
+    const { credentials, observationEvent, observationZone, schema, grid, tracking } = getState()
     const userId = credentials?.user?.id
 
     const region: ZoneType | undefined = observationZone.zones.find((region: Record<string, any>) => {
@@ -160,7 +160,6 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     }
 
     //reset map centering and zoom level, redirect to map
-    !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
     dispatch(setObserving(true))
     dispatch(setFirstZoom('not'))
@@ -173,7 +172,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 export const continueObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { centered, credentials, observationEventInterrupted, observationEvent, tracking } = getState()
+    const { credentials, observationEventInterrupted, observationEvent, tracking } = getState()
 
     //switch schema
     dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID))
@@ -243,7 +242,6 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     }
 
     //reset map centering and zoom level
-    !centered ? dispatch(toggleCentered()) : null
     dispatch(clearRegion())
     dispatch(setFirstZoom('not'))
 

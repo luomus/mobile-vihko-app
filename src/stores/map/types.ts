@@ -1,8 +1,6 @@
 import { Region } from 'react-native-maps'
 import { GeometryCollection } from 'geojson'
 
-export const TOGGLE_CENTERED = 'TOGGLE_CENTERED'
-
 export const SET_EDITING = 'SET_EDITING'
 
 export const SET_FIRST_ZOOM = 'SET_FIRST_ZOOM'
@@ -32,10 +30,6 @@ export interface ZoneType {
   name: string,
   id: string,
   geometry: GeometryCollection | null,
-}
-
-interface toggleCentered {
-  type: typeof TOGGLE_CENTERED,
 }
 
 interface setEditing {
@@ -72,7 +66,6 @@ interface setRegion {
 }
 
 export type mapActionTypes =
-  toggleCentered |
   setEditing |
   setFirstZoom |
   clearRegion |
