@@ -13,7 +13,7 @@ import {
   SET_REGION,
   FirstZoomType
 } from './types'
-import { MapTypes, Region } from 'react-native-maps'
+import { MapType, Region } from 'react-native-maps'
 
 const initEditingState: EditingType = {
   started: false,
@@ -61,8 +61,8 @@ const firstZoomReducer = (state: FirstZoomType = 'not', action : mapActionTypes)
   }
 }
 
-const maptypeReducer = (state: MapTypes = 'terrain', action : mapActionTypes) => {
-  let newState: MapTypes
+const maptypeReducer = (state: MapType = 'terrain', action : mapActionTypes) => {
+  let newState: MapType
   switch (action.type) {
     case TOGGLE_MAPTYPE:
       newState = state === 'terrain' ? 'satellite' : 'terrain'

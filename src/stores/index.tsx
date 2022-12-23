@@ -140,7 +140,7 @@ import {
 } from './user/types'
 
 import { Point } from 'geojson'
-import { MapTypes, Region } from 'react-native-maps'
+import { MapType, Region } from 'react-native-maps'
 
 interface rootState {
   centered: boolean,
@@ -149,7 +149,7 @@ interface rootState {
   firstLocation: number[],
   firstZoom: FirstZoomType,
   grid: GridType,
-  maptype: MapTypes,
+  maptype: MapType,
   message: MessageType[],
   observation: Point | null,
   observationEventInterrupted: boolean,
