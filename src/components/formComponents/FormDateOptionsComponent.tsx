@@ -7,7 +7,7 @@ import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { parseDateFromDocumentToUI, parseDateFromDocumentToFullISO, parseDateFromDateObjectToDocument, sameDay } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
@@ -98,19 +98,19 @@ const FormDateOptionsComponent = (props: Props) => {
 
   const onLockIntoCurrentDate = () => {
     setCurrentValue(parseDateFromDateObjectToDocument(date))
-    onChangeDate(undefined, date)
-    onChangeTime(undefined, date)
+    onChangeDate({ type: 'set', nativeEvent: {}}, date)
+    onChangeTime({ type: 'set', nativeEvent: {}}, date)
     setValue(props.objectTitle, parseDateFromDateObjectToDocument(date))
     setSelected(true)
   }
 
-  const onChangeDate = (event: Event | undefined, date: Date | undefined) => {
+  const onChangeDate = (event: DateTimePickerEvent, date: Date | undefined) => {
     setShowDate(false)
     setShowTime(true)
     date !== undefined ? setCurrentDate(parseDateFromDateObjectToDocument(date)) : null
   }
 
-  const onChangeTime = (event: Event | undefined, date: Date | undefined) => {
+  const onChangeTime = (event: DateTimePickerEvent, date: Date | undefined) => {
 
     setShowTime(false)
 

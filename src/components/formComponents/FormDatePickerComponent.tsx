@@ -4,7 +4,7 @@ import Os from '../../styles/OtherStyles'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import ButtonComponent from '../general/ButtonComponent'
 import { parseDateFromDocumentToUI, parseDateFromDocumentToFullISO, parseDateFromDateObjectToDocument } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
@@ -93,13 +93,13 @@ const FormDatePickerComponent = (props: Props) => {
     combinedDate !== '' ? setCurrentValue(combinedDate) : null
   }, [currentDate, currentTime])
 
-  const onChangeDate = (event: Event | undefined, date: Date | undefined) => {
+  const onChangeDate = (event: DateTimePickerEvent, date: Date | undefined) => {
     setShowDate(false)
     props.pickerType === 'date' ? null : setShowTime(true)
     date !== undefined ? setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
   }
 
-  const onChangeTime = (event: Event | undefined, date: Date | undefined) => {
+  const onChangeTime = (event: DateTimePickerEvent, date: Date | undefined) => {
     setShowTime(false)
     date !== undefined ? setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
   }

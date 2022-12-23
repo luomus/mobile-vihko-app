@@ -225,7 +225,7 @@ const MapComponent = (props: Props) => {
   const submitDelete = async (eventId: string, unitId: string) => {
     try {
       await dispatch(deleteObservation(eventId, unitId))
-    } catch (error) {
+    } catch (error: any) {
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
