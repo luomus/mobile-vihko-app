@@ -15,7 +15,6 @@ import {
   clearObservationId,
   deleteObservation,
   setRegion,
-  setFirstZoom,
   setEditing,
   setFirstLocation,
   setMessageState
@@ -48,6 +47,7 @@ const MapComponent = (props: Props) => {
 
   const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
   const [centered, setCentered] = useState(true)
+  const [firstZoom, setFirstZoom] = useState<'zoomed' | 'zooming' | 'not'>('not')
   const [mapLoaded, setMapLoaded] = useState(false)
   const [mapModalVisibility, setMapModalVisibility] = useState(false)
   const [mapType, setMapType] = useState<MapType>('terrain')
@@ -55,7 +55,6 @@ const MapComponent = (props: Props) => {
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
 
   const editing = useSelector((state: rootState) => state.editing)
-  const firstZoom = useSelector((state: rootState) => state.firstZoom)
   const grid = useSelector((state: rootState) => state.grid)
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -177,7 +176,7 @@ const MapComponent = (props: Props) => {
       return
     }
 
-    dispatch(setFirstZoom('zooming'))
+    setFirstZoom('zooming')
 
     const coords: LatLng = { ...position.coords }
     let initialRegion = {

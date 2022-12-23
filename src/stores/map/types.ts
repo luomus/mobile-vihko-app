@@ -3,8 +3,6 @@ import { GeometryCollection } from 'geojson'
 
 export const SET_EDITING = 'SET_EDITING'
 
-export const SET_FIRST_ZOOM = 'SET_FIRST_ZOOM'
-
 export const CLEAR_CURRENT_OBS_ZONE = 'CLEAR_CURRENT_OBS_ZONE'
 export const GET_OBS_ZONES_SUCCESS = 'GET_OBS_ZONES_SUCCESS'
 export const SET_CURRENT_OBS_ZONE = 'SET_CURRENT_OBS_ZONE'
@@ -18,8 +16,6 @@ export interface EditingType {
   locChanged: boolean,
   originalSourcePage: string
 }
-
-export type FirstZoomType = 'not' | 'zooming' | 'zoomed'
 
 export interface ObservationZonesType {
   currentZoneId: string,
@@ -35,11 +31,6 @@ export interface ZoneType {
 interface setEditing {
   type: typeof SET_EDITING,
   payload: EditingType,
-}
-
-interface setFirstZoom {
-  type: typeof SET_FIRST_ZOOM,
-  payload: FirstZoomType
 }
 
 interface clearCurrentObservationZone {
@@ -67,7 +58,6 @@ interface setRegion {
 
 export type mapActionTypes =
   setEditing |
-  setFirstZoom |
   clearRegion |
   setRegion |
   setCurrentObservationZone |

@@ -2,7 +2,7 @@ import { ThunkAction } from 'redux-thunk'
 import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
-import { setFirstZoom, setCurrentObservationZone, clearRegion } from '../map/actions'
+import { setCurrentObservationZone, clearRegion } from '../map/actions'
 import {
   clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
   replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId
@@ -159,10 +159,9 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
       })
     }
 
-    //reset map centering and zoom level, redirect to map
+    //reset map centering and redirect to map
     dispatch(clearRegion())
     dispatch(setObserving(true))
-    dispatch(setFirstZoom('not'))
     onPressMap()
 
     return Promise.resolve()
@@ -241,9 +240,8 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       })
     }
 
-    //reset map centering and zoom level
+    //reset map centering
     dispatch(clearRegion())
-    dispatch(setFirstZoom('not'))
 
     //set old path if exists
     const path: PathType | undefined = lineStringsToPathDeconstructor(observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry)
@@ -305,7 +303,6 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(clearObservationLocation())
     dispatch(clearObservationId())
     dispatch(clearGrid())
-    dispatch(setFirstZoom('not'))
     dispatch(setFirstLocation([60.192059, 24.945831]))
     await stopLocationAsync(observationEventInterrupted, tracking)
 

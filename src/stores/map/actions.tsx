@@ -3,7 +3,6 @@ import { ThunkAction } from 'redux-thunk'
 import i18n from '../../languages/i18n'
 import { mapActionTypes,
   ZoneType,
-  SET_FIRST_ZOOM,
   SET_CURRENT_OBS_ZONE,
   CLEAR_CURRENT_OBS_ZONE,
   GET_OBS_ZONES_SUCCESS,
@@ -11,7 +10,6 @@ import { mapActionTypes,
   CLEAR_REGION,
   SET_EDITING,
   EditingType,
-  FirstZoomType
 } from './types'
 import { getZones } from '../../services/zoneService'
 import storageService from '../../services/storageService'
@@ -134,9 +132,4 @@ export const getObservationZonesSuccess = (zones: any[]): mapActionTypes => ({
 export const setEditing = (editing: EditingType): mapActionTypes => ({
   type: SET_EDITING,
   payload: editing
-})
-
-export const setFirstZoom = (zoomState: FirstZoomType): mapActionTypes => ({
-  type: SET_FIRST_ZOOM,
-  payload: zoomState
 })

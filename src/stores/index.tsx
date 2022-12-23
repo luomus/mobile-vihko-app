@@ -11,7 +11,6 @@ import {
   setRegion,
   clearRegion,
   setEditing,
-  setFirstZoom,
   setCurrentObservationZone,
   clearCurrentObservationZone,
   initObservationZones,
@@ -79,7 +78,6 @@ import {
 //reducers
 import {
   editingReducer,
-  firstZoomReducer,
   observationZoneReducer,
   regionReducer
 } from './map/reducers'
@@ -105,7 +103,6 @@ import { credentialsReducer } from './user/reducers'
 import {
   mapActionTypes,
   EditingType,
-  FirstZoomType,
   ObservationZonesType,
   ZoneType
 } from './map/types'
@@ -142,7 +139,6 @@ interface rootState {
   credentials: CredentialsType,
   editing: EditingType,
   firstLocation: number[],
-  firstZoom: FirstZoomType,
   grid: GridType,
   message: MessageType[],
   observation: Point | null,
@@ -162,7 +158,6 @@ const appReducer = combineReducers({
   credentials: credentialsReducer,
   editing: editingReducer,
   firstLocation: firstLocationReducer,
-  firstZoom: firstZoomReducer,
   grid: gridReducer,
   message: messageReducer,
   observation: observationReducer,
@@ -199,7 +194,6 @@ export {
   setRegion,
   clearRegion,
   setEditing,
-  setFirstZoom,
   setCurrentObservationZone,
   clearCurrentObservationZone,
   initObservationZones,
@@ -255,7 +249,6 @@ export {
 export type {
   mapActionTypes,
   EditingType,
-  FirstZoomType,
   ObservationZonesType,
   ZoneType,
   messageActionTypes,
