@@ -7,8 +7,6 @@ export const SET_EDITING = 'SET_EDITING'
 
 export const SET_FIRST_ZOOM = 'SET_FIRST_ZOOM'
 
-export const TOGGLE_MAPTYPE = 'TOGGLE_MAPTYPE'
-
 export const CLEAR_CURRENT_OBS_ZONE = 'CLEAR_CURRENT_OBS_ZONE'
 export const GET_OBS_ZONES_SUCCESS = 'GET_OBS_ZONES_SUCCESS'
 export const SET_CURRENT_OBS_ZONE = 'SET_CURRENT_OBS_ZONE'
@@ -50,10 +48,6 @@ interface setFirstZoom {
   payload: FirstZoomType
 }
 
-interface toggleMaptype {
-  type: typeof TOGGLE_MAPTYPE,
-}
-
 interface clearCurrentObservationZone {
   type: typeof CLEAR_CURRENT_OBS_ZONE,
 }
@@ -81,7 +75,6 @@ export type mapActionTypes =
   toggleCentered |
   setEditing |
   setFirstZoom |
-  toggleMaptype |
   clearRegion |
   setRegion |
   setCurrentObservationZone |

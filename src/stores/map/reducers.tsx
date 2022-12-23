@@ -5,7 +5,6 @@ import {
   TOGGLE_CENTERED,
   SET_EDITING,
   SET_FIRST_ZOOM,
-  TOGGLE_MAPTYPE,
   CLEAR_CURRENT_OBS_ZONE,
   GET_OBS_ZONES_SUCCESS,
   SET_CURRENT_OBS_ZONE,
@@ -13,7 +12,7 @@ import {
   SET_REGION,
   FirstZoomType
 } from './types'
-import { MapType, Region } from 'react-native-maps'
+import { Region } from 'react-native-maps'
 
 const initEditingState: EditingType = {
   started: false,
@@ -61,17 +60,6 @@ const firstZoomReducer = (state: FirstZoomType = 'not', action : mapActionTypes)
   }
 }
 
-const maptypeReducer = (state: MapType = 'terrain', action : mapActionTypes) => {
-  let newState: MapType
-  switch (action.type) {
-    case TOGGLE_MAPTYPE:
-      newState = state === 'terrain' ? 'satellite' : 'terrain'
-      return newState
-    default:
-      return state
-  }
-}
-
 const observationZoneReducer = (state = initZoneState, action : mapActionTypes) => {
   switch (action.type) {
     case CLEAR_CURRENT_OBS_ZONE:
@@ -109,7 +97,6 @@ export {
   centeringReducer,
   editingReducer,
   firstZoomReducer,
-  maptypeReducer,
   observationZoneReducer,
   regionReducer
 }

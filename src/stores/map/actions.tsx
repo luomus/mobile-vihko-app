@@ -8,7 +8,6 @@ import { mapActionTypes,
   SET_CURRENT_OBS_ZONE,
   CLEAR_CURRENT_OBS_ZONE,
   GET_OBS_ZONES_SUCCESS,
-  TOGGLE_MAPTYPE,
   SET_REGION,
   CLEAR_REGION,
   SET_EDITING,
@@ -135,10 +134,6 @@ export const getObservationZonesSuccess = (zones: any[]): mapActionTypes => ({
 
 export const toggleCentered = (): mapActionTypes => ({
   type: TOGGLE_CENTERED
-})
-
-export const toggleMaptype = (): mapActionTypes => ({
-  type: TOGGLE_MAPTYPE
 })
 
 export const setEditing = (editing: EditingType): mapActionTypes => ({

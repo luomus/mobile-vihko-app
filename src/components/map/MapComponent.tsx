@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Platform, View } from 'react-native'
 import { Icon } from 'react-native-elements'
-import MapView, { Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
+import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon } from 'geojson'
@@ -17,7 +17,6 @@ import {
   setRegion,
   toggleCentered,
   setFirstZoom,
-  toggleMaptype,
   setEditing,
   setFirstLocation,
   setMessageState
@@ -49,6 +48,7 @@ type Props = {
 const MapComponent = (props: Props) => {
 
   const [mapLoaded, setMapLoaded] = useState(false)
+  const [mapType, setMapType] = useState<MapType>('terrain')
   const [observationButtonsState, setObservationButtonsState] = useState('')
   const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
   const [mapModalVisibility, setMapModalVisibility] = useState(false)
@@ -58,7 +58,6 @@ const MapComponent = (props: Props) => {
   const editing = useSelector((state: rootState) => state.editing)
   const firstZoom = useSelector((state: rootState) => state.firstZoom)
   const grid = useSelector((state: rootState) => state.grid)
-  const maptype = useSelector((state: rootState) => state.maptype)
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationZone = useSelector((state: rootState) => state.observationZone)
@@ -380,7 +379,7 @@ const MapComponent = (props: Props) => {
   }
 
   //if topomap is selected draws its tiles on map
-  const tileOverlay = () => (maptype === 'terrain' ?
+  const tileOverlay = () => (mapType === 'terrain' ?
     <UrlTile
       urlTemplate={urlTemplate}
       zIndex={-1}
@@ -451,6 +450,10 @@ const MapComponent = (props: Props) => {
     })
   }
 
+  const toggleMapType = () => {
+    mapType === 'terrain' ? setMapType('satellite') : setMapType('terrain')
+  }
+
   return (
     <>
       <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
@@ -465,7 +468,7 @@ const MapComponent = (props: Props) => {
           onRegionChangeComplete={(region) => onRegionChangeComplete(region)}
           maxZoomLevel={18.9}
           minZoomLevel={5}
-          mapType={maptype === 'terrain' ? 'none' : maptype}
+          mapType={mapType === 'terrain' ? 'none' : mapType}
           pitchEnabled={false}
           rotateEnabled={false}
           moveOnMarkerPress={false}
@@ -496,7 +499,7 @@ const MapComponent = (props: Props) => {
         }
         <View style={Cs.mapButtonsContainer}>
           <View style={Cs.padding5Container}>
-            <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => dispatch(toggleMaptype())} title={undefined}
+            <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => toggleMapType()} title={undefined}
               height={50} width={50} buttonStyle={Bs.mapIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}

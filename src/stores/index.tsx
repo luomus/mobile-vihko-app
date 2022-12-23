@@ -11,7 +11,6 @@ import {
   setRegion,
   clearRegion,
   toggleCentered,
-  toggleMaptype,
   setEditing,
   setFirstZoom,
   setCurrentObservationZone,
@@ -83,7 +82,6 @@ import {
   centeringReducer,
   editingReducer,
   firstZoomReducer,
-  maptypeReducer,
   observationZoneReducer,
   regionReducer
 } from './map/reducers'
@@ -140,7 +138,7 @@ import {
 } from './user/types'
 
 import { Point } from 'geojson'
-import { MapType, Region } from 'react-native-maps'
+import { Region } from 'react-native-maps'
 
 interface rootState {
   centered: boolean,
@@ -149,7 +147,6 @@ interface rootState {
   firstLocation: number[],
   firstZoom: FirstZoomType,
   grid: GridType,
-  maptype: MapType,
   message: MessageType[],
   observation: Point | null,
   observationEventInterrupted: boolean,
@@ -171,7 +168,6 @@ const appReducer = combineReducers({
   firstLocation: firstLocationReducer,
   firstZoom: firstZoomReducer,
   grid: gridReducer,
-  maptype: maptypeReducer,
   message: messageReducer,
   observation: observationReducer,
   observationEventInterrupted: observationEventInterruptedReducer,
@@ -207,7 +203,6 @@ export {
   setRegion,
   clearRegion,
   toggleCentered,
-  toggleMaptype,
   setEditing,
   setFirstZoom,
   setCurrentObservationZone,
