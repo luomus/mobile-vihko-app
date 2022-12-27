@@ -1,8 +1,7 @@
 import React from 'react'
-import { StyleProp, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native'
+import { StyleProp, Text, TextStyle, TouchableOpacity, ViewStyle, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Shadow } from 'react-native-shadow-2'
 
 type Props = {
   onPressFunction: () => any,
@@ -24,13 +23,22 @@ type Props = {
 }
 
 const ButtonComponent = (props: Props) => {
-
   return (
-    <Shadow startColor={props.shadowColor} endColor={props.shadowColor} distance={0}
-      sides={{ 'start': false, 'end': false, 'top': false, 'bottom': true }} offset={[0, 2]}
-      paintInside={true} style={{ borderRadius: 5, width: '100%' }}>
+    // <Shadow startColor={props.shadowColor} endColor={props.shadowColor} distance={0}
+    //   sides={{ 'start': false, 'end': false, 'top': false, 'bottom': true }} offset={[0, 2]}
+    //   paintInside={true} style={{ borderRadius: 5, width: '100%' }}>
+    <View>
       <TouchableOpacity onPress={props.onPressFunction} disabled={props.disabled} activeOpacity={0.8}
-        testID={props.testID}>
+        testID={props.testID} style={{
+          shadowColor: props.shadowColor,
+          shadowOffset: {
+            width: 0,
+            height: 5,
+          },
+          shadowOpacity: 0.34,
+          shadowRadius: 6.27,
+          elevation: 10,
+        }}>
         <LinearGradient start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
           colors={[props.gradientColorStart, props.gradientColorEnd]} style={[ props.buttonStyle, { width: props.width, height: props.height } ]}>
           { props.iconName ?
@@ -40,7 +48,7 @@ const ButtonComponent = (props: Props) => {
           <Text style={[ props.textStyle, { color: props.contentColor }, { width: props.textWidth } ]} numberOfLines={1}>{props.title ? ' ' + props.title : ''}</Text>
         </LinearGradient>
       </TouchableOpacity>
-    </Shadow>
+    </View>
   )
 }
 

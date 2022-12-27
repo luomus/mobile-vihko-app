@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import Ts from '../../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../languages/i18n'
-import { Shadow } from 'react-native-shadow-2'
 import { forms } from '../../config/fields'
 import { parseDateFromDocumentToUI } from '../../helpers/dateHelper'
 import Cs from '../../styles/ContainerStyles'
@@ -58,18 +57,25 @@ const EventListElementComponent = (props: Props) => {
     }
   }
 
+
   return (
     <View style={{ marginVertical: 5, width: '90%' }}>
-      <Shadow startColor={Colors.dangerShadow} endColor={Colors.dangerShadow} distance={2}
-        offset={[0, 1]} paintInside={true} style={{ alignSelf: 'stretch', borderRadius: 5 }}>
-        <TouchableOpacity onPress={props.onPress} activeOpacity={0.8}>
-          <View style={Cs.unsentEventsContainer} >
-            <Text style={[Ts.eventListElementTitle, { color: Colors.dangerButton1 }]}>{title}</Text>
-            <Text style={Ts.eventListElementTextClear}>{displayDateTime()}</Text>
-            <Text style={Ts.eventListElementTextFaded}>{t('observations in list') + ': ' + observationCount() + ' ' + (observationCount() === 1 ? t('piece') : t('pieces'))}</Text>
-          </View>
-        </TouchableOpacity>
-      </Shadow>
+      <TouchableOpacity onPress={props.onPress} activeOpacity={0.8} style={{
+        shadowColor: Colors.dangerShadow,
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+      }}>
+        <View style={Cs.unsentEventsContainer} >
+          <Text style={[Ts.eventListElementTitle, { color: Colors.dangerButton1 }]}>{title}</Text>
+          <Text style={Ts.eventListElementTextClear}>{displayDateTime()}</Text>
+          <Text style={Ts.eventListElementTextFaded}>{t('observations in list') + ': ' + observationCount() + ' ' + (observationCount() === 1 ? t('piece') : t('pieces'))}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   )
 }

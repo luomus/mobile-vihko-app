@@ -21,16 +21,16 @@ export default {
 
   //button colors and their shadows
   neutralButton: '#FCFDFD',
-  neutralShadow: '#141B1F50', //shadow colors use #rrggbbaa syntax, where aa is the alpha/(transparency) channel
+  neutralShadow: '#141B1F', //shadow colors use #rrggbbaa syntax, where aa is the alpha/(transparency) channel
   primaryButton1: '#22ABC3',
   primaryButton2: '#1F74AD',
-  primaryShadow: '#0F598A50',
+  primaryShadow: '#0F598A',
   successButton1: '#79A423',
   successButton2: '#448F1E',
   successShadow: '#2D6E0C50',
   dangerButton1: '#BD5A28',
   dangerButton2: '#A82424',
-  dangerShadow: '#8A0F0F50',
+  dangerShadow: '#8A0F0F',
   unavailableButton: '#C0C0C0',
   atlasCodeWhiteButton: '#FFFFFF',
   atlasCodeYellowButton: '#F0FFBC',

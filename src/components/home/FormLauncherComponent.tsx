@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { Shadow } from 'react-native-shadow-2'
 import i18n from '../../languages/i18n'
 import { useTranslation } from 'react-i18next'
 import { forms } from '../../config/fields'
@@ -43,29 +42,41 @@ const FormLauncherComponent = (props: Props) => {
   if (observing) {
     return (
       <View style={{ marginVertical: 5, width: '90%' }}>
-        <Shadow startColor={Colors.neutralShadow} endColor={Colors.neutralShadow} distance={2}
-          offset={[0, 1]} paintInside={true} style={{ alignSelf: 'stretch', borderRadius: 5 }}>
-          <TouchableOpacity onPress={() => null} activeOpacity={0.8}>
-            <View style={Cs.eventLauncherContainer}>
-              <Text style={[Ts.formLauncherTitle, { color: Colors.neutral6 }]}>{title}</Text>
-              <Text style={[Ts.formLauncherText, { color: Colors.neutral6 }]}>{description}</Text>
-            </View>
-          </TouchableOpacity>
-        </Shadow>
+        <TouchableOpacity onPress={() => null} activeOpacity={0.8} style={{
+          shadowColor: Colors.neutralShadow,
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.20,
+          shadowRadius: 1.41,
+          elevation: 2,
+        }}>
+          <View style={Cs.eventLauncherContainer}>
+            <Text style={[Ts.formLauncherTitle, { color: Colors.neutral6 }]}>{title}</Text>
+            <Text style={[Ts.formLauncherText, { color: Colors.neutral6 }]}>{description}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     )
   } else {
     return (
       <View style={{ marginVertical: 5, width: '90%' }}>
-        <Shadow startColor={Colors.primaryShadow} endColor={Colors.primaryShadow} distance={2}
-          offset={[0, 1]} paintInside={true} style={{ alignSelf: 'stretch', borderRadius: 5 }}>
-          <TouchableOpacity onPress={() => { props.setModalVisibility(true) }} activeOpacity={0.8}>
-            <View style={Cs.eventLauncherContainer}>
-              <Text style={[Ts.formLauncherTitle, { color: Colors.primary5 }]}>{title}</Text>
-              <Text style={[Ts.formLauncherText, { color: Colors.neutral9 }]}>{description}</Text>
-            </View>
-          </TouchableOpacity>
-        </Shadow>
+        <TouchableOpacity onPress={() => { props.setModalVisibility(true) }} activeOpacity={0.8} style={{
+          shadowColor: Colors.primaryShadow,
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.20,
+          shadowRadius: 1.41,
+          elevation: 2,
+        }}>
+          <View style={Cs.eventLauncherContainer}>
+            <Text style={[Ts.formLauncherTitle, { color: Colors.primary5 }]}>{title}</Text>
+            <Text style={[Ts.formLauncherText, { color: Colors.neutral9 }]}>{description}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     )
   }
