@@ -42,16 +42,7 @@ const FormLauncherComponent = (props: Props) => {
   if (observing) {
     return (
       <View style={{ marginVertical: 5, width: '90%' }}>
-        <TouchableOpacity onPress={() => null} activeOpacity={0.8} style={{
-          shadowColor: Colors.neutralShadow,
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.20,
-          shadowRadius: 1.41,
-          elevation: 2,
-        }}>
+        <TouchableOpacity onPress={() => null} activeOpacity={0.8} style={[Cs.shadowElement, { shadowColor: Colors.neutralShadow }]}>
           <View style={Cs.eventLauncherContainer}>
             <Text style={[Ts.formLauncherTitle, { color: Colors.neutral6 }]}>{title}</Text>
             <Text style={[Ts.formLauncherText, { color: Colors.neutral6 }]}>{description}</Text>
