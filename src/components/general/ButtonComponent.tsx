@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleProp, Text, TextStyle, TouchableOpacity, ViewStyle, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { LinearGradient } from 'expo-linear-gradient'
+import Bs from '../../styles/ButtonStyles'
 
 type Props = {
   onPressFunction: () => any,
@@ -26,16 +27,10 @@ const ButtonComponent = (props: Props) => {
   return (
     <View>
       <TouchableOpacity onPress={props.onPressFunction} disabled={props.disabled} activeOpacity={0.8}
-        testID={props.testID} style={{
-          shadowColor: props.shadowColor,
-          shadowOffset: {
-            width: 0,
-            height: 5,
-          },
-          shadowOpacity: 0.34,
-          shadowRadius: 6.27,
-          elevation: 10,
-        }}>
+        testID={props.testID} style={[
+          Bs.buttonShadow,
+          { shadowColor: props.shadowColor }
+        ]}>
         <LinearGradient start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
           colors={[props.gradientColorStart, props.gradientColorEnd]} style={[ props.buttonStyle, { width: props.width, height: props.height } ]}>
           { props.iconName ?
