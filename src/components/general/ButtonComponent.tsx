@@ -24,9 +24,6 @@ type Props = {
 
 const ButtonComponent = (props: Props) => {
   return (
-    // <Shadow startColor={props.shadowColor} endColor={props.shadowColor} distance={0}
-    //   sides={{ 'start': false, 'end': false, 'top': false, 'bottom': true }} offset={[0, 2]}
-    //   paintInside={true} style={{ borderRadius: 5, width: '100%' }}>
     <View>
       <TouchableOpacity onPress={props.onPressFunction} disabled={props.disabled} activeOpacity={0.8}
         testID={props.testID} style={{

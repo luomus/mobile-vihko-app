@@ -60,16 +60,7 @@ const EventListElementComponent = (props: Props) => {
 
   return (
     <View style={{ marginVertical: 5, width: '90%' }}>
-      <TouchableOpacity onPress={props.onPress} activeOpacity={0.8} style={{
-        shadowColor: Colors.dangerShadow,
-        shadowOffset: {
-          width: 0,
-          height: 1,
-        },
-        shadowOpacity: 0.20,
-        shadowRadius: 1.41,
-        elevation: 2,
-      }}>
+      <TouchableOpacity onPress={props.onPress} activeOpacity={0.8} style={[Cs.shadowElement, { shadowColor: Colors.dangerShadow }]}>
         <View style={Cs.unsentEventsContainer} >
           <Text style={[Ts.eventListElementTitle, { color: Colors.dangerButton1 }]}>{title}</Text>
           <Text style={Ts.eventListElementTextClear}>{displayDateTime()}</Text>

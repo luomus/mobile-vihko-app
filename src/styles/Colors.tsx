@@ -21,7 +21,7 @@ export default {
 
   //button colors and their shadows
   neutralButton: '#FCFDFD',
-  neutralShadow: '#141B1F', //shadow colors use #rrggbbaa syntax, where aa is the alpha/(transparency) channel
+  neutralShadow: '#141B1F',
   primaryButton1: '#22ABC3',
   primaryButton2: '#1F74AD',
   primaryShadow: '#0F598A',
