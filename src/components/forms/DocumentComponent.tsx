@@ -4,6 +4,8 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
+import { set, get, merge, mergeWith, omit } from 'lodash'
+import moment from 'moment'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
   rootState,
@@ -18,7 +20,6 @@ import {
   clearPath
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
-import { set, get, merge, mergeWith, omit } from 'lodash'
 import MessageComponent from '../general/MessageComponent'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../languages/i18n'
@@ -59,6 +60,7 @@ const DocumentComponent = (props: Props) => {
   //reference for scrollView
   const scrollView = useRef<KeyboardAwareScrollView | null>(null)
 
+  const grid = useSelector((state: rootState) => state.grid)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
   const path = useSelector((state: rootState) => state.path)
@@ -202,9 +204,29 @@ const DocumentComponent = (props: Props) => {
   }
 
   const deletePath = () => {
+    let pathPoints = 0
+    path.forEach(section => pathPoints += section.length)
+
+    const firstTimestamp = path[0][0][3]
+    const lastTimestamp = path[path.length - 1][path[path.length - 1].length - 1][3]
+    const firstMoment = moment(firstTimestamp).format('HH.mm')
+    const lastMoment = moment(lastTimestamp).format('HH.mm')
+
+    let messageContent = t('delete path description 1')
+      + ' ' + pathPoints + ' '
+      + t('delete path description 2')
+      + ' ' + firstMoment + ' - ' + lastMoment + '. '
+      + t('delete path description 3')
+
+    let birdAtlasMessageContent = t('delete bird atlas path 1')
+      + ' ' + grid?.n + ':' + grid?.e + '. '
+      + t('delete bird atlas path 2')
+
+    if (schema.formID === forms.birdAtlas) { messageContent += ('\n\n' + birdAtlasMessageContent) }
+
     dispatch(setMessageState({
       type: 'dangerConf',
-      messageContent: t('delete path description'),
+      messageContent: messageContent,
       onOk: () => dispatch(clearPath())
     }))
   }
