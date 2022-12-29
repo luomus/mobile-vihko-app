@@ -17,7 +17,6 @@ import Colors from '../../styles/Colors'
 import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
 import { gridPreviewUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
-import { mad, mean, median, square } from 'mathjs'
 
 type Props = {
   modalVisibility: boolean,
@@ -25,33 +24,6 @@ type Props = {
   onBeginObservationEvent: (tracking: boolean) => void,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   showError: (error: string) => void
-}
-
-export function ellipseMad(points: number[][], _sigma?: number) {
-  const sigma = _sigma || 3.5
-  const medianPoint = [median(points.map(p => p[0])), median(points.map(p => p[1]))]
-
-  const madValue = [mad(points.map(p => p[0])), mad(points.map(p => p[1]))]
-
-  const outliers = points.filter(pt => square(pt[0] - medianPoint[0]) / square(sigma * madValue[0]) +
-    square(pt[1] - medianPoint[1]) / square(sigma * madValue[1]) >= 1)
-  const filteredPoints = points.filter(pt => square(pt[0] - medianPoint[0]) / square(sigma * madValue[0]) +
-    square(pt[1] - medianPoint[1]) / square(sigma * madValue[1]) < 1)
-  return { filteredPoints, outliers }
-}
-
-export function getAverageOfPoints(points: number[][]): number[] {
-  return [mean(points.map(p => p[0])), mean(points.map(p => p[1]))]
-}
-
-const getAverageOfFiveLocations = async (): Promise<number[]> => {
-  let locations = []
-  while (locations.length < 5) {
-    let location = await getCurrentLocation()
-    locations.push([location.coords.longitude, location.coords.latitude])
-  }
-  let { filteredPoints } = ellipseMad(locations, 10) // TODO: tweak the sigma value
-  return getAverageOfPoints(filteredPoints)
 }
 
 const GridModalComponent = (props: Props) => {
@@ -74,7 +46,7 @@ const GridModalComponent = (props: Props) => {
       let location
       try {
         setLoading(true)
-        location = await getAverageOfFiveLocations()
+        location = await getCurrentLocation()
       } catch (err) {
         props.setModalVisibility(false)
         props.showError(`${t('unable to get current location')}: ${err}`)
@@ -82,7 +54,7 @@ const GridModalComponent = (props: Props) => {
         return
       }
 
-      const ykjLocation = convertWGS84ToYKJ([location[0], location[1]])
+      const ykjLocation = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
 
       setOwnLocation(ykjLocation)
       setEasting(ykjLocation[0].toString().slice(0, 3))
