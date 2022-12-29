@@ -46,7 +46,7 @@ const GridModalComponent = (props: Props) => {
       let location
       try {
         setLoading(true)
-        location = await getCurrentLocation()
+        location = await getCurrentLocation(false, 6)
       } catch (err) {
         props.setModalVisibility(false)
         props.showError(`${t('unable to get current location')}: ${err}`)
