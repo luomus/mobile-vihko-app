@@ -55,6 +55,14 @@ const OtherStyles = StyleSheet.create({
   iOSPickerInput: {
     flex: 1,
     paddingHorizontal: 10,
+  },
+  iOSListSorter: {
+    color: Colors.neutral6,
+    fontSize: 24,
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingTop: 15,
+    paddingBottom: 15
   }
 })
 
