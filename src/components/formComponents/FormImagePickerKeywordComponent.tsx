@@ -14,6 +14,7 @@ import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
 import { log } from '../../helpers/logger'
 import { ErrorMessage } from '@hookform/error-message'
+import { captureException } from '../../helpers/sentry'
 
 interface RadioPropsType {
   label: string,
@@ -91,6 +92,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
       return !pickerResult.cancelled
 
     } catch (error) {
+      captureException(error)
       setError(props.objectTitle, { message: t('image attachment failure'), type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerKeywordComponent attachImage()',

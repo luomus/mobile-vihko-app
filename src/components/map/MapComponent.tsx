@@ -33,6 +33,7 @@ import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import AtlasModalComponent from './AtlasModalComponent'
 import GridWarningComponent from '../general/GridWarningComponent'
+import { captureException } from '../../helpers/sentry'
 
 type Props = {
   onPressHome: () => void,
@@ -226,6 +227,7 @@ const MapComponent = (props: Props) => {
     try {
       await dispatch(deleteObservation(eventId, unitId))
     } catch (error: any) {
+      captureException(error)
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message

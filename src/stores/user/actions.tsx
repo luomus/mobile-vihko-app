@@ -11,6 +11,7 @@ import storageService from '../../services/storageService'
 import i18n from '../../languages/i18n'
 import { stopLocationAsync } from '../../helpers/geolocationHelper'
 import { log } from '../../helpers/logger'
+import { captureException } from '../../helpers/sentry'
 
 export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async dispatch => {
@@ -25,7 +26,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
 
     //in case of error, credentials stay null
     } catch (error: any) {
-
+      captureException(error)
       if (error.canceled) {
         return Promise.reject({ canceled: true })
       }
@@ -74,6 +75,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
 
     //if asyncstorage fails, set error as such, allows user to continue anyway
     } catch (locError) {
+      captureException(locError)
       log.error({
         location: '/stores/user/actions.tsx loginUser()',
         error: locError,
@@ -101,6 +103,7 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
       permissionsArr = [...permissions.admins, ...permissions.editors]
 
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/stores/user/actions.tsx getPermissions()',
         error: error,
@@ -125,6 +128,7 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
 
       //if asyncstorage fails set error as such, allows user to continue anyway
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/user/actions.tsx getPermissions()',
         error: error,
@@ -152,6 +156,7 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
       metadata = profile.settings?.defaultMediaMetadata
 
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/stores/user/actions.tsx getMetadata()',
         error: error,
@@ -176,6 +181,7 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
 
       //if asyncstorage fails set error as such, allows user to continue anyway
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/user/actions.tsx getMetadata()',
         error: error,
@@ -201,6 +207,7 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
       dispatch(clearCredentials())
 
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/user/actions.tsx logoutUser()',
         error: error,
@@ -222,6 +229,7 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
       await userService.logout(credentials)
 
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/stores/user/actions.tsx logoutUser()',
         error: error,
@@ -251,6 +259,7 @@ export const initLocalCredentials = (): ThunkAction<Promise<any>, any, void, use
 
       //failed to fetch credentials from storage
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/user/actions.tsx initLocalCredentials()',
         error: error,

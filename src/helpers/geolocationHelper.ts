@@ -13,6 +13,7 @@ import {
   PATH_MIN_X_INTERVALL
 } from '../config/location'
 import i18n from '../languages/i18n'
+import { captureException } from './sentry'
 
 let positionWatcher: null | { remove(): void } = null
 
@@ -71,6 +72,7 @@ export const watchLocationAsync = async (updateLocation: (location: LocationObje
     try {
       await watchPositionAsync((location) => updateLocation(location))
     } catch (error: any) {
+      captureException(error)
       throw new Error(error.message)
     }
 
@@ -78,6 +80,7 @@ export const watchLocationAsync = async (updateLocation: (location: LocationObje
       try {
         await watchBackgroundLocationAsync(title, body)
       } catch (error: any) {
+        captureException(error)
         throw new Error(error.message)
       }
     }
@@ -96,6 +99,7 @@ export const watchPositionAsync = async (updateLocation: (location: LocationObje
       return updateLocation(location)
     })
   } catch (error: any) {
+    captureException(error)
     throw new Error(i18n.t('failed to watch position'))
   }
 }

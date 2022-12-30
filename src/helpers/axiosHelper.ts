@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { log } from './logger'
+import { captureException } from './sentry'
 
 export const get = async (url: string, config?: object) => {
   try {
@@ -10,6 +11,7 @@ export const get = async (url: string, config?: object) => {
       location: '/helpers/axiosHelper.ts get(' + url + ',' + config + ')',
       error: error
     })
+    captureException(error)
     throw error
   }
 }
@@ -23,6 +25,7 @@ export const post = async (url: string, data: any, config?: object) => {
       location: '/helpers/axiosHelper.ts post(' + url + ',' + data + ',' + config + ')',
       error: error
     })
+    captureException(error)
     throw error
   }
 }
@@ -36,6 +39,7 @@ export const axiosDelete = async (url: string, config?: object) => {
       location: '/helpers/axiosHelper.ts delete(' + url + ',' + config + ')',
       error: error
     })
+    captureException(error)
     throw error
   }
 }

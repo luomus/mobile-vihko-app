@@ -27,6 +27,7 @@ import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign, loopThro
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
 import { saveImages } from '../../helpers/imageHelper'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
+import { captureException } from '../../helpers/sentry'
 
 export const setObservationLocation = (point: Point | null): observationActionTypes => ({
   type: SET_OBSERVATION,
@@ -76,6 +77,7 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
         return Promise.resolve()
       }
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx initObservationEvents()',
         error: error,
@@ -100,6 +102,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     try {
       await netStatusChecker()
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx uploadObservationEvent()/netStatusChecker()',
         error: 'Network error (no connection)',
@@ -115,6 +118,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     try {
       await userService.checkTokenValidity(credentials.token)
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error,
@@ -156,6 +160,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         try {
           await fetchFinland(event, lang, credentials)
         } catch (error: any) {
+          captureException(error)
           if (error.severity && error.severity === 'low') {
             localityErrorMessage = error.message
           }
@@ -164,6 +169,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         try {
           await fetchForeign(event, lang, credentials)
         } catch (error: any) {
+          captureException(error)
           if (error.severity && error.severity === 'low') {
             localityErrorMessage = error.message
           }
@@ -193,6 +199,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
           try {
             newImages = await saveImages(unit.images, credentials)
           } catch (error: any) {
+            captureException(error)
             if (error.severity && error.severity === 'low') {
               imageErrorMessage = error.message
             } else {
@@ -242,6 +249,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       }
 
     } catch (error: any) {
+      captureException(error)
       return Promise.reject({
         severity: 'low',
         message: error.message
@@ -251,6 +259,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     try {
       await postObservationEvent(event, credentials)
     } catch (error: any) {
+      captureException(error)
       if (error.response?.status.toString() === '422') {
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
@@ -275,6 +284,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     try {
       await dispatch(deleteObservationEvent(id))
     } catch (error) {
+      captureException(error)
       return Promise.reject(error)
     }
 
@@ -304,6 +314,7 @@ export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx newObservationEvent()',
         error: error,
@@ -334,6 +345,7 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx replaceObservationEventById()',
         error: error,
@@ -359,6 +371,7 @@ export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx deleteObservationEvent()',
         error: error,
@@ -408,6 +421,7 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: MultiL
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx newObservation()',
         error: error,
@@ -443,6 +457,7 @@ export const deleteObservation = (eventId: string, unitId: string): ThunkAction<
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx deleteObservation()',
         error: error,
@@ -479,6 +494,7 @@ export const replaceLocationById = (geometry: Geometry, eventId: string, unitId:
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx replaceLocationById()',
         error: error,
@@ -517,6 +533,7 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx replaceObservationById()',
         error: error,
@@ -590,6 +607,7 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/observation/actions.tsx saveBirdList()',
         error: error,

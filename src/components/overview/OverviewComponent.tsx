@@ -29,6 +29,7 @@ import ActivityComponent from '../general/ActivityComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
 import { log } from '../../helpers/logger'
+import { captureException } from '../../helpers/sentry'
 
 type Props = {
   id: string,
@@ -106,6 +107,7 @@ const OverviewComponent = (props: Props) => {
     try {
       await dispatch(deleteObservation(eventId, unitId))
     } catch (error: any) {
+      captureException(error)
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
@@ -128,6 +130,7 @@ const OverviewComponent = (props: Props) => {
       await dispatch(deleteObservationEvent(eventId))
       props.onPressHome()
     } catch (error: any) {
+      captureException(error)
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
@@ -143,6 +146,7 @@ const OverviewComponent = (props: Props) => {
       showMessage(t('post success'))
       props.onPressHome()
     } catch (error: any) {
+      captureException(error)
       if (error.severity === 'low') {
         dispatch(setMessageState({
           type: 'err',

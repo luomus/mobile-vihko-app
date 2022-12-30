@@ -13,6 +13,7 @@ import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
 import { log } from '../../helpers/logger'
 import { ErrorMessage } from '@hookform/error-message'
+import { captureException } from '../../helpers/sentry'
 
 type Props = {
   title: string,
@@ -72,6 +73,7 @@ const ImagePickerComponent = (props: Props) => {
 
       return !pickerResult.cancelled
     } catch (error) {
+      captureException(error)
       setError(props.objectTitle, { message: t('image attachment failure'), type: 'manual' })
       log.error({
         location: '/components/formComponents/FormImagePickerComponent attachImage()',

@@ -19,6 +19,7 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import i18n from '../../languages/i18n'
 import ZoneFilterPickerComponent from './ZoneFilterPickerComponent'
+import { captureException } from '../../helpers/sentry'
 
 type Props = {
   modalVisibility: boolean,
@@ -66,6 +67,7 @@ const ZoneModalComponent = (props: Props) => {
       props.setLoading(true)
       await dispatch(initObservationZones())
     } catch (error: any) {
+      captureException(error)
       props.showError(error.message)
       props.setModalVisibility(false)
     } finally {
