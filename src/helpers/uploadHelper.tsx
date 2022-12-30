@@ -5,6 +5,7 @@ import { centerOfBoundingBox, centerOfGeometry } from './geometryHelper'
 import { log } from '../helpers/logger'
 import i18n from 'i18next'
 import { CredentialsType } from '../stores'
+import { captureException } from './sentry'
 
 //define whether the event will be released publicly or privately
 export const definePublicity = (event: Record<string, any>, isPublic: boolean): Record<string, any> => {
@@ -59,6 +60,7 @@ export const fetchFinland = async (event: Record<string, any>, lang: string, cre
   try {
     localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang, credentials)
   } catch (error: any) {
+    captureException(error)
     return Promise.reject({
       severity: error.severity,
       message: error.message
@@ -91,6 +93,7 @@ export const fetchForeign = async (event: Record<string, any>, lang: string, cre
   try {
     localityDetails = await defineLocalityForeign(center, lang, credentials)
   } catch (error: any) {
+    captureException(error)
     return Promise.reject({
       severity: error.severity,
       message: error.message
@@ -114,6 +117,7 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   try {
     localityDetails = await getLocalityDetailsFromLajiApi(geometry, lang)
   } catch (error: any) {
+    captureException(error)
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
       error: error,
@@ -185,6 +189,7 @@ export const defineLocalityForeign = async (geometry: Point, lang: string, crede
     const response = await getLocalityDetailsFromGoogleAPI(geometry, lang)
     localityDetails = response.data.results
   } catch (error: any) {
+    captureException(error)
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityForeign()',
       error: error,

@@ -25,6 +25,7 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import SelectedButtonComponent from './SelectedButtonComponent'
 import { log } from '../../helpers/logger'
+import { captureException } from '../../helpers/sentry'
 
 type Props = {
   onPressMap: (() => void) | undefined,
@@ -114,6 +115,7 @@ const ExtendedNavBarComponent = (props: Props) => {
         try {
           await watchBackgroundLocationAsync(title, body)
         } catch (error: any) {
+          captureException(error)
           log.error({
             location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
             error: error,

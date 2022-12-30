@@ -9,6 +9,7 @@ import storageService from '../../services/storageService'
 import { parseUiSchemaToObservations } from '../../helpers/parsers/UiSchemaParser'
 import { log } from '../../helpers/logger'
 import { useUiSchemaFields } from '../../config/fields'
+import { captureException } from '../../helpers/sentry'
 
 export const setSchema = (schemas: Record<string, any>): schemaActionTypes => ({
   type: SET_SCHEMA,
@@ -76,6 +77,7 @@ export const initSchemas = (formIDs: Array<string>): ThunkAction<Promise<void>, 
           fetchedSchema = await getSchemas(language, formID)
 
         } catch (downloadError) {
+          captureException(downloadError)
           try {
             //try loading schema from internal storage, if success inform user
             //of use of old stored version, if error warn user of total failure
@@ -91,6 +93,7 @@ export const initSchemas = (formIDs: Array<string>): ThunkAction<Promise<void>, 
               user_id: credentials.user.id
             })
           } catch (storageFetchError) {
+            captureException(storageFetchError)
             schemaErrors.errors.unsuccessfullyStorageFetchedLanguages.push(language)
             sumOfUnsuccessfullyStorageFetchedLanguages++
             log.error({
@@ -139,6 +142,7 @@ export const initSchemas = (formIDs: Array<string>): ThunkAction<Promise<void>, 
         try {
           await storageService.save(storageKeys[language], schemas[language])
         } catch (storageSaveError) {
+          captureException(storageSaveError)
           schemaErrors.errors.unsuccessfullyStorageSavedLanguages.push(language)
           sumOfUnsuccessfullyStorageSavedLanguages++
           log.error({

@@ -27,6 +27,7 @@ import { clearGrid, setGrid } from '../position/actions'
 import { initCompleteList } from '../../stores/observation/actions'
 import { forms } from '../../config/fields'
 import { temporalOutlierFilter } from '../../helpers/pathFilters'
+import { captureException } from '@sentry/react-native'
 
 export const resetReducer = () => ({
   type: 'RESET_STORE'
@@ -52,6 +53,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     try {
       await userService.checkTokenValidity(credentials.token)
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error,
@@ -121,6 +123,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     try {
       await storageService.save('observationEvents', newEvents)
     } catch (error) {
+      captureException(error)
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/save()',
         error: error,
@@ -146,6 +149,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         tracking
       )
     } catch (error: any) {
+      captureException(error)
       //delete the new event if gps can't be launched
       await dispatch(deleteObservationEvent(newID))
       log.error({
@@ -202,6 +206,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     try {
       await userService.checkTokenValidity(credentials.token)
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
         error: error,
@@ -229,6 +234,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     try {
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), title, body, tracking)
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
         error: error,
@@ -295,6 +301,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       try {
         dispatch(replaceObservationEventById(event, event.id))
       } catch (error) {
+        captureException(error)
         return Promise.reject(error)
       }
     }

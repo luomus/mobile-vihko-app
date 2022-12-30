@@ -15,6 +15,7 @@ import { getZones } from '../../services/zoneService'
 import storageService from '../../services/storageService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { log } from '../../helpers/logger'
+import { captureException } from '../../helpers/sentry'
 
 export const setRegion = (region: Region): mapActionTypes => ({
   type: SET_REGION,
@@ -46,6 +47,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
       await netStatusChecker()
       zones = await getZones()
     } catch (netError) {
+      captureException(netError)
       try {
         //couldn't load zones from server. Check for local copy, if found inform user of use of local copy.
         zones = await storageService.fetch('zones')
@@ -60,6 +62,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
         })
       //if local copy does not exist inform user that no zones are available
       } catch (localError) {
+        captureException(localError)
         error = {
           severity: 'high',
           message: `${i18n.t('error loading zones from server and internal')}`
@@ -105,6 +108,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
       try {
         await storageService.save('zones', zones)
       } catch (localError) {
+        captureException(localError)
         error = {
           severity: 'low',
           message: i18n.t('zone save to async failed')

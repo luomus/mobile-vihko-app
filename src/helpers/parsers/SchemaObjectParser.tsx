@@ -7,6 +7,7 @@ import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import { log } from '../logger'
 import { parseDateFromDocumentToUI } from '../dateHelper'
 import { CredentialsType } from '../../stores'
+import { captureException } from '../sentry'
 
 export const createSchemaObjectComponents = async (inputObject: Record<string, any>, fields: Array<string>, schema: Record<string, any>,
   credentials: CredentialsType) => {
@@ -62,6 +63,7 @@ const parseObjectToComponents = async (
             finalValue = response.result[0].payload.scientificName
           }
         } catch (error) {
+          captureException(error)
           log.error({
             location: '/parsers/SchemaObjectParser parseObjectToComponents()',
             error: error,

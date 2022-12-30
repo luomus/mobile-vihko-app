@@ -2,6 +2,7 @@ import { get, post, axiosDelete } from '../helpers/axiosHelper'
 import { getLoginUrl, pollLoginUrl, getUserUrl, personTokenUrl } from '../config/urls'
 import { ACCESS_TOKEN, SOURCE_ID } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
+import { captureException } from '../helpers/sentry'
 
 export const getTempTokenAndLoginUrl = async () => {
   const params = {
@@ -22,6 +23,7 @@ export const postTmpToken = async (tmpToken: string) => {
     //successfully received the token
     return result.data
   } catch (error) {
+    captureException(error)
     //did not get the token in this poll
     return { token: undefined }
   }
@@ -62,6 +64,7 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
             token: result.token,
           })
         } catch (error) {
+          captureException(error)
           clearInterval(poller)
           clearTimeout(timeout)
           reject(error)
