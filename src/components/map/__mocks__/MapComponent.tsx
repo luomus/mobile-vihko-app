@@ -24,6 +24,7 @@ import Ts from '../../../styles/TextStyles'
 import Colors from '../../../styles/Colors'
 import { useTranslation } from "react-i18next"
 import ButtonComponent from "../../general/ButtonComponent"
+import { captureException } from "../../../helpers/sentry"
 
 type Props = {
   onPressHome: () => void,
@@ -117,6 +118,7 @@ const MapComponent = (props: Props) => {
     try {
       await dispatch(deleteObservation(eventId, unitId))
     } catch (error: any) {
+      captureException(error)
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message

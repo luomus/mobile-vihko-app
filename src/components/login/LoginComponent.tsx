@@ -31,6 +31,7 @@ import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
 import { initLanguage, saveLanguage } from '../../helpers/languageHelper'
+import { captureException } from '../../helpers/sentry'
 
 type Props = {
   onSuccessfulLogin: () => void,
@@ -75,6 +76,7 @@ const LoginComponent = (props: Props) => {
     try {
       await dispatch(logoutUser())
     } catch (error: any) { //catch if logout fails
+      captureException(error)
       showError(error.message)
     }
     dispatch(resetReducer())
@@ -88,6 +90,7 @@ const LoginComponent = (props: Props) => {
     try {
       await dispatch(initLocalCredentials())
     } catch (error: any) {
+      captureException(error)
 
       //failed to fetch credentials from storage
       if (error?.severity) {
@@ -114,12 +117,14 @@ const LoginComponent = (props: Props) => {
     try {
       await dispatch(initObservationZones())
     } catch (error: any) {
+      captureException(error)
       showError(error.message)
     }
 
     try {
       await dispatch(initObservationEvents())
     } catch (error: any) {
+      captureException(error)
       showError(error.message)
     }
 
@@ -132,6 +137,7 @@ const LoginComponent = (props: Props) => {
     try {
       await dispatch(initSchemas(formIDs))
     } catch (errors: any) {
+      captureException(errors)
       if (errors[errors.length - 1].severity === 'fatal') {
         showFatalError(`${t('critical error')}:\n${errors[errors.length - 1].message}`)
         setLoggingIn(false)
@@ -148,12 +154,14 @@ const LoginComponent = (props: Props) => {
     try {
       await dispatch(getPermissions())
     } catch (error: any) {
+      captureException(error)
       showError(error.message)
     }
 
     try {
       await dispatch(getMetadata())
     } catch (error: any) {
+      captureException(error)
       showError(error.message)
     }
 
@@ -168,7 +176,7 @@ const LoginComponent = (props: Props) => {
       setPolling(true)
       await dispatch(loginUser(tmpToken, setCanceler))
     } catch (error: any) {
-
+      captureException(error)
       //stop polling if user canceled the login
       if (error.canceled) {
         setLoggingIn(false)
@@ -203,6 +211,7 @@ const LoginComponent = (props: Props) => {
       result = await getTempTokenAndLoginUrl()
       await storageService.save(tmpTokenKey, result.tmpToken)
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/components/LoginComponent.tsx login()',
         error: error,
@@ -217,6 +226,7 @@ const LoginComponent = (props: Props) => {
     try {
       await openBrowserAsync(result.loginURL, { toolbarColor: Colors.primary5, controlsColor: Colors.neutral2 })
     } catch (error) {
+      captureException(error)
       log.error({
         location: 'components/LoginComponent.tsx login()',
         error: error,
@@ -239,11 +249,13 @@ const LoginComponent = (props: Props) => {
     try {
       await netStatusChecker()
     } catch (error) {
+      captureException(error)
       await delay(5000)
 
       try {
         await netStatusChecker()
       } catch (error: any) {
+        captureException(error)
         log.error({
           location: '/components/LoginComponent.tsx login()',
           error: 'Network error (no connection)',

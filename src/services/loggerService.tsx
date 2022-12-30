@@ -18,8 +18,6 @@ export const sendError = async (rawMsg: {error: string|undefined, data: string|u
     }
   }
 
-  captureException(errorData)
-
   try {
     return await axios.post(
       loggerUrl,
@@ -31,9 +29,6 @@ export const sendError = async (rawMsg: {error: string|undefined, data: string|u
       }
     )
   } catch (e) {
-    captureException({
-      message: 'loggerService error: ' + e,
-      meta: errorData.meta
-    })
+    captureException(e)
   }
 }

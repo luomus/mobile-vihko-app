@@ -4,6 +4,7 @@ import i18n from 'i18next'
 import { CredentialsType } from '../stores'
 import { sendImages, sendMetadata } from '../services/imageService'
 import { log } from '../helpers/logger'
+import { captureException } from './sentry'
 
 const JPEG_EXTENSIONS = ['jpeg', 'jpg']
 const TIFF_EXTENSIONS = ['tiff', 'tif']
@@ -45,6 +46,7 @@ export const processImages = async (uris: string[]) => {
     try {
       image = await processImage(uri)
     } catch (error) {
+      captureException(error)
       return Promise.reject(error)
     }
 
@@ -101,6 +103,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
   try {
     imageFiles = await processImages(uris)
   } catch (error) {
+    captureException(error)
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()/processImages()',
       error: error,
@@ -175,6 +178,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     try {
       res = await sendImages(formDataBody, credentials.token)
     } catch (error: any) {
+      captureException(error)
       log.error({
         location: '/helpers/imageHelper.tsx saveImages()/sendImages()',
         error: error,
@@ -215,6 +219,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
       try {
         res = await sendMetadata(tempId, metadata, credentials.token)
       } catch (error) {
+        captureException(error)
         return Promise.reject(error)
       }
 
@@ -223,6 +228,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 
     return idArr
   } catch (error: any) {
+    captureException(error)
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()/sendMetadata()',
       error: error,
