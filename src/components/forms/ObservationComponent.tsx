@@ -363,6 +363,26 @@ const ObservationComponent = (props: Props) => {
     }
   }
 
+  const showCancel = () => {
+    dispatch(setMessageState({
+      type: 'dangerConf',
+      messageContent: t('discard observation?'),
+      cancelLabel: t('cancel'),
+      okLabel: t('exit'),
+      onOk: () => {
+        cleanUp()
+        if (editing.originalSourcePage === 'map') {
+          props.toMap()
+        } else if (editing.originalSourcePage === 'overview') {
+          if (!observationId) { return }
+          props.toObservationEvent(observationId?.eventId)
+        } else if (editing.originalSourcePage === 'list') {
+          props.toList()
+        }
+      }
+    }))
+  }
+
   const showDelete = () => {
     dispatch(setMessageState({
       type: 'dangerConf',
@@ -438,6 +458,13 @@ const ObservationComponent = (props: Props) => {
           <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollView}>
+          <View style={Cs.buttonContainer}>
+            <ButtonComponent onPressFunction={() => showCancel()}
+              title={t('cancel')} height={40} width={150} buttonStyle={Bs.editObservationButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'close'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
+          </View>
           {observationId && !(schema.formID === forms.birdAtlas && observationState?.id.includes('complete_list')) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => editObservationLocation()}

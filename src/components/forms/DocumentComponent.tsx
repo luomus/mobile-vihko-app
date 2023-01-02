@@ -37,8 +37,9 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 
 type Props = {
-  onPressSubmit: () => void,
-  onPressObservationEvent: (id: string) => void,
+  toHome: () => void,
+  toObservationEvent: (id: string) => void,
+  toMap: () => void,
   onLogout: () => void,
   children?: ReactChild,
   sourcePage: string,
@@ -80,7 +81,7 @@ const DocumentComponent = (props: Props) => {
   useBackHandler(() => {
     if (props.isFocused()) {
       if (props.sourcePage === 'map') {
-        props.onPressSubmit()
+        props.toHome()
         return true
       }
     }
@@ -151,7 +152,7 @@ const DocumentComponent = (props: Props) => {
           await dispatch(finishObservationEvent())
           setModalVisibility(true)
         } else {
-          props.onPressObservationEvent(observationId?.eventId)
+          props.toObservationEvent(observationId?.eventId)
         }
         dispatch(clearObservationId())
       } catch (error: any) {
@@ -160,7 +161,7 @@ const DocumentComponent = (props: Props) => {
           messageContent: error.message,
         }))
         //redirects to home page in case of error
-        props.onPressSubmit()
+        props.toHome()
       } finally {
         setSaving(false)
       }
@@ -174,7 +175,7 @@ const DocumentComponent = (props: Props) => {
       await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
       showMessage(t('post success'))
       setForm(undefined)
-      props.onPressSubmit()
+      props.toHome()
     } catch (error: any) {
       if (error.severity === 'low') {
         dispatch(setMessageState({
@@ -182,7 +183,7 @@ const DocumentComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             setForm(undefined)
-            props.onPressSubmit()
+            props.toHome()
             if (error.message.includes(t('locality failure'))) showMessage(t('post success'))
           }
         }))
@@ -201,6 +202,25 @@ const DocumentComponent = (props: Props) => {
     }
 
     setSending(false)
+  }
+
+  const showCancel = () => {
+    dispatch(setMessageState({
+      type: 'dangerConf',
+      messageContent: t('discard observation?'),
+      cancelLabel: t('cancel'),
+      okLabel: t('exit'),
+      onOk: () => {
+        if (props.sourcePage === 'map') {
+          props.toMap()
+        } else if (props.sourcePage === 'home') {
+          props.toHome()
+        } else if (props.sourcePage === 'overview') {
+          if (!observationId) { return }
+          props.toObservationEvent(observationId?.eventId)
+        }
+      }
+    }))
   }
 
   const deletePath = () => {
@@ -258,6 +278,13 @@ const DocumentComponent = (props: Props) => {
           <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} ref={scrollView}>
+          <View style={Cs.buttonContainer}>
+            <ButtonComponent onPressFunction={() => showCancel()}
+              title={t('cancel')} height={40} width={150} buttonStyle={Bs.editObservationButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'close'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
+          </View>
           {!(path.length === 1 && path[0].length === 0) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => deletePath()}
@@ -275,7 +302,7 @@ const DocumentComponent = (props: Props) => {
           </View>
         </KeyboardAwareScrollView>
         <MessageComponent />
-        <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.onPressSubmit} sendObservationEvent={sendObservationEvent} />
+        <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.toHome} sendObservationEvent={sendObservationEvent} />
         {props.children}
       </View>
     )

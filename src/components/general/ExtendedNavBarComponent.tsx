@@ -137,7 +137,7 @@ const ExtendedNavBarComponent = (props: Props) => {
     <View style={Cs.stopObservingContainer}>
       <View style={{ flexDirection: 'row' }}>
         <View style={{ paddingHorizontal: 2 }}>
-          <ButtonComponent onPressFunction={() => stopObserving()} title={t('stop')}
+          <ButtonComponent onPressFunction={() => { stopObserving()}} title={t('stop')}
             height={30} width={100} buttonStyle={Bs.stopObservingButton}
             gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}

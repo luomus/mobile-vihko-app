@@ -19,11 +19,14 @@ const DocumentScreen = (props: Props) => {
 
   return (
     <DocumentComponent
-      onPressSubmit={() => {
+      toHome={() => {
         props.navigation.navigate('home')
       }}
-      onPressObservationEvent={(id: string) => {
+      toObservationEvent={(id: string) => {
         props.navigation.navigate('overview', { id })
+      }}
+      toMap={() => {
+        props.navigation.navigate('map')
       }}
       onLogout={() => {
         dispatch(

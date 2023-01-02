@@ -20,6 +20,7 @@ import Colors from '../../styles/Colors'
 import { forms } from '../../config/fields'
 import ListSorterComponent from './ListSorterComponent'
 import ListFilterComponent from './ListFilterComponent'
+import MessageComponent from '../general/MessageComponent'
 
 type Props = {
   onPressMap: () => void,
@@ -165,6 +166,7 @@ const ListComponent = (props: Props) => {
           <GridWarningComponent />
           : null
         }
+        <MessageComponent />
       </>
     )
   }
