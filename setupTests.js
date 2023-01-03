@@ -13,8 +13,10 @@ jest.mock('react-native-keyboard-aware-scroll-view', () => {
     KeyboardAwareScrollView: jest.fn().mockImplementation(({ children }) => children)
   }
 })
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 jest.mock('./src/helpers/geolocationHelper')
+jest.mock('./src/helpers/sentry')
 jest.mock('./src/services/atlasService')
 jest.mock('./src/services/autocompleteService')
 jest.mock('./src/services/documentService')
