@@ -148,17 +148,18 @@ const addBolding = (name: string, query: string, isScientific: boolean) => {
         start += endIndex
 
         if (startIndex === 0) {
-          text.push(<Text style={{ fontWeight: 'bold', fontSize: 15 }}>{nameSlice.slice(startIndex, endIndex)}</Text>)
+          text.push(<Text key={nameSlice} style={{ fontWeight: 'bold', fontSize: 15 }}>{nameSlice.slice(startIndex, endIndex)}</Text>)
         } else {
-          text.push(<Text style={{ fontSize: 15 }}>{nameSlice.slice(0, startIndex)}</Text>)
-          text.push(<Text style={{ fontWeight: 'bold', fontSize: 15 }}>{nameSlice.slice(startIndex, endIndex)}</Text>)
+          text.push(<Text key={nameSlice} style={{ fontSize: 15 }}>{nameSlice.slice(0, startIndex)}</Text>)
+          text.push(<Text key={nameSlice} style={{ fontWeight: 'bold', fontSize: 15 }}>{nameSlice.slice(startIndex, endIndex)}</Text>)
         }
       }
     })
   }
 
   if (start !== tempName.length) {
-    text.push(<Text style={{ fontSize: 15 }}>{tempName.slice(start)}</Text>)
+    const nameSlice = tempName.slice(start)
+    text.push(<Text key={nameSlice} style={{ fontSize: 15 }}>{nameSlice}</Text>)
   }
 
   return text
