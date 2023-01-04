@@ -45,7 +45,7 @@ describe('MapComponent', () => {
   test('testing the map component', async () => {
     const { getByText, getByTestId, getAllByText, store } = renderWithProviders(<Navigator initialRoute='map'/>)
 
-    await initializeComponent(store)
+    await waitFor(async () => {await initializeComponent(store)})
 
     expect(getByTestId('map-view')).toBeDefined()
 
@@ -176,7 +176,8 @@ describe('MapComponent', () => {
     expect(getByText(fi['do not submit'])).toBeDefined()
     fireEvent.press(getByText(fi['do not submit']))
 
-    expect(getAllByText(fi['trip form'])).toHaveLength(2)
+    // Check that we are back at the home screen
+    await waitFor(() => expect(getAllByText(fi['trip form'])).toHaveLength(2))
     expect(getByText(fi['bird atlas'])).toBeDefined()
     expect(getByText(fi['fungi atlas'])).toBeDefined()
     expect(getByText(fi['lolife'])).toBeDefined()
