@@ -43,7 +43,6 @@ type Props = {
   onPop: () => void,
   onPressList: () => void
 }
-
 const MapComponent = (props: Props) => {
 
   const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
