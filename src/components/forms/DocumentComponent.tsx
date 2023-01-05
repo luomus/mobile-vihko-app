@@ -59,7 +59,7 @@ const DocumentComponent = (props: Props) => {
   const [sending, setSending] = useState<boolean>(false)
 
   //reference for scrollView
-  const scrollView = useRef<KeyboardAwareScrollView | null>(null)
+  const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
 
   const grid = useSelector((state: rootState) => state.grid)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -105,20 +105,20 @@ const DocumentComponent = (props: Props) => {
       let schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
       if (schema.formID === forms.lolife) {
-        initForm(setForm, event, null, schemaWithoutUnits, null, observationEventFields, overrideObservationEventFields, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, observationEventFields, overrideObservationEventFields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.tripForm) {
-        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.birdAtlas) {
-        initForm(setForm, event, null, schemaWithoutUnits, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, MHL117ObservationEventFieldOrder, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, MHL117ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
-        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollView)
+        initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollViewRef)
       }
     }
   }
 
   //as complete list field is the only possible validation error, scroll to top when validation error occurs
   const onError = async () => {
-    scrollView?.current?.scrollToPosition(0, 0, false)
+    scrollViewRef?.current?.scrollToPosition(0, 0, false)
   }
 
   const onSubmit = async (data: { [key: string]: any }) => {
@@ -277,7 +277,7 @@ const DocumentComponent = (props: Props) => {
         <View style={Cs.formSaveButtonContainer}>
           <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
         </View>
-        <KeyboardAwareScrollView style={Cs.padding10Container} ref={scrollView}>
+        <KeyboardAwareScrollView style={Cs.padding10Container} ref={scrollViewRef}>
           <View style={Cs.buttonContainer}>
             <ButtonComponent onPressFunction={() => showCancel()}
               title={t('cancel')} height={40} width={150} buttonStyle={Bs.editObservationButton}
