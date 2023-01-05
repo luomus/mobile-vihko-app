@@ -108,6 +108,7 @@
   "locality": "Paikannimet",
   "locality description": "Paikan kuvaus",
   "locality failure": "Eliömaakunnan määrittely palvelimella epäonnistui. Havaintotapahtuma lähetetään palvelimelle ilman paikkanimeä.",
+  "locate me": "Etsi minut",
   "logged in": "Kirjautuneena:",
   "login": "Kirjaudu sisään",
   "login text": "Käyttääksesi sovellusta, sinun tulee kirjautua sisään.",

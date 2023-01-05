@@ -108,6 +108,7 @@
   "locality": "Ortnamn",
   "locality description": "Beskrivning av ort",
   "locality failure": "Kunde inte definiera biogeografiska provinsen i servern. Denna observationsuppsättning skickas utan ortnamn.",
+  "locate me": "Hitta mig",
   "logged in": "Loggad in:",
   "login": "Logga in",
   "login text": "Logga in för att använda applikationen.",
