@@ -42,6 +42,16 @@ const ZoneModalComponent = (props: Props) => {
   const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
+    const initZones = async () => {
+      await refreshZonesList()
+    }
+
+    if (props.modalVisibility === true && observationZone.zones.length < 1) {
+      initZones()
+    }
+  }, [props.modalVisibility])
+
+  useEffect(() => {
     setOptions(createZonesList())
 
   }, [i18n.language, observationZone.zones])

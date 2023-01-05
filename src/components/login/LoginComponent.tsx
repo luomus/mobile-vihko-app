@@ -111,15 +111,11 @@ const LoginComponent = (props: Props) => {
   }
 
   const initializeApp = async () => {
+
+    await initLanguage()
+
     const connected = await checkNetworkStatus()
     if (!connected) return
-
-    try {
-      await dispatch(initObservationZones())
-    } catch (error: any) {
-      captureException(error)
-      showError(error.message)
-    }
 
     try {
       await dispatch(initObservationEvents())
@@ -164,8 +160,6 @@ const LoginComponent = (props: Props) => {
       captureException(error)
       showError(error.message)
     }
-
-    await initLanguage()
 
     props.onSuccessfulLogin()
     setLoggingIn(false)
