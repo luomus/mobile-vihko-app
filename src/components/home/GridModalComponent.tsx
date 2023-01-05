@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Linking, View, Text, TextInput, ActivityIndicator } from 'react-native'
+import { Linking, View, Text, TextInput, ActivityIndicator, Platform } from 'react-native'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
   rootState,
   DispatchType,
-  setGrid
+  setGrid,
+  setRegion,
+  setFirstLocation,
+  updateLocation
 } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -15,8 +18,11 @@ import Ts from '../../styles/TextStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
-import { gridPreviewUrl, resultServiceUrl } from '../../config/urls'
+import { gridPreviewUrl, gridUrl, mapUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
+import MapView, { MapType, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
+import { Icon } from 'react-native-elements'
+import { LocationObject } from 'expo-location'
 
 type Props = {
   modalVisibility: boolean,
@@ -35,44 +41,52 @@ const GridModalComponent = (props: Props) => {
   const [easting, setEasting] = useState<string>('000')
   const [loading, setLoading] = useState<boolean>(false)
 
+  const [centered, setCentered] = useState(true)
+  const [firstZoom, setFirstZoom] = useState<'zoomed' | 'zooming' | 'not'>('not')
+  const [mapLoaded, setMapLoaded] = useState(false)
+  const [mapType, setMapType] = useState<MapType>('terrain')
+
+  const position = useSelector((state: rootState) => state.position)
+  const region = useSelector((state: rootState) => state.region)
   const tracking = useSelector((state: rootState) => state.tracking)
 
   const { t } = useTranslation()
 
   const dispatch: DispatchType = useDispatch()
 
-  useEffect(() => {
-    const setLocation = async () => {
-      let location
-      try {
-        setLoading(true)
-        location = await getCurrentLocation(false, 6)
-      } catch (err) {
-        props.setModalVisibility(false)
-        props.showError(`${t('unable to get current location')}: ${err}`)
-        setLoading(false)
-        return
-      }
-
-      const ykjLocation = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
-
-      setOwnLocation(ykjLocation)
-      setEasting(ykjLocation[0].toString().slice(0, 3))
-      setNorthing(ykjLocation[1].toString().slice(0, 3))
-
-      try {
-        const gridDetails = await getGridName(ykjLocation[1].toString().slice(0, 3) + ':' + ykjLocation[0].toString().slice(0, 3))
-        setGridName(gridDetails.name)
-        setGridCoords([parseInt(ykjLocation[1].toString().slice(0, 3)), parseInt(ykjLocation[0].toString().slice(0, 3))])
-      } catch (err) {
-        props.showError(`${t('failed to fetch grid name')}: ${err}`)
-      }
-
-      setLoading(false)
+  const setLocation = async (reloadModal: boolean) => {
+    let location: LocationObject
+    try {
+      if (reloadModal) setLoading(true)
+      location = await getCurrentLocation(false, 6)
+      dispatch(updateLocation(location))
+    } catch (err) {
+      props.setModalVisibility(false)
+      props.showError(`${t('unable to get current location')}: ${err}`)
+      if (reloadModal) setLoading(false)
+      return
     }
 
+    const ykjLocation = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
+
+    setOwnLocation(ykjLocation)
+    setEasting(ykjLocation[0].toString().slice(0, 3))
+    setNorthing(ykjLocation[1].toString().slice(0, 3))
+
+    try {
+      const gridDetails = await getGridName(ykjLocation[1].toString().slice(0, 3) + ':' + ykjLocation[0].toString().slice(0, 3))
+      setGridName(gridDetails.name)
+      setGridCoords([parseInt(ykjLocation[1].toString().slice(0, 3)), parseInt(ykjLocation[0].toString().slice(0, 3))])
+    } catch (err) {
+      props.showError(`${t('failed to fetch grid name')}: ${err}`)
+    }
+
+    if (reloadModal) setLoading(false)
+  }
+
+  useEffect(() => {
     if (props.modalVisibility) {
-      setLocation()
+      setLocation(true)
     }
   }, [props.modalVisibility])
 
@@ -111,6 +125,113 @@ const GridModalComponent = (props: Props) => {
     props.onBeginObservationEvent(tracking)
   }
 
+  useEffect(() => {
+    if (position && mapLoaded) {
+      if (firstZoom === 'zoomed') {
+        followUser()
+      } else if (firstZoom === 'not') {
+        zoomFromFinlandToLocation()
+      }
+    }
+  })
+
+  //reference for mapView
+  let mapView: MapView | null = null
+
+  //animates map to given region
+  const moveToRegion = (region: Region | null) => {
+    if (region && mapView && mapLoaded) {
+      mapView.animateToRegion(region, 500)
+    }
+  }
+
+  //gets user region and moves map to them
+  const followUser = () => moveToRegion(getRegionFromCoords())
+
+  const zoomFromFinlandToLocation = () => {
+    if (!position) {
+      setFirstZoom('zoomed')
+      return
+    }
+
+    setFirstZoom('zooming')
+
+    let initialRegion = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      latitudeDelta: 0.01000000000000000,
+      longitudeDelta: 0.01000000000000000
+    }
+
+    dispatch(setRegion(initialRegion))
+    moveToRegion(initialRegion)
+    dispatch(setFirstLocation([position.coords.latitude, position.coords.longitude]))
+
+    setTimeout(() => {
+      setFirstZoom('zoomed')
+    }, 1000)
+  }
+
+  const locationOverlay = () => (position !== null ?
+    <Marker
+      coordinate={{
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }}
+      zIndex={3}
+      anchor={{ x: 0.5, y: 0.5 }}>
+      <Icon
+        type={'material-icons'}
+        name={'my-location'}
+        size={50}
+        tvParallaxProperties={undefined}
+      />
+    </Marker>
+    : null
+  )
+
+  const getRegionFromCoords = () => {
+    if (!position) return null
+
+    const reg: Region = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      latitudeDelta: region.latitudeDelta,
+      longitudeDelta: region.longitudeDelta
+    }
+
+    return reg
+  }
+
+  const onMapLoaded = () => setMapLoaded(true)
+
+  const gridOverlay = () => (
+    <>
+      <WMSTile
+        urlTemplate={gridUrl}
+        tileSize={256}
+        opacity={1}
+        zIndex={5}
+      />
+    </>
+  )
+
+  const tileOverlay = () => (mapType === 'terrain' ?
+    <UrlTile
+      urlTemplate={mapUrl}
+      zIndex={-1}
+    />
+    : null
+  )
+
+  const toggleMapType = () => setMapType(mapType === 'terrain' ? 'satellite' : 'terrain')
+
+  const centerMapAnim = async () => {
+    await setLocation(false)
+    if (!centered) { setCentered(true) }
+    followUser()
+  }
+
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.setModalVisibility(false) }}
       onBackdropPress={() => { props.setModalVisibility(false) }}>
@@ -136,22 +257,67 @@ const GridModalComponent = (props: Props) => {
                     onPress={() => Linking.openURL(resultServiceUrl + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
                     {t('link to result service')}
                   </Text>
-                  {`\n\n${t('grid selection instructions')}`}
                 </Text>
               </View>
-              <View style={Cs.gridModalElementContainer}>
-                <TextInput
-                  style={Os.coordinateInput}
-                  keyboardType='numeric'
-                  value={northing}
-                  onChangeText={setNorthing}
-                />
-                <TextInput
-                  style={Os.coordinateInput}
-                  keyboardType='numeric'
-                  value={easting}
-                  onChangeText={setEasting}
-                />
+              <View style={Cs.locateMeMapContainer}>
+                <MapView
+                  ref={map => { mapView = map }}
+                  initialRegion={region}
+                  provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
+                  maxZoomLevel={18.9}
+                  minZoomLevel={5}
+                  mapType={mapType === 'terrain' ? 'terrain' : mapType}
+                  pitchEnabled={false}
+                  rotateEnabled={false}
+                  moveOnMarkerPress={false}
+                  style={Os.gridModalMapViewStyle}
+                  onMapReady={onMapLoaded}
+                >
+                  {locationOverlay()}
+                  {tileOverlay()}
+                  {gridOverlay()}
+                </MapView>
+                <View style={Cs.mapButtonsContainer}>
+                  <View style={Cs.padding5Container}>
+                    <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => toggleMapType()} title={undefined}
+                      height={50} width={50} buttonStyle={Bs.mapIconButton}
+                      gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                      textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+                    />
+                  </View>
+                  <View style={Cs.padding5Container}>
+                    <ButtonComponent testID="center-map-btn" onPressFunction={() => centerMapAnim()} title={undefined}
+                      height={50} width={50} buttonStyle={Bs.mapIconButton}
+                      gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                      textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+                    />
+                  </View>
+                </View>
+              </View>
+              <View style={Cs.modalStartButtonContainer}>
+                <View style={Cs.padding5Container}>
+                  <TextInput
+                    style={Os.coordinateInput}
+                    keyboardType='numeric'
+                    value={northing}
+                    onChangeText={setNorthing}
+                  />
+                </View>
+                <View style={Cs.padding5Container}>
+                  <TextInput
+                    style={Os.coordinateInput}
+                    keyboardType='numeric'
+                    value={easting}
+                    onChangeText={setEasting}
+                  />
+                </View>
+                <View style={Cs.padding5Container}>
+                  <ButtonComponent testID="center-map-btn" onPressFunction={async () => await centerMapAnim()} title={'Locate me'}
+                    height={40} width={120} buttonStyle={Bs.loginCancelButton}
+                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                    textStyle={Ts.buttonText} iconName={'location-searching'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                  />
+                </View>
               </View>
               <View style={Cs.modalStartButtonContainer}>
                 <View style={Cs.padding5Container}>

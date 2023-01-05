@@ -10,7 +10,7 @@ import Colors from '../../styles/Colors'
 interface Props {
   title: string,
   objectTitle: string,
-  pickerItems: Array<Object>,
+  pickerItems: Array<JSX.Element>,
   selectedValue: string | null,
   validation?: Record<string, any>,
   dictionary: { [key: string]: any }
@@ -31,18 +31,13 @@ const FormPickerComponent = (props: Props) => {
     setValue(props.objectTitle, props.selectedValue)
   }, [])
 
-  const errorMessageTranslation = (errorMessage: string): Element => {
-    const errorTranslation = t(errorMessage)
-    return <Text style={{ color: Colors.dangerButton2 }}>{errorTranslation}</Text>
-  }
-
   return (
     <View style={Cs.padding10Container}>
       <Text>{props.title}</Text>
       <ErrorMessage
         errors={formState.errors}
         name={props.objectTitle}
-        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{errorMessageTranslation(message)}</Text>}
+        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{t(message)}</Text>}
       />
       <View style={Cs.formPickerContainer}>
         <Picker
@@ -53,7 +48,7 @@ const FormPickerComponent = (props: Props) => {
             setValue(props.objectTitle, itemValue)
           }
           }>
-          {props.pickerItems}
+          { props.pickerItems }
         </Picker>
       </View>
     </View>

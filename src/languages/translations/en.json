@@ -108,6 +108,7 @@
   "locality": "Locality names",
   "locality description": "Locality description",
   "locality failure": "Failed to define biogeographical province in the server. The observation event will be sent without a locality name.",
+  "locate me": "Locate me",
   "logged in": "Logged in:",
   "login": "Login",
   "login text": "You need to log in to use the application.",
