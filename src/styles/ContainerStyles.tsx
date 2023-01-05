@@ -211,12 +211,23 @@ const ContainerStyles = StyleSheet.create({
     backgroundColor: Colors.neutral3,
     alignItems: 'center'
   },
+  locateMeMapContainer: {
+    flex: 1,
+    paddingLeft: 10,
+    backgroundColor: Colors.neutral3,
+    alignItems: 'center'
+  },
   mapButtonsContainer: {
     position: 'absolute',
     top: '1%',
     right: '1%',
     alignSelf: 'flex-end',
     flexDirection: 'column'
+  },
+  locateMeButtonContainer: {
+    position: 'absolute',
+    bottom: '1%',
+    right: '1%',
   },
   gridTitleContainer: {
     paddingLeft: 7,
