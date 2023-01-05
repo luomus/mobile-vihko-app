@@ -64,7 +64,7 @@ const FormPickerComponent = (props: Props) => {
         name={props.objectTitle}
         render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
       />
-      <TouchableOpacity onPress={() => onPress()} style={Cs.iOSPickerContainer}>
+      <TouchableOpacity testID="formPicker" onPress={() => onPress()} style={Cs.iOSPickerContainer}>
         <TextInput
           style={Os.iOSPickerInput}
           value={selected}
