@@ -54,6 +54,7 @@ const MapComponent = (props: Props) => {
   const [mapType, setMapType] = useState<MapType>('terrain')
   const [observationButtonsState, setObservationButtonsState] = useState('')
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
+  const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
 
   const editing = useSelector((state: rootState) => state.editing)
   const grid = useSelector((state: rootState) => state.grid)
@@ -464,7 +465,10 @@ const MapComponent = (props: Props) => {
           initialRegion={region}
           onPanDrag={() => stopCentering()}
           onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}
-          onRegionChangeComplete={(region) => onRegionChangeComplete(region)}
+          onRegionChangeComplete={(region) => {
+            onRegionChangeComplete(region)
+            setVisibleRegion(region) // for the iPhone 8 bug
+          }}
           maxZoomLevel={18.9}
           minZoomLevel={5}
           mapType={mapType === 'terrain' ? 'none' : mapType}
@@ -481,6 +485,11 @@ const MapComponent = (props: Props) => {
           {schema.formID === forms.birdAtlas ? gridOverlay() : null}
           {zoneOverlay()}
           {observationLocationsOverlay()}
+          {visibleRegion && Platform.OS === 'ios' &&
+            <Marker coordinate={visibleRegion}>
+              <View />
+            </Marker>
+          }
         </MapView>
         {schema.formID === forms.birdAtlas ?
           <View style={Cs.gridTitleContainer}>

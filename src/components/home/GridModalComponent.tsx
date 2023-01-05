@@ -45,6 +45,7 @@ const GridModalComponent = (props: Props) => {
   const [firstZoom, setFirstZoom] = useState<'zoomed' | 'zooming' | 'not'>('not')
   const [mapLoaded, setMapLoaded] = useState(false)
   const [mapType, setMapType] = useState<MapType>('terrain')
+  const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
 
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
@@ -272,10 +273,18 @@ const GridModalComponent = (props: Props) => {
                   moveOnMarkerPress={false}
                   style={Os.gridModalMapViewStyle}
                   onMapReady={onMapLoaded}
+                  onRegionChangeComplete={(region) => {
+                    setVisibleRegion(region) // for the iPhone 8 bug
+                  }}
                 >
                   {locationOverlay()}
                   {tileOverlay()}
                   {gridOverlay()}
+                  {visibleRegion && Platform.OS === 'ios' &&
+                    <Marker coordinate={visibleRegion}>
+                      <View />
+                    </Marker>
+                  }
                 </MapView>
                 <View style={Cs.mapButtonsContainer}>
                   <View style={Cs.padding5Container}>
@@ -312,7 +321,7 @@ const GridModalComponent = (props: Props) => {
                   />
                 </View>
                 <View style={Cs.padding5Container}>
-                  <ButtonComponent testID="center-map-btn" onPressFunction={async () => await centerMapAnim()} title={'Locate me'}
+                  <ButtonComponent testID="center-map-btn" onPressFunction={async () => await centerMapAnim()} title={t('locate me')}
                     height={40} width={120} buttonStyle={Bs.loginCancelButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                     textStyle={Ts.buttonText} iconName={'location-searching'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}

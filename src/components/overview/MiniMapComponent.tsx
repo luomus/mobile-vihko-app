@@ -1,5 +1,5 @@
-import React from 'react'
-import { Platform } from 'react-native'
+import React, { useState } from 'react'
+import { Platform, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import MapView, { Marker, Region, UrlTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
 import { mapUrl as urlTemplate } from '../../config/urls'
@@ -13,6 +13,8 @@ interface Props {
 }
 
 const MiniMapComponent = (props: Props) => {
+
+  const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
 
   const tileOverlay = () => (
     <UrlTile
@@ -58,9 +60,17 @@ const MiniMapComponent = (props: Props) => {
       rotateEnabled={false}
       scrollEnabled={false}
       style={Os.miniMapViewStyle}
+      onRegionChangeComplete={(region) => {
+        setVisibleRegion(region) // for the iPhone 8 bug
+      }}
     >
       {tileOverlay()}
       {observationLocationOverlay()}
+      {visibleRegion && Platform.OS === 'ios' &&
+        <Marker coordinate={visibleRegion}>
+          <View />
+        </Marker>
+      }
     </MapView>
   )
 }
