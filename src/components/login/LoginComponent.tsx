@@ -304,7 +304,7 @@ const LoginComponent = (props: Props) => {
             <ButtonComponent onPressFunction={async () => await login()} title={t('login')}
               height={40} width={200} buttonStyle={Bs.loginButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}
+              textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText} testID='login-button'
             />
           </View>
           <View style={Cs.loginLanguageContainer}>
