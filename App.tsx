@@ -24,7 +24,7 @@ import { captureException } from './src/helpers/sentry'
 
 LogBox.ignoreLogs(['EventEmitter.removeListener'])
 
-TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations } }) => {
+TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations }, error }) => {
   const showAlert = (message: string) => {
     store.dispatch(setMessageState({
       type: 'err',
@@ -32,6 +32,12 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations } })
     }))
   }
 
+  if (error) {
+    console.log(error)
+  }
+
+  console.log(locations.length)
+  console.log(locations)
   if (locations) {
     const { observationEvent, path, grid }: {observationEvent: ObservationEventType, path: PathType, grid: GridType} = store.getState()
     store.dispatch(appendPath(locations))

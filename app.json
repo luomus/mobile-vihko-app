@@ -48,6 +48,11 @@
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.SYSTEM_ALERT_WINDOW"
+      ],
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE"
       ]
     },
     "androidStatusBar": {
@@ -60,14 +65,16 @@
       }
     },
     "hooks": {
-      "postPublish": [{
+      "postPublish": [
+        {
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
             "organization": "luomus",
             "project": "mobiilivihko",
             "authToken": "SENTRY_AUTH_TOKEN"
           }
-      }]
+        }
+      ]
     },
     "plugins": [
       "sentry-expo"
