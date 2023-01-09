@@ -54,17 +54,16 @@ describe('LoginComponent', () => {
     await waitFor(() => expect(container.getByText(fi['trip form'])).toBeDefined())
   })
 
-  it('should logout succesfully', async () => {
-    await waitFor(() => expect(container.getByText(fi['trip form'])).toBeDefined())
-    expect(container.getByText(fi['trip form'])).toBeDefined()
+  it('should logout successfully', async () => {
+    await waitFor(() => expect(container.getByText(fi['new observation event'])).toBeDefined())
+    expect(container.getByText(fi['new observation event'])).toBeDefined()
     fireEvent.press(container.getByTestId('usermodal-visibility-button'))
     fireEvent.press(container.getByTestId('logout-button'))
 
     await waitFor(() => expect(container.getAllByText(fi['logout'])).toBeDefined())
-
     fireEvent.press(container.getAllByText(fi['exit'])[0])
 
-    await waitFor(() => expect(container.getAllByText(fi['mobile vihko'])).toBeDefined())
+    await waitFor(() => expect(container.getAllByText(fi['login text'])).toBeDefined())
   })
 
 })
