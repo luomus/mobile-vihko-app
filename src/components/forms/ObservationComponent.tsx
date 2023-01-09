@@ -61,7 +61,7 @@ const ObservationComponent = (props: Props) => {
   const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
 
   //reference for scrollView
-  const scrollView = useRef<KeyboardAwareScrollView | null>(null)
+  const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
 
   const editing = useSelector((state: rootState) => state.editing)
   const observation = useSelector((state: rootState) => state.observation)
@@ -173,36 +173,36 @@ const ObservationComponent = (props: Props) => {
     if (observationId) {
       //flying squirrel edit observation
       if (observationState?.rules) {
-        initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollView)
+        initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollViewRef)
         //trip form edit observation
       } else if (schema.formID === forms.tripForm) {
-        initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
+        initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.birdAtlas) {
         const additionalMHL117 = observationState?.id.includes('complete_list') ? null : additionalMHL117Fields
-        initForm(setForm, observationState, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollView)
+        initForm(setForm, observationState, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
-        initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
+        initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
       }
       //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
-        initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollView)
+        initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollViewRef)
         //trip form new observation
       } else if (schema.formID === forms.tripForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollView)
+        initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.birdAtlas) {
         const additionalMHL117 = observationState?.id.includes('complete_list') ? null : additionalMHL117Fields
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollView)
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
-        initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollView)
+        initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
       }
     }
   }
 
   //as autocomplete field is the only possible validation error, scroll to top when validation error occurs
   const onError = async () => {
-    scrollView?.current?.scrollToPosition(0, 0, false)
+    scrollViewRef?.current?.scrollToPosition(0, 0, false)
   }
 
   const onSubmit = async (data: { [key: string]: any }) => {
@@ -457,7 +457,7 @@ const ObservationComponent = (props: Props) => {
         <View style={Cs.formSaveButtonContainer}>
           <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
         </View>
-        <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollView}>
+        <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollViewRef}>
           <View style={Cs.buttonContainer}>
             <ButtonComponent onPressFunction={() => showCancel()}
               title={t('cancel')} height={40} width={150} buttonStyle={Bs.editObservationButton}
