@@ -105,18 +105,37 @@ export const watchPositionAsync = async (updateLocation: (location: LocationObje
 }
 
 export const watchBackgroundLocationAsync = async (title: string, body: string) => {
-  setTimeout(async () => {
+  let backgroundPermission: Location.LocationPermissionResponse | undefined = undefined
+  let foregroundPermission: Location.LocationPermissionResponse | undefined = undefined
+
+  try {
+    foregroundPermission = await Location.requestForegroundPermissionsAsync()
+  } catch (error) {
+    throw new Error(i18n.t('failed to request foreground permissions'))
+  }
+
+  try {
+    backgroundPermission = await Location.requestBackgroundPermissionsAsync();
+    console.log(backgroundPermission)
+  } catch (error: any) {
+    throw new Error(i18n.t('failed to request background permissions'))
+  }
+
+  try {
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
       accuracy: PATH_ACCURACY,
-      distanceInterval: PATH_MIN_X_INTERVALL,
-      timeInterval: PATH_MIN_T_INTERVALL,
+      distanceInterval: 0.01, //PATH_MIN_X_INTERVALL,
+      timeInterval: 10, //PATH_MIN_T_INTERVALL,
+      showsBackgroundLocationIndicator: true,
       foregroundService: {
         notificationTitle: title,
         notificationBody: body,
         notificationColor: Colors.primary5
       }
     })
-  }, 500)
+  } catch(error) {
+    throw(error)
+  }
 }
 
 export const stopLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
