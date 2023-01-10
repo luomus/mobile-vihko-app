@@ -116,7 +116,6 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
 
   try {
     backgroundPermission = await Location.requestBackgroundPermissionsAsync();
-    console.log(backgroundPermission)
   } catch (error: any) {
     throw new Error(i18n.t('failed to request background permissions'))
   }

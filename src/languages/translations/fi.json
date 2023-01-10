@@ -79,6 +79,7 @@
   "gps notification body": "Reittiäsi seurataan.",
   "gps notification title": "Paikannus",
   "grid description": "Mobiilivihko varoittaa jos olet ylittämässä tämän ruudun reunoja. Tällöin havaintojen kirjaaminen kannattaa yleensä lopettaa ja kirjata uuden ruudun havainnot erikseen.\n\nHavaintoluetteloon merkitsemäsi havainnot tallentuvat sille ruudulle, jolla kulkemasi reitin keskipiste sijaitsee. Kartalle merkitsemäsi havainnot tallentuvat merkitsemääsi paikkaan.",
+  "grid description intro": "Painamalla 'Jatka' sovellus määrittelee atlasruudun sijaintisi perusteella. Tarkista sijaintisi seuraavan valikon karttanäkymästä ja mikäli sijainti on virheellinen, sovelluksen saa paikantamaan sijaintisi uudelleen 'Etsi minut' painikkeella.",
   "grid selection instructions": "Jos automaattinen määrittely antoi eri atlasruudun kuin millä aiot retkeillä, korjaa ruudun numero tähän. Tässä ilmoittamaasi ruutua käytetään vain siihen, että Mobiilivihko varoittaa, jos olet ylittämässä valitsemasi ruudun rajoja.\n\nLintuatlaslomakkeen/Mobiilivihkon kartalle merkitsemiesi havaintojen atlasruutu määrittyy niiden sijainnin mukaan ja listalle merkitsemiesi havaintojen atlasruutu määrittyy reittisi sijainnin mukaan.\n\nJos aiot retkeillä usealla ruudulla, kirjaa kunkin ruudun havainnot erillisinä retkinä.",
   "grid warning 1": "Olet lähellä atlasruudun reunaa tai kulkenut rajan yli. Muista että kaikkien laijluetteloon merkittyjen havaintojen tulee olla ruudulta",
   "grid warning 2": "Kartalle voi merkitä havaintoja mihin ruutuun tahansa.",

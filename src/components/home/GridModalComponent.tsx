@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Linking, View, Text, TextInput, ActivityIndicator, Platform } from 'react-native'
+import MapView, { MapType, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
+import { Icon } from 'react-native-elements'
+import { LocationObject } from 'expo-location'
 import Modal from 'react-native-modal'
+import Checkbox from 'expo-checkbox'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
@@ -9,7 +13,8 @@ import {
   setGrid,
   setRegion,
   setFirstLocation,
-  updateLocation
+  updateLocation,
+  setTracking
 } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -20,9 +25,7 @@ import Colors from '../../styles/Colors'
 import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
 import { gridPreviewUrl, gridUrl, mapUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
-import MapView, { MapType, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
-import { Icon } from 'react-native-elements'
-import { LocationObject } from 'expo-location'
+import storageService from '../../services/storageService'
 
 type Props = {
   modalVisibility: boolean,
@@ -253,12 +256,6 @@ const GridModalComponent = (props: Props) => {
                   {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}, ${gridName}.\n\n`}
                   <Text
                     style={{ color: Colors.linkText }}
-                    onPress={() => Linking.openURL(gridPreviewUrl + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
-                    {t('link to grid')}
-                  </Text>
-                  {'\n\n'}
-                  <Text
-                    style={{ color: Colors.linkText }}
                     onPress={() => Linking.openURL(resultServiceUrl + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
                     {t('link to result service')}
                   </Text>
@@ -332,6 +329,18 @@ const GridModalComponent = (props: Props) => {
                     textStyle={Ts.buttonText} iconName={'location-searching'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                   />
                 </View>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
+                <Checkbox
+                  value={tracking}
+                  onValueChange={async (value: boolean) => {
+                    dispatch(setTracking(value))
+                    await storageService.save('tracking', value)
+                  }}
+                  style={{ padding: 5 }}
+                  color={tracking ? Colors.primary5 : undefined}
+                />
+                <Text style={{ color: Colors.neutral7, padding: 5 }}>{t('path tracking')}</Text>
               </View>
               <View style={Cs.modalStartButtonContainer}>
                 <View style={Cs.padding5Container}>

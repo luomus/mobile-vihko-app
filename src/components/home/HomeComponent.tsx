@@ -39,6 +39,7 @@ import storageService from '../../services/storageService'
 import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
+import AtlasInstructionModalComponent from './AtlasInstructionModalComponent'
 import GridModalComponent from './GridModalComponent'
 import DefaultModalComponent from './DefaultModalComponent'
 import { getCurrentLocation } from '../../helpers/geolocationHelper'
@@ -59,6 +60,7 @@ const HomeComponent = (props: Props) => {
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
   const [tripModalVisibility, setTripModalVisibility] = useState<boolean>(false)
+  const [atlasInstructionModalVisibility, setAtlasInstructionModalVisibility] = useState<boolean>(false)
   const [gridModalVisibility, setGridModalVisibility] = useState<boolean>(false)
   const [fungiModalVisibility, setFungiModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
@@ -87,6 +89,8 @@ const HomeComponent = (props: Props) => {
     setObservationEvents={setObservationEvents}
     tripModalVisibility={tripModalVisibility}
     setTripModalVisibility={setTripModalVisibility}
+    atlasInstructionModalVisibility={atlasInstructionModalVisibility}
+    setAtlasInstructionModalVisibility={setAtlasInstructionModalVisibility}
     gridModalVisibility={gridModalVisibility}
     setGridModalVisibility={setGridModalVisibility}
     fungiModalVisibility={fungiModalVisibility}
@@ -124,6 +128,8 @@ type Props2 = {
   setObservationEvents: React.Dispatch<React.SetStateAction<Element[]>>,
   tripModalVisibility: boolean,
   setTripModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  atlasInstructionModalVisibility: boolean,
+  setAtlasInstructionModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   gridModalVisibility: boolean,
   setGridModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   fungiModalVisibility: boolean,
@@ -415,7 +421,7 @@ export const HomeComponentContainer = (
             </>
             <Text style={Ts.previousObservationsTitle}>{props.t('new observation event')}</Text>
             <FormLauncherComponent formID={forms.tripForm} setModalVisibility={props.setTripModalVisibility} />
-            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={props.setGridModalVisibility} />
+            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={props.setAtlasInstructionModalVisibility} />
             <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={props.setFungiModalVisibility} />
             <>
               {
@@ -439,6 +445,8 @@ export const HomeComponentContainer = (
         </ScrollView>
         <DefaultModalComponent modalVisibility={props.tripModalVisibility} setModalVisibility={props.setTripModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.tripForm) }} formID={forms.tripForm} />
+        <AtlasInstructionModalComponent modalVisibility={props.atlasInstructionModalVisibility}
+          setModalVisibility={props.setAtlasInstructionModalVisibility} setGridModalVisibility={props.setGridModalVisibility}/>
         <GridModalComponent modalVisibility={props.gridModalVisibility} setModalVisibility={props.setGridModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.birdAtlas) }}
           setLoading={props.setLoading} showError={showError} />
