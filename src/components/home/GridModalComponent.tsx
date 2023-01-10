@@ -127,7 +127,7 @@ const GridModalComponent = (props: Props) => {
   }
 
   useEffect(() => {
-    if (position && mapLoaded) {
+    if (centered && position && mapLoaded) {
       if (firstZoom === 'zoomed') {
         followUser()
       } else if (firstZoom === 'not') {
@@ -233,6 +233,10 @@ const GridModalComponent = (props: Props) => {
     followUser()
   }
 
+  const stopCentering = () => {
+    if (centered) { setCentered(false) }
+  }
+
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.setModalVisibility(false) }}
       onBackdropPress={() => { props.setModalVisibility(false) }}>
@@ -273,6 +277,7 @@ const GridModalComponent = (props: Props) => {
                   moveOnMarkerPress={false}
                   style={Os.gridModalMapViewStyle}
                   onMapReady={onMapLoaded}
+                  onPanDrag={() => stopCentering()}
                   onRegionChangeComplete={(region) => {
                     setVisibleRegion(region) // for the iPhone 8 bug
                   }}
