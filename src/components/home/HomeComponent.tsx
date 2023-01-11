@@ -46,6 +46,7 @@ import { getCurrentLocation } from '../../helpers/geolocationHelper'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import { updateIsAvailable } from '../../helpers/versionHelper'
 import { getVersionNumber } from '../../services/versionService'
+import i18n from '../../languages/i18n'
 
 type Props = {
   isFocused: () => boolean,
@@ -173,7 +174,7 @@ export const HomeComponentContainer = (
 
     const initSchema = async () => {
       const formID = await props.fetch('formID')
-      await props.dispatch(switchSchema(formID))
+      await props.dispatch(switchSchema(formID, i18n.language))
     }
 
     initSchema()
@@ -283,7 +284,7 @@ export const HomeComponentContainer = (
 
     //save the used form before beginning an event
     if (!props.observing) {
-      await props.dispatch(switchSchema(formID))
+      await props.dispatch(switchSchema(formID, i18n.language))
       await props.save('formID', formID)
     }
 

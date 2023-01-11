@@ -178,7 +178,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     const { credentials, observationEventInterrupted, observationEvent, tracking } = getState()
 
     //switch schema
-    dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID))
+    dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID, i18n.language))
 
     const currentObservationZone = await storageService.fetch('currentZoneId')
     dispatch(setCurrentObservationZone(currentObservationZone))
