@@ -182,7 +182,7 @@ export const HomeComponentContainer = (
       const appVersion = AppJSON.expo.version
       const latestVersion = await getVersionNumber()
 
-      if (await updateIsAvailable(appVersion, latestVersion)) {
+      if (updateIsAvailable(appVersion, latestVersion)) {
         props.dispatch(setMessageState({
           type: 'conf',
           messageContent: props.t('update app'),

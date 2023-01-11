@@ -1,4 +1,4 @@
-export const updateIsAvailable = async (appVersion: string, latestVersion: string): Promise<boolean> => {
+export const updateIsAvailable = (appVersion: string, latestVersion: string): boolean => {
   const appVersionArray = appVersion.split('.')
   const latestVersionArray = latestVersion.split('.')
 
