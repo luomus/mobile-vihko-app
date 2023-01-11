@@ -51,13 +51,18 @@ describe('BirdAtlas', () => {
     await waitFor(() => expect(getByText(fi['bird atlas'])).toBeDefined())
     fireEvent.press(getByText(fi['bird atlas']))
 
+    // This opens the AtlasInstruction modal
+    await waitFor(() => expect(getByText(fi['continue'])).toBeDefined())
+    expect(getByText(fi['cancel'])).toBeDefined()
+    expect(getByText(fi['grid description intro'], { exact: false })).toBeDefined()
+    fireEvent.press(getByText(fi['continue']))
+
     // This opens the GridModalComponent
     await waitFor(() => expect(getByText(fi['new trip'])).toBeDefined())
     await waitFor(() => expect(getByText(fi['your current location is'], { exact: false })).toBeDefined())
-    expect(getByText(fi['link to grid'])).toBeDefined()
     expect(getByText(fi['link to result service'])).toBeDefined()
     expect(getByText(fi['start'])).toBeDefined()
-    expect(getByText(fi['cancel'])).toBeDefined()
+    expect(getAllByText(fi['cancel'])).toHaveLength(2)
     fireEvent.press(getByText(fi['start']))
 
     // MapComponent
