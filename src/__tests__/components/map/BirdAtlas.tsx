@@ -5,8 +5,9 @@ import { renderWithProviders } from '../../../helpers/testHelper'
 import * as fi from '../../../languages/translations/fi.json'
 import * as fi2 from '../../../schemas/birdAtlasFi.json'
 import Navigator from '../../../navigation/Navigator'
-import { CredentialsType, initSchemas, setCredentials } from '../../../stores'
+import { CredentialsType, switchSchema, setCredentials } from '../../../stores'
 import { ActionSheetIOS } from 'react-native'
+import i18n from '../../../languages/i18n'
 
 const initializeComponent = async (store:any) => {
   const credentials: CredentialsType = {
@@ -26,7 +27,7 @@ const initializeComponent = async (store:any) => {
   }
   await store.dispatch(setCredentials(credentials))
 
-  await store.dispatch(initSchemas(['MHL.117']))
+  await store.dispatch(switchSchema('MHL.117', i18n.language))
 }
 
 let testPressLocation = {
