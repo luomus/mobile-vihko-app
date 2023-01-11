@@ -6,9 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   rootState,
   DispatchType,
-  initObservationZones,
   initObservationEvents,
-  initSchemas,
   resetReducer,
   loginUser,
   logoutUser,
@@ -26,7 +24,6 @@ import MessageComponent from '../general/MessageComponent'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
 import { log } from '../../helpers/logger'
-import { forms } from '../../config/fields'
 import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
@@ -111,55 +108,19 @@ const LoginComponent = (props: Props) => {
   }
 
   const initializeApp = async () => {
-
-    await initLanguage()
-
     const connected = await checkNetworkStatus()
     if (!connected) return
 
-    try {
-      await dispatch(initObservationEvents())
-    } catch (error: any) {
+    let promises = [
+      dispatch(initObservationEvents()),
+      dispatch(getPermissions()),
+      dispatch(getMetadata()),
+      initLanguage()
+    ]
+    await Promise.all(promises).catch((error: any) => {
       captureException(error)
       showError(error.message)
-    }
-
-    let formIDs = []
-
-    for (const id in forms) {
-      formIDs.push(forms[id])
-    }
-
-    try {
-      await dispatch(initSchemas(formIDs))
-    } catch (errors: any) {
-      captureException(errors)
-      if (errors[errors.length - 1].severity === 'fatal') {
-        showFatalError(`${t('critical error')}:\n${errors[errors.length - 1].message}`)
-        setLoggingIn(false)
-        return
-
-      } else {
-        errors.forEach((error: Record<string, any>) => {
-          showError(error.message)
-        })
-      }
-    }
-
-    //keep the following two action calls here, there will be errors if they're moved above
-    try {
-      await dispatch(getPermissions())
-    } catch (error: any) {
-      captureException(error)
-      showError(error.message)
-    }
-
-    try {
-      await dispatch(getMetadata())
-    } catch (error: any) {
-      captureException(error)
-      showError(error.message)
-    }
+    })
 
     props.onSuccessfulLogin()
     setLoggingIn(false)

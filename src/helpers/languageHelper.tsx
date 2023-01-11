@@ -7,9 +7,7 @@ export const initLanguage = async (): Promise<void> => {
   try {
     const language = await storageService.fetch('language')
 
-    if (language) {
-      await saveLanguage(language)
-    }
+    i18n.changeLanguage(language)
   } catch (error) {
     captureException(error)
     log.error({

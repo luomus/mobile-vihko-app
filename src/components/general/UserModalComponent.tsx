@@ -11,7 +11,8 @@ import {
   resetReducer,
   logoutUser,
   setMessageState,
-  eventPathUpdate
+  eventPathUpdate,
+  switchSchema
 } from '../../stores'
 import { stopLocationAsync } from '../../helpers/geolocationHelper'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
@@ -39,6 +40,7 @@ const UserModalComponent = (props: Props) => {
   const observing = useSelector((state: rootState) => state.observing)
   const path = useSelector((state: rootState) => state.path)
   const tracking = useSelector((state: rootState) => state.tracking)
+  const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -72,6 +74,16 @@ const UserModalComponent = (props: Props) => {
     )
   }
 
+  const setLanguageHelper = (lang: string) => {
+    return async () => {
+      await saveLanguage(lang)
+      if (schema) {
+        await dispatch(switchSchema(schema.formID, lang))
+      }
+      props.onClose()
+    }
+  }
+
   return (
     <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
       <View style={Cs.userModalContainer}>
@@ -101,20 +113,14 @@ const UserModalComponent = (props: Props) => {
         </View>
         <Text
           style={Ts.languageText}
-          onPress={async () => {
-            await saveLanguage('fi')
-            props.onClose()
-          }}
+          onPress={setLanguageHelper('fi')}
         >
           {t('select language')}:
         </Text>
         <View style={Cs.languageContainer}>
           {i18n.language === 'fi' ?
             <SelectedButtonComponent
-              onPress={async () => {
-                await saveLanguage('fi')
-                props.onClose()
-              }}
+              onPress={setLanguageHelper('fi')}
               title={'FI'} height={40} width={80}
               color={Colors.neutral3}
               textStyle={Ts.languageAndAtlasCodeButtonText}
@@ -122,10 +128,7 @@ const UserModalComponent = (props: Props) => {
             />
             :
             <ButtonComponent
-              onPressFunction={async () => {
-                await saveLanguage('fi')
-                props.onClose()
-              }}
+              onPressFunction={setLanguageHelper('fi')}
               title={'FI'} height={40} width={80} buttonStyle={Bs.logoutButton}
               gradientColorStart={i18n.language === 'fi' ? Colors.primaryButton1 : Colors.neutralButton}
               gradientColorEnd={i18n.language === 'fi' ? Colors.primaryButton2 : Colors.neutralButton}
@@ -136,10 +139,7 @@ const UserModalComponent = (props: Props) => {
           }
           {i18n.language === 'sv' ?
             <SelectedButtonComponent
-              onPress={async () => {
-                await saveLanguage('sv')
-                props.onClose()
-              }}
+              onPress={setLanguageHelper('sv')}
               title={'SV'} height={40} width={80}
               color={Colors.neutral3}
               textStyle={Ts.languageAndAtlasCodeButtonText}
@@ -147,10 +147,7 @@ const UserModalComponent = (props: Props) => {
             />
             :
             <ButtonComponent
-              onPressFunction={async () => {
-                await saveLanguage('sv')
-                props.onClose()
-              }}
+              onPressFunction={setLanguageHelper('sv')}
               title={'SV'} height={40} width={80} buttonStyle={Bs.logoutButton}
               gradientColorStart={i18n.language === 'sv' ? Colors.primaryButton1 : Colors.neutralButton}
               gradientColorEnd={i18n.language === 'sv' ? Colors.primaryButton2 : Colors.neutralButton}
@@ -161,10 +158,7 @@ const UserModalComponent = (props: Props) => {
           }
           {i18n.language === 'en' ?
             <SelectedButtonComponent
-              onPress={async () => {
-                await saveLanguage('en')
-                props.onClose()
-              }}
+              onPress={setLanguageHelper('en')}
               title={'EN'} height={40} width={80}
               color={Colors.neutral3}
               textStyle={Ts.languageAndAtlasCodeButtonText}
@@ -172,10 +166,7 @@ const UserModalComponent = (props: Props) => {
             />
             :
             <ButtonComponent
-              onPressFunction={async () => {
-                await saveLanguage('en')
-                props.onClose()
-              }}
+              onPressFunction={setLanguageHelper('en')}
               title={'EN'} height={40} width={80} buttonStyle={Bs.logoutButton}
               gradientColorStart={i18n.language === 'en' ? Colors.primaryButton1 : Colors.neutralButton}
               gradientColorEnd={i18n.language === 'en' ? Colors.primaryButton2 : Colors.neutralButton}
