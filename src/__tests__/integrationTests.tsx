@@ -21,7 +21,7 @@ describe('Application', () => {
     fireEvent.press(getByText('Kirjaudu sisään'))
 
     //HomeComponent
-    await waitFor(() => expect(getAllByText('Retkilomake')).toHaveLength(2))
+    await waitFor(() => expect(getAllByText('Retkilomake')).toHaveLength(3))
     fireEvent.press(getByText('Retkilomake'))
 
     //FormLauncherComponent

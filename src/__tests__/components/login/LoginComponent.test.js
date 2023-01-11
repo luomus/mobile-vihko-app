@@ -48,7 +48,7 @@ describe('LoginComponent', () => {
     expect(container.getByText(fi['login text'])).toBeDefined()
     fireEvent.press(container.getByText(fi['login']))
 
-    await waitFor(() => expect(container.getAllByText(fi['trip form'])).toHaveLength(4))
+    await waitFor(() => expect(container.getAllByText(fi['trip form'])).toHaveLength(3))
     fireEvent.press(container.getByText(fi['trip form']))
     fireEvent.press(container.getByText(fi['cancel']))
     await waitFor(() => expect(container.getByText(fi['trip form'])).toBeDefined())
