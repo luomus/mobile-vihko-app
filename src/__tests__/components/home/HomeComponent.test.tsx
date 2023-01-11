@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent } from '@testing-library/react-native'
+import { fireEvent, waitFor } from '@testing-library/react-native'
 import { CredentialsType, ObservationZonesType, store } from '../../../stores'
 import i18n from 'i18next'
 import { HomeComponentContainer } from '../../../components/home/HomeComponent'
@@ -25,6 +25,8 @@ describe('HomeComponent', () => {
     const setFungiModalVisibility = jest.fn()
     const zoneModalVisibility = false
     const setZoneModalVisibility = jest.fn()
+    const atlasInstructionModalVisibility = false
+    const setAtlasInstructionModalVisibility = jest.fn()
     const loading = false
     const setLoading = jest.fn()
 
@@ -273,6 +275,8 @@ describe('HomeComponent', () => {
 
       fetch={fetch}
       save={save}
+      atlasInstructionModalVisibility={atlasInstructionModalVisibility}
+      setAtlasInstructionModalVisibility={setAtlasInstructionModalVisibility}
     />)
 
     expect(getByText('Retkilomake')).toBeDefined()
@@ -284,7 +288,7 @@ describe('HomeComponent', () => {
     expect(setTripModalVisibility).toHaveBeenCalledTimes(1)
 
     fireEvent.press(getByText('Lintuatlas'))
-    expect(setGridModalVisibility).toHaveBeenCalledTimes(1)
+    expect(setAtlasInstructionModalVisibility).toHaveBeenCalledTimes(1)
 
     fireEvent.press(getByText('Sieniatlas'))
     expect(setFungiModalVisibility).toHaveBeenCalledTimes(1)
