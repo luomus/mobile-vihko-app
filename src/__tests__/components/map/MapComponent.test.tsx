@@ -5,7 +5,8 @@ import { renderWithProviders } from '../../../helpers/testHelper'
 import * as fi from '../../../languages/translations/fi.json'
 import * as fi2 from '../../../schemas/tripFormFi.json'
 import Navigator from '../../../navigation/Navigator'
-import { beginObservationEvent, CredentialsType, initSchemas, setCredentials } from '../../../stores'
+import { beginObservationEvent, CredentialsType, switchSchema, setCredentials } from '../../../stores'
+import i18n from '../../../languages/i18n'
 
 const onPressMap = jest.fn()
 
@@ -27,8 +28,7 @@ const initializeComponent = async (store:any) => {
   }
   await store.dispatch(setCredentials(credentials))
 
-  await store.dispatch(initSchemas(['JX.519']))
-
+  await store.dispatch(switchSchema('JX.519', i18n.language))
   await store.dispatch(beginObservationEvent(onPressMap, fi['gps notification title'], fi['gps notification body']))
 }
 
