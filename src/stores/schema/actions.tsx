@@ -104,6 +104,8 @@ const initSchema = async (formID: string, lang: string) => {
       message: i18n.t(ERROR_MESSAGES['StorageSave']) + '\n' + i18n.t(HUMAN_READABLE_FORM_NAMES[formID]) + ' ' + i18n.t('in languages') + ': ' + lang
     }
   }
+
+  return schema
 }
 
 /*
@@ -124,9 +126,13 @@ export const switchSchema = (formId: string, lang: string): ThunkAction<Promise<
 
     try {
       schemas[lang] = await storageService.fetch(formId + lang[0].toUpperCase() + lang[1])
+      if (!schemas[lang]) {
+        // Schema+language combination is not initialized yet
+        schemas[lang] = await initSchema(formId, lang)
+      }
     } catch (error) {
       // Schema+language combination is not initialized yet
-      await initSchema(formId, lang)
+      schemas[lang] = await initSchema(formId, lang)
     }
 
     dispatch(setSchema(schemas))
