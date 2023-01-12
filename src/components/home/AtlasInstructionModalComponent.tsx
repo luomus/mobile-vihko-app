@@ -11,32 +11,27 @@ import Colors from '../../styles/Colors'
 type Props = {
   modalVisibility: boolean,
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  setGridModalVisibility: React.Dispatch<React.SetStateAction<boolean>> 
+  setGridModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const AtlasInstructionModalComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const openGridModal = () => {
-    props.setModalVisibility(false)
-    props.setGridModalVisibility(true)
-  }
-
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.setModalVisibility(false) }}
-      onBackdropPress={() => { props.setModalVisibility(false) }}>
+      onBackdropPress={() => { props.setModalVisibility(false) }} onModalHide={() => props.setGridModalVisibility(true)}>
       <View style={Cs.modalContainer}>
         <View style={{ alignSelf: 'flex-start' }}>
           <Text style={Ts.homeScreenTitle}>
             {t('bird atlas')}
           </Text>
           <Text style={Ts.zonePickerDescription}>
-            {t('grid description intro') + '\n\n' +t('grid description')}
+            {t('grid description intro') + '\n\n' + t('grid description')}
           </Text>
           <View style={Cs.modalStartButtonContainer}>
             <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={() => openGridModal()} title={t('continue')}
+              <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('continue')}
                 height={40} width={120} buttonStyle={Bs.beginButton}
                 gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                 textStyle={Ts.buttonText} iconName={'done'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
