@@ -78,7 +78,9 @@ const FormAutocompleteComponent = (props: Props) => {
 
   //set focus into the autocomplete's input field so user can start typing immediately
   useEffect(() => {
-    setFocus('autocompleteInput')
+    setTimeout(() => { //does not work without the timeout
+      setFocus('autocompleteInput')
+    }, 500)
   }, [setFocus])
 
   //this timeout clears taxon name -field's errors (and the error notification) in 5 sec
@@ -271,6 +273,7 @@ const FormAutocompleteComponent = (props: Props) => {
             defaultValue={query}
             onChangeText={(text) => onQueryChange(text)}
             hideResults={hideResult}
+            keyboardType={'default'}
             listStyle={{ paddingLeft: 15 }}
             renderTextInput={({ onFocus, onBlur, onChangeText, defaultValue }) => {
               return renderTextInput(onFocus, onBlur, onChangeText, defaultValue)

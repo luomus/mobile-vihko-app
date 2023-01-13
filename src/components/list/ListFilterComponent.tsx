@@ -22,9 +22,9 @@ const ListFilterComponent = (props: Props) => {
   useEffect(() => {
     if (props.textInput.current) {
       const openKeyboard = props.navigation.addListener('focus', () => {
-        setTimeout(() => {
+        setTimeout(() => { //does not work without the timeout
           props.textInput.current?.focus()
-        }, 1000)
+        }, 500)
       })
 
       return openKeyboard
