@@ -62,7 +62,7 @@ describe('BirdAtlas', () => {
     await waitFor(() => expect(getByText(fi['your current location is'], { exact: false })).toBeDefined())
     expect(getByText(fi['link to result service'])).toBeDefined()
     expect(getByText(fi['start'])).toBeDefined()
-    expect(getAllByText(fi['cancel'])).toHaveLength(2)
+    expect(getAllByText(fi['cancel'])).toHaveLength(1)
     fireEvent.press(getByText(fi['start']))
 
     // MapComponent
