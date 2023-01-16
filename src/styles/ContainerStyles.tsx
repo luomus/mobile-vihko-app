@@ -37,11 +37,13 @@ const ContainerStyles = StyleSheet.create({
     padding: 10
   },
   modalContainer: {
+    alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',
     padding: 10,
     borderRadius: 10,
-    backgroundColor: Colors.neutral2
+    backgroundColor: Colors.neutral2,
+    maxWidth: 320
   },
   modalCloseContainer: {
     alignSelf: 'flex-end'
