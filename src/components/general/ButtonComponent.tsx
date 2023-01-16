@@ -9,7 +9,7 @@ type Props = {
   disabled?: boolean | undefined,
   title: string | undefined,
   height: number | undefined,
-  width: number | undefined,
+  width: string | number | undefined,
   buttonStyle: StyleProp<ViewStyle>,
   gradientColorStart: string,
   gradientColorEnd: string,

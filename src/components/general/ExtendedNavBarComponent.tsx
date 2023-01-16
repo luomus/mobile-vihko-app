@@ -135,26 +135,26 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   return (
     <View style={Cs.stopObservingContainer}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={{ paddingHorizontal: 2 }}>
+      <View style={{ flexDirection: 'row', width: '50%' }}>
+        <View style={{ paddingHorizontal: 2, width: '50%' }}>
           <ButtonComponent onPressFunction={() => { stopObserving()}} title={t('stop')}
-            height={30} width={100} buttonStyle={Bs.stopObservingButton}
+            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
             gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
           />
         </View>
-        <View style={{ paddingHorizontal: 2 }}>
+        <View style={{ paddingHorizontal: 2, width: '50%' }}>
           <ButtonComponent onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
             title={tracking ? t('pause') : t('continue')}
-            height={30} width={100} buttonStyle={Bs.stopObservingButton}
+            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
           />
         </View>
       </View>
       {schema.formID === forms.birdAtlas ?
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ paddingHorizontal: 2 }}>
+        <View style={{ flexDirection: 'row', width: '50%' }}>
+          <View style={{ paddingHorizontal: 2, width: '50%' }}>
             {props.onPressMap === undefined ?
               <SelectedButtonComponent
                 onPress={() => null}
@@ -164,13 +164,13 @@ const ExtendedNavBarComponent = (props: Props) => {
                 textColor={Colors.darkText}
               /> :
               <ButtonComponent onPressFunction={() => { props.onPressMap === undefined ? null : props.onPressMap() }} title={t('map')}
-                height={30} width={80} buttonStyle={Bs.stopObservingButton}
+                height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
               />
             }
           </View>
-          <View style={{ paddingHorizontal: 2 }}>
+          <View style={{ paddingHorizontal: 2, width: '50%' }}>
             {props.onPressList === undefined ?
               <SelectedButtonComponent
                 onPress={() => null}
@@ -180,7 +180,7 @@ const ExtendedNavBarComponent = (props: Props) => {
                 textColor={Colors.darkText}
               /> :
               <ButtonComponent onPressFunction={() => { props.onPressList === undefined ? null : props.onPressList() }} title={t('list')}
-                height={30} width={80} buttonStyle={Bs.stopObservingButton}
+                height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
               />

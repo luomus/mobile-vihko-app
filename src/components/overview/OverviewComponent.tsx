@@ -276,28 +276,28 @@ const OverviewComponent = (props: Props) => {
                   dispatch(setObservationId(id))
                   props.onPressObservationEvent('overview')
                 }}
-                title={undefined} height={40} width={45} buttonStyle={Bs.iconButton}
+                title={'Edit'} height={40} width={'100%'} buttonStyle={Bs.textAndIconButton}
                 gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                 textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
               />
             </View>
             <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={() => setModalVisibility(true)} title={undefined}
-                height={40} width={45} buttonStyle={Bs.iconButton}
+              <ButtonComponent onPressFunction={() => setModalVisibility(true)} title={'Send'}
+                height={40} width={'100%'} buttonStyle={Bs.textAndIconButton}
                 gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
                 textStyle={Ts.buttonText} iconName={'send'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
               />
             </View>
             <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={undefined}
-                height={40} width={45} buttonStyle={Bs.iconButton}
+              <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={'Delete'}
+                height={40} width={'100%'} buttonStyle={Bs.textAndIconButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
             <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={() => handleBugReport()} title={undefined}
-                height={40} width={45} buttonStyle={Bs.iconButton}
+              <ButtonComponent onPressFunction={() => handleBugReport()} title={'Bug report'}
+                height={40} width={'100%'} buttonStyle={Bs.textAndIconButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
                 textStyle={Ts.buttonText} iconName={'bug-report'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
               />
