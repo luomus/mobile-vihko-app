@@ -111,13 +111,18 @@ const LoginComponent = (props: Props) => {
     const connected = await checkNetworkStatus()
     if (!connected) return
 
-    let promises = [
+    await Promise.all([
       dispatch(initObservationEvents()),
+      initLanguage()
+    ]).catch((error: any) => {
+      captureException(error)
+      showError(error.message)
+    })
+
+    await Promise.all([
       dispatch(getPermissions()),
       dispatch(getMetadata()),
-      initLanguage()
-    ]
-    await Promise.all(promises).catch((error: any) => {
+    ]).catch((error: any) => {
       captureException(error)
       showError(error.message)
     })
