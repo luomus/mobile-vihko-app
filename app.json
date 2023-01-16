@@ -30,7 +30,8 @@
         "UIBackgroundModes": [
           "location",
           "fetch"
-        ]
+        ],
+        "NSLocationWhenInUseUsageDescription": "Mobiilivihko requires permissions to track the route while the app is on the background."
       }
     },
     "android": {
