@@ -27,9 +27,9 @@ export const convertYKJToWGS84 = (coordinates: [number, number]) => {
   return proj4(ykjProjection, 'WGS84', coordinates)
 }
 
-const timeoutPromise = <T>(promise: Promise<T>, timeout: number) => Promise.race([promise, new Promise((_r, reject) => setTimeout(reject, timeout))])
+const timeoutPromise = <T>(promise: Promise<T>, timeout: number) => Promise.race([promise, new Promise<T>((_r, reject) => setTimeout(reject, timeout))])
 
-export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy : number = LOCATION_ACCURACY, timeout: number = 5000) => {
+export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy : number = LOCATION_ACCURACY, timeout: number = 5000): Promise<LocationObject> => {
   let permission: Location.LocationPermissionResponse | undefined = undefined
 
   try {

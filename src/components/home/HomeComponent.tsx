@@ -366,8 +366,13 @@ export const HomeComponentContainer = (
         }))
 
         //save the path before stopping
-        const location: LocationType = await getCurrentLocation(true)
-        await props.dispatch(appendPath([location]))
+        let location: LocationType
+        try {
+          location = await getCurrentLocation(true)
+          await props.dispatch(appendPath([location]))
+        } catch (error: any) {
+          showError('Could not get the last location of path: ' + error)
+        }
 
         if (props.path) {
           await props.dispatch(eventPathUpdate(pathToLineStringConstructor(props.path)))
