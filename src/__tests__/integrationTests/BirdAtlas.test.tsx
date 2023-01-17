@@ -1,14 +1,13 @@
 import { fireEvent, waitFor } from '@testing-library/react-native'
 import React from 'react'
-import { additionalJX519Fields, overrideJX519ObservationEventFields } from '../../../config/fields'
-import { renderWithProviders } from '../../../helpers/testHelper'
-import * as fi from '../../../languages/translations/fi.json'
-import * as fi2 from '../../../schemas/tripFormFi.json'
-import Navigator from '../../../navigation/Navigator'
-import { beginObservationEvent, CredentialsType, switchSchema, setCredentials } from '../../../stores'
-import i18n from '../../../languages/i18n'
-
-const onPressMap = jest.fn()
+import { additionalJX519Fields, overrideJX519ObservationEventFields } from '../../config/fields'
+import { renderWithProviders } from '../../helpers/testHelper'
+import * as fi from '../../languages/translations/fi.json'
+import * as fi2 from '../../schemas/birdAtlasFi.json'
+import Navigator from '../../navigation/Navigator'
+import { CredentialsType, switchSchema, setCredentials } from '../../stores'
+import { ActionSheetIOS } from 'react-native'
+import i18n from '../../languages/i18n'
 
 const initializeComponent = async (store:any) => {
   const credentials: CredentialsType = {
@@ -28,8 +27,7 @@ const initializeComponent = async (store:any) => {
   }
   await store.dispatch(setCredentials(credentials))
 
-  await store.dispatch(switchSchema('JX.519', i18n.language))
-  await store.dispatch(beginObservationEvent(onPressMap, fi['gps notification title'], fi['gps notification body']))
+  await store.dispatch(switchSchema('MHL.117', i18n.language))
 }
 
 let testPressLocation = {
@@ -41,16 +39,37 @@ let testPressLocation = {
   }
 }
 
-describe('MapComponent', () => {
-  test('testing the map component', async () => {
-    const { getByText, getByTestId, getAllByText, store } = renderWithProviders(<Navigator initialRoute='map'/>)
+ActionSheetIOS.showActionSheetWithOptions = (obj, callback) => callback(2)
+
+describe('BirdAtlas', () => {
+  test('is able to add bird atlas observations and save the event', async () => {
+
+    const { getByText, getByTestId, getAllByText, store } = renderWithProviders(<Navigator initialRoute='home'/>)
 
     await waitFor(async () => {await initializeComponent(store)})
 
-    expect(getByTestId('map-view')).toBeDefined()
+    await waitFor(() => expect(getByText(fi['bird atlas'])).toBeDefined())
+    fireEvent.press(getByText(fi['bird atlas']))
+
+    // This opens the AtlasInstruction modal
+    await waitFor(() => expect(getByText(fi['continue'])).toBeDefined())
+    expect(getByText(fi['cancel'])).toBeDefined()
+    expect(getByText(fi['grid description intro'], { exact: false })).toBeDefined()
+    fireEvent.press(getByText(fi['continue']))
+
+    // This opens the GridModalComponent
+    await waitFor(() => expect(getByText(fi['new trip'])).toBeDefined())
+    await waitFor(() => expect(getByText(fi['your current location is'], { exact: false })).toBeDefined())
+    expect(getByText(fi['link to result service'])).toBeDefined()
+    expect(getByText(fi['start'])).toBeDefined()
+    expect(getAllByText(fi['cancel'])).toHaveLength(1)
+    fireEvent.press(getByText(fi['start']))
+
+    // MapComponent
+    await waitFor(() => expect(getByTestId('map-view')).toBeDefined())
 
     // ExtendedNavBarComponent
-    expect(getByText(fi['stop'])).toBeDefined()
+    expect(getAllByText(fi['stop'])).toHaveLength(2)
     //expect(getByText(fi['to map'])).toBeDefined()
 
     // Buttons on MapComponent
@@ -69,16 +88,12 @@ describe('MapComponent', () => {
 
     let prop = fi2.data.form.schema.properties.gatherings.items.properties.units.items.properties
     expect(getByTestId('saveButton')).toBeDefined()
+    expect(getAllByText(fi['cancel'])).toHaveLength(2)
     expect(getByText(fi['species'])).toBeDefined()
     expect(getByTestId('autocomplete')).toBeDefined()
+    expect(getByText(prop.atlasCode.title)).toBeDefined()
     expect(getByText(prop.count.title)).toBeDefined() // Count
     expect(getByText(additionalJX519Fields.unitGathering_geometry_radius.title[0])).toBeDefined() // Accuracy (m)
-    expect(getByText(fi['time'])).toBeDefined()
-    expect(getByText(fi['timestamp'])).toBeDefined() // Now
-    expect(getByText(fi['choose time'])).toBeDefined() // Choose time
-    expect(getByText(prop.taxonConfidence.title)).toBeDefined() // Confidence of determination
-    expect(getByText(prop.wild.title)).toBeDefined() // Native status
-    expect(getByText(prop.atlasCode.title)).toBeDefined() // Breeding code
     expect(getByText(prop.notes.title)).toBeDefined() // Notes
     expect(getByText(fi['images'])).toBeDefined() // Images
     expect(getByText(fi['no image'])).toBeDefined() // No photos
@@ -93,6 +108,9 @@ describe('MapComponent', () => {
     for (const e of ['vihervarpunen', 'kirjosieppo', 'varpunen', 'kuusitiainen']) {
       expect(getByText(e)).toBeDefined()
     }
+    /*for (let i of ['Empty', '1', '2', '3', '4', '5', '6', '61', '62', '63', '64', '65', '66', '7', '71', '72', '73', '74', '75', '8', '81', '82']) {
+      expect(getByText(i)).toBeDefined()
+    }*/
 
     // Select vihervarpunen
     fireEvent.press(getByText('vihervarpunen'))
@@ -110,25 +128,20 @@ describe('MapComponent', () => {
     await waitFor(() => expect(getByTestId('map-view')).toBeDefined())
     fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
 
-    // Check that the 'edit obserrvation' modal pops up, and press the button to edit our observation
+    // Check that the 'edit observation' modal pops up, and press the button to edit our observation
     //expect(getByText(fi['edit observations'])).toBeDefined() //TODO: why doesn't this show?
     expect(getByText('vihervarpunen')).toBeDefined()
     fireEvent.press(getByText('vihervarpunen'))
 
     // Check that all the fields are there, and press the green save button
     expect(getByTestId('saveButton')).toBeDefined()
+    expect(getByText(fi['cancel'])).toBeDefined()
     expect(getByText(fi['edit location'])).toBeDefined()
-    expect(getByText(fi['delete'])).toBeDefined()
     expect(getByText(fi['species'])).toBeDefined()
     expect(getByTestId('autocomplete')).toBeDefined()
+    expect(getByText(prop.atlasCode.title)).toBeDefined()
     expect(getByText(prop.count.title)).toBeDefined() // Count
     expect(getByText(additionalJX519Fields.unitGathering_geometry_radius.title[0])).toBeDefined() // Accuracy (m)
-    expect(getByText(fi['time'])).toBeDefined()
-    expect(getByText(fi['timestamp'])).toBeDefined() // Now
-    expect(getByText(fi['choose time'])).toBeDefined() // Choose time
-    expect(getByText(prop.taxonConfidence.title)).toBeDefined() // Confidence of determination
-    expect(getByText(prop.wild.title)).toBeDefined() // Native status
-    expect(getByText(prop.atlasCode.title)).toBeDefined() // Breeding code
     expect(getByText(prop.notes.title)).toBeDefined() // Notes
     expect(getByText(fi['images'])).toBeDefined() // Images
     expect(getByText(fi['no image'])).toBeDefined() // No photos
@@ -139,30 +152,34 @@ describe('MapComponent', () => {
 
     // Check that we are back at the map view again, and press the stop button
     expect(getByTestId('map-view')).toBeDefined()
-    expect(getByText(fi['stop'])).toBeDefined()
-    fireEvent.press(getByText(fi['stop']))
+    expect(getAllByText(fi['stop'])).toHaveLength(2)
+    fireEvent.press(getAllByText(fi['stop'])[0])
 
     // Check that the 'Do you really want to quit' modal pops up, try the 'do not stop' button
-    await waitFor(() => expect(getAllByText(fi['stop'])).toHaveLength(2))
-    expect(getByText(fi['do not stop'])).toBeDefined()
-    fireEvent.press(getByText(fi['do not stop']))
+    await waitFor(() => expect(getAllByText(fi['stop'])).toHaveLength(5))
+    expect(getAllByText(fi['do not stop'])).toHaveLength(2)
+    fireEvent.press(getAllByText(fi['do not stop'])[0])
 
     // Check that we are back at the map view again, and press the stop button again
     expect(getByTestId('map-view')).toBeDefined()
-    expect(getByText(fi['stop'])).toBeDefined()
-    fireEvent.press(getByText(fi['stop']))
+    expect(getAllByText(fi['stop'])).toHaveLength(2)
+    fireEvent.press(getAllByText(fi['stop'])[0])
 
     // Check that the 'Do you really want to quit' modal pops up, this time press the 'Yes, stop' button
-    expect(getByText(fi['do not stop'])).toBeDefined()
-    expect(getAllByText(fi['stop'])).toHaveLength(2)
-    fireEvent.press(getAllByText(fi['stop'])[1])
+    expect(getAllByText(fi['do not stop'])).toHaveLength(2)
+    expect(getAllByText(fi['stop'])).toHaveLength(4)
+    fireEvent.press(getAllByText(fi['stop'])[3])
 
     // Check that the submit form is displayed, press save to submit
     await waitFor(() => expect(getByTestId('saveButton')).toBeDefined())
+    expect(getByText(fi['cancel'])).toBeDefined()
+    expect(getByText(fi['delete path'])).toBeDefined()
     expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.legPublic.title)).toBeDefined()
-    expect(getByText(overrideJX519ObservationEventFields.secureLevel.title[0])).toBeDefined()
-    expect(getByText(fi['date begin'])).toBeDefined()
-    expect(getByText(fi['date end'])).toBeDefined()
+    expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.completeList.properties.completeListType.title)).toBeDefined()
+    expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.dateBegin.title)).toBeDefined() // Alkupäivä
+    expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.timeStart.title)).toBeDefined() // Alkuaika
+    expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.dateEnd.title)).toBeDefined() //Loppupäivä
+    expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.timeEnd.title)).toBeDefined() //Loppuaika
     expect(getByText(overrideJX519ObservationEventFields.gatherings_0_locality.title[0])).toBeDefined()
     expect(getByText(fi2.data.form.schema.properties.gatherings.items.properties.localityDescription.title)).toBeDefined()
     expect(getByText(fi2.data.form.schema.properties.gatherings.items.properties.weather.title)).toBeDefined()
@@ -170,15 +187,24 @@ describe('MapComponent', () => {
     expect(getByText(fi2.data.form.schema.properties.keywords.title)).toBeDefined()
     fireEvent.press(getByTestId('saveButton'))
 
+    await waitFor(() => expect(getByText(fi['must choose list type'])).toBeDefined())
+
+    // Select something
+    expect(getByTestId('formPicker')).toBeDefined()
+    fireEvent.press(getByTestId('formPicker'))
+    //await waitFor(() => expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.completeList.properties.completeListType.enumNames[1])).toBeDefined())
+    //expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.completeList.properties.completeListType.enumNames[2])).toBeDefined()
+    //fireEvent.press(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.completeList.properties.completeListType.enumNames[2]))
+    fireEvent.press(getByTestId('saveButton'))
+
     // Check that the SendEventModal pops up
     await waitFor(() => expect(getByText(fi['send public'])).toBeDefined())
-    expect(getByText(fi['send private'])).toBeDefined()
     expect(getByText(fi['do not submit'])).toBeDefined()
     fireEvent.press(getByText(fi['do not submit']))
 
     // Check that we are back at the home screen
-    await waitFor(() => expect(getAllByText(fi['trip form'])).toHaveLength(2))
-    expect(getByText(fi['bird atlas'])).toBeDefined()
+    await waitFor(() => expect(getByText(fi['trip form'])).toBeDefined())
+    expect(getAllByText(fi['bird atlas'])).toHaveLength(2)
     expect(getByText(fi['fungi atlas'])).toBeDefined()
     expect(getByText(fi['lolife'])).toBeDefined()
   })

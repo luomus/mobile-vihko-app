@@ -1,11 +1,11 @@
 import { fireEvent, waitFor } from '@testing-library/react-native'
 import React from 'react'
-import { renderWithProviders } from '../../../helpers/testHelper'
-import * as fi from '../../../languages/translations/fi.json'
-import * as lolifeSchema from '../../../schemas/lolifeFi.json'
-import Navigator from '../../../navigation/Navigator'
-import { CredentialsType, switchSchema, setCredentials } from '../../../stores'
-import i18n from '../../../languages/i18n'
+import { renderWithProviders } from '../../helpers/testHelper'
+import * as fi from '../../languages/translations/fi.json'
+import * as lolifeSchema from '../../schemas/lolifeFi.json'
+import Navigator from '../../navigation/Navigator'
+import { CredentialsType, switchSchema, setCredentials } from '../../stores'
+import i18n from '../../languages/i18n'
 
 const initializeComponent = async (store:any) => {
   const credentials: CredentialsType = {
@@ -38,8 +38,8 @@ let testPressLocation = {
 }
 
 describe('LoLIFE', () => {
-  test('testing the lolife form', async () => {
-    const { getByText, getByTestId, getAllByText, getAllByTestId, store, debug } = renderWithProviders(<Navigator initialRoute='home'/>)
+  test('is able to add flying squirrel observations and save the event', async () => {
+    const { getByText, getByTestId, getAllByText, store } = renderWithProviders(<Navigator initialRoute='home'/>)
   
     await waitFor(async () => {await initializeComponent(store)})
   
