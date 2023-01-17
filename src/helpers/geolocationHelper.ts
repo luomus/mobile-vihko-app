@@ -27,7 +27,9 @@ export const convertYKJToWGS84 = (coordinates: [number, number]) => {
   return proj4(ykjProjection, 'WGS84', coordinates)
 }
 
-export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy : number = LOCATION_ACCURACY) => {
+const timeoutPromise = <T>(promise: Promise<T>, timeout: number) => Promise.race([promise, new Promise((_r, reject) => setTimeout(reject, timeout))])
+
+export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy : number = LOCATION_ACCURACY, timeout: number = 5000) => {
   let permission: Location.LocationPermissionResponse | undefined = undefined
 
   try {
@@ -51,9 +53,9 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
       if (previousLocation !== null) return previousLocation
     }
 
-    return await Location.getCurrentPositionAsync({
+    return await timeoutPromise(Location.getCurrentPositionAsync({
       accuracy: locationAccuracy
-    })
+    }), timeout)
   } else {
     throw new Error(i18n.t('permission to access location denied'))
   }
@@ -123,8 +125,8 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
   try {
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
       accuracy: PATH_ACCURACY,
-      distanceInterval: 0.01, //PATH_MIN_X_INTERVALL,
-      timeInterval: 10, //PATH_MIN_T_INTERVALL,
+      distanceInterval: PATH_MIN_X_INTERVALL,
+      timeInterval: PATH_MIN_T_INTERVALL,
       showsBackgroundLocationIndicator: true,
       foregroundService: {
         notificationTitle: title,
