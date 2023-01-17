@@ -128,7 +128,7 @@ describe('BirdAtlas', () => {
     await waitFor(() => expect(getByTestId('map-view')).toBeDefined())
     fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
 
-    // Check that the 'edit obserrvation' modal pops up, and press the button to edit our observation
+    // Check that the 'edit observation' modal pops up, and press the button to edit our observation
     //expect(getByText(fi['edit observations'])).toBeDefined() //TODO: why doesn't this show?
     expect(getByText('vihervarpunen')).toBeDefined()
     fireEvent.press(getByText('vihervarpunen'))

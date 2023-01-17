@@ -23,7 +23,7 @@
                 "title": "10 km"
               }
             ],
-            "title": "Havainnon tarkat paikkatiedot ovat julkisia",
+            "title": "Paikan karkeistus",
             "default": "MX.secureLevelNone"
           },
           "gatheringEvent": {
