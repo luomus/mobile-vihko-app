@@ -185,7 +185,21 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 
     if (observationEvent.events[observationEvent.events.length - 1].grid) {
       const grid = observationEvent.events[observationEvent.events.length - 1].grid
-      const location = await getCurrentLocation()
+      let location: LocationObject
+      try {
+        location = await getCurrentLocation()
+      } catch (error: any) {
+        // If the Location.getCurrentLocationAsync fails or times out, we don't need to spam Sentry, since it probably works on the next iteration.
+        log.error({
+          location: '/stores/shared/actions.tsx continueObservationEvent()',
+          error: error,
+          user_id: credentials.user.id
+        })
+        return Promise.reject({
+          severity: 'low',
+          message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
+        })
+      }
       const ykjCoords = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
 
       dispatch(setGrid({
