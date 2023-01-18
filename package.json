@@ -9,7 +9,8 @@
     "test": "jest -u",
     "tests": "jest -u --silent",
     "lint": "eslint '**'",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.0",
@@ -96,6 +97,7 @@
     "eslint": "^7.30.0",
     "eslint-plugin-jest": "^26.8.2",
     "eslint-plugin-react": "^7.24.0",
+    "husky": "^8.0.3",
     "jest": "^27.0.0",
     "jest-expo": "^47.0.0",
     "react-test-renderer": "18.0.0",
