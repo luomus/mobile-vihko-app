@@ -7,6 +7,7 @@ import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
+import i18n from '../../languages/i18n'
 
 interface Props {
   onPress: (key: string) => void,
@@ -23,8 +24,8 @@ const AtlasCodeStampComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    const codeEnums = get(schema, 'fi.schema.properties.gatherings.items.properties.units.items.properties.atlasCode.oneOf')
-    const codeDictionary: { [key: string]: any } = {}
+    const codeEnums = get(schema, i18n.language + '.schema.properties.gatherings.items.properties.units.items.properties.atlasCode.oneOf')
+    let codeDictionary: { [key: string]: any } = {}
     codeEnums.forEach((entry: { const: string, title: string }) => codeDictionary[entry.const] = entry.title)
     const code = getAtlasCode(codeDictionary[props.atlasKey])
     setAtlasCode(code)
