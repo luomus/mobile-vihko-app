@@ -63,6 +63,7 @@
   "failed to save credentials locally": "Misslyckades med att spara användardatan till enheten.",
   "failed to save schema to storage": "Misslyckades med att spara följande observationsscheman till lokalt minne.",
   "failed to save updated permissions locally": "Möjliga ändringar av formulärtillstånd kunde inte sparas i programmet.",
+  "failed to start location updates": "Misslyckades att starta platsspårning.",
   "failed to update permissions": "Misslyckades med att ladda formulärtillstånd, sparade tillstånd används.",
   "failed to watch background location": "Misslyckades att spåra plats i bakgrunden.",
   "failed to watch position": "Misslyckades att spåra användarnas position.",

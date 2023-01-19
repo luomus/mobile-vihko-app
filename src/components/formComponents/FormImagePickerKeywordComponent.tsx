@@ -66,7 +66,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
       }
 
       let pickerResult: ImagePicker.ImagePickerResult
-      let fromGallery: boolean = false
+      let fromGallery = false
 
       if (useCamera) {
         pickerResult = await ImagePicker.launchCameraAsync()
@@ -76,7 +76,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
       }
 
       if (!pickerResult.cancelled) {
-        let uri = pickerResult.uri
+        const uri = pickerResult.uri
 
         setImages(images.concat({
           uri: uri,
@@ -153,7 +153,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
 
   const renderImages = () => {
     return images.map((image: Record<string, any>) => {
-      let initial: number = -1
+      let initial = -1
 
       //checks the keywords of all languages to find out which index was chosen in the radio button
       const indexFi: number = keywords.fi.findIndex((keyword: string) => keyword === image.keywords)

@@ -41,14 +41,14 @@ const ListSorterComponent = (props: Props) => {
         props.updateList()
       }
 
-    // } else if (itemValue === 'systematic') {
+      // } else if (itemValue === 'systematic') {
 
     } else if (itemValue === 'name') {
       const sortByName = (list: Record<string, any>[]) => {
         return list.sort((a, b) => {
-          const textA = a.identifications[0].taxon;
-          const textB = b.identifications[0].taxon;
-          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          const textA = a.identifications[0].taxon
+          const textB = b.identifications[0].taxon
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
         })
       }
       const pickedSorted = sortByName(props.picked)
@@ -59,9 +59,9 @@ const ListSorterComponent = (props: Props) => {
     } else if (itemValue === 'scientific') {
       const sortByScientificName = (list: Record<string, any>[]) => {
         return list.sort((a, b) => {
-          const textA = a.scientificName;
-          const textB = b.scientificName;
-          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          const textA = a.scientificName
+          const textB = b.scientificName
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
         })
       }
       const pickedSorted = sortByScientificName(props.picked)
@@ -88,20 +88,20 @@ const ListSorterComponent = (props: Props) => {
   return (
     <View style={Cs.listSorterContainer}>
       <TouchableOpacity onPress={() => onPress()} style={Cs.iOSPickerContainer}>
-      <TextInput
-        style={Os.iOSListSorter}
-        value={selected}
-        editable={false}
-        onPressOut={() => onPress()}
-        multiline
-      />
-      <Icon
-        name='arrow-drop-down'
-        type='material-icons'
-        color={Colors.neutral7}
-        size={22}
-        tvParallaxProperties={undefined}
-      />
+        <TextInput
+          style={Os.iOSListSorter}
+          value={selected}
+          editable={false}
+          onPressOut={() => onPress()}
+          multiline
+        />
+        <Icon
+          name='arrow-drop-down'
+          type='material-icons'
+          color={Colors.neutral7}
+          size={22}
+          tvParallaxProperties={undefined}
+        />
       </TouchableOpacity>
     </View>
   )

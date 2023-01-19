@@ -9,7 +9,7 @@ import { captureException } from './sentry'
 
 //define whether the event will be released publicly or privately
 export const definePublicity = (event: Record<string, any>, isPublic: boolean): Record<string, any> => {
-  let modifiedEvent = event
+  const modifiedEvent = event
 
   if (isPublic) {
     modifiedEvent.publicityRestrictions = 'MZ.publicityRestrictionsPublic'
@@ -22,7 +22,7 @@ export const definePublicity = (event: Record<string, any>, isPublic: boolean): 
 
 export const loopThroughUnits = (event: Record<string, any>): Record<string, any> => {
 
-  let modifiedEvent: Record<string, any> = event
+  const modifiedEvent: Record<string, any> = event
 
   modifiedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
     if (unit.images && unit.images.length > 0) {
@@ -43,7 +43,7 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
 
 export const loopThroughBirdUnits = (event: Record<string, any>): Record<string, any> => {
 
-  let modifiedEvent: Record<string, any> = event
+  const modifiedEvent: Record<string, any> = event
 
   modifiedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
     if (unit.scientificName) {
@@ -150,9 +150,9 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   }
 
   //store list of provinces and municipalities in string variables
-  let biologicalProvince: string = ''
-  let country: string = i18n.t('finland') //because country is always finland here, just use the translation
-  let municipality: string = ''
+  let biologicalProvince = ''
+  const country: string = i18n.t('finland') //because country is always finland here, just use the translation
+  let municipality = ''
 
   //loop through results and add provinces and municipalities to the list, separated by commas
   localityDetails.result.results.forEach((result: Record<string, any>) => {
@@ -202,9 +202,9 @@ export const defineLocalityForeign = async (geometry: Point, lang: string, crede
   }
 
   //store list of provinces, countries and municipalities in string arrays
-  let administrativeProvinceArray: Array<string> = []
-  let countryArray: Array<string> = []
-  let municipalityArray: Array<string> = []
+  const administrativeProvinceArray: Array<string> = []
+  const countryArray: Array<string> = []
+  const municipalityArray: Array<string> = []
 
   //loop through results and add provinces, countries and municipalities to the arrays, without duplicates
   localityDetails.forEach((point: Record<string, any>) => {
@@ -228,9 +228,9 @@ export const defineLocalityForeign = async (geometry: Point, lang: string, crede
   })
 
   //form strings separated by commas from the arrays
-  let administrativeProvince: string = administrativeProvinceArray.join(', ')
-  let country: string = countryArray.join(', ')
-  let municipality: string = municipalityArray.join(', ')
+  const administrativeProvince: string = administrativeProvinceArray.join(', ')
+  const country: string = countryArray.join(', ')
+  const municipality: string = municipalityArray.join(', ')
 
   return {
     administrativeProvince: administrativeProvince,

@@ -14,7 +14,7 @@ const Form = (
   lang: string,
   scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>
 ) => {
-  let toReturn: any[] = []
+  const toReturn: any[] = []
 
   const schemaToForm = (
     path: string | null,
@@ -102,7 +102,7 @@ const Form = (
         case 'completeListField':
           set(fieldEnumDict, 'empty', '')
           fieldEnumDict = omit(fieldEnumDict, 'MY.completeListTypeCompleteWithBreedingStatus')
-          let objectOrder = {
+          const objectOrder = {
             'empty': '',
           }
           fieldEnumDict = Object.assign(objectOrder, fieldEnumDict) //sets empty as default, when user has not selected complete list value before
@@ -143,7 +143,7 @@ const Form = (
     defaultValue: any,
     blacklist: string[] | null
   ) => {
-    let translatedTitle: string = ''
+    let translatedTitle = ''
 
     if (typeof (title) !== 'string') {
       if (lang === 'fi') {
@@ -195,7 +195,7 @@ const Form = (
     }
 
     toReturn.forEach(element => {
-      let index: number = 0
+      let index = 0
       if (fieldOrder) {
         index = fieldOrder.findIndex(field => field === element.key)
       } else {

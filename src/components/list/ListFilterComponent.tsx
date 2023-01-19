@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react"
-import { TextInput, View } from "react-native"
-import { Icon } from "react-native-elements"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { ParamListBase } from "@react-navigation/native"
-import { useTranslation } from "react-i18next"
+import React, { useEffect } from 'react'
+import { TextInput, View } from 'react-native'
+import { Icon } from 'react-native-elements'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { ParamListBase } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
-import Colors from "../../styles/Colors"
+import Colors from '../../styles/Colors'
 
 type Props = {
   search: string,
@@ -29,7 +29,7 @@ const ListFilterComponent = (props: Props) => {
 
       return openKeyboard
     }
-  }, [props.navigation, props.textInput.current])  
+  }, [props.navigation, props.textInput.current])
 
   return (
     <View style={Cs.listFilterContainer}>

@@ -77,18 +77,18 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
     }
 
     //create an empty observation zone
-    let empty = {
+    const empty = {
       id: 'empty',
       name: '',
       geometry: null
     }
 
-    let firstElement: ZoneType[] = [empty]
+    const firstElement: ZoneType[] = [empty]
 
     //sort the observation zones in alphabetical order
     zones.sort((zoneA: ZoneType, zoneB: ZoneType) => {
-      let nameA = zoneA.name
-      let nameB = zoneB.name
+      const nameA = zoneA.name
+      const nameB = zoneB.name
 
       if (nameA < nameB) {
         return -1

@@ -29,7 +29,7 @@ export const convertYKJToWGS84 = (coordinates: [number, number]) => {
 
 const timeoutPromise = <T>(promise: Promise<T>, timeout: number) => Promise.race([promise, new Promise<T>((_r, reject) => setTimeout(reject, timeout))])
 
-export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy : number = LOCATION_ACCURACY, timeout: number = 5000): Promise<LocationObject> => {
+export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy: number = LOCATION_ACCURACY, timeout = 5000): Promise<LocationObject> => {
   let permission: Location.LocationPermissionResponse | undefined = undefined
 
   try {
@@ -107,17 +107,14 @@ export const watchPositionAsync = async (updateLocation: (location: LocationObje
 }
 
 export const watchBackgroundLocationAsync = async (title: string, body: string) => {
-  let backgroundPermission: Location.LocationPermissionResponse | undefined = undefined
-  let foregroundPermission: Location.LocationPermissionResponse | undefined = undefined
-
   try {
-    foregroundPermission = await Location.requestForegroundPermissionsAsync()
+    await Location.requestForegroundPermissionsAsync()
   } catch (error) {
     throw new Error(i18n.t('failed to request foreground permissions'))
   }
 
   try {
-    backgroundPermission = await Location.requestBackgroundPermissionsAsync()
+    await Location.requestBackgroundPermissionsAsync()
   } catch (error: any) {
     throw new Error(i18n.t('failed to request background permissions'))
   }
@@ -134,8 +131,8 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
         notificationColor: Colors.primary5
       }
     })
-  } catch(error) {
-    throw(error)
+  } catch (error) {
+    throw new Error(i18n.t('failed to start location updates'))
   }
 }
 

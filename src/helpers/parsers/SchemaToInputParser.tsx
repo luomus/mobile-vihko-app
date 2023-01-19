@@ -22,16 +22,16 @@ export const parsePathForFieldParams = (inputObject: Record<string, any>, path: 
 
 //parses object containing the information of a single property for field parameters required by its input field
 export const parseObjectForFieldParams = (inputObject: Record<string, any>) => {
-  let title: string = ''
-  let type: string = ''
-  let isEnum: boolean = false
+  let title = ''
+  let type = ''
+  let isEnum = false
   let enumDict: Record<string, any> = {}
-  let isArray: boolean = false
-  let typeOfArray: string = ''
+  let isArray = false
+  let typeOfArray = ''
   let defaultValue: string | number | boolean = ''
 
   const formEnumDict = (oneOf: { const: string, title: string }[]) => {
-    let dict: { [key: string]: any } = {}
+    const dict: { [key: string]: any } = {}
     oneOf.forEach((entry: { const: string, title: string }) => {
       dict[entry.const] = entry.title
     })

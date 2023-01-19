@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react"
-import { View } from "react-native"
+import React, { useEffect, useState } from 'react'
+import { View } from 'react-native'
 import { LatLng } from 'react-native-maps'
-import { useDispatch, useSelector } from "react-redux"
-import { convertLatLngToPoint } from "../../../helpers/geoJSONHelper"
+import { useDispatch, useSelector } from 'react-redux'
+import { convertLatLngToPoint } from '../../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
   clearObservationId,
   clearObservationLocation,
-  deleteObservation,  
+  deleteObservation,
   setEditing,
   setMessageState,
   setObservationId,
   setObservationLocation
-} from "../../../stores"
-import ExtendedNavBarComponent from "../../general/ExtendedNavBarComponent"
-import MessageComponent from "../../general/MessageComponent"
-import MapModalComponent from "../MapModalComponent"
-import ObservationButtonsComponent from "../ObservationButtonsComponent"
+} from '../../../stores'
+import ExtendedNavBarComponent from '../../general/ExtendedNavBarComponent'
+import MessageComponent from '../../general/MessageComponent'
+import MapModalComponent from '../MapModalComponent'
+import ObservationButtonsComponent from '../ObservationButtonsComponent'
 import Bs from '../../../styles/ButtonStyles'
 import Cs from '../../../styles/ContainerStyles'
 import Ts from '../../../styles/TextStyles'
 import Colors from '../../../styles/Colors'
-import { useTranslation } from "react-i18next"
-import ButtonComponent from "../../general/ButtonComponent"
-import { captureException } from "../../../helpers/sentry"
+import { useTranslation } from 'react-i18next'
+import ButtonComponent from '../../general/ButtonComponent'
+import { captureException } from '../../../helpers/sentry'
 
 type Props = {
   onPressHome: () => void,

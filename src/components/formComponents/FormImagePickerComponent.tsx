@@ -49,7 +49,7 @@ const ImagePickerComponent = (props: Props) => {
       }
 
       let pickerResult: ImagePicker.ImagePickerResult
-      let fromGallery: boolean = false
+      let fromGallery = false
 
       if (useCamera) {
         pickerResult = await ImagePicker.launchCameraAsync()
@@ -59,7 +59,7 @@ const ImagePickerComponent = (props: Props) => {
       }
 
       if (!pickerResult.cancelled) {
-        let uri = pickerResult.uri
+        const uri = pickerResult.uri
 
         setImages(images.concat({
           uri: uri,

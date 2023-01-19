@@ -71,7 +71,7 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
     const { credentials } = getState()
 
     try {
-      const observationEvents: Array<Object> = await storageService.fetch('observationEvents')
+      const observationEvents: Array<Record<string, any>> = await storageService.fetch('observationEvents')
       if (observationEvents !== null) {
         dispatch(replaceObservationEvents(observationEvents))
         return Promise.resolve()
@@ -96,7 +96,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     const { credentials, observationEvent, schema } = getState()
 
     let event: Record<string, any> = cloneDeep(observationEvent.events.find((event: Record<string, any>) => event.id === id))
-    let units: Record<string, any>[] = event.gatherings[0].units
+    const units: Record<string, any>[] = event.gatherings[0].units
 
     //check that internet can be reached
     try {
@@ -191,7 +191,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //for each observation in observation event try to send images to server
     //using saveImages, and clean out local properties
     try {
-      let newUnits = await Promise.all(units.map(async (unit: Record<string, any>) => {
+      const newUnits = await Promise.all(units.map(async (unit: Record<string, any>) => {
         let newUnit: Record<string, any>
         let newImages
 
@@ -567,9 +567,9 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
 
     //fetch taxon details concurrently and initialize bird list observations
     await Promise.all(birdList.map(async (item: Record<string, any>) => {
-      let res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
-      let observation = {}
-      let name: string = ''
+      const res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
+      const observation = {}
+      let name = ''
       if (lang === 'fi') {
         name = item.vernacularName.fi
       } else if (lang === 'sv') {

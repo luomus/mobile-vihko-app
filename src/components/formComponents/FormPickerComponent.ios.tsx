@@ -11,7 +11,7 @@ import Colors from '../../styles/Colors'
 interface Props {
   title: string,
   objectTitle: string,
-  pickerItems: Array<Object>,
+  pickerItems: Array<JSX.Element>,
   selectedValue: string | null,
   validation?: Record<string, any>,
   dictionary: { [key: string]: any }
@@ -31,7 +31,7 @@ const FormPickerComponent = (props: Props) => {
       register(props.objectTitle)
     }
     setValue(props.objectTitle, props.selectedValue)
-    let valueSet = []
+    const valueSet = []
     for (const key in props.dictionary) {
       valueSet.push(props.dictionary[key])
     }

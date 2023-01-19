@@ -68,7 +68,7 @@ export const createUnitBoundingBox = (units: Record<string, any>): Polygon | Poi
   })
 
   //returns a bounding box based on unit coordinates
-  let boundingBox: Record<string, any> = calculateBoundingBoxBoundaries(points)
+  const boundingBox: Record<string, any> = calculateBoundingBoxBoundaries(points)
 
   return {
     type: 'Polygon',
@@ -143,10 +143,10 @@ export const centerOfGeometry = (geometry: any, units: Array<Record<string, any>
 
 //takes list of coordinates as input and outputs max/min lng/lat of the created BB of coordinates
 const calculateBoundingBoxBoundaries = (coordinates: Array<Array<number>>): Record<string, any> => {
-  let maxLat: number = -90
-  let minLat: number = 90
-  let maxLng: number = -180
-  let minLng: number = 180
+  let maxLat = -90
+  let minLat = 90
+  let maxLng = -180
+  let minLng = 180
 
   //checks if a point is a new edge for BB
   const addPoint = (pointCoordinates: Array<number>): void => {
@@ -191,8 +191,8 @@ export const centerOfBoundingBox = (geometry: Polygon | Point): Point => {
   const boundingBox = calculateBoundingBoxBoundaries(geometry.coordinates[0])
 
   //count the average of lng and lat to find out the center point
-  let avgLng = (boundingBox.maxLng + boundingBox.minLng) / 2
-  let avgLat = (boundingBox.maxLat + boundingBox.minLat) / 2
+  const avgLng = (boundingBox.maxLng + boundingBox.minLng) / 2
+  const avgLat = (boundingBox.maxLat + boundingBox.minLat) / 2
 
   return {
     type: 'Point',
@@ -219,7 +219,7 @@ export const overlapsFinland = (geometry: MultiLineString | LineString | Polygon
 
   //if the geometry is a LineString, check if even one of the points is inside finnish borders, if so, return true
   if (geometry.type === 'LineString') {
-    let somePointsOverlapFinland: boolean = false
+    let somePointsOverlapFinland = false
     geometry.coordinates.forEach((point: Array<number>) => {
       if (pointOverlapsFinland(point)) {
         somePointsOverlapFinland = true
@@ -229,7 +229,7 @@ export const overlapsFinland = (geometry: MultiLineString | LineString | Polygon
   }
   //same for GeometryCollection of LineStrings
   if (geometry.type === 'MultiLineString') {
-    let somePointsOverlapFinland: boolean = false
+    let somePointsOverlapFinland = false
 
     geometry.coordinates.forEach((coords: Array<Array<number>>) => {
       coords.forEach((point: Array<number>) => {
@@ -263,18 +263,18 @@ export const removeDuplicatesFromPath = (lineString: LineString | MultiLineStrin
   if (!lineString) { return }
 
   const filterGeometry = (points: Array<Array<number>>) => {
-    let uniqueCoordinates: Array<Array<number>> = []
+    const uniqueCoordinates: Array<Array<number>> = []
 
     points.forEach(point => {
-      let noDuplicates: boolean = true
+      let noDuplicates = true
       //use same decimals for all coordinates
-      const coord0: number = Number(point[0].toFixed(5))
-      const coord1: number = Number(point[1].toFixed(5))
+      const coord0 = Number(point[0].toFixed(5))
+      const coord1 = Number(point[1].toFixed(5))
 
       //check that the point isn't a duplicate of any of the unique coordinates
       uniqueCoordinates.forEach((uniquePoint: Array<number>) => {
-        const uniqueCoord0: number = Number(uniquePoint[0].toFixed(5))
-        const uniqueCoord1: number = Number(uniquePoint[1].toFixed(5))
+        const uniqueCoord0 = Number(uniquePoint[0].toFixed(5))
+        const uniqueCoord1 = Number(uniquePoint[1].toFixed(5))
 
         if (coord0 === uniqueCoord0 && coord1 === uniqueCoord1) {
           noDuplicates = false
@@ -333,7 +333,7 @@ export const removeDuplicatesFromPath = (lineString: LineString | MultiLineStrin
 export const listOfHaversineNeighbors = (units: Array<Record<string, any>>, region: Record<string, any>, point: any):
   Array<Record<string, any>> => {
 
-  let filteredUnits: Record<string, any>[] = []
+  const filteredUnits: Record<string, any>[] = []
   units.forEach((observation: Record<string, any>) => {
     if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {
       filteredUnits.push(observation)

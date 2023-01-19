@@ -56,8 +56,8 @@ describe('parseDateFromDocumentToFullISO', () => {
     const dateOnly = isoDate.substring(0, isoDate.lastIndexOf('T') + 1)
     isoDate = dateOnly + '14:12'
     const type = 'time'
-    let timezoneMinutes = -(new Date().getTimezoneOffset())
-    let timezoneStr = String(timezoneMinutes / 60).padStart(2, '0') + ':' + String(timezoneMinutes % 60).padStart(2, '0')
+    const timezoneMinutes = -(new Date().getTimezoneOffset())
+    const timezoneStr = String(timezoneMinutes / 60).padStart(2, '0') + ':' + String(timezoneMinutes % 60).padStart(2, '0')
     const parsedTime = parseDateFromDocumentToFullISO(isoDate, type)
     expect(parsedTime).toEqual(dateOnly + '20:12:00+' + timezoneStr)
   })

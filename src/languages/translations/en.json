@@ -63,6 +63,7 @@
   "failed to save credentials locally": "Failed to save user credentials to device to local storage.",
   "failed to save schema to storage": "Failed to save the following schemas to local storage.",
   "failed to save updated permissions locally": "Failed to save possible changes in form permission to the application.",
+  "failed to start location updates": "Failed to start location updates.",
   "failed to update permissions": "Failed to load form permissions, previously saved permissions are used.",
   "failed to watch background location": "Failed to track location on background.",
   "failed to watch position": "Failed to track user's position.",

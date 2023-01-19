@@ -26,7 +26,7 @@ const observationReducer = (state = null, action : observationActionTypes) => {
   }
 }
 
-const observationEventInterruptedReducer = (state: boolean = false, action : observationActionTypes) => {
+const observationEventInterruptedReducer = (state = false, action : observationActionTypes) => {
   switch (action.type) {
     case SET_OBSERVATION_EVENT_INTERRUPTED:
       return action.payload

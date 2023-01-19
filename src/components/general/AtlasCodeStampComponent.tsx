@@ -24,7 +24,7 @@ const AtlasCodeStampComponent = (props: Props) => {
 
   useEffect(() => {
     const codeEnums = get(schema, 'fi.schema.properties.gatherings.items.properties.units.items.properties.atlasCode.oneOf')
-    let codeDictionary: { [key: string]: any } = {}
+    const codeDictionary: { [key: string]: any } = {}
     codeEnums.forEach((entry: { const: string, title: string }) => codeDictionary[entry.const] = entry.title)
     const code = getAtlasCode(codeDictionary[props.atlasKey])
     setAtlasCode(code)

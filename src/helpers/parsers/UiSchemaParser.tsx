@@ -5,8 +5,8 @@ const locateNextInstanceOf: any | null = (objectName: string, inputObject: Recor
   let queue = [inputObject]
 
   while (queue.length > 0) {
-    let queueTop = queue.shift()
-    for (let key in queueTop) {
+    const queueTop = queue.shift()
+    for (const key in queueTop) {
       if (key === objectName) {
         result = queueTop[key]
         queue = []
@@ -41,9 +41,9 @@ const blacklistExtractor = (inputObject: Record<string, any>) => {
 
 const fieldScopeExtractor = (fieldScopes: Record<string, any>, definitions: Record<string, any> | null) => {
   const findFieldsAndBlacklist = (inputObject: Record<string, any>) => {
-    let fields: string[] | null = get(inputObject, 'fields', null)
+    const fields: string[] | null = get(inputObject, 'fields', null)
 
-    let blacklist: Record<string, any> | null = blacklistExtractor(inputObject)
+    const blacklist: Record<string, any> | null = blacklistExtractor(inputObject)
 
     return { fields, blacklist }
   }
@@ -64,7 +64,7 @@ const fieldScopeExtractor = (fieldScopes: Record<string, any>, definitions: Reco
     } else {
       Object.keys(fieldScopes[key]).forEach((nestedKey: string) => {
         const nestedFields = fieldScopes[key][nestedKey]
-        let { fields, blacklist } = findFieldsAndBlacklist(nestedFields)
+        const { fields, blacklist } = findFieldsAndBlacklist(nestedFields)
 
         if (fields) {
           set(outputFieldScopes, [key, nestedKey], {
@@ -77,7 +77,7 @@ const fieldScopeExtractor = (fieldScopes: Record<string, any>, definitions: Reco
         const refs = get(nestedFields, 'refs', null)
 
         if (refs && definitions) {
-          let tempFields: string[] = []
+          const tempFields: string[] = []
           let tempBlacklist: Record<string, any> = {}
 
           refs.forEach((ref: string) => {
@@ -87,7 +87,7 @@ const fieldScopeExtractor = (fieldScopes: Record<string, any>, definitions: Reco
               return
             }
 
-            let { fields, blacklist } = findFieldsAndBlacklist(refObject)
+            const { fields, blacklist } = findFieldsAndBlacklist(refObject)
 
             if (fields) {
               tempFields.push(...fields)
@@ -134,7 +134,7 @@ export const parseUiSchemaToObservations = (uiSchema: Record<string, any>) => {
   let unitFieldScopes: Record<string, any> | null = locateNextInstanceOf('fieldScopes', units)
 
   //locate definitions for any refs in object fields
-  let definitions: Record<string, any> | null = locateNextInstanceOf('definitions', units)
+  const definitions: Record<string, any> | null = locateNextInstanceOf('definitions', units)
 
   //locate rules for conditional
   let unitColors: Record<string, any>[] | null = locateNextInstanceOf('cases', units)

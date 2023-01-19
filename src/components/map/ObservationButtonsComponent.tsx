@@ -76,7 +76,7 @@ const ObservationButtonsComponent = (props: Props) => {
             {haversineNeighbors?.map((neighbor: Record<string, any>) => {
 
               const rulesField = neighbor.rules.field
-              let typeName = lolifeObservationTypes[rulesField] ? t(lolifeObservationTypes[rulesField]) : t('flying squirrel')
+              const typeName = lolifeObservationTypes[rulesField] ? t(lolifeObservationTypes[rulesField]) : t('flying squirrel')
 
               return createButton(
                 typeName.length > 14 ? typeName.substring(0, 12) + '...' : typeName,
@@ -106,7 +106,7 @@ const ObservationButtonsComponent = (props: Props) => {
   }
 
   const createRightSideButtonsList = () => {
-    let lang = i18n.language
+    const lang = i18n.language
     const unitGroups = schema[lang]?.uiSchemaParams?.unitGroups
 
     return unitGroups ? unitGroups.map((observation: Record<string, any>) =>

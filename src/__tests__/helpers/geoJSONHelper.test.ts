@@ -538,7 +538,7 @@ describe('pathToLineStringConstructor', () => {
 })
 
 describe('lineStringsToPathDeconstructor', () => {
-  it('it converts a LineString into a path', () => {
+  it('LineString is converted a into a path', () => {
     const lineString: LineString = {
       coordinates: [
         [
@@ -613,7 +613,7 @@ describe('lineStringsToPathDeconstructor', () => {
     expect(lineStringsToPathDeconstructor(lineString)).toEqual(path)
   })
 
-  it('it converts a MultiLineString into a path', () => {
+  it('MultiLineString is converted into a path', () => {
     const multiLineString: MultiLineString = {
       coordinates: [
         [

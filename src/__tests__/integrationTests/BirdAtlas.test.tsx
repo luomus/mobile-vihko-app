@@ -30,7 +30,7 @@ const initializeComponent = async (store:any) => {
   await store.dispatch(switchSchema('MHL.117', i18n.language))
 }
 
-let testPressLocation = {
+const testPressLocation = {
   nativeEvent: {
     coordinate: {
       latitude: 60.17102521395383,
@@ -86,7 +86,7 @@ describe('BirdAtlas', () => {
     // Press the +Observation button to open the observation form
     fireEvent.press(getByText('+ ' + fi['observation']))
 
-    let prop = fi2.data.form.schema.properties.gatherings.items.properties.units.items.properties
+    const prop = fi2.data.form.schema.properties.gatherings.items.properties.units.items.properties
     expect(getByTestId('saveButton')).toBeDefined()
     expect(getAllByText(fi['cancel'])).toHaveLength(2)
     expect(getByText(fi['species'])).toBeDefined()

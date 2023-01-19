@@ -50,8 +50,8 @@ const FormAtlasCodeComponent = (props: Props) => {
   }
 
   const renderListElements = () => {
-    let elements = []
-    for (let key of Object.keys(props.dictionary)) {
+    const elements = []
+    for (const key of Object.keys(props.dictionary)) {
 
       const atlasCode = getAtlasCode(props.dictionary[key])
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent, waitFor } from '@testing-library/react-native'
+import { fireEvent } from '@testing-library/react-native'
 import { CredentialsType, ObservationZonesType, store } from '../../../stores'
 import i18n from 'i18next'
 import { HomeComponentContainer } from '../../../components/home/HomeComponent'

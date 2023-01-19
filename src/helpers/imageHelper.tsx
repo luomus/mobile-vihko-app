@@ -18,7 +18,7 @@ interface BasicObject {
 
 const processImage = async (uri: string) => {
   const { size } = await FileSystem.getInfoAsync(uri, { size: true })
-  let name = uri.substring(uri.lastIndexOf('/') + 1)
+  const name = uri.substring(uri.lastIndexOf('/') + 1)
   let type = uri.substring(uri.lastIndexOf('.') + 1)
 
   if (SNGL_EXTENSIONS.some((ext) => ext === type)) {
@@ -70,7 +70,7 @@ export const getAllowedMediaFormatsAsString = () => {
 }
 
 export const getMaxFileSizeAsString = () => {
-  let maxSize = MAX_FILE_SIZE.toString().substring(0, MAX_FILE_SIZE.toString().length - 6)
+  const maxSize = MAX_FILE_SIZE.toString().substring(0, MAX_FILE_SIZE.toString().length - 6)
   return maxSize + ' Mt'
 }
 
@@ -119,7 +119,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
   }
 
   let invalidFile = (images.length <= 0)
-  let invalidFileTypes: string[] = []
+  const invalidFileTypes: string[] = []
   let fileTooLarge = false
 
   const formDataBody = new FormData()

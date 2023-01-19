@@ -145,7 +145,7 @@ type Props2 = {
   observationZone: ObservationZonesType,
   observing: boolean,
   path: PathType,
-  schema: SchemaType
+  schema: SchemaType,
 
   t: TFunction,
   dispatch: DispatchType,
@@ -164,13 +164,13 @@ export const HomeComponentContainer = (
     props.setLoading(true)
 
     const length = props.observationEvent.events.length
-    let isUnfinished: boolean = false
+    let isUnfinished = false
 
     if (length >= 1) {
       isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
     }
 
-    let formID = forms.tripForm
+    const formID = forms.tripForm
 
     const initSchema = async () => {
       const formID = await props.fetch('formID')

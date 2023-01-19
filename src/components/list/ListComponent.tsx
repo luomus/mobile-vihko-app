@@ -58,8 +58,8 @@ const ListComponent = (props: Props) => {
       .map((unit: Record<string, any>) => unit.identifications[0].taxon)
     setTaxaOnMap(taxaOnMap)
 
-    let pickedTemp: Record<string, any>[] = []
-    let unpickedTemp: Record<string, any>[] = []
+    const pickedTemp: Record<string, any>[] = []
+    const unpickedTemp: Record<string, any>[] = []
 
     filtered.forEach((observation: Record<string, any>) => {
       if (observation.atlasCode || observation.count || taxaOnMap.includes(observation.identifications[0].taxon)) {
@@ -69,7 +69,7 @@ const ListComponent = (props: Props) => {
       }
     })
 
-    let combined = pickedTemp.concat(unpickedTemp)
+    const combined = pickedTemp.concat(unpickedTemp)
 
     setPicked(pickedTemp)
     setUnpicked(unpickedTemp)

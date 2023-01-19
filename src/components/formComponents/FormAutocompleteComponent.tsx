@@ -96,7 +96,7 @@ const FormAutocompleteComponent = (props: Props) => {
     try {
       setLoading(true)
 
-      let res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelToken)
+      const res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelToken)
 
       if (res.result[0]?.payload?.matchType === 'exactMatches') {
         const payload = res.result[0].payload
@@ -156,7 +156,7 @@ const FormAutocompleteComponent = (props: Props) => {
         cancel()
       }
 
-      let res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
+      const res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
 
       const autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
 

@@ -25,7 +25,7 @@ interface Props {
   undefined,
   defaultValue: string | number | Array<string> | undefined,
   isArrayItem: boolean,
-  parentCallback: Function | undefined,
+  parentCallback: ((childValue: any) => void) | undefined,
   editable: boolean
 }
 

@@ -63,7 +63,7 @@ const OverviewComponent = (props: Props) => {
     setEvent(searchedEvent)
 
     if (searchedEvent && searchedEvent.formID === forms.birdAtlas) {
-      let filteredObservations: Record<string, any>[] = []
+      const filteredObservations: Record<string, any>[] = []
       searchedObservations.forEach((observation) => {
         if (!(observation.id.includes('complete_list') && !observation.atlasCode && !observation.count)) {
           filteredObservations.push(observation)

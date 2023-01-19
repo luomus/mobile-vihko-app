@@ -39,7 +39,7 @@ export const appendPath = (locations: LocationObject[]): ThunkAction<Promise<any
         return Promise.resolve()
       }
 
-      let newPath = [...path.slice(0, -1), [ ...currentPath, ...points ]]
+      const newPath = [...path.slice(0, -1), [ ...currentPath, ...points ]]
 
       dispatch({
         type: SET_PATH,

@@ -49,7 +49,7 @@ type Props = {
 const DocumentComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
   const [event, setEvent] = useState<Record<string, any> | undefined>(undefined)
-  const [form, setForm] = useState<Array<Element> | undefined>(undefined)
+  const [form, setForm] = useState<Array<Element | undefined> | null>(null)
   const [saving, setSaving] = useState<boolean>(false)
   //for react-hook-form
   const methods = useForm()
@@ -74,7 +74,7 @@ const DocumentComponent = (props: Props) => {
 
     return () => {
       dispatch(clearObservationId())
-      setForm(undefined)
+      setForm(null)
     }
   }, [])
 
@@ -102,7 +102,7 @@ const DocumentComponent = (props: Props) => {
   const onUninitalizedForm = () => {
     if (event) {
       const lang = i18n.language
-      let schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
+      const schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
       if (schema.formID === forms.lolife) {
         initForm(setForm, event, null, schemaWithoutUnits, null, observationEventFields, overrideObservationEventFields, null, null, lang, scrollViewRef)
@@ -174,7 +174,7 @@ const DocumentComponent = (props: Props) => {
     try {
       await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
       showMessage(t('post success'))
-      setForm(undefined)
+      setForm(null)
       props.toHome()
     } catch (error: any) {
       if (error.severity === 'low') {
@@ -182,7 +182,7 @@ const DocumentComponent = (props: Props) => {
           type: 'err',
           messageContent: error.message,
           onOk: () => {
-            setForm(undefined)
+            setForm(null)
             props.toHome()
             if (error.message.includes(t('locality failure'))) showMessage(t('post success'))
           }
@@ -238,7 +238,7 @@ const DocumentComponent = (props: Props) => {
       + ' ' + firstMoment + ' - ' + lastMoment + '. '
       + t('delete path description 3')
 
-    let birdAtlasMessageContent = t('delete bird atlas path 1')
+    const birdAtlasMessageContent = t('delete bird atlas path 1')
       + ' ' + grid?.n + ':' + grid?.e + '. '
       + t('delete bird atlas path 2')
 

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
 import { Provider } from 'react-redux'
 import { store } from '../stores'
@@ -6,7 +6,7 @@ import { store } from '../stores'
 export function renderWithProviders(
   ui: React.ReactElement
 ) {
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+  function Wrapper({ children }: PropsWithChildren<ReactNode | undefined>): JSX.Element {
     return <Provider store={store}>{children}</Provider>
   }
 

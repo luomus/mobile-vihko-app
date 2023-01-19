@@ -83,7 +83,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 
     const lang = i18n.language
 
-    let observationEventDefaults = {}
+    const observationEventDefaults = {}
     set(observationEventDefaults, 'editors', [userId])
     set(observationEventDefaults, 'sourceID', SOURCE_ID)
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
@@ -97,7 +97,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
       set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], dateTime)
     }
 
-    let parsedObservationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema[lang].schema)
+    const parsedObservationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema[lang].schema)
 
     const setGeometry = () => {
       set(parsedObservationEvent, ['gatherings', '1', 'geometry'], region?.geometry)
@@ -290,7 +290,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
 
     //remove unused complete list observations from bird atlas events
     if (event.formID === forms.birdAtlas) {
-      let filtered: Record<string, any>[] = []
+      const filtered: Record<string, any>[] = []
       event.gatherings[0].units.forEach((observation: Record<string, any>) => {
         if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {
           filtered.push(observation)

@@ -180,7 +180,7 @@ const MapComponent = (props: Props) => {
     setFirstZoom('zooming')
 
     const coords: LatLng = { ...position.coords }
-    let initialRegion = {
+    const initialRegion = {
       latitude: coords.latitude,
       longitude: coords.longitude,
       latitudeDelta: 0.01000000000000000,
@@ -360,7 +360,7 @@ const MapComponent = (props: Props) => {
 
   //draws observation zone to map
   const zoneOverlay = () => {
-    let zone = observationZone.zones.find(z =>
+    const zone = observationZone.zones.find(z =>
       observationZone.currentZoneId !== 'empty' &&
       z.id === observationZone.currentZoneId &&
       z.geometry !== null

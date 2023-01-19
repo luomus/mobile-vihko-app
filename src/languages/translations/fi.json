@@ -63,6 +63,7 @@
   "failed to save credentials locally": "Käyttäjätietojen tallennus laitteeseen epäonnistui.",
   "failed to save schema to storage": "Seuraavien havaintopohjien tallennus laitteelle epäonnistui.",
   "failed to save updated permissions locally": "Mahdollisia muutoksia lomakkeiden oikeuksissa ei onnistuttu tallentamaan sovellukseen.",
+  "failed to start location updates": "Sijainnin seurannan käynnistäminen epäonnistui.",
   "failed to update permissions": "Lomakkeiden oikeuksia ei voitu ladata, käytetään tallennettuja oikeuksia.",
   "failed to watch background location": "Sijainnin seuranta taustalla epäonnistui.",
   "failed to watch position": "Sijainnin seuranta epäonnistui.",

@@ -21,7 +21,7 @@ interface Props {
   createInputElement: (
     title: string, objectTitle: string, parentObjectTitle: string,
     type: string, defaultValue: string | number | Array<string> | undefined, isArrayItem: boolean,
-    callbackFunction: Function | undefined, editable: boolean
+    callbackFunction: ((childValue: any) => void) | undefined, editable: boolean
   ) => JSX.Element | undefined
 }
 
@@ -36,14 +36,14 @@ const FormArrayComponent = (props: Props) => {
 
   useEffect(() => {
     //if there are default values for the array, we iterate them, create the according input elements and pass the elements to FormArrayComponent
-    let inputElems: Array<JSX.Element | undefined> = []
+    const inputElems: Array<JSX.Element | undefined> = []
 
     if (props.parentObjectTitle !== '') {
       register(props.parentObjectTitle)
       setValue(props.parentObjectTitle, []) // Adds empty array to register
     }
 
-    let newElementDictionary: Record<string, any> = {}
+    const newElementDictionary: Record<string, any> = {}
     const values: Array<number | string | undefined> = []
 
     //make first input uneditabel if set as such
@@ -84,7 +84,7 @@ const FormArrayComponent = (props: Props) => {
   const callbackFunction = (childValue: any) => { // Create callback function for fetching values from inputs
     addValueToArray(childValue)
 
-    let newElementDictionary = { ...stateRef.current }
+    const newElementDictionary = { ...stateRef.current }
     newElementDictionary[childValue.objectTitle] = childValue.value
     setElementDictionary(newElementDictionary)
   }
@@ -114,7 +114,7 @@ const FormArrayComponent = (props: Props) => {
     setInputElements(elements)
 
     //add new input field to elementDict
-    let newElementDictionary = { ...elementDictionary }
+    const newElementDictionary = { ...elementDictionary }
     newElementDictionary[childObjectTiltle] = childDefaultValue
     setElementDictionary(newElementDictionary)
 
@@ -150,7 +150,7 @@ const FormArrayComponent = (props: Props) => {
     removeValueFromRegister(valueToRemove)
     setInputElements(elements)
 
-    let newElementDictionay = { ...elementDictionary }
+    const newElementDictionay = { ...elementDictionary }
     delete newElementDictionay[elementKey]
     setElementDictionary(newElementDictionay)
   }

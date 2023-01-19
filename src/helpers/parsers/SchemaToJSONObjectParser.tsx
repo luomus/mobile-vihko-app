@@ -7,7 +7,7 @@ export const parseSchemaToJSONObject = (data: MyObject = {}) => {
   const finalObject = {}
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') {
-      let objectKey = key
+      const objectKey = key
       Object.keys(data[key]).forEach((key: string) => {
         handleKeysAndValues(key, objectKey, data[objectKey], finalObject)
       })
@@ -79,7 +79,7 @@ const handleKeysAndValues = (key: string, objectKey: string, data: MyObject = {}
     default:
       //new object that should be added to final object
       if (typeof(data[key]) === 'object' && !Array.isArray(data[key])) {
-        let objectKey = key
+        const objectKey = key
         Object.keys(data[key]).forEach((subKey: string) => {
           handleKeysAndValues(subKey, objectKey, data[key], currentObject)
         })

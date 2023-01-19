@@ -4,7 +4,7 @@ import { captureException } from './sentry'
 
 export const get = async (url: string, config?: object) => {
   try {
-    let promise = config ? axios.get(url, config) : axios.get(url)
+    const promise = config ? axios.get(url, config) : axios.get(url)
     return await promise
   } catch (error) {
     log.error({
@@ -18,7 +18,7 @@ export const get = async (url: string, config?: object) => {
 
 export const post = async (url: string, data: any, config?: object) => {
   try {
-    let promise = config ? axios.post(url, data, config) : axios.post(url, data)
+    const promise = config ? axios.post(url, data, config) : axios.post(url, data)
     return await promise
   } catch (error) {
     log.error({
@@ -32,7 +32,7 @@ export const post = async (url: string, data: any, config?: object) => {
 
 export const axiosDelete = async (url: string, config?: object) => {
   try {
-    let promise = config ? axios.delete(url, config) : axios.delete(url)
+    const promise = config ? axios.delete(url, config) : axios.delete(url)
     return await promise
   } catch (error) {
     log.error({

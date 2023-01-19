@@ -32,7 +32,7 @@ const initializeComponent = async (store:any) => {
   await store.dispatch(beginObservationEvent(onPressMap, fi['gps notification title'], fi['gps notification body']))
 }
 
-let testPressLocation = {
+const testPressLocation = {
   nativeEvent: {
     coordinate: {
       latitude: 60.17102521395383,
@@ -67,7 +67,7 @@ describe('TripForm', () => {
     // Press the +Observation button to open the observation form
     fireEvent.press(getByText('+ ' + fi['observation']))
 
-    let prop = fi2.data.form.schema.properties.gatherings.items.properties.units.items.properties
+    const prop = fi2.data.form.schema.properties.gatherings.items.properties.units.items.properties
     expect(getByTestId('saveButton')).toBeDefined()
     expect(getByText(fi['species'])).toBeDefined()
     expect(getByTestId('autocomplete')).toBeDefined()

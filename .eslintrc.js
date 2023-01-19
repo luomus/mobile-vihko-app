@@ -1,5 +1,5 @@
 module.exports = {
-  'parser': 'babel-eslint',
+  'parser': '@typescript-eslint/parser',
   'env': {
     'browser': true,
     'es6': true,
@@ -9,7 +9,8 @@ module.exports = {
   'extends': [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:jest/recommended'
+    'plugin:jest/recommended',
+    'plugin:@typescript-eslint/recommended'
   ],
   'globals': {
     'Atomics': 'readonly',
@@ -24,7 +25,8 @@ module.exports = {
   },
   'plugins': [
     'react',
-    'jest'
+    'jest',
+    '@typescript-eslint'
   ],
   'rules': {
     'no-case-declarations': 'off',
@@ -68,7 +70,10 @@ module.exports = {
     ],
     'space-infix-ops': [
       'error'
-    ]
+    ],
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-loss-of-precision': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off'
   },
   'settings': {
     'react': {

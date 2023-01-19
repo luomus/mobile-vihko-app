@@ -3,7 +3,7 @@ import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { formPermissionUrl } from '../config/urls'
 
 export const getFormPermissions = async (personToken: string): Promise<Record<string, any>> => {
-  let params = {
+  const params = {
     'personToken': personToken,
     'access_token': ACCESS_TOKEN
   }

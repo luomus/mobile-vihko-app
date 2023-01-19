@@ -67,7 +67,7 @@ const gridReducer = (state: GridType = null, action: locationActionTypes) => {
   }
 }
 
-const trackingReducer = (state: boolean = true, action: locationActionTypes) => {
+const trackingReducer = (state = true, action: locationActionTypes) => {
   switch (action.type) {
     case SET_TRACKING:
       return action.payload

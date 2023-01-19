@@ -23,7 +23,7 @@ import Ts from '../../styles/TextStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
-import { gridPreviewUrl, gridUrl, mapUrl, resultServiceUrl } from '../../config/urls'
+import { gridUrl, mapUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
 import storageService from '../../services/storageService'
 
@@ -160,7 +160,7 @@ const GridModalComponent = (props: Props) => {
 
     setFirstZoom('zooming')
 
-    let initialRegion = {
+    const initialRegion = {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
       latitudeDelta: 0.01000000000000000,

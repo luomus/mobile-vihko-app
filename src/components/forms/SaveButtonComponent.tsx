@@ -1,7 +1,6 @@
 import React from 'react'
 import { Dimensions, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements'
-import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 
 type Props = {

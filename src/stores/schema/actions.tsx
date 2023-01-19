@@ -31,10 +31,10 @@ const ERROR_MESSAGES: {[key: string]: string} = {
 }
 
 const initSchema = async (formID: string, lang: string) => {
-  let storageKey = formID + lang[0].toUpperCase() + lang[1]
+  const storageKey = formID + lang[0].toUpperCase() + lang[1]
   let schema, fetchedSchema = null
 
-  let logErrorHelper = (error: unknown, errorString: string, msgAction: string, msgSuffix: string) => log.error({
+  const logErrorHelper = (error: unknown, errorString: string, msgAction: string, msgSuffix: string) => log.error({
     location: '/stores/observation/actions.tsx initSchema()',
     error: error,
     details: 'While ' + msgAction + ' ' + formID + ' ' + lang + msgSuffix + '.',
@@ -70,7 +70,7 @@ const initSchema = async (formID: string, lang: string) => {
   //fresh schema was fetched from net, try to parse necessary parameters and values for input creation from it
   if (fetchedSchema) {
     if (useUiSchemaFields.includes(formID)) {
-      let uiSchemaParams = parseUiSchemaToObservations(fetchedSchema.uiSchema)
+      const uiSchemaParams = parseUiSchemaToObservations(fetchedSchema.uiSchema)
 
       //if parsing fails warn user that language is unusable
       if (!uiSchemaParams) {
@@ -117,7 +117,7 @@ errors.forEach(err => dispatch(setMessageState({
 
 export const switchSchema = (formId: string, lang: string): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
   return async dispatch => {
-    let schemas: Record<string, any> = {
+    const schemas: Record<string, any> = {
       formID: formId,
       fi: null,
       en: null,

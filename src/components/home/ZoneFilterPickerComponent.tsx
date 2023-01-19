@@ -15,9 +15,9 @@ type Props = {
   onSelect: (key: string) => void,
   onCancel: () => void,
   options: {
-    key: string
+    key: string,
     label: string
-  }[]
+  }[],
   selectedOption: string,
   placeholderText: string
 }

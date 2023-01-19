@@ -41,7 +41,7 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
   let poller: NodeJS.Timeout
   let timeout: NodeJS.Timeout
 
-  let userPromise = new Promise<CredentialsType> ((resolve, reject) => {
+  const userPromise = new Promise<CredentialsType> ((resolve, reject) => {
     //starts a 180 second timeout which stops above polling interval
     timeout = setTimeout(() => {
       clearInterval(poller)

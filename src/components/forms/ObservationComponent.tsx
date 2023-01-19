@@ -157,9 +157,9 @@ const ObservationComponent = (props: Props) => {
       return
     }
 
-    let schemaVar = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
-    let fieldScopes = schema[lang]?.uiSchemaParams?.unitFieldScopes || null
-    let defaultObject: Record<string, any> = {}
+    const schemaVar = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
+    const fieldScopes = schema[lang]?.uiSchemaParams?.unitFieldScopes || null
+    const defaultObject: Record<string, any> = {}
 
     if (props.defaults) {
       Object.keys(props.defaults).forEach(key => {
@@ -216,7 +216,7 @@ const ObservationComponent = (props: Props) => {
   const createNewObservation = async (data: { [key: string]: any }) => {
     setSaving(true)
 
-    let newUnit: Record<string, any> = {}
+    const newUnit: Record<string, any> = {}
 
     //add id and rules in use internally, destroyed before sending
     if (props.sourcePage !== 'list') {
@@ -244,7 +244,7 @@ const ObservationComponent = (props: Props) => {
     })
 
     //set correct color for obseration, if available
-    let color = schema[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
+    const color = schema[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
       const field: string = unitColor.rules.field
       if (newUnit[field]) {
         return new RegExp(unitColor.rules.regexp).test(newUnit[unitColor.rules.field])

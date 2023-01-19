@@ -34,7 +34,7 @@ interface Props {
   undefined,
   defaultValue: string,
   isArrayItem: boolean,
-  parentCallback: Function | undefined,
+  parentCallback: ((childValue: any) => void) | undefined,
 }
 
 const FormDateOptionsComponent = (props: Props) => {
@@ -98,8 +98,8 @@ const FormDateOptionsComponent = (props: Props) => {
 
   const onLockIntoCurrentDate = () => {
     setCurrentValue(parseDateFromDateObjectToDocument(date))
-    onChangeDate({ type: 'set', nativeEvent: {}}, date)
-    onChangeTime({ type: 'set', nativeEvent: {}}, date)
+    onChangeDate({ type: 'set', nativeEvent: {} }, date)
+    onChangeTime({ type: 'set', nativeEvent: {} }, date)
     setValue(props.objectTitle, parseDateFromDateObjectToDocument(date))
     setSelected(true)
   }
