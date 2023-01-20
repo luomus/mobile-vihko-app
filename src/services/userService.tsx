@@ -91,7 +91,7 @@ export const checkTokenValidity = async (personToken: string) => {
 
   const result = await get(personTokenUrl + '/' + personToken, { params })
 
-  if (result.data.target !== SOURCE_ID) throw new Error('WRONG SOURCE')
+  if (SOURCE_ID && result.data.target !== SOURCE_ID) throw new Error('WRONG SOURCE')
 
   return result.data
 }
