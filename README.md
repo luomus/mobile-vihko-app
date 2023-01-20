@@ -14,27 +14,20 @@ Install [Android Studio](https://developer.android.com/studio/install) to use em
 
 Install dependencies: `npm ci`.
 
-Add the following `.env` file to the project root. Ask the developers for the values and replace the placeholders with them.
+Add files called `.env` and `prod.env` to the project root. Ask the developers for the values and replace the placeholders with them. Note that the values of ACCESS_TOKEN, API_URL and SOURCE_ID are different in `.env` and `prod.env`. The app uses `.env` i.e. the dev values by default when running the app locally. Both of the .env files have the following structure:
 
 ```
 // @ts-nocheck
 
 // types have been configured manually in src/types/env.d.ts 
 
-// development
-ACCESS_TOKEN=<DEV_ACCESS_TOKEN>
-API_URL=<DEV_API_URL>
-SOURCE_ID=<DEV_SOURCE_ID>
-
-// production
-// ACCESS_TOKEN=<PROD_ACCESS_TOKEN>
-// API_URL=<PROD_API_URL>
-// SOURCE_ID=<PROD_SOURCE_ID>
-
+ACCESS_TOKEN=<DEV_OR_PROD_ACCESS_TOKEN>
+API_URL=<DEV_OR_PROD_API_URL>
 GEOCODING_API_KEY=<GEOCODING_API_KEY>
 GOOGLE_MAPS_API_KEY=<GOOGLE_MAPS_API_KEY>
 SENTRY_AUTH_TOKEN=<SENTRY_AUTH_TOKEN>
 SENTRY_DSN=<SENTRY_DSN>
+SOURCE_ID=<DEV_OR_PROD_SOURCE_ID>
 ```
 
 Start the app for development with `npx expo start --tunnel` and scan the QR-code from the terminal with the Expo mobile app or open it into an emulator from the terminal by pressing 'a' (might require to have an emulator already running on Android Studio).
@@ -47,9 +40,9 @@ Install [eas-cli](https://docs.expo.dev/distribution/introduction/) for building
 
 Add the Google Maps Geocoding API Key (ask from developers) into app.json, as a value to expo.android.config.googleMaps.apiKey but remember to not push it to Git!
 
-To create a test build, run `eas build --platform android --profile preview` for Android, or `eas build --platform ios --profile preview` for iOS.
+To create a test build, initialize the development variables to EAS by running `eas secret:push --scope project --env-file .env --force`. Then run `eas build --platform android --profile preview` for Android, or `eas build --platform ios --profile preview` for iOS.
 
-To create a production build, run `eas build --platform android --profile production` for Android, or `eas build --platform ios --profile production` for iOS.
+To create a production build, initialize the production variables to EAS by running `eas secret:push --scope project --env-file prod.env --force`. Then run `eas build --platform android --profile production` for Android, or `eas build --platform ios --profile production` for iOS.
 
 To release the app to Play Store, first run `eas submit --platform android` and then log into luomusict@gmail.com account on Google, and finally go to [Google Play Console](https://play.google.com/console) to add changelog and to publish the uploaded .aab file.
 
