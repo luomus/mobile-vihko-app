@@ -6,7 +6,7 @@ import * as en from '../../../languages/translations/en.json'
 import * as fi from '../../../languages/translations/fi.json'
 import * as sv from '../../../languages/translations/sv.json'
 import { ReactTestInstance } from 'react-test-renderer'
-// import { useNetInfo } from '@react-native-community/netinfo'
+import storageService from '../../../services/storageService'
 
 describe('LoginComponent', () => {
   let getByText: (text: TextMatch, options?: TextMatchOptions) => ReactTestInstance
@@ -21,7 +21,7 @@ describe('LoginComponent', () => {
 
   it('should display the login component correctly', async () => {
     // Check everything is displayed in Finnish
-    await waitFor(() => expect(getAllByText(fi['mobile vihko'])).toBeDefined())
+    await waitFor(() => expect(getByText(fi['mobile vihko'])).toBeDefined())
     expect(getByText(fi['login text'])).toBeDefined()
     expect(getByText('FI')).toBeDefined()
     expect(getByText('SV')).toBeDefined()
@@ -48,17 +48,21 @@ describe('LoginComponent', () => {
   })
 
   it('should login correctly and show the trip form', async () => {
-    await waitFor(() => expect(getAllByText(fi['mobile vihko'])).toBeDefined())
+    await waitFor(() => expect(getByText(fi['mobile vihko'])).toBeDefined())
     expect(getByText(fi['login text'])).toBeDefined()
     fireEvent.press(getByText(fi['login']))
 
-    await waitFor(() => expect(getAllByText(fi['trip form'])).toHaveLength(3))
+    await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
+
+    await waitFor(() => expect(getByText(fi['trip form'])).toBeDefined())
     fireEvent.press(getByText(fi['trip form']))
     fireEvent.press(getByText(fi['cancel']))
     await waitFor(() => expect(getByText(fi['trip form'])).toBeDefined())
   })
 
   it('should logout successfully', async () => {
+    await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
+
     await waitFor(() => expect(getByText(fi['new observation event'])).toBeDefined())
     expect(getByText(fi['new observation event'])).toBeDefined()
     fireEvent.press(getByTestId('usermodal-visibility-button'))
@@ -67,40 +71,38 @@ describe('LoginComponent', () => {
     await waitFor(() => expect(getAllByText(fi['logout'])).toBeDefined())
     fireEvent.press(getAllByText(fi['exit'])[0])
 
-    await waitFor(() => expect(getAllByText(fi['login text'])).toBeDefined())
-  })
+    await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
 
+    await waitFor(() => expect(getByText(fi['login text'])).toBeDefined())
+  })
 })
 
+const turnInternetOff = () => storageService.save('testingInternetStatus', 404)
+const turnInternetOn = () => storageService.save('testingInternetStatus', 200)
 
-// eslint-disable-next-line jest/no-commented-out-tests
-// describe('LoginComponent with network issues', () => {
-//   let container
-//   beforeEach(() => {
-//     container = renderWithProviders(<Navigator initialRoute='login'/>)
-//   })
+describe('LoginComponent with network issues', () => {
+  let getByText: (text: TextMatch, options?: TextMatchOptions) => ReactTestInstance
+  beforeEach(() => {
+    turnInternetOff();
+    ({ getByText } = renderWithProviders(<Navigator initialRoute='login'/>))
+  })
 
-// eslint-disable-next-line jest/no-commented-out-tests
-//   it('should display no network error message', async () => {
+  it('should display no network error message', async () => {
+    await waitFor(() => expect(getByText(fi['mobile vihko'])).toBeDefined())
 
-//     await waitFor(() => expect(container.getAllByText(fi['mobile vihko'])).toBeDefined())
+    expect(getByText(fi['login text'])).toBeDefined()
+    expect(getByText(fi['login'])).toBeDefined()
 
+    await fireEvent.press(getByText(fi['login']))
 
-//     await waitFor(() => expect(container.getByText(fi['login text'])).toBeDefined())
-//     await waitFor(() => expect(container.getByText(fi['login'])).toBeDefined())
+    await waitFor(() => expect(getByText(fi['getting temp token failed with'], { exact: false })).toBeDefined())
 
-//     await fireEvent.press(container.getByTestId('login-button'))
+    await turnInternetOn()
 
+    fireEvent.press(getByText(fi['login']))
 
-//     await waitFor(() => expect(container.getByText(fi['trip form'])).toBeDefined())
-//     await useNetInfo.mockResolvedValueOnce({
-//       type: 'test', // not 'unknown'
-//       isInternetReachable: false,
-//     })
+    await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
 
-//     fireEvent.press(container.getByText(fi['trip form']))
-
-//     //For some reason the error modals aren't displayed
-//     await waitFor(() => expect(container.getByText(fi['failed to check token'])).toBeDefined())
-//   })
-// })
+    expect(getByText(fi['trip form'])).toBeDefined()
+  })
+})
