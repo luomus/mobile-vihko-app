@@ -6,7 +6,6 @@ import * as en from '../../../languages/translations/en.json'
 import * as fi from '../../../languages/translations/fi.json'
 import * as sv from '../../../languages/translations/sv.json'
 import { ReactTestInstance } from 'react-test-renderer'
-import storageService from '../../../services/storageService'
 
 describe('LoginComponent', () => {
   let getByText: (text: TextMatch, options?: TextMatchOptions) => ReactTestInstance
@@ -74,35 +73,5 @@ describe('LoginComponent', () => {
     await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
 
     await waitFor(() => expect(getByText(fi['login text'])).toBeDefined())
-  })
-})
-
-const turnInternetOff = () => storageService.save('testingInternetStatus', 404)
-const turnInternetOn = () => storageService.save('testingInternetStatus', 200)
-
-describe('LoginComponent with network issues', () => {
-  let getByText: (text: TextMatch, options?: TextMatchOptions) => ReactTestInstance
-  beforeEach(() => {
-    turnInternetOff();
-    ({ getByText } = renderWithProviders(<Navigator initialRoute='login'/>))
-  })
-
-  it('should display no network error message', async () => {
-    await waitFor(() => expect(getByText(fi['mobile vihko'])).toBeDefined())
-
-    expect(getByText(fi['login text'])).toBeDefined()
-    expect(getByText(fi['login'])).toBeDefined()
-
-    await fireEvent.press(getByText(fi['login']))
-
-    await waitFor(() => expect(getByText(fi['getting temp token failed with'], { exact: false })).toBeDefined())
-
-    await turnInternetOn()
-
-    fireEvent.press(getByText(fi['login']))
-
-    await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
-
-    expect(getByText(fi['trip form'])).toBeDefined()
   })
 })

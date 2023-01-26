@@ -9,4 +9,5 @@ LICENSE
 README.md
 .gitignore
 **/*.json
+*.env
 *.gpx

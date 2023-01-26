@@ -1,5 +1,5 @@
-import { getLoginUrl, getUserUrl, personTokenUrl, pollLoginUrl } from "../../config/urls"
-import storageService from "../../services/storageService"
+import { getLoginUrl, getUserUrl, personTokenUrl, pollLoginUrl } from '../../config/urls'
+import storageService from '../../services/storageService'
 
 const getLoginUrlMockData = {
   'loginURL': 'https://fmnh-ws-test.it.helsinki.fi/laji-auth/login?target=KE.1141&redirectMethod=POST&next=%2F%3FtmpToken%3Dtmp_JuVT28QfBI6GTkpPOCfSnBZvAzZXzQXxK0X2dJoY6QY84ODB',
@@ -67,7 +67,7 @@ export const get = async (url: string, config?: object) => {
     console.error('WARNING! Axios Mock is not handling url "' + url + '" yet.')
   }
 }
-  
+
 export const post = async (url: string, data: any, config?: object) => {
   if (await storageService.fetch('testingInternetStatus') === 404) {
     throw {}
@@ -79,7 +79,7 @@ export const post = async (url: string, data: any, config?: object) => {
     console.error('WARNING! Axios Mock is not handling url "' + url + '" yet.')
   }
 }
-  
+
 export const axiosDelete = async (url: string, config?: object) => {
   if (await storageService.fetch('testingInternetStatus') === 404) {
     throw {}
