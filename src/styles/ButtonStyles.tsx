@@ -83,6 +83,15 @@ const ButtonStyles = StyleSheet.create({
   refreshButton: {
     borderRadius: 5
   },
+  locateMeButton: {
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
 
   //map component
   observationButton: {

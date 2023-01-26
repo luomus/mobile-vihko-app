@@ -58,7 +58,6 @@ describe('BirdAtlas', () => {
     fireEvent.press(getByText(fi['continue']))
 
     // This opens the GridModalComponent
-    await waitFor(() => expect(getByText(fi['new trip'])).toBeDefined())
     await waitFor(() => expect(getByText(fi['your current location is'], { exact: false })).toBeDefined())
     expect(getByText(fi['link to result service'])).toBeDefined()
     expect(getByText(fi['start'])).toBeDefined()

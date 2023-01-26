@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Linking, View, Text, TextInput, ActivityIndicator, Platform } from 'react-native'
+import { Linking, View, Text, ActivityIndicator, Platform } from 'react-native'
 import MapView, { MapType, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
 import { Icon } from 'react-native-elements'
 import { LocationObject } from 'expo-location'
@@ -245,9 +245,6 @@ const GridModalComponent = (props: Props) => {
       onBackdropPress={() => { props.setModalVisibility(false) }}>
       <View style={Cs.modalContainer}>
         <View style={{ alignSelf: 'flex-start' }}>
-          <Text style={Ts.homeScreenTitle}>
-            {t('new trip')}
-          </Text>
           {loading ?
             <ActivityIndicator size={25} color={Colors.primary5} /> :
             <>
@@ -307,26 +304,10 @@ const GridModalComponent = (props: Props) => {
               </View>
               <View style={Cs.modalStartButtonContainer}>
                 <View style={Cs.padding5Container}>
-                  <TextInput
-                    style={Os.coordinateInput}
-                    keyboardType='numeric'
-                    value={northing}
-                    onChangeText={setNorthing}
-                  />
-                </View>
-                <View style={Cs.padding5Container}>
-                  <TextInput
-                    style={Os.coordinateInput}
-                    keyboardType='numeric'
-                    value={easting}
-                    onChangeText={setEasting}
-                  />
-                </View>
-                <View style={Cs.padding5Container}>
                   <ButtonComponent testID="center-map-btn" onPressFunction={async () => await centerMapAnim()} title={t('locate me')}
-                    height={40} width={120} buttonStyle={Bs.loginCancelButton}
+                    height={40} width={160} buttonStyle={Bs.locateMeButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                    textStyle={Ts.buttonText} iconName={'location-searching'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                    textStyle={Ts.buttonText} iconName={'person-pin'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                   />
                 </View>
               </View>
