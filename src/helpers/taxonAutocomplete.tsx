@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
+import uuid from 'react-native-uuid'
 
 interface Converter {
   (data: Record<string, any>, uery: string): {data: Record<string, any>, element: JSX.Element}
@@ -148,18 +149,17 @@ const addBolding = (name: string, query: string, isScientific: boolean) => {
         start += endIndex
 
         if (startIndex === 0) {
-          text.push(<Text key={nameSlice} style={{ fontWeight: 'bold', fontSize: 15 }}>{nameSlice.slice(startIndex, endIndex)}</Text>)
+          text.push(<Text key={uuid.v4().toString()} style={{ fontWeight: 'bold', fontSize: 15 }}>{nameSlice.slice(startIndex, endIndex)}</Text>)
         } else {
-          text.push(<Text key={nameSlice} style={{ fontSize: 15 }}>{nameSlice.slice(0, startIndex)}</Text>)
-          text.push(<Text key={nameSlice} style={{ fontWeight: 'bold', fontSize: 15 }}>{nameSlice.slice(startIndex, endIndex)}</Text>)
+          text.push(<Text key={uuid.v4().toString()} style={{ fontSize: 15 }}>{nameSlice.slice(0, startIndex)}</Text>)
+          text.push(<Text key={uuid.v4().toString()} style={{ fontWeight: 'bold', fontSize: 15 }}>{nameSlice.slice(startIndex, endIndex)}</Text>)
         }
       }
     })
   }
 
   if (start !== tempName.length) {
-    const nameSlice = tempName.slice(start)
-    text.push(<Text key={nameSlice} style={{ fontSize: 15 }}>{nameSlice}</Text>)
+    text.push(<Text key={uuid.v4().toString()} style={{ fontSize: 15 }}>{tempName.slice(start)}</Text>)
   }
 
   return text
