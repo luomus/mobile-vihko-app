@@ -172,7 +172,6 @@ describe('BirdAtlas', () => {
     // Check that the submit form is displayed, press save to submit
     await waitFor(() => expect(getByTestId('saveButton')).toBeDefined())
     expect(getByText(fi['cancel'])).toBeDefined()
-    expect(getByText(fi['delete path'])).toBeDefined()
     expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.legPublic.title)).toBeDefined()
     expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.completeList.properties.completeListType.title)).toBeDefined()
     expect(getByText(fi2.data.form.schema.properties.gatheringEvent.properties.dateBegin.title)).toBeDefined() // Alkupäivä

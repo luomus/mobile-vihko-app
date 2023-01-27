@@ -285,7 +285,7 @@ const DocumentComponent = (props: Props) => {
               textStyle={Ts.buttonText} iconName={'close'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
           </View>
-          {!(path.length === 1 && path[0].length === 0) ?
+          {(event?.formID !== 'MHL.117' && !(path.length === 1 && path[0].length === 0)) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => deletePath()}
                 title={t('delete path')} height={40} width={150} buttonStyle={Bs.editObservationButton}
