@@ -181,6 +181,16 @@ const ButtonStyles = StyleSheet.create({
     elevation: 10,
     backgroundColor: Colors.neutralButton,
     borderRadius: 5,
+  },
+
+  //overview component
+  eventOptionsButton: {
+    paddingHorizontal: 5,
+    paddingBottom: 5,
+    flexDirection: 'row',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   }
 })
 

@@ -291,12 +291,12 @@ const ContainerStyles = StyleSheet.create({
   overviewTextContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    width: '68%'
+    width: '62%'
   },
   overviewButtonsContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    width: '32%'
+    width: '38%'
   },
   observationInfoContainer: {
     padding: 5,
