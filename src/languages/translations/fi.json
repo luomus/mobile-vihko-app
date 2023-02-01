@@ -139,6 +139,8 @@
   "observations in list": "Havaintoja",
   "ok": "OK",
   "ongoing event": "Käynnissä oleva havaintotapahtuma",
+  "outside borders 1": "Reitin seuranta on tauolla, koska poistuit valitsemaltasi atlasruudulta",
+  "outside borders 2": "Palaa takaisin ja jatka havainnointia, tai aloita uusi havaintoerä uudelle ruudulle.",
   "oversized image": "Osa lähetettävistä kuvista oli liian suuria, joten niitä ei lähetetty dokumentin mukana, mutta ne on tallennettu puhelimelle. Kuvan suurin sallittu koko on",
   "path not tracked": "Reittiä ei seurata",
   "path tracking": "Reitin seuranta",

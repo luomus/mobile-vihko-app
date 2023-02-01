@@ -139,6 +139,8 @@
   "observations in list": "Observationer",
   "ok": "OK",
   "ongoing event": "Pågående observationsuppsättningen",
+  "outside borders 1": "Ruttspårning har pausats eftersom du har lämnat det valda Atlasrutan",
+  "outside borders 2": "Gå tillbaka och fortsätt att observera, eller starta en ny uppsättningen på en annan ruta.",
   "oversized image": "En del av bilderna som skulle skickas var för stor, så de skickades inte med dokumentet, men de sparas i enheten. De tillåtna storleken för bilden är",
   "path not tracked": "Din rutt spåras inte",
   "path tracking": "Spårning av rutten",

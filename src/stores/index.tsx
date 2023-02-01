@@ -52,6 +52,7 @@ import {
   clearGrid,
   setGridCoords,
   setGridPause,
+  setOutsideBorders,
   setTracking,
 } from './position/actions'
 import {
@@ -228,6 +229,7 @@ export {
   clearGrid,
   setGridCoords,
   setGridPause,
+  setOutsideBorders,
   setTracking,
   setSchema,
   switchSchema,
@@ -257,6 +259,7 @@ export type {
   LocationType,
   PathType,
   PathPoint,
+  GridType,
   schemaActionTypes,
   SchemaType,
   userActionTypes,

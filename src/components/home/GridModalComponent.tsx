@@ -114,7 +114,8 @@ const GridModalComponent = (props: Props) => {
         e: e,
         geometry: YKJCoordinateIntoWGS84Grid(gridCoords[0], gridCoords[1]),
         name: gridDetails.name,
-        pauseGridCheck: false
+        pauseGridCheck: false,
+        outsideBorders: 'false'
       }))
     } else {
       dispatch(setGrid({
@@ -122,7 +123,8 @@ const GridModalComponent = (props: Props) => {
         e: e,
         geometry: YKJCoordinateIntoWGS84Grid(gridCoords[0], gridCoords[1]),
         name: gridDetails.name,
-        pauseGridCheck: true
+        pauseGridCheck: true,
+        outsideBorders: 'false'
       }))
     }
 

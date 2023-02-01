@@ -14,6 +14,7 @@ export const SET_GRID = 'SET_GRID'
 export const CLEAR_GRID = 'CLEAR_GRID'
 export const SET_COORDS = 'SET_COORDS'
 export const SET_PAUSE = 'SET_PAUSE'
+export const SET_OUTSIDE_BORDERS = 'SET_OUTSIDE_BORDERS'
 
 export const SET_TRACKING = 'SET_TRACKING'
 
@@ -31,6 +32,7 @@ export type GridType = {
   geometry: Polygon | undefined,
   name: string,
   pauseGridCheck: boolean,
+  outsideBorders: 'false' | 'pending' | 'true'
 } | null
 
 export type LocationType = LocationObject | null
@@ -83,6 +85,11 @@ interface setGridPause {
   payload: boolean
 }
 
+interface setOutsideBorders {
+  type: typeof SET_OUTSIDE_BORDERS,
+  payload: 'false' | 'pending' | 'true'
+}
+
 interface setTracking {
   type: typeof SET_TRACKING,
   payload: boolean
@@ -99,4 +106,5 @@ export type locationActionTypes =
   clearGrid |
   setGridCoords |
   setGridPause |
+  setOutsideBorders |
   setTracking

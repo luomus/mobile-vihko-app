@@ -207,7 +207,8 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
         e: grid.e,
         geometry: YKJCoordinateIntoWGS84Grid(grid.n, grid.e),
         name: grid.name,
-        pauseGridCheck: Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n
+        pauseGridCheck: Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n,
+        outsideBorders: (Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n) ? 'true' : 'false'
       }))
     }
 

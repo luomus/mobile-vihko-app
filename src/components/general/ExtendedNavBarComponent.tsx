@@ -40,10 +40,11 @@ const ExtendedNavBarComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const credentials = useSelector((state: rootState) => state.credentials)
+  const grid = useSelector((state: rootState) => state.grid)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const path = useSelector((state: rootState) => state.path)
-  const tracking = useSelector((state: rootState) => state.tracking)
   const schema = useSelector((state: rootState) => state.schema)
+  const tracking = useSelector((state: rootState) => state.tracking)
 
   const stopObserving = () => {
     dispatch(setMessageState({
@@ -144,11 +145,13 @@ const ExtendedNavBarComponent = (props: Props) => {
           />
         </View>
         <View style={{ paddingHorizontal: 2, width: '50%' }}>
-          <ButtonComponent onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
-            title={tracking ? t('pause') : t('continue')}
-            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+          <ButtonComponent disabled={grid?.outsideBorders === 'true'}
+            onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
+            title={tracking ? t('pause') : t('continue')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
+            gradientColorStart={grid?.outsideBorders !== 'true' ? Colors.neutralButton : Colors.unavailableButton}
+            gradientColorEnd={grid?.outsideBorders !== 'true' ? Colors.neutralButton : Colors.unavailableButton}
+            shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
+            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
           />
         </View>
       </View>

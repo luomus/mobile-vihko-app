@@ -12,7 +12,8 @@ import {
   CLEAR_GRID,
   SET_COORDS,
   SET_PAUSE,
-  SET_TRACKING
+  SET_OUTSIDE_BORDERS,
+  SET_TRACKING,
 } from './types'
 
 const firstLocationReducer = (state: Array<number> = [60.192059, 	24.945831], action: locationActionTypes) => {
@@ -61,6 +62,11 @@ const gridReducer = (state: GridType = null, action: locationActionTypes) => {
       return {
         ...state,
         pauseGridCheck: action.payload
+      }
+    case SET_OUTSIDE_BORDERS:
+      return {
+        ...state,
+        outsideBorders: action.payload
       }
     default:
       return state

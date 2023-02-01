@@ -139,6 +139,8 @@
   "observations in list": "Observations",
   "ok": "OK",
   "ongoing event": "Ongoing observation event",
+  "outside borders 1": "Route tracking has been paused because you have left the chosen Atlas square",
+  "outside borders 2": "Return back and continue observing, or start a new event on another square.",
   "oversized image": "Some of the pictures to be sent were too large, so they were not sent with the document, but they are saved to the phone. The largest allowed image size is",
   "path not tracked": "Path is not tracked",
   "path tracking": "Path tracking",

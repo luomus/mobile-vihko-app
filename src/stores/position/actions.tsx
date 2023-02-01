@@ -14,7 +14,8 @@ import {
   CLEAR_GRID,
   SET_COORDS,
   SET_PAUSE,
-  SET_TRACKING
+  SET_OUTSIDE_BORDERS,
+  SET_TRACKING,
 } from './types'
 import { gpsOutlierFilter } from '../../helpers/pathFilters'
 
@@ -80,6 +81,11 @@ export const setGridCoords = (coordinates: {n: number, e: number}): locationActi
 
 export const setGridPause = (state: boolean): locationActionTypes => ({
   type: SET_PAUSE,
+  payload: state
+})
+
+export const setOutsideBorders = (state: 'false' | 'pending' | 'true'): locationActionTypes => ({
+  type: SET_OUTSIDE_BORDERS,
   payload: state
 })
 
