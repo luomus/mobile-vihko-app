@@ -48,6 +48,9 @@ const ContainerStyles = StyleSheet.create({
   modalCloseContainer: {
     alignSelf: 'flex-end'
   },
+  rowContainer: {
+    flexDirection: 'row'
+  },
 
   //navigation bar
   navBarContainer: {

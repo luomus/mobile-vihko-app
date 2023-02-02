@@ -5,6 +5,7 @@ import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
 import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 
@@ -53,7 +54,7 @@ const FormPickerComponent = (props: Props) => {
 
   const errorMessageTranslation = (errorMessage: string): Element => {
     const errorTranslation = t(errorMessage)
-    return <Text style={{ color: Colors.dangerButton2 }}>{errorTranslation}</Text>
+    return <Text style={Ts.redText}>{errorTranslation}</Text>
   }
 
   return (
@@ -62,7 +63,7 @@ const FormPickerComponent = (props: Props) => {
       <ErrorMessage
         errors={formState.errors}
         name={props.objectTitle}
-        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
+        render={({ message }) => <Text style={Ts.redText}><>{errorMessageTranslation(message)}</></Text>}
       />
       <TouchableOpacity testID='formPicker' onPress={() => onPress()} style={Cs.iOSPickerContainer}>
         <TextInput

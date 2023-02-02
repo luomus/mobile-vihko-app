@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Picker } from '@react-native-picker/picker'
 import { ErrorMessage } from '@hookform/error-message'
 import Cs from '../../styles/ContainerStyles'
-import Colors from '../../styles/Colors'
+import Ts from '../../styles/TextStyles'
 
 interface Props {
   title: string,
@@ -37,7 +37,7 @@ const FormPickerComponent = (props: Props) => {
       <ErrorMessage
         errors={formState.errors}
         name={props.objectTitle}
-        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}>{t(message)}</Text>}
+        render={({ message }) => <Text style={Ts.redText}>{t(message)}</Text>}
       />
       <View style={Cs.formPickerContainer}>
         <Picker

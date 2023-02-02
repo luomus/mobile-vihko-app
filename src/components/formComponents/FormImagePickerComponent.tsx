@@ -112,7 +112,7 @@ const ImagePickerComponent = (props: Props) => {
 
   const errorMessageTranslation = (errorMessage: string): Element => {
     const errorTranslation = t(errorMessage)
-    return <Text style={{ color: Colors.dangerButton2 }}>{errorTranslation}</Text>
+    return <Text style={Ts.redText}>{errorTranslation}</Text>
   }
 
   const renderImages = () => {
@@ -126,7 +126,7 @@ const ImagePickerComponent = (props: Props) => {
             <Icon
               name='delete'
               type='material-icons'
-              color={Colors.dangerButton2}
+              color={'red'}
               size={22}
               onPress={() => { showRemoveImage(image.uri) }}
               tvParallaxProperties={undefined}
@@ -144,7 +144,7 @@ const ImagePickerComponent = (props: Props) => {
         <ErrorMessage
           errors={formState.errors}
           name={props.objectTitle}
-          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
+          render={({ message }) => <Text style={Ts.redText}><>{errorMessageTranslation(message)}</></Text>}
         />
         <View style={{ paddingLeft: 10 }}>
           <Text>{props.title}</Text>
@@ -183,7 +183,7 @@ const ImagePickerComponent = (props: Props) => {
         <ErrorMessage
           errors={formState.errors}
           name={props.objectTitle}
-          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
+          render={({ message }) => <Text style={Ts.redText}><>{errorMessageTranslation(message)}</></Text>}
         />
         <View style={{ paddingLeft: 10 }}>
           <Text>{props.title}</Text>

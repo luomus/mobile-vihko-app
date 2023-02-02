@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -485,6 +485,7 @@ const ObservationComponent = (props: Props) => {
             </View>
             : null
           }
+          <Text style={Ts.redTextWithPadding}>{t('required field')} *</Text>
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               <>{form}</>

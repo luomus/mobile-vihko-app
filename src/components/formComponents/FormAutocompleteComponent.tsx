@@ -7,6 +7,7 @@ import { rootState } from '../../stores'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import Autocomplete from 'react-native-autocomplete-input'
 import Cs from '../../styles/ContainerStyles'
+import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { get, debounce } from 'lodash'
 import { Canceler } from 'axios'
@@ -76,11 +77,13 @@ const FormAutocompleteComponent = (props: Props) => {
     }
   }, [observationId])
 
-  //set focus into the autocomplete's input field so user can start typing immediately
+  //set focus into the taxon autocomplete's input field so user can start typing immediately
   useEffect(() => {
-    setTimeout(() => { //does not work without the timeout
-      setFocus('autocompleteInput')
-    }, 500)
+    if (valueField === 'identifications_0_taxon') {
+      setTimeout(() => { //does not work without the timeout
+        setFocus(valueField)
+      }, 500)
+    }
   }, [setFocus])
 
   //this timeout clears taxon name -field's errors (and the error notification) in 5 sec
@@ -151,7 +154,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
   const queryAutocomplete = async (query: string) => {
     try {
-      //fire request cancel if last is still unning to avoid getting responses in wrong order
+      //fire request cancel if last is still running to avoid getting responses in wrong order
       if (cancel) {
         cancel()
       }
@@ -221,7 +224,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
   const errorMessageTranslation = (errorMessage: string): Element => {
     const errorTranslation = t(errorMessage)
-    return <Text style={{ color: Colors.dangerButton2 }}>{errorTranslation}</Text>
+    return <Text style={Ts.redText}>{errorTranslation}</Text>
   }
 
   const renderTextInput = (
@@ -233,7 +236,7 @@ const FormAutocompleteComponent = (props: Props) => {
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch' }}>
         <TextInput
-          {...register('autocompleteInput')}
+          {...register(valueField)}
           style={{ borderColor: Colors.neutral5, borderWidth: 1, height: 40, width: '90%', padding: 10 }}
           onFocus={onFocus}
           onBlur={onBlur}
@@ -258,11 +261,18 @@ const FormAutocompleteComponent = (props: Props) => {
   if (!unitID.includes('complete_list')) {
     return (
       <View style={[Cs.padding10Container, { zIndex: Platform.OS === 'ios' ? props.index : undefined }]}>
-        <Text>{props.title}</Text>
+        <View style={Cs.rowContainer}>
+          <Text>{props.title}</Text>
+          {
+            props.autocompleteParams.validation?.required ?
+              <Text style={Ts.redText}> *</Text>
+              : null
+          }
+        </View>
         <ErrorMessage
           errors={formState.errors}
           name={valueField}
-          render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
+          render={({ message }) => <Text style={Ts.redText}><>{errorMessageTranslation(message)}</></Text>}
         />
         <View style={{ paddingBottom: 35 }}>
           <Autocomplete

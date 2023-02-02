@@ -80,8 +80,8 @@ const FormAtlasCodeComponent = (props: Props) => {
   }
 
   const errorMessageTranslation = (errorMessage: string): Element => {
-    const errorTranslation = t(errorMessage  + ' atlas code')
-    return <Text style={{ color: Colors.dangerButton2 }}>{errorTranslation}</Text>
+    const errorTranslation = t(errorMessage + ' atlas code')
+    return <Text style={Ts.redText}>{errorTranslation}</Text>
   }
 
   return (
@@ -90,7 +90,7 @@ const FormAtlasCodeComponent = (props: Props) => {
       <ErrorMessage
         errors={formState.errors}
         name={props.objectTitle}
-        render={({ message }) => <Text style={{ color: Colors.dangerButton2 }}><>{errorMessageTranslation(message)}</></Text>}
+        render={({ message }) => <Text style={Ts.redText}><>{errorMessageTranslation(message)}</></Text>}
       />
       <View style={Cs.atlasCodeChosenContainer}>
         <Text>{!selectedKey || selectedKey === '' ? t('no atlas code') : props.dictionary[selectedKey]}</Text>

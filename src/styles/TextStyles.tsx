@@ -159,10 +159,17 @@ const TextStyles = StyleSheet.create({
     paddingRight: 30
   },
 
-  //form componenets
+  //form components
   noImageText: {
     color: Colors.neutral5
-  }
+  },
+  redText: {
+    color: 'red'
+  },
+  redTextWithPadding: {
+    color: 'red',
+    paddingLeft: 10
+  },
 })
 
 export default TextStyles
