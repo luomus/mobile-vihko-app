@@ -27,8 +27,6 @@ export const convertYKJToWGS84 = (coordinates: [number, number]) => {
   return proj4(ykjProjection, 'WGS84', coordinates)
 }
 
-const timeoutPromise = <T>(promise: Promise<T>, timeout: number) => Promise.race([promise, new Promise<T>((_r, reject) => setTimeout(reject, timeout))])
-
 export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy: number = LOCATION_ACCURACY, timeout = 5000): Promise<LocationObject> => {
   let permission: Location.LocationPermissionResponse | undefined = undefined
 
@@ -53,9 +51,9 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
       if (previousLocation !== null) return previousLocation
     }
 
-    return await timeoutPromise(Location.getCurrentPositionAsync({
+    return await Location.getCurrentPositionAsync({
       accuracy: locationAccuracy
-    }), timeout)
+    })
   } else {
     throw new Error(i18n.t('permission to access location denied'))
   }
