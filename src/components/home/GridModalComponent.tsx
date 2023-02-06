@@ -4,7 +4,6 @@ import MapView, { MapType, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region, Ur
 import { Icon } from 'react-native-elements'
 import { LocationObject } from 'expo-location'
 import Modal from 'react-native-modal'
-import Checkbox from 'expo-checkbox'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
@@ -52,7 +51,6 @@ const GridModalComponent = (props: Props) => {
 
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
-  const tracking = useSelector((state: rootState) => state.tracking)
 
   const { t } = useTranslation()
 
@@ -128,7 +126,10 @@ const GridModalComponent = (props: Props) => {
       }))
     }
 
-    props.onBeginObservationEvent(tracking)
+    setTracking(true)
+    await storageService.save('tracking', true)
+
+    props.onBeginObservationEvent(true)
   }
 
   useEffect(() => {
@@ -312,18 +313,6 @@ const GridModalComponent = (props: Props) => {
                     textStyle={Ts.buttonText} iconName={'person-pin'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
                   />
                 </View>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
-                <Checkbox
-                  value={tracking}
-                  onValueChange={async (value: boolean) => {
-                    dispatch(setTracking(value))
-                    await storageService.save('tracking', value)
-                  }}
-                  style={{ padding: 5 }}
-                  color={tracking ? Colors.primary5 : undefined}
-                />
-                <Text style={{ color: Colors.neutral7, padding: 5 }}>{t('path tracking')}</Text>
               </View>
               <View style={Cs.modalStartButtonContainer}>
                 <View style={Cs.padding5Container}>

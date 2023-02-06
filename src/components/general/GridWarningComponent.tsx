@@ -29,7 +29,7 @@ const GridWarningComponent = () => {
           dispatch(setTracking(false))
           await storageService.save('tracking', false)
         }
-      }, 18000)
+      }, 120000)
 
     } else if (grid?.outsideBorders === 'false') {
       const restartTracking = async () => {
