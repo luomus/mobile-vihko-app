@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { useTranslation } from 'react-i18next'
@@ -10,11 +10,12 @@ type Props = {
   updateList: () => void,
   observedUnedited: any[] | undefined,
   picked: Record<string, any>[],
-  unpicked: Record<string, any>[]
+  unpicked: Record<string, any>[],
+  order: string,
+  setOrder: React.Dispatch<React.SetStateAction<string>>
 }
 
 const ListSorterComponent = (props: Props) => {
-  const [selected, setSelected] = useState('default')
 
   const { t } = useTranslation()
 
@@ -60,10 +61,10 @@ const ListSorterComponent = (props: Props) => {
   return (
     <View style={Cs.listSorterContainer}>
       <Picker
-        selectedValue={selected}
+        selectedValue={props.order}
         numberOfLines={10}
         onValueChange={itemValue => {
-          setSelected(itemValue)
+          props.setOrder(itemValue)
           sortTaxonList(itemValue)
         }}
       >

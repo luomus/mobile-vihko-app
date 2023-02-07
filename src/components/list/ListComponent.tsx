@@ -38,6 +38,7 @@ const ListComponent = (props: Props) => {
   const [picked, setPicked] = useState<Record<string, any>[]>([])
   const [unpicked, setUnpicked] = useState<Record<string, any>[]>([])
   const [search, setSearch] = useState<string>('')
+  const [order, setOrder] = useState<string>('default')
 
   const textInput = useRef<TextInput | null>(null)
 
@@ -106,7 +107,7 @@ const ListComponent = (props: Props) => {
     >
       <Text style={(item.atlasCode || item.count || taxaOnMap.includes(item.identifications[0].taxon)) ?
         Ts.listBoldText : Ts.listText}>
-        {item.identifications[0].taxon}
+        { order !== 'scientific' ? item.identifications[0].taxon : item.scientificName }
       </Text>
       {
         item.atlasCode ?
@@ -142,6 +143,8 @@ const ListComponent = (props: Props) => {
         observedUnedited={observedUnedited}
         picked={picked}
         unpicked={unpicked}
+        order={order}
+        setOrder={setOrder}
       />
     </>
   )

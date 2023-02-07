@@ -11,19 +11,20 @@ type Props = {
   updateList: () => void,
   observedUnedited: any[] | undefined,
   picked: Record<string, any>[],
-  unpicked: Record<string, any>[]
+  unpicked: Record<string, any>[],
+  order: string,
+  setOrder: React.Dispatch<React.SetStateAction<string>>
 }
 
 const ListSorterComponent = (props: Props) => {
 
-  const [selected, setSelected] = useState('')
   const [pickerValues, setPickerValues] = useState<Array<string>>([])
   const [dictionary, setDictionary] = useState<{ [key: string]: any }>({})
 
   const { t } = useTranslation()
 
   useEffect(() => {
-    setSelected(t('filter.default'))
+    props.setOrder(t('filter.default'))
     setPickerValues([t('filter.default'), t('filter.name'), t('filter.scientific')])
     setDictionary({
       default: t('filter.default'),
@@ -78,7 +79,7 @@ const ListSorterComponent = (props: Props) => {
         userInterfaceStyle: 'dark'
       },
       buttonIndex => {
-        setSelected(pickerValues[buttonIndex])
+        props.setOrder(pickerValues[buttonIndex])
         const pickerValue = Object.keys(dictionary).find(key => dictionary[key] === pickerValues[buttonIndex])
         if (pickerValue === undefined) return
         sortTaxonList(pickerValue)
@@ -90,7 +91,7 @@ const ListSorterComponent = (props: Props) => {
       <TouchableOpacity onPress={() => onPress()} style={Cs.iOSPickerContainer}>
         <TextInput
           style={Os.iOSListSorter}
-          value={selected}
+          value={props.order}
           editable={false}
           onPressOut={() => onPress()}
           multiline
