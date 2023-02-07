@@ -564,37 +564,33 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
     const newEvent = cloneDeep(newEvents.pop())
     const observations: Record<string, any>[] = []
     const birdList: Record<string, any>[] = await getBirdList()
+    const nameList: Array<any> = []
 
     //fetch taxon details concurrently and initialize bird list observations
     await Promise.all(birdList.map(async (item: Record<string, any>) => {
       const res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
       const observation = {}
+
       let name = ''
+
       if (lang === 'fi') {
-        name = item.vernacularName.fi
+        name = item.vernacularName.fi ? item.vernacularName.fi : item.scientificName
       } else if (lang === 'sv') {
-        name = item.vernacularName.sv
+        name = item.vernacularName.sv ? item.vernacularName.sv : item.scientificName
       } else if (lang === 'en') {
-        name = item.vernacularName.en
+        name = item.vernacularName.en ? item.vernacularName.en : item.scientificName
       }
+
+      nameList.push(name)
+
       set(observation, 'id', `complete_list_${uuid.v4()}`)
       set(observation, 'identifications', [{ taxon: name }])
       set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
       set(observation, 'scientificName', item.scientificName)
       set(observation, 'unitFact', { autocompleteSelectedTaxonID: item.id })
+
       observations.push(observation)
     }))
-
-    //get list or bird names in the correct order
-    const nameList = birdList.map((bird) => {
-      if (lang === 'fi') {
-        return bird.vernacularName.fi
-      } else if (lang === 'sv') {
-        return bird.vernacularName.sv
-      } else if (lang === 'en') {
-        return bird.vernacularName.en
-      }
-    })
 
     //sort the observations based on the correct order
     observations.sort((a, b) => {

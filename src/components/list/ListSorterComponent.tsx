@@ -32,8 +32,8 @@ const ListSorterComponent = (props: Props) => {
     } else if (itemValue === 'name') {
       const sortByName = (list: Record<string, any>[]) => {
         return list.sort((a, b) => {
-          const textA = a.identifications[0].taxon
-          const textB = b.identifications[0].taxon
+          const textA = a.identifications[0].taxon.toLowerCase()
+          const textB = b.identifications[0].taxon.toLowerCase()
           return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
         })
       }
@@ -45,8 +45,8 @@ const ListSorterComponent = (props: Props) => {
     } else if (itemValue === 'scientific') {
       const sortByScientificName = (list: Record<string, any>[]) => {
         return list.sort((a, b) => {
-          const textA = a.scientificName
-          const textB = b.scientificName
+          const textA = a.scientificName.toLowerCase()
+          const textB = b.scientificName.toLowerCase()
           return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
         })
       }

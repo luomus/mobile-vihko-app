@@ -27,7 +27,7 @@ export const convertYKJToWGS84 = (coordinates: [number, number]) => {
   return proj4(ykjProjection, 'WGS84', coordinates)
 }
 
-export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy: number = LOCATION_ACCURACY, timeout = 5000): Promise<LocationObject> => {
+export const getCurrentLocation = async (usePreviousLocation?: boolean, locationAccuracy: number = LOCATION_ACCURACY): Promise<LocationObject> => {
   let permission: Location.LocationPermissionResponse | undefined = undefined
 
   try {
