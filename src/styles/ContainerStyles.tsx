@@ -122,13 +122,13 @@ const ContainerStyles = StyleSheet.create({
   eventLauncherContainer: {
     backgroundColor: Colors.neutral3,
     borderRadius: 5,
-    minHeight: 150,
+    minHeight: 120,
     maxHeight: 500
   },
   unsentEventsContainer: {
     backgroundColor: Colors.neutral3,
     borderRadius: 5,
-    minHeight: 120,
+    minHeight: 100,
     maxHeight: 300
   },
   continueEventContainer: {

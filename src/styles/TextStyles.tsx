@@ -70,13 +70,14 @@ const TextStyles = StyleSheet.create({
   formLauncherTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    paddingVertical: 15,
-    paddingHorizontal: 25
+    paddingTop: 10,
+    paddingBottom: 5,
+    paddingHorizontal: 15
   },
   formLauncherText: {
     fontSize: 16,
-    paddingBottom: 25,
-    paddingHorizontal: 25
+    paddingBottom: 10,
+    paddingHorizontal: 15
   },
   homeScreenTitle: {
     color: Colors.neutral9,
@@ -102,18 +103,18 @@ const TextStyles = StyleSheet.create({
   eventListElementTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    paddingTop: 15,
-    paddingHorizontal: 25
+    paddingTop: 10,
+    paddingHorizontal: 15
   },
   eventListElementTextClear: {
     color: Colors.neutral9,
     fontSize: 16,
-    paddingHorizontal: 25
+    paddingHorizontal: 15
   },
   eventListElementTextFaded: {
     color: Colors.neutral7,
     fontSize: 16,
-    paddingHorizontal: 25,
+    paddingHorizontal: 15,
     paddingBottom: 10
   },
   unfinishedEventTextClear: {
