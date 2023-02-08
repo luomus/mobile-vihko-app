@@ -449,6 +449,15 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
   },
+  iOSDatePickerContainer: {
+    alignSelf: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.neutral2,
+    width: '90%'
+  },
   imagePickerRowContainer: {
     flexDirection: 'row',
     padding: 10,

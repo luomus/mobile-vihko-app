@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
+import Modal from 'react-native-modal'
 import Os from '../../styles/OtherStyles'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -9,6 +10,7 @@ import ButtonComponent from '../general/ButtonComponent'
 import { parseDateFromDocumentToUI, parseDateFromDocumentToFullISO, parseDateFromDateObjectToDocument } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   title: string,
@@ -35,16 +37,18 @@ interface Props {
 
 const FormDatePickerComponent = (props: Props) => {
   const { register, setValue, watch } = useFormContext()
-  const [currentValue, setCurrentValue] = useState<string>(props.defaultValue )
-  const [currentDate, setCurrentDate] = useState<string>(props.defaultValue )
-  const [currentTime, setCurrentTime] = useState<string>(props.defaultValue )
-  const [showDate, setShowDate] = useState<boolean>(false)
-  const [showTime, setShowTime] = useState<boolean>(false)
+  const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
+  const [currentDate, setCurrentDate] = useState<string>(props.defaultValue)
+  const [currentTime, setCurrentTime] = useState<string>(props.defaultValue)
+  const [modalVisibility, setModalVisibility] = useState<boolean>(false)
+
   const date = new Date()
   const dateBegin = watch('gatheringEvent_dateBegin')
   const dateEnd = watch('gatheringEvent_dateEnd')
   const timeStart = watch('gatheringEvent_timeStart')
   const timeEnd = watch('gatheringEvent_timeEnd')
+
+  const { t } = useTranslation()
 
   useEffect(() => {
     register(props.objectTitle)
@@ -93,22 +97,11 @@ const FormDatePickerComponent = (props: Props) => {
   }, [currentDate, currentTime])
 
   const onChangeDate = (event: DateTimePickerEvent, date: Date | undefined) => {
-    setShowDate(false)
-    props.pickerType === 'date' ? null : setShowTime(true)
     date !== undefined ? setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
   }
 
   const onChangeTime = (event: DateTimePickerEvent, date: Date | undefined) => {
-    setShowTime(false)
     date !== undefined ? setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
-  }
-
-  const onOpenDatePicker = () => {
-    if (props.pickerType === 'time') {
-      setShowTime(true)
-    } else {
-      setShowDate(true)
-    }
   }
 
   const createParseableTime = () => {
@@ -128,36 +121,49 @@ const FormDatePickerComponent = (props: Props) => {
           value={parseDateFromDocumentToUI(createParseableTime(), props.pickerType)}
           editable={false}
         />
-        <ButtonComponent onPressFunction={() => onOpenDatePicker()}
+        <ButtonComponent onPressFunction={() => setModalVisibility(true)}
           title={undefined} height={40} width={45} buttonStyle={Bs.neutralIconButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
         />
       </View>
-      {showDate && (
-        <View>
-          <DateTimePicker
-            value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue, props.pickerType)) : date}
-            mode='date'
-            onChange={onChangeDate}
-            minimumDate={props.objectTitle.includes('dateEnd')
-              ? (dateBegin ? new Date(parseDateFromDocumentToFullISO(dateBegin, props.pickerType)) : undefined)
-              : undefined}
-            maximumDate={props.objectTitle.includes('dateBegin')
-              ? (dateEnd ? new Date(parseDateFromDocumentToFullISO(dateEnd, props.pickerType)) : undefined)
-              : undefined}
-          />
+      <Modal isVisible={modalVisibility} onBackButtonPress={() => setModalVisibility(false)}>
+        <View style={Cs.iOSDatePickerContainer}>
+          {
+            props.pickerType === 'time' ? null :
+              <View style={Cs.padding5Container}>
+                <DateTimePicker
+                  value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue, props.pickerType)) : date}
+                  mode='date'
+                  onChange={onChangeDate}
+                  minimumDate={props.objectTitle.includes('dateEnd')
+                    ? (dateBegin ? new Date(parseDateFromDocumentToFullISO(dateBegin, props.pickerType)) : undefined)
+                    : undefined}
+                  maximumDate={props.objectTitle.includes('dateBegin')
+                    ? (dateEnd ? new Date(parseDateFromDocumentToFullISO(dateEnd, props.pickerType)) : undefined)
+                    : undefined}
+                />
+              </View>
+          }
+          {
+            props.pickerType === 'date' ? null :
+              <View style={Cs.padding5Container}>
+                <DateTimePicker
+                  value={currentValue ? new Date(parseDateFromDocumentToFullISO(createParseableTime())) : date}
+                  mode='time'
+                  onChange={onChangeTime}
+                />
+              </View>
+          }
+          <View style={Cs.padding5Container}>
+            <ButtonComponent onPressFunction={() => setModalVisibility(false)}
+              title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
+          </View>
         </View>
-      )}
-      {showTime && (
-        <View>
-          <DateTimePicker
-            value={currentValue ? new Date(parseDateFromDocumentToFullISO(createParseableTime())) : date}
-            mode='time'
-            onChange={onChangeTime}
-          />
-        </View>
-      )}
+      </Modal>
     </View>
   )
 }
