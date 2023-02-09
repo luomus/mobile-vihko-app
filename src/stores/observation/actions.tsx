@@ -1,8 +1,7 @@
 import { Point, Geometry, LineString, MultiLineString } from 'geojson'
 import { ThunkAction } from 'redux-thunk'
-import { clone, cloneDeep } from 'lodash'
+import { clone, cloneDeep, set } from 'lodash'
 import i18n from 'i18next'
-import { set } from 'lodash'
 import uuid from 'react-native-uuid'
 import {
   observationActionTypes,
@@ -239,6 +238,11 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
             'recordBasis': ''
           })
         }
+      }
+
+      //add ykjSquareNumber to bird atlas events
+      if (event.formID === 'MHL.117' && event.grid.n && event.grid.e) {
+        set(event, 'gatherings[0].gatheringFact.ykjSquareNumber', '' + event.grid.n + ':' + event.grid.e)
       }
 
       delete event.id

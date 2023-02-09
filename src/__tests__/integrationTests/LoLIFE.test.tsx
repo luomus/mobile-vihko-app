@@ -70,13 +70,13 @@ describe('LoLIFE', () => {
     fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
 
     // Expect buttons to show up for all LoLIFE observation categories
-    expect(getByText('Lisää havainto')).toBeDefined()
-    expect(getByText('Lisää jälkihavainto')).toBeDefined()
-    expect(getByText('Lisää pesä')).toBeDefined()
-    expect(getByText('Lisää papanahavainto')).toBeDefined()
+    expect(getByText('+ Havainto')).toBeDefined()
+    expect(getByText('+ Jälkihavainto')).toBeDefined()
+    expect(getByText('+ Pesä')).toBeDefined()
+    expect(getByText('+ Papanahavainto')).toBeDefined()
 
     // Open and check the observation form
-    fireEvent.press(getByText('Lisää havainto'))
+    fireEvent.press(getByText('+ Havainto'))
     const prop = lolifeSchema.data.form.schema.properties.gatherings.items.properties.units.items.properties
     expect(getByTestId('saveButton')).toBeDefined()
     expect(getAllByText(fi['cancel'])).toHaveLength(2)
@@ -102,7 +102,7 @@ describe('LoLIFE', () => {
     fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the traces form
-    fireEvent.press(getByText('Lisää jälkihavainto'))
+    fireEvent.press(getByText('+ Jälkihavainto'))
     expect(getByTestId('saveButton')).toBeDefined()
     expect(getAllByText(fi['cancel'])).toHaveLength(2)
     expect(getByText(prop.indirectObservationType.title)).toBeDefined() // Tracks
@@ -122,7 +122,7 @@ describe('LoLIFE', () => {
     fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the nest site form
-    fireEvent.press(getByText('Lisää pesä'))
+    fireEvent.press(getByText('+ Pesä'))
     expect(getByTestId('saveButton')).toBeDefined()
     expect(getAllByText(fi['cancel'])).toHaveLength(2)
     expect(getByText(prop.nestType.title)).toBeDefined() // Nest type
@@ -145,7 +145,7 @@ describe('LoLIFE', () => {
     fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the droppings form
-    fireEvent.press(getByText('Lisää papanahavainto'))
+    fireEvent.press(getByText('+ Papanahavainto'))
     expect(getByTestId('saveButton')).toBeDefined()
     expect(getAllByText(fi['cancel'])).toHaveLength(2)
     expect(getByText(prop.unitFact.properties.lolifeDroppingsType.title)).toBeDefined() // Droppings type

@@ -111,7 +111,7 @@ const ObservationButtonsComponent = (props: Props) => {
 
     return unitGroups ? unitGroups.map((observation: Record<string, any>) =>
       createButton(
-        observation.button.label,
+        '+ ' + observation.button.label,
         Bs.observationButton,
         () => props.confirmationButton(true, observation.rules, observation.button.default, 'map'),
         'primary', undefined, undefined, undefined

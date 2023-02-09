@@ -1180,7 +1180,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Lisää havainto"
+                              "label": "Havainto"
                             }
                           ]
                         }
@@ -1206,7 +1206,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Lisää jälkihavainto"
+                              "label": "Jälkihavainto"
                             }
                           ]
                         }
@@ -1231,7 +1231,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Lisää pesä"
+                              "label": "Pesä"
                             }
                           ]
                         }
@@ -1257,7 +1257,7 @@
                               "fn": "addPredefined",
                               "glyph": "plus",
                               "key": "3",
-                              "label": "Lisää papanahavainto"
+                              "label": "Papanahavainto"
                             }
                           ]
                         }

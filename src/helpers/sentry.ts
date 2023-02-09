@@ -3,8 +3,7 @@ import { SENTRY_DSN } from 'react-native-dotenv'
 
 Sentry.init({
   dsn: SENTRY_DSN,
-  enableInExpoDevelopment: true,
-  debug: false,
+  debug: false
 })
 
 export const captureException = (e: any) => {
