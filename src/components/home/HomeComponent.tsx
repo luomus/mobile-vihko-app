@@ -170,15 +170,6 @@ export const HomeComponentContainer = (
       isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
     }
 
-    const formID = forms.tripForm
-
-    const initSchema = async () => {
-      const formID = await props.fetch('formID')
-      await props.dispatch(switchSchema(formID, i18n.language))
-    }
-
-    initSchema()
-
     const checkUpdates = async () => {
       const appVersion = AppJSON.expo.version
       const latestVersion = await getVersionNumber()
@@ -197,26 +188,21 @@ export const HomeComponentContainer = (
     if (Platform.OS === 'android') checkUpdates()
 
     if (isUnfinished) {
-      props.dispatch(setObserving(true))
-      props.dispatch(setObservationEventInterrupted(true))
-      if (formID === forms.lolife) { props.dispatch(setCurrentObservationZone(getLastZoneId())) }
-    }
-
-    const initTracking = async () => {
-      if (isUnfinished) {
+      const initTracking = async () => {
+        const formID = props.observationEvent.events[length - 1].formID
         props.dispatch(setObserving(true))
         props.dispatch(setObservationEventInterrupted(true))
         if (formID === forms.lolife) { props.dispatch(setCurrentObservationZone(getLastZoneId())) }
-
         const savedTrackingMode = await props.fetch('tracking')
-
         props.dispatch(setTracking(savedTrackingMode))
         await onContinueObservationEvent()
       }
-    }
 
-    initTracking()
-    if (!isUnfinished) props.setLoading(false)
+      initTracking()
+
+    } else {
+      props.setLoading(false)
+    }
   }, [])
 
   useEffect(() => {
@@ -284,7 +270,7 @@ export const HomeComponentContainer = (
 
     //save the used form before beginning an event
     if (!props.observing) {
-      await props.dispatch(switchSchema(formID, i18n.language))
+      await props.dispatch(switchSchema(formID, i18n.language, true))
       await props.save('formID', formID)
     }
 
@@ -452,7 +438,7 @@ export const HomeComponentContainer = (
         <DefaultModalComponent modalVisibility={props.tripModalVisibility} setModalVisibility={props.setTripModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.tripForm) }} formID={forms.tripForm} />
         <AtlasInstructionModalComponent modalVisibility={props.atlasInstructionModalVisibility}
-          setModalVisibility={props.setAtlasInstructionModalVisibility} setGridModalVisibility={props.setGridModalVisibility}/>
+          setModalVisibility={props.setAtlasInstructionModalVisibility} setGridModalVisibility={props.setGridModalVisibility} />
         <GridModalComponent modalVisibility={props.gridModalVisibility} setModalVisibility={props.setGridModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.birdAtlas) }}
           setLoading={props.setLoading} showError={showError} />

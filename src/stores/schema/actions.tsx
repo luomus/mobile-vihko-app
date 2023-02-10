@@ -115,7 +115,7 @@ errors.forEach(err => dispatch(setMessageState({
         })))
 */
 
-export const switchSchema = (formId: string, lang: string): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
+export const switchSchema = (formId: string, lang: string, fromAPI: boolean = false): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
   return async dispatch => {
     const schemas: Record<string, any> = {
       formID: formId,
@@ -125,7 +125,10 @@ export const switchSchema = (formId: string, lang: string): ThunkAction<Promise<
     }
 
     try {
-      schemas[lang] = await storageService.fetch(formId + lang[0].toUpperCase() + lang[1])
+      schemas[lang] = fromAPI ?
+        undefined :
+        await storageService.fetch(formId + lang[0].toUpperCase() + lang[1])
+
       if (!schemas[lang]) {
         // Schema+language combination is not initialized yet
         schemas[lang] = await initSchema(formId, lang)

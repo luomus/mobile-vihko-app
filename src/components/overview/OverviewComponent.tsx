@@ -80,7 +80,7 @@ const OverviewComponent = (props: Props) => {
       if (searchedEvent === null) { return }
       const fetchedSchema = await storageService.fetch(`${searchedEvent.formID}${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
       setEventSchema(fetchedSchema)
-      dispatch(switchSchema(searchedEvent.formID, lang))
+      await dispatch(switchSchema(searchedEvent.formID, lang))
     }
 
     initEventSchema()
