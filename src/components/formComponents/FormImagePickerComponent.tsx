@@ -159,20 +159,16 @@ const ImagePickerComponent = (props: Props) => {
             : renderImages()
           }
           <View style={Cs.imageButtonsColumnContainer}>
-            <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={imageFromLibrary}
-                title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-              />
-            </View>
-            <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={imageFromCamera}
-                title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-              />
-            </View>
+            <ButtonComponent onPressFunction={imageFromLibrary}
+              title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
+            <ButtonComponent onPressFunction={imageFromCamera}
+              title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
           </View>
         </View>
       </>
@@ -199,20 +195,16 @@ const ImagePickerComponent = (props: Props) => {
               {renderImages()}
             </ScrollView>
             <View style={Cs.imageButtonsRowContainer}>
-              <View style={Cs.padding5Container}>
-                <ButtonComponent onPressFunction={imageFromLibrary}
-                  title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
-                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-                />
-              </View>
-              <View style={Cs.padding5Container}>
-                <ButtonComponent onPressFunction={imageFromCamera}
-                  title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
-                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-                />
-              </View>
+              <ButtonComponent onPressFunction={imageFromLibrary}
+                title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+              <ButtonComponent onPressFunction={imageFromCamera}
+                title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
             </View>
           </View>
         </View>

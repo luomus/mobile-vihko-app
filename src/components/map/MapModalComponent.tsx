@@ -51,20 +51,16 @@ const MapModalComponent = (props: Props) => {
                     {lolifeObservationTypes[observation.rules.field] ? t(lolifeObservationTypes[observation.rules.field]) : t('flying squirrel')}
                   </Text>
                 }
-                <View style={Cs.padding5Container}>
-                  <ButtonComponent onPressFunction={() => props.shiftToEditPage(observationId.eventId, observation.id)}
-                    title={t('edit')} height={40} width={120} buttonStyle={Bs.mapModalButton}
-                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                    textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-                  />
-                </View>
-                <View style={Cs.padding5Container}>
-                  <ButtonComponent onPressFunction={() => props.showSubmitDelete(observationId.eventId, observation.id)}
-                    title={t('delete')} height={40} width={120} buttonStyle={Bs.mapModalButton}
-                    gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                    textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-                  />
-                </View>
+                <ButtonComponent onPressFunction={() => props.shiftToEditPage(observationId.eventId, observation.id)}
+                  title={t('edit')} height={40} width={120} buttonStyle={Bs.mapModalButton}
+                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                />
+                <ButtonComponent onPressFunction={() => props.showSubmitDelete(observationId.eventId, observation.id)}
+                  title={t('delete')} height={40} width={120} buttonStyle={Bs.mapModalButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
               </View>
             )}
           </ScrollView>

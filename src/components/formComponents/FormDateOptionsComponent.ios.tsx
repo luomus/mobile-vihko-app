@@ -138,20 +138,16 @@ const FormDateOptionsComponent = (props: Props) => {
       <Text>{props.title}</Text>
       {!selected ?
         <View style={Cs.datePickerContainer}>
-          <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => onLockIntoCurrentDate()}
-              title={t('timestamp')} height={40} width={120} buttonStyle={Bs.timeButton}
-              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.buttonText} iconName={'schedule'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-            />
-          </View>
-          <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => setModalVisibility(true)}
-              title={t('choose time')} height={40} width={120} buttonStyle={Bs.timeButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'restore'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-            />
-          </View>
+          <ButtonComponent onPressFunction={() => onLockIntoCurrentDate()}
+            title={t('timestamp')} height={40} width={120} buttonStyle={Bs.timeButton}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={'schedule'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+          />
+          <ButtonComponent onPressFunction={() => setModalVisibility(true)}
+            title={t('choose time')} height={40} width={120} buttonStyle={Bs.timeButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'restore'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          />
         </View>
         :
         <View style={Cs.datePickerContainer}>
@@ -187,13 +183,11 @@ const FormDateOptionsComponent = (props: Props) => {
               onChange={onChangeTime}
             />
           </View>
-          <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => setModalVisibility(false)}
-              title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-            />
-          </View>
+          <ButtonComponent onPressFunction={() => setModalVisibility(false)}
+            title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          />
         </View>
       </Modal>
     </View>

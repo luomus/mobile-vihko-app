@@ -29,29 +29,23 @@ const SendEventModalComponent = (props: Props) => {
         <Text style={Cs.padding10Container}>
           {t('send observation event to server?')}
         </Text>
-        <View style={Cs.padding5Container}>
-          <ButtonComponent onPressFunction={() => { props.sendObservationEvent(true) }} title={t('send public')}
-            height={40} width={200} buttonStyle={Bs.sendEventModalButton}
-            gradientColorStart={Colors.successButton1} gradientColorEnd={Colors.successButton2} shadowColor={Colors.successShadow}
-            textStyle={Ts.buttonText} iconName={'publish'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
-          />
-        </View>
-        { schema.formID !== forms.lolife && schema.formID !== forms.birdAtlas &&
-          <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => { props.sendObservationEvent(false) }} title={t('send private')}
-              height={40} width={200} buttonStyle={Bs.sendEventModalButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'security'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
-            />
-          </View>
-        }
-        <View style={Cs.padding5Container}>
-          <ButtonComponent onPressFunction={() => { props.onCancel(false) }} title={t('do not submit')}
+        <ButtonComponent onPressFunction={() => { props.sendObservationEvent(true) }} title={t('send public')}
+          height={40} width={200} buttonStyle={Bs.sendEventModalButton}
+          gradientColorStart={Colors.successButton1} gradientColorEnd={Colors.successButton2} shadowColor={Colors.successShadow}
+          textStyle={Ts.buttonText} iconName={'publish'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
+        />
+        {schema.formID !== forms.lolife && schema.formID !== forms.birdAtlas &&
+          <ButtonComponent onPressFunction={() => { props.sendObservationEvent(false) }} title={t('send private')}
             height={40} width={200} buttonStyle={Bs.sendEventModalButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'close'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={'security'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
           />
-        </View>
+        }
+        <ButtonComponent onPressFunction={() => { props.onCancel(false) }} title={t('do not submit')}
+          height={40} width={200} buttonStyle={Bs.sendEventModalButton}
+          gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+          textStyle={Ts.buttonText} iconName={'close'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
+        />
       </View>
     </Modal>
   )

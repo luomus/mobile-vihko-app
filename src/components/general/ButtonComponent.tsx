@@ -15,29 +15,33 @@ type Props = {
   gradientColorEnd: string,
   shadowColor: string,
   textStyle: StyleProp<TextStyle>,
+  textWidth?: number,
   iconName: string | undefined,
   iconType: string | undefined,
   iconSize: number | undefined,
   contentColor: string,
+  noMargin?: boolean,
   testID?: string,
-  textWidth?: number
 }
 
 const ButtonComponent = (props: Props) => {
   return (
     <View>
-      <TouchableOpacity onPress={props.onPressFunction} disabled={props.disabled} activeOpacity={0.8}
-        testID={props.testID} style={[
+      <TouchableOpacity onPress={props.onPressFunction} disabled={props.disabled} activeOpacity={0.8} testID={props.testID}
+        style={[
           Bs.buttonShadow,
-          { shadowColor: props.shadowColor }
+          { shadowColor: props.shadowColor },
+          props.noMargin ? null : { margin: 5 }
         ]}>
         <LinearGradient start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
-          colors={[props.gradientColorStart, props.gradientColorEnd]} style={[ props.buttonStyle, { width: props.width, height: props.height } ]}>
-          { props.iconName ?
-            <Icon name={ props.iconName } type={ props.iconType } color={ props.contentColor } size={ props.iconSize } containerStyle={{ marginTop: 5 }} tvParallaxProperties={undefined} />
+          colors={[props.gradientColorStart, props.gradientColorEnd]}
+          style={[props.buttonStyle, { width: props.width, height: props.height }]}>
+          {props.iconName ?
+            <Icon name={props.iconName} type={props.iconType} color={props.contentColor} size={props.iconSize}
+              containerStyle={{ marginTop: 5 }} tvParallaxProperties={undefined} />
             : null
           }
-          <Text style={[ props.textStyle, { color: props.contentColor }, { width: props.textWidth } ]} numberOfLines={1}>{props.title ? ' ' + props.title : ''}</Text>
+          <Text style={[props.textStyle, { color: props.contentColor }, { width: props.textWidth }]} numberOfLines={1}>{props.title ? ' ' + props.title : ''}</Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>

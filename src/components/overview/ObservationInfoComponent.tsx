@@ -111,12 +111,8 @@ const ObservationInfoComponent = (props: Props) => {
         }
 
         <View style={Cs.observationListElementButtonsContainer}>
-          <View style={Cs.padding5Container}>
-            {props.editButton}
-          </View>
-          <View style={Cs.padding5Container}>
-            {props.removeButton}
-          </View>
+          {props.editButton}
+          {props.removeButton}
         </View>
       </View>
     )

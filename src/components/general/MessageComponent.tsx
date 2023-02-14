@@ -65,17 +65,9 @@ const MessageComponent = () => {
 
   const oneButtonCreator = (buttonType: string, buttonLabel: string) => {
     if (buttonType === 'primary') {
-      return (
-        <View style={Cs.padding5Container}>
-          {primaryButton(buttonLabel, 'check')}
-        </View>
-      )
+      return primaryButton(buttonLabel, 'check')
     } else {
-      return (
-        <View style={Cs.padding5Container}>
-          {neutralButton(buttonLabel, 'check')}
-        </View>
-      )
+      return neutralButton(buttonLabel, 'check')
     }
   }
 
@@ -88,23 +80,15 @@ const MessageComponent = () => {
     if (leftButtonType === 'primary' && rightButtonType === 'neutral') {
       return (
         <View style={Cs.messageButtonsContainer}>
-          <View style={Cs.padding5Container}>
-            {primaryButton(leftButtonLabel, 'check')}
-          </View>
-          <View style={Cs.padding5Container}>
-            {neutralButton(rightButtonLabel, 'cancel')}
-          </View>
+          {primaryButton(leftButtonLabel, 'check')}
+          {neutralButton(rightButtonLabel, 'cancel')}
         </View>
       )
     } else {
       return (
         <View style={Cs.messageButtonsContainer}>
-          <View style={Cs.padding5Container}>
-            {neutralButton(leftButtonLabel, 'check')}
-          </View>
-          <View style={Cs.padding5Container}>
-            {primaryButton(rightButtonLabel, 'cancel')}
-          </View>
+          {neutralButton(leftButtonLabel, 'check')}
+          {primaryButton(rightButtonLabel, 'cancel')}
         </View>
       )
     }

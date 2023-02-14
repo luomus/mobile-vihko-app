@@ -139,9 +139,9 @@ const ExtendedNavBarComponent = (props: Props) => {
       <View style={{ flexDirection: 'row', width: '50%' }}>
         <View style={{ paddingHorizontal: 2, width: '50%' }}>
           <ButtonComponent onPressFunction={() => { stopObserving()}} title={t('stop')}
-            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-            gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.dangerButton1}
+            gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
+            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin
           />
         </View>
         <View style={{ paddingHorizontal: 2, width: '50%' }}>
@@ -151,7 +151,7 @@ const ExtendedNavBarComponent = (props: Props) => {
             gradientColorStart={grid?.outsideBorders !== 'true' ? Colors.neutralButton : Colors.unavailableButton}
             gradientColorEnd={grid?.outsideBorders !== 'true' ? Colors.neutralButton : Colors.unavailableButton}
             shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
-            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
           />
         </View>
       </View>
@@ -161,15 +161,15 @@ const ExtendedNavBarComponent = (props: Props) => {
             {props.onPressMap === undefined ?
               <SelectedButtonComponent
                 onPress={() => null}
-                title={t('map')} height={30} width={80}
+                title={t('map')} height={30}
                 color={Colors.neutral5}
                 textStyle={Ts.mapToListButtonText}
                 textColor={Colors.darkText}
               /> :
               <ButtonComponent onPressFunction={() => { props.onPressMap === undefined ? null : props.onPressMap() }} title={t('map')}
-                height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+                height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.neutralButton}
+                gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
+                iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
               />
             }
           </View>
@@ -177,15 +177,15 @@ const ExtendedNavBarComponent = (props: Props) => {
             {props.onPressList === undefined ?
               <SelectedButtonComponent
                 onPress={() => null}
-                title={t('list')} height={30} width={80}
+                title={t('list')} height={30}
                 color={Colors.neutral5}
                 textStyle={Ts.mapToListButtonText}
                 textColor={Colors.darkText}
               /> :
               <ButtonComponent onPressFunction={() => { props.onPressList === undefined ? null : props.onPressList() }} title={t('list')}
-                height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+                height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.neutralButton}
+                gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
+                iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
               />
             }
           </View>

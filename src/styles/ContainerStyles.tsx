@@ -5,7 +5,7 @@ const ContainerStyles = StyleSheet.create({
 
   //general
   buttonContainer: {
-    padding: 10,
+    padding: 5,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'

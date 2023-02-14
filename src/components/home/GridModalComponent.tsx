@@ -60,7 +60,7 @@ const GridModalComponent = (props: Props) => {
     let location: LocationObject
     try {
       if (reloadModal) setLoading(true)
-      location = await getCurrentLocation(false, 6)
+      location = await getCurrentLocation(false, 5)
       dispatch(updateLocation(location))
     } catch (err) {
       props.setModalVisibility(false)
@@ -289,46 +289,36 @@ const GridModalComponent = (props: Props) => {
                   }
                 </MapView>
                 <View style={Cs.mapButtonsContainer}>
-                  <View style={Cs.padding5Container}>
-                    <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => toggleMapType()} title={undefined}
-                      height={50} width={50} buttonStyle={Bs.mapIconButton}
-                      gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                      textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-                    />
-                  </View>
-                  <View style={Cs.padding5Container}>
-                    <ButtonComponent testID="center-map-btn" onPressFunction={() => centerMapAnim()} title={undefined}
-                      height={50} width={50} buttonStyle={Bs.mapIconButton}
-                      gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                      textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-                    />
-                  </View>
-                </View>
-              </View>
-              <View style={Cs.modalStartButtonContainer}>
-                <View style={Cs.padding5Container}>
-                  <ButtonComponent testID="center-map-btn" onPressFunction={async () => await centerMapAnim()} title={t('locate me')}
-                    height={40} width={160} buttonStyle={Bs.locateMeButton}
+                  <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => toggleMapType()} title={undefined}
+                    height={50} width={50} buttonStyle={Bs.mapIconButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                    textStyle={Ts.buttonText} iconName={'person-pin'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                    textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+                  />
+                  <ButtonComponent testID="center-map-btn" onPressFunction={() => centerMapAnim()} title={undefined}
+                    height={50} width={50} buttonStyle={Bs.mapIconButton}
+                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                    textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
                   />
                 </View>
               </View>
               <View style={Cs.modalStartButtonContainer}>
-                <View style={Cs.padding5Container}>
-                  <ButtonComponent disabled={loading} onPressFunction={async () => await handleStartEvent()} title={t('start')}
-                    height={40} width={120} buttonStyle={Bs.beginButton}
-                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                    textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-                  />
-                </View>
-                <View style={Cs.padding5Container}>
-                  <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
-                    height={40} width={120} buttonStyle={Bs.beginButton}
-                    gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                    textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-                  />
-                </View>
+                <ButtonComponent testID="center-map-btn" onPressFunction={async () => await centerMapAnim()} title={t('locate me')}
+                  height={40} width={160} buttonStyle={Bs.locateMeButton}
+                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                  textStyle={Ts.buttonText} iconName={'person-pin'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                />
+              </View>
+              <View style={Cs.modalStartButtonContainer}>
+                <ButtonComponent disabled={loading} onPressFunction={async () => await handleStartEvent()} title={t('start')}
+                  height={40} width={120} buttonStyle={Bs.beginButton}
+                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                  textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                />
+                <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
+                  height={40} width={120} buttonStyle={Bs.beginButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
               </View>
             </>
           }

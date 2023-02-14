@@ -32,7 +32,7 @@ type Props = {
 const ZoneModalComponent = (props: Props) => {
 
   const [shown, setShown] = useState<boolean>(false)
-  const [options, setOptions] = useState<{key: string, label: string}[]>([])
+  const [options, setOptions] = useState<{ key: string, label: string }[]>([])
 
   const observationZone = useSelector((state: rootState) => state.observationZone)
   const tracking = useSelector((state: rootState) => state.tracking)
@@ -118,13 +118,11 @@ const ZoneModalComponent = (props: Props) => {
                 placeholderText={t('choose observation zone')}
               />
             </View>
-            <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={() => refreshZonesList()} title={undefined}
-                height={40} width={40} buttonStyle={Bs.refreshButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'refresh'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
-              />
-            </View>
+            <ButtonComponent onPressFunction={() => refreshZonesList()} title={undefined}
+              height={40} width={40} buttonStyle={Bs.refreshButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'refresh'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText}
+            />
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
             <Checkbox
@@ -139,20 +137,16 @@ const ZoneModalComponent = (props: Props) => {
             <Text style={{ color: Colors.neutral7, padding: 5 }}>{t('path tracking')}</Text>
           </View>
           <View style={Cs.modalStartButtonContainer}>
-            <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={() => handleStartEvent()} title={t('start')}
-                height={40} width={120} buttonStyle={Bs.beginButton}
-                gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-              />
-            </View>
-            <View style={Cs.padding5Container}>
-              <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
-                height={40} width={120} buttonStyle={Bs.beginButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-              />
-            </View>
+            <ButtonComponent onPressFunction={() => handleStartEvent()} title={t('start')}
+              height={40} width={120} buttonStyle={Bs.beginButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+            />
+            <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
+              height={40} width={120} buttonStyle={Bs.beginButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
           </View>
         </View>
       </View>

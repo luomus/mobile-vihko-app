@@ -115,7 +115,7 @@ errors.forEach(err => dispatch(setMessageState({
         })))
 */
 
-export const switchSchema = (formId: string, lang: string, fromAPI: boolean = false): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
+export const switchSchema = (formId: string, lang: string, fromAPI = false): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
   return async dispatch => {
     const schemas: Record<string, any> = {
       formID: formId,

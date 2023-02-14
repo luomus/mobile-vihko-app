@@ -7,7 +7,7 @@ type Props = {
   onPress: () => void,
   title: string,
   height: number,
-  width: number,
+  width?: number,
   color: string,
   textStyle: StyleProp<TextStyle>,
   textColor: string

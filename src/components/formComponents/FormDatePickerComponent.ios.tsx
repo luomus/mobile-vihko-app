@@ -155,13 +155,11 @@ const FormDatePickerComponent = (props: Props) => {
                 />
               </View>
           }
-          <View style={Cs.padding5Container}>
-            <ButtonComponent onPressFunction={() => setModalVisibility(false)}
-              title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-            />
-          </View>
+          <ButtonComponent onPressFunction={() => setModalVisibility(false)}
+            title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          />
         </View>
       </Modal>
     </View>
