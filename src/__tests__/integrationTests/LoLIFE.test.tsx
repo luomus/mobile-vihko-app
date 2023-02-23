@@ -192,7 +192,7 @@ describe('LoLIFE', () => {
 
     // Check that we are back at the home screen
     await waitFor(() => expect(getByText(fi['trip form'])).toBeDefined())
-    expect(getByText(fi['bird atlas'])).toBeDefined()
+    await waitFor(() => expect(getAllByText(fi['bird atlas'])).toHaveLength(2))
     expect(getByText(fi['fungi atlas'])).toBeDefined()
     expect(getAllByText(fi['lolife'])).toHaveLength(2)
   })

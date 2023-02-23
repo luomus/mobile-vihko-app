@@ -38,6 +38,7 @@ import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
 import FormLauncherComponent from './FormLauncherComponent'
 import UnfinishedEventComponent from './UnifinishedEventComponent'
+import SentEventComponent from './SentEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
 import AtlasInstructionModalComponent from './AtlasInstructionModalComponent'
 import GridModalComponent from './GridModalComponent'
@@ -45,6 +46,7 @@ import DefaultModalComponent from './DefaultModalComponent'
 import { getCurrentLocation } from '../../helpers/geolocationHelper'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import { updateIsAvailable } from '../../helpers/versionHelper'
+import { getSentEvents } from '../../services/documentService'
 import { getVersionNumber } from '../../services/versionService'
 import i18n from '../../languages/i18n'
 
@@ -60,6 +62,7 @@ const HomeComponent = (props: Props) => {
 
   const [pressCounter, setPressCounter] = useState<number>(0)
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
+  const [sentEvents, setSentEvents] = useState<Element[]>([])
   const [tripModalVisibility, setTripModalVisibility] = useState<boolean>(false)
   const [atlasInstructionModalVisibility, setAtlasInstructionModalVisibility] = useState<boolean>(false)
   const [gridModalVisibility, setGridModalVisibility] = useState<boolean>(false)
@@ -88,6 +91,8 @@ const HomeComponent = (props: Props) => {
     setPressCounter={setPressCounter}
     observationEvents={observationEvents}
     setObservationEvents={setObservationEvents}
+    sentEvents={sentEvents}
+    setSentEvents={setSentEvents}
     tripModalVisibility={tripModalVisibility}
     setTripModalVisibility={setTripModalVisibility}
     atlasInstructionModalVisibility={atlasInstructionModalVisibility}
@@ -127,6 +132,8 @@ type Props2 = {
   setPressCounter: React.Dispatch<React.SetStateAction<number>>,
   observationEvents: Element[],
   setObservationEvents: React.Dispatch<React.SetStateAction<Element[]>>,
+  sentEvents: Element[],
+  setSentEvents: React.Dispatch<React.SetStateAction<Element[]>>
   tripModalVisibility: boolean,
   setTripModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   atlasInstructionModalVisibility: boolean,
@@ -187,6 +194,12 @@ export const HomeComponentContainer = (
 
     if (Platform.OS === 'android') checkUpdates()
 
+    const initSentEvents = async () => {
+      await loadSentEvents()
+    }
+
+    initSentEvents()
+
     if (isUnfinished) {
       const initTracking = async () => {
         const formID = props.observationEvent.events[length - 1].formID
@@ -246,6 +259,23 @@ export const HomeComponentContainer = (
     })
 
     props.setObservationEvents(events)
+  }
+
+  const loadSentEvents = async () => {
+    let sentEvents: Record<string, any>[] = []
+    try {
+      sentEvents = await getSentEvents(props.credentials)
+    } catch (error: any) {
+      props.dispatch(setMessageState({
+        type: 'err',
+        messageContent: props.t('failed to fetch sent events'),
+      }))
+    }
+    const sentEventElements: Element[] = []
+    sentEvents.map(event => sentEventElements.push(
+      <SentEventComponent key={event.aggregateBy['document.documentId']} event={event} />
+    ))
+    props.setSentEvents(sentEventElements)
   }
 
   //handle back press in homescreen by asking user if they wish to exit the app
@@ -423,9 +453,9 @@ export const HomeComponentContainer = (
               }
             </>
             <Text style={Ts.previousObservationsTitle}>{props.t('previous observation events')}</Text>
-            <>
-              {props.observationEvents}
-            </>
+            <>{props.observationEvents}</>
+            <Text style={Ts.previousObservationsTitle}>{props.t('sent observation events')}</Text>
+            <>{props.sentEvents}</>
           </View>
           <View style={Cs.versionContainer}>
             <Text

@@ -39,6 +39,10 @@ export const parseDateFromDateObjectToDocument = (dateObject: Date, type?: strin
     return moment(date, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('YYYY-MM-DDTHH:mm')
 }
 
+export const parseFromWarehouseToUI = (date: string) => {
+  return moment(date, 'YYYY-MM-DD').format('DD.MM.YYYY')
+}
+
 //checks whether two 'yyyy-MM-ddTHH.mm' formated dates are from same day
 export const sameDay = (dateOne: string, dateTwo: string) => {
   if (dateOne.substring(0, 10) === dateTwo.substring(0, 10)) {

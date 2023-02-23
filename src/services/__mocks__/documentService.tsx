@@ -56,3 +56,14 @@ export const postObservationEvent = async (observationEvent: Record<string, any>
 
   Promise.resolve()
 }
+
+export const getSentEvents = async (credentials: CredentialsType) => {
+  return [{
+    'aggregateBy': {
+      'document.createdDate': '2023-02-09',
+      'document.documentId': 'http://tun.fi/JX.1111',
+      'document.formId': 'http://tun.fi/MHL.117'
+    },
+    'count': 1
+  }]
+}

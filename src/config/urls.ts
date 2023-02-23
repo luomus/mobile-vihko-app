@@ -12,6 +12,9 @@ export const graphqlUrl           = `${API_URL}/graphql`
 //documents url
 export const postDocumentUrl      = `${API_URL}/documents`
 
+//sent documents url
+export const sentDocumentsUrl     = `${API_URL}/warehouse/query/document/aggregate`
+
 //image urls
 export const postImageUrl         = `${API_URL}/images`
 

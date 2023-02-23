@@ -106,6 +106,11 @@ const TextStyles = StyleSheet.create({
     paddingTop: 10,
     paddingHorizontal: 15
   },
+  eventListElementThinTitle: {
+    fontSize: 16,
+    paddingTop: 12,
+    paddingHorizontal: 15
+  },
   eventListElementTextClear: {
     color: Colors.neutral9,
     fontSize: 16,

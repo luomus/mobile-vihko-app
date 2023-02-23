@@ -1,10 +1,11 @@
 import moment from 'moment'
 import {
+  setDateForDocument,
   parseDateFromDocumentToUI,
   parseDateFromDateObjectToDocument,
   parseDateFromDocumentToFullISO,
-  sameDay,
-  setDateForDocument
+  parseFromWarehouseToUI,
+  sameDay
 } from '../../helpers/dateHelper'
 
 describe('setDateForDocument', () => {
@@ -94,6 +95,13 @@ describe('parseDateFromDateObjectToDocument', () => {
     const date = new Date(2022, 7, 29, 14, 12, 9, 427)
     const parsedDate = parseDateFromDateObjectToDocument(date)
     expect(parsedDate).toEqual('2022-08-29T14:12')
+  })
+})
+
+describe('parseFromWarehouseToUI', () => {
+  it('returns the given date in a UI friendly format', () => {
+    const date = '2022-08-29'
+    expect(parseFromWarehouseToUI(date)).toEqual('29.08.2022')
   })
 })
 

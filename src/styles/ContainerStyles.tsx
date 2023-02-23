@@ -131,6 +131,13 @@ const ContainerStyles = StyleSheet.create({
     minHeight: 100,
     maxHeight: 300
   },
+  sentEventsContainer: {
+    backgroundColor: Colors.neutral3,
+    borderRadius: 5,
+    flexDirection: 'row',
+    minHeight: 50,
+    maxHeight: 100
+  },
   continueEventContainer: {
     width: '90%',
     marginTop: 10

@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleProp, Text, View, ViewStyle } from 'react-native'
+import uuid from 'react-native-uuid'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
@@ -43,7 +44,7 @@ const ObservationButtonsComponent = (props: Props) => {
         shadowColor={styleType === 'primary' ? Colors.primaryShadow : Colors.neutralShadow}
         textStyle={Ts.buttonText} iconName={iconName} iconType={iconType} iconSize={22}
         contentColor={styleType === 'primary' ? Colors.whiteText : Colors.darkText}
-        textWidth={textWidth}
+        textWidth={textWidth} key={uuid.v4().toString()}
       />
     )
   }

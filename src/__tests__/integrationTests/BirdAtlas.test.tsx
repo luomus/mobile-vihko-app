@@ -48,8 +48,8 @@ describe('BirdAtlas', () => {
 
     await waitFor(async () => {await initializeComponent(store)})
 
-    await waitFor(() => expect(getByText(fi['bird atlas'])).toBeDefined())
-    fireEvent.press(getByText(fi['bird atlas']))
+    await waitFor(() => expect(getAllByText(fi['bird atlas'])).toHaveLength(2))
+    fireEvent.press(getAllByText(fi['bird atlas'])[0])
 
     // This opens the AtlasInstruction modal
     await waitFor(() => expect(getByText(fi['continue'])).toBeDefined())
@@ -202,7 +202,7 @@ describe('BirdAtlas', () => {
 
     // Check that we are back at the home screen
     await waitFor(() => expect(getByText(fi['trip form'])).toBeDefined())
-    expect(getAllByText(fi['bird atlas'])).toHaveLength(2)
+    expect(getAllByText(fi['bird atlas'])).toHaveLength(3)
     expect(getByText(fi['fungi atlas'])).toBeDefined()
     expect(getByText(fi['lolife'])).toBeDefined()
   })
