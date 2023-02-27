@@ -25,7 +25,6 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import SelectedButtonComponent from './SelectedButtonComponent'
 import { log } from '../../helpers/logger'
-import { captureException } from '../../helpers/sentry'
 
 type Props = {
   onPressMap: (() => void) | undefined,
@@ -116,7 +115,6 @@ const ExtendedNavBarComponent = (props: Props) => {
         try {
           await watchBackgroundLocationAsync(title, body)
         } catch (error: any) {
-          captureException(error)
           log.error({
             location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
             error: error,
@@ -159,12 +157,8 @@ const ExtendedNavBarComponent = (props: Props) => {
         <View style={{ flexDirection: 'row', width: '50%' }}>
           <View style={{ paddingHorizontal: 2, width: '50%' }}>
             {props.onPressMap === undefined ?
-              <SelectedButtonComponent
-                onPress={() => null}
-                title={t('map')} height={30}
-                color={Colors.neutral5}
-                textStyle={Ts.mapToListButtonText}
-                textColor={Colors.darkText}
+              <SelectedButtonComponent onPress={() => null} title={t('map')} height={30} color={Colors.neutral5}
+                textStyle={Ts.mapToListButtonText} textColor={Colors.darkText} noMargin
               /> :
               <ButtonComponent onPressFunction={() => { props.onPressMap === undefined ? null : props.onPressMap() }} title={t('map')}
                 height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.neutralButton}
@@ -175,12 +169,8 @@ const ExtendedNavBarComponent = (props: Props) => {
           </View>
           <View style={{ paddingHorizontal: 2, width: '50%' }}>
             {props.onPressList === undefined ?
-              <SelectedButtonComponent
-                onPress={() => null}
-                title={t('list')} height={30}
-                color={Colors.neutral5}
-                textStyle={Ts.mapToListButtonText}
-                textColor={Colors.darkText}
+              <SelectedButtonComponent onPress={() => null} title={t('list')} height={30} color={Colors.neutral5}
+                textStyle={Ts.mapToListButtonText} textColor={Colors.darkText} noMargin
               /> :
               <ButtonComponent onPressFunction={() => { props.onPressList === undefined ? null : props.onPressList() }} title={t('list')}
                 height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.neutralButton}

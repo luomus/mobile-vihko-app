@@ -149,7 +149,6 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         tracking
       )
     } catch (error: any) {
-      captureException(error)
       //delete the new event if gps can't be launched
       await dispatch(deleteObservationEvent(newID))
       log.error({
@@ -249,7 +248,6 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     try {
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), title, body, tracking)
     } catch (error: any) {
-      captureException(error)
       log.error({
         location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
         error: error,

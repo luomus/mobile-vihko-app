@@ -159,7 +159,6 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         try {
           await fetchFinland(event, lang, credentials)
         } catch (error: any) {
-          captureException(error)
           if (error.severity && error.severity === 'low') {
             localityErrorMessage = error.message
           }
@@ -168,7 +167,6 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         try {
           await fetchForeign(event, lang, credentials)
         } catch (error: any) {
-          captureException(error)
           if (error.severity && error.severity === 'low') {
             localityErrorMessage = error.message
           }
@@ -263,8 +261,13 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     try {
       await postObservationEvent(event, credentials)
     } catch (error: any) {
-      captureException(error)
       if (error.response?.status.toString() === '422') {
+        captureException({
+          error,
+          extra: {
+            payload: JSON.stringify(event),
+          }
+        })
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
           error: error.response.data.error,
@@ -272,6 +275,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
           user_id: credentials.user.id
         })
       } else {
+        captureException(error)
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
           error: error,

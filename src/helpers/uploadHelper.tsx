@@ -60,7 +60,6 @@ export const fetchFinland = async (event: Record<string, any>, lang: string, cre
   try {
     localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang, credentials)
   } catch (error: any) {
-    captureException(error)
     return Promise.reject({
       severity: error.severity,
       message: error.message
@@ -93,7 +92,6 @@ export const fetchForeign = async (event: Record<string, any>, lang: string, cre
   try {
     localityDetails = await defineLocalityForeign(center, lang, credentials)
   } catch (error: any) {
-    captureException(error)
     return Promise.reject({
       severity: error.severity,
       message: error.message
@@ -137,6 +135,7 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   }
 
   if (localityDetails.result.status === 'INVALID_REQUEST') {
+    captureException(localityDetails.result.error_message)
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
       error: localityDetails.result.error_message,

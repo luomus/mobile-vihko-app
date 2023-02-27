@@ -10,14 +10,16 @@ type Props = {
   width?: number,
   color: string,
   textStyle: StyleProp<TextStyle>,
-  textColor: string
+  textColor: string,
+  noMargin?: boolean
 }
 
 const SelectedButtonComponent = (props: Props) => {
   return (
     <TouchableOpacity
       onPress={() => { props.onPress() }} activeOpacity={0.8}
-      style={{ width: props.width, height: props.height, borderRadius: 5, backgroundColor: props.color }}>
+      style={[{ width: props.width, height: props.height, borderRadius: 5, backgroundColor: props.color },
+        props.noMargin ? null : { margin: 5 }]}>
       <InsetShadow shadowRadius={5} shadowOffset={5} shadowOpacity={0.9} containerStyle={{ borderRadius: 5, alignItems: 'center' }}>
         <Text style={props.textStyle}>{props.title}</Text>
       </InsetShadow>

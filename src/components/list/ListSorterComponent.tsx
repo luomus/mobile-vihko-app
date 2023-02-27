@@ -46,8 +46,8 @@ const ListSorterComponent = (props: Props) => {
     } else if (itemValue === 'scientific') {
       const sortByScientificName = (list: Record<string, any>[]) => {
         return list.sort((a, b) => {
-          const textA = a.scientificName.toLowerCase()
-          const textB = b.scientificName.toLowerCase()
+          const textA = a.scientificName ? a.scientificName.toLowerCase() : undefined
+          const textB = b.scientificName ? b.scientificName.toLowerCase() : undefined
           return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
         })
       }

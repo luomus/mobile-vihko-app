@@ -23,7 +23,6 @@ export const postTmpToken = async (tmpToken: string) => {
     //successfully received the token
     return result.data
   } catch (error) {
-    captureException(error)
     //did not get the token in this poll
     return { token: undefined }
   }
@@ -109,7 +108,7 @@ export const logout = async (credentials: CredentialsType) => {
   const params = {
     'access_token': ACCESS_TOKEN
   }
-  const result = await axiosDelete(personTokenUrl + '/' + credentials.token, { params })
+  const result = await axiosDelete(personTokenUrl + credentials.token, { params })
 
   return result.data
 }

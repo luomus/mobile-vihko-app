@@ -24,9 +24,8 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
       credentials = await pollUserLogin(tmpToken, setCanceler)
       dispatch(setCredentials(credentials))
 
-    //in case of error, credentials stay null
+      //in case of error, credentials stay null
     } catch (error: any) {
-      captureException(error)
       if (error.canceled) {
         return Promise.reject({ canceled: true })
       }
@@ -58,6 +57,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
       }
 
       //error from server
+      captureException(error)
       log.error({
         location: '/stores/user/actions.tsx loginUser()',
         error: error,
@@ -73,7 +73,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
     try {
       await storageService.save('credentials', credentials)
 
-    //if asyncstorage fails, set error as such, allows user to continue anyway
+      //if asyncstorage fails, set error as such, allows user to continue anyway
     } catch (locError) {
       captureException(locError)
       log.error({
@@ -201,6 +201,13 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
   return async (dispatch, getState) => {
     const { credentials, observationEventInterrupted, observing, tracking } = getState()
 
+    const credentialsCopy = credentials
+
+    //stop recording when logging out
+    if (observing) {
+      await stopLocationAsync(observationEventInterrupted, tracking)
+    }
+
     //clear credentials
     try {
       storageService.remove('credentials')
@@ -219,21 +226,16 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
       })
     }
 
-    //stop recording when logging out
-    if (observing) {
-      await stopLocationAsync(observationEventInterrupted, tracking)
-    }
-
-    //logout from service
+    //logout from the API
     try {
-      await userService.logout(credentials)
+      await userService.logout(credentialsCopy)
 
     } catch (error: any) {
       captureException(error)
       log.error({
         location: '/stores/user/actions.tsx logoutUser()',
         error: error,
-        user_id: credentials.user.id
+        user_id: credentialsCopy.user.id
       })
       return Promise.reject({
         severity: 'low',

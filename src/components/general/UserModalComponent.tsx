@@ -63,7 +63,15 @@ const UserModalComponent = (props: Props) => {
       await stopLocationAsync(observationEventInterrupted, tracking)
     }
 
-    dispatch(logoutUser())
+    try {
+      await dispatch(logoutUser())
+    } catch (error: any) {
+      dispatch(setMessageState({
+        type: 'dangerConf',
+        messageContent: error.message
+      }))
+    }
+
     dispatch(resetReducer())
 
     props.navigation.dispatch(

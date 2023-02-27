@@ -87,7 +87,6 @@ const LoginComponent = (props: Props) => {
     try {
       await dispatch(initLocalCredentials())
     } catch (error: any) {
-      captureException(error)
 
       //failed to fetch credentials from storage
       if (error?.severity) {
@@ -135,8 +134,8 @@ const LoginComponent = (props: Props) => {
     try {
       setPolling(true)
       await dispatch(loginUser(tmpToken, setCanceler))
+
     } catch (error: any) {
-      captureException(error)
       //stop polling if user canceled the login
       if (error.canceled) {
         setLoggingIn(false)

@@ -72,7 +72,6 @@ export const watchLocationAsync = async (updateLocation: (location: LocationObje
     try {
       await watchPositionAsync((location) => updateLocation(location))
     } catch (error: any) {
-      captureException(error)
       throw new Error(error.message)
     }
 
@@ -80,7 +79,6 @@ export const watchLocationAsync = async (updateLocation: (location: LocationObje
       try {
         await watchBackgroundLocationAsync(title, body)
       } catch (error: any) {
-        captureException(error)
         throw new Error(error.message)
       }
     }
@@ -118,6 +116,7 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
         }
       })
     } catch (error) {
+      captureException(error)
       throw new Error(i18n.t('failed to start location updates'))
     }
   }, 500)
