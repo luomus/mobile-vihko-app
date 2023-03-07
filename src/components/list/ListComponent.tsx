@@ -56,14 +56,14 @@ const ListComponent = (props: Props) => {
 
     const taxaOnMap: string[] = units
       .filter((unit: Record<string, any>) => !unit.id.includes('complete_list'))
-      .map((unit: Record<string, any>) => unit.identifications[0].taxon)
+      .map((unit: Record<string, any>) => unit.unitFact.autocompleteSelectedTaxonID)
     setTaxaOnMap(taxaOnMap)
 
     const pickedTemp: Record<string, any>[] = []
     const unpickedTemp: Record<string, any>[] = []
 
     filtered.forEach((observation: Record<string, any>) => {
-      if (observation.atlasCode || observation.count || taxaOnMap.includes(observation.identifications[0].taxon)) {
+      if (observation.atlasCode || observation.count || taxaOnMap.includes(observation.unitFact.autocompleteSelectedTaxonID)) {
         pickedTemp.push(observation)
       } else {
         unpickedTemp.push(observation)
@@ -83,8 +83,11 @@ const ListComponent = (props: Props) => {
   }, [search, observed])
 
   const updateList = () => {
-    if (!observed) return
-    else {
+    if (!observed) {
+      return
+    } else if (order === 'scientific') {
+      setFilteredObservations(observed.filter(createFilter(search, ['scientificName'])))
+    } else {
       setFilteredObservations(observed.filter(createFilter(search, ['identifications.0.taxon'])))
     }
   }
@@ -105,7 +108,7 @@ const ListComponent = (props: Props) => {
       key={item.key}
       style={Cs.listElementContainer}
     >
-      <Text style={(item.atlasCode || item.count || taxaOnMap.includes(item.identifications[0].taxon)) ?
+      <Text style={(item.atlasCode || item.count || taxaOnMap.includes(item.unitFact.autocompleteSelectedTaxonID)) ?
         Ts.listBoldText : Ts.listText}>
         { order !== 'scientific' ? item.identifications[0].taxon : item.scientificName }
       </Text>
@@ -116,7 +119,7 @@ const ListComponent = (props: Props) => {
             <Text style={Ts.listBoldCenteredText}>
               {item.count.length > 6 ? item.count.substring(0, 5) + '...' : item.count}
             </Text>
-            : taxaOnMap.includes(item.identifications[0].taxon) ?
+            : taxaOnMap.includes(item.unitFact.autocompleteSelectedTaxonID) ?
               <Icon
                 type={'material-icons'}
                 name={'location-pin'}

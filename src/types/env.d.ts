@@ -1,6 +1,7 @@
 declare module 'react-native-dotenv' {
   export const ACCESS_TOKEN: string
   export const API_URL: string
+  export const ATLAS_API_URL: string
   export const SOURCE_ID: string
   export const GEOCODING_API_KEY: string
   export const SENTRY_DSN: string

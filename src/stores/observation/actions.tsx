@@ -595,6 +595,7 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
       set(observation, 'identifications', [{ taxon: name }])
       set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
       set(observation, 'scientificName', item.scientificName)
+      set(observation, 'taxonomicOrder', item.taxonomicOrder)
       set(observation, 'unitFact', { autocompleteSelectedTaxonID: item.id })
 
       observations.push(observation)

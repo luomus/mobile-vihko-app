@@ -49,6 +49,9 @@ export const loopThroughBirdUnits = (event: Record<string, any>): Record<string,
     if (unit.scientificName) {
       delete unit.scientificName
     }
+    if (unit.taxonomicOrder) {
+      delete unit.taxonomicOrder
+    }
   })
 
   return modifiedEvent

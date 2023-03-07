@@ -1,4 +1,4 @@
-import { API_URL } from 'react-native-dotenv'
+import { API_URL, ATLAS_API_URL } from 'react-native-dotenv'
 
 //map url
 export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
@@ -40,10 +40,10 @@ export const getUserUrl           = `${API_URL}/person/`
 export const personTokenUrl       = `${API_URL}/person-token/`
 
 //bird list url
-export const birdListUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/taxon'
+export const birdListUrl          = `${ATLAS_API_URL}/taxon`
 
 //grid name url
-export const gridNameUrl          = 'https://atlas-api.rahtiapp.fi/api/v1/grid/'
+export const gridNameUrl          = `${ATLAS_API_URL}/grid/`
 
 //grid preview url
 export const gridPreviewUrl       = 'https://laji.fi/map?layers=maastokartta,atlasGrid&gridsquare='

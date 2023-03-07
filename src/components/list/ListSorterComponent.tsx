@@ -28,7 +28,14 @@ const ListSorterComponent = (props: Props) => {
         props.updateList()
       }
 
-      // } else if (itemValue === 'systematic') {
+    } else if (itemValue === 'systematic') {
+      const sortBySystematicOrder = (list: Record<string, any>[]) => {
+        return list.sort((a, b) => b.taxonomicOrder - a.taxonomicOrder)
+      }
+      const pickedSorted = sortBySystematicOrder(props.picked)
+      const unpickedSorted = sortBySystematicOrder(props.unpicked)
+      props.setObserved(pickedSorted.concat(unpickedSorted))
+      props.updateList()
 
     } else if (itemValue === 'name') {
       const sortByName = (list: Record<string, any>[]) => {
@@ -69,7 +76,7 @@ const ListSorterComponent = (props: Props) => {
         }}
       >
         <Picker.Item label={t('filter.default')} value='default' style={{ fontSize: 24, color: Colors.neutral6 }} />
-        {/* <Picker.Item label={t('filter.systematic')} value='systematic' style={{ fontSize: 24, color: Colors.neutral6 }} /> */}
+        <Picker.Item label={t('filter.systematic')} value='systematic' style={{ fontSize: 24, color: Colors.neutral6 }} />
         <Picker.Item label={t('filter.name')} value='name' style={{ fontSize: 24, color: Colors.neutral6 }} />
         <Picker.Item label={t('filter.scientific')} value='scientific' style={{ fontSize: 24, color: Colors.neutral6 }} />
       </Picker>
