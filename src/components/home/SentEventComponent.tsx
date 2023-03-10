@@ -29,6 +29,8 @@ const SentEventComponent = (props: Props) => {
       setTitle(t('bird atlas'))
     } else if (formId === forms.fungiAtlas) {
       setTitle(t('fungi atlas'))
+    } else if (formId === forms.dragonflyForm) {
+      setTitle(t('dragonfly form'))
     } else {
       setTitle(t('lolife'))
     }

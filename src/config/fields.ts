@@ -345,6 +345,75 @@ export const overrideJX652ObservationEventFields = {
   },
 }
 
+export const MHL932ObservationEventFields = [
+  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatheringEvent_completeList_completeListType',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_weather',
+  'gatherings_0_notes',
+  'keywords',
+]
+
+export const MHL932Fields = [
+  'identifications_0_taxon',
+  'count',
+  'unitGathering_dateBegin',
+  'recordBasis',
+  'lifeStage',
+  'notes',
+  'images'
+]
+
+export const overrideMHL932Fields = {
+  'identifications_0_taxon': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      valueField: 'identifications_0_taxon',
+      validation: {
+        required: {
+          value: true,
+          message: 'must not be empty'
+        },
+        minLength: {
+          value: 2,
+          message: 'must be at least 2 letters'
+        },
+      },
+      transform: {
+        'key': 'unitFact_autocompleteSelectedTaxonID',
+        'shownName': 'identifications_0_taxon',
+        'payload_informalTaxonGroups': 'informalTaxonGroups'
+      }
+    }
+  }
+}
+
+export const overrideMHL932ObservationEventFields = {
+  'secureLevel': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikan karkeistus',
+      'Plats skyddning',
+      'Location roughening'
+    ]
+  },
+  'gatherings_0_locality': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikannimet (kunta tallentuu automaattisesti)',
+      'Ortnamn (kommunen sparar automatiskt)',
+      'Locality names (municipality is saved automatically)'
+    ]
+  },
+}
+
 export const observationEventFields = [
   'gatheringEvent_legPublic',
   'secureLevel',
@@ -375,6 +444,7 @@ export const forms: Record<string, any> = {
   tripForm: 'JX.519',
   birdAtlas: 'MHL.117',
   fungiAtlas: 'JX.652',
+  dragonflyForm: 'MHL.932',
   lolife: 'MHL.45'
 }
 

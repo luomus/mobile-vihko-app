@@ -30,7 +30,10 @@ const EventListElementComponent = (props: Props) => {
     } else {
       let sum = 0
       props.observationEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
-        if (!(unit.id.includes('complete_list') && !unit.atlasCode  && !unit.count)) { sum += 1 }
+        if (props.observationEvent.formID === forms.birdAtlas && (!(unit.id.includes('complete_list') && !unit.atlasCode && !unit.count)) ||
+          props.observationEvent.formID === forms.dragonflyForm && (!(unit.id.includes('complete_list') && !unit.count))) {
+          sum += 1
+        }
       })
       return sum
     }
@@ -43,6 +46,8 @@ const EventListElementComponent = (props: Props) => {
       setTitle(t('bird atlas'))
     } else if (props.observationEvent.formID === forms.fungiAtlas) {
       setTitle(t('fungi atlas'))
+    } else if (props.observationEvent.formID === forms.dragonflyForm) {
+      setTitle(t('dragonfly form'))
     } else {
       setTitle(t('lolife'))
     }
@@ -51,7 +56,7 @@ const EventListElementComponent = (props: Props) => {
   const displayDateTime = () => {
     if (props.observationEvent.gatheringEvent?.timeStart) {
       return parseDateFromDocumentToUI(dateBegin + 'T' + props.observationEvent.gatheringEvent.timeStart) + ' - '
-      + parseDateFromDocumentToUI(dateEnd + 'T' + props.observationEvent.gatheringEvent.timeEnd)
+        + parseDateFromDocumentToUI(dateEnd + 'T' + props.observationEvent.gatheringEvent.timeEnd)
     } else {
       return parseDateFromDocumentToUI(dateBegin) + ' - ' + parseDateFromDocumentToUI(dateEnd)
     }

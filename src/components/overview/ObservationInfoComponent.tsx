@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import MiniMapComponent from './MiniMapComponent'
-import { forms, JX519Fields, MHL117Fields, JX652Fields } from '../../config/fields'
+import { forms, JX519Fields, MHL117Fields, JX652Fields, MHL932Fields } from '../../config/fields'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 
@@ -63,6 +63,8 @@ const ObservationInfoComponent = (props: Props) => {
         fields = MHL117Fields
       } else if (props.event.formID === forms.fungiAtlas) {
         fields = JX652Fields
+      } else if (props.event.formID === forms.dragonflyForm) {
+        fields = MHL932Fields
       }
 
       if (schemaUnits && fields) {
@@ -78,7 +80,7 @@ const ObservationInfoComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.observationInfoContainer}>
-        {props.observation.unitGathering ? <MiniMapComponent observation={props.observation} event={props.event} /> : null}
+        {props.observation.unitGathering?.geometry ? <MiniMapComponent observation={props.observation} event={props.event} /> : null}
         {list}
         {props.observation.images !== undefined && props.observation.images.length > 0 ?
           <View>

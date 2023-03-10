@@ -49,6 +49,7 @@ import { updateIsAvailable } from '../../helpers/versionHelper'
 import { getSentEvents } from '../../services/documentService'
 import { getVersionNumber } from '../../services/versionService'
 import i18n from '../../languages/i18n'
+import CompleteListModalComponent from './CompleteListModalComponent'
 
 type Props = {
   isFocused: () => boolean,
@@ -67,6 +68,7 @@ const HomeComponent = (props: Props) => {
   const [atlasInstructionModalVisibility, setAtlasInstructionModalVisibility] = useState<boolean>(false)
   const [gridModalVisibility, setGridModalVisibility] = useState<boolean>(false)
   const [fungiModalVisibility, setFungiModalVisibility] = useState<boolean>(false)
+  const [dragonflyModalVisibility, setDragonflyModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -101,6 +103,8 @@ const HomeComponent = (props: Props) => {
     setGridModalVisibility={setGridModalVisibility}
     fungiModalVisibility={fungiModalVisibility}
     setFungiModalVisibility={setFungiModalVisibility}
+    dragonflyModalVisibility={dragonflyModalVisibility}
+    setDragonflyModalVisibility={setDragonflyModalVisibility}
     zoneModalVisibility={zoneModalVisibility}
     setZoneModalVisibility={setZoneModalVisibility}
     loading={loading}
@@ -142,6 +146,8 @@ type Props2 = {
   setGridModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   fungiModalVisibility: boolean,
   setFungiModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  dragonflyModalVisibility: boolean,
+  setDragonflyModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   zoneModalVisibility: boolean,
   setZoneModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   loading: boolean,
@@ -445,6 +451,7 @@ export const HomeComponentContainer = (
             <FormLauncherComponent formID={forms.tripForm} setModalVisibility={props.setTripModalVisibility} />
             <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={props.setAtlasInstructionModalVisibility} />
             <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={props.setFungiModalVisibility} />
+            <FormLauncherComponent formID={forms.dragonflyForm} setModalVisibility={props.setDragonflyModalVisibility} />
             <>
               {
                 props.credentials.permissions?.includes('HR.2951') ?
@@ -474,6 +481,9 @@ export const HomeComponentContainer = (
           setLoading={props.setLoading} showError={showError} />
         <DefaultModalComponent modalVisibility={props.fungiModalVisibility} setModalVisibility={props.setFungiModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.fungiAtlas) }} formID={forms.fungiAtlas} />
+        <CompleteListModalComponent modalVisibility={props.dragonflyModalVisibility}
+          setModalVisibility={props.setDragonflyModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.dragonflyForm) }}
+          formID={forms.dragonflyForm} showError={showError} />
         <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={props.setLoading} showError={showError} />

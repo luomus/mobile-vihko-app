@@ -62,10 +62,11 @@ const OverviewComponent = (props: Props) => {
 
     setEvent(searchedEvent)
 
-    if (searchedEvent && searchedEvent.formID === forms.birdAtlas) {
+    if (searchedEvent && (searchedEvent.formID === forms.birdAtlas || searchedEvent.formID === forms.dragonflyForm)) {
       const filteredObservations: Record<string, any>[] = []
       searchedObservations.forEach((observation) => {
-        if (!(observation.id.includes('complete_list') && !observation.atlasCode && !observation.count)) {
+        if (searchedEvent.formID === forms.birdAtlas && (!(observation.id.includes('complete_list') && !observation.atlasCode && !observation.count)) ||
+          searchedEvent.formID === forms.dragonflyForm && (!(observation.id.includes('complete_list') && !observation.count))) {
           filteredObservations.push(observation)
         }
       })

@@ -32,7 +32,7 @@ import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import SaveButtonComponent from './SaveButtonComponent'
 import {
   JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, MHL117Fields, overrideMHL117Fields, MHL117FieldOrder, additionalMHL117Fields,
-  JX652Fields, overrideJX652Fields, forms
+  JX652Fields, overrideJX652Fields, MHL932Fields, overrideMHL932Fields, forms
 } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
@@ -182,6 +182,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, observationState, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
         initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.dragonflyForm) {
+        initForm(setForm, observationState, null, schemaVar, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
       }
       //new observations
     } else {
@@ -196,6 +198,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
         initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.dragonflyForm) {
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
       }
     }
   }
@@ -465,7 +469,8 @@ const ObservationComponent = (props: Props) => {
               textStyle={Ts.buttonText} iconName={'close'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
           </View>
-          {observationId && !(schema.formID === forms.birdAtlas && observationState?.id.includes('complete_list')) ?
+          {observationId && !((schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm)
+            && observationState?.id.includes('complete_list')) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => editObservationLocation()}
                 title={t('edit location')} height={40} width={150} buttonStyle={Bs.editObservationButton}
@@ -475,7 +480,8 @@ const ObservationComponent = (props: Props) => {
             </View>
             : null
           }
-          {observationId && !(schema.formID === forms.birdAtlas && !observationState?.atlasCode && !observationState?.count) ?
+          {observationId && !(schema.formID === forms.birdAtlas && !observationState?.atlasCode && !observationState?.count)
+            && !(schema.formID === forms.dragonflyForm && !observationState?.count) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => showDelete()}
                 title={t('delete')} height={40} width={150} buttonStyle={Bs.editObservationButton}

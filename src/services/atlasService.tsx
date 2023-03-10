@@ -1,8 +1,13 @@
 import { get } from '../helpers/axiosHelper'
-import { birdListUrl, gridNameUrl } from '../config/urls'
+import { biomonListUrl, birdListUrl, gridNameUrl } from '../config/urls'
 
 export const getBirdList = async () => {
   const result = await get(birdListUrl)
+  return result.data
+}
+
+export const getBiomonList = async (taxonSetId: string, grid: string) => {
+  const result = await get(biomonListUrl + '/' + taxonSetId + '/' + grid)
   return result.data
 }
 

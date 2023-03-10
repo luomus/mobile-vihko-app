@@ -9,7 +9,8 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
   const eventHasNamedPlace = event.namedPlaceID && event.namedPlaceID !== 'empty'
   const eventHasPath = lineStringPath !== undefined
   const eventHasGrid = event.formID === forms.birdAtlas
-  const eventHasUnits = event.gatherings[0].units.length >= 1
+  const eventHasUnits = event.gatherings[0].units
+    .filter((unit: Record<string, any>) => !unit.id.includes('complete_list')).length >= 1
   const eventHasFirstLocation = firstLocation
 
   if (eventHasNamedPlace) {
@@ -52,20 +53,20 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
 
 //this is called in HomeComponent, if there was no path geometry
 //creates a bounding box from unit geometries
-export const createUnitBoundingBox = (units: Record<string, any>): Polygon | Point => {
-
-  //return a point, in case there's only one observation
-  if (units.length === 1) {
-    return {
-      type: 'Point',
-      coordinates: units[0].unitGathering.geometry.coordinates
-    }
-  }
+export const createUnitBoundingBox = (units: Record<string, any>[]): Polygon | Point => {
 
   //makes an array of unit coordinates
-  const points: Array<Array<number>> = units.map((unit: Record<string, any>) => {
-    return unit.unitGathering.geometry.coordinates
-  })
+  const points: Array<Array<number>> = units
+    .filter((unit) => unit.unitGathering?.geometry?.coordinates)
+    .map((unit) => unit.unitGathering.geometry.coordinates)
+
+  //return a point, in case there's only one observation
+  if (points.length === 1) {
+    return {
+      type: 'Point',
+      coordinates: points[0]
+    }
+  }
 
   //returns a bounding box based on unit coordinates
   const boundingBox: Record<string, any> = calculateBoundingBoxBoundaries(points)

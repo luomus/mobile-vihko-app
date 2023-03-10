@@ -153,7 +153,7 @@ const ExtendedNavBarComponent = (props: Props) => {
           />
         </View>
       </View>
-      {schema.formID === forms.birdAtlas ?
+      {schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm ?
         <View style={{ flexDirection: 'row', width: '50%' }}>
           <View style={{ paddingHorizontal: 2, width: '50%' }}>
             {props.onPressMap === undefined ?

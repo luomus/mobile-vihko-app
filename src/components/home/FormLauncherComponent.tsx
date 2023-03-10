@@ -33,6 +33,9 @@ const FormLauncherComponent = (props: Props) => {
     } else if (props.formID === forms.fungiAtlas) {
       setTitle(t('fungi atlas'))
       setDescription(t('instructions.fungi.intro'))
+    } else if (props.formID === forms.dragonflyForm) {
+      setTitle(t('dragonfly form'))
+      setDescription(t('instructions.dragonfly.intro'))
     } else {
       setTitle(t('lolife'))
       setDescription(t('instructions.lolife.intro'))

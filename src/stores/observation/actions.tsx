@@ -15,7 +15,7 @@ import {
   CLEAR_OBSERVATION_ID,
 } from './types'
 import { forms } from '../../config/fields'
-import { getBirdList } from '../../services/atlasService'
+import { getBiomonList, getBirdList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -144,9 +144,9 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //define whether the event will be released publicly or privately
     event = definePublicity(event, isPublic)
 
-    if (schema.formID !== forms.lolife && event.formID !== forms.birdAtlas) {
+    if (schema.formID !== forms.lolife && event.formID !== forms.birdAtlas && event.formID !== forms.dragonflyForm) {
       event = loopThroughUnits(event)
-    } else if (event.formID === forms.birdAtlas) {
+    } else if (event.formID === forms.birdAtlas || event.formID === forms.dragonflyForm) {
       event = loopThroughBirdUnits(event)
     }
 
@@ -558,7 +558,8 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
   }
 }
 
-export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+export const initCompleteList = (lang: string, formID: string, gridNumber?: string):
+  ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { credentials, observationEvent } = getState()
 
@@ -571,11 +572,45 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
     const observations: Record<string, any>[] = []
-    const birdList: Record<string, any>[] = await getBirdList()
     const nameList: Array<any> = []
 
+    let taxonList: Record<string, any>[] = []
+
+    if (formID === forms.birdAtlas) {
+      try {
+        taxonList = await getBirdList()
+      } catch (error: any) {
+        captureException(error)
+        log.error({
+          location: '/stores/observation/actions.tsx initCompleteList()',
+          error: error,
+          user_id: credentials.user.id
+        })
+        return Promise.reject({
+          severity: 'low',
+          message: i18n.t('failed to fetch taxon list')
+        })
+      }
+
+    } else if (gridNumber) {
+      try {
+        taxonList = await getBiomonList('MX.taxonSetBiomonCompleteListOdonata', gridNumber)
+      } catch (error: any) {
+        captureException(error)
+        log.error({
+          location: '/stores/observation/actions.tsx initCompleteList()',
+          error: error,
+          user_id: credentials.user.id
+        })
+        return Promise.reject({
+          severity: 'low',
+          message: i18n.t('failed to fetch taxon list')
+        })
+      }
+    }
+
     //fetch taxon details concurrently and initialize bird list observations
-    await Promise.all(birdList.map(async (item: Record<string, any>) => {
+    await Promise.all(taxonList.map(async (item: Record<string, any>) => {
       const res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
       const observation = {}
 
@@ -614,7 +649,7 @@ export const initCompleteList = (lang: string): ThunkAction<Promise<any>, any, v
     } catch (error) {
       captureException(error)
       log.error({
-        location: '/stores/observation/actions.tsx saveBirdList()',
+        location: '/stores/observation/actions.tsx initCompleteList()',
         error: error,
         user_id: credentials.user.id
       })

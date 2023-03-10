@@ -40,6 +40,10 @@ const UnfinishedEventComponent = (props: Props) => {
       let sum = 0
       unfinishedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
         if (!(unit.id.includes('complete_list') && !unit.atlasCode && !unit.count)) { sum += 1 }
+        if (unfinishedEvent.formID === forms.birdAtlas && (!(unit.id.includes('complete_list') && !unit.atlasCode && !unit.count)) ||
+          unfinishedEvent.formID === forms.dragonflyForm && (!(unit.id.includes('complete_list') && !unit.count))) {
+          sum += 1
+        }
       })
       return sum
     }

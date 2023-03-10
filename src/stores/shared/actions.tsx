@@ -89,7 +89,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
 
     const dateTime = setDateForDocument()
-    if (schema.formID === forms.birdAtlas) {
+    if (schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm) {
       set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], dateTime.substring(0, 10))
       set(observationEventDefaults, ['gatheringEvent', 'timeStart'], dateTime.substring(11, 16))
 
@@ -137,8 +137,13 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 
     dispatch(replaceObservationEvents(newEvents))
 
-    //initialize complete list for bird atlas
-    if (schema.formID === forms.birdAtlas) { await dispatch(initCompleteList(lang)) }
+    //initialize complete list
+    if (schema.formID === forms.birdAtlas) {
+      await dispatch(initCompleteList(lang, schema.formID))
+    } else if (schema.formID === forms.dragonflyForm) {
+      await dispatch(initCompleteList(lang, schema.formID, grid.n + ':' + grid.e))
+      dispatch(clearGrid())
+    }
 
     //attempt to start geolocation systems
     try {
@@ -288,7 +293,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     let lineStringPath = pathToLineStringConstructor(path)
 
     //remove unused complete list observations from bird atlas events
-    if (event.formID === forms.birdAtlas) {
+    if (event.formID === forms.birdAtlas || event.formID === forms.dragonflyForm) {
       const filtered: Record<string, any>[] = []
       event.gatherings[0].units.forEach((observation: Record<string, any>) => {
         if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {

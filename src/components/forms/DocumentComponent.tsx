@@ -29,7 +29,7 @@ import SendEventModalComponent from '../general/SendEventModalComponent'
 import {
   forms, observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
   overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields,
-  overrideJX652ObservationEventFields, MHL117ObservationEventFieldOrder
+  overrideJX652ObservationEventFields, MHL117ObservationEventFieldOrder, MHL932Fields, MHL932ObservationEventFields, overrideMHL932ObservationEventFields
 } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -112,6 +112,8 @@ const DocumentComponent = (props: Props) => {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, MHL117ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
         initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.dragonflyForm) {
+        initForm(setForm, event, null, schemaWithoutUnits, null, MHL932ObservationEventFields, overrideMHL932ObservationEventFields, null, null, lang, scrollViewRef)
       }
     }
   }

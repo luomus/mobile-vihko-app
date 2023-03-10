@@ -25,6 +25,9 @@ import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } fro
 import { gridUrl, mapUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
 import storageService from '../../services/storageService'
+import { initCompleteList } from '../../stores/observation/actions'
+import i18n from '../../languages/i18n'
+import { forms } from '../../config/fields'
 
 type Props = {
   modalVisibility: boolean,
@@ -104,8 +107,6 @@ const GridModalComponent = (props: Props) => {
 
     const gridDetails = await getGridName(n + ':' + e)
 
-    props.setModalVisibility(false)
-
     if (e === Math.trunc(ownLocation[0] / 10000) && n === Math.trunc(ownLocation[1] / 10000)) {
       dispatch(setGrid({
         n: n,
@@ -129,6 +130,7 @@ const GridModalComponent = (props: Props) => {
     setTracking(true)
     await storageService.save('tracking', true)
 
+    props.setModalVisibility(false)
     props.onBeginObservationEvent(true)
   }
 
