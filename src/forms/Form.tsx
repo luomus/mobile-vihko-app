@@ -1,4 +1,4 @@
-import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker, createAtlasCodeField, createDateTimePicker } from './formComponentBuilders'
+import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker, createAtlasCodeField, createDateTimePicker, createCountSelectorField } from './formComponentBuilders'
 import { get, omit, set } from 'lodash'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParser'
@@ -107,6 +107,9 @@ const Form = (
           }
           fieldEnumDict = Object.assign(objectOrder, fieldEnumDict) //sets empty as default, when user has not selected complete list value before
           toReturn.push(createPicker(fieldTitle, path, fieldDefaultValue, fieldEnumDict, fieldBlacklist, overrideFields[path].params.validation))
+          return
+        case 'countSelectorField':
+          toReturn.push(createCountSelectorField(fieldTitle, path, fieldDefaultValue))
           return
       }
     }

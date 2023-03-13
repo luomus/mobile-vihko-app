@@ -69,7 +69,7 @@ const CompleteListModalComponent = (props: Props) => {
 
   const handleStartEvent = async () => {
     setLoading(true)
-    
+
     dispatch(setGrid({
       n: Number(northing),
       e: Number(easting),
@@ -85,7 +85,7 @@ const CompleteListModalComponent = (props: Props) => {
   }
 
   const description = () => {
-    let formTranslation = t('dragonfly form')
+    const formTranslation = t('dragonfly form')
     return t('do you want to start an event?') + ' ' + formTranslation + '?'
   }
 

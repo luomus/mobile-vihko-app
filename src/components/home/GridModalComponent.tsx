@@ -25,9 +25,6 @@ import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } fro
 import { gridUrl, mapUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
 import storageService from '../../services/storageService'
-import { initCompleteList } from '../../stores/observation/actions'
-import i18n from '../../languages/i18n'
-import { forms } from '../../config/fields'
 
 type Props = {
   modalVisibility: boolean,

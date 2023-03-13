@@ -5,7 +5,7 @@ import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PR
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon } from 'geojson'
-import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor, pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,

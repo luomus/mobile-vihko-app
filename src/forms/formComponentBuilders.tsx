@@ -12,6 +12,7 @@ import FormDatePickerComponent from '../components/formComponents/FormDatePicker
 import FormSwitchComponent from '../components/formComponents/FormSwitchComponent'
 import FormHiddenComponent from '../components/formComponents/FormHiddenComponent'
 import FormAutocompleteComponent, { AutocompleteParams } from '../components/formComponents/FormAutocompleteComponent'
+import FormCountSelectorComponent from '../components/formComponents/FormCountSelectorComponent'
 
 export const createAutocompleteField = (
   title: string,
@@ -60,6 +61,14 @@ export const createAtlasCodeField = (
   return <FormAtlasCodeComponent
     key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue} params={params} dictionary={dictionary}
   />
+}
+
+export const createCountSelectorField = (
+  title: string, objectTitle: string, defaultValue: string
+) => {
+
+  return <FormCountSelectorComponent
+    key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue} />
 }
 
 //create hidden component that just stores values for any fields not shown to user

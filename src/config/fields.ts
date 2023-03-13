@@ -363,7 +363,6 @@ export const MHL932ObservationEventFields = [
 export const MHL932Fields = [
   'identifications_0_taxon',
   'count',
-  'unitGathering_dateBegin',
   'recordBasis',
   'lifeStage',
   'notes',
@@ -392,6 +391,9 @@ export const overrideMHL932Fields = {
         'payload_informalTaxonGroups': 'informalTaxonGroups'
       }
     }
+  },
+  'count': {
+    field: 'countSelectorField'
   }
 }
 

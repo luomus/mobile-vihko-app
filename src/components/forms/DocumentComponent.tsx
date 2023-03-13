@@ -29,7 +29,8 @@ import SendEventModalComponent from '../general/SendEventModalComponent'
 import {
   forms, observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
   overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields,
-  overrideJX652ObservationEventFields, MHL117ObservationEventFieldOrder, MHL932Fields, MHL932ObservationEventFields, overrideMHL932ObservationEventFields
+  overrideJX652ObservationEventFields, MHL117ObservationEventFieldOrder,
+  MHL932ObservationEventFields, overrideMHL932ObservationEventFields
 } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
