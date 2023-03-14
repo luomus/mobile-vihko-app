@@ -15,7 +15,7 @@ import {
   CLEAR_OBSERVATION_ID,
 } from './types'
 import { forms } from '../../config/fields'
-import { getBiomonList, getBirdList } from '../../services/atlasService'
+import { getCompleteList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -558,7 +558,7 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
   }
 }
 
-export const initCompleteList = (lang: string, formID: string, gridNumber?: string):
+export const initCompleteList = (lang: string, formID: string, gridNumber: string):
   ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { credentials, observationEvent } = getState()
@@ -576,37 +576,22 @@ export const initCompleteList = (lang: string, formID: string, gridNumber?: stri
 
     let taxonList: Record<string, any>[] = []
 
-    if (formID === forms.birdAtlas) {
-      try {
-        taxonList = await getBirdList()
-      } catch (error: any) {
-        captureException(error)
-        log.error({
-          location: '/stores/observation/actions.tsx initCompleteList()',
-          error: error,
-          user_id: credentials.user.id
-        })
-        return Promise.reject({
-          severity: 'low',
-          message: i18n.t('failed to fetch taxon list')
-        })
-      }
+    let taxonSetID = 'MX.taxonSetBirdAtlasCommon'
+    if (formID === forms.dragonflyForm) taxonSetID = 'MX.taxonSetBiomonCompleteListOdonata'
 
-    } else if (gridNumber) {
-      try {
-        taxonList = await getBiomonList('MX.taxonSetBiomonCompleteListOdonata', gridNumber)
-      } catch (error: any) {
-        captureException(error)
-        log.error({
-          location: '/stores/observation/actions.tsx initCompleteList()',
-          error: error,
-          user_id: credentials.user.id
-        })
-        return Promise.reject({
-          severity: 'low',
-          message: i18n.t('failed to fetch taxon list')
-        })
-      }
+    try {
+      taxonList = await getCompleteList(taxonSetID, gridNumber)
+    } catch (error: any) {
+      captureException(error)
+      log.error({
+        location: '/stores/observation/actions.tsx initCompleteList()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('failed to fetch taxon list')
+      })
     }
 
     //fetch taxon details concurrently and initialize bird list observations

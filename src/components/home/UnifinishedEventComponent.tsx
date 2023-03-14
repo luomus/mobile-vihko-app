@@ -34,14 +34,13 @@ const UnfinishedEventComponent = (props: Props) => {
   const observationCount = (): number => {
     if (!unfinishedEvent) {
       return 0
-    } else if (unfinishedEvent.formID !== forms.birdAtlas) {
+    } else if (unfinishedEvent.formID !== forms.birdAtlas && unfinishedEvent.formID !== forms.dragonflyForm) {
       return unfinishedEvent.gatherings[0].units.length
     } else {
       let sum = 0
       unfinishedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
-        if (!(unit.id.includes('complete_list') && !unit.atlasCode && !unit.count)) { sum += 1 }
-        if (unfinishedEvent.formID === forms.birdAtlas && (!(unit.id.includes('complete_list') && !unit.atlasCode && !unit.count)) ||
-          unfinishedEvent.formID === forms.dragonflyForm && (!(unit.id.includes('complete_list') && !unit.count))) {
+        if ((unfinishedEvent.formID === forms.birdAtlas && (!(unit.id.includes('complete_list') && !unit.atlasCode && !unit.count))) ||
+          (unfinishedEvent.formID === forms.dragonflyForm && (!(unit.id.includes('complete_list') && !unit.count)))) {
           sum += 1
         }
       })

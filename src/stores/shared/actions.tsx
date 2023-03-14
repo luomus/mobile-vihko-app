@@ -138,11 +138,9 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     dispatch(replaceObservationEvents(newEvents))
 
     //initialize complete list
-    if (schema.formID === forms.birdAtlas) {
-      await dispatch(initCompleteList(lang, schema.formID))
-    } else if (schema.formID === forms.dragonflyForm) {
-      await dispatch(initCompleteList(lang, schema.formID, grid.n + ':' + grid.e))
-      dispatch(clearGrid())
+    if (schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm) {
+      await dispatch(initCompleteList(lang, schema.formID, grid.n.toString().slice(0, 2) + ':' + grid.e.toString().slice(0, 2)))
+      if (schema.formID === forms.dragonflyForm) dispatch(clearGrid())
     }
 
     //attempt to start geolocation systems

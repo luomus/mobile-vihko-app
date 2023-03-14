@@ -39,11 +39,8 @@ export const pollLoginUrl         = `${API_URL}/login/check`
 export const getUserUrl           = `${API_URL}/person/`
 export const personTokenUrl       = `${API_URL}/person-token/`
 
-//bird list url
-export const birdListUrl          = `${ATLAS_API_URL}/taxon`
-
-//biomon list url
-export const biomonListUrl        = `${ATLAS_API_URL}/taxon/biomon`
+//complete list url
+export const completeListUrl      = `${ATLAS_API_URL}/taxon/biomon`
 
 //grid name url
 export const gridNameUrl          = `${ATLAS_API_URL}/grid/`

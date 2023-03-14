@@ -364,7 +364,6 @@ export const MHL932Fields = [
   'identifications_0_taxon',
   'count',
   'recordBasis',
-  'lifeStage',
   'notes',
   'images'
 ]

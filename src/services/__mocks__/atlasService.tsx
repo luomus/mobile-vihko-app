@@ -1,4 +1,4 @@
-export const getBirdList = async () => {
+export const getCompleteList = async (taxonSetId: string, gridNumber: string) => {
   const birdList = [
     { 'vernacularName': { 'fi': 'kyhmyjoutsen', 'sv': 'knölsvan', 'en': 'Mute Swan' }, 'scientificName': 'Cygnus olor', 'id': 'MX.26277', 'intellectualRights': 'MZ.intellectualRightsCC-BY-4.0' },
     { 'vernacularName': { 'fi': 'laulujoutsen', 'sv': 'sångsvan', 'en': 'Whooper Swan' }, 'scientificName': 'Cygnus cygnus', 'id': 'MX.26280', 'intellectualRights': 'MZ.intellectualRightsCC-BY-4.0' },
