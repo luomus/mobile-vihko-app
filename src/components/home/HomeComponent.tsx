@@ -50,6 +50,7 @@ import { getSentEvents } from '../../services/documentService'
 import { getVersionNumber } from '../../services/versionService'
 import i18n from '../../languages/i18n'
 import CompleteListModalComponent from './CompleteListModalComponent'
+import NewsComponent from './NewsComponent'
 
 type Props = {
   isFocused: () => boolean,
@@ -439,6 +440,8 @@ export const HomeComponentContainer = (
       <>
         <ScrollView contentContainerStyle={Cs.contentAndVersionContainer}>
           <View style={Cs.homeContentContainer}>
+            <NewsComponent tag={'technical'} />
+            <NewsComponent tag={'mobiilivihko'} />
             <>
               {props.observing ?
                 <UnfinishedEventComponent onContinueObservationEvent={() => { onContinueObservationEvent() }}

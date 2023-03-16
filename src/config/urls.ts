@@ -1,4 +1,4 @@
-import { API_URL, ATLAS_API_URL } from 'react-native-dotenv'
+import { API_URL, ATLAS_API_URL, LAJI_URL } from 'react-native-dotenv'
 
 //map url
 export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
@@ -39,6 +39,9 @@ export const pollLoginUrl         = `${API_URL}/login/check`
 export const getUserUrl           = `${API_URL}/person/`
 export const personTokenUrl       = `${API_URL}/person-token/`
 
+//news url
+export const getNewsUrl           = `${API_URL}/news`
+
 //complete list url
 export const completeListUrl      = `${ATLAS_API_URL}/taxon/biomon`
 
@@ -46,7 +49,7 @@ export const completeListUrl      = `${ATLAS_API_URL}/taxon/biomon`
 export const gridNameUrl          = `${ATLAS_API_URL}/grid/`
 
 //grid preview url
-export const gridPreviewUrl       = 'https://laji.fi/map?layers=maastokartta,atlasGrid&gridsquare='
+export const gridPreviewUrl       = `${ATLAS_API_URL}/map?layers=maastokartta,atlasGrid&gridsquare=`
 
 //result service url
 export const resultServiceUrl     = 'https://tulokset.lintuatlas.fi/grid/'
@@ -58,38 +61,41 @@ export const versionNumberUrl     = 'https://cdn.laji.fi/mobiilivihko/version.tx
 export const playStoreUrl         = 'market://details?id=org.luomus.mobi'
 
 //laji.fi
-export const lajiHomepageEn       = 'https://laji.fi/en'
-export const lajiHomepageFi       = 'https://laji.fi'
-export const lajiHomepageSv       = 'https://laji.fi/sv'
+export const lajiHomepageEn       = `${LAJI_URL}/en`
+export const lajiHomepageFi       =  LAJI_URL
+export const lajiHomepageSv       = `${LAJI_URL}/sv`
 
 //instructions
-export const instructionsEn       = 'https://laji.fi/en/about/4981'
-export const instructionsFi       = 'https://laji.fi/about/4981'
-export const instructionsSv       = 'https://laji.fi/sv/about/4981'
+export const instructionsEn       = `${LAJI_URL}/en/about/4981`
+export const instructionsFi       = `${LAJI_URL}/about/4981`
+export const instructionsSv       = `${LAJI_URL}/sv/about/4981`
 
 //privacy policy
-export const privacyPolicyEn      = 'https://laji.fi/about/848'
-export const privacyPolicyFi      = 'https://laji.fi/about/713'
+export const privacyPolicyEn      = `${LAJI_URL}/about/848`
+export const privacyPolicyFi      = `${LAJI_URL}/about/713`
 
 //terms of service
-export const termsOfServiceEn     = 'https://laji.fi/en/vihko/terms-of-service'
-export const termsOfServiceFi     = 'https://laji.fi/vihko/terms-of-service'
-export const termsOfServiceSv     = 'https://laji.fi/sv/vihko/terms-of-service'
+export const termsOfServiceEn     = `${LAJI_URL}/en/vihko/terms-of-service`
+export const termsOfServiceFi     = `${LAJI_URL}/vihko/terms-of-service`
+export const termsOfServiceSv     = `${LAJI_URL}/sv/vihko/terms-of-service`
 
 //vihko
-export const vihkoEn              = 'https://laji.fi/en/vihko'
-export const vihkoFi              = 'https://laji.fi/vihko'
-export const vihkoSv              = 'https://laji.fi/sv/vihko'
+export const vihkoEn              = `${LAJI_URL}/en/vihko`
+export const vihkoFi              = `${LAJI_URL}/vihko`
+export const vihkoSv              = `${LAJI_URL}/sv/vihko`
 
 //lolife
-export const lolifeEn             = 'https://laji.fi/en/project/MHL.45/about'
-export const lolifeFi             = 'https://laji.fi/project/MHL.45/about'
-export const lolifeSv             = 'https://laji.fi/sv/project/MHL.45/about'
+export const lolifeEn             = `${LAJI_URL}/en/project/MHL.45/about`
+export const lolifeFi             = `${LAJI_URL}/project/MHL.45/about`
+export const lolifeSv             = `${LAJI_URL}/sv/project/MHL.45/about`
 
 //laji.fi observations page
-export const lajiFI               = 'https://laji.fi/observation/list'
-export const lajiSV               = 'https://laji.fi/sv/observation/list'
-export const lajiEN               = 'https://laji.fi/en/observation/list'
+export const lajiFI               = `${LAJI_URL}/observation/list`
+export const lajiSV               = `${LAJI_URL}/sv/observation/list`
+export const lajiEN               = `${LAJI_URL}/en/observation/list`
+
+//laji.fi news page
+export const newsPage             = `${LAJI_URL}/news/`
 
 //google geocoding api url
 export const googleGeocodingAPIURL = 'https://maps.googleapis.com/maps/api/geocode/json'
