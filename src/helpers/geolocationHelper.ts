@@ -51,9 +51,39 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
       if (previousLocation !== null) return previousLocation
     }
 
-    return await Location.getCurrentPositionAsync({
-      accuracy: locationAccuracy
-    })
+    const getCurrentLocationAttempt = async () => {
+      const timer = setTimeout(() => { throw new Error() }, 7000)
+
+      try {
+        const currentLocation = await Location.getCurrentPositionAsync({
+          accuracy: locationAccuracy
+        })
+        clearTimeout(timer)
+        if (currentLocation === undefined) throw new Error()
+        return currentLocation
+      } catch (error: any) {
+        throw new Error()
+      }
+    }
+
+    let attempt = 0
+    let location: Location.LocationObject | undefined = undefined
+
+    while (attempt < 3) {
+      try {
+        location = await getCurrentLocationAttempt()
+        break
+      } catch (error: any) {
+        attempt++
+      }
+    }
+
+    if (location === undefined) {
+      throw new Error(i18n.t('failed to fetch location'))
+    } else {
+      return location
+    }
+
   } else {
     throw new Error(i18n.t('permission to access location denied'))
   }

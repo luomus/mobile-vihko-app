@@ -52,6 +52,7 @@
   "exit app?": "Haluatko varmasti keskeyttää havainnoinnin ja poistua sovelluksesta?",
   "failed to check token": "Kirjautumistietojen tarkastaminen palvelimella epäonnistui.",
   "failed to fetch grid name": "Atlasruudun nimen hakeminen palvelimelta epäonnistui.",
+  "failed to fetch location": "Sijainnin määrittely epäonnistui.",
   "failed to fetch sent events": "Lähetettyjen havaintotapahtumien hakeminen palvelimelta epäonnistui.",
   "failed to fetch taxon list": "Lajilistan lataaminen palvelimelta epäonnistui.",
   "failed to load any schemas from server and storage": "Kaikkien havaintopohjien lataaminen palvelimelta sekä laitteen tallennustilasta epäonnistui.",

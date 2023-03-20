@@ -1,6 +1,6 @@
-import { ACCESS_TOKEN } from "react-native-dotenv"
-import { getNewsUrl } from "../config/urls"
-import { get } from "../helpers/axiosHelper"
+import { ACCESS_TOKEN } from 'react-native-dotenv'
+import { getNewsUrl } from '../config/urls'
+import { get } from '../helpers/axiosHelper'
 
 export const getNews = async (lang: string, tag: string) => {
   const params = {
