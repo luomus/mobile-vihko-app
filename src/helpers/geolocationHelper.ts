@@ -52,17 +52,16 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
     }
 
     const getCurrentLocationAttempt = async () => {
-      const timer = setTimeout(() => { throw new Error() }, 7000)
+      const timer = setTimeout(() => { return undefined }, 7000)
 
       try {
         const currentLocation = await Location.getCurrentPositionAsync({
           accuracy: locationAccuracy
         })
         clearTimeout(timer)
-        if (currentLocation === undefined) throw new Error()
         return currentLocation
       } catch (error: any) {
-        throw new Error()
+        return undefined
       }
     }
 
@@ -70,12 +69,9 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
     let location: Location.LocationObject | undefined = undefined
 
     while (attempt < 3) {
-      try {
-        location = await getCurrentLocationAttempt()
-        break
-      } catch (error: any) {
-        attempt++
-      }
+      location = await getCurrentLocationAttempt()
+      if (location) break
+      else attempt++
     }
 
     if (location === undefined) {
