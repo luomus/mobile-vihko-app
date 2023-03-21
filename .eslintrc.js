@@ -31,6 +31,7 @@ module.exports = {
   'rules': {
     'no-case-declarations': 'off',
     'no-undef': 'off',
+    'no-async-promise-executor': 'off',
     'react/prop-types': 0,
     'indent': [
       'error',

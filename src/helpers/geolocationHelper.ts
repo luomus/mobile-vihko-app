@@ -51,27 +51,32 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
       if (previousLocation !== null) return previousLocation
     }
 
-    const getCurrentLocationAttempt = async () => {
-      const timer = setTimeout(() => { return undefined }, 7000)
+    const getCurrentLocationAttempt = () => {
+      return new Promise<Location.LocationObject>(async (resolve, reject) => {
+        const timer = setTimeout(() => { reject() }, 7000)
 
-      try {
-        const currentLocation = await Location.getCurrentPositionAsync({
-          accuracy: locationAccuracy
-        })
-        clearTimeout(timer)
-        return currentLocation
-      } catch (error: any) {
-        return undefined
-      }
+        try {
+          const currentLocation = await Location.getCurrentPositionAsync({
+            accuracy: locationAccuracy
+          })
+          clearTimeout(timer)
+          resolve(currentLocation)
+        } catch (error: any) {
+          reject()
+        }
+      })
     }
 
     let attempt = 0
     let location: Location.LocationObject | undefined = undefined
 
     while (attempt < 3) {
-      location = await getCurrentLocationAttempt()
-      if (location) break
-      else attempt++
+      try {
+        location = await getCurrentLocationAttempt()
+        break
+      } catch (error: any) {
+        attempt++
+      }
     }
 
     if (location === undefined) {
