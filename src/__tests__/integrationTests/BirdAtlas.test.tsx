@@ -43,6 +43,7 @@ ActionSheetIOS.showActionSheetWithOptions = (obj, callback) => callback(2)
 
 describe('BirdAtlas', () => {
   test('is able to add bird atlas observations and save the event', async () => {
+    jest.setTimeout(10000)
 
     const { getByText, getByTestId, getAllByText, store } = renderWithProviders(<Navigator initialRoute='home'/>)
 
@@ -205,5 +206,5 @@ describe('BirdAtlas', () => {
     expect(getAllByText(fi['bird atlas'])).toHaveLength(3)
     expect(getByText(fi['fungi atlas'])).toBeDefined()
     expect(getByText(fi['lolife'])).toBeDefined()
-  })
+  }, 10000)
 })

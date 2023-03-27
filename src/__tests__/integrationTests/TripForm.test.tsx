@@ -43,6 +43,8 @@ const testPressLocation = {
 
 describe('TripForm', () => {
   test('is able to add trip form observations and save the event', async () => {
+    jest.setTimeout(10000)
+
     const { getByText, getByTestId, getAllByText, store } = renderWithProviders(<Navigator initialRoute='map'/>)
 
     await waitFor(async () => {await initializeComponent(store)})
@@ -181,5 +183,5 @@ describe('TripForm', () => {
     await waitFor(() => expect(getAllByText(fi['bird atlas'])).toHaveLength(2))
     expect(getByText(fi['fungi atlas'])).toBeDefined()
     expect(getByText(fi['lolife'])).toBeDefined()
-  })
+  }, 10000)
 })

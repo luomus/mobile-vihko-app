@@ -9,7 +9,7 @@ import {
 } from '../../stores/observation/actions'
 import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
 import { switchSchema } from '../schema/actions'
-import { mapActionTypes, ZoneType } from '../map/types'
+import { mapActionTypes } from '../map/types'
 import { messageActionTypes } from '../message/types'
 import { observationActionTypes } from '../observation/types'
 import { locationActionTypes, PathType } from '../position/types'
@@ -39,7 +39,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     const { credentials, observationEvent, observationZone, schema, grid, tracking } = getState()
     const userId = credentials?.user?.id
 
-    const region: ZoneType | undefined = observationZone.zones.find((region: Record<string, any>) => {
+    const region: Record<string, any> | undefined = observationZone.zones.find((region: Record<string, any>) => {
       return region.id === observationZone.currentZoneId
     })
 

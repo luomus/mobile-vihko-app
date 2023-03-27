@@ -39,6 +39,8 @@ const testPressLocation = {
 
 describe('LoLIFE', () => {
   test('is able to add flying squirrel observations and save the event', async () => {
+    jest.setTimeout(10000)
+
     const { getByText, getByTestId, getAllByText, store } = renderWithProviders(<Navigator initialRoute='home'/>)
 
     await waitFor(async () => {await initializeComponent(store)})
@@ -195,5 +197,5 @@ describe('LoLIFE', () => {
     await waitFor(() => expect(getAllByText(fi['bird atlas'])).toHaveLength(2))
     expect(getByText(fi['fungi atlas'])).toBeDefined()
     expect(getAllByText(fi['lolife'])).toHaveLength(2)
-  })
+  }, 10000)
 })

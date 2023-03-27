@@ -53,6 +53,13 @@ const TextStyles = StyleSheet.create({
     paddingLeft: 10,
     paddingBottom: 10
   },
+  zonePickerLabel: {
+    color: Colors.neutral9,
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingLeft: 10,
+    paddingBottom: 10
+  },
 
   //login component
   loginHeader: {

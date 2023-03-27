@@ -422,6 +422,9 @@ export const observationEventFields = [
   'gatheringEvent_dateEnd',
   'gatherings_0_notes',
   'keywords',
+  'gatheringEvent_gatheringFact_lolifeSiteClassification',
+  'gatheringEvent_nextMonitoringYear',
+  'gatheringEvent_namedPlaceNotes'
 ]
 
 export const lolifeObservationTypes: Record<string, string> = {

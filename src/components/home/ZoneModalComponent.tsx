@@ -9,7 +9,8 @@ import {
   DispatchType,
   setCurrentObservationZone,
   initObservationZones,
-  setTracking
+  setTracking,
+  switchSchema
 } from '../../stores'
 import storageService from '../../services/storageService'
 import ButtonComponent from '../general/ButtonComponent'
@@ -20,6 +21,7 @@ import Colors from '../../styles/Colors'
 import i18n from '../../languages/i18n'
 import ZoneFilterPickerComponent from './ZoneFilterPickerComponent'
 import { captureException } from '../../helpers/sentry'
+import { forms } from '../../config/fields'
 
 type Props = {
   modalVisibility: boolean,
@@ -33,8 +35,25 @@ const ZoneModalComponent = (props: Props) => {
 
   const [shown, setShown] = useState<boolean>(false)
   const [options, setOptions] = useState<{ key: string, label: string }[]>([])
+  const [initializing, setInitializing] = useState<boolean>(true)
+  const [namedPlaceLabels, setNamedPlaceLabels] = useState<
+    {
+      tagSuitable: string | undefined,
+      siteClassification: string | undefined,
+      namedPlaceNotes: string | undefined
+    }
+  >()
+  const [namedPlaceState, setNamedPlaceState] = useState<
+    {
+      label: string | undefined,
+      tagSuitable: string | undefined,
+      siteClassification: string | undefined,
+      namedPlaceNotes: string | undefined
+    }
+  >()
 
   const observationZone = useSelector((state: rootState) => state.observationZone)
+  const schema = useSelector((state: rootState) => state.schema)
   const tracking = useSelector((state: rootState) => state.tracking)
 
   const { t } = useTranslation()
@@ -42,12 +61,27 @@ const ZoneModalComponent = (props: Props) => {
   const dispatch: DispatchType = useDispatch()
 
   useEffect(() => {
+    setInitializing(true)
+
     const initZones = async () => {
       await refreshZonesList()
     }
 
+    const initLolifeSchema = async () => {
+      await dispatch(switchSchema(forms.lolife, i18n.language))
+      setInitializing(false)
+    }
+
     if (props.modalVisibility === true && observationZone.zones.length < 1) {
       initZones()
+    }
+
+    if (props.modalVisibility === true) {
+      if (schema.formID !== forms.lolife || schema[i18n.language] === null) {
+        initLolifeSchema()
+      } else {
+        setInitializing(false)
+      }
     }
   }, [props.modalVisibility])
 
@@ -55,6 +89,44 @@ const ZoneModalComponent = (props: Props) => {
     setOptions(createZonesList())
 
   }, [i18n.language, observationZone.zones])
+
+  useEffect(() => {
+    if (!initializing) {
+      const tagSuitable = undefined
+      const siteClassification = schema[i18n.language]?.schema?.properties?.gatheringEvent?.properties?.gatheringFact?.properties?.lolifeSiteClassification?.title
+      const namedPlaceNotes = schema[i18n.language]?.schema?.properties?.gatheringEvent?.properties?.namedPlaceNotes?.title
+
+      setNamedPlaceLabels({
+        tagSuitable,
+        siteClassification,
+        namedPlaceNotes
+      })
+
+      setInitializing(true)
+    }
+  }, [initializing])
+
+  useEffect(() => {
+    if (!initializing) return
+
+    const currentZone = observationZone.zones.find(zone => zone.id === observationZone.currentZoneId)
+    const lolifeSiteClassificationEnum = schema[i18n.language]?.schema?.properties?.gatheringEvent?.properties?.gatheringFact?.properties?.lolifeSiteClassification?.oneOf
+
+    const label = currentZone?.label
+    const tagSuitable = undefined
+    const namedPlaceNotes = currentZone?.prepopulatedDocument?.gatheringEvent?.namedPlaceNotes
+    const siteClassification = lolifeSiteClassificationEnum
+      ? lolifeSiteClassificationEnum.find((classification: { const: string, value: string }) =>
+        classification.const === currentZone?.prepopulatedDocument?.gatheringEvent?.gatheringFact?.lolifeSiteClassification)?.title
+      : undefined
+
+    setNamedPlaceState({
+      label,
+      tagSuitable,
+      namedPlaceNotes,
+      siteClassification
+    })
+  }, [i18n.language, observationZone.currentZoneId, initializing])
 
   const createZonesList = () => {
     if (observationZone.zones.length <= 0) {
@@ -101,6 +173,30 @@ const ZoneModalComponent = (props: Props) => {
           <Text style={Ts.zonePickerDescription}>
             {t('zone picker description')}
           </Text>
+          {
+            namedPlaceLabels?.tagSuitable && namedPlaceState?.tagSuitable ?
+              <>
+                <Text style={Ts.zonePickerLabel}>{namedPlaceLabels.tagSuitable}</Text>
+                <Text style={Ts.zonePickerDescription}>{namedPlaceState.tagSuitable}</Text>
+              </>
+              : null
+          }
+          {
+            namedPlaceLabels?.siteClassification && namedPlaceState?.siteClassification ?
+              <>
+                <Text style={Ts.zonePickerLabel}>{namedPlaceLabels.siteClassification}</Text>
+                <Text style={Ts.zonePickerDescription}>{namedPlaceState?.siteClassification}</Text>
+              </>
+              : null
+          }
+          {
+            namedPlaceLabels?.namedPlaceNotes && namedPlaceState?.namedPlaceNotes ?
+              <>
+                <Text style={Ts.zonePickerLabel}>{namedPlaceLabels.namedPlaceNotes}</Text>
+                <Text style={Ts.zonePickerDescription}>{namedPlaceState.namedPlaceNotes}</Text>
+              </>
+              : null
+          }
           <View style={Cs.zoneEventLauncherContainer}>
             <View style={Cs.zonePickerContainer}>
               <TouchableOpacity onPress={() => setShown(true)}>

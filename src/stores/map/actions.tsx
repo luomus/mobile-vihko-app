@@ -1,8 +1,8 @@
 import { Region } from 'react-native-maps'
 import { ThunkAction } from 'redux-thunk'
 import i18n from '../../languages/i18n'
-import { mapActionTypes,
-  ZoneType,
+import {
+  mapActionTypes,
   SET_CURRENT_OBS_ZONE,
   CLEAR_CURRENT_OBS_ZONE,
   GET_OBS_ZONES_SUCCESS,
@@ -39,7 +39,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
   return async (dispatch, getState) => {
     const { credentials } = getState()
 
-    let zones: ZoneType[]
+    let zones: Record<string, any>[]
     let error: Record<string, any> | null = null
 
     //check connection exists and try to fetch observation zones from server
@@ -83,10 +83,10 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
       geometry: null
     }
 
-    const firstElement: ZoneType[] = [empty]
+    const firstElement: Record<string, any>[] = [empty]
 
     //sort the observation zones in alphabetical order
-    zones.sort((zoneA: ZoneType, zoneB: ZoneType) => {
+    zones.sort((zoneA: Record<string, any>, zoneB: Record<string, any>) => {
       const nameA = zoneA.name
       const nameB = zoneB.name
 

@@ -103,8 +103,7 @@ import { credentialsReducer } from './user/reducers'
 import {
   mapActionTypes,
   EditingType,
-  ObservationZonesType,
-  ZoneType
+  ObservationZonesType
 } from './map/types'
 import {
   messageActionTypes,
@@ -250,7 +249,6 @@ export type {
   mapActionTypes,
   EditingType,
   ObservationZonesType,
-  ZoneType,
   messageActionTypes,
   MessageType,
   observationActionTypes,

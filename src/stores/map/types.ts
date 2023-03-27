@@ -1,5 +1,4 @@
 import { Region } from 'react-native-maps'
-import { GeometryCollection } from 'geojson'
 
 export const SET_EDITING = 'SET_EDITING'
 
@@ -19,13 +18,7 @@ export interface EditingType {
 
 export interface ObservationZonesType {
   currentZoneId: string,
-  zones: ZoneType[],
-}
-
-export interface ZoneType {
-  name: string,
-  id: string,
-  geometry: GeometryCollection | null,
+  zones: Record<string, any>[]
 }
 
 interface setEditing {
@@ -39,7 +32,7 @@ interface clearCurrentObservationZone {
 
 interface getObservationZonesSuccess {
   type: typeof GET_OBS_ZONES_SUCCESS,
-  payload: ZoneType[],
+  payload: Record<string, any>[],
 }
 
 interface setCurrentObservationZone {
