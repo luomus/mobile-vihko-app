@@ -48,6 +48,22 @@ const ListComponent = (props: Props) => {
 
   const dispatch: DispatchType = useDispatch()
 
+  const getTaxonID = (unit: Record<string, any>) => {
+    if (schema.formID === forms.birdAtlas || !unit.id.includes('complete_list')) {
+      return unit.unitFact.autocompleteSelectedTaxonID
+    } else {
+      return unit.identifications[0].taxonID
+    }
+  }
+
+  const getTaxonName = (unit: Record<string, any>) => {
+    if (schema.formID === forms.birdAtlas) {
+      return unit.identifications[0].taxon
+    } else {
+      return unit.identifications[0].taxonVerbatim
+    }
+  }
+
   useEffect(() => {
     const units: Record<string, any>[] = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.units
     if (units === undefined) { return }
@@ -56,14 +72,14 @@ const ListComponent = (props: Props) => {
 
     const taxaOnMap: string[] = units
       .filter((unit: Record<string, any>) => !unit.id.includes('complete_list'))
-      .map((unit: Record<string, any>) => unit.unitFact.autocompleteSelectedTaxonID)
+      .map((unit: Record<string, any>) => getTaxonID(unit))
     setTaxaOnMap(taxaOnMap)
 
     const pickedTemp: Record<string, any>[] = []
     const unpickedTemp: Record<string, any>[] = []
 
     filtered.forEach((observation: Record<string, any>) => {
-      if (observation.atlasCode || observation.count || taxaOnMap.includes(observation.unitFact.autocompleteSelectedTaxonID)) {
+      if (observation.atlasCode || observation.count || taxaOnMap.includes(getTaxonID(observation))) {
         pickedTemp.push(observation)
       } else {
         unpickedTemp.push(observation)
@@ -108,9 +124,9 @@ const ListComponent = (props: Props) => {
       key={item.key}
       style={Cs.listElementContainer}
     >
-      <Text style={(item.atlasCode || item.count || taxaOnMap.includes(item.unitFact.autocompleteSelectedTaxonID)) ?
+      <Text style={(item.atlasCode || item.count || taxaOnMap.includes(getTaxonID(item))) ?
         Ts.listBoldText : Ts.listText}>
-        { order !== 'scientific' ? item.identifications[0].taxon : item.scientificName }
+        { order !== 'scientific' ? getTaxonName(item) : item.scientificName }
       </Text>
       {
         item.atlasCode ?
@@ -119,12 +135,13 @@ const ListComponent = (props: Props) => {
             <Text style={Ts.listBoldCenteredText}>
               {item.count.length > 6 ? item.count.substring(0, 5) + '...' : item.count}
             </Text>
-            : taxaOnMap.includes(item.unitFact.autocompleteSelectedTaxonID) ?
+            : taxaOnMap.includes(getTaxonID(item)) ?
               <Icon
                 type={'material-icons'}
                 name={'location-pin'}
                 size={30}
                 color={Colors.neutral5}
+                containerStyle={{ paddingRight: 30 }}
                 tvParallaxProperties={undefined}
               />
               : null

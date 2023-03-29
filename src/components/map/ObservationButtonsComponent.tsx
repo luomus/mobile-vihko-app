@@ -92,7 +92,7 @@ const ObservationButtonsComponent = (props: Props) => {
             <Text style={Ts.mapButtonsLeftTitle}>{t('edit observations')}:</Text>
             {haversineNeighbors?.map((neighbor: Record<string, any>) =>
               createButton(
-                neighbor.identifications[0].taxon,
+                neighbor.identifications[0].taxon ? neighbor.identifications[0].taxon : neighbor.identifications[0].taxonVerbatim,
                 Bs.observationNeighborsButton,
                 () => props.shiftToEditPage(eventId, neighbor.id),
                 'primary', 'edit', 'material-icons', 150, 110,

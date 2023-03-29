@@ -361,7 +361,7 @@ export const MHL932ObservationEventFields = [
 ]
 
 export const MHL932Fields = [
-  'identifications_0_taxon',
+  'identifications_0_taxonVerbatim',
   'count',
   'recordBasis',
   'notes',
@@ -369,11 +369,11 @@ export const MHL932Fields = [
 ]
 
 export const overrideMHL932Fields = {
-  'identifications_0_taxon': {
+  'identifications_0_taxonVerbatim': {
     field: 'autocomplete',
     params: {
       target: 'taxon',
-      valueField: 'identifications_0_taxon',
+      valueField: 'identifications_0_taxonVerbatim',
       validation: {
         required: {
           value: true,
@@ -386,7 +386,7 @@ export const overrideMHL932Fields = {
       },
       transform: {
         'key': 'unitFact_autocompleteSelectedTaxonID',
-        'shownName': 'identifications_0_taxon',
+        'shownName': 'identifications_0_taxonVerbatim',
         'payload_informalTaxonGroups': 'informalTaxonGroups'
       }
     }
@@ -405,6 +405,14 @@ export const overrideMHL932ObservationEventFields = {
       'Location roughening'
     ]
   },
+  'gatheringEvent_completeList_completeListType': {
+    field: 'completeListField',
+    params: {
+      validation: {
+        validate: (value: string) => value !== 'empty' || 'must choose list type'
+      }
+    }
+  },
   'gatherings_0_locality': {
     field: 'inputTitleOverridden',
     title: [
@@ -414,6 +422,21 @@ export const overrideMHL932ObservationEventFields = {
     ]
   },
 }
+
+export const MHL932ObservationEventFieldOrder = [
+  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_weather',
+  'gatherings_0_notes',
+  'keywords',
+]
 
 export const observationEventFields = [
   'gatheringEvent_legPublic',

@@ -33,7 +33,14 @@ const FormPickerComponent = (props: Props) => {
 
   return (
     <View style={Cs.padding10Container}>
-      <Text>{props.title}</Text>
+      <View style={Cs.rowContainer}>
+        <Text>{props.title}</Text>
+        {
+          props.validation ?
+            <Text style={Ts.redText}> *</Text>
+            : null
+        }
+      </View>
       <ErrorMessage
         errors={formState.errors}
         name={props.objectTitle}
@@ -48,7 +55,7 @@ const FormPickerComponent = (props: Props) => {
             setValue(props.objectTitle, itemValue)
           }
           }>
-          { props.pickerItems }
+          {props.pickerItems}
         </Picker>
       </View>
     </View>

@@ -458,7 +458,7 @@ const MapComponent = (props: Props) => {
       <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
       <View style={Cs.mapContainer}>
         <MapView
-          testID="map-view"
+          testID='map-view'
           ref={map => { mapView = map }}
           provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
           initialRegion={region}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -30,7 +30,7 @@ import {
   forms, observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
   overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields,
   overrideJX652ObservationEventFields, MHL117ObservationEventFieldOrder,
-  MHL932ObservationEventFields, overrideMHL932ObservationEventFields
+  MHL932ObservationEventFields, overrideMHL932ObservationEventFields, MHL932ObservationEventFieldOrder
 } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -114,7 +114,7 @@ const DocumentComponent = (props: Props) => {
       } else if (schema.formID === forms.fungiAtlas) {
         initForm(setForm, event, null, schemaWithoutUnits, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.dragonflyForm) {
-        initForm(setForm, event, null, schemaWithoutUnits, null, MHL932ObservationEventFields, overrideMHL932ObservationEventFields, null, null, lang, scrollViewRef)
+        initForm(setForm, event, null, schemaWithoutUnits, null, MHL932ObservationEventFields, overrideMHL932ObservationEventFields, null, MHL932ObservationEventFieldOrder, lang, scrollViewRef)
       }
     }
   }
@@ -298,6 +298,7 @@ const DocumentComponent = (props: Props) => {
             </View>
             : null
           }
+          <Text style={Ts.redTextWithPadding}>{t('required field')} *</Text>
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               <>{form}</>

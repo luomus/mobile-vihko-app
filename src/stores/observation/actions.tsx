@@ -15,7 +15,7 @@ import {
   CLEAR_OBSERVATION_ID,
 } from './types'
 import { forms } from '../../config/fields'
-import { getCompleteList } from '../../services/atlasService'
+import { getBirdList, getCompleteList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -580,7 +580,11 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
     if (formID === forms.dragonflyForm) taxonSetID = 'MX.taxonSetBiomonCompleteListOdonata'
 
     try {
-      taxonList = await getCompleteList(taxonSetID, gridNumber)
+      if (taxonSetID === 'MX.taxonSetBirdAtlasCommon') {
+        taxonList = await getBirdList()
+      } else {
+        taxonList = await getCompleteList(taxonSetID, gridNumber)
+      }
     } catch (error: any) {
       captureException(error)
       log.error({
@@ -594,37 +598,55 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
       })
     }
 
+    const getTaxonName = (taxon: Record<string, any>) => {
+      let name = ''
+
+      if (lang === 'fi') {
+        name = taxon.vernacularName.fi ? taxon.vernacularName.fi : taxon.scientificName
+      } else if (lang === 'sv') {
+        name = taxon.vernacularName.sv ? taxon.vernacularName.sv : taxon.scientificName
+      } else if (lang === 'en') {
+        name = taxon.vernacularName.en ? taxon.vernacularName.en : taxon.scientificName
+      }
+
+      return name
+    }
+
+    taxonList.forEach(taxon => nameList.push(getTaxonName(taxon)))
+
     //fetch taxon details concurrently and initialize bird list observations
     await Promise.all(taxonList.map(async (item: Record<string, any>) => {
       const res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
       const observation = {}
 
-      let name = ''
-
-      if (lang === 'fi') {
-        name = item.vernacularName.fi ? item.vernacularName.fi : item.scientificName
-      } else if (lang === 'sv') {
-        name = item.vernacularName.sv ? item.vernacularName.sv : item.scientificName
-      } else if (lang === 'en') {
-        name = item.vernacularName.en ? item.vernacularName.en : item.scientificName
+      if (taxonSetID === 'MX.taxonSetBirdAtlasCommon') {
+        set(observation, 'id', `complete_list_${uuid.v4()}`)
+        set(observation, 'identifications', [{ taxon: getTaxonName(item) }])
+        set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
+        set(observation, 'scientificName', item.scientificName)
+        set(observation, 'taxonomicOrder', item.taxonomicOrder)
+        set(observation, 'unitFact', { autocompleteSelectedTaxonID: item.id })
+      } else {
+        set(observation, 'id', `complete_list_${uuid.v4()}`)
+        set(observation, 'identifications', [{ taxonID: item.id, taxonVerbatim: getTaxonName(item) }])
+        set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
+        set(observation, 'scientificName', item.scientificName)
+        set(observation, 'taxonomicOrder', item.taxonomicOrder)
       }
-
-      nameList.push(name)
-
-      set(observation, 'id', `complete_list_${uuid.v4()}`)
-      set(observation, 'identifications', [{ taxon: name }])
-      set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
-      set(observation, 'scientificName', item.scientificName)
-      set(observation, 'taxonomicOrder', item.taxonomicOrder)
-      set(observation, 'unitFact', { autocompleteSelectedTaxonID: item.id })
 
       observations.push(observation)
     }))
 
     //sort the observations based on the correct order
-    observations.sort((a, b) => {
-      return nameList.indexOf(a.identifications[0].taxon) - nameList.indexOf(b.identifications[0].taxon)
-    })
+    if (taxonSetID === 'MX.taxonSetBirdAtlasCommon') {
+      observations.sort((a, b) => {
+        return nameList.indexOf(a.identifications[0].taxon) - nameList.indexOf(b.identifications[0].taxon)
+      })
+    } else {
+      observations.sort((a, b) => {
+        return nameList.indexOf(a.identifications[0].taxonVerbatim) - nameList.indexOf(b.identifications[0].taxonVerbatim)
+      })
+    }
 
     newEvent.gatherings[0].units = observations
     newEvents.push(newEvent)
