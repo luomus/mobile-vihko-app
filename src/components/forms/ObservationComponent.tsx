@@ -247,6 +247,10 @@ const ObservationComponent = (props: Props) => {
       set(newUnit, key.split('_'), data[key])
     })
 
+    if (schema.formID === forms.dragonflyForm && newUnit.count === '') {
+      set(newUnit, 'count', 'X')
+    }
+
     //set correct color for obseration, if available
     const color = schema[lang].uiSchemaParams?.unitColors?.find((unitColor: Record<string, any>) => {
       const field: string = unitColor.rules.field
@@ -321,7 +325,16 @@ const ObservationComponent = (props: Props) => {
     }
 
     //for bird atlas list observations, set count to x, if atlasCode nor count is given
-    if (editedUnit.id.includes('complete_list') && (!editedUnit.atlasCode || editedUnit.atlasCode === '') && !editedUnit.count) {
+    if (schema.formID === forms.birdAtlas
+      && editedUnit.id.includes('complete_list')
+      && (!editedUnit.atlasCode || editedUnit.atlasCode === '')
+      && !editedUnit.count) {
+      set(editedUnit, 'count', 'X')
+
+    //for all biomon observations, set count to x if count is not given
+    } else if (schema.formID === forms.dragonflyForm
+      && !editedUnit.count
+    ) {
       set(editedUnit, 'count', 'X')
     }
 
