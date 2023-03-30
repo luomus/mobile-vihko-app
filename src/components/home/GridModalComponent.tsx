@@ -13,7 +13,8 @@ import {
   setRegion,
   setFirstLocation,
   updateLocation,
-  setTracking
+  setTracking,
+  setMessageState
 } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -25,13 +26,13 @@ import { convertWGS84ToYKJ, getCurrentLocation, YKJCoordinateIntoWGS84Grid } fro
 import { gridUrl, mapUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
 import storageService from '../../services/storageService'
+import MessageComponent from '../general/MessageComponent'
 
 type Props = {
   modalVisibility: boolean,
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   onBeginObservationEvent: (tracking: boolean) => void,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  showError: (error: string) => void
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const GridModalComponent = (props: Props) => {
@@ -62,10 +63,9 @@ const GridModalComponent = (props: Props) => {
       if (reloadModal) setLoading(true)
       location = await getCurrentLocation(false, 5)
       dispatch(updateLocation(location))
-    } catch (err) {
-      props.setModalVisibility(false)
-      props.showError(`${t('unable to get current location')}: ${err}`)
+    } catch (error: any) {
       if (reloadModal) setLoading(false)
+      showError(error.message)
       return
     }
 
@@ -79,8 +79,8 @@ const GridModalComponent = (props: Props) => {
       const gridDetails = await getGridName(ykjLocation[1].toString().slice(0, 3) + ':' + ykjLocation[0].toString().slice(0, 3))
       setGridName(gridDetails.name)
       setGridCoords([parseInt(ykjLocation[1].toString().slice(0, 3)), parseInt(ykjLocation[0].toString().slice(0, 3))])
-    } catch (err) {
-      props.showError(`${t('failed to fetch grid name')}: ${err}`)
+    } catch (error: any) {
+      showError(`${t('failed to fetch grid name')}: ${error}`)
     }
 
     if (reloadModal) setLoading(false)
@@ -98,7 +98,7 @@ const GridModalComponent = (props: Props) => {
 
     if (n < 661 || n > 777 || e < 306 || e > 373) {
       props.setModalVisibility(false)
-      props.showError(t('current location out of ykj bounds'))
+      showError(t('current location out of ykj bounds'))
       return
     }
 
@@ -242,6 +242,15 @@ const GridModalComponent = (props: Props) => {
     if (centered) { setCentered(false) }
   }
 
+  const showError = (error: string) => {
+    console.log('show ', error)
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: error,
+      onOk: () => props.setModalVisibility(false)
+    }))
+  }
+
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.setModalVisibility(false) }}
       onBackdropPress={() => { props.setModalVisibility(false) }}>
@@ -323,6 +332,7 @@ const GridModalComponent = (props: Props) => {
           }
         </View>
       </View>
+      <MessageComponent />
     </Modal>
   )
 }

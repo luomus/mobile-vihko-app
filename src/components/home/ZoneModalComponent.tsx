@@ -10,7 +10,8 @@ import {
   setCurrentObservationZone,
   initObservationZones,
   setTracking,
-  switchSchema
+  switchSchema,
+  setMessageState
 } from '../../stores'
 import storageService from '../../services/storageService'
 import ButtonComponent from '../general/ButtonComponent'
@@ -22,13 +23,13 @@ import i18n from '../../languages/i18n'
 import ZoneFilterPickerComponent from './ZoneFilterPickerComponent'
 import { captureException } from '../../helpers/sentry'
 import { forms } from '../../config/fields'
+import MessageComponent from '../general/MessageComponent'
 
 type Props = {
   modalVisibility: boolean,
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   onBeginObservationEvent: (tracking: boolean) => void,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  showError: (error: string) => void
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ZoneModalComponent = (props: Props) => {
@@ -150,8 +151,7 @@ const ZoneModalComponent = (props: Props) => {
       await dispatch(initObservationZones())
     } catch (error: any) {
       captureException(error)
-      props.showError(error.message)
-      props.setModalVisibility(false)
+      showError(error.message)
     } finally {
       props.setLoading(false)
     }
@@ -160,6 +160,14 @@ const ZoneModalComponent = (props: Props) => {
   const handleStartEvent = () => {
     props.setModalVisibility(false)
     props.onBeginObservationEvent(tracking)
+  }
+
+  const showError = (error: string) => {
+    console.log('show ', error)
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: error
+    }))
   }
 
   return (
@@ -246,6 +254,7 @@ const ZoneModalComponent = (props: Props) => {
           </View>
         </View>
       </View>
+      <MessageComponent />
     </Modal>
   )
 }

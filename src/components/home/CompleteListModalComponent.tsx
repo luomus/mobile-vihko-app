@@ -9,7 +9,8 @@ import {
   DispatchType,
   setTracking,
   updateLocation,
-  setGrid
+  setGrid,
+  setMessageState
 } from '../../stores'
 import storageService from '../../services/storageService'
 import ButtonComponent from '../general/ButtonComponent'
@@ -19,13 +20,13 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { LocationObject } from 'expo-location'
 import { convertWGS84ToYKJ, getCurrentLocation } from '../../helpers/geolocationHelper'
+import MessageComponent from '../general/MessageComponent'
 
 type Props = {
   modalVisibility: boolean,
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   onBeginObservationEvent: (tracking: boolean) => void,
   formID: string
-  showError: (error: string) => void
 }
 
 const CompleteListModalComponent = (props: Props) => {
@@ -46,10 +47,9 @@ const CompleteListModalComponent = (props: Props) => {
       setLoading(true)
       location = await getCurrentLocation(false, 5)
       dispatch(updateLocation(location))
-    } catch (err) {
-      props.setModalVisibility(false)
-      props.showError(`${t('unable to get current location')}: ${err}`)
+    } catch (error: any) {
       setLoading(false)
+      showError(error.message)
       return
     }
 
@@ -87,6 +87,15 @@ const CompleteListModalComponent = (props: Props) => {
   const description = () => {
     const formTranslation = t('dragonfly form')
     return t('do you want to start an event?') + ' ' + formTranslation + '?'
+  }
+
+  const showError = (error: string) => {
+    console.log('show ', error)
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: error,
+      onOk: () => props.setModalVisibility(false)
+    }))
   }
 
   return (
@@ -129,6 +138,7 @@ const CompleteListModalComponent = (props: Props) => {
           </View>
         }
       </View>
+      <MessageComponent />
     </Modal>
   )
 }

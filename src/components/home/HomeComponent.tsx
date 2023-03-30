@@ -481,15 +481,15 @@ export const HomeComponentContainer = (
           setModalVisibility={props.setAtlasInstructionModalVisibility} setGridModalVisibility={props.setGridModalVisibility} />
         <GridModalComponent modalVisibility={props.gridModalVisibility} setModalVisibility={props.setGridModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.birdAtlas) }}
-          setLoading={props.setLoading} showError={showError} />
+          setLoading={props.setLoading} />
         <DefaultModalComponent modalVisibility={props.fungiModalVisibility} setModalVisibility={props.setFungiModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.fungiAtlas) }} formID={forms.fungiAtlas} />
         <CompleteListModalComponent modalVisibility={props.dragonflyModalVisibility}
           setModalVisibility={props.setDragonflyModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.dragonflyForm) }}
-          formID={forms.dragonflyForm} showError={showError} />
+          formID={forms.dragonflyForm} />
         <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
-          setLoading={props.setLoading} showError={showError} />
+          setLoading={props.setLoading} />
         <MessageComponent />
       </>
     )
