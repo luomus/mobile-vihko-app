@@ -572,7 +572,6 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
     const observations: Record<string, any>[] = []
-    const nameList: Array<any> = []
 
     let taxonList: Record<string, any>[] = []
 
@@ -612,7 +611,7 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
       return name
     }
 
-    taxonList.forEach(taxon => nameList.push(getTaxonName(taxon)))
+    const nameList: Array<string> = taxonList.map(taxon => getTaxonName(taxon))
 
     //fetch taxon details concurrently and initialize bird list observations
     await Promise.all(taxonList.map(async (item: Record<string, any>) => {

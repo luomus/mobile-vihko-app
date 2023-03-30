@@ -181,7 +181,7 @@ export const HomeComponentContainer = (
     let isUnfinished = false
 
     if (length >= 1) {
-      isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent.dateEnd
+      isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent?.dateEnd
     }
 
     const checkUpdates = async () => {
