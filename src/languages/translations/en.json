@@ -74,6 +74,7 @@
   "failed to watch position": "Failed to track user's position.",
   "false": "No",
   "filter species": "Filter species",
+  "filter.commonness": "Commonness",
   "filter.default": "Default order",
   "filter.name": "Alphabetical order",
   "filter.scientific": "Alphabetical order, scientific",

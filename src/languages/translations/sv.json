@@ -74,6 +74,7 @@
   "failed to watch position": "Misslyckades att spåra användarnas position.",
   "false": "Nej",
   "filter species": "Filtrera arter",
+  "filter.commonness": "Vanlighet",
   "filter.default": "Standardordning",
   "filter.name": "Alfabetisk ordning",
   "filter.scientific": "Alfabetisk ordning, vetenskaplig",

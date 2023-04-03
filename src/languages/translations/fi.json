@@ -74,6 +74,7 @@
   "failed to watch position": "Sijainnin seuranta epäonnistui.",
   "false": "Ei",
   "filter species": "Suodata lajeja",
+  "filter.commonness": "Yleisyys",
   "filter.default": "Oletusarvoinen järjestys",
   "filter.name": "Aakkosjärjestys",
   "filter.scientific": "Aakkosjärjestys, tieteellinen",

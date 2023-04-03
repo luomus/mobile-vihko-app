@@ -1,7 +1,10 @@
 import React from 'react'
 import { View } from 'react-native'
+import { useSelector } from 'react-redux'
 import { Picker } from '@react-native-picker/picker'
 import { useTranslation } from 'react-i18next'
+import { rootState } from '../../stores'
+import { forms } from '../../config/fields'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 
@@ -11,26 +14,29 @@ type Props = {
   observedUnedited: any[] | undefined,
   picked: Record<string, any>[],
   unpicked: Record<string, any>[],
+  orderOptions: Array<string>
   order: string,
   setOrder: React.Dispatch<React.SetStateAction<string>>
 }
 
 const ListSorterComponent = (props: Props) => {
 
+  const schema = useSelector((state: rootState) => state.schema)
+
   const { t } = useTranslation()
 
   const sortTaxonList = (itemValue: string) => {
     if (props.picked.length < 1 && props.unpicked.length < 1) return
 
-    if (itemValue === 'default') {
+    if ((itemValue === 'default' && schema.formID !== forms.birdAtlas) || itemValue === 'commonness') {
       if (props.observedUnedited) {
         props.setObserved(props.observedUnedited)
         props.updateList()
       }
 
-    } else if (itemValue === 'systematic') {
+    } else if (itemValue === 'systematic' || (itemValue === 'default' && schema.formID === forms.birdAtlas)) {
       const sortBySystematicOrder = (list: Record<string, any>[]) => {
-        return list.sort((a, b) => b.taxonomicOrder - a.taxonomicOrder)
+        return list.sort((a, b) => a.taxonomicOrder - b.taxonomicOrder)
       }
       const pickedSorted = sortBySystematicOrder(props.picked)
       const unpickedSorted = sortBySystematicOrder(props.unpicked)
@@ -40,8 +46,12 @@ const ListSorterComponent = (props: Props) => {
     } else if (itemValue === 'name') {
       const sortByName = (list: Record<string, any>[]) => {
         return list.sort((a, b) => {
-          const textA = a.identifications[0].taxon.toLowerCase()
-          const textB = b.identifications[0].taxon.toLowerCase()
+          const textA = a.identifications[0].taxon
+            ? a.identifications[0].taxon.toLowerCase()
+            : a.identifications[0].taxonVerbatim.toLowerCase()
+          const textB = b.identifications[0].taxon
+            ? b.identifications[0].taxon.toLowerCase()
+            : b.identifications[0].taxonVerbatim.toLowerCase()
           return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
         })
       }
@@ -75,10 +85,11 @@ const ListSorterComponent = (props: Props) => {
           sortTaxonList(itemValue)
         }}
       >
-        <Picker.Item label={t('filter.default')} value='default' style={{ fontSize: 24, color: Colors.neutral6 }} />
-        <Picker.Item label={t('filter.systematic')} value='systematic' style={{ fontSize: 24, color: Colors.neutral6 }} />
-        <Picker.Item label={t('filter.name')} value='name' style={{ fontSize: 24, color: Colors.neutral6 }} />
-        <Picker.Item label={t('filter.scientific')} value='scientific' style={{ fontSize: 24, color: Colors.neutral6 }} />
+        {
+          props.orderOptions.map(option => (
+            <Picker.Item key={option} label={t(`filter.${option}`)} value={option} style={{ fontSize: 24, color: Colors.neutral6 }} />
+          ))
+        }
       </Picker>
     </View>
   )

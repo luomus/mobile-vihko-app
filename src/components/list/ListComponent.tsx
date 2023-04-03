@@ -38,6 +38,7 @@ const ListComponent = (props: Props) => {
   const [picked, setPicked] = useState<Record<string, any>[]>([])
   const [unpicked, setUnpicked] = useState<Record<string, any>[]>([])
   const [search, setSearch] = useState<string>('')
+  const [orderOptions, setOrderOptions] = useState<Array<string>>(['default', 'systematic', 'name', 'scientific'])
   const [order, setOrder] = useState<string>('default')
 
   const textInput = useRef<TextInput | null>(null)
@@ -63,6 +64,12 @@ const ListComponent = (props: Props) => {
       return unit.identifications[0].taxonVerbatim
     }
   }
+
+  useEffect(() => {
+    if (schema.formID === forms.birdAtlas) {
+      setOrderOptions(['default', 'name', 'scientific']) // add commonness later
+    }
+  }, [])
 
   useEffect(() => {
     const units: Record<string, any>[] = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.units
@@ -163,6 +170,7 @@ const ListComponent = (props: Props) => {
         observedUnedited={observedUnedited}
         picked={picked}
         unpicked={unpicked}
+        orderOptions={orderOptions}
         order={order}
         setOrder={setOrder}
       />
