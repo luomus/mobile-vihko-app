@@ -109,6 +109,7 @@
   "instructions.overview": "Tässä voit ryhtyä muokkaamaan havaintotapahtuman tietoja, lähettää sen Vihkoon tai poistaa sen.\n\nJos lähetätä havaintotapahtuman Vihkoon, voit jatkaa havaintojen muokkaamista Vihkossa osoitteessa <0>Laji.fi/vihko</0>, mutta et enää Mobiilivihkossa.\n\nVoit myös muokata yksittäisiä havaintoja.\n\n<1>Lisää ohjeita</1>",
   "instructions.trip.intro": "Retkilomakkeella voit tallentaa havaintoja kaikista lajiryhmistä.",
   "interrupted observation event": "Keskeytynyt havaintotapahtuma",
+  "latest path point missing": "Viimeisin reittipiste voi jäädä tallentamatta.",
   "leaving grid": "Olet poistumassa valitsemaltasi Atlasruudulta.",
   "link to grid": "Katso ruudun rajat laji.fi-kartalla.",
   "link to result service": "Katso ruudun tiedot tulospalvelusta.",

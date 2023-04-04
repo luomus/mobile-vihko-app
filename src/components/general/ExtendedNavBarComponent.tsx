@@ -57,12 +57,18 @@ const ExtendedNavBarComponent = (props: Props) => {
           unitId: null
         }))
 
-        //save the path before stopping
-        const location: LocationType = await getCurrentLocation(true)
-        await dispatch(appendPath([location]))
+        if (JSON.stringify(path) !== JSON.stringify([[]])) {
+          //save the path before stopping
+          try {
+            const location: LocationType = await getCurrentLocation(true)
+            await dispatch(appendPath([location]))
 
-        if (path) {
-          await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+            if (path) {
+              await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+            }
+          } catch (error: any) {
+            showError(error.message + ' ' + t('latest path point missing'))
+          }
         }
 
         props.onPressFinishObservationEvent('map')
@@ -77,15 +83,20 @@ const ExtendedNavBarComponent = (props: Props) => {
       okLabel: t('pause'),
       cancelLabel: t('cancel'),
       onOk: async () => {
-        const location: LocationType = await getCurrentLocation(true)
-
         dispatch(setTracking(false))
         await storageService.save('tracking', false)
 
-        await dispatch(appendPath([location]))
+        if (JSON.stringify(path) !== JSON.stringify([[]])) {
+          try {
+            const location: LocationType = await getCurrentLocation(true)
+            await dispatch(appendPath([location]))
 
-        if (path) {
-          await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+            if (path) {
+              await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+            }
+          } catch (error: any) {
+            showError(error.message + ' ' + t('latest path point missing'))
+          }
         }
 
         await stopBackgroundLocationAsync()
@@ -132,11 +143,18 @@ const ExtendedNavBarComponent = (props: Props) => {
     }))
   }
 
+  const showError = (error: string) => {
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: error
+    }))
+  }
+
   return (
     <View style={Cs.stopObservingContainer}>
       <View style={{ flexDirection: 'row', width: '50%' }}>
         <View style={{ paddingHorizontal: 2, width: '50%' }}>
-          <ButtonComponent onPressFunction={() => { stopObserving()}} title={t('stop')}
+          <ButtonComponent onPressFunction={() => { stopObserving() }} title={t('stop')}
             height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.dangerButton1}
             gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
             iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin

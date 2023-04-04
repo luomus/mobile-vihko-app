@@ -109,6 +109,7 @@
   "instructions.overview": "Here you can start editing the information of the observation event, sending it to Notebook or deleting it.\n\nIf you send an observation event to Notebook, you can continue editing the observations in Notebook at <0>Laji.fi/vihko</0>, but no longer in the Nature Notebook.\n\nYou can also edit individual observations.\n\n<1>More instructions</1>",
   "instructions.trip.intro": "Save nature observations from all taxon groups to species.fi database.",
   "interrupted observation event": "Interrupted observation event",
+  "latest path point missing": "The latest path point may not be saved.",
   "leaving grid": "You are leaving the Atlas tile that you've chosen.",
   "link to grid": "Check the Atlas squares from Laji.fi.",
   "link to result service": "Check details from the result service.",

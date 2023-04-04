@@ -109,6 +109,7 @@
   "instructions.overview": "Här kan du börja redigera information om observationsuppsättningen, skicka den till Skrivbok eller radera den.\n\nOm du skickar en observationsuppsättning till Skrivbok kan du fortsätta att redigera observationerna i Skrivbok på <0>Laji.fi/vihko</0>, men inte längre i Mobil Skrivbok.\n\nDu kan också redigera enskilda observationer.\n\n<1>Fler instruktioner</1>",
   "instructions.trip.intro": "Med Fältbesök-formuläret kan du spara naturobservationer från alla artgrupper i laji.fi databasen.",
   "interrupted observation event": "Avbruten observationsuppsättning",
+  "latest path point missing": "Den senaste vägpunkten kanske inte sparas.",
   "leaving grid": "Du håller på att lämna den atlasruta du har valt.",
   "link to grid": "Kolla upp gränserna av atlasrutan på Laji.fi kartan.",
   "link to result service": "Kolla upp detaljer från resultat service.",
