@@ -440,8 +440,8 @@ export const HomeComponentContainer = (
       <>
         <ScrollView contentContainerStyle={Cs.contentAndVersionContainer}>
           <View style={Cs.homeContentContainer}>
-            <NewsComponent tag={'technical'} />
-            <NewsComponent tag={'mobiilivihko'} />
+            <NewsComponent tag={'technical'} thisDay={true} />
+            <NewsComponent tag={'mobiilivihko'} thisDay={false} />
             <>
               {props.observing ?
                 <UnfinishedEventComponent onContinueObservationEvent={() => { onContinueObservationEvent() }}

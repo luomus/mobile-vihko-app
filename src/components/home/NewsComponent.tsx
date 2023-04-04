@@ -8,7 +8,8 @@ import { getNews } from '../../services/newsService'
 import { newsPage } from '../../config/urls'
 
 interface Props {
-  tag: string
+  tag: string,
+  thisDay: boolean
 }
 
 const NewsComponent = (props: Props) => {
@@ -18,7 +19,9 @@ const NewsComponent = (props: Props) => {
   useEffect(() => {
     const getNewsAsync = async () => {
       const news = await getNews(i18n.language, props.tag)
-      if (news.results) {
+      if (news.results
+        && (props.thisDay && news.posted >= Date.now() - (24 * 60 * 60 * 1000) || !props.thisDay)
+      ) {
         setLatestNews(news.results[0])
       } else {
         setLatestNews(undefined)
