@@ -69,7 +69,7 @@ const ZoneModalComponent = (props: Props) => {
     }
 
     const initLolifeSchema = async () => {
-      await dispatch(switchSchema(forms.lolife, i18n.language, true))
+      await dispatch(switchSchema(forms.lolife, i18n.language))
       setInitializing(false)
     }
 

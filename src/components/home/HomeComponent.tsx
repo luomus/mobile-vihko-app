@@ -307,7 +307,7 @@ export const HomeComponentContainer = (
 
     //save the used form before beginning an event
     if (!props.observing) {
-      await props.dispatch(switchSchema(formID, i18n.language, true))
+      await props.dispatch(switchSchema(formID, i18n.language))
       await props.save('formID', formID)
     }
 

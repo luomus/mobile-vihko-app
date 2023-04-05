@@ -16,14 +16,14 @@ export const setSchema = (schemas: Record<string, any>): schemaActionTypes => ({
   payload: schemas
 })
 
-const HUMAN_READABLE_FORM_NAMES: {[key: string]: string} = {
+const HUMAN_READABLE_FORM_NAMES: { [key: string]: string } = {
   'JX.519': 'trip form',
   'MHL.117': 'bird atlas',
   'JX.652': 'fungi atlas',
   'MHL.45': 'lolife',
 }
 
-const ERROR_MESSAGES: {[key: string]: string} = {
+const ERROR_MESSAGES: { [key: string]: string } = {
   'StorageFetch': 'failed to load schema from storage',
   'Download': 'failed to load schema from server',
   'Parse': 'failed to parse uiSchema to input',
@@ -88,6 +88,7 @@ const initSchema = async (formID: string, lang: string) => {
     } else {
       schema = {
         schema: fetchedSchema.schema,
+        timestamp: Date.now()
       }
     }
   }
@@ -115,7 +116,7 @@ errors.forEach(err => dispatch(setMessageState({
         })))
 */
 
-export const switchSchema = (formId: string, lang: string, fromAPI = false): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
+export const switchSchema = (formId: string, lang: string): ThunkAction<Promise<void>, any, void, schemaActionTypes> => {
   return async dispatch => {
     const schemas: Record<string, any> = {
       formID: formId,
@@ -124,18 +125,22 @@ export const switchSchema = (formId: string, lang: string, fromAPI = false): Thu
       sv: null
     }
 
-    try {
-      schemas[lang] = fromAPI ?
-        undefined :
-        await storageService.fetch(formId + lang[0].toUpperCase() + lang[1])
+    // attempt fetching schema from storage
+    schemas[lang] = await storageService.fetch(formId + lang[0].toUpperCase() + lang[1])
 
-      if (!schemas[lang]) {
-        // Schema+language combination is not initialized yet
+    // fetch schema from the api if there was no schema in the storage, or if it has been expired
+    if (
+      !schemas[lang]
+      || !schemas[lang].timestamp
+      || (schemas[lang].timestamp && schemas[lang].timestamp < Date.now() - (24 * 60 * 60 * 1000))
+    ) {
+      try {
         schemas[lang] = await initSchema(formId, lang)
+      } catch (error: any) {
+        if (!schemas[lang]) {
+          throw error
+        }
       }
-    } catch (error) {
-      // Schema+language combination is not initialized yet
-      schemas[lang] = await initSchema(formId, lang)
     }
 
     dispatch(setSchema(schemas))
