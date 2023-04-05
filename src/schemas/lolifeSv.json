@@ -48,6 +48,55 @@
               "dateEnd": {
                 "type": "string",
                 "title": "Slutdatum"
+              },
+              "gatheringFact": {
+                "type": "object",
+                "properties": {
+                  "lolifeSiteClassification": {
+                    "type": "string",
+                    "oneOf": [
+                      {
+                        "const": "",
+                        "title": ""
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationExcellent",
+                        "title": "Utmärkt"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationSuboptimal",
+                        "title": "Suboptima"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationPossible",
+                        "title": "Möjlig, inte trolig"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationCurrentlyUnsuitable",
+                        "title": "Inte möjligt för närvarande"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationPermanentlyUnsuitable",
+                        "title": "Permanent ogiltig"
+                      }
+                    ],
+                    "title": "Platsklassificering"
+                  },
+                  "lolifeSiteClassificationComments": {
+                    "type": "string",
+                    "title": "Klassificeringskommentarer"
+                  }
+                },
+                "required": [],
+                "title": ""
+              },
+              "nextMonitoringYear": {
+                "type": "integer",
+                "title": "Nästa kontrollår"
+              },
+              "namedPlaceNotes": {
+                "type": "string",
+                "title": "Info om denna rutt"
               }
             },
             "required": [],
@@ -58,7 +107,7 @@
             "items": {
               "type": "string"
             },
-            "title": "Nyckelordet"
+            "title": "Nyckelord"
           },
           "gatherings": {
             "type": "array",
@@ -89,215 +138,215 @@
                       },
                       {
                         "const": "MY.habitatEnumValue1",
-                        "title": ""
+                        "title": "Skog"
                       },
                       {
                         "const": "MY.habitatEnumValue2",
-                        "title": ""
+                        "title": "Moskog"
                       },
                       {
                         "const": "MY.habitatEnumValue3",
-                        "title": ""
+                        "title": "Frisk mo"
                       },
                       {
                         "const": "MY.habitatEnumValue4",
-                        "title": ""
+                        "title": "Lundartad mo"
                       },
                       {
                         "const": "MY.habitatEnumValue5",
-                        "title": ""
+                        "title": "Tämligen torr mo"
                       },
                       {
                         "const": "MY.habitatEnumValue6",
-                        "title": ""
+                        "title": "Karg mo"
                       },
                       {
                         "const": "MY.habitatEnumValue7",
-                        "title": ""
+                        "title": "Lund"
                       },
                       {
                         "const": "MY.habitatEnumValue8",
-                        "title": ""
+                        "title": "Torr lund"
                       },
                       {
                         "const": "MY.habitatEnumValue9",
-                        "title": ""
+                        "title": "Frisk lund"
                       },
                       {
                         "const": "MY.habitatEnumValue10",
-                        "title": ""
+                        "title": "Fuktig lund"
                       },
                       {
                         "const": "MY.habitatEnumValue11",
-                        "title": ""
+                        "title": "Ädellövskog"
                       },
                       {
                         "const": "MY.habitatEnumValue12",
-                        "title": ""
+                        "title": "Fjällbjörkslund"
                       },
                       {
                         "const": "MY.habitatEnumValue13",
-                        "title": ""
+                        "title": "Fjällbjörkskog, ej lund"
                       },
                       {
                         "const": "MY.habitatEnumValue14",
-                        "title": ""
+                        "title": "Myr"
                       },
                       {
                         "const": "MY.habitatEnumValue15",
-                        "title": ""
+                        "title": "Öppen myr"
                       },
                       {
                         "const": "MY.habitatEnumValue16",
-                        "title": ""
+                        "title": "Rikkärr"
                       },
                       {
                         "const": "MY.habitatEnumValue17",
-                        "title": ""
+                        "title": "Fattigkärr"
                       },
                       {
                         "const": "MY.habitatEnumValue18",
-                        "title": ""
+                        "title": "Öppet madkärr"
                       },
                       {
                         "const": "MY.habitatEnumValue19",
-                        "title": ""
+                        "title": "Trädbevuxen myr"
                       },
                       {
                         "const": "MY.habitatEnumValue20",
-                        "title": ""
+                        "title": "Mosse"
                       },
                       {
                         "const": "MY.habitatEnumValue21",
-                        "title": ""
+                        "title": "Skogkärr"
                       },
                       {
                         "const": "MY.habitatEnumValue22",
-                        "title": ""
+                        "title": "Busk-madkärr"
                       },
                       {
                         "const": "MY.habitatEnumValue23",
-                        "title": ""
+                        "title": "Skogs-madkärr"
                       },
                       {
                         "const": "MY.habitatEnumValue24",
-                        "title": ""
+                        "title": "Vatten"
                       },
                       {
                         "const": "MY.habitatEnumValue25",
-                        "title": ""
+                        "title": "Källa och källkärr"
                       },
                       {
                         "const": "MY.habitatEnumValue26",
-                        "title": ""
+                        "title": "Bäck"
                       },
                       {
                         "const": "MY.habitatEnumValue27",
-                        "title": ""
+                        "title": "Strand"
                       },
                       {
                         "const": "MY.habitatEnumValue28",
-                        "title": ""
+                        "title": "Översvämningsskog och skogskärr"
                       },
                       {
                         "const": "MY.habitatEnumValue29",
-                        "title": ""
+                        "title": "Strandbuskage"
                       },
                       {
                         "const": "MY.habitatEnumValue30",
-                        "title": ""
+                        "title": "Madskärrstrand"
                       },
                       {
                         "const": "MY.habitatEnumValue31",
-                        "title": ""
+                        "title": "Ängstrand"
                       },
                       {
                         "const": "MY.habitatEnumValue32",
-                        "title": ""
+                        "title": "Vassruggar"
                       },
                       {
                         "const": "MY.habitatEnumValue33",
-                        "title": ""
+                        "title": "Grus- och klapperstenstrand"
                       },
                       {
                         "const": "MY.habitatEnumValue34",
-                        "title": ""
+                        "title": "Sandstrand"
                       },
                       {
                         "const": "MY.habitatEnumValue35",
-                        "title": ""
+                        "title": "Öppen översvämingsbenägna mark"
                       },
                       {
                         "const": "MY.habitatEnumValue36",
-                        "title": ""
+                        "title": "Hällmark och stenfält"
                       },
                       {
                         "const": "MY.habitatEnumValue87",
-                        "title": ""
+                        "title": "Karga och mesotrofa hällmark (\"vanliga hällmark\")"
                       },
                       {
                         "const": "MY.habitatEnumValue37",
-                        "title": ""
+                        "title": "Hällmark och stenfält med lavar"
                       },
                       {
                         "const": "MY.habitatEnumValue38",
-                        "title": ""
+                        "title": "Ris-gräsrik hällmark och stenfält"
                       },
                       {
                         "const": "MY.habitatEnumValue39",
-                        "title": ""
+                        "title": "Hällmark och stenfält med gläsa träd"
                       },
                       {
                         "const": "MY.habitatEnumValue40",
-                        "title": ""
+                        "title": "Skog på hällmark"
                       },
                       {
                         "const": "MY.habitatEnumValue41",
-                        "title": ""
+                        "title": "Kalkhäll och stenbrott, bar kalkjord"
                       },
                       {
                         "const": "MY.habitatEnumValue42",
-                        "title": ""
+                        "title": "Serpentinberg och -mark"
                       },
                       {
                         "const": "MY.habitatEnumValue43",
-                        "title": ""
+                        "title": "Hällmarkstorräng"
                       },
                       {
                         "const": "MY.habitatEnumValue44",
-                        "title": ""
+                        "title": "Kalfjäll"
                       },
                       {
                         "const": "MY.habitatEnumValue45",
-                        "title": ""
+                        "title": "Fjällhed"
                       },
                       {
                         "const": "MY.habitatEnumValue46",
-                        "title": ""
+                        "title": "Fjälläng"
                       },
                       {
                         "const": "MY.habitatEnumValue47",
-                        "title": ""
+                        "title": "Snölega"
                       },
                       {
                         "const": "MY.habitatEnumValue48",
-                        "title": ""
+                        "title": "Fjällhedbuskage"
                       },
                       {
                         "const": "MY.habitatEnumValue49",
-                        "title": ""
+                        "title": "Kärr på kalfjäll"
                       },
                       {
                         "const": "MY.habitatEnumValue50",
-                        "title": ""
+                        "title": "Hällmark eller stenfält på kalfjäll"
                       },
                       {
                         "const": "MY.habitatEnumValue51",
-                        "title": ""
+                        "title": "Myrmark på kalfjäll"
                       },
                       {
                         "const": "MY.habitatEnumValue52",
-                        "title": ""
+                        "title": "Sjö och tjärna (inkl. strand) på kalfjäll"
                       },
                       {
                         "const": "MY.habitatEnumValue53",
@@ -305,135 +354,135 @@
                       },
                       {
                         "const": "MY.habitatEnumValue54",
-                        "title": ""
+                        "title": "Bergsbrant"
                       },
                       {
                         "const": "MY.habitatEnumValue55",
-                        "title": ""
+                        "title": "Vårdbiotop och annan omgivning med mänsklig påverkan"
                       },
                       {
                         "const": "MY.habitatEnumValue56",
-                        "title": ""
+                        "title": "Vårdbiotop"
                       },
                       {
                         "const": "MY.habitatEnumValue57",
-                        "title": ""
+                        "title": "Torräng"
                       },
                       {
                         "const": "MY.habitatEnumValue58",
-                        "title": ""
+                        "title": "Hed"
                       },
                       {
                         "const": "MY.habitatEnumValue59",
-                        "title": ""
+                        "title": "Frisk äng"
                       },
                       {
                         "const": "MY.habitatEnumValue60",
-                        "title": ""
+                        "title": "Hagmark, hamlingsäng eller skogsbete"
                       },
                       {
                         "const": "MY.habitatEnumValue61",
-                        "title": ""
+                        "title": "Fuktäng (annan än strandäng)"
                       },
                       {
                         "const": "MY.habitatEnumValue62",
-                        "title": ""
+                        "title": "Kärräng"
                       },
                       {
                         "const": "MY.habitatEnumValue63",
-                        "title": ""
+                        "title": "Hällmarkstorräng"
                       },
                       {
                         "const": "MY.habitatEnumValue64",
-                        "title": ""
+                        "title": "Dike eller annat schakt (inkl. dikesren)"
                       },
                       {
                         "const": "MY.habitatEnumValue65",
-                        "title": ""
+                        "title": "Vägkant (ren, ramp)"
                       },
                       {
                         "const": "MY.habitatEnumValue66",
-                        "title": ""
+                        "title": "Odlingsmark"
                       },
                       {
                         "const": "MY.habitatEnumValue67",
-                        "title": ""
+                        "title": "Åker"
                       },
                       {
                         "const": "MY.habitatEnumValue68",
-                        "title": ""
+                        "title": "Odlad vall"
                       },
                       {
                         "const": "MY.habitatEnumValue69",
-                        "title": ""
+                        "title": "Träd- och buskodling"
                       },
                       {
                         "const": "MY.habitatEnumValue70",
-                        "title": ""
+                        "title": "Övergiven åker"
                       },
                       {
                         "const": "MY.habitatEnumValue71",
-                        "title": ""
+                        "title": "Park, gårdsplan, trädgård"
                       },
                       {
                         "const": "MY.habitatEnumValue72",
-                        "title": ""
+                        "title": "Park"
                       },
                       {
                         "const": "MY.habitatEnumValue73",
-                        "title": ""
+                        "title": "Herrgård park"
                       },
                       {
                         "const": "MY.habitatEnumValue74",
-                        "title": ""
+                        "title": "Begravningsplats"
                       },
                       {
                         "const": "MY.habitatEnumValue75",
-                        "title": ""
+                        "title": "Gårdsplan"
                       },
                       {
                         "const": "MY.habitatEnumValue76",
-                        "title": ""
+                        "title": "Trädgård"
                       },
                       {
                         "const": "MY.habitatEnumValue77",
-                        "title": ""
+                        "title": "Öppen grässmark"
                       },
                       {
                         "const": "MY.habitatEnumValue78",
-                        "title": ""
+                        "title": "Buskage"
                       },
                       {
                         "const": "MY.habitatEnumValue79",
-                        "title": ""
+                        "title": "Nytthabitat"
                       },
                       {
                         "const": "MY.habitatEnumValue80",
-                        "title": ""
+                        "title": "Vägkant (ren, ramp)"
                       },
                       {
                         "const": "MY.habitatEnumValue81",
-                        "title": ""
+                        "title": "Jordtipp"
                       },
                       {
                         "const": "MY.habitatEnumValue82",
-                        "title": ""
+                        "title": "Markfyllningsområde"
                       },
                       {
                         "const": "MY.habitatEnumValue83",
-                        "title": ""
+                        "title": "Sand- och grusgrop"
                       },
                       {
                         "const": "MY.habitatEnumValue84",
-                        "title": ""
+                        "title": "Torvproduktionsområde"
                       },
                       {
                         "const": "MY.habitatEnumValue85",
-                        "title": ""
+                        "title": "Stenbrott- och gruvområde"
                       },
                       {
                         "const": "MY.habitatEnumValue86",
-                        "title": ""
+                        "title": "Impediment (inkl. hamnen, bangårdar)"
                       },
                       {
                         "const": "MY.habitatEnumValue88",
@@ -449,11 +498,11 @@
                       },
                       {
                         "const": "MY.habitatEnumValue91",
-                        "title": "Eutrophic lake or pond"
+                        "title": "Näringsrik sjö eller tjärna"
                       },
                       {
                         "const": "MY.habitatEnumValue92",
-                        "title": "Lampare tai allikko"
+                        "title": "Göl"
                       },
                       {
                         "const": "MY.habitatEnumValue93",
@@ -577,10 +626,6 @@
                         "type": "string",
                         "oneOf": [
                           {
-                            "const": "",
-                            "title": ""
-                          },
-                          {
                             "const": "MY.recordBasisPreservedSpecimen",
                             "title": "Prov"
                           },
@@ -590,7 +635,7 @@
                           },
                           {
                             "const": "MY.recordBasisHumanObservationPhoto",
-                            "title": "Fotograferade"
+                            "title": "Fotograferat"
                           },
                           {
                             "const": "MY.recordBasisHumanObservationVideo",
@@ -601,7 +646,7 @@
                             "title": "Indirekt observation (fotspår, avföring, etc)"
                           }
                         ],
-                        "title": "Rekords typ"
+                        "title": "Typ av abservation"
                       },
                       "nestType": {
                         "type": "string",
@@ -631,11 +676,11 @@
                             "title": "Andra, vad?"
                           }
                         ],
-                        "title": "Boetyp"
+                        "title": "Botyp"
                       },
                       "nestNotes": {
                         "type": "string",
-                        "title": "Boet förlängning"
+                        "title": "Boidentifierare"
                       },
                       "nestCount": {
                         "type": "integer",
@@ -664,9 +709,13 @@
                           {
                             "const": "MY.indirectObservationTypeFoodStock",
                             "title": "Matförvaring"
+                          },
+                          {
+                            "const": "MY.indirectObservationTypeNone",
+                            "title": "Inga iakttagelser"
                           }
                         ],
-                        "title": "Spår av"
+                        "title": "Spår"
                       },
                       "alive": {
                         "type": "boolean",
@@ -721,6 +770,10 @@
                                 "title": ""
                               },
                               {
+                                "const": "MY.lolifeDroppingsCount0",
+                                "title": ""
+                              },
+                              {
                                 "const": "MY.lolifeDroppingsCount1",
                                 "title": ""
                               },
@@ -729,7 +782,15 @@
                                 "title": ""
                               },
                               {
+                                "const": "MY.lolifeDroppingsCount25",
+                                "title": ""
+                              },
+                              {
                                 "const": "MY.lolifeDroppingsCount3",
+                                "title": ""
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsCount4",
                                 "title": ""
                               }
                             ],
@@ -801,9 +862,16 @@
                           "type": "string"
                         },
                         "title": "Bilder"
+                      },
+                      "nestTreeDiameterInCentimeters": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "title": "Trädets diameter (cm)"
                       }
                     },
-                    "required": []
+                    "required": [
+                      "recordBasis"
+                    ]
                   },
                   "uniqueItems": false,
                   "title": "Observationer"
@@ -879,7 +947,10 @@
             "legPublic",
             "secureLevel",
             "eventTime",
-            "keywords"
+            "keywords",
+            "gatheringFact",
+            "nextMonitoringYear",
+            "namedPlaceNotes"
           ],
           "ui:options": {
             "nests": {
@@ -1019,6 +1090,11 @@
               "allowUndefined": false
             },
             "ui:help": "Du kan gömma observatörsnamn om det behövs genom att välja \"Nej\". Observatörsnamnen är alltid synliga för auktoritativa medel."
+          },
+          "gatheringFact": {
+            "lolifeSiteClassification": {
+              "ui:title": "Luokitus"
+            }
           }
         },
         "editors": {
@@ -1180,7 +1256,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Ny observation"
+                              "label": "Observation"
                             }
                           ]
                         }
@@ -1206,7 +1282,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Ny spår"
+                              "label": "Spår"
                             }
                           ]
                         }
@@ -1231,7 +1307,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Ny bo"
+                              "label": "Bo"
                             }
                           ]
                         }
@@ -1257,7 +1333,7 @@
                               "fn": "addPredefined",
                               "glyph": "plus",
                               "key": "3",
-                              "label": "Ny spillning"
+                              "label": "Spillning"
                             }
                           ]
                         }
@@ -1332,6 +1408,8 @@
                               "count",
                               "taxonConfidence",
                               "recordBasis",
+                              "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ],
                             "uiSchema": {
@@ -1342,7 +1420,17 @@
                                     "MY.recordBasisHumanObservationIndirect"
                                   ]
                                 }
-                              }
+                              },
+                              "ui:order": [
+                                "alive",
+                                "count",
+                                "taxonConfidence",
+                                "recordBasis",
+                                "unitFact_lolifeNestTree",
+                                "nestTreeDiameterInCentimeters",
+                                "notes",
+                                "*"
+                              ]
                             }
                           }
                         },
@@ -1354,6 +1442,7 @@
                               "nestCount",
                               "taxonConfidence",
                               "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ],
                             "uiSchema": {
@@ -1366,6 +1455,7 @@
                                 "nestCount",
                                 "taxonConfidence",
                                 "unitFact_lolifeNestTree",
+                                "nestTreeDiameterInCentimeters",
                                 "notes",
                                 "*"
                               ],
@@ -1385,6 +1475,7 @@
                                     "unitFact_lolifeDroppingsCount",
                                     "unitFact_lolifeDroppingsQuality",
                                     "unitFact_lolifeNestTree",
+                                    "nestTreeDiameterInCentimeters",
                                     "notes"
                                   ],
                                   "uiSchema": {
@@ -1396,6 +1487,7 @@
                                       "unitFact_lolifeDroppingsCount",
                                       "unitFact_lolifeDroppingsQuality",
                                       "unitFact_lolifeNestTree",
+                                      "nestTreeDiameterInCentimeters",
                                       "notes",
                                       "*"
                                     ]
@@ -1420,6 +1512,11 @@
                                   "refs": [
                                     "indirectObs"
                                   ]
+                                },
+                                "MY.indirectObservationTypeNone": {
+                                  "refs": [
+                                    "indirectObs"
+                                  ]
                                 }
                               }
                             },
@@ -1436,6 +1533,7 @@
                           "fields": [
                             "indirectObservationType",
                             "unitFact_lolifeNestTree",
+                            "nestTreeDiameterInCentimeters",
                             "notes"
                           ],
                           "uiSchema": {
@@ -1451,6 +1549,7 @@
                               "*",
                               "indirectObservationType",
                               "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ]
                           }
@@ -1522,7 +1621,8 @@
                   "notes",
                   "*"
                 ]
-              }
+              },
+              "ui:title": "Observationer"
             },
             "ui:order": [
               "gatheringType",

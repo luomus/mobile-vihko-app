@@ -48,6 +48,55 @@
               "dateEnd": {
                 "type": "string",
                 "title": "Loppu"
+              },
+              "gatheringFact": {
+                "type": "object",
+                "properties": {
+                  "lolifeSiteClassification": {
+                    "type": "string",
+                    "oneOf": [
+                      {
+                        "const": "",
+                        "title": ""
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationExcellent",
+                        "title": "Erinomainen"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationSuboptimal",
+                        "title": "Suboptimaalinen"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationPossible",
+                        "title": "Mahdollinen, ei todennäköinen"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationCurrentlyUnsuitable",
+                        "title": "Nykyisellään ei mahdollinen"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationPermanentlyUnsuitable",
+                        "title": "Pysyvästi kelvoton"
+                      }
+                    ],
+                    "title": "Ruudun luokitus"
+                  },
+                  "lolifeSiteClassificationComments": {
+                    "type": "string",
+                    "title": "Luokituksen kommentit"
+                  }
+                },
+                "required": [],
+                "title": ""
+              },
+              "nextMonitoringYear": {
+                "type": "integer",
+                "title": "Seuraava tarkastusvuosi"
+              },
+              "namedPlaceNotes": {
+                "type": "string",
+                "title": "Reitin kuvaus"
               }
             },
             "required": [],
@@ -241,7 +290,7 @@
                       },
                       {
                         "const": "MY.habitatEnumValue38",
-                        "title": "Varpu-heinäkallio tai -kivikko"
+                        "title": "Varpu–heinäkallio tai -kivikko"
                       },
                       {
                         "const": "MY.habitatEnumValue39",
@@ -345,7 +394,7 @@
                       },
                       {
                         "const": "MY.habitatEnumValue64",
-                        "title": "Oja tai muu kaivanto  (sis. ojanpientareet, metsäojat)"
+                        "title": "Oja tai muu kaivanto (sis. ojanpientareet, metsäojat)"
                       },
                       {
                         "const": "MY.habitatEnumValue65",
@@ -577,10 +626,6 @@
                         "type": "string",
                         "oneOf": [
                           {
-                            "const": "",
-                            "title": ""
-                          },
-                          {
                             "const": "MY.recordBasisPreservedSpecimen",
                             "title": "Näyte"
                           },
@@ -664,6 +709,10 @@
                           {
                             "const": "MY.indirectObservationTypeFoodStock",
                             "title": "Ruokavarasto"
+                          },
+                          {
+                            "const": "MY.indirectObservationTypeNone",
+                            "title": "Ei havaintoja"
                           }
                         ],
                         "title": "Jälkiä"
@@ -721,16 +770,28 @@
                                 "title": ""
                               },
                               {
+                                "const": "MY.lolifeDroppingsCount0",
+                                "title": "Ei papanoita"
+                              },
+                              {
                                 "const": "MY.lolifeDroppingsCount1",
-                                "title": "Muutama"
+                                "title": "1-10 (muutamia)"
                               },
                               {
                                 "const": "MY.lolifeDroppingsCount2",
-                                "title": "Kymmeniä"
+                                "title": "10-50 (kymmeniä)"
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsCount25",
+                                "title": "50-100"
                               },
                               {
                                 "const": "MY.lolifeDroppingsCount3",
-                                "title": "Satoja"
+                                "title": "100-500 (satoja)"
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsCount4",
+                                "title": "yli 500"
                               }
                             ],
                             "title": "Papanamäärä"
@@ -801,9 +862,16 @@
                           "type": "string"
                         },
                         "title": "Kuvat"
+                      },
+                      "nestTreeDiameterInCentimeters": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "title": "Puun halkaisija (cm)"
                       }
                     },
-                    "required": []
+                    "required": [
+                      "recordBasis"
+                    ]
                   },
                   "uniqueItems": false,
                   "title": "Havainnot"
@@ -879,7 +947,10 @@
             "legPublic",
             "secureLevel",
             "eventTime",
-            "keywords"
+            "keywords",
+            "gatheringFact",
+            "nextMonitoringYear",
+            "namedPlaceNotes"
           ],
           "ui:options": {
             "nests": {
@@ -1019,6 +1090,11 @@
               "allowUndefined": false
             },
             "ui:help": "Tarvittaessa voit piilottaa havainnoijien nimet avoimesta aineistosta valitsemalla \"Ei\"-vaihtoehdon. Havainnoijien nimet ovat aina viranomaisten käytettävissä."
+          },
+          "gatheringFact": {
+            "lolifeSiteClassification": {
+              "ui:title": "Luokitus"
+            }
           }
         },
         "editors": {
@@ -1332,6 +1408,8 @@
                               "count",
                               "taxonConfidence",
                               "recordBasis",
+                              "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ],
                             "uiSchema": {
@@ -1342,7 +1420,17 @@
                                     "MY.recordBasisHumanObservationIndirect"
                                   ]
                                 }
-                              }
+                              },
+                              "ui:order": [
+                                "alive",
+                                "count",
+                                "taxonConfidence",
+                                "recordBasis",
+                                "unitFact_lolifeNestTree",
+                                "nestTreeDiameterInCentimeters",
+                                "notes",
+                                "*"
+                              ]
                             }
                           }
                         },
@@ -1354,6 +1442,7 @@
                               "nestCount",
                               "taxonConfidence",
                               "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ],
                             "uiSchema": {
@@ -1366,6 +1455,7 @@
                                 "nestCount",
                                 "taxonConfidence",
                                 "unitFact_lolifeNestTree",
+                                "nestTreeDiameterInCentimeters",
                                 "notes",
                                 "*"
                               ],
@@ -1385,6 +1475,7 @@
                                     "unitFact_lolifeDroppingsCount",
                                     "unitFact_lolifeDroppingsQuality",
                                     "unitFact_lolifeNestTree",
+                                    "nestTreeDiameterInCentimeters",
                                     "notes"
                                   ],
                                   "uiSchema": {
@@ -1396,6 +1487,7 @@
                                       "unitFact_lolifeDroppingsCount",
                                       "unitFact_lolifeDroppingsQuality",
                                       "unitFact_lolifeNestTree",
+                                      "nestTreeDiameterInCentimeters",
                                       "notes",
                                       "*"
                                     ]
@@ -1420,6 +1512,11 @@
                                   "refs": [
                                     "indirectObs"
                                   ]
+                                },
+                                "MY.indirectObservationTypeNone": {
+                                  "refs": [
+                                    "indirectObs"
+                                  ]
                                 }
                               }
                             },
@@ -1436,6 +1533,7 @@
                           "fields": [
                             "indirectObservationType",
                             "unitFact_lolifeNestTree",
+                            "nestTreeDiameterInCentimeters",
                             "notes"
                           ],
                           "uiSchema": {
@@ -1451,6 +1549,7 @@
                               "*",
                               "indirectObservationType",
                               "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ]
                           }
@@ -1522,7 +1621,8 @@
                   "notes",
                   "*"
                 ]
-              }
+              },
+              "ui:title": "Havainnot"
             },
             "ui:order": [
               "gatheringType",

@@ -443,7 +443,6 @@ export const observationEventFields = [
   'secureLevel',
   'gatheringEvent_dateBegin',
   'gatheringEvent_dateEnd',
-  'gatherings_0_notes',
   'keywords',
   'gatheringEvent_gatheringFact_lolifeSiteClassification',
   'gatheringEvent_nextMonitoringYear',

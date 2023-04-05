@@ -179,12 +179,14 @@ describe('LoLIFE', () => {
     await waitFor(() => expect(getByTestId('saveButton')).toBeDefined())
     expect(getByText(fi['cancel'])).toBeDefined()
     expect(getByText(fi['delete path'])).toBeDefined()
-    expect(getByText(prop2.gatheringEvent.properties.legPublic.title)).toBeDefined()
-    expect(getByText(prop2.secureLevel.title)).toBeDefined()
-    expect(getByText(prop2.gatheringEvent.properties.dateBegin.title)).toBeDefined() // Alku
-    expect(getByText(prop2.gatheringEvent.properties.dateEnd.title)).toBeDefined() //Loppu
-    expect(getByText(prop.notes.title)).toBeDefined() // Notes
-    expect(getByText(prop2.keywords.title)).toBeDefined()
+    expect(getByText(prop2.gatheringEvent.properties.legPublic.title)).toBeDefined() // Controller names
+    expect(getByText(prop2.secureLevel.title)).toBeDefined() // Secure level
+    expect(getByText(prop2.gatheringEvent.properties.dateBegin.title)).toBeDefined() // Start date
+    expect(getByText(prop2.gatheringEvent.properties.dateEnd.title)).toBeDefined() // End date
+    expect(getByText(prop2.keywords.title)).toBeDefined() // Keywords
+    expect(getByText(prop2.gatheringEvent.properties.gatheringFact.properties.lolifeSiteClassification.title)).toBeDefined() // Site classification
+    expect(getByText(prop2.gatheringEvent.properties.nextMonitoringYear.title)).toBeDefined() // Next monitoring year
+    expect(getByText(prop2.gatheringEvent.properties.namedPlaceNotes.title)).toBeDefined() // Route info
     fireEvent.press(getByTestId('saveButton'))
 
     // Check that the SendEventModal pops up

@@ -48,6 +48,55 @@
               "dateEnd": {
                 "type": "string",
                 "title": "End date"
+              },
+              "gatheringFact": {
+                "type": "object",
+                "properties": {
+                  "lolifeSiteClassification": {
+                    "type": "string",
+                    "oneOf": [
+                      {
+                        "const": "",
+                        "title": ""
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationExcellent",
+                        "title": "Excellent"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationSuboptimal",
+                        "title": "Suboptimal"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationPossible",
+                        "title": "Possible, not likely"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationCurrentlyUnsuitable",
+                        "title": "Currently not possible"
+                      },
+                      {
+                        "const": "MY.lolifeSiteClassificationPermanentlyUnsuitable",
+                        "title": "Permanently invalid"
+                      }
+                    ],
+                    "title": "Site classification"
+                  },
+                  "lolifeSiteClassificationComments": {
+                    "type": "string",
+                    "title": "Classification comments"
+                  }
+                },
+                "required": [],
+                "title": ""
+              },
+              "nextMonitoringYear": {
+                "type": "integer",
+                "title": "Next monitoring year"
+              },
+              "namedPlaceNotes": {
+                "type": "string",
+                "title": "Info about this route"
               }
             },
             "required": [],
@@ -285,11 +334,11 @@
                       },
                       {
                         "const": "MY.habitatEnumValue49",
-                        "title": "Paljakan lähteikkö tai tihkupintaOroarctic/mountain spring complexes and habitats"
+                        "title": "Oroarctic/mountain spring complexes and habitats"
                       },
                       {
                         "const": "MY.habitatEnumValue50",
-                        "title": "Paljakan kallio tai kivikkoOroarctic/ rocky outcrop and scree"
+                        "title": "Oroarctic/ rocky outcrop and scree"
                       },
                       {
                         "const": "MY.habitatEnumValue51",
@@ -297,11 +346,11 @@
                       },
                       {
                         "const": "MY.habitatEnumValue52",
-                        "title": "Paljakan järvi tai lampi (sis. ranta)Oroarctic/mountain lake"
+                        "title": "Oroarctic/mountain lake"
                       },
                       {
                         "const": "MY.habitatEnumValue53",
-                        "title": "Paljakan virtavesi (sis. purot ja rannat)Oroarctic/mountain brookside or a stream"
+                        "title": "Oroarctic/mountain brookside or a stream"
                       },
                       {
                         "const": "MY.habitatEnumValue54",
@@ -413,7 +462,7 @@
                       },
                       {
                         "const": "MY.habitatEnumValue81",
-                        "title": "Dumpling area"
+                        "title": "Dumping area"
                       },
                       {
                         "const": "MY.habitatEnumValue82",
@@ -577,10 +626,6 @@
                         "type": "string",
                         "oneOf": [
                           {
-                            "const": "",
-                            "title": ""
-                          },
-                          {
                             "const": "MY.recordBasisPreservedSpecimen",
                             "title": "Preserved specimen"
                           },
@@ -664,6 +709,10 @@
                           {
                             "const": "MY.indirectObservationTypeFoodStock",
                             "title": "Food stock"
+                          },
+                          {
+                            "const": "MY.indirectObservationTypeNone",
+                            "title": "No sightings"
                           }
                         ],
                         "title": "Tracks"
@@ -721,6 +770,10 @@
                                 "title": ""
                               },
                               {
+                                "const": "MY.lolifeDroppingsCount0",
+                                "title": ""
+                              },
+                              {
                                 "const": "MY.lolifeDroppingsCount1",
                                 "title": ""
                               },
@@ -729,7 +782,15 @@
                                 "title": ""
                               },
                               {
+                                "const": "MY.lolifeDroppingsCount25",
+                                "title": ""
+                              },
+                              {
                                 "const": "MY.lolifeDroppingsCount3",
+                                "title": ""
+                              },
+                              {
+                                "const": "MY.lolifeDroppingsCount4",
                                 "title": ""
                               }
                             ],
@@ -801,9 +862,16 @@
                           "type": "string"
                         },
                         "title": "Images"
+                      },
+                      "nestTreeDiameterInCentimeters": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "title": "Diameter of the tree (cm)"
                       }
                     },
-                    "required": []
+                    "required": [
+                      "recordBasis"
+                    ]
                   },
                   "uniqueItems": false,
                   "title": "Observations"
@@ -879,7 +947,10 @@
             "legPublic",
             "secureLevel",
             "eventTime",
-            "keywords"
+            "keywords",
+            "gatheringFact",
+            "nextMonitoringYear",
+            "namedPlaceNotes"
           ],
           "ui:options": {
             "nests": {
@@ -1019,6 +1090,11 @@
               "allowUndefined": false
             },
             "ui:help": "You can hide the observer names if needed by selecting \"No\". The observer names are always available to authoritatives."
+          },
+          "gatheringFact": {
+            "lolifeSiteClassification": {
+              "ui:title": "Luokitus"
+            }
           }
         },
         "editors": {
@@ -1180,7 +1256,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Add observation"
+                              "label": "Observation"
                             }
                           ]
                         }
@@ -1206,7 +1282,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Add traces"
+                              "label": "Traces"
                             }
                           ]
                         }
@@ -1231,7 +1307,7 @@
                               },
                               "fn": "addPredefined",
                               "glyph": "plus",
-                              "label": "Add nest site"
+                              "label": "Nest site"
                             }
                           ]
                         }
@@ -1257,7 +1333,7 @@
                               "fn": "addPredefined",
                               "glyph": "plus",
                               "key": "3",
-                              "label": "Add droppings"
+                              "label": "Droppings"
                             }
                           ]
                         }
@@ -1332,6 +1408,8 @@
                               "count",
                               "taxonConfidence",
                               "recordBasis",
+                              "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ],
                             "uiSchema": {
@@ -1342,7 +1420,17 @@
                                     "MY.recordBasisHumanObservationIndirect"
                                   ]
                                 }
-                              }
+                              },
+                              "ui:order": [
+                                "alive",
+                                "count",
+                                "taxonConfidence",
+                                "recordBasis",
+                                "unitFact_lolifeNestTree",
+                                "nestTreeDiameterInCentimeters",
+                                "notes",
+                                "*"
+                              ]
                             }
                           }
                         },
@@ -1354,6 +1442,7 @@
                               "nestCount",
                               "taxonConfidence",
                               "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ],
                             "uiSchema": {
@@ -1366,6 +1455,7 @@
                                 "nestCount",
                                 "taxonConfidence",
                                 "unitFact_lolifeNestTree",
+                                "nestTreeDiameterInCentimeters",
                                 "notes",
                                 "*"
                               ],
@@ -1385,6 +1475,7 @@
                                     "unitFact_lolifeDroppingsCount",
                                     "unitFact_lolifeDroppingsQuality",
                                     "unitFact_lolifeNestTree",
+                                    "nestTreeDiameterInCentimeters",
                                     "notes"
                                   ],
                                   "uiSchema": {
@@ -1396,6 +1487,7 @@
                                       "unitFact_lolifeDroppingsCount",
                                       "unitFact_lolifeDroppingsQuality",
                                       "unitFact_lolifeNestTree",
+                                      "nestTreeDiameterInCentimeters",
                                       "notes",
                                       "*"
                                     ]
@@ -1420,6 +1512,11 @@
                                   "refs": [
                                     "indirectObs"
                                   ]
+                                },
+                                "MY.indirectObservationTypeNone": {
+                                  "refs": [
+                                    "indirectObs"
+                                  ]
                                 }
                               }
                             },
@@ -1436,6 +1533,7 @@
                           "fields": [
                             "indirectObservationType",
                             "unitFact_lolifeNestTree",
+                            "nestTreeDiameterInCentimeters",
                             "notes"
                           ],
                           "uiSchema": {
@@ -1451,6 +1549,7 @@
                               "*",
                               "indirectObservationType",
                               "unitFact_lolifeNestTree",
+                              "nestTreeDiameterInCentimeters",
                               "notes"
                             ]
                           }
@@ -1522,7 +1621,8 @@
                   "notes",
                   "*"
                 ]
-              }
+              },
+              "ui:title": "Observations"
             },
             "ui:order": [
               "gatheringType",
