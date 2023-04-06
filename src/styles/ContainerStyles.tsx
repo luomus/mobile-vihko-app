@@ -28,7 +28,8 @@ const ContainerStyles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
-    backgroundColor: Colors.neutral3
+    backgroundColor: Colors.neutral3,
+    maxHeight: '90%'
   },
   padding5Container: {
     padding: 5
@@ -43,10 +44,12 @@ const ContainerStyles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     backgroundColor: Colors.neutral2,
-    maxWidth: 320
+    maxHeight: '90%',
+    maxWidth: '90%'
   },
   modalCloseContainer: {
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
+    marginRight: 10
   },
   rowContainer: {
     flexDirection: 'row'
@@ -163,14 +166,9 @@ const ContainerStyles = StyleSheet.create({
     marginTop: 5,
   },
   filterPickerOverlayContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'black',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: '90%'
   },
   unfinishedEventButtonsContainer: {
     paddingHorizontal: 5,
@@ -208,6 +206,12 @@ const ContainerStyles = StyleSheet.create({
   versionContainer: {
     alignItems: 'stretch',
     justifyContent: 'flex-end'
+  },
+  zoneListFilterInput: {
+    flex: 1,
+    fontSize: 18,
+    paddingVertical: 15,
+    paddingHorizontal: 10
   },
 
   //map component

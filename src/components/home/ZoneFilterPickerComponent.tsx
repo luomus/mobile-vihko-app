@@ -35,7 +35,8 @@ const ZoneFilterPickerComponent = (props: Props) => {
         value={search}
         onChangeText={setSearch}
         placeholder={props.placeholderText}
-        style={Cs.listFilterInput}
+        placeholderTextColor={Colors.neutral5}
+        style={Cs.zoneListFilterInput}
         ref={textInput}
       />
       <Icon
@@ -61,7 +62,7 @@ const ZoneFilterPickerComponent = (props: Props) => {
     return (
       <TouchableOpacity onPress={() => props.onSelect(item.key)} key={item.key}
         style={Cs.listElementContainer}>
-        <Text style={Ts.listText}>
+        <Text style={Ts.zoneListText}>
           {item.label}
         </Text>
       </TouchableOpacity>
@@ -71,19 +72,20 @@ const ZoneFilterPickerComponent = (props: Props) => {
   const filteredZones = props.options.filter(createFilter(search, ['label']))
 
   return (
-    <Modal isVisible={props.visible} backdropOpacity={10} onBackButtonPress={props.onCancel}
-      style={Cs.filterPickerOverlayContainer}>
-      <ButtonComponent onPressFunction={() => props.onCancel()} title={t('cancel')}
-        height={40} width={120} buttonStyle={Bs.textAndIconButton}
-        gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
-      />
-      <FlatList
-        data={filteredZones}
-        renderItem={renderZone}
-        ListHeaderComponent={FilterInput}
-        style={Cs.filterPickerContainer}
-      />
+    <Modal isVisible={props.visible} backdropOpacity={10} onBackButtonPress={props.onCancel}>
+      <View style={Cs.filterPickerOverlayContainer}>
+        <ButtonComponent onPressFunction={() => props.onCancel()} title={t('cancel')}
+          height={40} width={120} buttonStyle={Bs.textAndIconButton}
+          gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+          textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+        />
+        <FlatList
+          data={filteredZones}
+          renderItem={renderZone}
+          ListHeaderComponent={FilterInput}
+          style={Cs.filterPickerContainer}
+        />
+      </View>
     </Modal>
   )
 }

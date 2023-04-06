@@ -64,7 +64,7 @@ const FormAtlasCodeComponent = (props: Props) => {
                 title={atlasCode} height={40} width={80}
                 color={Colors.unavailableButton}
                 textStyle={Ts.languageAndAtlasCodeButtonText}
-                textColor={Colors.darkText}
+                textColor={Colors.darkText} noMargin
               />
               :
               <AtlasCodeStampComponent

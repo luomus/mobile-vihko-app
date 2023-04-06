@@ -62,7 +62,7 @@ const AtlasCodeStampComponent = (props: Props) => {
       gradientColorEnd={color}
       shadowColor={Colors.neutralShadow}
       textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
-      contentColor={color === Colors.atlasCodeBlueButton ? Colors.whiteText : Colors.blackText}
+      contentColor={color === Colors.atlasCodeBlueButton ? Colors.whiteText : Colors.blackText} noMargin
     />
   )
 }

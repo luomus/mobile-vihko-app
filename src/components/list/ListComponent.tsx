@@ -111,7 +111,11 @@ const ListComponent = (props: Props) => {
     } else if (order === 'scientific') {
       setFilteredObservations(observed.filter(createFilter(search, ['scientificName'])))
     } else {
-      setFilteredObservations(observed.filter(createFilter(search, ['identifications.0.taxon'])))
+      setFilteredObservations(observed.filter(createFilter(search,
+        schema.formID === forms.birdAtlas
+          ? ['identifications.0.taxon']
+          : ['identifications.0.taxonVerbatim']
+      )))
     }
   }
 
@@ -133,7 +137,7 @@ const ListComponent = (props: Props) => {
     >
       <Text style={(item.atlasCode || item.count || taxaOnMap.includes(getTaxonID(item))) ?
         Ts.listBoldText : Ts.listText}>
-        { order !== 'scientific' ? getTaxonName(item) : item.scientificName }
+        {order !== 'scientific' ? getTaxonName(item) : item.scientificName}
       </Text>
       {
         item.atlasCode ?

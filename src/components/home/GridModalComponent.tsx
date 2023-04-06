@@ -243,7 +243,6 @@ const GridModalComponent = (props: Props) => {
   }
 
   const showError = (error: string) => {
-    console.log('show ', error)
     dispatch(setMessageState({
       type: 'err',
       messageContent: error,

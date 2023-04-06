@@ -139,6 +139,9 @@ const TextStyles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 10
   },
+  zoneListText: {
+    fontSize: 18
+  },
 
   //map component
   centeredBold: {
