@@ -179,13 +179,22 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
   return async (dispatch, getState) => {
     const { credentials, observationEventInterrupted, observationEvent, tracking } = getState()
 
+    if (!observationEventInterrupted) {
+      onPressMap()
+      return Promise.resolve()
+    }
+
+    const formID = observationEvent.events[observationEvent.events.length - 1].formID
+
     //switch schema
-    await dispatch(switchSchema(observationEvent.events[observationEvent.events.length - 1].formID, i18n.language))
+    await dispatch(switchSchema(formID, i18n.language))
 
-    const currentObservationZone = await storageService.fetch('currentZoneId')
-    dispatch(setCurrentObservationZone(currentObservationZone))
+    if (formID === forms.lolife) {
+      const currentObservationZone = await storageService.fetch('currentZoneId')
+      dispatch(setCurrentObservationZone(currentObservationZone))
+    }
 
-    if (observationEvent.events[observationEvent.events.length - 1].grid) {
+    if (formID === forms.birdAtlas && observationEvent.events[observationEvent.events.length - 1].grid) {
       const grid = observationEvent.events[observationEvent.events.length - 1].grid
       let location: LocationObject
       try {
@@ -209,14 +218,9 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
         e: grid.e,
         geometry: YKJCoordinateIntoWGS84Grid(grid.n, grid.e),
         name: grid.name,
-        pauseGridCheck: Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n,
-        outsideBorders: (Math.trunc(ykjCoords[0] / 100000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n) ? 'true' : 'false'
+        pauseGridCheck: Math.trunc(ykjCoords[0] / 10000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n,
+        outsideBorders: (Math.trunc(ykjCoords[0] / 10000) !== grid.e || Math.trunc(ykjCoords[1] / 10000) !== grid.n) ? 'true' : 'false'
       }))
-    }
-
-    if (!observationEventInterrupted) {
-      onPressMap()
-      return Promise.resolve()
     }
 
     //check that person token isn't expired
@@ -274,6 +278,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     } else {
       dispatch(setPath([[]]))
     }
+
     dispatch(setObservationEventInterrupted(false))
     onPressMap()
     return Promise.resolve()
