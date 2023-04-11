@@ -444,6 +444,7 @@ export const observationEventFields = [
   'gatheringEvent_dateBegin',
   'gatheringEvent_dateEnd',
   'keywords',
+  'notes',
   'gatheringEvent_gatheringFact_lolifeSiteClassification',
   'gatheringEvent_nextMonitoringYear',
   'gatheringEvent_namedPlaceNotes'
