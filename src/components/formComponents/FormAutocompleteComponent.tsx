@@ -222,6 +222,15 @@ const FormAutocompleteComponent = (props: Props) => {
     setHideResult(true)
   }
 
+  // override for taxonVerbatim label
+  const getTitle = () => {
+    if (valueField !== 'identifications_0_taxonVerbatim') {
+      return props.title
+    } else {
+      return t('species')
+    }
+  }
+
   const errorMessageTranslation = (errorMessage: string): Element => {
     const errorTranslation = t(errorMessage)
     return <Text style={Ts.redText}>{errorTranslation}</Text>
@@ -262,7 +271,7 @@ const FormAutocompleteComponent = (props: Props) => {
     return (
       <View style={[Cs.padding10Container, { zIndex: Platform.OS === 'ios' ? props.index : undefined }]}>
         <View style={Cs.rowContainer}>
-          <Text>{props.title}</Text>
+          <Text>{getTitle()}</Text>
           {
             props.autocompleteParams.validation?.required ?
               <Text style={Ts.redText}> *</Text>
