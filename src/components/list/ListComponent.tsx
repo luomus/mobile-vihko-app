@@ -51,7 +51,9 @@ const ListComponent = (props: Props) => {
 
   const getTaxonID = (unit: Record<string, any>) => {
     if (schema.formID === forms.birdAtlas || !unit.id.includes('complete_list')) {
-      return unit.unitFact.autocompleteSelectedTaxonID
+      return unit.unitFact?.autocompleteSelectedTaxonID
+        ? unit.unitFact.autocompleteSelectedTaxonID
+        : undefined
     } else {
       return unit.identifications[0].taxonID
     }
