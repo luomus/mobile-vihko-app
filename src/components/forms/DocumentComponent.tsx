@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -298,7 +298,6 @@ const DocumentComponent = (props: Props) => {
             </View>
             : null
           }
-          <Text style={Ts.redTextWithPadding}>{t('required field')} *</Text>
           <View style={Cs.formContentContainer}>
             <FormProvider {...methods}>
               <>{form}</>
