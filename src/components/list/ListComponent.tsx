@@ -38,8 +38,7 @@ const ListComponent = (props: Props) => {
   const [picked, setPicked] = useState<Record<string, any>[]>([])
   const [unpicked, setUnpicked] = useState<Record<string, any>[]>([])
   const [search, setSearch] = useState<string>('')
-  const [orderOptions, setOrderOptions] = useState<Array<string>>(['default', 'systematic', 'name', 'scientific'])
-  const [order, setOrder] = useState<string>('default')
+  const [order, setOrder] = useState<string>('commonness')
 
   const textInput = useRef<TextInput | null>(null)
 
@@ -69,7 +68,7 @@ const ListComponent = (props: Props) => {
 
   useEffect(() => {
     if (schema.formID === forms.birdAtlas) {
-      setOrderOptions(['default', 'name', 'scientific']) // add commonness later
+      setOrder('systematic')
     }
   }, [])
 
@@ -110,7 +109,7 @@ const ListComponent = (props: Props) => {
   const updateList = () => {
     if (!observed) {
       return
-    } else if (order === 'scientific') {
+    } else if (order === 'scientific' || order === 'scientific-systematic') {
       setFilteredObservations(observed.filter(createFilter(search, ['scientificName'])))
     } else {
       setFilteredObservations(observed.filter(createFilter(search,
@@ -139,7 +138,7 @@ const ListComponent = (props: Props) => {
     >
       <Text style={(item.atlasCode || item.count || taxaOnMap.includes(getTaxonID(item))) ?
         Ts.listBoldText : Ts.listText}>
-        {order !== 'scientific' ? getTaxonName(item) : item.scientificName}
+        {(order !== 'scientific' && order !== 'scientific-systematic') ? getTaxonName(item) : item.scientificName}
       </Text>
       {
         item.atlasCode ?
@@ -176,7 +175,6 @@ const ListComponent = (props: Props) => {
         observedUnedited={observedUnedited}
         picked={picked}
         unpicked={unpicked}
-        orderOptions={orderOptions}
         order={order}
         setOrder={setOrder}
       />

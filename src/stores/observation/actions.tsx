@@ -15,7 +15,7 @@ import {
   CLEAR_OBSERVATION_ID,
 } from './types'
 import { forms } from '../../config/fields'
-import { getBirdList, getCompleteList } from '../../services/atlasService'
+import { getCompleteList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -575,15 +575,11 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
 
     let taxonList: Record<string, any>[] = []
 
-    let taxonSetID = 'MX.taxonSetBirdAtlasCommon'
+    let taxonSetID = 'BirdAtlas'
     if (formID === forms.dragonflyForm) taxonSetID = 'MX.taxonSetBiomonCompleteListOdonata'
 
     try {
-      if (taxonSetID === 'MX.taxonSetBirdAtlasCommon') {
-        taxonList = await getBirdList()
-      } else {
-        taxonList = await getCompleteList(taxonSetID, gridNumber)
-      }
+      taxonList = await getCompleteList(taxonSetID, gridNumber)
     } catch (error: any) {
       captureException(error)
       log.error({
@@ -618,7 +614,7 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
       const res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
       const observation = {}
 
-      if (taxonSetID === 'MX.taxonSetBirdAtlasCommon') {
+      if (taxonSetID === 'BirdAtlas') {
         set(observation, 'id', `complete_list_${uuid.v4()}`)
         set(observation, 'identifications', [{ taxon: getTaxonName(item) }])
         set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
@@ -637,7 +633,7 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
     }))
 
     //sort the observations based on the correct order
-    if (taxonSetID === 'MX.taxonSetBirdAtlasCommon') {
+    if (taxonSetID === 'BirdAtlas') {
       observations.sort((a, b) => {
         return nameList.indexOf(a.identifications[0].taxon) - nameList.indexOf(b.identifications[0].taxon)
       })

@@ -78,6 +78,7 @@
   "filter.default": "Default order",
   "filter.name": "Alphabetical order",
   "filter.scientific": "Alphabetical order, scientific",
+  "filter.scientific-systematic": "Systematic order, scientific",
   "filter.systematic": "Systematic order",
   "finland": "Finland",
   "flying squirrel": "Flying squirrel",

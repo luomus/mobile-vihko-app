@@ -1,10 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
-import { useSelector } from 'react-redux'
 import { Picker } from '@react-native-picker/picker'
 import { useTranslation } from 'react-i18next'
-import { rootState } from '../../stores'
-import { forms } from '../../config/fields'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 
@@ -14,27 +11,24 @@ type Props = {
   observedUnedited: any[] | undefined,
   picked: Record<string, any>[],
   unpicked: Record<string, any>[],
-  orderOptions: Array<string>
   order: string,
   setOrder: React.Dispatch<React.SetStateAction<string>>
 }
 
 const ListSorterComponent = (props: Props) => {
 
-  const schema = useSelector((state: rootState) => state.schema)
-
   const { t } = useTranslation()
 
   const sortTaxonList = (itemValue: string) => {
     if (props.picked.length < 1 && props.unpicked.length < 1) return
 
-    if ((itemValue === 'default' && schema.formID !== forms.birdAtlas) || itemValue === 'commonness') {
+    if (itemValue === 'commonness') {
       if (props.observedUnedited) {
         props.setObserved(props.observedUnedited)
         props.updateList()
       }
 
-    } else if (itemValue === 'systematic' || (itemValue === 'default' && schema.formID === forms.birdAtlas)) {
+    } else if (itemValue === 'systematic') {
       const sortBySystematicOrder = (list: Record<string, any>[]) => {
         return list.sort((a, b) => a.taxonomicOrder - b.taxonomicOrder)
       }
@@ -72,6 +66,15 @@ const ListSorterComponent = (props: Props) => {
       const unpickedSorted = sortByScientificName(props.unpicked)
       props.setObserved(pickedSorted.concat(unpickedSorted))
       props.updateList()
+
+    } else if (itemValue === 'scientific-systematic') {
+      const sortBySystematicOrder = (list: Record<string, any>[]) => {
+        return list.sort((a, b) => a.taxonomicOrder - b.taxonomicOrder)
+      }
+      const pickedSorted = sortBySystematicOrder(props.picked)
+      const unpickedSorted = sortBySystematicOrder(props.unpicked)
+      props.setObserved(pickedSorted.concat(unpickedSorted))
+      props.updateList()
     }
   }
 
@@ -85,11 +88,11 @@ const ListSorterComponent = (props: Props) => {
           sortTaxonList(itemValue)
         }}
       >
-        {
-          props.orderOptions.map(option => (
-            <Picker.Item key={option} label={t(`filter.${option}`)} value={option} style={{ fontSize: 24, color: Colors.neutral6 }} />
-          ))
-        }
+        <Picker.Item key={'commonness'} label={t('filter.commonness')} value={'commonness'} style={{ fontSize: 24, color: Colors.neutral6 }} />
+        <Picker.Item key={'systematic'} label={t('filter.systematic')} value={'systematic'} style={{ fontSize: 24, color: Colors.neutral6 }} />
+        <Picker.Item key={'name'} label={t('filter.name')} value={'name'} style={{ fontSize: 24, color: Colors.neutral6 }} />
+        <Picker.Item key={'scientific'} label={t('filter.scientific')} value={'scientific'} style={{ fontSize: 24, color: Colors.neutral6 }} />
+        <Picker.Item key={'scientific-systematic'} label={t('filter.scientific-systematic')} value={'scientific-systematic'} style={{ fontSize: 24, color: Colors.neutral6 }} />
       </Picker>
     </View>
   )
