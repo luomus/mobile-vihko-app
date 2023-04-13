@@ -154,6 +154,9 @@ export const overrideMHL117Fields = {
     field: 'autocomplete',
     params: {
       target: 'taxon',
+      filters: {
+        informalTaxonGroup: 'MVL.1'
+      },
       valueField: 'identifications_0_taxon',
       validation: {
         required: {
@@ -373,6 +376,9 @@ export const overrideMHL932Fields = {
     field: 'autocomplete',
     params: {
       target: 'taxon',
+      filters: {
+        taxonSet: 'MX.taxonSetBiomonCompleteListOdonata'
+      },
       valueField: 'identifications_0_taxonVerbatim',
       validation: {
         required: {

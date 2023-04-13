@@ -159,9 +159,26 @@ const FormAutocompleteComponent = (props: Props) => {
         cancel()
       }
 
-      const res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
+      let autocompleteOptions: {
+        data: Record<string, any>
+        element: JSX.Element
+      }[] = []
 
-      const autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
+      //do not include non-filtered options for fungi atlas
+      if (!filters || filters.informalTaxonGroup === 'MVL.233,MVL.321') {
+        const res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
+        autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
+
+      //priotize filtered options over random options
+      } else {
+        const resultsWithFilters = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
+        const resultsWithoutFilters = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelToken)
+        const res = {
+          query: resultsWithFilters.query,
+          result: resultsWithFilters.result.concat(resultsWithoutFilters.result)
+        }
+        autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query)).slice(0, 5)
+      }
 
       setOptions(autocompleteOptions)
 
