@@ -15,7 +15,7 @@ import {
   CLEAR_OBSERVATION_ID,
 } from './types'
 import { forms } from '../../config/fields'
-import { getCompleteList } from '../../services/atlasService'
+import { getBirdList, getCompleteList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
 import userService from '../../services/userService'
@@ -579,7 +579,11 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
     if (formID === forms.dragonflyForm) taxonSetID = 'MX.taxonSetBiomonCompleteListOdonata'
 
     try {
-      taxonList = await getCompleteList(taxonSetID, gridNumber)
+      if (taxonSetID === 'BirdAtlas') {
+        taxonList = await getBirdList()
+      } else {
+        taxonList = await getCompleteList(taxonSetID, gridNumber)
+      }
     } catch (error: any) {
       captureException(error)
       log.error({

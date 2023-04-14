@@ -179,7 +179,7 @@ describe('TripForm', () => {
     fireEvent.press(getByText(fi['do not submit']))
 
     // Check that we are back at the home screen
-    await waitFor(() => expect(getAllByText(fi['trip form'])).toHaveLength(2))
+    await waitFor(() => expect(getAllByText(fi['trip form'])).toHaveLength(3))
     await waitFor(() => expect(getAllByText(fi['bird atlas'])).toHaveLength(2))
     expect(getByText(fi['fungi atlas'])).toBeDefined()
     expect(getByText(fi['lolife'])).toBeDefined()

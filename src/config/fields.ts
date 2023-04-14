@@ -154,9 +154,6 @@ export const overrideMHL117Fields = {
     field: 'autocomplete',
     params: {
       target: 'taxon',
-      filters: {
-        taxonSet: 'BirdAtlas'
-      },
       valueField: 'identifications_0_taxon',
       validation: {
         required: {
