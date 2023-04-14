@@ -85,7 +85,6 @@ const FormPickerComponent = (props: Props) => {
           type='material-icons'
           color={Colors.neutral7}
           size={22}
-          tvParallaxProperties={undefined}
         />
       </TouchableOpacity>
     </View>

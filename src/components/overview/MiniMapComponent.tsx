@@ -38,7 +38,6 @@ const MiniMapComponent = (props: Props) => {
               name={'location-pin'}
               size={45}
               color={Colors.observationColor}
-              tvParallaxProperties={undefined}
             />
             : null
         }

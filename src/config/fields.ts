@@ -155,7 +155,7 @@ export const overrideMHL117Fields = {
     params: {
       target: 'taxon',
       filters: {
-        informalTaxonGroup: 'MVL.1'
+        taxonSet: 'BirdAtlas'
       },
       valueField: 'identifications_0_taxon',
       validation: {

@@ -38,7 +38,7 @@ const ButtonComponent = (props: Props) => {
           style={[props.buttonStyle, { width: props.width, height: props.height }]}>
           {props.iconName ?
             <Icon name={props.iconName} type={props.iconType} color={props.contentColor} size={props.iconSize}
-              containerStyle={{ marginTop: 5 }} tvParallaxProperties={undefined} />
+              containerStyle={{ marginTop: 5 }} />
             : null
           }
           <Text style={[props.textStyle, { color: props.contentColor }, { width: props.textWidth }]} numberOfLines={1}>{props.title ? ' ' + props.title : ''}</Text>

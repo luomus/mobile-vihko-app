@@ -275,9 +275,9 @@ const FormAutocompleteComponent = (props: Props) => {
           {loading ?
             <ActivityIndicator size={25} color={Colors.primary5} />
             : selected ?
-              <Icon iconStyle={{ padding: 5, color: Colors.successButton1 }} name='done' type='material-icons' size={25} tvParallaxProperties={undefined} />
+              <Icon iconStyle={{ padding: 5, color: Colors.successButton1 }} name='done' type='material-icons' size={25} />
               : query !== '' ?
-                <Icon iconStyle={{ padding: 5, color: Colors.primary5 }} name='warning' type='material-icons' size={25} tvParallaxProperties={undefined} />
+                <Icon iconStyle={{ padding: 5, color: Colors.primary5 }} name='warning' type='material-icons' size={25} />
                 : null
           }
         </View>

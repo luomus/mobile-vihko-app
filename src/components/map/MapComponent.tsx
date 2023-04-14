@@ -290,7 +290,6 @@ const MapComponent = (props: Props) => {
         type={'material-icons'}
         name={'my-location'}
         size={50}
-        tvParallaxProperties={undefined}
       />
     </Marker>
     : null
@@ -350,7 +349,6 @@ const MapComponent = (props: Props) => {
             name={'location-pin'}
             size={45}
             color={Colors.pathColor}
-            tvParallaxProperties={undefined}
           />
           : null
       }
@@ -440,7 +438,6 @@ const MapComponent = (props: Props) => {
                 name={'location-pin'}
                 size={45}
                 color={color}
-                tvParallaxProperties={undefined}
               />
               : null
           }

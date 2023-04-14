@@ -154,7 +154,6 @@ const ListComponent = (props: Props) => {
                 size={30}
                 color={Colors.neutral5}
                 containerStyle={{ paddingRight: 30 }}
-                tvParallaxProperties={undefined}
               />
               : null
       }

@@ -30,7 +30,6 @@ const AtlasModalComponent = (props: Props) => {
           color={Colors.dangerButton2}
           containerStyle={Cs.modalCloseContainer}
           onPress={() => props.onBackButtonPress()}
-          tvParallaxProperties={undefined}
         />
         <Text>{t('you have chosen the grid') + ' ' + grid?.n + ':' + grid?.e + ' ' + grid?.name + '. ' + t('grid description')}
           {'\n\n'}

@@ -190,7 +190,6 @@ const GridModalComponent = (props: Props) => {
         type={'material-icons'}
         name={'my-location'}
         size={50}
-        tvParallaxProperties={undefined}
       />
     </Marker>
     : null

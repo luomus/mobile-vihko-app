@@ -50,7 +50,6 @@ const ZoneFilterPickerComponent = (props: Props) => {
           textInput.current?.focus()
         }}
         iconStyle={Cs.listFilterIcon}
-        tvParallaxProperties={undefined}
       />
     </View>
   )

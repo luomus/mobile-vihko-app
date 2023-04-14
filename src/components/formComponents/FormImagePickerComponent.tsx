@@ -129,7 +129,6 @@ const ImagePickerComponent = (props: Props) => {
               color={'red'}
               size={22}
               onPress={() => { showRemoveImage(image.uri) }}
-              tvParallaxProperties={undefined}
             />
           </View>
         </ImageBackground>

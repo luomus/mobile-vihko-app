@@ -102,7 +102,6 @@ const UserModalComponent = (props: Props) => {
           color={Colors.dangerButton2}
           containerStyle={Cs.modalCloseContainer}
           onPress={() => props.onClose()}
-          tvParallaxProperties={undefined}
         />
         <View style={Cs.userDetailsContainer}>
           <View>

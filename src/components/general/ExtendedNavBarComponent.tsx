@@ -1,6 +1,7 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import {
   rootState,
@@ -23,7 +24,6 @@ import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
-import SelectedButtonComponent from './SelectedButtonComponent'
 import { log } from '../../helpers/logger'
 
 type Props = {
@@ -152,15 +152,16 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   return (
     <View style={Cs.stopObservingContainer}>
-      <View style={{ flexDirection: 'row', width: '50%' }}>
-        <View style={{ paddingHorizontal: 2, width: '50%' }}>
-          <ButtonComponent onPressFunction={() => { stopObserving() }} title={t('stop')}
-            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.dangerButton1}
-            gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
-            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin
-          />
-        </View>
-        <View style={{ paddingHorizontal: 2, width: '50%' }}>
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={{ color: Colors.whiteText, alignSelf: 'center' }}>{tracking ? t('tracking') : t('no tracking')}</Text>
+        {tracking ?
+          <Icon iconStyle={{ color: 'white' }} containerStyle={{ alignSelf: 'center', paddingLeft: 5 }} name='near-me' type='material-icons' size={25} />
+          :
+          <Icon iconStyle={{ color: 'white' }} containerStyle={{ alignSelf: 'center', paddingLeft: 5 }} name='near-me-disabled' type='material-icons' size={25} />
+        }
+      </View>
+      <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
+        <View style={{ paddingHorizontal: 2, width: 80 }}>
           <ButtonComponent disabled={grid?.outsideBorders === 'true'}
             onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
             title={tracking ? t('pause') : t('continue')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
@@ -170,35 +171,23 @@ const ExtendedNavBarComponent = (props: Props) => {
             iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
           />
         </View>
-      </View>
-      {schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm ?
-        <View style={{ flexDirection: 'row', width: '50%' }}>
-          <View style={{ paddingHorizontal: 2, width: '50%' }}>
-            {props.onPressMap === undefined ?
-              <SelectedButtonComponent onPress={() => null} title={t('map')} height={30} color={Colors.neutral5}
-                textStyle={Ts.mapToListButtonText} textColor={Colors.darkText} noMargin
-              /> :
-              <ButtonComponent onPressFunction={() => { props.onPressMap === undefined ? null : props.onPressMap() }} title={t('map')}
-                height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.neutralButton}
-                gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
-                iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
-              />
-            }
-          </View>
-          <View style={{ paddingHorizontal: 2, width: '50%' }}>
-            {props.onPressList === undefined ?
-              <SelectedButtonComponent onPress={() => null} title={t('list')} height={30} color={Colors.neutral5}
-                textStyle={Ts.mapToListButtonText} textColor={Colors.darkText} noMargin
-              /> :
-              <ButtonComponent onPressFunction={() => { props.onPressList === undefined ? null : props.onPressList() }} title={t('list')}
-                height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.neutralButton}
-                gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
-                iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
-              />
-            }
-          </View>
+        <View style={{ paddingHorizontal: 2, width: 80 }}>
+          <ButtonComponent onPressFunction={() => { stopObserving() }} title={t('stop')}
+            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.dangerButton1}
+            gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
+            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin
+          />
         </View>
-        : null}
+        {schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm ?
+          <View style={{ paddingHorizontal: 2, width: 80 }}>
+            <ButtonComponent onPressFunction={() => props.onPressMap ? props.onPressMap() : props.onPressList ? props.onPressList() : undefined}
+              title={props.onPressMap ? t('map') : t('list')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
+            />
+          </View>
+          : null}
+      </View>
     </View>
   )
 }

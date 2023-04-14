@@ -39,7 +39,6 @@ const MapModalComponent = (props: Props) => {
             color={Colors.dangerButton2}
             containerStyle={Cs.modalCloseContainer}
             onPress={() => props.onBackButtonPress()}
-            tvParallaxProperties={undefined}
           />
           <ScrollView style={{ width: '100%' }}>
             {props.observationOptions.map(observation =>

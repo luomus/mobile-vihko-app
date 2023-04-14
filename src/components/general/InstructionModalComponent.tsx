@@ -98,7 +98,6 @@ const InstructionModalComponent = (props: Props) => {
             color={Colors.dangerButton2}
             containerStyle={Cs.modalCloseContainer}
             onPress={() => props.onClose()}
-            tvParallaxProperties={undefined}
           />
           <Text>
             <Trans i18nKey={'instructions.' + props.screen} components={links} />

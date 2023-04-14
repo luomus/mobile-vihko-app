@@ -52,7 +52,6 @@ const ListFilterComponent = (props: Props) => {
           props.textInput.current?.focus()
         }}
         iconStyle={Cs.listFilterIcon}
-        tvParallaxProperties={undefined}
       />
     </View>
   )
