@@ -47,6 +47,11 @@ const TextStyles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 15,
   },
+  trackingText: {
+    alignSelf: 'center',
+    color: Colors.whiteText,
+    fontSize: 15
+  },
   zonePickerDescription: {
     color: Colors.neutral7,
     fontSize: 16,

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import {
   rootState,
@@ -153,12 +152,7 @@ const ExtendedNavBarComponent = (props: Props) => {
   return (
     <View style={Cs.stopObservingContainer}>
       <View style={{ flexDirection: 'row' }}>
-        <Text style={{ color: Colors.whiteText, alignSelf: 'center' }}>{tracking ? t('tracking') : t('no tracking')}</Text>
-        {tracking ?
-          <Icon iconStyle={{ color: 'white' }} containerStyle={{ alignSelf: 'center', paddingLeft: 5 }} name='near-me' type='material-icons' size={25} />
-          :
-          <Icon iconStyle={{ color: 'white' }} containerStyle={{ alignSelf: 'center', paddingLeft: 5 }} name='near-me-disabled' type='material-icons' size={25} />
-        }
+        <Text style={Ts.trackingText}>{tracking ? t('tracking') : t('no tracking')}</Text>
       </View>
       <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
         <View style={{ paddingHorizontal: 2, width: 80 }}>
