@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { useTranslation } from 'react-i18next'
@@ -18,6 +18,10 @@ type Props = {
 const ListSorterComponent = (props: Props) => {
 
   const { t } = useTranslation()
+
+  useEffect(() => {
+    sortTaxonList(props.order)
+  }, [props.order])
 
   const sortTaxonList = (itemValue: string) => {
     if (props.picked.length < 1 && props.unpicked.length < 1) return

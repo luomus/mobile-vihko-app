@@ -42,9 +42,6 @@ export const personTokenUrl       = `${API_URL}/person-token/`
 //news url
 export const getNewsUrl           = `${API_URL}/news`
 
-//bird list url
-export const birdListUrl          = `${ATLAS_API_URL}/taxon`
-
 //complete list url
 export const completeListUrl      = `${ATLAS_API_URL}/taxon/biomon`
 

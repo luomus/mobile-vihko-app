@@ -31,6 +31,12 @@ type Props = {
 
 const ListComponent = (props: Props) => {
 
+  const textInput = useRef<TextInput | null>(null)
+
+  const grid = useSelector((state: rootState) => state.grid)
+  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const schema = useSelector((state: rootState) => state.schema)
+
   const [observed, setObserved] = useState<any[] | undefined>(undefined)
   const [observedUnedited, setObservedUnedited] = useState<any[] | undefined>(undefined)
   const [filteredObservations, setFilteredObservations] = useState<any[] | undefined>(undefined)
@@ -39,13 +45,7 @@ const ListComponent = (props: Props) => {
   const [picked, setPicked] = useState<Record<string, any>[]>([])
   const [unpicked, setUnpicked] = useState<Record<string, any>[]>([])
   const [search, setSearch] = useState<string>('')
-  const [order, setOrder] = useState<string>('commonness')
-
-  const textInput = useRef<TextInput | null>(null)
-
-  const grid = useSelector((state: rootState) => state.grid)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const schema = useSelector((state: rootState) => state.schema)
+  const [order, setOrder] = useState<string>(schema.formID === forms.birdAtlas ? 'systematic' : 'commonness')
 
   const dispatch: DispatchType = useDispatch()
 
@@ -66,12 +66,6 @@ const ListComponent = (props: Props) => {
       return unit.identifications[0].taxonVerbatim
     }
   }
-
-  useEffect(() => {
-    if (schema.formID === forms.birdAtlas) {
-      setOrder('systematic')
-    }
-  }, [])
 
   useEffect(() => {
     const units: Record<string, any>[] = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.units
