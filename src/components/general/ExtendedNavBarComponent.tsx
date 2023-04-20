@@ -28,7 +28,8 @@ import { log } from '../../helpers/logger'
 type Props = {
   onPressMap: (() => void) | undefined,
   onPressList: (() => void) | undefined,
-  onPressFinishObservationEvent: (sourcePage: string) => void
+  onPressFinishObservationEvent: (sourcePage: string) => void,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ExtendedNavBarComponent = (props: Props) => {
@@ -51,6 +52,8 @@ const ExtendedNavBarComponent = (props: Props) => {
       okLabel: t('stop'),
       cancelLabel: t('do not stop'),
       onOk: async () => {
+        props.setLoading(true)
+
         dispatch(setObservationId({
           eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
           unitId: null
@@ -70,6 +73,7 @@ const ExtendedNavBarComponent = (props: Props) => {
           }
         }
 
+        props.setLoading(false)
         props.onPressFinishObservationEvent('map')
       }
     }))

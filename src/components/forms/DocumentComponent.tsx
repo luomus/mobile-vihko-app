@@ -23,7 +23,7 @@ import Cs from '../../styles/ContainerStyles'
 import MessageComponent from '../general/MessageComponent'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../languages/i18n'
-import ActivityComponent from '../general/ActivityComponent'
+import LoadingComponent from '../general/LoadingComponent'
 import SaveButtonComponent from './SaveButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import {
@@ -263,16 +263,16 @@ const DocumentComponent = (props: Props) => {
 
   if (saving) {
     return (
-      <ActivityComponent text={'saving'} />
+      <LoadingComponent text={'saving'} />
     )
   } else if (!form) {
     onUninitalizedForm()
     return (
-      <ActivityComponent text={'loading'} />
+      <LoadingComponent text={'loading'} />
     )
   } else if (sending) {
     return (
-      <ActivityComponent text={t('sending')} />
+      <LoadingComponent text={t('sending')} />
     )
   } else {
     return (

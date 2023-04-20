@@ -33,7 +33,7 @@ import * as Clipboard from 'expo-clipboard'
 import { forms } from '../../config/fields'
 import { playStoreUrl } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
-import ActivityComponent from '../general/ActivityComponent'
+import LoadingComponent from '../general/LoadingComponent'
 import AppJSON from '../../../app.json'
 import storageService from '../../services/storageService'
 import FormLauncherComponent from './FormLauncherComponent'
@@ -433,7 +433,7 @@ export const HomeComponentContainer = (
 
   if (props.loading) {
     return (
-      <ActivityComponent text={'loading'} />
+      <LoadingComponent text={'loading'} />
     )
   } else {
     return (

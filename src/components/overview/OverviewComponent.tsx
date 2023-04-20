@@ -25,7 +25,7 @@ import ObservationInfoComponent from './ObservationInfoComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import MessageComponent from '../general/MessageComponent'
 import { parseDateFromDocumentToUI } from '../../helpers/dateHelper'
-import ActivityComponent from '../general/ActivityComponent'
+import LoadingComponent from '../general/LoadingComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
 import { log } from '../../helpers/logger'
@@ -305,11 +305,11 @@ const OverviewComponent = (props: Props) => {
 
   if (!event || !observations || !eventSchema) {
     return (
-      <ActivityComponent text={t('loading')} />
+      <LoadingComponent text={t('loading')} />
     )
   } else if (sending) {
     return (
-      <ActivityComponent text={t('sending')} />
+      <LoadingComponent text={t('sending')} />
     )
   } else {
     return (

@@ -25,6 +25,7 @@ import Colors from '../../../styles/Colors'
 import { useTranslation } from 'react-i18next'
 import ButtonComponent from '../../general/ButtonComponent'
 import { captureException } from '../../../helpers/sentry'
+import LoadingComponent from '../../general/LoadingComponent'
 
 type Props = {
   onPressHome: () => void,
@@ -37,6 +38,7 @@ type Props = {
 
 const MapComponent = (props: Props) => {
 
+  const [loading, setLoading] = useState<boolean>(false)
   const [mapModalVisibility, setMapModalVisibility] = useState(false)
   const [observationButtonsState, setObservationButtonsState] = useState('')
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
@@ -141,46 +143,53 @@ const MapComponent = (props: Props) => {
     dispatch(clearObservationId())
   }
 
-  return (
-    <>
-      <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
-      <View style={Cs.mapContainer} testID={'extendedNavBar'}>
-        <ButtonComponent onPressFunction={() => markObservationToPredeterminedPoint()} title={'Merkitse piste'}
-          height={40} width={120} buttonStyle={Bs.observationButton}
-          gradientColorStart={Colors.primaryButton1}
-          gradientColorEnd={Colors.primaryButton2}
-          shadowColor={Colors.primaryShadow}
-          textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22}
-          contentColor={Colors.whiteText}
-        />
-        {observation ?
-          observationButtonsState === 'newObservation' &&
-          <ObservationButtonsComponent
-            confirmationButton={props.onPressObservation}
-            cancelButton={cancelObservation}
-            mode={observationButtonsState}
-            openModal={openMapModal}
-            shiftToEditPage={shiftToEditPage}
+  if (loading) {
+    return (
+      <LoadingComponent text={'loading'} />
+    )
+  } else {
+    return (
+      <>
+        <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList}
+          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading} />
+        <View style={Cs.mapContainer} testID={'extendedNavBar'}>
+          <ButtonComponent onPressFunction={() => markObservationToPredeterminedPoint()} title={'Merkitse piste'}
+            height={40} width={120} buttonStyle={Bs.observationButton}
+            gradientColorStart={Colors.primaryButton1}
+            gradientColorEnd={Colors.primaryButton2}
+            shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22}
+            contentColor={Colors.whiteText}
           />
-          ||
-          observationButtonsState === 'changeLocation' &&
-          <ObservationButtonsComponent
-            confirmationButton={changeObservationLocation}
-            cancelButton={cancelEdit}
-            mode={observationButtonsState}
-            openModal={openMapModal}
-            shiftToEditPage={shiftToEditPage}
-          />
-          : null
-        }
-        <MapModalComponent
-          shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
-          cancelObservation={cancelObservation} isVisible={mapModalVisibility}
-          onBackButtonPress={closeMapModal} observationOptions={observationOptions} />
-        <MessageComponent />
-      </View>
-    </>
-  )
+          {observation ?
+            observationButtonsState === 'newObservation' &&
+            <ObservationButtonsComponent
+              confirmationButton={props.onPressObservation}
+              cancelButton={cancelObservation}
+              mode={observationButtonsState}
+              openModal={openMapModal}
+              shiftToEditPage={shiftToEditPage}
+            />
+            ||
+            observationButtonsState === 'changeLocation' &&
+            <ObservationButtonsComponent
+              confirmationButton={changeObservationLocation}
+              cancelButton={cancelEdit}
+              mode={observationButtonsState}
+              openModal={openMapModal}
+              shiftToEditPage={shiftToEditPage}
+            />
+            : null
+          }
+          <MapModalComponent
+            shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
+            cancelObservation={cancelObservation} isVisible={mapModalVisibility}
+            onBackButtonPress={closeMapModal} observationOptions={observationOptions} />
+          <MessageComponent />
+        </View>
+      </>
+    )
+  }
 }
 
 export default MapComponent

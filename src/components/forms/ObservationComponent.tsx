@@ -27,7 +27,7 @@ import { initForm } from '../../forms/formMethods'
 import { get, set, clone, merge } from 'lodash'
 import uuid from 'react-native-uuid'
 import i18n from '../../languages/i18n'
-import ActivityComponent from '../general/ActivityComponent'
+import LoadingComponent from '../general/LoadingComponent'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import SaveButtonComponent from './SaveButtonComponent'
 import {
@@ -461,12 +461,12 @@ const ObservationComponent = (props: Props) => {
 
   if (saving) {
     return (
-      <ActivityComponent text={'saving'} />
+      <LoadingComponent text={'saving'} />
     )
   } if (!form) {
     onUninitializedForm()
     return (
-      <ActivityComponent text={'loading'} />
+      <LoadingComponent text={'loading'} />
     )
   } else {
     return (

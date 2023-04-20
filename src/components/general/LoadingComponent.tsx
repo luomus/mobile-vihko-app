@@ -10,7 +10,7 @@ type Props = {
   children?: ReactChild
 }
 
-const ActivityComponent = (props: Props) => {
+const LoadingComponent = (props: Props) => {
   const { t } = useTranslation()
 
   return (
@@ -25,4 +25,4 @@ const ActivityComponent = (props: Props) => {
   )
 }
 
-export default ActivityComponent
+export default LoadingComponent

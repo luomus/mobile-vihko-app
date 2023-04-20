@@ -19,7 +19,7 @@ import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
-import ActivityComponent from '../general/ActivityComponent'
+import LoadingComponent from '../general/LoadingComponent'
 import MessageComponent from '../general/MessageComponent'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import AppJSON from '../../../app.json'
@@ -230,7 +230,7 @@ const LoginComponent = (props: Props) => {
 
   if (polling) {
     return <>
-      <ActivityComponent text={t('waiting for login')}>
+      <LoadingComponent text={t('waiting for login')}>
         <View style={Bs.loginCancelButton}>
           <ButtonComponent
             onPressFunction={
@@ -244,12 +244,12 @@ const LoginComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
-      </ActivityComponent>
+      </LoadingComponent>
     </>
 
   } else if (loggingIn) {
     return (
-      <ActivityComponent text={t('loading')} />
+      <LoadingComponent text={t('loading')} />
     )
   } else {
     return (

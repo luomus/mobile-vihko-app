@@ -19,6 +19,7 @@ import {
   setFirstLocation,
   setMessageState
 } from '../../stores'
+import LoadingComponent from '../general/LoadingComponent'
 import ExtendedNavBarComponent from '../general/ExtendedNavBarComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -48,6 +49,7 @@ const MapComponent = (props: Props) => {
   const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
   const [centered, setCentered] = useState(true)
   const [firstZoom, setFirstZoom] = useState<'zoomed' | 'zooming' | 'not'>('not')
+  const [loading, setLoading] = useState<boolean>(false)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [mapModalVisibility, setMapModalVisibility] = useState(false)
   const [mapType, setMapType] = useState<MapType>('terrain')
@@ -450,98 +452,105 @@ const MapComponent = (props: Props) => {
     mapType === 'terrain' ? setMapType('satellite') : setMapType('terrain')
   }
 
-  return (
-    <>
-      <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
-      <View style={Cs.mapContainer}>
-        <MapView
-          testID='map-view'
-          ref={map => { mapView = map }}
-          provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
-          initialRegion={region}
-          onPanDrag={() => stopCentering()}
-          onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}
-          onRegionChangeComplete={(region) => {
-            onRegionChangeComplete(region)
-            setVisibleRegion(region) // for the iPhone 8 bug
-          }}
-          maxZoomLevel={18.9}
-          minZoomLevel={5}
-          mapType={mapType === 'terrain' ? 'none' : mapType}
-          pitchEnabled={false}
-          rotateEnabled={false}
-          moveOnMarkerPress={false}
-          style={Os.mapViewStyle}
-          onMapReady={onMapLoaded}
-        >
-          {locationOverlay()}
-          {targetOverlay()}
-          {pathOverlay()}
-          {tileOverlay()}
-          {schema.formID === forms.birdAtlas ? gridOverlay() : null}
-          {zoneOverlay()}
-          {observationLocationsOverlay()}
-          {visibleRegion && Platform.OS === 'ios' &&
-            <Marker coordinate={visibleRegion}>
-              <View />
-            </Marker>
+  if (loading) {
+    return (
+      <LoadingComponent text={'loading'} />
+    )
+  } else {
+    return (
+      <>
+        <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList}
+          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading} />
+        <View style={Cs.mapContainer}>
+          <MapView
+            testID='map-view'
+            ref={map => { mapView = map }}
+            provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
+            initialRegion={region}
+            onPanDrag={() => stopCentering()}
+            onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}
+            onRegionChangeComplete={(region) => {
+              onRegionChangeComplete(region)
+              setVisibleRegion(region) // for the iPhone 8 bug
+            }}
+            maxZoomLevel={18.9}
+            minZoomLevel={5}
+            mapType={mapType === 'terrain' ? 'none' : mapType}
+            pitchEnabled={false}
+            rotateEnabled={false}
+            moveOnMarkerPress={false}
+            style={Os.mapViewStyle}
+            onMapReady={onMapLoaded}
+          >
+            {locationOverlay()}
+            {targetOverlay()}
+            {pathOverlay()}
+            {tileOverlay()}
+            {schema.formID === forms.birdAtlas ? gridOverlay() : null}
+            {zoneOverlay()}
+            {observationLocationsOverlay()}
+            {visibleRegion && Platform.OS === 'ios' &&
+              <Marker coordinate={visibleRegion}>
+                <View />
+              </Marker>
+            }
+          </MapView>
+          {schema.formID === forms.birdAtlas ?
+            <View style={Cs.gridTitleContainer}>
+              <ButtonComponent onPressFunction={() => setAtlasModalVisibility(true)} title={grid?.n + ':' + grid?.e}
+                height={35} width={100} buttonStyle={Bs.tileDetailsButton}
+                gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                textStyle={Ts.boldButtonText} iconName={'help'} iconType={'material-icons'} iconSize={20} contentColor={Colors.whiteText}
+              />
+            </View>
+            : null
           }
-        </MapView>
-        {schema.formID === forms.birdAtlas ?
-          <View style={Cs.gridTitleContainer}>
-            <ButtonComponent onPressFunction={() => setAtlasModalVisibility(true)} title={grid?.n + ':' + grid?.e}
-              height={35} width={100} buttonStyle={Bs.tileDetailsButton}
+          {schema.formID === forms.birdAtlas && grid?.pauseGridCheck ?
+            <GridWarningComponent />
+            : null
+          }
+          <View style={Cs.mapButtonsContainer}>
+            <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => toggleMapType()} title={undefined}
+              height={50} width={50} buttonStyle={Bs.mapIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.boldButtonText} iconName={'help'} iconType={'material-icons'} iconSize={20} contentColor={Colors.whiteText}
+              textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+            />
+            <ButtonComponent testID="center-map-btn" onPressFunction={() => centerMapAnim()} title={undefined}
+              height={50} width={50} buttonStyle={Bs.mapIconButton}
+              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+              textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
             />
           </View>
-          : null
-        }
-        {schema.formID === forms.birdAtlas && grid?.pauseGridCheck ?
-          <GridWarningComponent />
-          : null
-        }
-        <View style={Cs.mapButtonsContainer}>
-          <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => toggleMapType()} title={undefined}
-            height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-          />
-          <ButtonComponent testID="center-map-btn" onPressFunction={() => centerMapAnim()} title={undefined}
-            height={50} width={50} buttonStyle={Bs.mapIconButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-          />
+          {observation ?
+            observationButtonsState === 'newObservation' &&
+            <ObservationButtonsComponent
+              confirmationButton={props.onPressObservation}
+              cancelButton={cancelObservation}
+              mode={observationButtonsState}
+              openModal={openMapModal}
+              shiftToEditPage={shiftToEditPage}
+            />
+            ||
+            observationButtonsState === 'changeLocation' &&
+            <ObservationButtonsComponent
+              confirmationButton={changeObservationLocation}
+              cancelButton={cancelEdit}
+              mode={observationButtonsState}
+              openModal={openMapModal}
+              shiftToEditPage={shiftToEditPage}
+            />
+            : null
+          }
+          <MapModalComponent
+            shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
+            cancelObservation={cancelObservation} isVisible={mapModalVisibility}
+            onBackButtonPress={closeMapModal} observationOptions={observationOptions} />
+          <MessageComponent />
+          <AtlasModalComponent isVisible={atlasModalVisibility} onBackButtonPress={() => { setAtlasModalVisibility(false) }} />
         </View>
-        {observation ?
-          observationButtonsState === 'newObservation' &&
-          <ObservationButtonsComponent
-            confirmationButton={props.onPressObservation}
-            cancelButton={cancelObservation}
-            mode={observationButtonsState}
-            openModal={openMapModal}
-            shiftToEditPage={shiftToEditPage}
-          />
-          ||
-          observationButtonsState === 'changeLocation' &&
-          <ObservationButtonsComponent
-            confirmationButton={changeObservationLocation}
-            cancelButton={cancelEdit}
-            mode={observationButtonsState}
-            openModal={openMapModal}
-            shiftToEditPage={shiftToEditPage}
-          />
-          : null
-        }
-        <MapModalComponent
-          shiftToEditPage={shiftToEditPage} showSubmitDelete={showSubmitDelete}
-          cancelObservation={cancelObservation} isVisible={mapModalVisibility}
-          onBackButtonPress={closeMapModal} observationOptions={observationOptions} />
-        <MessageComponent />
-        <AtlasModalComponent isVisible={atlasModalVisibility} onBackButtonPress={() => { setAtlasModalVisibility(false) }} />
-      </View>
-    </>
-  )
+      </>
+    )
+  }
 }
 
 export default MapComponent

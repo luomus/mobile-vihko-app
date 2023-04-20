@@ -10,7 +10,7 @@ import {
   DispatchType,
   setObservationId
 } from '../../stores'
-import ActivityComponent from '../general/ActivityComponent'
+import LoadingComponent from '../general/LoadingComponent'
 import AtlasCodeStampComponent from '../general/AtlasCodeStampComponent'
 import ExtendedNavBarComponent from '../general/ExtendedNavBarComponent'
 import GridWarningComponent from '../general/GridWarningComponent'
@@ -34,6 +34,7 @@ const ListComponent = (props: Props) => {
   const [observed, setObserved] = useState<any[] | undefined>(undefined)
   const [observedUnedited, setObservedUnedited] = useState<any[] | undefined>(undefined)
   const [filteredObservations, setFilteredObservations] = useState<any[] | undefined>(undefined)
+  const [loading, setLoading] = useState<boolean>(false)
   const [taxaOnMap, setTaxaOnMap] = useState<string[]>([])
   const [picked, setPicked] = useState<Record<string, any>[]>([])
   const [unpicked, setUnpicked] = useState<Record<string, any>[]>([])
@@ -180,14 +181,15 @@ const ListComponent = (props: Props) => {
     </>
   )
 
-  if (!observed) {
+  if (!observed || loading) {
     return (
-      <ActivityComponent text={'loading'} />
+      <LoadingComponent text={'loading'} />
     )
   } else {
     return (
       <>
-        <ExtendedNavBarComponent onPressMap={props.onPressMap} onPressList={undefined} onPressFinishObservationEvent={props.onPressFinishObservationEvent} />
+        <ExtendedNavBarComponent onPressMap={props.onPressMap} onPressList={undefined}
+          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading} />
         <View style={Cs.listContainer}>
           <FlatList
             data={filteredObservations}
