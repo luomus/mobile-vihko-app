@@ -21,6 +21,7 @@ import { forms } from '../../config/fields'
 import ListSorterComponent from './ListSorterComponent'
 import ListFilterComponent from './ListFilterComponent'
 import MessageComponent from '../general/MessageComponent'
+import useChange from '../../helpers/useChange'
 
 type Props = {
   onPressMap: () => void,
@@ -45,7 +46,7 @@ const ListComponent = (props: Props) => {
   const [picked, setPicked] = useState<Record<string, any>[]>([])
   const [unpicked, setUnpicked] = useState<Record<string, any>[]>([])
   const [search, setSearch] = useState<string>('')
-  const [order, setOrder] = useState<string>(schema.formID === forms.birdAtlas ? 'systematic' : 'commonness')
+  const [order, setOrder] = useState<{ class: string }>({ class: '' })
 
   const dispatch: DispatchType = useDispatch()
 
@@ -95,16 +96,22 @@ const ListComponent = (props: Props) => {
     setUnpicked(unpickedTemp)
     setObserved(combined)
     setObservedUnedited(combined)
+
+    if (order.class === '') {
+      setOrder({ class: schema.formID === forms.birdAtlas ? 'systematic' : 'commonness' })
+    } else {
+      setOrder({ class: order.class })
+    }
   }, [observationEvent])
 
-  useEffect(() => {
+  useChange(() => {
     updateList()
   }, [search, observed])
 
   const updateList = () => {
     if (!observed) {
       return
-    } else if (order === 'scientific' || order === 'scientific-systematic') {
+    } else if (order.class === 'scientific' || order.class === 'scientific-systematic') {
       setFilteredObservations(observed.filter(createFilter(search, ['scientificName'])))
     } else {
       setFilteredObservations(observed.filter(createFilter(search,
@@ -133,7 +140,7 @@ const ListComponent = (props: Props) => {
     >
       <Text style={(item.atlasCode || item.count || taxaOnMap.includes(getTaxonID(item))) ?
         Ts.listBoldText : Ts.listText}>
-        {(order !== 'scientific' && order !== 'scientific-systematic') ? getTaxonName(item) : item.scientificName}
+        {(order.class !== 'scientific' && order.class !== 'scientific-systematic') ? getTaxonName(item) : item.scientificName}
       </Text>
       {
         item.atlasCode ?
