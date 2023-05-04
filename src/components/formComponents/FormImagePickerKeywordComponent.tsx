@@ -75,8 +75,8 @@ const ImagePickerKeywordComponent = (props: Props) => {
         fromGallery = true
       }
 
-      if (!pickerResult.cancelled) {
-        const uri = pickerResult.uri
+      if (!pickerResult.canceled) {
+        const uri = pickerResult.assets[0].uri
 
         setImages(images.concat({
           uri: uri,
@@ -89,7 +89,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
           keywords: ''
         }))
       }
-      return !pickerResult.cancelled
+      return !pickerResult.canceled
 
     } catch (error) {
       captureException(error)

@@ -58,8 +58,8 @@ const ImagePickerComponent = (props: Props) => {
         fromGallery = true
       }
 
-      if (!pickerResult.cancelled) {
-        const uri = pickerResult.uri
+      if (!pickerResult.canceled) {
+        const uri = pickerResult.assets[0].uri
 
         setImages(images.concat({
           uri: uri,
@@ -71,7 +71,7 @@ const ImagePickerComponent = (props: Props) => {
         }))
       }
 
-      return !pickerResult.cancelled
+      return !pickerResult.canceled
     } catch (error) {
       captureException(error)
       setError(props.objectTitle, { message: t('image attachment failure'), type: 'manual' })
