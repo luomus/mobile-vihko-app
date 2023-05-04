@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Platform, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
@@ -35,6 +35,8 @@ import MapModalComponent from './MapModalComponent'
 import AtlasModalComponent from './AtlasModalComponent'
 import GridWarningComponent from '../general/GridWarningComponent'
 import { captureException } from '../../helpers/sentry'
+import useInterval from '../../helpers/useInterval'
+import useChange from '../../helpers/useChange'
 
 type Props = {
   onPressHome: () => void,
@@ -48,14 +50,14 @@ const MapComponent = (props: Props) => {
 
   const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
   const [centered, setCentered] = useState(true)
-  const [firstZoom, setFirstZoom] = useState<'zoomed' | 'zooming' | 'not'>('not')
+  const [delay, setDelay] = useState<number>(1000)
   const [loading, setLoading] = useState<boolean>(false)
-  const [mapLoaded, setMapLoaded] = useState(false)
   const [mapModalVisibility, setMapModalVisibility] = useState(false)
   const [mapType, setMapType] = useState<MapType>('terrain')
   const [observationButtonsState, setObservationButtonsState] = useState('')
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
   const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
+  const [zooming, setZooming] = useState<boolean>(true)
 
   const editing = useSelector((state: rootState) => state.editing)
   const grid = useSelector((state: rootState) => state.grid)
@@ -72,27 +74,37 @@ const MapComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const onMapLoaded = () => {
-    setMapLoaded(true)
-  }
+  const mapViewRef = useRef<MapView | null>(null)
 
-  //if centering is true keeps recentering the map on renders
-  useEffect(() => {
-    if (centered && position && mapLoaded) {
+  useInterval(() => {
+    if (centered) followUser()
+  }, zooming ? null : delay)
 
-      //zoom from initial region to user location when starting the observation event
-      const triggerZoomFromFinland = async () => {
-        zoomFromFinlandToLocation()
-      }
-
-      if (firstZoom === 'zoomed') {
-        followUser()
-
-      } else if (firstZoom === 'not') {
-        triggerZoomFromFinland()
-      }
+  //performs the zoom from initial region to user location
+  useChange(() => {
+    if (!position) {
+      setZooming(false)
+      return
     }
-  })
+
+    const coords: LatLng = { ...position.coords }
+    const initialRegion = {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      latitudeDelta: 0.01000000000000000,
+      longitudeDelta: 0.01000000000000000
+    }
+
+    dispatch(setRegion(initialRegion))
+    moveToRegion(initialRegion)
+    dispatch(setFirstLocation([coords.latitude, coords.longitude]))
+
+    setZooming(false)
+
+    setTimeout(() => {
+      setDelay(5000)
+    }, 1500)
+  }, [mapViewRef.current])
 
   //if observation location is being edited center on observation initially, else to user location
   useEffect(() => {
@@ -113,13 +125,10 @@ const MapComponent = (props: Props) => {
     }
   }, [editing])
 
-  //reference for mapView
-  let mapView: MapView | null = null
-
   //animates map to given region
   const moveToRegion = (region: Region | null) => {
-    if (region && mapView && mapLoaded) {
-      mapView.animateToRegion(region, 500)
+    if (region && mapViewRef) {
+      mapViewRef?.current?.animateToRegion(region, 500)
     }
   }
 
@@ -169,33 +178,6 @@ const MapComponent = (props: Props) => {
   const markObservation = (coordinate: LatLng) => {
     const point = convertLatLngToPoint(coordinate)
     dispatch(setObservationLocation(point))
-  }
-
-  //performs the zoom from initial region to user location
-  const zoomFromFinlandToLocation = () => {
-
-    if (!position) {
-      setFirstZoom('zoomed')
-      return
-    }
-
-    setFirstZoom('zooming')
-
-    const coords: LatLng = { ...position.coords }
-    const initialRegion = {
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-      latitudeDelta: 0.01000000000000000,
-      longitudeDelta: 0.01000000000000000
-    }
-
-    dispatch(setRegion(initialRegion))
-    moveToRegion(initialRegion)
-    dispatch(setFirstLocation([coords.latitude, coords.longitude]))
-
-    setTimeout(() => {
-      setFirstZoom('zoomed')
-    }, 1000)
   }
 
   //clears observation location from its reducer, and removes it from the list
@@ -464,7 +446,7 @@ const MapComponent = (props: Props) => {
         <View style={Cs.mapContainer}>
           <MapView
             testID='map-view'
-            ref={map => { mapView = map }}
+            ref={mapViewRef}
             provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
             initialRegion={region}
             onPanDrag={() => stopCentering()}
@@ -480,7 +462,6 @@ const MapComponent = (props: Props) => {
             rotateEnabled={false}
             moveOnMarkerPress={false}
             style={Os.mapViewStyle}
-            onMapReady={onMapLoaded}
           >
             {locationOverlay()}
             {targetOverlay()}

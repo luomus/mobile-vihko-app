@@ -197,6 +197,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     if (formID === forms.birdAtlas && observationEvent.events[observationEvent.events.length - 1].grid) {
       const grid = observationEvent.events[observationEvent.events.length - 1].grid
       let location: LocationObject
+
       try {
         location = await getCurrentLocation()
       } catch (error: any) {
@@ -211,6 +212,9 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
           message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
         })
       }
+
+      dispatch(updateLocation(location))
+
       const ykjCoords = convertWGS84ToYKJ([location.coords.longitude, location.coords.latitude])
 
       dispatch(setGrid({

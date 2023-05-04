@@ -53,7 +53,7 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
 
     const getCurrentLocationAttempt = () => {
       return new Promise<Location.LocationObject>(async (resolve, reject) => {
-        const timer = setTimeout(() => { reject() }, 7000)
+        const timer = setTimeout(() => { reject() }, 15000)
 
         try {
           const currentLocation = await Location.getCurrentPositionAsync({
@@ -70,7 +70,7 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
     let attempt = 0
     let location: Location.LocationObject | undefined = undefined
 
-    while (attempt < 3) {
+    while (attempt <= 3) {
       try {
         location = await getCurrentLocationAttempt()
         break

@@ -11,7 +11,8 @@ import {
   initObservationZones,
   setTracking,
   switchSchema,
-  setMessageState
+  setMessageState,
+  updateLocation
 } from '../../stores'
 import storageService from '../../services/storageService'
 import ButtonComponent from '../general/ButtonComponent'
@@ -21,6 +22,7 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import i18n from '../../languages/i18n'
 import ZoneFilterPickerComponent from './ZoneFilterPickerComponent'
+import { getCurrentLocation } from '../../helpers/geolocationHelper'
 import { captureException } from '../../helpers/sentry'
 import { forms } from '../../config/fields'
 import MessageComponent from '../general/MessageComponent'
@@ -63,6 +65,19 @@ const ZoneModalComponent = (props: Props) => {
 
   useEffect(() => {
     setInitializing(true)
+
+    const initLocation = async () => {
+      if (props.modalVisibility) {
+        try {
+          const location = await getCurrentLocation(false, 5)
+          dispatch(updateLocation(location))
+        } catch (error: any) {
+          showError(error.message)
+        }
+      }
+    }
+
+    initLocation()
 
     const initZones = async () => {
       await refreshZonesList()

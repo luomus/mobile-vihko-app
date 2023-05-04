@@ -145,7 +145,7 @@ describe('TripForm', () => {
     fireEvent.press(getByText(fi['stop']))
 
     // Check that the 'Do you really want to quit' modal pops up, try the 'do not stop' button
-    await waitFor(() => expect(getAllByText(fi['stop'])).toHaveLength(2))
+    await waitFor(() => expect(getAllByText(fi['stop'])).toHaveLength(3))
     expect(getByText(fi['do not stop'])).toBeDefined()
     fireEvent.press(getByText(fi['do not stop']))
 
