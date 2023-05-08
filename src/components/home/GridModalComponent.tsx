@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Linking, View, Text, ActivityIndicator, Platform } from 'react-native'
-import MapView, { MapType, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
+import MapView, { LatLng, MapType, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
 import { Icon } from 'react-native-elements'
 import { LocationObject } from 'expo-location'
 import Modal from 'react-native-modal'
@@ -27,6 +27,7 @@ import { gridUrl, mapUrl, resultServiceUrl } from '../../config/urls'
 import { getGridName } from '../../services/atlasService'
 import storageService from '../../services/storageService'
 import MessageComponent from '../general/MessageComponent'
+import useInterval from '../../helpers/useInterval'
 
 type Props = {
   modalVisibility: boolean,
@@ -37,16 +38,16 @@ type Props = {
 
 const GridModalComponent = (props: Props) => {
 
-  const [ownLocation, setOwnLocation] = useState<[number, number]>([373, 777])
-  const [gridName, setGridName] = useState<string>('')
-  const [gridCoords, setGridCoords] = useState<[number, number]>([373, 777])
-  const [northing, setNorthing] = useState<string>('000')
+  const [delay, setDelay] = useState<number>(1000)
   const [easting, setEasting] = useState<string>('000')
+  const [gridCoords, setGridCoords] = useState<[number, number]>([373, 777])
+  const [gridName, setGridName] = useState<string>('')
+  const [initialized, setInitialized] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [northing, setNorthing] = useState<string>('000')
+  const [ownLocation, setOwnLocation] = useState<[number, number]>([373, 777])
 
   const [centered, setCentered] = useState(true)
-  const [firstZoom, setFirstZoom] = useState<'zoomed' | 'zooming' | 'not'>('not')
-  const [mapLoaded, setMapLoaded] = useState(false)
   const [mapType, setMapType] = useState<MapType>('terrain')
   const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
 
@@ -56,6 +57,20 @@ const GridModalComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const dispatch: DispatchType = useDispatch()
+
+  const miniMapRef = useRef<MapView | null>(null)
+
+  useEffect(() => {
+    if (props.modalVisibility) {
+      setLocation(true)
+    } else {
+      setInitialized(false)
+    }
+  }, [props.modalVisibility])
+
+  useInterval(() => {
+    if (centered) followUser()
+  }, initialized ? delay : null)
 
   const setLocation = async (reloadModal: boolean) => {
     let location: LocationObject
@@ -84,13 +99,35 @@ const GridModalComponent = (props: Props) => {
     }
 
     if (reloadModal) setLoading(false)
+
+    //run initRegion after the location has been set (map should be loaded by then)
+    initRegion(location)
   }
 
-  useEffect(() => {
-    if (props.modalVisibility) {
-      setLocation(true)
+  const initRegion = (positionParam: LocationObject) => {
+    if (!positionParam) {
+      setInitialized(true)
+      return
     }
-  }, [props.modalVisibility])
+
+    const coords: LatLng = { ...positionParam.coords }
+    const initialRegion = {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      latitudeDelta: 0.01000000000000000,
+      longitudeDelta: 0.01000000000000000
+    }
+
+    dispatch(setRegion(initialRegion))
+    moveToRegion(initialRegion)
+    dispatch(setFirstLocation([coords.latitude, coords.longitude]))
+
+    setInitialized(true)
+
+    setTimeout(() => {
+      setDelay(5000)
+    }, 1500)
+  }
 
   const handleStartEvent = async () => {
     const n = parseInt(northing)
@@ -131,52 +168,15 @@ const GridModalComponent = (props: Props) => {
     props.onBeginObservationEvent(true)
   }
 
-  useEffect(() => {
-    if (centered && position && mapLoaded) {
-      if (firstZoom === 'zoomed') {
-        followUser()
-      } else if (firstZoom === 'not') {
-        zoomFromFinlandToLocation()
-      }
-    }
-  })
-
-  //reference for mapView
-  let mapView: MapView | null = null
-
   //animates map to given region
   const moveToRegion = (region: Region | null) => {
-    if (region && mapView && mapLoaded) {
-      mapView.animateToRegion(region, 500)
+    if (region && miniMapRef) {
+      miniMapRef?.current?.animateToRegion(region, 500)
     }
   }
 
   //gets user region and moves map to them
   const followUser = () => moveToRegion(getRegionFromCoords())
-
-  const zoomFromFinlandToLocation = () => {
-    if (!position) {
-      setFirstZoom('zoomed')
-      return
-    }
-
-    setFirstZoom('zooming')
-
-    const initialRegion = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-      latitudeDelta: 0.01000000000000000,
-      longitudeDelta: 0.01000000000000000
-    }
-
-    dispatch(setRegion(initialRegion))
-    moveToRegion(initialRegion)
-    dispatch(setFirstLocation([position.coords.latitude, position.coords.longitude]))
-
-    setTimeout(() => {
-      setFirstZoom('zoomed')
-    }, 1000)
-  }
 
   const locationOverlay = () => (position !== null ?
     <Marker
@@ -208,8 +208,6 @@ const GridModalComponent = (props: Props) => {
     return reg
   }
 
-  const onMapLoaded = () => setMapLoaded(true)
-
   const gridOverlay = () => (
     <>
       <WMSTile
@@ -232,13 +230,17 @@ const GridModalComponent = (props: Props) => {
   const toggleMapType = () => setMapType(mapType === 'terrain' ? 'satellite' : 'terrain')
 
   const centerMapAnim = async () => {
-    await setLocation(false)
     if (!centered) { setCentered(true) }
     followUser()
   }
 
   const stopCentering = () => {
     if (centered) { setCentered(false) }
+  }
+
+  //updates region reducer once map has stopped moving
+  const onRegionChangeComplete = (region: Region) => {
+    dispatch(setRegion(region))
   }
 
   const showError = (error: string) => {
@@ -269,7 +271,7 @@ const GridModalComponent = (props: Props) => {
               </View>
               <View style={Cs.locateMeMapContainer}>
                 <MapView
-                  ref={map => { mapView = map }}
+                  ref={miniMapRef}
                   initialRegion={region}
                   provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
                   maxZoomLevel={18.9}
@@ -279,9 +281,9 @@ const GridModalComponent = (props: Props) => {
                   rotateEnabled={false}
                   moveOnMarkerPress={false}
                   style={Os.gridModalMapViewStyle}
-                  onMapReady={onMapLoaded}
                   onPanDrag={() => stopCentering()}
                   onRegionChangeComplete={(region) => {
+                    onRegionChangeComplete(region)
                     setVisibleRegion(region) // for the iPhone 8 bug
                   }}
                 >

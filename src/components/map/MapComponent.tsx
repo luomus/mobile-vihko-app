@@ -46,18 +46,19 @@ type Props = {
   onPop: () => void,
   onPressList: () => void
 }
+
 const MapComponent = (props: Props) => {
 
   const [atlasModalVisibility, setAtlasModalVisibility] = useState(false)
   const [centered, setCentered] = useState(true)
   const [delay, setDelay] = useState<number>(1000)
+  const [initialized, setInitialized] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [mapModalVisibility, setMapModalVisibility] = useState(false)
   const [mapType, setMapType] = useState<MapType>('terrain')
   const [observationButtonsState, setObservationButtonsState] = useState('')
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
   const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
-  const [zooming, setZooming] = useState<boolean>(true)
 
   const editing = useSelector((state: rootState) => state.editing)
   const grid = useSelector((state: rootState) => state.grid)
@@ -78,12 +79,12 @@ const MapComponent = (props: Props) => {
 
   useInterval(() => {
     if (centered) followUser()
-  }, zooming ? null : delay)
+  }, initialized ? delay : null)
 
   //performs the zoom from initial region to user location
   useChange(() => {
     if (!position) {
-      setZooming(false)
+      setInitialized(true)
       return
     }
 
@@ -99,7 +100,7 @@ const MapComponent = (props: Props) => {
     moveToRegion(initialRegion)
     dispatch(setFirstLocation([coords.latitude, coords.longitude]))
 
-    setZooming(false)
+    setInitialized(true)
 
     setTimeout(() => {
       setDelay(5000)
