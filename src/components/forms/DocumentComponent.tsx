@@ -210,7 +210,7 @@ const DocumentComponent = (props: Props) => {
   const showCancel = () => {
     dispatch(setMessageState({
       type: 'dangerConf',
-      messageContent: t('discard observation?'),
+      messageContent: t('discard document?'),
       cancelLabel: t('cancel'),
       okLabel: t('exit'),
       onOk: () => {

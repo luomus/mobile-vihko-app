@@ -492,12 +492,12 @@ const MapComponent = (props: Props) => {
             : null
           }
           <View style={Cs.mapButtonsContainer}>
-            <ButtonComponent testID="toggle-map-type-btn" onPressFunction={() => toggleMapType()} title={undefined}
+            <ButtonComponent testID='toggle-map-type-btn' onPressFunction={() => toggleMapType()} title={undefined}
               height={50} width={50} buttonStyle={Bs.mapIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
             />
-            <ButtonComponent testID="center-map-btn" onPressFunction={() => centerMapAnim()} title={undefined}
+            <ButtonComponent testID='center-map-btn' onPressFunction={() => centerMapAnim()} title={undefined}
               height={50} width={50} buttonStyle={Bs.mapIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
               textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}

@@ -27,6 +27,7 @@
   "delete path description 1": "Reitti sisältää",
   "delete path description 2": "reittipistettä aikaväliltä",
   "delete path description 3": "Oletko varma, että haluat poistaa koko reitin?",
+  "discard document?": "Haluatko palata takaisin jatkamaan havainnointia? Tälle lomakkeelle jo kirjaamasi paikannimi- ja muut tiedot poistuvat.",
   "discard observation?": "Haluatko varmasti poistua tallentamatta tätä havaintoa?",
   "do not delete": "Älä poista",
   "do not stop": "Älä lopeta",

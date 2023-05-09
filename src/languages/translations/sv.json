@@ -27,6 +27,7 @@
   "delete path description 1": "Rutten innehåller",
   "delete path description 2": "poäng mellan",
   "delete path description 3": "Är du säker på att du vill ta bort hela rutten?",
+  "discard document?": "Vill du säkert fortsätta att observera? Platsnamnet och annan information som du redan har angett i detta formulär kommer att raderas.",
   "discard observation?": "Vill du säkert lämna utan att spara den här observationen?",
   "do not delete": "Ta inte bort",
   "do not stop": "Avsluta inte",

@@ -4,7 +4,17 @@ import { Vibration } from 'react-native'
 import { forms } from '../config/fields'
 import { GRID_EDGE_DISTANCE, PATH_BACKUP_INTERVALL } from '../config/location'
 import i18n from '../languages/i18n'
-import { appendPath, eventPathUpdate, GridType, ObservationEventType, PathType, setGridPause, setMessageState, setOutsideBorders, store } from '../stores'
+import {
+  store,
+  appendPath,
+  eventPathUpdate,
+  GridType,
+  ObservationEventType,
+  PathType,
+  setGridPause,
+  setMessageState,
+  setOutsideBorders
+} from '../stores'
 import { pathToLineStringConstructor } from './geoJSONHelper'
 import { convertWGS84ToYKJ } from './geolocationHelper'
 

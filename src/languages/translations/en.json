@@ -27,6 +27,7 @@
   "delete path description 1": "Route contains",
   "delete path description 2": "waypoints between",
   "delete path description 3": "Are you sure you want to remove the whole route?",
+  "discard document?": "Are you sure you want to continue observing? The locality details and other details entered in this form are going to be cleared.",
   "discard observation?": "Are you sure you want to leave without saving this observation?",
   "do not delete": "Don't delete",
   "do not stop": "Don't stop",

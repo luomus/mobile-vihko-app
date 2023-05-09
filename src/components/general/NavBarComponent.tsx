@@ -70,10 +70,10 @@ const NavBarComponent = (props: Props) => {
     }
   }
 
-  const homeButtonHandler = () => {
+  const homeButtonHandler = (screen: string) => {
     dispatch(setMessageState({
       type: 'dangerConf',
-      messageContent: t('discard observation?'),
+      messageContent: screen === 'observation' ? t('discard observation?') : t('discard document?'),
       cancelLabel: t('cancel'),
       okLabel: t('exit'),
       onOk: () => {
@@ -98,7 +98,7 @@ const NavBarComponent = (props: Props) => {
             onPress={
               props.route.name !== 'observation' && props.route.name !== 'document'
                 ? () => props.navigation.navigate('home')
-                : () => homeButtonHandler()
+                : () => homeButtonHandler(props.route.name)
             }
           /> :
           <Icon iconStyle={Bs.headerUnavailableButton} name='home' type='material-icons' size={25} onPress={() => null} testID={'homeButton'} />
