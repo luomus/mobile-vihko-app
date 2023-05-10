@@ -139,8 +139,19 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 
     //initialize complete list
     if (schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm) {
-      await dispatch(initCompleteList(lang, schema.formID, grid.n.toString().slice(0, 2) + ':' + grid.e.toString().slice(0, 2)))
-      if (schema.formID === forms.dragonflyForm) dispatch(clearGrid())
+      try {
+        await dispatch(initCompleteList(lang, schema.formID, grid.n.toString().slice(0, 2) + ':' + grid.e.toString().slice(0, 2)))
+        if (schema.formID === forms.dragonflyForm) dispatch(clearGrid())
+      } catch (error: any) {
+        await dispatch(deleteObservationEvent(newID))
+        return Promise.reject({
+          severity: 'low',
+          message: error.message
+        })
+      }
+      //clear the grid in case it wasn't cleared due to errors
+    } else {
+      dispatch(clearGrid())
     }
 
     //attempt to start geolocation systems
@@ -152,7 +163,6 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         tracking
       )
     } catch (error: any) {
-      //delete the new event if gps can't be launched
       await dispatch(deleteObservationEvent(newID))
       log.error({
         location: '/components/HomeComponent.tsx beginObservationEvent()/watchLocationAsync()',
