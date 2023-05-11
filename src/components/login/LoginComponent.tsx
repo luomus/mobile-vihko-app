@@ -118,13 +118,13 @@ const LoginComponent = (props: Props) => {
       showError(error.message)
     })
 
-    await Promise.all([
-      dispatch(getPermissions()),
-      dispatch(getMetadata()),
-    ]).catch((error: any) => {
+    try {
+      await dispatch(getPermissions())
+      await dispatch(getMetadata())
+    } catch (error: any) {
       captureException(error)
       showError(error.message)
-    })
+    }
 
     props.onSuccessfulLogin()
     setLoggingIn(false)
