@@ -21,6 +21,7 @@ import Colors from '../../styles/Colors'
 import { LocationObject } from 'expo-location'
 import { convertWGS84ToYKJ, getCurrentLocation } from '../../helpers/geolocationHelper'
 import MessageComponent from '../general/MessageComponent'
+import { forms } from '../../config/fields'
 
 type Props = {
   modalVisibility: boolean,
@@ -85,7 +86,14 @@ const CompleteListModalComponent = (props: Props) => {
   }
 
   const description = () => {
-    const formTranslation = t('dragonfly form')
+    let formTranslation = ''
+
+    if (props.formID === forms.dragonflyForm) {
+      formTranslation = t('dragonfly form')
+    } else if (props.formID === forms.butterflyForm) {
+      formTranslation = t('butterfly form')
+    }
+
     return t('do you want to start an event?') + ' ' + formTranslation + '?'
   }
 

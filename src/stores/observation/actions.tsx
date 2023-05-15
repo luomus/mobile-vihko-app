@@ -577,6 +577,7 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
 
     let taxonSetID = 'BirdAtlas'
     if (formID === forms.dragonflyForm) taxonSetID = 'MX.taxonSetBiomonCompleteListOdonata'
+    if (formID === forms.butterflyForm) taxonSetID = 'MX.taxonSetBiomonCompleteListButterflies'
 
     try {
       taxonList = await getCompleteList(taxonSetID, gridNumber)
@@ -597,11 +598,11 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
       let name = ''
 
       if (lang === 'fi') {
-        name = taxon.vernacularName.fi ? taxon.vernacularName.fi : taxon.scientificName
+        name = taxon.vernacularName?.fi ? taxon.vernacularName.fi : taxon.scientificName
       } else if (lang === 'sv') {
-        name = taxon.vernacularName.sv ? taxon.vernacularName.sv : taxon.scientificName
+        name = taxon.vernacularName?.sv ? taxon.vernacularName.sv : taxon.scientificName
       } else if (lang === 'en') {
-        name = taxon.vernacularName.en ? taxon.vernacularName.en : taxon.scientificName
+        name = taxon.vernacularName?.en ? taxon.vernacularName.en : taxon.scientificName
       }
 
       return name

@@ -32,7 +32,7 @@ import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import SaveButtonComponent from './SaveButtonComponent'
 import {
   JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, MHL117Fields, overrideMHL117Fields, MHL117FieldOrder, additionalMHL117Fields,
-  JX652Fields, overrideJX652Fields, MHL932Fields, overrideMHL932Fields, forms, biomonForms
+  JX652Fields, overrideJX652Fields, MHL932Fields, overrideMHL932Fields, forms, biomonForms, MHL1040Fields, overrideMHL1040Fields
 } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
@@ -184,7 +184,10 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.dragonflyForm) {
         initForm(setForm, observationState, null, schemaVar, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.butterflyForm) {
+        initForm(setForm, observationState, null, schemaVar, null, MHL1040Fields, overrideMHL1040Fields, null, null, lang, scrollViewRef)
       }
+
       //new observations
     } else {
       //flying squirrel new observation
@@ -200,6 +203,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.dragonflyForm) {
         initForm(setForm, defaultObject, null, schemaVar, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.butterflyForm) {
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL1040Fields, overrideMHL1040Fields, null, null, lang, scrollViewRef)
       }
     }
   }
