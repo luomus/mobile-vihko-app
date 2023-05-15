@@ -7,7 +7,7 @@ import Bs from '../../styles/ButtonStyles'
 import Colors from '../../styles/Colors'
 import { useDispatch, useSelector } from 'react-redux'
 import i18n from '../../languages/i18n'
-import { forms } from '../../config/fields'
+import { biomonForms, forms } from '../../config/fields'
 import {
   rootState,
   DispatchType,
@@ -62,11 +62,11 @@ const OverviewComponent = (props: Props) => {
 
     setEvent(searchedEvent)
 
-    if (searchedEvent && (searchedEvent.formID === forms.birdAtlas || searchedEvent.formID === forms.dragonflyForm)) {
+    if (searchedEvent && (searchedEvent.formID === forms.birdAtlas || Object.values(biomonForms).includes(searchedEvent.formID))) {
       const filteredObservations: Record<string, any>[] = []
       searchedObservations.forEach((observation) => {
         if (searchedEvent.formID === forms.birdAtlas && (!(observation.id.includes('complete_list') && !observation.atlasCode && !observation.count)) ||
-          searchedEvent.formID === forms.dragonflyForm && (!(observation.id.includes('complete_list') && !observation.count))) {
+          Object.values(biomonForms).includes(searchedEvent.formID) && (!(observation.id.includes('complete_list') && !observation.count))) {
           filteredObservations.push(observation)
         }
       })

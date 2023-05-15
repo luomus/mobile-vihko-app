@@ -478,4 +478,8 @@ export const forms: Record<string, any> = {
   lolife: 'MHL.45'
 }
 
+export const biomonForms: Record<string, any> = {
+  dragonflyForm: 'MHL.932'
+}
+
 export const useUiSchemaFields = ['MHL.45']

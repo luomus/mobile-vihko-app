@@ -25,7 +25,7 @@ import { SOURCE_ID } from 'react-native-dotenv'
 import userService from '../../services/userService'
 import { clearGrid, setGrid } from '../position/actions'
 import { initCompleteList } from '../../stores/observation/actions'
-import { forms } from '../../config/fields'
+import { biomonForms, forms } from '../../config/fields'
 import { temporalOutlierFilter } from '../../helpers/pathFilters'
 import { captureException } from '@sentry/react-native'
 
@@ -89,7 +89,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
 
     const dateTime = setDateForDocument()
-    if (schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm) {
+    if (schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID)) {
       set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], dateTime.substring(0, 10))
       set(observationEventDefaults, ['gatheringEvent', 'timeStart'], dateTime.substring(11, 16))
 
@@ -138,10 +138,10 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     dispatch(replaceObservationEvents(newEvents))
 
     //initialize complete list
-    if (schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm) {
+    if (schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID)) {
       try {
         await dispatch(initCompleteList(lang, schema.formID, grid.n.toString().slice(0, 2) + ':' + grid.e.toString().slice(0, 2)))
-        if (schema.formID === forms.dragonflyForm) dispatch(clearGrid())
+        if (Object.values(biomonForms).includes(schema.formID)) dispatch(clearGrid())
       } catch (error: any) {
         await dispatch(deleteObservationEvent(newID))
         return Promise.reject({
@@ -310,7 +310,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     let lineStringPath = pathToLineStringConstructor(path)
 
     //remove unused complete list observations from bird atlas events
-    if (event.formID === forms.birdAtlas || event.formID === forms.dragonflyForm) {
+    if (event.formID === forms.birdAtlas || Object.values(biomonForms).includes(event.formID)) {
       const filtered: Record<string, any>[] = []
       event.gatherings[0].units.forEach((observation: Record<string, any>) => {
         if (!observation.id.includes('complete_list') || observation.atlasCode || observation.count) {

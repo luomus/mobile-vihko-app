@@ -15,7 +15,7 @@ import {
   setTracking
 } from '../../stores'
 import storageService from '../../services/storageService'
-import { forms } from '../../config/fields'
+import { biomonForms, forms } from '../../config/fields'
 import { getCurrentLocation, stopBackgroundLocationAsync, watchBackgroundLocationAsync } from '../../helpers/geolocationHelper'
 import { lineStringsToPathDeconstructor, pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import ButtonComponent from '../general/ButtonComponent'
@@ -176,7 +176,7 @@ const ExtendedNavBarComponent = (props: Props) => {
             iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin
           />
         </View>
-        {schema.formID === forms.birdAtlas || schema.formID === forms.dragonflyForm ?
+        {schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID) ?
           <View style={{ paddingHorizontal: 2, width: 80 }}>
             <ButtonComponent onPressFunction={() => props.onPressMap ? props.onPressMap() : props.onPressList ? props.onPressList() : undefined}
               title={props.onPressMap ? t('map') : t('list')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}

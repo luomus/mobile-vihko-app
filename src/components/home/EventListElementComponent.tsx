@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import Ts from '../../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../languages/i18n'
-import { forms } from '../../config/fields'
+import { biomonForms, forms } from '../../config/fields'
 import { parseDateFromDocumentToUI } from '../../helpers/dateHelper'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
@@ -31,7 +31,7 @@ const EventListElementComponent = (props: Props) => {
       let sum = 0
       props.observationEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
         if (props.observationEvent.formID === forms.birdAtlas && (!(unit.id.includes('complete_list') && !unit.atlasCode && !unit.count)) ||
-          props.observationEvent.formID === forms.dragonflyForm && (!(unit.id.includes('complete_list') && !unit.count))) {
+          Object.values(biomonForms).includes(props.observationEvent.formID) && (!(unit.id.includes('complete_list') && !unit.count))) {
           sum += 1
         }
       })

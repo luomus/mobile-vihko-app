@@ -14,7 +14,7 @@ import {
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
 } from './types'
-import { forms } from '../../config/fields'
+import { biomonForms, forms } from '../../config/fields'
 import { getCompleteList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
@@ -144,9 +144,9 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //define whether the event will be released publicly or privately
     event = definePublicity(event, isPublic)
 
-    if (schema.formID !== forms.lolife && event.formID !== forms.birdAtlas && event.formID !== forms.dragonflyForm) {
+    if (schema.formID !== forms.lolife && event.formID !== forms.birdAtlas && !Object.values(biomonForms).includes(event.formID)) {
       event = loopThroughUnits(event)
-    } else if (event.formID === forms.birdAtlas || event.formID === forms.dragonflyForm) {
+    } else if (event.formID === forms.birdAtlas || Object.values(biomonForms).includes(event.formID)) {
       event = loopThroughBirdUnits(event)
     }
 
