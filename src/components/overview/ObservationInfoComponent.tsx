@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import MiniMapComponent from './MiniMapComponent'
-import { forms, JX519Fields, MHL117Fields, JX652Fields, MHL932Fields, MHL1040Fields } from '../../config/fields'
+import { forms, JX519Fields, MHL117Fields, JX652Fields, MHL932Fields, MHL1040Fields, MHL1042Fields } from '../../config/fields'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 
@@ -67,6 +67,8 @@ const ObservationInfoComponent = (props: Props) => {
         fields = MHL932Fields
       } else if (props.event.formID === forms.butterflyForm) {
         fields = MHL1040Fields
+      } else if (props.event.formID === forms.largeFlowersForm) {
+        fields = MHL1042Fields
       }
 
       if (schemaUnits && fields) {

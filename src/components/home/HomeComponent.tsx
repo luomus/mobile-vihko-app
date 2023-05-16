@@ -71,6 +71,7 @@ const HomeComponent = (props: Props) => {
   const [fungiModalVisibility, setFungiModalVisibility] = useState<boolean>(false)
   const [dragonflyModalVisibility, setDragonflyModalVisibility] = useState<boolean>(false)
   const [butterflyModalVisibility, setButterflyModalVisibility] = useState<boolean>(false)
+  const [largeFlowersModalVisibility, setLargeFlowersModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -109,6 +110,8 @@ const HomeComponent = (props: Props) => {
     setDragonflyModalVisibility={setDragonflyModalVisibility}
     butterflyModalVisibility={butterflyModalVisibility}
     setButterflyModalVisibility={setButterflyModalVisibility}
+    largeFlowersModalVisibility={largeFlowersModalVisibility}
+    setLargeFlowersModalVisibility={setLargeFlowersModalVisibility}
     zoneModalVisibility={zoneModalVisibility}
     setZoneModalVisibility={setZoneModalVisibility}
     loading={loading}
@@ -154,6 +157,8 @@ type Props2 = {
   setDragonflyModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   butterflyModalVisibility: boolean,
   setButterflyModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  largeFlowersModalVisibility: boolean,
+  setLargeFlowersModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   zoneModalVisibility: boolean,
   setZoneModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   loading: boolean,
@@ -461,6 +466,7 @@ export const HomeComponentContainer = (
             <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={props.setFungiModalVisibility} />
             <FormLauncherComponent formID={forms.dragonflyForm} setModalVisibility={props.setDragonflyModalVisibility} />
             <FormLauncherComponent formID={forms.butterflyForm} setModalVisibility={props.setButterflyModalVisibility} />
+            <FormLauncherComponent formID={forms.largeFlowersForm} setModalVisibility={props.setLargeFlowersModalVisibility} />
             <>
               {
                 props.credentials.permissions?.includes('HR.2951') ?
@@ -496,6 +502,9 @@ export const HomeComponentContainer = (
         <CompleteListModalComponent modalVisibility={props.butterflyModalVisibility}
           setModalVisibility={props.setButterflyModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.butterflyForm) }}
           formID={forms.butterflyForm} />
+        <CompleteListModalComponent modalVisibility={props.largeFlowersModalVisibility}
+          setModalVisibility={props.setLargeFlowersModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.largeFlowersForm) }}
+          formID={forms.largeFlowersForm} />
         <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={props.setLoading} />

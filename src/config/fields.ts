@@ -523,7 +523,97 @@ export const overrideMHL1040ObservationEventFields = {
 }
 
 export const MHL1040ObservationEventFieldOrder = [
-  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_weather',
+  'gatherings_0_notes',
+  'keywords',
+]
+
+export const MHL1042ObservationEventFields = [
+  'secureLevel',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_notes',
+]
+
+export const overrideMHL1042Fields = {
+  'identifications_0_taxonVerbatim': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      filters: {
+        taxonSet: 'MX.taxonSetBiomonCompleteListLargeFlowers'
+      },
+      valueField: 'identifications_0_taxonVerbatim',
+      validation: {
+        required: {
+          value: true,
+          message: 'must not be empty'
+        },
+        minLength: {
+          value: 2,
+          message: 'must be at least 2 letters'
+        },
+      },
+      transform: {
+        'key': 'unitFact_autocompleteSelectedTaxonID',
+        'shownName': 'identifications_0_taxonVerbatim',
+        'payload_informalTaxonGroups': 'informalTaxonGroups'
+      }
+    }
+  }
+}
+
+export const MHL1042Fields = [
+  'identifications_0_taxonVerbatim',
+  'recordBasis',
+  'plantLifeStage',
+  'wild',
+  'taxonConfidence',
+  'images',
+  'count'
+]
+
+export const overrideMHL1042ObservationEventFields = {
+  'secureLevel': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikan karkeistus',
+      'Plats skyddning',
+      'Location roughening'
+    ]
+  },
+  'gatheringEvent_completeList_completeListType': {
+    field: 'completeListField',
+    params: {
+      validation: {
+        validate: (value: string) => value !== 'empty' || 'must choose list type'
+      }
+    }
+  },
+  'gatherings_0_locality': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikannimet (kunta tallentuu automaattisesti)',
+      'Ortnamn (kommunen sparar automatiskt)',
+      'Locality names (municipality is saved automatically)'
+    ]
+  },
+}
+
+export const MHL1042ObservationEventFieldOrder = [
   'secureLevel',
   'gatheringEvent_completeList_completeListType',
   'gatheringEvent_dateBegin',
@@ -572,12 +662,14 @@ export const forms: Record<string, any> = {
   fungiAtlas: 'JX.652',
   dragonflyForm: 'MHL.932',
   butterflyForm: 'MHL.1040',
+  largeFlowersForm: 'MHL.1042',
   lolife: 'MHL.45'
 }
 
 export const biomonForms: Record<string, any> = {
   dragonflyForm: 'MHL.932',
-  butterflyForm: 'MHL.1040'
+  butterflyForm: 'MHL.1040',
+  largeFlowersForm: 'MHL.1042'
 }
 
 export const useUiSchemaFields = ['MHL.45']

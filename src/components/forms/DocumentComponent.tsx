@@ -31,7 +31,8 @@ import {
   overrideObservationEventFields, overrideJX519ObservationEventFields, overrideMHL117ObservationEventFields,
   overrideJX652ObservationEventFields, MHL117ObservationEventFieldOrder,
   MHL932ObservationEventFields, overrideMHL932ObservationEventFields, MHL932ObservationEventFieldOrder,
-  MHL1040ObservationEventFields, overrideMHL1040ObservationEventFields, MHL1040ObservationEventFieldOrder
+  MHL1040ObservationEventFields, overrideMHL1040ObservationEventFields, MHL1040ObservationEventFieldOrder,
+  MHL1042ObservationEventFields, overrideMHL1042ObservationEventFields, MHL1042ObservationEventFieldOrder
 } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -118,6 +119,8 @@ const DocumentComponent = (props: Props) => {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL932ObservationEventFields, overrideMHL932ObservationEventFields, null, MHL932ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.butterflyForm) {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL1040ObservationEventFields, overrideMHL1040ObservationEventFields, null, MHL1040ObservationEventFieldOrder, lang, scrollViewRef)
+      } else if (schema.formID === forms.largeFlowersForm) {
+        initForm(setForm, event, null, schemaWithoutUnits, null, MHL1042ObservationEventFields, overrideMHL1042ObservationEventFields, null, MHL1042ObservationEventFieldOrder, lang, scrollViewRef)
       }
     }
   }

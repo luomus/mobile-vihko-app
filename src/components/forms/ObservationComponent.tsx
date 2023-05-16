@@ -32,7 +32,7 @@ import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import SaveButtonComponent from './SaveButtonComponent'
 import {
   JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, MHL117Fields, overrideMHL117Fields, MHL117FieldOrder, additionalMHL117Fields,
-  JX652Fields, overrideJX652Fields, MHL932Fields, overrideMHL932Fields, forms, biomonForms, MHL1040Fields, overrideMHL1040Fields
+  JX652Fields, overrideJX652Fields, MHL932Fields, overrideMHL932Fields, forms, biomonForms, MHL1040Fields, overrideMHL1040Fields, MHL1042Fields, overrideMHL1042Fields
 } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
@@ -186,6 +186,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, observationState, null, schemaVar, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.butterflyForm) {
         initForm(setForm, observationState, null, schemaVar, null, MHL1040Fields, overrideMHL1040Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.largeFlowersForm) {
+        initForm(setForm, observationState, null, schemaVar, null, MHL1042Fields, overrideMHL1042Fields, null, null, lang, scrollViewRef)
       }
 
       //new observations
@@ -205,6 +207,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, defaultObject, null, schemaVar, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.butterflyForm) {
         initForm(setForm, defaultObject, null, schemaVar, null, MHL1040Fields, overrideMHL1040Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.largeFlowersForm) {
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL1042Fields, overrideMHL1042Fields, null, null, lang, scrollViewRef)
       }
     }
   }
