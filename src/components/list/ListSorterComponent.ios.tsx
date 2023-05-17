@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { ActionSheetIOS, TextInput, TouchableOpacity, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
@@ -12,78 +12,87 @@ type Props = {
   observedUnedited: any[] | undefined,
   picked: Record<string, any>[],
   unpicked: Record<string, any>[],
-  order: string,
-  setOrder: React.Dispatch<React.SetStateAction<string>>
+  order: {class: string},
+  setOrder: React.Dispatch<React.SetStateAction<{class: string}>>
 }
 
 const ListSorterComponent = (props: Props) => {
 
-  const [pickerValues, setPickerValues] = useState<Array<string>>([])
-  const [dictionary, setDictionary] = useState<{ [key: string]: any }>({})
-
   const { t } = useTranslation()
 
+  const dictionary: { [key: string]: any } = {
+    commonness: t('filter.commonness'),
+    systematic: t('filter.systematic'),
+    name: t('filter.name'),
+    scientific: t('filter.scientific'),
+    'scientific-systematic': t('filter.scientific-systematic')
+  }
+
   useEffect(() => {
-    props.setOrder(t('filter.default'))
-    setPickerValues([t('filter.default'), t('filter.name'), t('filter.scientific')])
-    setDictionary({
-      default: t('filter.default'),
-      name: t('filter.name'),
-      scientific: t('filter.scientific')
-    })
-  }, [])
+    sortTaxonList(props.order.class)
+  }, [props.order])
 
   const sortTaxonList = (itemValue: string) => {
     if (props.picked.length < 1 && props.unpicked.length < 1) return
 
-    if (itemValue === 'default') {
+    if (itemValue === 'commonness') {
       if (props.observedUnedited) {
         props.setObserved(props.observedUnedited)
-        props.updateList()
       }
 
-      // } else if (itemValue === 'systematic') {
+    } else if (itemValue === 'systematic') {
+      const sortBySystematicOrder = (list: Record<string, any>[]) => {
+        return list.sort((a, b) => a.taxonomicOrder - b.taxonomicOrder)
+      }
+      const pickedSorted = sortBySystematicOrder(props.picked)
+      const unpickedSorted = sortBySystematicOrder(props.unpicked)
+      props.setObserved(pickedSorted.concat(unpickedSorted))
 
     } else if (itemValue === 'name') {
       const sortByName = (list: Record<string, any>[]) => {
         return list.sort((a, b) => {
           const textA = a.identifications[0].taxon
+            ? a.identifications[0].taxon.toLowerCase()
+            : a.identifications[0].taxonVerbatim.toLowerCase()
           const textB = b.identifications[0].taxon
+            ? b.identifications[0].taxon.toLowerCase()
+            : b.identifications[0].taxonVerbatim.toLowerCase()
           return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
         })
       }
       const pickedSorted = sortByName(props.picked)
       const unpickedSorted = sortByName(props.unpicked)
       props.setObserved(pickedSorted.concat(unpickedSorted))
-      props.updateList()
 
     } else if (itemValue === 'scientific') {
       const sortByScientificName = (list: Record<string, any>[]) => {
         return list.sort((a, b) => {
-          const textA = a.scientificName
-          const textB = b.scientificName
+          const textA = a.scientificName ? a.scientificName.toLowerCase() : undefined
+          const textB = b.scientificName ? b.scientificName.toLowerCase() : undefined
           return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
         })
       }
       const pickedSorted = sortByScientificName(props.picked)
       const unpickedSorted = sortByScientificName(props.unpicked)
       props.setObserved(pickedSorted.concat(unpickedSorted))
-      props.updateList()
+
+    } else if (itemValue === 'scientific-systematic') {
+      const sortBySystematicOrder = (list: Record<string, any>[]) => {
+        return list.sort((a, b) => a.taxonomicOrder - b.taxonomicOrder)
+      }
+      const pickedSorted = sortBySystematicOrder(props.picked)
+      const unpickedSorted = sortBySystematicOrder(props.unpicked)
+      props.setObserved(pickedSorted.concat(unpickedSorted))
     }
   }
 
   const onPress = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: pickerValues,
+        options: Object.values(dictionary),
         userInterfaceStyle: 'dark'
       },
-      buttonIndex => {
-        props.setOrder(pickerValues[buttonIndex])
-        const pickerValue = Object.keys(dictionary).find(key => dictionary[key] === pickerValues[buttonIndex])
-        if (pickerValue === undefined) return
-        sortTaxonList(pickerValue)
-      }
+      buttonIndex => props.setOrder({ class: Object.keys(dictionary)[buttonIndex] })
     )
 
   return (
@@ -91,7 +100,7 @@ const ListSorterComponent = (props: Props) => {
       <TouchableOpacity onPress={() => onPress()} style={Cs.iOSPickerContainer}>
         <TextInput
           style={Os.iOSListSorter}
-          value={props.order}
+          value={dictionary[props.order.class]}
           editable={false}
           onPressOut={() => onPress()}
           multiline

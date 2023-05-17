@@ -622,9 +622,7 @@ export const MHL1042ObservationEventFieldOrder = [
   'gatheringEvent_timeEnd',
   'gatherings_0_locality',
   'gatherings_0_localityDescription',
-  'gatherings_0_weather',
   'gatherings_0_notes',
-  'keywords',
 ]
 
 export const observationEventFields = [
