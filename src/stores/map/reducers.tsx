@@ -1,13 +1,15 @@
 import {
   mapActionTypes,
   EditingType,
+  ListOrderType,
   ObservationZonesType,
   SET_EDITING,
   CLEAR_CURRENT_OBS_ZONE,
   GET_OBS_ZONES_SUCCESS,
   SET_CURRENT_OBS_ZONE,
   CLEAR_REGION,
-  SET_REGION
+  SET_REGION,
+  SET_LIST_ORDER
 } from './types'
 import { Region } from 'react-native-maps'
 
@@ -15,6 +17,10 @@ const initEditingState: EditingType = {
   started: false,
   locChanged: false,
   originalSourcePage: ''
+}
+
+const initListOrderState: ListOrderType = {
+  class: ''
 }
 
 const initRegionState = {
@@ -32,6 +38,15 @@ const editingReducer = (state: EditingType = initEditingState, action: mapAction
     case SET_EDITING:
       newState = action.payload
       return newState
+    default:
+      return state
+  }
+}
+
+const listOrderReducer = (state: ListOrderType = initListOrderState, action: mapActionTypes) => {
+  switch (action.type) {
+    case SET_LIST_ORDER:
+      return action.payload
     default:
       return state
   }
@@ -72,6 +87,7 @@ const regionReducer = (state: Region = initRegionState, action: mapActionTypes) 
 
 export {
   editingReducer,
+  listOrderReducer,
   observationZoneReducer,
   regionReducer
 }

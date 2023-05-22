@@ -2,7 +2,7 @@ import { ThunkAction } from 'redux-thunk'
 import uuid from 'react-native-uuid'
 import { clone, set } from 'lodash'
 import { LocationObject } from 'expo-location'
-import { setCurrentObservationZone, clearRegion } from '../map/actions'
+import { setCurrentObservationZone, clearRegion, setListOrder } from '../map/actions'
 import {
   clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
   replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId
@@ -176,6 +176,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     }
 
     //reset map centering and redirect to map
+    dispatch(setListOrder({ class: '' }))
     dispatch(clearRegion())
     dispatch(setObserving(true))
     onPressMap()

@@ -11,6 +11,7 @@ import {
   setRegion,
   clearRegion,
   setEditing,
+  setListOrder,
   setCurrentObservationZone,
   clearCurrentObservationZone,
   initObservationZones,
@@ -78,6 +79,7 @@ import {
 //reducers
 import {
   editingReducer,
+  listOrderReducer,
   observationZoneReducer,
   regionReducer
 } from './map/reducers'
@@ -103,6 +105,7 @@ import { credentialsReducer } from './user/reducers'
 import {
   mapActionTypes,
   EditingType,
+  ListOrderType,
   ObservationZonesType
 } from './map/types'
 import {
@@ -139,6 +142,7 @@ interface rootState {
   editing: EditingType,
   firstLocation: number[],
   grid: GridType,
+  listOrder: ListOrderType,
   message: MessageType[],
   observation: Point | null,
   observationEventInterrupted: boolean,
@@ -158,6 +162,7 @@ const appReducer = combineReducers({
   editing: editingReducer,
   firstLocation: firstLocationReducer,
   grid: gridReducer,
+  listOrder: listOrderReducer,
   message: messageReducer,
   observation: observationReducer,
   observationEventInterrupted: observationEventInterruptedReducer,
@@ -193,6 +198,7 @@ export {
   setRegion,
   clearRegion,
   setEditing,
+  setListOrder,
   setCurrentObservationZone,
   clearCurrentObservationZone,
   initObservationZones,
@@ -248,6 +254,7 @@ export {
 export type {
   mapActionTypes,
   EditingType,
+  ListOrderType,
   ObservationZonesType,
   messageActionTypes,
   MessageType,

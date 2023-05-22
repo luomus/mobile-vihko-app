@@ -8,6 +8,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import {
   rootState,
   DispatchType,
+  setListOrder,
   setObservationId
 } from '../../stores'
 import LoadingComponent from '../general/LoadingComponent'
@@ -35,6 +36,7 @@ const ListComponent = (props: Props) => {
   const textInput = useRef<TextInput | null>(null)
 
   const grid = useSelector((state: rootState) => state.grid)
+  const listOrder = useSelector((state: rootState) => state.listOrder)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const schema = useSelector((state: rootState) => state.schema)
 
@@ -46,7 +48,6 @@ const ListComponent = (props: Props) => {
   const [picked, setPicked] = useState<Record<string, any>[]>([])
   const [unpicked, setUnpicked] = useState<Record<string, any>[]>([])
   const [search, setSearch] = useState<string>('')
-  const [order, setOrder] = useState<{ class: string }>({ class: '' })
 
   const dispatch: DispatchType = useDispatch()
 
@@ -97,10 +98,8 @@ const ListComponent = (props: Props) => {
     setObserved(combined)
     setObservedUnedited(combined)
 
-    if (order.class === '') {
-      setOrder({ class: schema.formID === forms.birdAtlas ? 'systematic' : 'commonness' })
-    } else {
-      setOrder({ class: order.class })
+    if (listOrder.class === '') {
+      dispatch(setListOrder({ class: schema.formID === forms.birdAtlas ? 'systematic' : 'commonness' }))
     }
   }, [observationEvent])
 
@@ -111,7 +110,7 @@ const ListComponent = (props: Props) => {
   const updateList = () => {
     if (!observed) {
       return
-    } else if (order.class === 'scientific' || order.class === 'scientific-systematic') {
+    } else if (listOrder.class === 'scientific' || listOrder.class === 'scientific-systematic') {
       setFilteredObservations(observed.filter(createFilter(search, ['scientificName'])))
     } else {
       setFilteredObservations(observed.filter(createFilter(search,
@@ -140,7 +139,7 @@ const ListComponent = (props: Props) => {
     >
       <Text style={(item.atlasCode || item.count || taxaOnMap.includes(getTaxonID(item))) ?
         Ts.listBoldText : Ts.listText}>
-        {(order.class !== 'scientific' && order.class !== 'scientific-systematic') ? getTaxonName(item) : item.scientificName}
+        {(listOrder.class !== 'scientific' && listOrder.class !== 'scientific-systematic') ? getTaxonName(item) : item.scientificName}
       </Text>
       {
         item.atlasCode ?
@@ -176,8 +175,6 @@ const ListComponent = (props: Props) => {
         observedUnedited={observedUnedited}
         picked={picked}
         unpicked={unpicked}
-        order={order}
-        setOrder={setOrder}
       />
     </>
   )

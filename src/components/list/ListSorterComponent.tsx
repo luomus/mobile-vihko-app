@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { Picker } from '@react-native-picker/picker'
 import { useTranslation } from 'react-i18next'
+import { DispatchType, rootState, setListOrder } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 
@@ -10,18 +12,20 @@ type Props = {
   updateList: () => void,
   observedUnedited: any[] | undefined,
   picked: Record<string, any>[],
-  unpicked: Record<string, any>[],
-  order: {class: string},
-  setOrder: React.Dispatch<React.SetStateAction<{class: string}>>
+  unpicked: Record<string, any>[]
 }
 
 const ListSorterComponent = (props: Props) => {
 
+  const listOrder = useSelector((state: rootState) => state.listOrder)
+
+  const dispatch: DispatchType = useDispatch()
+
   const { t } = useTranslation()
 
   useEffect(() => {
-    sortTaxonList(props.order.class)
-  }, [props.order])
+    sortTaxonList(listOrder.class)
+  }, [listOrder])
 
   const sortTaxonList = (itemValue: string) => {
     if (props.picked.length < 1 && props.unpicked.length < 1) return
@@ -80,10 +84,10 @@ const ListSorterComponent = (props: Props) => {
   return (
     <View style={Cs.listSorterContainer}>
       <Picker
-        selectedValue={props.order.class}
+        selectedValue={listOrder.class}
         numberOfLines={10}
         onValueChange={itemValue => {
-          props.setOrder({ class: itemValue })
+          dispatch(setListOrder({ class: itemValue }))
         }}
       >
         <Picker.Item key={'commonness'} label={t('filter.commonness')} value={'commonness'} style={{ fontSize: 24, color: Colors.neutral6 }} />

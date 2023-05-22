@@ -9,7 +9,9 @@ import {
   SET_REGION,
   CLEAR_REGION,
   SET_EDITING,
+  SET_LIST_ORDER,
   EditingType,
+  ListOrderType,
 } from './types'
 import { getZones } from '../../services/zoneService'
 import storageService from '../../services/storageService'
@@ -136,4 +138,9 @@ export const getObservationZonesSuccess = (zones: any[]): mapActionTypes => ({
 export const setEditing = (editing: EditingType): mapActionTypes => ({
   type: SET_EDITING,
   payload: editing
+})
+
+export const setListOrder = (order: ListOrderType): mapActionTypes => ({
+  type: SET_LIST_ORDER,
+  payload: order
 })

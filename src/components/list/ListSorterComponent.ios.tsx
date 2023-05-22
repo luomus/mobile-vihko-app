@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { ActionSheetIOS, TextInput, TouchableOpacity, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { DispatchType, rootState, setListOrder } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
@@ -11,12 +13,14 @@ type Props = {
   updateList: () => void,
   observedUnedited: any[] | undefined,
   picked: Record<string, any>[],
-  unpicked: Record<string, any>[],
-  order: {class: string},
-  setOrder: React.Dispatch<React.SetStateAction<{class: string}>>
+  unpicked: Record<string, any>[]
 }
 
 const ListSorterComponent = (props: Props) => {
+
+  const listOrder = useSelector((state: rootState) => state.listOrder)
+
+  const dispatch: DispatchType = useDispatch()
 
   const { t } = useTranslation()
 
@@ -29,8 +33,8 @@ const ListSorterComponent = (props: Props) => {
   }
 
   useEffect(() => {
-    sortTaxonList(props.order.class)
-  }, [props.order])
+    sortTaxonList(listOrder.class)
+  }, [listOrder])
 
   const sortTaxonList = (itemValue: string) => {
     if (props.picked.length < 1 && props.unpicked.length < 1) return
@@ -92,7 +96,7 @@ const ListSorterComponent = (props: Props) => {
         options: Object.values(dictionary),
         userInterfaceStyle: 'dark'
       },
-      buttonIndex => props.setOrder({ class: Object.keys(dictionary)[buttonIndex] })
+      buttonIndex => dispatch(setListOrder({ class: Object.keys(dictionary)[buttonIndex] }))
     )
 
   return (
@@ -100,7 +104,7 @@ const ListSorterComponent = (props: Props) => {
       <TouchableOpacity onPress={() => onPress()} style={Cs.iOSPickerContainer}>
         <TextInput
           style={Os.iOSListSorter}
-          value={dictionary[props.order.class]}
+          value={dictionary[listOrder.class]}
           editable={false}
           onPressOut={() => onPress()}
           multiline
