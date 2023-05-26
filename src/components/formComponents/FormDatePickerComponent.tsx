@@ -131,7 +131,7 @@ const FormDatePickerComponent = (props: Props) => {
         <ButtonComponent onPressFunction={() => onOpenDatePicker()}
           title={undefined} height={40} width={45} buttonStyle={Bs.neutralIconButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-          textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText} noMargin
         />
       </View>
       {showDate && (

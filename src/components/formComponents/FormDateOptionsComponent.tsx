@@ -162,7 +162,7 @@ const FormDateOptionsComponent = (props: Props) => {
           <ButtonComponent onPressFunction={() => clearDateAndTime()}
             title={undefined} height={40} width={45} buttonStyle={Bs.iconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText} noMargin
           />
         </View>
       }

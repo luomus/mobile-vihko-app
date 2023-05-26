@@ -169,7 +169,9 @@ const ButtonStyles = StyleSheet.create({
     alignItems: 'center'
   },
   neutralIconButton: {
-    backgroundColor: Colors.neutralButton
+    backgroundColor: Colors.neutralButton,
+    borderRadius: 5,
+    paddingTop: 2
   },
   buttonShadow: {
     shadowOffset: {

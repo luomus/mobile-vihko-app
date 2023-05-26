@@ -34,6 +34,7 @@ const OtherStyles = StyleSheet.create({
     borderColor: Colors.neutral5,
     borderWidth: 1,
     height: 40,
+    marginRight: 5,
     width: '90%',
   },
   hiddenComponent: {
