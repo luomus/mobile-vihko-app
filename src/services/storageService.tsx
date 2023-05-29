@@ -6,7 +6,7 @@ const save = async (key: string, value: any) => {
 }
 
 const fetch = async (key: string) => {
-  const value: string|null = await AsyncStorage.getItem(key)
+  const value: string | null = await AsyncStorage.getItem(key)
   if (value !== null) {
     return JSON.parse(value)
   } else {
@@ -19,6 +19,17 @@ const getKeys = async () => {
   return allKeys
 }
 
+const printValues = async () => {
+  const keys = await getKeys()
+  const items = await AsyncStorage.multiGet(keys)
+
+  items.forEach((item) => {
+    const key = item[0]
+    const value = item[1]
+    console.log(`${key}: ${value}`)
+  })
+}
+
 const remove = async (key: string) => {
   await AsyncStorage.removeItem(key)
 }
@@ -28,4 +39,4 @@ const clear = async () => {
   await AsyncStorage.clear()
 }
 
-export default { save, fetch, getKeys, remove, clear }
+export default { save, fetch, getKeys, printValues, remove, clear }

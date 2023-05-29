@@ -49,7 +49,7 @@ export const completeListUrl      = `${ATLAS_API_URL}/taxon/biomon`
 export const gridNameUrl          = `${ATLAS_API_URL}/grid/`
 
 //grid preview url
-export const gridPreviewUrl       = `${ATLAS_API_URL}/map?layers=maastokartta,atlasGrid&gridsquare=`
+export const gridPreviewUrl       = `${LAJI_URL}/map?layers=maastokartta,atlasGrid&gridsquare=`
 
 //result service url
 export const resultServiceUrl     = 'https://tulokset.lintuatlas.fi/grid/'
