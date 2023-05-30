@@ -52,6 +52,8 @@ const EventListElementComponent = (props: Props) => {
       setTitle(t('butterfly form'))
     } else if (props.observationEvent.formID === forms.largeFlowersForm) {
       setTitle(t('large flowers form'))
+    } else if (props.observationEvent.formID === forms.mothForm) {
+      setTitle(t('moth form'))
     } else {
       setTitle(t('lolife'))
     }
