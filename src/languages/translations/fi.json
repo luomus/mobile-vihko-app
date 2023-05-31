@@ -20,6 +20,8 @@
   "date begin": "Alku",
   "date end": "Loppu",
   "delete": "Poista",
+  "delete account": "Poista käyttäjätili",
+  "delete account description": "Oletko varma että haluat poistaa Laji-fi käyttäjätilisi? Jos painat 'Poista', sinut kirjataan ulos Mobiilivihkosta ja ohjataan sivulle, jossa kirjaudutaan käyttäjätilille, jonka jälkeen painetaan sivun alareunasta painiketta 'Poista tili' otsikon alla.",
   "delete bird atlas path 1": "Jos poistat reitin, lajilistan havainnot tallentuvat ruutuun",
   "delete bird atlas path 2": "Havainnot epätarkalla sijainnilla ovat vähemmän arvokkaita suojelu- ja tiedekäytössä.",
   "delete image?": "Haluatko varmasti poistaa tämän kuvan?",

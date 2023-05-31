@@ -20,6 +20,8 @@
   "date begin": "Starting date",
   "date end": "Ending date",
   "delete": "Delete",
+  "delete account": "Delete account",
+  "delete account description": "Are you sure that you want to delete your Laji-fi account? If you press \"Delete\", you're going to be logged out from this app and be directed to a page where you need to login to the account, after which you scroll to the bottom of that page and press the button below the \"Delete account\" title.",
   "delete bird atlas path 1": "If you do, the observations on your species list will be located to the atlas square",
   "delete bird atlas path 2": "Observations with imprecise location are less valuable for conservation and research use.",
   "delete image?": "Are you sure you want to delete this image?",

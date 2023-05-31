@@ -20,6 +20,8 @@
   "date begin": "Startdatum",
   "date end": "Slutdatum",
   "delete": "Ta bort",
+  "delete account": "Radera konto",
+  "delete account description": "Är du säker på att du vill ta bort ditt Laji-fi användarkonto? Om du trycker på 'Radera' kommer du att loggas ut från Mobiilivihko och omdirigeras till en sida där du loggar in, varefter du trycker på knappen under rubriken 'Radera konto' från botten av sidan.",
   "delete bird atlas path 1": "Om du gör det kommer observationerna på din artlista att placeras till atlasrutan",
   "delete bird atlas path 2": "Observationer med oprecis läge är mindre värda för bevarande och forskningsanvändning.",
   "delete image?": "Vill du säkert radera den här bilden?",

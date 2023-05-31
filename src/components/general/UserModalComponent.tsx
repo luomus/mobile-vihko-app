@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { Icon } from 'react-native-elements'
@@ -26,6 +26,7 @@ import ButtonComponent from '../general/ButtonComponent'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import SelectedButtonComponent from './SelectedButtonComponent'
 import { saveLanguage } from '../../helpers/languageHelper'
+import { accountPageUrl } from '../../config/urls'
 
 type Props = {
   isVisible: boolean,
@@ -46,13 +47,26 @@ const UserModalComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const showLogoutDialoue = () => {
+  const showLogoutDialogue = () => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('logout'),
       cancelLabel: t('cancel'),
       okLabel: t('exit'),
       onOk: logout
+    }))
+  }
+
+  const showAccountDeletionDialogue = () => {
+    dispatch(setMessageState({
+      type: 'dangerConf',
+      messageContent: t('delete account description'),
+      cancelLabel: t('cancel'),
+      okLabel: t('delete'),
+      onOk: async () => {
+        Linking.openURL(accountPageUrl)
+        await logout()
+      }
     }))
   }
 
@@ -110,7 +124,7 @@ const UserModalComponent = (props: Props) => {
             </Text>
           </View>
           <View style={Cs.logoutButtonContainer}>
-            <ButtonComponent onPressFunction={() => showLogoutDialoue()} title={undefined}
+            <ButtonComponent onPressFunction={() => showLogoutDialogue()} title={undefined}
               height={40} width={40} buttonStyle={Bs.logoutButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText} testID='logout-button'
@@ -118,12 +132,7 @@ const UserModalComponent = (props: Props) => {
           </View>
           <MessageComponent />
         </View>
-        <Text
-          style={Ts.languageText}
-          onPress={setLanguageHelper('fi')}
-        >
-          {t('select language')}:
-        </Text>
+        <Text style={Ts.languageText}>{t('select language')}:</Text>
         <View style={Cs.languageContainer}>
           {i18n.language === 'fi' ?
             <SelectedButtonComponent
@@ -182,6 +191,16 @@ const UserModalComponent = (props: Props) => {
               contentColor={i18n.language === 'en' ? Colors.whiteText : Colors.darkText}
             />
           }
+        </View>
+        <Text style={Ts.languageText}>{t('delete account')}:</Text>
+        <View style={Cs.languageContainer}>
+          <ButtonComponent
+            onPressFunction={() => showAccountDeletionDialogue()}
+            title={t('delete')} height={40} width={100} buttonStyle={Bs.textAndIconButton}
+            gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2}
+            shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
+            iconName={'delete-forever'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+          />
         </View>
       </View>
     </Modal>

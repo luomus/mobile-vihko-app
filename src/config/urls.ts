@@ -1,4 +1,4 @@
-import { API_URL, ATLAS_API_URL, LAJI_URL } from 'react-native-dotenv'
+import { API_URL, ATLAS_API_URL, LAJI_AUTH_URL, LAJI_URL } from 'react-native-dotenv'
 
 //map url
 export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
@@ -96,6 +96,9 @@ export const lajiEN               = `${LAJI_URL}/en/observation/list`
 
 //laji.fi news page
 export const newsPage             = `${LAJI_URL}/news/`
+
+//laji-auth account page
+export const accountPageUrl       = `${LAJI_AUTH_URL}/self`
 
 //google geocoding api url
 export const googleGeocodingAPIURL = 'https://maps.googleapis.com/maps/api/geocode/json'
