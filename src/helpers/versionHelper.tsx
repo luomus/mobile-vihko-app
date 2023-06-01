@@ -2,10 +2,10 @@ export const updateIsAvailable = (appVersion: string, latestVersion: string): bo
   const appVersionArray = appVersion.split('.')
   const latestVersionArray = latestVersion.split('.')
 
-  if (appVersionArray[0] < latestVersionArray[0]) return true
-  else if (appVersionArray[0] > latestVersionArray[0]) return false
-  else if (appVersionArray[1] < latestVersionArray[1]) return true
-  else if (appVersionArray[1] > latestVersionArray[1]) return false
-  else if (appVersionArray[2] < latestVersionArray[2]) return true
+  if (parseInt(appVersionArray[0]) < parseInt(latestVersionArray[0])) return true
+  else if (parseInt(appVersionArray[0]) > parseInt(latestVersionArray[0])) return false
+  else if (parseInt(appVersionArray[1]) < parseInt(latestVersionArray[1])) return true
+  else if (parseInt(appVersionArray[1]) > parseInt(latestVersionArray[1])) return false
+  else if (parseInt(appVersionArray[2]) < parseInt(latestVersionArray[2])) return true
   else return false
 }
