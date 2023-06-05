@@ -398,6 +398,8 @@ export const HomeComponentContainer = (
       okLabel: props.t('stop'),
       cancelLabel: props.t('do not stop'),
       onOk: async () => {
+        props.setLoading(true)
+
         props.dispatch(setObservationId({
           eventId: props.observationEvent?.events?.[props.observationEvent?.events?.length - 1].id,
           unitId: null
@@ -416,6 +418,7 @@ export const HomeComponentContainer = (
           await props.dispatch(eventPathUpdate(pathToLineStringConstructor(props.path)))
         }
 
+        props.setLoading(false)
         props.onPressFinishObservationEvent('home')
       },
       testID: 'stopFromHomeMessage'
