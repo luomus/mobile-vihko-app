@@ -45,6 +45,9 @@ const FormLauncherComponent = (props: Props) => {
     } else if (props.formID === forms.mothForm) {
       setTitle(t('moth form'))
       setDescription(t('instructions.moth.intro'))
+    } else if (props.formID === forms.bumblebeeForm) {
+      setTitle(t('bumblebee form'))
+      setDescription(t('instructions.bumblebee.intro'))
     } else {
       setTitle(t('lolife'))
       setDescription(t('instructions.lolife.intro'))

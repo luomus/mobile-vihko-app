@@ -73,6 +73,7 @@ const HomeComponent = (props: Props) => {
   const [butterflyModalVisibility, setButterflyModalVisibility] = useState<boolean>(false)
   const [largeFlowersModalVisibility, setLargeFlowersModalVisibility] = useState<boolean>(false)
   const [mothModalVisibility, setMothModalVisibility] = useState<boolean>(false)
+  const [bumblebeeModalVisibility, setBumblebeeModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -115,6 +116,8 @@ const HomeComponent = (props: Props) => {
     setLargeFlowersModalVisibility={setLargeFlowersModalVisibility}
     mothModalVisibility={mothModalVisibility}
     setMothModalVisibility={setMothModalVisibility}
+    bumblebeeModalVisibility={bumblebeeModalVisibility}
+    setBumblebeeModalVisibility={setBumblebeeModalVisibility}
     zoneModalVisibility={zoneModalVisibility}
     setZoneModalVisibility={setZoneModalVisibility}
     loading={loading}
@@ -163,7 +166,9 @@ type Props2 = {
   largeFlowersModalVisibility: boolean,
   setLargeFlowersModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   mothModalVisibility: boolean,
-  setMothModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
+  setMothModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  bumblebeeModalVisibility: boolean,
+  setBumblebeeModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   zoneModalVisibility: boolean,
   setZoneModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   loading: boolean,
@@ -476,6 +481,7 @@ export const HomeComponentContainer = (
             <FormLauncherComponent formID={forms.butterflyForm} setModalVisibility={props.setButterflyModalVisibility} />
             <FormLauncherComponent formID={forms.largeFlowersForm} setModalVisibility={props.setLargeFlowersModalVisibility} />
             <FormLauncherComponent formID={forms.mothForm} setModalVisibility={props.setMothModalVisibility} />
+            <FormLauncherComponent formID={forms.bumblebeeForm} setModalVisibility={props.setBumblebeeModalVisibility} />
             <>
               {
                 props.credentials.permissions?.includes('HR.2951') ?
@@ -517,6 +523,9 @@ export const HomeComponentContainer = (
         <CompleteListModalComponent modalVisibility={props.mothModalVisibility}
           setModalVisibility={props.setMothModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.mothForm) }}
           formID={forms.mothForm} />
+        <CompleteListModalComponent modalVisibility={props.bumblebeeModalVisibility}
+          setModalVisibility={props.setBumblebeeModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.bumblebeeForm) }}
+          formID={forms.bumblebeeForm} />
         <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={props.setLoading} />
