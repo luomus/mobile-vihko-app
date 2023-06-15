@@ -34,7 +34,8 @@ import {
   MHL1040ObservationEventFields, overrideMHL1040ObservationEventFields, MHL1040ObservationEventFieldOrder,
   MHL1042ObservationEventFields, overrideMHL1042ObservationEventFields, MHL1042ObservationEventFieldOrder,
   MHL1043ObservationEventFields, overrideMHL1043ObservationEventFields, MHL1043ObservationEventFieldOrder,
-  MHL1044ObservationEventFields, overrideMHL1044ObservationEventFields, MHL1044ObservationEventFieldOrder
+  MHL1044ObservationEventFields, overrideMHL1044ObservationEventFields, MHL1044ObservationEventFieldOrder,
+  MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, MHL1045ObservationEventFieldOrder
 } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -127,6 +128,8 @@ const DocumentComponent = (props: Props) => {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL1043ObservationEventFields, overrideMHL1043ObservationEventFields, null, MHL1043ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.bumblebeeForm) {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL1044ObservationEventFields, overrideMHL1044ObservationEventFields, null, MHL1044ObservationEventFieldOrder, lang, scrollViewRef)
+      } else if (schema.formID === forms.herpForm) {
+        initForm(setForm, event, null, schemaWithoutUnits, null, MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, null, MHL1045ObservationEventFieldOrder, lang, scrollViewRef)
       }
     }
   }

@@ -35,7 +35,8 @@ import {
   MHL117Fields, overrideMHL117Fields, MHL117FieldOrder, additionalMHL117Fields,
   JX652Fields, overrideJX652Fields, MHL932Fields, overrideMHL932Fields, forms, biomonForms,
   MHL1040Fields, overrideMHL1040Fields, MHL1042Fields, overrideMHL1042Fields,
-  MHL1043Fields, overrideMHL1043Fields, MHL1044Fields, overrideMHL1044Fields
+  MHL1043Fields, overrideMHL1043Fields, MHL1044Fields, overrideMHL1044Fields,
+  MHL1045Fields, overrideMHL1045Fields
 } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
@@ -195,6 +196,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, observationState, null, schemaVar, null, MHL1043Fields, overrideMHL1043Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.bumblebeeForm) {
         initForm(setForm, observationState, null, schemaVar, null, MHL1044Fields, overrideMHL1044Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.herpForm) {
+        initForm(setForm, observationState, null, schemaVar, null, MHL1045Fields, overrideMHL1045Fields, null, null, lang, scrollViewRef)
       }
 
       //new observations
@@ -220,6 +223,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, defaultObject, null, schemaVar, null, MHL1043Fields, overrideMHL1043Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.bumblebeeForm) {
         initForm(setForm, defaultObject, null, schemaVar, null, MHL1044Fields, overrideMHL1044Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.herpForm) {
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL1045Fields, overrideMHL1045Fields, null, null, lang, scrollViewRef)
       }
     }
   }
