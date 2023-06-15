@@ -37,7 +37,7 @@ import {
   MHL1040Fields, overrideMHL1040Fields, MHL1042Fields, overrideMHL1042Fields,
   MHL1043Fields, overrideMHL1043Fields, MHL1044Fields, overrideMHL1044Fields,
   MHL1045Fields, overrideMHL1045Fields, MHL1046Fields, overrideMHL1046Fields,
-  MHL1047Fields, overrideMHL1047Fields
+  MHL1047Fields, overrideMHL1047Fields, MHL1048Fields, overrideMHL1048Fields
 } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
@@ -203,6 +203,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, observationState, null, schemaVar, null, MHL1046Fields, overrideMHL1046Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.macrolichenForm) {
         initForm(setForm, observationState, null, schemaVar, null, MHL1047Fields, overrideMHL1047Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.bracketFungiForm) {
+        initForm(setForm, observationState, null, schemaVar, null, MHL1048Fields, overrideMHL1048Fields, null, null, lang, scrollViewRef)
       }
 
       //new observations
@@ -234,6 +236,8 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, defaultObject, null, schemaVar, null, MHL1046Fields, overrideMHL1046Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.macrolichenForm) {
         initForm(setForm, defaultObject, null, schemaVar, null, MHL1047Fields, overrideMHL1047Fields, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.bracketFungiForm) {
+        initForm(setForm, defaultObject, null, schemaVar, null, MHL1048Fields, overrideMHL1048Fields, null, null, lang, scrollViewRef)
       }
     }
   }

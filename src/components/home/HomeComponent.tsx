@@ -77,6 +77,7 @@ const HomeComponent = (props: Props) => {
   const [herpModalVisibility, setHerpModalVisibility] = useState<boolean>(false)
   const [subarcticModalVisibility, setSubarcticModalVisibility] = useState<boolean>(false)
   const [macrolichenModalVisibility, setMacrolichenModalVisibility] = useState<boolean>(false)
+  const [bracketFungiModalVisibility, setBracketFungiModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -127,6 +128,8 @@ const HomeComponent = (props: Props) => {
     setSubarcticModalVisibility={setSubarcticModalVisibility}
     macrolichenModalVisibility={macrolichenModalVisibility}
     setMacrolichenModalVisibility={setMacrolichenModalVisibility}
+    bracketFungiModalVisibility={bracketFungiModalVisibility}
+    setBracketFungiModalVisibility={setBracketFungiModalVisibility}
     zoneModalVisibility={zoneModalVisibility}
     setZoneModalVisibility={setZoneModalVisibility}
     loading={loading}
@@ -184,6 +187,8 @@ type Props2 = {
   setSubarcticModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   macrolichenModalVisibility: boolean,
   setMacrolichenModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  bracketFungiModalVisibility: boolean,
+  setBracketFungiModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   zoneModalVisibility: boolean,
   setZoneModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   loading: boolean,
@@ -500,6 +505,7 @@ export const HomeComponentContainer = (
             <FormLauncherComponent formID={forms.herpForm} setModalVisibility={props.setHerpModalVisibility} />
             <FormLauncherComponent formID={forms.subarcticForm} setModalVisibility={props.setSubarcticModalVisibility} />
             <FormLauncherComponent formID={forms.macrolichenForm} setModalVisibility={props.setMacrolichenModalVisibility} />
+            <FormLauncherComponent formID={forms.bracketFungiForm} setModalVisibility={props.setBracketFungiModalVisibility} />
             <>
               {
                 props.credentials.permissions?.includes('HR.2951') ?
@@ -553,6 +559,9 @@ export const HomeComponentContainer = (
         <CompleteListModalComponent modalVisibility={props.macrolichenModalVisibility}
           setModalVisibility={props.setMacrolichenModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.macrolichenForm) }}
           formID={forms.macrolichenForm} />
+        <CompleteListModalComponent modalVisibility={props.bracketFungiModalVisibility}
+          setModalVisibility={props.setBracketFungiModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.bracketFungiForm) }}
+          formID={forms.bracketFungiForm} />
         <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={props.setLoading} />
