@@ -100,6 +100,8 @@ const CompleteListModalComponent = (props: Props) => {
       formTranslation = t('bumblebee form')
     } else if (props.formID === forms.herpForm) {
       formTranslation = t('herp form')
+    } else if (props.formID === forms.subarcticForm) {
+      formTranslation = t('subarctic form')
     }
 
     return t('do you want to start an event?') + ' ' + formTranslation + '?'

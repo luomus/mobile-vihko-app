@@ -5,7 +5,12 @@ import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import MiniMapComponent from './MiniMapComponent'
-import { forms, JX519Fields, MHL117Fields, JX652Fields, MHL932Fields, MHL1040Fields, MHL1042Fields, MHL1043Fields, MHL1044Fields, MHL1045Fields } from '../../config/fields'
+import {
+  forms,
+  JX519Fields, MHL117Fields, JX652Fields, MHL932Fields,
+  MHL1040Fields, MHL1042Fields, MHL1043Fields, MHL1044Fields,
+  MHL1045Fields, MHL1046Fields
+} from '../../config/fields'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
 
@@ -75,6 +80,8 @@ const ObservationInfoComponent = (props: Props) => {
         fields = MHL1044Fields
       } else if (props.event.formID === forms.herpForm) {
         fields = MHL1045Fields
+      } else if (props.event.formID === forms.subarcticForm) {
+        fields = MHL1046Fields
       }
 
       if (schemaUnits && fields) {

@@ -56,6 +56,8 @@ const NavBarComponent = (props: Props) => {
       setFormName(t('bumblebee form'))
     } else if (schema.formID === forms.herpForm) {
       setFormName(t('herp form'))
+    } else if (schema.formID === forms.subarcticForm) {
+      setFormName(t('subarctic form'))
     } else {
       setFormName(t('lolife'))
     }

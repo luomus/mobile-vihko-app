@@ -51,6 +51,9 @@ const FormLauncherComponent = (props: Props) => {
     } else if (props.formID === forms.herpForm) {
       setTitle(t('herp form'))
       setDescription(t('instructions.herp.intro'))
+    } else if (props.formID === forms.subarcticForm) {
+      setTitle(t('subarctic form'))
+      setDescription(t('instructions.subarctic.intro'))
     } else {
       setTitle(t('lolife'))
       setDescription(t('instructions.lolife.intro'))

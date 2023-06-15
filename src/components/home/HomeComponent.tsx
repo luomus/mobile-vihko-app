@@ -75,6 +75,7 @@ const HomeComponent = (props: Props) => {
   const [mothModalVisibility, setMothModalVisibility] = useState<boolean>(false)
   const [bumblebeeModalVisibility, setBumblebeeModalVisibility] = useState<boolean>(false)
   const [herpModalVisibility, setHerpModalVisibility] = useState<boolean>(false)
+  const [subarcticModalVisibility, setSubarcticModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -121,6 +122,8 @@ const HomeComponent = (props: Props) => {
     setBumblebeeModalVisibility={setBumblebeeModalVisibility}
     herpModalVisibility={herpModalVisibility}
     setHerpModalVisibility={setHerpModalVisibility}
+    subarcticModalVisibility={subarcticModalVisibility}
+    setSubarcticModalVisibility={setSubarcticModalVisibility}
     zoneModalVisibility={zoneModalVisibility}
     setZoneModalVisibility={setZoneModalVisibility}
     loading={loading}
@@ -174,6 +177,8 @@ type Props2 = {
   setBumblebeeModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   herpModalVisibility: boolean,
   setHerpModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  subarcticModalVisibility: boolean,
+  setSubarcticModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   zoneModalVisibility: boolean,
   setZoneModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   loading: boolean,
@@ -488,6 +493,7 @@ export const HomeComponentContainer = (
             <FormLauncherComponent formID={forms.mothForm} setModalVisibility={props.setMothModalVisibility} />
             <FormLauncherComponent formID={forms.bumblebeeForm} setModalVisibility={props.setBumblebeeModalVisibility} />
             <FormLauncherComponent formID={forms.herpForm} setModalVisibility={props.setHerpModalVisibility} />
+            <FormLauncherComponent formID={forms.subarcticForm} setModalVisibility={props.setSubarcticModalVisibility} />
             <>
               {
                 props.credentials.permissions?.includes('HR.2951') ?
@@ -535,6 +541,9 @@ export const HomeComponentContainer = (
         <CompleteListModalComponent modalVisibility={props.herpModalVisibility}
           setModalVisibility={props.setHerpModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.herpForm) }}
           formID={forms.herpForm} />
+        <CompleteListModalComponent modalVisibility={props.subarcticModalVisibility}
+          setModalVisibility={props.setSubarcticModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.subarcticForm) }}
+          formID={forms.subarcticForm} />
         <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={props.setLoading} />
