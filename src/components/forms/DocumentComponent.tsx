@@ -36,7 +36,8 @@ import {
   MHL1043ObservationEventFields, overrideMHL1043ObservationEventFields, MHL1043ObservationEventFieldOrder,
   MHL1044ObservationEventFields, overrideMHL1044ObservationEventFields, MHL1044ObservationEventFieldOrder,
   MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, MHL1045ObservationEventFieldOrder,
-  MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, MHL1046ObservationEventFieldOrder
+  MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, MHL1046ObservationEventFieldOrder,
+  MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, MHL1047ObservationEventFieldOrder
 } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -133,6 +134,8 @@ const DocumentComponent = (props: Props) => {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, null, MHL1045ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.subarcticForm) {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, null, MHL1046ObservationEventFieldOrder, lang, scrollViewRef)
+      } else if (schema.formID === forms.macrolichenForm) {
+        initForm(setForm, event, null, schemaWithoutUnits, null, MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, null, MHL1047ObservationEventFieldOrder, lang, scrollViewRef)
       }
     }
   }

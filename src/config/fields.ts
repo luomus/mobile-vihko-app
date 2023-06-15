@@ -997,6 +997,94 @@ export const MHL1046ObservationEventFieldOrder = [
   'gatherings_0_notes',
 ]
 
+export const MHL1047ObservationEventFields = [
+  'secureLevel',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_notes',
+]
+
+export const overrideMHL1047Fields = {
+  'identifications_0_taxonVerbatim': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      filters: {
+        taxonSet: 'MX.taxonSetBiomonCompleteListmacrolichen'
+      },
+      valueField: 'identifications_0_taxonVerbatim',
+      validation: {
+        required: {
+          value: true,
+          message: 'must not be empty'
+        },
+        minLength: {
+          value: 2,
+          message: 'must be at least 2 letters'
+        },
+      },
+      transform: {
+        'key': 'unitFact_autocompleteSelectedTaxonID',
+        'shownName': 'identifications_0_taxonVerbatim',
+        'payload_informalTaxonGroups': 'informalTaxonGroups'
+      }
+    }
+  }
+}
+
+export const MHL1047Fields = [
+  'identifications_0_taxonVerbatim',
+  'recordBasis',
+  'substrateClassification',
+  'taxonConfidence',
+  'images',
+  'count'
+]
+
+export const overrideMHL1047ObservationEventFields = {
+  'secureLevel': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikan karkeistus',
+      'Plats skyddning',
+      'Location roughening'
+    ]
+  },
+  'gatheringEvent_completeList_completeListType': {
+    field: 'completeListField',
+    params: {
+      validation: {
+        validate: (value: string) => value !== 'empty' || 'must choose list type'
+      }
+    }
+  },
+  'gatherings_0_locality': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikannimet (kunta tallentuu automaattisesti)',
+      'Ortnamn (kommunen sparar automatiskt)',
+      'Locality names (municipality is saved automatically)'
+    ]
+  },
+}
+
+export const MHL1047ObservationEventFieldOrder = [
+  'secureLevel',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_notes',
+]
+
 export const observationEventFields = [
   'gatheringEvent_legPublic',
   'secureLevel',
@@ -1037,6 +1125,7 @@ export const forms: Record<string, any> = {
   bumblebeeForm: 'MHL.1044',
   herpForm: 'MHL.1045',
   subarcticForm: 'MHL.1046',
+  macrolichenForm: 'MHL.1047',
   lolife: 'MHL.45'
 }
 
@@ -1047,7 +1136,8 @@ export const biomonForms: Record<string, any> = {
   mothForm: 'MHL.1043',
   bumblebeeForm: 'MHL.1044',
   herpForm: 'MHL.1045',
-  subarcticForm: 'MHL.1046'
+  subarcticForm: 'MHL.1046',
+  macrolichenForm: 'MHL.1047'
 }
 
 export const useUiSchemaFields = ['MHL.45']

@@ -54,6 +54,9 @@ const FormLauncherComponent = (props: Props) => {
     } else if (props.formID === forms.subarcticForm) {
       setTitle(t('subarctic form'))
       setDescription(t('instructions.subarctic.intro'))
+    } else if (props.formID === forms.macrolichenForm) {
+      setTitle(t('macrolichen form'))
+      setDescription(t('instructions.macrolichen.intro'))
     } else {
       setTitle(t('lolife'))
       setDescription(t('instructions.lolife.intro'))

@@ -43,6 +43,8 @@ const SentEventComponent = (props: Props) => {
       setTitle(t('herp form'))
     } else if (formId === forms.subarcticForm) {
       setTitle(t('subarctic form'))
+    } else if (formId === forms.macrolichenForm) {
+      setTitle(t('macrolichen form'))
     } else {
       setTitle(t('lolife'))
     }

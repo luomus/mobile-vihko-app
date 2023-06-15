@@ -9,7 +9,7 @@ import {
   forms,
   JX519Fields, MHL117Fields, JX652Fields, MHL932Fields,
   MHL1040Fields, MHL1042Fields, MHL1043Fields, MHL1044Fields,
-  MHL1045Fields, MHL1046Fields
+  MHL1045Fields, MHL1046Fields, MHL1047Fields
 } from '../../config/fields'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
@@ -82,6 +82,8 @@ const ObservationInfoComponent = (props: Props) => {
         fields = MHL1045Fields
       } else if (props.event.formID === forms.subarcticForm) {
         fields = MHL1046Fields
+      } else if (props.event.formID === forms.macrolichenForm) {
+        fields = MHL1047Fields
       }
 
       if (schemaUnits && fields) {

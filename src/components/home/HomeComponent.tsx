@@ -76,6 +76,7 @@ const HomeComponent = (props: Props) => {
   const [bumblebeeModalVisibility, setBumblebeeModalVisibility] = useState<boolean>(false)
   const [herpModalVisibility, setHerpModalVisibility] = useState<boolean>(false)
   const [subarcticModalVisibility, setSubarcticModalVisibility] = useState<boolean>(false)
+  const [macrolichenModalVisibility, setMacrolichenModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -124,6 +125,8 @@ const HomeComponent = (props: Props) => {
     setHerpModalVisibility={setHerpModalVisibility}
     subarcticModalVisibility={subarcticModalVisibility}
     setSubarcticModalVisibility={setSubarcticModalVisibility}
+    macrolichenModalVisibility={macrolichenModalVisibility}
+    setMacrolichenModalVisibility={setMacrolichenModalVisibility}
     zoneModalVisibility={zoneModalVisibility}
     setZoneModalVisibility={setZoneModalVisibility}
     loading={loading}
@@ -179,6 +182,8 @@ type Props2 = {
   setHerpModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   subarcticModalVisibility: boolean,
   setSubarcticModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+  macrolichenModalVisibility: boolean,
+  setMacrolichenModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   zoneModalVisibility: boolean,
   setZoneModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   loading: boolean,
@@ -494,6 +499,7 @@ export const HomeComponentContainer = (
             <FormLauncherComponent formID={forms.bumblebeeForm} setModalVisibility={props.setBumblebeeModalVisibility} />
             <FormLauncherComponent formID={forms.herpForm} setModalVisibility={props.setHerpModalVisibility} />
             <FormLauncherComponent formID={forms.subarcticForm} setModalVisibility={props.setSubarcticModalVisibility} />
+            <FormLauncherComponent formID={forms.macrolichenForm} setModalVisibility={props.setMacrolichenModalVisibility} />
             <>
               {
                 props.credentials.permissions?.includes('HR.2951') ?
@@ -544,6 +550,9 @@ export const HomeComponentContainer = (
         <CompleteListModalComponent modalVisibility={props.subarcticModalVisibility}
           setModalVisibility={props.setSubarcticModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.subarcticForm) }}
           formID={forms.subarcticForm} />
+        <CompleteListModalComponent modalVisibility={props.macrolichenModalVisibility}
+          setModalVisibility={props.setMacrolichenModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.macrolichenForm) }}
+          formID={forms.macrolichenForm} />
         <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={props.setLoading} />
