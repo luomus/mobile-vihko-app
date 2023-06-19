@@ -23,11 +23,15 @@ Add files called `.env` and `prod.env` to the project root. Ask the developers f
 
 ACCESS_TOKEN=<DEV_OR_PROD_ACCESS_TOKEN>
 API_URL=<DEV_OR_PROD_API_URL>
+ATLAS_API_URL=<DEV_OR_PROD_ATLAS_API_URL>
 GEOCODING_API_KEY=<GEOCODING_API_KEY>
 GOOGLE_MAPS_API_KEY=<GOOGLE_MAPS_API_KEY>
+LAJI_AUTH_URL=<DEV_OR_PROD_LAJI_AUTH_URL>
+LAJI_URL=<DEV_OR_PROD_LAJI_URL>
 SENTRY_AUTH_TOKEN=<SENTRY_AUTH_TOKEN>
 SENTRY_DSN=<SENTRY_DSN>
 SOURCE_ID=<DEV_OR_PROD_SOURCE_ID>
+
 ```
 
 Start the app for development with `npx expo start --tunnel` and scan the QR-code from the terminal with the Expo mobile app or open it into an emulator from the terminal by pressing 'a' (might require to have an emulator already running on Android Studio).
