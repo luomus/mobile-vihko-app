@@ -224,7 +224,7 @@ const FormAutocompleteComponent = (props: Props) => {
   }
 
   const onSelection = (item: Record<string, any>) => {
-    setQuery(item.payload.matchingName)
+    setQuery(item.payload.vernacularName ? item.payload.vernacularName : item.payload.scientificName)
     setSelected(true)
     setHideResult(true)
 
