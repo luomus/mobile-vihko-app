@@ -588,6 +588,7 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
 
     try {
       taxonList = await getCompleteList(taxonSetID, gridNumber)
+      taxonList = taxonList.filter(taxon => { return taxon !== null })
     } catch (error: any) {
       captureException(error)
       log.error({
