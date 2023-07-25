@@ -137,16 +137,18 @@ const ListComponent = (props: Props) => {
       key={item.key}
       style={Cs.listElementContainer}
     >
-      <Text style={(item.atlasCode || item.count || taxaOnMap.includes(getTaxonID(item))) ?
-        Ts.listBoldText : Ts.listText}>
+      <Text
+        style={(item.atlasCode || item.count || taxaOnMap.includes(getTaxonID(item))) ? Ts.listBoldText : Ts.listText}
+        numberOfLines={1}
+      >
         {(listOrder.class !== 'scientific' && listOrder.class !== 'scientific-systematic') ? getTaxonName(item) : item.scientificName}
       </Text>
       {
         item.atlasCode ?
           <AtlasCodeStampComponent onPress={() => null} atlasKey={item.atlasCode} />
           : item.count ?
-            <Text style={Ts.listBoldCenteredText}>
-              {item.count.length > 6 ? item.count.substring(0, 5) + '...' : item.count}
+            <Text style={Ts.listCountText}>
+              {item.count.length > 8 ? item.count.substring(0, 5) + '...' : item.count}
             </Text>
             : taxaOnMap.includes(getTaxonID(item)) ?
               <Icon

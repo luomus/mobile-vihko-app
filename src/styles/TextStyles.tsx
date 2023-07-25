@@ -168,16 +168,19 @@ const TextStyles = StyleSheet.create({
 
   //list component
   listText: {
+    flex: 1,
     fontSize: 24
   },
   listBoldText: {
+    flex: 1,
     fontWeight: 'bold',
     fontSize: 24
   },
-  listBoldCenteredText: {
+  listCountText: {
     fontWeight: 'bold',
     fontSize: 24,
-    paddingRight: 30
+    paddingLeft: 20,
+    paddingRight: 10
   },
 
   //form components
