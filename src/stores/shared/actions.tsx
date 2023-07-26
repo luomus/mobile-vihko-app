@@ -165,7 +165,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     } catch (error: any) {
       await dispatch(deleteObservationEvent(newID))
       log.error({
-        location: '/components/HomeComponent.tsx beginObservationEvent()/watchLocationAsync()',
+        location: '/stores/shared/actions.tsx beginObservationEvent()/watchLocationAsync()',
         error: error,
         user_id: credentials.user.id
       })
@@ -303,7 +303,22 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { grid, firstLocation, observationEvent, path, tracking, observationEventInterrupted } = getState()
+    const { credentials, grid, firstLocation, observationEvent, path, tracking, observationEventInterrupted } = getState()
+
+    try {
+      await stopLocationAsync(observationEventInterrupted, tracking)
+    } catch (error: any) {
+      captureException(error)
+      log.error({
+        location: '/stores/shared/actions.tsx finishObservationEvent()/stopLocationAsync()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: (`${i18n.t('failed to stop location updates')} ${error}`)
+      })
+    }
 
     dispatch(setObservationEventInterrupted(false))
 
@@ -347,7 +362,6 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(clearObservationId())
     dispatch(clearGrid())
     dispatch(setFirstLocation([60.192059, 24.945831]))
-    await stopLocationAsync(observationEventInterrupted, tracking)
 
     return Promise.resolve()
   }

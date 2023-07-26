@@ -161,7 +161,44 @@ export const stopLocationAsync = async (observationEventInterrupted: boolean, tr
 }
 
 export const stopBackgroundLocationAsync = async () => {
-  await Location.stopLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
+
+  let lastError: any = undefined
+
+  const stopTrackingAttempt = (timeout: number) => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        await new Promise<void>((timeoutResolve) => {
+          setTimeout(() => {
+            timeoutResolve()
+          }, timeout)
+        })
+
+        await Location.stopLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
+        resolve()
+
+      } catch (error: any) {
+        lastError = error
+        reject()
+      }
+    })
+  }
+
+  let stopped = false
+  let attempt = 1
+
+  while (attempt <= 5) {
+    try {
+      await stopTrackingAttempt(3000)
+      stopped = true
+      break
+    } catch (error: any) {
+      attempt++
+    }
+  }
+
+  if (!stopped) {
+    throw new Error(lastError)
+  }
 }
 
 export const cleanupLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
