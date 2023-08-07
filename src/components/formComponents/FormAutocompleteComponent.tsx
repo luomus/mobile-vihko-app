@@ -161,7 +161,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
       let autocompleteOptions: {
         data: Record<string, any>
-        element: JSX.Element
+        element: React.JSX.Element
       }[] = []
 
       //do not include non-filtered options for fungi atlas
@@ -248,7 +248,7 @@ const FormAutocompleteComponent = (props: Props) => {
     }
   }
 
-  const errorMessageTranslation = (errorMessage: string): Element => {
+  const errorMessageTranslation = (errorMessage: string): React.JSX.Element => {
     const errorTranslation = t(errorMessage)
     return <Text style={Ts.redText}>{errorTranslation}</Text>
   }
@@ -310,7 +310,6 @@ const FormAutocompleteComponent = (props: Props) => {
             onChangeText={(text) => onQueryChange(text)}
             hideResults={hideResult}
             keyboardType={'default'}
-            listStyle={{ paddingLeft: 15 }}
             renderTextInput={({ onFocus, onBlur, onChangeText, defaultValue }) => {
               return renderTextInput(onFocus, onBlur, onChangeText, defaultValue)
             }}

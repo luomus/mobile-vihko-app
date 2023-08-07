@@ -6,7 +6,7 @@ import { store } from '../stores'
 export function renderWithProviders(
   ui: React.ReactElement
 ) {
-  function Wrapper({ children }: PropsWithChildren<ReactNode | undefined>): JSX.Element {
+  function Wrapper({ children }: PropsWithChildren<ReactNode | undefined>): React.JSX.Element {
     return <Provider store={store}>{children}</Provider>
   }
 

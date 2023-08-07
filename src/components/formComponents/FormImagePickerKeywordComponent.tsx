@@ -146,7 +146,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
     setValue(props.objectTitle, updatedImages)
   }
 
-  const errorMessageTranslation = (errorMessage: string): Element => {
+  const errorMessageTranslation = (errorMessage: string): React.JSX.Element => {
     const errorTranslation = t(errorMessage)
     return <Text style={Ts.redText}>{errorTranslation}</Text>
   }

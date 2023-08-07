@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleProp, Text, TextStyle, TouchableOpacity, ViewStyle, View } from 'react-native'
+import { DimensionValue, StyleProp, Text, TextStyle, TouchableOpacity, ViewStyle, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { LinearGradient } from 'expo-linear-gradient'
 import Bs from '../../styles/ButtonStyles'
@@ -8,8 +8,8 @@ type Props = {
   onPressFunction: () => any,
   disabled?: boolean | undefined,
   title: string | undefined,
-  height: number | undefined,
-  width: string | number | undefined,
+  height: DimensionValue | undefined,
+  width: DimensionValue | undefined,
   buttonStyle: StyleProp<ViewStyle>,
   gradientColorStart: string,
   gradientColorEnd: string,

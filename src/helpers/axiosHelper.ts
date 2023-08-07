@@ -21,6 +21,7 @@ export const post = async (url: string, data: any, config?: object) => {
     const promise = config ? axios.post(url, data, config) : axios.post(url, data)
     return await promise
   } catch (error) {
+    console.log('X', JSON.stringify(error, null, 4))
     log.error({
       location: '/helpers/axiosHelper.ts post(' + url + ',' + data + ',' + config + ')',
       error: error

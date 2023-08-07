@@ -1,5 +1,6 @@
 import * as FileSystem from 'expo-file-system'
 import * as MediaLibrary from 'expo-media-library'
+import { decode } from 'base-64'
 import i18n from 'i18next'
 import { CredentialsType } from '../stores'
 import { sendImages, sendMetadata } from '../services/imageService'
@@ -17,7 +18,8 @@ interface BasicObject {
 }
 
 const processImage = async (uri: string) => {
-  const { size } = await FileSystem.getInfoAsync(uri, { size: true })
+  const fileInfo = await FileSystem.getInfoAsync(uri, { size: true })
+  const size = fileInfo.exists ? fileInfo.size : 0
   const name = uri.substring(uri.lastIndexOf('/') + 1)
   let type = uri.substring(uri.lastIndexOf('.') + 1)
 
@@ -124,7 +126,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 
   const formDataBody = new FormData()
 
-  Promise.all(imageFiles.map(async image => {
+  await Promise.all(imageFiles.map(async image => {
     if (!isValidFileType(image.type)) {
       if (!invalidFileTypes.includes(image.type)) {
         invalidFileTypes.push(image.type)
@@ -143,7 +145,39 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
         await MediaLibrary.saveToLibraryAsync(image.uri)
       }
     } else {
-      formDataBody.append('data', image)
+      // console.log('uri', image.uri)
+      // let fetchedImage = await fetch(image.uri)
+      // let blob = await fetchedImage.blob()
+      // console.log('blob ', blob)
+
+      let base64String = ''
+
+      try {
+        base64String = await FileSystem.readAsStringAsync(image.uri, { encoding: 'base64' })
+        console.log('A')
+      } catch (error: any) {
+        console.log('CATCH!')
+        return Promise.reject({
+          severity: 'low',
+          message: 'Failed to read image.' 
+        })
+      }
+
+      const binaryData = decode(base64String)
+      console.log('B')
+
+      //create a Uint8Array to represent the binary data
+      const buffer = new Uint8Array(binaryData.length)
+      for (let i = 0; i < binaryData.length; i++) {
+        buffer[i] = binaryData.charCodeAt(i)
+      }
+      console.log('C')
+      //create a File object from the binary data
+      const file = new File([binaryData], image.name, { type: image.type })
+      console.log('D', JSON.stringify(file, null, 4))
+      // const imageFile = new File([imageContent], 'data')
+
+      formDataBody.append('data', file)
     }
   }))
 
@@ -176,8 +210,11 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     })
   } else {
     try {
+      // console.log('E', JSON.stringify(formDataBody, null, 4))
       res = await sendImages(formDataBody, credentials.token)
+      // console.log('F', res)
     } catch (error: any) {
+      // console.log('G', error)
       captureException(error)
       log.error({
         location: '/helpers/imageHelper.tsx saveImages()/sendImages()',

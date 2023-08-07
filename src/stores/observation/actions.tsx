@@ -196,6 +196,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
           try {
             newImages = await saveImages(unit.images, credentials)
           } catch (error: any) {
+            console.log('H', error)
             captureException(error)
             if (error.severity && error.severity === 'low') {
               imageErrorMessage = error.message
