@@ -59,12 +59,17 @@ const OtherStyles = StyleSheet.create({
     borderBottomWidth: 2,
     paddingVertical: 5
   },
+  listSorter: {
+    backgroundColor: Colors.neutral5,
+    color: Colors.neutral7 //text color
+  },
   iOSPickerInput: {
     flex: 1,
     paddingHorizontal: 10,
   },
   iOSListSorter: {
-    color: Colors.neutral6,
+    backgroundColor: Colors.neutral5,
+    color: Colors.neutral7, //text color
     fontSize: 24,
     flex: 1,
     paddingHorizontal: 10,

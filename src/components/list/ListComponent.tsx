@@ -165,18 +165,18 @@ const ListComponent = (props: Props) => {
 
   const ListHeader = (
     <>
-      <ListFilterComponent
-        search={search}
-        setSearch={setSearch}
-        textInput={textInput}
-        navigation={props.navigation}
-      />
       <ListSorterComponent
         setObserved={setObserved}
         updateList={updateList}
         observedUnedited={observedUnedited}
         picked={picked}
         unpicked={unpicked}
+      />
+      <ListFilterComponent
+        search={search}
+        setSearch={setSearch}
+        textInput={textInput}
+        navigation={props.navigation}
       />
     </>
   )

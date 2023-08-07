@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker'
 import { useTranslation } from 'react-i18next'
 import { DispatchType, rootState, setListOrder } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
+import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 
 type Props = {
@@ -89,6 +90,7 @@ const ListSorterComponent = (props: Props) => {
         onValueChange={itemValue => {
           dispatch(setListOrder({ class: itemValue }))
         }}
+        style={Os.listSorter}
       >
         <Picker.Item key={'commonness'} label={t('filter.commonness')} value={'commonness'} style={{ fontSize: 24, color: Colors.neutral6 }} />
         <Picker.Item key={'systematic'} label={t('filter.systematic')} value={'systematic'} style={{ fontSize: 24, color: Colors.neutral6 }} />

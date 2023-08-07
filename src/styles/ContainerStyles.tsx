@@ -366,6 +366,7 @@ const ContainerStyles = StyleSheet.create({
     right: 34
   },
   listSorterContainer: {
+    backgroundColor: Colors.neutral5,
     borderBottomWidth: 2
   },
   listElementContainer: {

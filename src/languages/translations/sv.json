@@ -80,7 +80,7 @@
   "failed to watch background location": "Misslyckades att spåra plats i bakgrunden.",
   "failed to watch position": "Misslyckades att spåra användarnas position.",
   "false": "Nej",
-  "filter species": "Filtrera arter",
+  "filter species": "Sök arter...",
   "filter.commonness": "Vanlighet",
   "filter.default": "Standardordning",
   "filter.name": "Alfabetisk ordning",
