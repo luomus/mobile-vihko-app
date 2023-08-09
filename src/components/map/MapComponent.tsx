@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import { Icon } from 'react-native-elements'
-import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
+import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { MultiPolygon } from 'geojson'
@@ -58,7 +58,6 @@ const MapComponent = (props: Props) => {
   const [mapType, setMapType] = useState<MapType>('terrain')
   const [observationButtonsState, setObservationButtonsState] = useState('')
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
-  const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
 
   const editing = useSelector((state: rootState) => state.editing)
   const grid = useSelector((state: rootState) => state.grid)
@@ -309,7 +308,7 @@ const MapComponent = (props: Props) => {
       return pathPolygon ?
         <Geojson
           geojson={wrapGeometryInFC(pathPolygon)}
-          strokeWidth={Platform.OS === 'ios' ? 3 : 5}
+          strokeWidth={5}
           strokeColor={Colors.pathColor}
         />
         : null
@@ -326,18 +325,7 @@ const MapComponent = (props: Props) => {
       coordinate={convertPointToLatLng(observation)}
       onDragEnd={(event) => markObservation(event.nativeEvent.coordinate)}
       zIndex={4}
-    >
-      {
-        Platform.OS === 'ios' ?
-          <Icon
-            type={'material-icons'}
-            name={'location-pin'}
-            size={45}
-            color={Colors.pathColor}
-          />
-          : null
-      }
-    </Marker>
+    />
     : null
   )
 
@@ -415,18 +403,7 @@ const MapComponent = (props: Props) => {
           coordinate={coordinate}
           pinColor={color}
           zIndex={3}
-        >
-          {
-            Platform.OS === 'ios' ?
-              <Icon
-                type={'material-icons'}
-                name={'location-pin'}
-                size={45}
-                color={color}
-              />
-              : null
-          }
-        </Marker>
+        />
       )
     })
   }
@@ -448,13 +425,12 @@ const MapComponent = (props: Props) => {
           <MapView
             testID='map-view'
             ref={mapViewRef}
-            provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
+            provider={PROVIDER_GOOGLE}
             initialRegion={region}
             onPanDrag={() => stopCentering()}
             onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}
             onRegionChangeComplete={(region) => {
               onRegionChangeComplete(region)
-              setVisibleRegion(region) // for the iPhone 8 bug
             }}
             maxZoomLevel={18.9}
             minZoomLevel={5}
@@ -471,11 +447,6 @@ const MapComponent = (props: Props) => {
             {schema.formID === forms.birdAtlas ? gridOverlay() : null}
             {zoneOverlay()}
             {observationLocationsOverlay()}
-            {visibleRegion && Platform.OS === 'ios' &&
-              <Marker coordinate={visibleRegion}>
-                <View />
-              </Marker>
-            }
           </MapView>
           {schema.formID === forms.birdAtlas ?
             <View style={Cs.gridTitleContainer}>

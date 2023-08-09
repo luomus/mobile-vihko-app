@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Linking, View, Text, ActivityIndicator, Platform } from 'react-native'
-import MapView, { LatLng, MapType, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
+import { Linking, View, Text, ActivityIndicator } from 'react-native'
+import MapView, { LatLng, MapType, Marker, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
 import { Icon } from 'react-native-elements'
 import { LocationObject } from 'expo-location'
 import Modal from 'react-native-modal'
@@ -49,7 +49,6 @@ const GridModalComponent = (props: Props) => {
 
   const [centered, setCentered] = useState(true)
   const [mapType, setMapType] = useState<MapType>('terrain')
-  const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
 
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
@@ -273,7 +272,7 @@ const GridModalComponent = (props: Props) => {
                 <MapView
                   ref={miniMapRef}
                   initialRegion={region}
-                  provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
+                  provider={PROVIDER_GOOGLE}
                   maxZoomLevel={18.9}
                   minZoomLevel={5}
                   mapType={mapType === 'terrain' ? 'terrain' : mapType}
@@ -284,17 +283,11 @@ const GridModalComponent = (props: Props) => {
                   onPanDrag={() => stopCentering()}
                   onRegionChangeComplete={(region) => {
                     onRegionChangeComplete(region)
-                    setVisibleRegion(region) // for the iPhone 8 bug
                   }}
                 >
                   {locationOverlay()}
                   {tileOverlay()}
                   {gridOverlay()}
-                  {visibleRegion && Platform.OS === 'ios' &&
-                    <Marker coordinate={visibleRegion}>
-                      <View />
-                    </Marker>
-                  }
                 </MapView>
                 <View style={Cs.mapButtonsContainer}>
                   <ButtonComponent testID='toggle-map-type-btn' onPressFunction={() => toggleMapType()} title={undefined}

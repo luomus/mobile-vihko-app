@@ -23,5 +23,12 @@ module.exports = ({ config }) => {
         },
       },
     },
+    ios: {
+      ...config.ios,
+      config: {
+        ...config.ios.config,
+        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY_IOS
+      }
+    }
   }
 }

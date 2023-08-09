@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import { Platform, View } from 'react-native'
-import { Icon } from 'react-native-elements'
-import MapView, { Marker, Region, UrlTile, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps'
+import React from 'react'
+import MapView, { Marker, Region, UrlTile, PROVIDER_GOOGLE } from 'react-native-maps'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import { convertPointToLatLng } from '../../helpers/geoJSONHelper'
 import Os from '../../styles/OtherStyles'
@@ -13,8 +11,6 @@ interface Props {
 }
 
 const MiniMapComponent = (props: Props) => {
-
-  const [visibleRegion, setVisibleRegion] = useState<Region>() // for the iPhone 8 bug
 
   const tileOverlay = () => (
     <UrlTile
@@ -30,18 +26,7 @@ const MiniMapComponent = (props: Props) => {
         coordinate={coordinate}
         pinColor={props.observation.color ? props.observation.color : Colors.observationColor}
         zIndex={5}
-      >
-        {
-          Platform.OS === 'ios' ?
-            <Icon
-              type={'material-icons'}
-              name={'location-pin'}
-              size={45}
-              color={Colors.observationColor}
-            />
-            : null
-        }
-      </Marker>
+      />
     )
   }
 
@@ -54,22 +39,14 @@ const MiniMapComponent = (props: Props) => {
 
   return (
     <MapView
-      provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
+      provider={PROVIDER_GOOGLE}
       region={region}
       rotateEnabled={false}
       scrollEnabled={false}
       style={Os.miniMapViewStyle}
-      onRegionChangeComplete={(region) => {
-        setVisibleRegion(region) // for the iPhone 8 bug
-      }}
     >
       {tileOverlay()}
       {observationLocationOverlay()}
-      {visibleRegion && Platform.OS === 'ios' &&
-        <Marker coordinate={visibleRegion}>
-          <View />
-        </Marker>
-      }
     </MapView>
   )
 }
