@@ -51,10 +51,6 @@ export const stopBackgroundLocationAsync = async () => {
   Promise.resolve()
 }
 
-export const cleanupLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
-  Promise.resolve()
-}
-
 export const YKJCoordinateIntoWGS84Grid = (northing: number, easting: number): Polygon => {
   const easting1 = easting * 10000
   const easting2 = easting * 10000 + 10000

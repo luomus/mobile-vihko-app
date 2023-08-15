@@ -161,6 +161,11 @@ export const stopLocationAsync = async (observationEventInterrupted: boolean, tr
 }
 
 export const stopBackgroundLocationAsync = async () => {
+  const locationRunning = await Location.hasStartedLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
+
+  if (!locationRunning) {
+    return Promise.resolve()
+  }
 
   let lastError: any = undefined
 
@@ -198,13 +203,6 @@ export const stopBackgroundLocationAsync = async () => {
 
   if (!stopped) {
     throw new Error(lastError)
-  }
-}
-
-export const cleanupLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
-  const locationRunning = await Location.hasStartedLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
-  if (locationRunning) {
-    await stopLocationAsync(observationEventInterrupted, tracking)
   }
 }
 
