@@ -176,6 +176,12 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start'
   },
+  atlasInstructionContainer: {
+    backgroundColor: Colors.neutral2,
+    borderRadius: 10,
+    maxHeight: '90%',
+    padding: 10
+  },
   modalStartButtonContainer: {
     alignSelf: 'flex-start',
     flexDirection: 'row',

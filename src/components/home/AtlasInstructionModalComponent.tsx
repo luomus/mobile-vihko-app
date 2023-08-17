@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import Modal from 'react-native-modal'
 import { useTranslation } from 'react-i18next'
 import ButtonComponent from '../general/ButtonComponent'
@@ -21,8 +21,8 @@ const AtlasInstructionModalComponent = (props: Props) => {
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.setModalVisibility(false) }}
       onBackdropPress={() => { props.setModalVisibility(false) }} onModalHide={() => props.setGridModalVisibility(true)}>
-      <View style={Cs.modalContainer}>
-        <View style={{ alignSelf: 'flex-start' }}>
+      <View style={ Cs.atlasInstructionContainer }>
+        <ScrollView>
           <Text style={Ts.homeScreenTitle}>
             {t('bird atlas')}
           </Text>
@@ -41,7 +41,7 @@ const AtlasInstructionModalComponent = (props: Props) => {
               textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
           </View>
-        </View>
+        </ScrollView>
       </View>
     </Modal>
   )
