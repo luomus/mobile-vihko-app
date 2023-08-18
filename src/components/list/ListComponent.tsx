@@ -100,6 +100,8 @@ const ListComponent = (props: Props) => {
 
     if (listOrder.class === '') {
       dispatch(setListOrder({ class: schema.formID === forms.birdAtlas ? 'systematic' : 'commonness' }))
+    } else {
+      dispatch(setListOrder({ class: listOrder.class }))
     }
   }, [observationEvent])
 
@@ -167,7 +169,6 @@ const ListComponent = (props: Props) => {
     <>
       <ListSorterComponent
         setObserved={setObserved}
-        updateList={updateList}
         observedUnedited={observedUnedited}
         picked={picked}
         unpicked={unpicked}
@@ -189,7 +190,8 @@ const ListComponent = (props: Props) => {
     return (
       <>
         <ExtendedNavBarComponent onPressMap={props.onPressMap} onPressList={undefined}
-          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading} />
+          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading}
+          observationButtonsState={''} />
         <View style={Cs.listContainer}>
           <FlatList
             data={filteredObservations}

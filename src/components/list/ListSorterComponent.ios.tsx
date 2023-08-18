@@ -10,7 +10,6 @@ import { Icon } from 'react-native-elements'
 
 type Props = {
   setObserved: React.Dispatch<React.SetStateAction<any[] | undefined>>,
-  updateList: () => void,
   observedUnedited: any[] | undefined,
   picked: Record<string, any>[],
   unpicked: Record<string, any>[]

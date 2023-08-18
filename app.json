@@ -8,7 +8,7 @@
       "android",
       "ios"
     ],
-    "version": "1.4.13",
+    "version": "1.4.14",
     "orientation": "portrait",
     "icon": "./assets/appIcon.png",
     "splash": {
@@ -24,7 +24,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.luomus.mobi",
-      "buildNumber": "1.1.9",
+      "buildNumber": "1.1.10",
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": [
@@ -41,7 +41,7 @@
     },
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 70,
+      "versionCode": 71,
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIcon.png",
         "backgroundColor": "#FFFFFF"
