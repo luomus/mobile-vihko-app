@@ -29,7 +29,8 @@ type Props = {
   onPressMap: (() => void) | undefined,
   onPressList: (() => void) | undefined,
   onPressFinishObservationEvent: (sourcePage: string) => void,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  observationButtonsState: string
 }
 
 const ExtendedNavBarComponent = (props: Props) => {
@@ -153,6 +154,8 @@ const ExtendedNavBarComponent = (props: Props) => {
     }))
   }
 
+  const changingLocation = props.observationButtonsState === 'changeLocation'
+
   return (
     <View style={Cs.stopObservingContainer}>
       <View style={{ flexDirection: 'row' }}>
@@ -160,28 +163,35 @@ const ExtendedNavBarComponent = (props: Props) => {
       </View>
       <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
         <View style={{ paddingHorizontal: 2, width: 80 }}>
-          <ButtonComponent disabled={grid?.outsideBorders === 'true'}
+          <ButtonComponent disabled={changingLocation || grid?.outsideBorders === 'true'}
             onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
             title={tracking ? t('pause') : t('continue')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-            gradientColorStart={grid?.outsideBorders !== 'true' ? Colors.neutralButton : Colors.unavailableButton}
-            gradientColorEnd={grid?.outsideBorders !== 'true' ? Colors.neutralButton : Colors.unavailableButton}
+            gradientColorStart={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
+            gradientColorEnd={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
             shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
             iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
           />
         </View>
         <View style={{ paddingHorizontal: 2, width: 80 }}>
-          <ButtonComponent onPressFunction={() => { stopObserving() }} title={t('stop')}
-            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton} gradientColorStart={Colors.dangerButton1}
-            gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
-            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin
+          <ButtonComponent disabled={changingLocation}
+            onPressFunction={() => { stopObserving() }} title={t('stop')}
+            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
+            gradientColorStart={!changingLocation ? Colors.dangerButton1 : Colors.unavailableButton}
+            gradientColorEnd={!changingLocation ? Colors.dangerButton2 : Colors.unavailableButton}
+            shadowColor={!changingLocation ? Colors.dangerShadow : Colors.neutralShadow} textStyle={Ts.buttonText}
+            iconName={undefined} iconType={undefined} iconSize={undefined}
+            contentColor={!changingLocation ? Colors.whiteText : Colors.darkText} noMargin
           />
         </View>
         {schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID) ?
           <View style={{ paddingHorizontal: 2, width: 80 }}>
-            <ButtonComponent onPressFunction={() => props.onPressMap ? props.onPressMap() : props.onPressList ? props.onPressList() : undefined}
+            <ButtonComponent disabled={changingLocation}
+              onPressFunction={() => props.onPressMap ? props.onPressMap() : props.onPressList ? props.onPressList() : undefined}
               title={props.onPressMap ? t('map') : t('list')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
+              gradientColorStart={!changingLocation ? Colors.neutralButton : Colors.unavailableButton}
+              gradientColorEnd={!changingLocation ? Colors.neutralButton : Colors.unavailableButton}
+              shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
+              iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
             />
           </View>
           : null}

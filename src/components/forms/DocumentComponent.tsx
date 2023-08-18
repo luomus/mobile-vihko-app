@@ -17,7 +17,8 @@ import {
   setMessageState,
   logoutUser,
   resetReducer,
-  clearPath
+  clearPath,
+  setEditing
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import MessageComponent from '../general/MessageComponent'
@@ -70,6 +71,7 @@ const DocumentComponent = (props: Props) => {
   //reference for scrollView
   const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
 
+  const editing = useSelector((state: rootState) => state.editing)
   const grid = useSelector((state: rootState) => state.grid)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
@@ -150,6 +152,15 @@ const DocumentComponent = (props: Props) => {
 
   const onSubmit = async (data: { [key: string]: any }) => {
     setSaving(true)
+
+    //set editing off if it is on
+    if (editing) {
+      dispatch(setEditing({
+        started: false,
+        locChanged: false,
+        originalSourcePage: editing.originalSourcePage
+      }))
+    }
 
     if (event && observationId) {
       let editedEvent = {}

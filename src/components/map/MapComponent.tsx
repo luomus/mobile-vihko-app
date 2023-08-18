@@ -194,7 +194,7 @@ const MapComponent = (props: Props) => {
       locChanged: true,
       originalSourcePage: editing.originalSourcePage
     }))
-    props.onPop()
+    props.onPressEditing()
   }
 
   const showSubmitDelete = (eventId: string, unitId: string) => {
@@ -420,7 +420,8 @@ const MapComponent = (props: Props) => {
     return (
       <>
         <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList}
-          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading} />
+          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading}
+          observationButtonsState={observationButtonsState} />
         <View style={Cs.mapContainer}>
           <MapView
             testID='map-view'

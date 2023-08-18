@@ -80,7 +80,7 @@ const MapComponent = (props: Props) => {
       locChanged: true,
       originalSourcePage: editing.originalSourcePage
     }))
-    props.onPop()
+    props.onPressEditing()
   }
 
   const cancelObservation = () => {
@@ -151,7 +151,8 @@ const MapComponent = (props: Props) => {
     return (
       <>
         <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList}
-          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading} />
+          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading}
+          observationButtonsState={observationButtonsState} />
         <View style={Cs.mapContainer} testID={'extendedNavBar'}>
           <ButtonComponent onPressFunction={() => markObservationToPredeterminedPoint()} title={'Merkitse piste'}
             height={40} width={120} buttonStyle={Bs.observationButton}
