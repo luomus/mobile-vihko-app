@@ -147,8 +147,8 @@ const MapComponent = (props: Props) => {
       const reg: Region = {
         latitude: coords.latitude,
         longitude: coords.longitude,
-        latitudeDelta: region.latitudeDelta,
-        longitudeDelta: region.longitudeDelta
+        latitudeDelta: region.latitudeDelta > 0.01000000000000000 ? 0.010000000000000000 : region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta > 0.01000000000000000 ? 0.010000000000000000 : region.longitudeDelta
       }
 
       return reg
