@@ -42,8 +42,8 @@ const OtherStyles = StyleSheet.create({
   },
   mapViewStyle: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: '100%',
+    height: '100%'
   },
   gridModalMapViewStyle: {
     flex: 1,

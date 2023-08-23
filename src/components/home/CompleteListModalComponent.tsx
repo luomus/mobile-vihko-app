@@ -122,9 +122,12 @@ const CompleteListModalComponent = (props: Props) => {
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.setModalVisibility(false) }}
       onBackdropPress={() => { props.setModalVisibility(false) }}>
-      <View style={Cs.modalContainer}>
-        {loading ?
-          <ActivityIndicator size={25} color={Colors.primary5} /> :
+      {loading ?
+        <View style={Cs.modalLoadingContainer}>
+          <ActivityIndicator size={25} color={Colors.primary5} />
+        </View>
+        :
+        <View style={Cs.modalContainer}>
           <View style={{ alignSelf: 'flex-start' }}>
             <Text style={Ts.homeScreenTitle}>
               {t('new observation event')}
@@ -157,8 +160,8 @@ const CompleteListModalComponent = (props: Props) => {
               />
             </View>
           </View>
-        }
-      </View>
+        </View>
+      }
       <MessageComponent />
     </Modal>
   )

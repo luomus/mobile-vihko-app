@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
+import { Icon } from 'react-native-elements'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
 import { set, get, merge, mergeWith, omit } from 'lodash'
@@ -25,7 +26,6 @@ import MessageComponent from '../general/MessageComponent'
 import { initForm } from '../../forms/formMethods'
 import i18n from '../../languages/i18n'
 import LoadingComponent from '../general/LoadingComponent'
-import SaveButtonComponent from './SaveButtonComponent'
 import SendEventModalComponent from '../general/SendEventModalComponent'
 import {
   forms, observationEventFields, JX519ObservationEventFields, MHL117ObservationEventFields, JX652ObservationEventFields,
@@ -313,7 +313,9 @@ const DocumentComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
-          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
+          <TouchableOpacity onPress={methods.handleSubmit(onSubmit, onError)} testID={'saveButton'}>
+            <Icon reverse color={Colors.successButton1} name='done' type='material-icons' raised size={30} />
+          </TouchableOpacity>
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} ref={scrollViewRef}>
           <View style={Cs.buttonContainer}>

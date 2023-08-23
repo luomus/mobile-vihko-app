@@ -200,8 +200,8 @@ const GridModalComponent = (props: Props) => {
     const reg: Region = {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
-      latitudeDelta: region.latitudeDelta,
-      longitudeDelta: region.longitudeDelta
+      latitudeDelta: region.latitudeDelta > 0.01000000000000000 ? 0.010000000000000000 : region.latitudeDelta,
+      longitudeDelta: region.longitudeDelta > 0.01000000000000000 ? 0.010000000000000000 : region.longitudeDelta
     }
 
     return reg
@@ -253,78 +253,79 @@ const GridModalComponent = (props: Props) => {
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={10} onBackButtonPress={() => { props.setModalVisibility(false) }}
       onBackdropPress={() => { props.setModalVisibility(false) }}>
-      <View style={Cs.modalContainer}>
-        <View style={{ alignSelf: 'flex-start' }}>
-          {loading ?
-            <ActivityIndicator size={25} color={Colors.primary5} /> :
-            <>
-              <View style={Cs.gridModalElementContainer}>
-                <Text>
-                  {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}, ${gridName}.\n\n`}
-                  <Text
-                    style={{ color: Colors.linkText }}
-                    onPress={() => Linking.openURL(resultServiceUrl + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
-                    {t('link to result service')}
-                  </Text>
-                </Text>
-              </View>
-              <View style={Cs.locateMeMapContainer}>
-                <MapView
-                  ref={miniMapRef}
-                  initialRegion={region}
-                  provider={PROVIDER_GOOGLE}
-                  maxZoomLevel={18.9}
-                  minZoomLevel={5}
-                  mapType={mapType === 'terrain' ? 'terrain' : mapType}
-                  pitchEnabled={false}
-                  rotateEnabled={false}
-                  moveOnMarkerPress={false}
-                  style={Os.gridModalMapViewStyle}
-                  onPanDrag={() => stopCentering()}
-                  onRegionChangeComplete={(region) => {
-                    onRegionChangeComplete(region)
-                  }}
-                >
-                  {locationOverlay()}
-                  {tileOverlay()}
-                  {gridOverlay()}
-                </MapView>
-                <View style={Cs.mapButtonsContainer}>
-                  <ButtonComponent testID='toggle-map-type-btn' onPressFunction={() => toggleMapType()} title={undefined}
-                    height={50} width={50} buttonStyle={Bs.mapIconButton}
-                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                    textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-                  />
-                  <ButtonComponent testID='center-map-btn' onPressFunction={() => centerMapAnim()} title={undefined}
-                    height={50} width={50} buttonStyle={Bs.mapIconButton}
-                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                    textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
-                  />
-                </View>
-              </View>
-              <View style={Cs.modalStartButtonContainer}>
-                <ButtonComponent testID='center-map-btn' onPressFunction={async () => await centerMapAnim()} title={t('locate me')}
-                  height={40} width={160} buttonStyle={Bs.locateMeButton}
-                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                  textStyle={Ts.buttonText} iconName={'person-pin'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-                />
-              </View>
-              <View style={Cs.modalStartButtonContainer}>
-                <ButtonComponent disabled={loading} onPressFunction={async () => await handleStartEvent()} title={t('start')}
-                  height={40} width={120} buttonStyle={Bs.beginButton}
-                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                  textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-                />
-                <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
-                  height={40} width={120} buttonStyle={Bs.beginButton}
-                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-                />
-              </View>
-            </>
-          }
+      {loading ?
+        <View style={Cs.modalLoadingContainer}>
+          <ActivityIndicator size={25} color={Colors.primary5} />
         </View>
-      </View>
+        :
+        <View style={Cs.gridModalContainer}>
+          <View style={Cs.gridModalItemsContainer}>
+            <View style={Cs.gridModalElementContainer}>
+              <Text>
+                {`${t('your current location is')} ${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}, ${gridName}.\n\n`}
+                <Text
+                  style={{ color: Colors.linkText }}
+                  onPress={() => Linking.openURL(resultServiceUrl + `${ownLocation[1].toString().slice(0, 3)}:${ownLocation[0].toString().slice(0, 3)}`)}>
+                  {t('link to result service')}
+                </Text>
+              </Text>
+            </View>
+            <View style={Cs.locateMeMapContainer}>
+              <MapView
+                ref={miniMapRef}
+                initialRegion={region}
+                provider={PROVIDER_GOOGLE}
+                maxZoomLevel={18.9}
+                minZoomLevel={5}
+                mapType={mapType === 'terrain' ? 'terrain' : mapType}
+                pitchEnabled={false}
+                rotateEnabled={false}
+                moveOnMarkerPress={false}
+                style={Os.gridModalMapViewStyle}
+                onPanDrag={() => stopCentering()}
+                onRegionChangeComplete={(region) => {
+                  onRegionChangeComplete(region)
+                }}
+              >
+                {locationOverlay()}
+                {tileOverlay()}
+                {gridOverlay()}
+              </MapView>
+              <View style={Cs.mapButtonsContainer}>
+                <ButtonComponent testID='toggle-map-type-btn' onPressFunction={() => toggleMapType()} title={undefined}
+                  height={50} width={50} buttonStyle={Bs.mapIconButton}
+                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                  textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+                />
+                <ButtonComponent testID='center-map-btn' onPressFunction={() => centerMapAnim()} title={undefined}
+                  height={50} width={50} buttonStyle={Bs.mapIconButton}
+                  gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                  textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+                />
+              </View>
+            </View>
+            <View style={Cs.modalStartButtonContainer}>
+              <ButtonComponent testID='center-map-btn' onPressFunction={async () => await centerMapAnim()} title={t('locate me')}
+                height={40} width={160} buttonStyle={Bs.locateMeButton}
+                gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                textStyle={Ts.buttonText} iconName={'person-pin'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+              />
+            </View>
+            <View style={Cs.modalStartButtonContainer}>
+              <ButtonComponent disabled={loading} onPressFunction={async () => await handleStartEvent()} title={t('start')}
+                height={40} width={120} buttonStyle={Bs.beginButton}
+                gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+              />
+              <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
+                height={40} width={120} buttonStyle={Bs.beginButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+            </View>
+          </View>
+        </View>
+      }
       <MessageComponent />
     </Modal>
   )

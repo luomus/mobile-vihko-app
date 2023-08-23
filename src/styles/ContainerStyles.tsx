@@ -28,8 +28,11 @@ const ContainerStyles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
+    alignSelf: 'center',
     backgroundColor: Colors.neutral3,
-    maxHeight: '90%'
+    maxHeight: '90%',
+    width: '90%',
+    maxWidth: 400
   },
   padding5Container: {
     padding: 5
@@ -45,11 +48,25 @@ const ContainerStyles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: Colors.neutral2,
     maxHeight: '90%',
-    maxWidth: '90%'
+    width: '90%',
+    maxWidth: 400
   },
   modalCloseContainer: {
     alignSelf: 'flex-end',
     marginRight: 10
+  },
+  modalLoadingContainer: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    justifyContent: 'center',
+    height: 100,
+    width: 100,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center'
   },
   rowContainer: {
     flexDirection: 'row'
@@ -66,7 +83,9 @@ const ContainerStyles = StyleSheet.create({
   userModalContainer: {
     padding: 10,
     borderRadius: 10,
-    backgroundColor: Colors.neutral3
+    backgroundColor: Colors.neutral3,
+    maxWidth: 400,
+    alignSelf: 'center'
   },
   userDetailsContainer: {
     paddingHorizontal: 10,
@@ -177,15 +196,32 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   atlasInstructionContainer: {
+    alignSelf: 'center',
     backgroundColor: Colors.neutral2,
     borderRadius: 10,
     maxHeight: '90%',
+    maxWidth: 400,
+    width: '90%',
     padding: 10
   },
   modalStartButtonContainer: {
     alignSelf: 'flex-start',
     flexDirection: 'row',
     padding: 5
+  },
+  gridModalContainer: {
+    alignSelf: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.neutral2,
+    height: '90%',
+    width: '90%',
+  },
+  gridModalItemsContainer: {
+    height: '100%',
+    width: '100%'
   },
   gridModalElementContainer: {
     flexDirection: 'row',
@@ -285,8 +321,9 @@ const ContainerStyles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     backgroundColor: Colors.neutral3,
+    maxHeight: '75%',
     width: '90%',
-    maxHeight: '75%'
+    maxWidth: 400
   },
   mapModalItemContainer: {
     alignSelf: 'center',
@@ -304,8 +341,9 @@ const ContainerStyles = StyleSheet.create({
     marginBottom: 10
   },
   overviewContentContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingBottom: 15
   },
   overviewTextContainer: {
@@ -314,9 +352,11 @@ const ContainerStyles = StyleSheet.create({
     width: '62%'
   },
   overviewButtonsContainer: {
+    alignSelf: 'flex-end',
     flexDirection: 'column',
-    justifyContent: 'center',
-    width: '38%'
+    justifyContent: 'flex-end',
+    width: '38%',
+    maxWidth: 150
   },
   observationInfoContainer: {
     padding: 5,
@@ -343,7 +383,7 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     marginTop: 5
   },
 
@@ -522,10 +562,6 @@ const ContainerStyles = StyleSheet.create({
     position: 'absolute',
     top: '1%',
     right: '1%'
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center'
   },
   saveButtonContainer: {
     bottom: 0,

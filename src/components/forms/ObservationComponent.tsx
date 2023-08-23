@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
+import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { omit } from 'lodash'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -29,7 +30,6 @@ import uuid from 'react-native-uuid'
 import i18n from '../../languages/i18n'
 import LoadingComponent from '../general/LoadingComponent'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
-import SaveButtonComponent from './SaveButtonComponent'
 import {
   JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder,
   MHL117Fields, overrideMHL117Fields, MHL117FieldOrder, additionalMHL117Fields,
@@ -510,7 +510,9 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
-          <SaveButtonComponent onPress={methods.handleSubmit(onSubmit, onError)} />
+          <TouchableOpacity onPress={methods.handleSubmit(onSubmit, onError)} testID={'saveButton'}>
+            <Icon reverse color={Colors.successButton1} name='done' type='material-icons' raised size={30} />
+          </TouchableOpacity>
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollViewRef}>
           <View style={Cs.buttonContainer}>
