@@ -10,26 +10,12 @@ import Colors from '../../styles/Colors'
 type Props = {
   search: string,
   setSearch: React.Dispatch<React.SetStateAction<string>>,
-  textInput: React.MutableRefObject<TextInput | null>,
-  navigation: NativeStackNavigationProp<ParamListBase, string>
+  textInput: React.MutableRefObject<TextInput | null>
 }
 
 const ListFilterComponent = (props: Props) => {
 
   const { t } = useTranslation()
-
-  //opens the keyboard when returning from ObservationComponent
-  useEffect(() => {
-    if (props.textInput.current) {
-      const openKeyboard = props.navigation.addListener('focus', () => {
-        setTimeout(() => { //does not work without the timeout
-          props.textInput.current?.focus()
-        }, 500)
-      })
-
-      return openKeyboard
-    }
-  }, [props.navigation, props.textInput.current])
 
   return (
     <View style={Cs.listFilterContainer}>

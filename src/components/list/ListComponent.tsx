@@ -27,8 +27,7 @@ import useChange from '../../helpers/useChange'
 type Props = {
   onPressMap: () => void,
   onPressObservation: (sourcePage: string) => void,
-  onPressFinishObservationEvent: (sourcePage: string) => void,
-  navigation: NativeStackNavigationProp<ParamListBase, string>
+  onPressFinishObservationEvent: (sourcePage: string) => void
 }
 
 const ListComponent = (props: Props) => {
@@ -177,7 +176,6 @@ const ListComponent = (props: Props) => {
         search={search}
         setSearch={setSearch}
         textInput={textInput}
-        navigation={props.navigation}
       />
     </>
   )
