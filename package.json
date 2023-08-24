@@ -76,7 +76,8 @@
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
     "sentry-expo": "~6.0.0",
-    "ts-jest": "^29.1.0"
+    "ts-jest": "^29.1.0",
+    "expo-build-properties": "~0.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

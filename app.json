@@ -36,7 +36,9 @@
         "NSPhotoLibraryUsageDescription": "Mobiilivihko requires permissions to browse the user's image gallery if they want to add images from the gallery to the observation. For example, the user has taken a picture of a rare taxon with their phone camera before launching the app and wants to attach it to an observation."
       },
       "entitlements": {
-        "com.apple.developer.applesignin": ["Default"]
+        "com.apple.developer.applesignin": [
+          "Default"
+        ]
       }
     },
     "android": {
@@ -69,7 +71,17 @@
       "postPublish": []
     },
     "plugins": [
-      "sentry-expo"
+      "sentry-expo",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 33,
+            "targetSdkVersion": 33,
+            "buildToolsVersion": "33.0.0"
+          }
+        }
+      ]
     ]
   }
 }
