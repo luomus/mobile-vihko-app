@@ -39,7 +39,8 @@ import {
   MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, MHL1045ObservationEventFieldOrder,
   MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, MHL1046ObservationEventFieldOrder,
   MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, MHL1047ObservationEventFieldOrder,
-  MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, MHL1048ObservationEventFieldOrder
+  MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, MHL1048ObservationEventFieldOrder,
+  MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, MHL1062ObservationEventFieldOrder
 } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -141,6 +142,8 @@ const DocumentComponent = (props: Props) => {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, null, MHL1047ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.bracketFungiForm) {
         initForm(setForm, event, null, schemaWithoutUnits, null, MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, null, MHL1048ObservationEventFieldOrder, lang, scrollViewRef)
+      } else if (schema.formID === forms.practicalFungiForm) {
+        initForm(setForm, event, null, schemaWithoutUnits, null, MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, null, MHL1062ObservationEventFieldOrder, lang, scrollViewRef)
       }
     }
   }

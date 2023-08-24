@@ -585,6 +585,7 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
     if (formID === forms.subarcticForm) taxonSetID = 'MX.taxonSetBiomonCompleteListSubarcticPlants'
     if (formID === forms.macrolichenForm) taxonSetID = 'MX.taxonSetBiomonCompleteListMacrolichens'
     if (formID === forms.bracketFungiForm) taxonSetID = 'MX.taxonSetBiomonCompleteListBracketFungi'
+    if (formID === forms.practicalFungiForm) taxonSetID = 'MX.taxonSetBiomonCompleteListPracticalFungi'
 
     try {
       taxonList = await getCompleteList(taxonSetID, gridNumber)

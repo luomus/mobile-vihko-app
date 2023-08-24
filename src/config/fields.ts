@@ -1175,6 +1175,92 @@ export const MHL1048ObservationEventFieldOrder = [
   'gatherings_0_notes',
 ]
 
+export const MHL1062ObservationEventFields = [
+  'secureLevel',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_notes',
+]
+
+export const overrideMHL1062Fields = {
+  'identifications_0_taxonVerbatim': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      filters: {
+        taxonSet: 'MX.taxonSetBiomonCompleteListPracticalFungi'
+      },
+      valueField: 'identifications_0_taxonVerbatim',
+      validation: {
+        required: {
+          value: true,
+          message: 'must not be empty'
+        },
+        minLength: {
+          value: 2,
+          message: 'must be at least 2 letters'
+        },
+      },
+      transform: {
+        'key': 'unitFact_autocompleteSelectedTaxonID',
+        'shownName': 'identifications_0_taxonVerbatim',
+        'payload_informalTaxonGroups': 'informalTaxonGroups'
+      }
+    }
+  }
+}
+
+export const MHL1062Fields = [
+  'identifications_0_taxonVerbatim',
+  'taxonConfidence',
+  'notes',
+  'images'
+]
+
+export const overrideMHL1062ObservationEventFields = {
+  'secureLevel': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikan karkeistus',
+      'Plats skyddning',
+      'Location roughening'
+    ]
+  },
+  'gatheringEvent_completeList_completeListType': {
+    field: 'completeListField',
+    params: {
+      validation: {
+        validate: (value: string) => value !== 'empty' || 'must choose list type'
+      }
+    }
+  },
+  'gatherings_0_locality': {
+    field: 'inputTitleOverridden',
+    title: [
+      'Paikannimet (kunta tallentuu automaattisesti)',
+      'Ortnamn (kommunen sparar automatiskt)',
+      'Locality names (municipality is saved automatically)'
+    ]
+  },
+}
+
+export const MHL1062ObservationEventFieldOrder = [
+  'secureLevel',
+  'gatheringEvent_completeList_completeListType',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_timeStart',
+  'gatheringEvent_dateEnd',
+  'gatheringEvent_timeEnd',
+  'gatherings_0_locality',
+  'gatherings_0_localityDescription',
+  'gatherings_0_notes',
+]
+
 export const observationEventFields = [
   'gatheringEvent_legPublic',
   'secureLevel',
@@ -1217,6 +1303,7 @@ export const forms: Record<string, any> = {
   subarcticForm: 'MHL.1046',
   macrolichenForm: 'MHL.1047',
   bracketFungiForm: 'MHL.1048',
+  practicalFungiForm: 'MHL.1062',
   lolife: 'MHL.45'
 }
 
@@ -1229,7 +1316,8 @@ export const biomonForms: Record<string, any> = {
   herpForm: 'MHL.1045',
   subarcticForm: 'MHL.1046',
   macrolichenForm: 'MHL.1047',
-  bracketFungiForm: 'MHL.1048'
+  bracketFungiForm: 'MHL.1048',
+  practicalFungiForm: 'MHL.1062'
 }
 
 export const useUiSchemaFields = ['MHL.45']

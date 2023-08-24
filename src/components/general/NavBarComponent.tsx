@@ -62,6 +62,8 @@ const NavBarComponent = (props: Props) => {
       setFormName(t('macrolichen form'))
     } else if (schema.formID === forms.bracketFungiForm) {
       setFormName(t('bracket fungi form'))
+    } else if (schema.formID === forms.practicalFungiForm) {
+      setFormName(t('practical fungi form'))
     } else {
       setFormName(t('lolife'))
     }
