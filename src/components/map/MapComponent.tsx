@@ -4,8 +4,14 @@ import { Icon } from 'react-native-elements'
 import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { MultiPolygon } from 'geojson'
-import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng, wrapGeometryInFC, pathPolygonConstructor } from '../../helpers/geoJSONHelper'
+import { LineString, MultiLineString } from 'geojson'
+import {
+  convertGC2FC,
+  convertLatLngToPoint,
+  convertPointToLatLng,
+  wrapGeometryInFC,
+  pathToLineStringConstructor
+} from '../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
@@ -281,29 +287,22 @@ const MapComponent = (props: Props) => {
 
   //draws user path to map
   const pathOverlay = () => {
+    if (path[path.length - 1]?.length >= 1 && position) {
+      const pathToDraw = path.map((subpath, index) => {
+        if (index === path.length - 1) {
+          return subpath.concat([[
+            position.coords.longitude,
+            position.coords.latitude,
+            0.0,
+            0.0,
+            false
+          ]])
+        }
 
-    if (path?.length >= 1 && position) {
-      const pathPolygon: MultiPolygon | undefined = pathPolygonConstructor(path, tracking ? [
-        position.coords.longitude,
-        position.coords.latitude
-      ] : undefined)
+        return subpath
+      })
 
-      // if (path[path.length - 1]?.length >= 1 && position) {
-      //   const pathToDraw = path.map((subpath, index) => {
-      //     if (index === path.length - 1) {
-      //       return subpath.concat([[
-      //         position.coords.longitude,
-      //         position.coords.latitude,
-      //         0.0,
-      //         0.0,
-      //         false
-      //       ]])
-      //     }
-
-      //     return subpath
-      //   })
-
-      //   const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
+      const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
 
       return pathPolygon ?
         <Geojson

@@ -8,7 +8,7 @@
       "android",
       "ios"
     ],
-    "version": "1.4.15",
+    "version": "1.4.16",
     "orientation": "portrait",
     "icon": "./assets/appIcon.png",
     "splash": {
@@ -43,7 +43,7 @@
     },
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 72,
+      "versionCode": 73,
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIcon.png",
         "backgroundColor": "#FFFFFF"
