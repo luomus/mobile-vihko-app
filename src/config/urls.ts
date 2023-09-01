@@ -10,10 +10,7 @@ export const gridUrl              = 'https://geoserver-dev.laji.fi/geoserver/Laj
 export const graphqlUrl           = `${API_URL}/graphql`
 
 //documents url
-export const postDocumentUrl      = `${API_URL}/documents`
-
-//sent documents url
-export const sentDocumentsUrl     = `${API_URL}/warehouse/query/document/aggregate`
+export const documentsUrl         = `${API_URL}/documents`
 
 //image urls
 export const postImageUrl         = `${API_URL}/images`

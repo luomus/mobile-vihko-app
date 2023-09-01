@@ -1,7 +1,7 @@
 import ApolloClient, { gql } from 'apollo-boost'
 import { get, post } from '../helpers/axiosHelper'
 import i18n from '../languages/i18n'
-import { graphqlUrl, postDocumentUrl, sentDocumentsUrl } from '../config/urls'
+import { graphqlUrl, documentsUrl } from '../config/urls'
 import { ACCESS_TOKEN, SOURCE_ID } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
 import AppJSON from '../../app.json'
@@ -51,21 +51,18 @@ export const postObservationEvent = async (observationEvent: Record<string, any>
     validationErrorFormat: 'remote'
   }
 
-  await post(postDocumentUrl, observationEvent, { params })
+  await post(documentsUrl, observationEvent, { params })
 }
 
 export const getSentEvents = async (credentials: CredentialsType) => {
   const params = {
-    'format': 'json',
-    'aggregateBy': 'document.createdDate,document.documentId,document.formId',
-    'orderBy': 'document.createdDate DESC',
+    'personToken': credentials.token,
+    'access_token': ACCESS_TOKEN,
     'pageSize': 5,
-    'sourceId': SOURCE_ID,
-    'editorId': credentials.user?.id,
-    'editorPersonToken': credentials.token,
-    'access_token': ACCESS_TOKEN
+    'sourceID': SOURCE_ID,
+    'selectedFields': 'dateCreated,formID'
   }
 
-  const result = await get(sentDocumentsUrl, { params })
+  const result = await get(documentsUrl, { params })
   return result.data.results
 }

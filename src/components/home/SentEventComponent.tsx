@@ -19,7 +19,7 @@ const SentEventComponent = (props: Props) => {
   const [title, setTitle] = useState<string>(t('trip form'))
 
   useEffect(() => {
-    const formLink: string = props.event.aggregateBy['document.formId']
+    const formLink: string = props.event.formID
     const formLinkParts = formLink.split('/')
     const formId = formLinkParts[formLinkParts.length - 1]
 
@@ -56,14 +56,14 @@ const SentEventComponent = (props: Props) => {
 
   return (
     <View style={{ marginVertical: 5, width: '90%' }}>
-      <TouchableOpacity onPress={() => Linking.openURL(props.event.aggregateBy['document.documentId'])}
+      <TouchableOpacity onPress={() => Linking.openURL('http://tun.fi/' + props.event.id)}
         activeOpacity={0.8} style={[Cs.shadowElement, { shadowColor: Colors.successShadow }]}>
         <View style={Cs.sentEventsContainer}>
           <Text style={[Ts.eventListElementTitle, { color: Colors.successButton1 }]}>
             {title}
           </Text>
           <Text style={Ts.eventListElementThinTitle}>
-            {parseFromWarehouseToUI(props.event.aggregateBy['document.createdDate'])}
+            {parseFromWarehouseToUI(props.event.dateCreated)}
           </Text>
         </View>
       </TouchableOpacity>

@@ -246,12 +246,6 @@ export const HomeComponentContainer = (
 
     if (Platform.OS === 'android') checkUpdates()
 
-    const initSentEvents = async () => {
-      await loadSentEvents()
-    }
-
-    initSentEvents()
-
     if (isUnfinished) {
       const initTracking = async () => {
         const formID = props.observationEvent.events[length - 1].formID
@@ -271,7 +265,12 @@ export const HomeComponentContainer = (
   }, [])
 
   useEffect(() => {
+    const initSentEvents = async () => {
+      await loadSentEvents()
+    }
+
     loadObservationEvents()
+    initSentEvents()
   }, [props.observationEvent, props.observing, props.schema])
 
   useEffect(() => {
@@ -315,6 +314,7 @@ export const HomeComponentContainer = (
 
   const loadSentEvents = async () => {
     let sentEvents: Record<string, any>[] = []
+
     try {
       sentEvents = await getSentEvents(props.credentials)
     } catch (error: any) {
@@ -323,10 +323,19 @@ export const HomeComponentContainer = (
         messageContent: props.t('failed to fetch sent events'),
       }))
     }
+
+    sentEvents.sort((a, b) => {
+      const dateA = new Date(a.dateCreated)
+      const dateB = new Date(b.dateCreated)
+      return dateB.getTime() - dateA.getTime()
+    })
+
     const sentEventElements: Element[] = []
+
     sentEvents.map(event => sentEventElements.push(
-      <SentEventComponent key={event.aggregateBy['document.documentId']} event={event} />
+      <SentEventComponent key={event.id} event={event} />
     ))
+
     props.setSentEvents(sentEventElements)
   }
 
