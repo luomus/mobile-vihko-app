@@ -309,6 +309,7 @@ const MapComponent = (props: Props) => {
           geojson={wrapGeometryInFC(pathPolygon)}
           strokeWidth={5}
           strokeColor={Colors.pathColor}
+          zIndex={2}
         />
         : null
     }
@@ -342,6 +343,7 @@ const MapComponent = (props: Props) => {
         fillColor="#f002"
         strokeColor="#f00"
         strokeWidth={1}
+        zIndex={1}
       />
       : null
     )
