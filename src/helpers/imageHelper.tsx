@@ -17,7 +17,8 @@ interface BasicObject {
 }
 
 const processImage = async (uri: string) => {
-  const { size } = await FileSystem.getInfoAsync(uri, { size: true })
+  const fileInfo = await FileSystem.getInfoAsync(uri, { size: true })
+  const size = fileInfo.exists ? fileInfo.size : 0
   const name = uri.substring(uri.lastIndexOf('/') + 1)
   let type = uri.substring(uri.lastIndexOf('.') + 1)
 
@@ -124,7 +125,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 
   const formDataBody = new FormData()
 
-  Promise.all(imageFiles.map(async image => {
+  await Promise.all(imageFiles.map(async image => {
     if (!isValidFileType(image.type)) {
       if (!invalidFileTypes.includes(image.type)) {
         invalidFileTypes.push(image.type)
@@ -143,6 +144,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
         await MediaLibrary.saveToLibraryAsync(image.uri)
       }
     } else {
+      // @ts-ignore
       formDataBody.append('data', image)
     }
   }))

@@ -63,8 +63,8 @@ type Props = {
 const HomeComponent = (props: Props) => {
 
   const [pressCounter, setPressCounter] = useState<number>(0)
-  const [observationEvents, setObservationEvents] = useState<Element[]>([])
-  const [sentEvents, setSentEvents] = useState<Element[]>([])
+  const [observationEvents, setObservationEvents] = useState<React.JSX.Element[]>([])
+  const [sentEvents, setSentEvents] = useState<React.JSX.Element[]>([])
   const [tripModalVisibility, setTripModalVisibility] = useState<boolean>(false)
   const [atlasInstructionModalVisibility, setAtlasInstructionModalVisibility] = useState<boolean>(false)
   const [gridModalVisibility, setGridModalVisibility] = useState<boolean>(false)
@@ -162,10 +162,10 @@ type Props2 = {
 
   pressCounter: number,
   setPressCounter: React.Dispatch<React.SetStateAction<number>>,
-  observationEvents: Element[],
-  setObservationEvents: React.Dispatch<React.SetStateAction<Element[]>>,
-  sentEvents: Element[],
-  setSentEvents: React.Dispatch<React.SetStateAction<Element[]>>
+  observationEvents: React.JSX.Element[],
+  setObservationEvents: React.Dispatch<React.SetStateAction<React.JSX.Element[]>>,
+  sentEvents: React.JSX.Element[],
+  setSentEvents: React.Dispatch<React.SetStateAction<React.JSX.Element[]>>
   tripModalVisibility: boolean,
   setTripModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   atlasInstructionModalVisibility: boolean,
@@ -300,7 +300,7 @@ export const HomeComponentContainer = (
   }, [props.pressCounter])
 
   const loadObservationEvents = () => {
-    const events: Array<Element> = []
+    const events: Array<React.JSX.Element> = []
     const indexLast: number = props.observationEvent.events.length - 1
     props.observationEvent.events.forEach((event: Record<string, any>, index: number) => {
       if (props.observing && index === indexLast) {
@@ -330,7 +330,7 @@ export const HomeComponentContainer = (
       return dateB.getTime() - dateA.getTime()
     })
 
-    const sentEventElements: Element[] = []
+    const sentEventElements: React.JSX.Element[] = []
 
     sentEvents.map(event => sentEventElements.push(
       <SentEventComponent key={event.id} event={event} />

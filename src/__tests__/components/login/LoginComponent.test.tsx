@@ -20,7 +20,7 @@ describe('LoginComponent', () => {
 
   it('should display the login component correctly', async () => {
     // Check everything is displayed in Finnish
-    await waitFor(() => expect(getByText(fi['mobile vihko'])).toBeDefined())
+    await waitFor(() => expect(getAllByText(fi['mobile vihko'])).toHaveLength(2))
     expect(getByText(fi['login text'])).toBeDefined()
     expect(getByText('FI')).toBeDefined()
     expect(getByText('SV')).toBeDefined()
@@ -43,11 +43,11 @@ describe('LoginComponent', () => {
     expect(getByText('EN')).toBeDefined()
     fireEvent.press(getByText('FI'))
 
-    expect(getAllByText(fi['mobile vihko'])).toBeDefined()
+    await waitFor(() => expect(getAllByText(fi['mobile vihko'])).toHaveLength(2))
   })
 
   it('should login correctly and show the trip form', async () => {
-    await waitFor(() => expect(getByText(fi['mobile vihko'])).toBeDefined())
+    await waitFor(() => expect(getAllByText(fi['mobile vihko'])).toHaveLength(2))
     expect(getByText(fi['login text'])).toBeDefined()
     fireEvent.press(getByText(fi['login']))
 

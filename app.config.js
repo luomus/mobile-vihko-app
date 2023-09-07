@@ -6,8 +6,7 @@ module.exports = ({ config }) => {
     'file': 'sentry-expo/upload-sourcemaps',
     'config': {
       'organization': 'luomus',
-      'project': 'mobiilivihko',
-      'authToken': process.env.SENTRY_AUTH_TOKEN
+      'project': 'mobiilivihko'
     }
   }
   config.hooks.postPublish.push(sentry)
@@ -19,7 +18,7 @@ module.exports = ({ config }) => {
       config: {
         ...config.android.config,
         googleMaps: {
-          apiKey: process.env.GOOGLE_MAPS_API_KEY,
+          apiKey: process.env.GOOGLE_MAPS_API_KEY
         },
       },
     },

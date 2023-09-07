@@ -63,7 +63,7 @@ const ObservationComponent = (props: Props) => {
   const { t } = useTranslation()
   const [saving, setSaving] = useState<boolean>(false)
   const lang = i18n.language
-  const [form, setForm] = useState<Array<Element | undefined> | null>(null)
+  const [form, setForm] = useState<Array<React.JSX.Element | undefined> | null>(null)
   const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
 
   //reference for scrollView

@@ -3,7 +3,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 //called in component to initalize to any of the forms
 export const initForm = (
-  setForm: React.Dispatch<React.SetStateAction<(Element | undefined)[] | null>>,
+  setForm: React.Dispatch<React.SetStateAction<(React.JSX.Element | undefined)[] | null>>,
   defaults: any,
   rules: Record<string, any> | null = null,
   schema: Record<string, any> | null = null,

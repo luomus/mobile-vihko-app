@@ -22,11 +22,11 @@ interface Props {
     title: string, objectTitle: string, parentObjectTitle: string,
     type: string, defaultValue: string | number | Array<string> | undefined, isArrayItem: boolean,
     callbackFunction: ((childValue: any) => void) | undefined, editable: boolean
-  ) => JSX.Element | undefined
+  ) => React.JSX.Element | undefined
 }
 
 const FormArrayComponent = (props: Props) => {
-  const [inputElements, setInputElements] = useState<Array<JSX.Element | undefined>>([])
+  const [inputElements, setInputElements] = useState<Array<React.JSX.Element | undefined>>([])
   const indexOfRemovable = props.firstEditable ? 0 : 1
   const { register, setValue, watch, getValues } = useFormContext()
   const [elementDictionary, setElementDictionary] = useState<Record<string, any>>({})
@@ -36,7 +36,7 @@ const FormArrayComponent = (props: Props) => {
 
   useEffect(() => {
     //if there are default values for the array, we iterate them, create the according input elements and pass the elements to FormArrayComponent
-    const inputElems: Array<JSX.Element | undefined> = []
+    const inputElems: Array<React.JSX.Element | undefined> = []
 
     if (props.parentObjectTitle !== '') {
       register(props.parentObjectTitle)

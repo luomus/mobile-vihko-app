@@ -98,7 +98,7 @@
   "grid selection instructions": "If the automatic definition gave a different Atlas square than what you're visiting, fix the number here. The defined square number is only used by Mobiilivihko to warn you if you're crossing the lines of the chosen square.\n\nThe locations of the observations that are marked on Bird Atlas form's/Nature Notebook's map are determined by their own location and the locations of the observations that are marked on the list are determined by the location of the traveled route.\n\nIf you want to observe in many squares, mark each tile's observations as separate square.",
   "grid warning 1": "You are near the edge of the Atlas-square or you have crossed its border. Remember that the observations in the bird list have to be from the square",
   "grid warning 2": "In the map you can mark observations into any square.",
-  "herp form": "Herps",
+  "herp form": "Herpetological checklist",
   "image attachment failure": "Error while adding image",
   "image post failure": "Sending failed, posting images failed,",
   "images": "Images",

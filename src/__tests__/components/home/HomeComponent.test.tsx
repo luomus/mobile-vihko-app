@@ -15,9 +15,9 @@ describe('HomeComponent', () => {
 
     const pressCounter = 0
     const setPressCounter = jest.fn()
-    const observationEvents: Element[] = []
+    const observationEvents: React.JSX.Element[] = []
     const setObservationEvents = jest.fn()
-    const sentEvents: Element[] = []
+    const sentEvents: React.JSX.Element[] = []
     const setSentEvents = jest.fn()
     const tripModalVisibility = false
     const setTripModalVisibility = jest.fn()

@@ -94,7 +94,7 @@ const MessageComponent = () => {
     }
   }
 
-  const primaryButton = (label: string, iconName: string): JSX.Element => {
+  const primaryButton = (label: string, iconName: string): React.JSX.Element => {
     return (
       <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
         height={40} width={120} buttonStyle={Bs.textAndIconButton}
@@ -104,7 +104,7 @@ const MessageComponent = () => {
     )
   }
 
-  const neutralButton = (label: string, iconName: string): JSX.Element => {
+  const neutralButton = (label: string, iconName: string): React.JSX.Element => {
     return (
       <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
         height={40} width={120} buttonStyle={Bs.textAndIconButton}

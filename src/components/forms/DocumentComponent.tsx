@@ -60,7 +60,7 @@ type Props = {
 const DocumentComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
   const [event, setEvent] = useState<Record<string, any> | undefined>(undefined)
-  const [form, setForm] = useState<Array<Element | undefined> | null>(null)
+  const [form, setForm] = useState<Array<React.JSX.Element | undefined> | null>(null)
   const [saving, setSaving] = useState<boolean>(false)
   //for react-hook-form
   const methods = useForm()

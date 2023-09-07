@@ -20,7 +20,7 @@ interface Props {
 const FormCountSelectorComponent = (props: Props) => {
   const { register, setValue } = useFormContext()
   const [currentValue, setCurrentValue] = useState<string>(props.defaultValue ? props.defaultValue.toString() : '')
-  const [elementList, setElementList] = useState<JSX.Element[] | undefined>([])
+  const [elementList, setElementList] = useState<React.JSX.Element[] | undefined>([])
 
   const { t } = useTranslation()
 
@@ -40,7 +40,7 @@ const FormCountSelectorComponent = (props: Props) => {
   }
 
   const renderListElements = () => {
-    const elements: JSX.Element[] = []
+    const elements: React.JSX.Element[] = []
 
     const dictionary = [
       {

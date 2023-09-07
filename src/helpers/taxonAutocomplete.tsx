@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 import uuid from 'react-native-uuid'
 
 interface Converter {
-  (data: Record<string, any>, uery: string): {data: Record<string, any>, element: JSX.Element}
+  (data: Record<string, any>, uery: string): {data: Record<string, any>, element: React.JSX.Element}
 }
 
 const scientificNameOrTaxonIdCoverter = (data: Record<string, any>, query: string) => {
@@ -136,7 +136,7 @@ const addBolding = (name: string, query: string, isScientific: boolean) => {
     tempName = name
   }
 
-  const text: Element[] = []
+  const text: React.JSX.Element[] = []
   let start = 0
 
   if (query !== '') {

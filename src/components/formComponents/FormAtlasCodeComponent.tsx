@@ -21,7 +21,7 @@ interface Props {
 const FormAtlasCodeComponent = (props: Props) => {
   const { register, setValue, formState } = useFormContext()
   const [selectedKey, setSelectedKey] = useState<string | undefined>(undefined)
-  const [elementList, setElementList] = useState<JSX.Element[] | undefined>([])
+  const [elementList, setElementList] = useState<React.JSX.Element[] | undefined>([])
 
   const { t } = useTranslation()
 
@@ -79,7 +79,7 @@ const FormAtlasCodeComponent = (props: Props) => {
     setElementList(elements)
   }
 
-  const errorMessageTranslation = (errorMessage: string): Element => {
+  const errorMessageTranslation = (errorMessage: string): React.JSX.Element => {
     const errorTranslation = t(errorMessage + ' atlas code')
     return <Text style={Ts.redText}>{errorTranslation}</Text>
   }

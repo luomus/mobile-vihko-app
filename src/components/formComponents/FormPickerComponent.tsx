@@ -10,7 +10,7 @@ import Ts from '../../styles/TextStyles'
 interface Props {
   title: string,
   objectTitle: string,
-  pickerItems: Array<JSX.Element>,
+  pickerItems: Array<React.JSX.Element>,
   selectedValue: string | null,
   validation?: Record<string, any>,
   dictionary: { [key: string]: any }
