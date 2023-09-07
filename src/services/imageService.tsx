@@ -10,6 +10,9 @@ export const sendImages = async (formDataBody: FormData, token: string) => {
       params: {
         'personToken': token,
         'access_token': ACCESS_TOKEN
+      },
+      headers: {
+        'content-type': 'multipart/form-data'
       }
     }
   )

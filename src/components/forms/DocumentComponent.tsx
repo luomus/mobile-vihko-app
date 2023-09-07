@@ -204,7 +204,6 @@ const DocumentComponent = (props: Props) => {
       setForm(null)
       props.toHome()
     } catch (error: any) {
-      console.log('Y', error)
       if (error.severity === 'low') {
         dispatch(setMessageState({
           type: 'err',
