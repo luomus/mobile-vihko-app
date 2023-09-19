@@ -74,7 +74,6 @@ const MapComponent = (props: Props) => {
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
   const schema = useSelector((state: rootState) => state.schema)
-  const tracking = useSelector((state: rootState) => state.tracking)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -302,11 +301,11 @@ const MapComponent = (props: Props) => {
         return subpath
       })
 
-      const pathPolygon: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
+      const pathLine: LineString | MultiLineString | undefined = pathToLineStringConstructor(pathToDraw)
 
-      return pathPolygon ?
+      return pathLine ?
         <Geojson
-          geojson={wrapGeometryInFC(pathPolygon)}
+          geojson={wrapGeometryInFC(pathLine)}
           strokeWidth={5}
           strokeColor={Colors.pathColor}
           zIndex={2}

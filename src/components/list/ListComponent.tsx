@@ -3,8 +3,6 @@ import { FlatList, ListRenderItem, Text, TextInput, TouchableOpacity, View } fro
 import { useDispatch, useSelector } from 'react-redux'
 import { createFilter } from 'react-native-search-filter'
 import { Icon } from 'react-native-elements'
-import { ParamListBase } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import {
   rootState,
   DispatchType,

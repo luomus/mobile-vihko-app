@@ -73,7 +73,6 @@ const ObservationComponent = (props: Props) => {
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
-  const path = useSelector((state: rootState) => state.path)
   const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
@@ -311,7 +310,7 @@ const ObservationComponent = (props: Props) => {
     //add the new observation to latest event, clear location
     //and redirect to map after user oks message
     try {
-      await dispatch(newObservation(newUnit, pathToLineStringConstructor(path)))
+      await dispatch(newObservation(newUnit))
       dispatch(clearObservationLocation())
       setSaving(false)
       if (editing.originalSourcePage === 'map') {

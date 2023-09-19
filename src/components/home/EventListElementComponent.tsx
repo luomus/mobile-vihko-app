@@ -65,7 +65,7 @@ const EventListElementComponent = (props: Props) => {
     } else if (props.observationEvent.formID === forms.bracketFungiForm) {
       setTitle(t('bracket fungi form'))
     } else if (props.observationEvent.formID === forms.practicalFungiForm) {
-      setTitle(t('bracket fungi form'))
+      setTitle(t('practical fungi form'))
     } else {
       setTitle(t('lolife'))
     }

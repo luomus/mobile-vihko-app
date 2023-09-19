@@ -413,21 +413,18 @@ export const eventPathUpdate = (lineStringPath: LineString | MultiLineString | u
   }
 }
 
-export const newObservation = (unit: Record<string, any>, lineStringPath: MultiLineString | LineString | undefined): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
+export const newObservation = (unit: Record<string, any>): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
   return async (dispatch, getState) => {
     const { credentials, observationEvent } = getState()
 
-    const newEvents = clone(observationEvent.events)
-    const newEvent = cloneDeep(newEvents.pop())
+    const events = clone(observationEvent.events)
+    const event = cloneDeep(events.pop())
 
-    newEvent.gatherings[0].units.push(unit)
-    if (lineStringPath) {
-      newEvent.gatherings[0].geometry = lineStringPath
-    }
-    newEvents.push(newEvent)
+    event.gatherings[0].units.push(unit)
+    events.push(event)
 
     try {
-      await storageService.save('observationEvents', newEvents)
+      await storageService.save('observationEvents', events)
     } catch (error) {
       captureException(error)
       log.error({
@@ -441,7 +438,7 @@ export const newObservation = (unit: Record<string, any>, lineStringPath: MultiL
       })
     }
 
-    dispatch(replaceObservationEvents(newEvents))
+    dispatch(replaceObservationEvents(events))
     Promise.resolve()
   }
 }
