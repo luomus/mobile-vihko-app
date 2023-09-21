@@ -106,7 +106,9 @@ export const watchLocationAsync = async (updateLocation: (location: LocationObje
       throw new Error(error.message)
     }
 
-    if (tracking) {
+    const locationRunning = await Location.hasStartedLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
+
+    if (tracking && !locationRunning) {
       try {
         await watchBackgroundLocationAsync(title, body)
       } catch (error: any) {
@@ -153,10 +155,10 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
   }, 500)
 }
 
-export const stopLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
+export const stopLocationAsync = async (observationEventInterrupted: boolean) => {
   if (!observationEventInterrupted) {
-    positionWatcher ? positionWatcher.remove() : null
-    if (tracking) await stopBackgroundLocationAsync()
+    if (positionWatcher) positionWatcher.remove()
+    await stopBackgroundLocationAsync()
   }
 }
 

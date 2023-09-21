@@ -8,7 +8,6 @@ import {
 } from './src/stores'
 import Navigator from './src/navigation/Navigator'
 import { LOCATION_BACKGROUND_TASK } from './src/config/location'
-import { stopLocationAsync } from './src/helpers/geolocationHelper'
 import { locationBackgroundTask } from './src/helpers/taskManagerHelper'
 
 LogBox.ignoreLogs(['EventEmitter.removeListener'])
@@ -19,8 +18,6 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations } })
 
 const App = () => {
   useEffect(() => {
-    const { observationEventInterrupted, tracking } = store.getState()
-    stopLocationAsync(observationEventInterrupted, tracking) // cleans up tracking, if background task is found
     store.dispatch(resetReducer())
   }, [])
 

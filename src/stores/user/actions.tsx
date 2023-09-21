@@ -205,7 +205,7 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
 
     //stop recording when logging out
     if (observing) {
-      await stopLocationAsync(observationEventInterrupted, tracking)
+      await stopLocationAsync(observationEventInterrupted)
     }
 
     //clear credentials
