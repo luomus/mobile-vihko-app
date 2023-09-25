@@ -74,7 +74,7 @@ const UserModalComponent = (props: Props) => {
     if (observing) {
       const lineString = pathToLineStringConstructor(path)
       dispatch(eventPathUpdate(lineString))
-      await stopLocationAsync(observationEventInterrupted)
+      await stopLocationAsync(observationEventInterrupted, tracking)
     }
 
     try {

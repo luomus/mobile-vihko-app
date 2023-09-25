@@ -307,7 +307,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     const { credentials, grid, firstLocation, observationEvent, path, tracking, observationEventInterrupted } = getState()
 
     try {
-      await stopLocationAsync(observationEventInterrupted)
+      await stopLocationAsync(observationEventInterrupted, tracking)
     } catch (error: any) {
       captureException(error)
       log.error({

@@ -5,6 +5,8 @@ import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PR
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { LineString, MultiLineString } from 'geojson'
+import * as Location from 'expo-location'
+import { LocationObject } from 'expo-location'
 import {
   convertGC2FC,
   convertLatLngToPoint,
@@ -23,7 +25,8 @@ import {
   setRegion,
   setEditing,
   setFirstLocation,
-  setMessageState
+  setMessageState,
+  updateLocation
 } from '../../stores'
 import LoadingComponent from '../general/LoadingComponent'
 import ExtendedNavBarComponent from '../general/ExtendedNavBarComponent'
@@ -40,6 +43,8 @@ import MessageComponent from '../general/MessageComponent'
 import MapModalComponent from './MapModalComponent'
 import AtlasModalComponent from './AtlasModalComponent'
 import GridWarningComponent from '../general/GridWarningComponent'
+import { LOCATION_BACKGROUND_TASK } from '../../config/location'
+import { watchLocationAsync } from '../../helpers/geolocationHelper'
 import { captureException } from '../../helpers/sentry'
 import useInterval from '../../helpers/useInterval'
 import useChange from '../../helpers/useChange'
@@ -74,6 +79,7 @@ const MapComponent = (props: Props) => {
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
   const schema = useSelector((state: rootState) => state.schema)
+  const tracking = useSelector((state: rootState) => state.tracking)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -106,7 +112,12 @@ const MapComponent = (props: Props) => {
 
     setInitialized(true)
 
-    setTimeout(() => {
+    setTimeout(async () => {
+      const locationRunning = await Location.hasStartedLocationUpdatesAsync(LOCATION_BACKGROUND_TASK)
+      if (!locationRunning) { //temporary fix, starts tracking in case it shut down right after restarting
+        await watchLocationAsync((location: LocationObject) =>
+          dispatch(updateLocation(location)), t('gps notification title'), t('gps notification body'), tracking)
+      }
       setDelay(5000)
     }, 1500)
   }, [mapViewRef.current])
