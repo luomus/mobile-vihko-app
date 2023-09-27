@@ -1,6 +1,5 @@
 babel.config.js
 assets/
-.circleci/
 .expo/
 .expo-shared/
 bin/

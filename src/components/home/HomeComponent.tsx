@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Linking, View, Text, ScrollView, BackHandler, Platform } from 'react-native'
 import ObservationEventListComponent from './EventListElementComponent'
-import { TFunction, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import {
@@ -21,11 +21,6 @@ import {
   appendPath,
   eventPathUpdate,
   setTracking,
-  CredentialsType,
-  ObservationEventType,
-  ObservationZonesType,
-  PathType,
-  SchemaType
 } from '../../stores'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -87,146 +82,20 @@ const HomeComponent = (props: Props) => {
   const observationZone = useSelector((state: rootState) => state.observationZone)
   const observing = useSelector((state: rootState) => state.observing)
   const path = useSelector((state: rootState) => state.path)
-  const schema = useSelector((state: rootState) => state.schema)
 
   const { t } = useTranslation()
   const dispatch: DispatchType = useDispatch()
 
-  return <HomeComponentContainer
-    isFocused={props.isFocused}
-    onLogout={props.onLogout}
-    onPressMap={props.onPressMap}
-    onPressObservationEvent={props.onPressObservationEvent}
-    onPressFinishObservationEvent={props.onPressFinishObservationEvent}
-
-    pressCounter={pressCounter}
-    setPressCounter={setPressCounter}
-    observationEvents={observationEvents}
-    setObservationEvents={setObservationEvents}
-    sentEvents={sentEvents}
-    setSentEvents={setSentEvents}
-    tripModalVisibility={tripModalVisibility}
-    setTripModalVisibility={setTripModalVisibility}
-    atlasInstructionModalVisibility={atlasInstructionModalVisibility}
-    setAtlasInstructionModalVisibility={setAtlasInstructionModalVisibility}
-    gridModalVisibility={gridModalVisibility}
-    setGridModalVisibility={setGridModalVisibility}
-    fungiModalVisibility={fungiModalVisibility}
-    setFungiModalVisibility={setFungiModalVisibility}
-    dragonflyModalVisibility={dragonflyModalVisibility}
-    setDragonflyModalVisibility={setDragonflyModalVisibility}
-    butterflyModalVisibility={butterflyModalVisibility}
-    setButterflyModalVisibility={setButterflyModalVisibility}
-    largeFlowersModalVisibility={largeFlowersModalVisibility}
-    setLargeFlowersModalVisibility={setLargeFlowersModalVisibility}
-    mothModalVisibility={mothModalVisibility}
-    setMothModalVisibility={setMothModalVisibility}
-    bumblebeeModalVisibility={bumblebeeModalVisibility}
-    setBumblebeeModalVisibility={setBumblebeeModalVisibility}
-    herpModalVisibility={herpModalVisibility}
-    setHerpModalVisibility={setHerpModalVisibility}
-    subarcticModalVisibility={subarcticModalVisibility}
-    setSubarcticModalVisibility={setSubarcticModalVisibility}
-    macrolichenModalVisibility={macrolichenModalVisibility}
-    setMacrolichenModalVisibility={setMacrolichenModalVisibility}
-    bracketFungiModalVisibility={bracketFungiModalVisibility}
-    setBracketFungiModalVisibility={setBracketFungiModalVisibility}
-    practicalFungiModalVisibility={practicalFungiModalVisibility}
-    setPracticalFungiModalVisibility={setPracticalFungiModalVisibility}
-    zoneModalVisibility={zoneModalVisibility}
-    setZoneModalVisibility={setZoneModalVisibility}
-    loading={loading}
-    setLoading={setLoading}
-
-    credentials={credentials}
-    observationEvent={observationEvent}
-    observationZone={observationZone}
-    observing={observing}
-    path={path}
-    schema={schema}
-
-    t={t}
-    dispatch={dispatch}
-
-    fetch={storageService.fetch}
-    save={storageService.save}
-  />
-}
-
-type Props2 = {
-  isFocused: () => boolean,
-  onLogout: () => void,
-  onPressMap: () => void,
-  onPressObservationEvent: (id: string) => void,
-  onPressFinishObservationEvent: (sourcePage: string) => void,
-
-  pressCounter: number,
-  setPressCounter: React.Dispatch<React.SetStateAction<number>>,
-  observationEvents: React.JSX.Element[],
-  setObservationEvents: React.Dispatch<React.SetStateAction<React.JSX.Element[]>>,
-  sentEvents: React.JSX.Element[],
-  setSentEvents: React.Dispatch<React.SetStateAction<React.JSX.Element[]>>
-  tripModalVisibility: boolean,
-  setTripModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  atlasInstructionModalVisibility: boolean,
-  setAtlasInstructionModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  gridModalVisibility: boolean,
-  setGridModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  fungiModalVisibility: boolean,
-  setFungiModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  dragonflyModalVisibility: boolean,
-  setDragonflyModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  butterflyModalVisibility: boolean,
-  setButterflyModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  largeFlowersModalVisibility: boolean,
-  setLargeFlowersModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  mothModalVisibility: boolean,
-  setMothModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  bumblebeeModalVisibility: boolean,
-  setBumblebeeModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  herpModalVisibility: boolean,
-  setHerpModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  subarcticModalVisibility: boolean,
-  setSubarcticModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  macrolichenModalVisibility: boolean,
-  setMacrolichenModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  bracketFungiModalVisibility: boolean,
-  setBracketFungiModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  practicalFungiModalVisibility: boolean,
-  setPracticalFungiModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  zoneModalVisibility: boolean,
-  setZoneModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
-  loading: boolean,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-
-  credentials: CredentialsType,
-  observationEvent: ObservationEventType,
-  observationZone: ObservationZonesType,
-  observing: boolean,
-  path: PathType,
-  schema: SchemaType,
-
-  t: TFunction,
-  dispatch: DispatchType,
-
-  fetch: (key: string) => Promise<any>,
-  save: (key: string, value: any) => Promise<void>
-}
-
-export const HomeComponentContainer = (
-  props: Props2
-) => {
-
   let logTimeout: NodeJS.Timeout | undefined
 
   useEffect(() => {
-    props.setLoading(true)
+    setLoading(true)
 
-    const length = props.observationEvent.events.length
+    const length = observationEvent.events.length
     let isUnfinished = false
 
     if (length >= 1) {
-      isUnfinished = !props.observationEvent.events[length - 1].gatheringEvent?.dateEnd
+      isUnfinished = !observationEvent.events[length - 1].gatheringEvent?.dateEnd
     }
 
     const checkUpdates = async () => {
@@ -234,11 +103,11 @@ export const HomeComponentContainer = (
       const latestVersion = await getVersionNumber()
 
       if (updateIsAvailable(appVersion, latestVersion)) {
-        props.dispatch(setMessageState({
+        dispatch(setMessageState({
           type: 'conf',
-          messageContent: props.t('update app'),
-          cancelLabel: props.t('no'),
-          okLabel: props.t('yes'),
+          messageContent: t('update app'),
+          cancelLabel: t('no'),
+          okLabel: t('yes'),
           onOk: () => Linking.openURL(playStoreUrl)
         }))
       }
@@ -248,19 +117,19 @@ export const HomeComponentContainer = (
 
     if (isUnfinished) {
       const initTracking = async () => {
-        const formID = props.observationEvent.events[length - 1].formID
-        props.dispatch(setObserving(true))
-        props.dispatch(setObservationEventInterrupted(true))
-        if (formID === forms.lolife) { props.dispatch(setCurrentObservationZone(getLastZoneId())) }
-        const savedTrackingMode = await props.fetch('tracking')
-        props.dispatch(setTracking(savedTrackingMode))
+        const formID = observationEvent.events[length - 1].formID
+        dispatch(setObserving(true))
+        dispatch(setObservationEventInterrupted(true))
+        if (formID === forms.lolife) { dispatch(setCurrentObservationZone(getLastZoneId())) }
+        const savedTrackingMode = await storageService.fetch('tracking')
+        dispatch(setTracking(savedTrackingMode))
         await onContinueObservationEvent()
       }
 
       initTracking()
 
     } else {
-      props.setLoading(false)
+      setLoading(false)
     }
   }, [])
 
@@ -271,56 +140,56 @@ export const HomeComponentContainer = (
 
     loadObservationEvents()
     initSentEvents()
-  }, [props.observing])
+  }, [observing])
 
   useEffect(() => {
     //set first zone in array as selected zone to avoid undefined values
-    if (props.observationZone.currentZoneId === '' && props.observationZone.zones.length > 0) {
-      props.dispatch(setCurrentObservationZone(props.observationZone?.zones[0].id))
+    if (observationZone.currentZoneId === '' && observationZone.zones.length > 0) {
+      dispatch(setCurrentObservationZone(observationZone?.zones[0].id))
     }
-  }, [props.observationZone])
+  }, [observationZone])
 
   useEffect(() => {
-    if (props.pressCounter > 0 && !logTimeout) {
+    if (pressCounter > 0 && !logTimeout) {
       logTimeout = setTimeout(() => {
-        props.setPressCounter(0)
+        setPressCounter(0)
         logTimeout = undefined
       }, 5000)
     }
 
     const logHandler = async () => {
-      if (props.pressCounter === 5) {
-        const logs: any[] = await props.fetch('logs')
+      if (pressCounter === 5) {
+        const logs: any[] = await storageService.fetch('logs')
         clipboardConfirmation(logs)
-        props.setPressCounter(0)
+        setPressCounter(0)
       }
     }
 
     logHandler()
-  }, [props.pressCounter])
+  }, [pressCounter])
 
   const loadObservationEvents = () => {
     const events: Array<React.JSX.Element> = []
-    const indexLast: number = props.observationEvent.events.length - 1
-    props.observationEvent.events.forEach((event: Record<string, any>, index: number) => {
-      if (props.observing && index === indexLast) {
+    const indexLast: number = observationEvent.events.length - 1
+    observationEvent.events.forEach((event: Record<string, any>, index: number) => {
+      if (observing && index === indexLast) {
         return
       }
       events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
     })
 
-    props.setObservationEvents(events)
+    setObservationEvents(events)
   }
 
   const loadSentEvents = async () => {
     let sentEvents: Record<string, any>[] = []
 
     try {
-      sentEvents = await getSentEvents(props.credentials)
+      sentEvents = await getSentEvents(credentials)
     } catch (error: any) {
-      props.dispatch(setMessageState({
+      dispatch(setMessageState({
         type: 'err',
-        messageContent: props.t('failed to fetch sent events'),
+        messageContent: t('failed to fetch sent events'),
       }))
     }
 
@@ -336,17 +205,17 @@ export const HomeComponentContainer = (
       <SentEventComponent key={event.id} event={event} />
     ))
 
-    props.setSentEvents(sentEventElements)
+    setSentEvents(sentEventElements)
   }
 
   //handle back press in homescreen by asking user if they wish to exit the app
   useBackHandler(() => {
-    if (props.isFocused() && props.observing) {
-      props.dispatch(setMessageState({
+    if (props.isFocused() && observing) {
+      dispatch(setMessageState({
         type: 'dangerConf',
-        messageContent: props.t('exit app?'),
-        cancelLabel: props.t('cancel'),
-        okLabel: props.t('exit'),
+        messageContent: t('exit app?'),
+        cancelLabel: t('cancel'),
+        okLabel: t('exit'),
         onOk: () => BackHandler.exitApp()
       }))
 
@@ -357,90 +226,90 @@ export const HomeComponentContainer = (
   })
 
   const onBeginObservationEvent = async (formID: string) => {
-    props.setLoading(true)
+    setLoading(true)
 
     //save the used form before beginning an event
-    if (!props.observing) {
-      await props.dispatch(switchSchema(formID, i18n.language))
-      await props.save('formID', formID)
+    if (!observing) {
+      await dispatch(switchSchema(formID, i18n.language))
+      await storageService.save('formID', formID)
     }
 
-    const title: string = props.t('gps notification title')
-    const body: string = props.t('gps notification body')
+    const title: string = t('gps notification title')
+    const body: string = t('gps notification body')
 
     try {
-      await props.dispatch(beginObservationEvent(props.onPressMap, title, body))
+      await dispatch(beginObservationEvent(props.onPressMap, title, body))
     } catch (error: any) {
       if (error.severity === 'high') {
-        props.dispatch(setMessageState({
+        dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            props.dispatch(logoutUser())
-            props.dispatch(resetReducer())
+            dispatch(logoutUser())
+            dispatch(resetReducer())
           }
         }))
       } else {
-        props.dispatch(setMessageState({
+        dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
         }))
       }
     }
 
-    props.setLoading(false)
+    setLoading(false)
   }
 
   const onContinueObservationEvent = async () => {
-    props.setLoading(true)
+    setLoading(true)
 
-    const title: string = props.t('gps notification title')
-    const body: string = props.t('gps notification body')
+    const title: string = t('gps notification title')
+    const body: string = t('gps notification body')
 
     try {
-      await props.dispatch(continueObservationEvent(props.onPressMap, title, body))
+      await dispatch(continueObservationEvent(props.onPressMap, title, body))
     } catch (error: any) {
       if (error.severity === 'high') {
-        props.dispatch(setMessageState({
+        dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            props.dispatch(logoutUser())
-            props.dispatch(resetReducer())
+            dispatch(logoutUser())
+            dispatch(resetReducer())
           }
         }))
       } else {
-        props.dispatch(setMessageState({
+        dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
         }))
       }
     }
 
-    props.setLoading(false)
+    setLoading(false)
   }
 
   const getLastZoneId = () => {
-    const zone = props.observationZone.zones.find((zone: Record<string, any>) => {
-      return zone.name === props.observationEvent.events?.[props.observationEvent.events.length - 1].gatherings[1].locality
+    const zone = observationZone.zones.find((zone: Record<string, any>) => {
+      return zone.name === observationEvent.events?.[observationEvent.events.length - 1].gatherings[1].locality
     })
 
     return zone ? zone.id : ''
   }
 
   const stopObserving = () => {
-    props.dispatch(setMessageState({
+    dispatch(setMessageState({
       type: 'dangerConf',
-      messageContent: props.t('stop observing'),
-      okLabel: props.t('stop'),
-      cancelLabel: props.t('do not stop'),
+      messageContent: t('stop observing'),
+      okLabel: t('stop'),
+      cancelLabel: t('do not stop'),
       onOk: async () => {
-        props.setLoading(true)
+        setLoading(true)
 
-        props.dispatch(setObservationId({
-          eventId: props.observationEvent?.events?.[props.observationEvent?.events?.length - 1].id,
+        dispatch(setObservationId({
+          eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
           unitId: null
         }))
 
@@ -448,16 +317,16 @@ export const HomeComponentContainer = (
         let location: LocationType
         try {
           location = await getCurrentLocation(true)
-          await props.dispatch(appendPath([location]))
+          await dispatch(appendPath([location]))
         } catch (error: any) {
           showError('Could not get the last location of path: ' + error)
         }
 
-        if (props.path) {
-          await props.dispatch(eventPathUpdate(pathToLineStringConstructor(props.path)))
+        if (path) {
+          await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
         }
 
-        props.setLoading(false)
+        setLoading(false)
         props.onPressFinishObservationEvent('home')
       },
       testID: 'stopFromHomeMessage'
@@ -466,29 +335,29 @@ export const HomeComponentContainer = (
 
   const clipboardConfirmation = (logs: any[] | null) => {
     if (logs !== null && logs.length > 0) {
-      props.dispatch(setMessageState({
+      dispatch(setMessageState({
         type: 'dangerConf',
-        messageContent: props.t('copy log to clipboard?'),
-        okLabel: props.t('yes'),
-        cancelLabel: props.t('no'),
+        messageContent: t('copy log to clipboard?'),
+        okLabel: t('yes'),
+        cancelLabel: t('no'),
         onOk: async () => await Clipboard.setStringAsync(JSON.stringify(logs, null, '  '))
       }))
     } else {
-      props.dispatch(setMessageState({
+      dispatch(setMessageState({
         type: 'msg',
-        messageContent: props.t('no logs')
+        messageContent: t('no logs')
       }))
     }
   }
 
   const showError = (error: string) => {
-    props.dispatch(setMessageState({
+    dispatch(setMessageState({
       type: 'err',
       messageContent: error
     }))
   }
 
-  if (props.loading) {
+  if (loading) {
     return (
       <LoadingComponent text={'loading'} />
     )
@@ -500,89 +369,89 @@ export const HomeComponentContainer = (
             <NewsComponent tag={'technical'} thisDay={true} />
             <NewsComponent tag={'mobiilivihko'} thisDay={false} />
             <>
-              {props.observing ?
+              {observing ?
                 <UnfinishedEventComponent onContinueObservationEvent={() => { onContinueObservationEvent() }}
                   stopObserving={stopObserving} />
                 :
                 null
               }
             </>
-            <Text style={Ts.previousObservationsTitle}>{props.t('new observation event')}</Text>
-            <FormLauncherComponent formID={forms.tripForm} setModalVisibility={props.setTripModalVisibility} />
-            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={props.setAtlasInstructionModalVisibility} />
-            <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={props.setFungiModalVisibility} />
-            <FormLauncherComponent formID={forms.dragonflyForm} setModalVisibility={props.setDragonflyModalVisibility} />
-            <FormLauncherComponent formID={forms.butterflyForm} setModalVisibility={props.setButterflyModalVisibility} />
-            <FormLauncherComponent formID={forms.largeFlowersForm} setModalVisibility={props.setLargeFlowersModalVisibility} />
-            <FormLauncherComponent formID={forms.mothForm} setModalVisibility={props.setMothModalVisibility} />
-            <FormLauncherComponent formID={forms.bumblebeeForm} setModalVisibility={props.setBumblebeeModalVisibility} />
-            <FormLauncherComponent formID={forms.herpForm} setModalVisibility={props.setHerpModalVisibility} />
-            <FormLauncherComponent formID={forms.subarcticForm} setModalVisibility={props.setSubarcticModalVisibility} />
-            <FormLauncherComponent formID={forms.macrolichenForm} setModalVisibility={props.setMacrolichenModalVisibility} />
-            <FormLauncherComponent formID={forms.bracketFungiForm} setModalVisibility={props.setBracketFungiModalVisibility} />
-            <FormLauncherComponent formID={forms.practicalFungiForm} setModalVisibility={props.setPracticalFungiModalVisibility} />
+            <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
+            <FormLauncherComponent formID={forms.tripForm} setModalVisibility={setTripModalVisibility} />
+            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={setAtlasInstructionModalVisibility} />
+            <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={setFungiModalVisibility} />
+            <FormLauncherComponent formID={forms.dragonflyForm} setModalVisibility={setDragonflyModalVisibility} />
+            <FormLauncherComponent formID={forms.butterflyForm} setModalVisibility={setButterflyModalVisibility} />
+            <FormLauncherComponent formID={forms.largeFlowersForm} setModalVisibility={setLargeFlowersModalVisibility} />
+            <FormLauncherComponent formID={forms.mothForm} setModalVisibility={setMothModalVisibility} />
+            <FormLauncherComponent formID={forms.bumblebeeForm} setModalVisibility={setBumblebeeModalVisibility} />
+            <FormLauncherComponent formID={forms.herpForm} setModalVisibility={setHerpModalVisibility} />
+            <FormLauncherComponent formID={forms.subarcticForm} setModalVisibility={setSubarcticModalVisibility} />
+            <FormLauncherComponent formID={forms.macrolichenForm} setModalVisibility={setMacrolichenModalVisibility} />
+            <FormLauncherComponent formID={forms.bracketFungiForm} setModalVisibility={setBracketFungiModalVisibility} />
+            <FormLauncherComponent formID={forms.practicalFungiForm} setModalVisibility={setPracticalFungiModalVisibility} />
             <>
               {
-                props.credentials.permissions?.includes('HR.2951') ?
-                  <FormLauncherComponent formID={forms.lolife} setModalVisibility={props.setZoneModalVisibility} />
+                credentials.permissions?.includes('HR.2951') ?
+                  <FormLauncherComponent formID={forms.lolife} setModalVisibility={setZoneModalVisibility} />
                   : null
               }
             </>
-            <Text style={Ts.previousObservationsTitle}>{props.t('previous observation events')}</Text>
-            <>{props.observationEvents}</>
-            <Text style={Ts.previousObservationsTitle}>{props.t('sent observation events')}</Text>
-            <>{props.sentEvents}</>
+            <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
+            <>{observationEvents}</>
+            <Text style={Ts.previousObservationsTitle}>{t('sent observation events')}</Text>
+            <>{sentEvents}</>
           </View>
           <View style={Cs.versionContainer}>
             <Text
               style={Ts.alignedRightText}
-              onPress={() => props.setPressCounter(props.pressCounter + 1)}>
-              {props.t('version')} {AppJSON.expo.version}
+              onPress={() => setPressCounter(pressCounter + 1)}>
+              {t('version')} {AppJSON.expo.version}
             </Text>
           </View>
         </ScrollView>
-        <DefaultModalComponent modalVisibility={props.tripModalVisibility} setModalVisibility={props.setTripModalVisibility}
+        <DefaultModalComponent modalVisibility={tripModalVisibility} setModalVisibility={setTripModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.tripForm) }} formID={forms.tripForm} />
-        <AtlasInstructionModalComponent modalVisibility={props.atlasInstructionModalVisibility}
-          setModalVisibility={props.setAtlasInstructionModalVisibility} setGridModalVisibility={props.setGridModalVisibility} />
-        <GridModalComponent modalVisibility={props.gridModalVisibility} setModalVisibility={props.setGridModalVisibility}
+        <AtlasInstructionModalComponent modalVisibility={atlasInstructionModalVisibility}
+          setModalVisibility={setAtlasInstructionModalVisibility} setGridModalVisibility={setGridModalVisibility} />
+        <GridModalComponent modalVisibility={gridModalVisibility} setModalVisibility={setGridModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.birdAtlas) }}
-          setLoading={props.setLoading} />
-        <DefaultModalComponent modalVisibility={props.fungiModalVisibility} setModalVisibility={props.setFungiModalVisibility}
+          setLoading={setLoading} />
+        <DefaultModalComponent modalVisibility={fungiModalVisibility} setModalVisibility={setFungiModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.fungiAtlas) }} formID={forms.fungiAtlas} />
-        <CompleteListModalComponent modalVisibility={props.dragonflyModalVisibility}
-          setModalVisibility={props.setDragonflyModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.dragonflyForm) }}
+        <CompleteListModalComponent modalVisibility={dragonflyModalVisibility}
+          setModalVisibility={setDragonflyModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.dragonflyForm) }}
           formID={forms.dragonflyForm} />
-        <CompleteListModalComponent modalVisibility={props.butterflyModalVisibility}
-          setModalVisibility={props.setButterflyModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.butterflyForm) }}
+        <CompleteListModalComponent modalVisibility={butterflyModalVisibility}
+          setModalVisibility={setButterflyModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.butterflyForm) }}
           formID={forms.butterflyForm} />
-        <CompleteListModalComponent modalVisibility={props.largeFlowersModalVisibility}
-          setModalVisibility={props.setLargeFlowersModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.largeFlowersForm) }}
+        <CompleteListModalComponent modalVisibility={largeFlowersModalVisibility}
+          setModalVisibility={setLargeFlowersModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.largeFlowersForm) }}
           formID={forms.largeFlowersForm} />
-        <CompleteListModalComponent modalVisibility={props.mothModalVisibility}
-          setModalVisibility={props.setMothModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.mothForm) }}
+        <CompleteListModalComponent modalVisibility={mothModalVisibility}
+          setModalVisibility={setMothModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.mothForm) }}
           formID={forms.mothForm} />
-        <CompleteListModalComponent modalVisibility={props.bumblebeeModalVisibility}
-          setModalVisibility={props.setBumblebeeModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.bumblebeeForm) }}
+        <CompleteListModalComponent modalVisibility={bumblebeeModalVisibility}
+          setModalVisibility={setBumblebeeModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.bumblebeeForm) }}
           formID={forms.bumblebeeForm} />
-        <CompleteListModalComponent modalVisibility={props.herpModalVisibility}
-          setModalVisibility={props.setHerpModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.herpForm) }}
+        <CompleteListModalComponent modalVisibility={herpModalVisibility}
+          setModalVisibility={setHerpModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.herpForm) }}
           formID={forms.herpForm} />
-        <CompleteListModalComponent modalVisibility={props.subarcticModalVisibility}
-          setModalVisibility={props.setSubarcticModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.subarcticForm) }}
+        <CompleteListModalComponent modalVisibility={subarcticModalVisibility}
+          setModalVisibility={setSubarcticModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.subarcticForm) }}
           formID={forms.subarcticForm} />
-        <CompleteListModalComponent modalVisibility={props.macrolichenModalVisibility}
-          setModalVisibility={props.setMacrolichenModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.macrolichenForm) }}
+        <CompleteListModalComponent modalVisibility={macrolichenModalVisibility}
+          setModalVisibility={setMacrolichenModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.macrolichenForm) }}
           formID={forms.macrolichenForm} />
-        <CompleteListModalComponent modalVisibility={props.bracketFungiModalVisibility}
-          setModalVisibility={props.setBracketFungiModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.bracketFungiForm) }}
+        <CompleteListModalComponent modalVisibility={bracketFungiModalVisibility}
+          setModalVisibility={setBracketFungiModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.bracketFungiForm) }}
           formID={forms.bracketFungiForm} />
-        <CompleteListModalComponent modalVisibility={props.practicalFungiModalVisibility}
-          setModalVisibility={props.setPracticalFungiModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.practicalFungiForm) }}
+        <CompleteListModalComponent modalVisibility={practicalFungiModalVisibility}
+          setModalVisibility={setPracticalFungiModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.practicalFungiForm) }}
           formID={forms.practicalFungiForm} />
-        <ZoneModalComponent modalVisibility={props.zoneModalVisibility} setModalVisibility={props.setZoneModalVisibility}
+        <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
-          setLoading={props.setLoading} />
+          setLoading={setLoading} />
         <MessageComponent />
       </>
     )
