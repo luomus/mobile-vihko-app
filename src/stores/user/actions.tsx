@@ -199,13 +199,13 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
 
 export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
   return async (dispatch, getState) => {
-    const { credentials, observationEventInterrupted, observing, tracking } = getState()
+    const { credentials, observing } = getState()
 
     const credentialsCopy = credentials
 
     //stop recording when logging out
     if (observing) {
-      await stopLocationAsync(observationEventInterrupted, tracking)
+      await stopLocationAsync()
     }
 
     //clear credentials

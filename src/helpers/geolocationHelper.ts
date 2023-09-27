@@ -153,11 +153,9 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
   }, 500)
 }
 
-export const stopLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
-  if (!observationEventInterrupted) {
-    if (positionWatcher) positionWatcher.remove()
-    if (tracking) await stopBackgroundLocationAsync()
-  }
+export const stopLocationAsync = async () => {
+  if (positionWatcher) positionWatcher.remove()
+  await stopBackgroundLocationAsync()
 }
 
 export const stopBackgroundLocationAsync = async () => {

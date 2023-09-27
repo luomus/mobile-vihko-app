@@ -29,7 +29,6 @@ import { get, set, clone, merge } from 'lodash'
 import uuid from 'react-native-uuid'
 import i18n from '../../languages/i18n'
 import LoadingComponent from '../general/LoadingComponent'
-import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import {
   JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder,
   MHL117Fields, overrideMHL117Fields, MHL117FieldOrder, additionalMHL117Fields,

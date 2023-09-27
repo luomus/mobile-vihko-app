@@ -43,7 +43,7 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
   Promise.resolve()
 }
 
-export const stopLocationAsync = async (observationEventInterrupted: boolean, tracking: boolean) => {
+export const stopLocationAsync = async () => {
   Promise.resolve()
 }
 

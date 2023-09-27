@@ -195,6 +195,8 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       return Promise.resolve()
     }
 
+    await stopLocationAsync() // cleans up tracking
+
     const formID = observationEvent.events[observationEvent.events.length - 1].formID
 
     //switch schema
@@ -302,10 +304,10 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
   locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
   return async (dispatch, getState) => {
-    const { credentials, grid, firstLocation, observationEvent, path, tracking, observationEventInterrupted } = getState()
+    const { credentials, grid, firstLocation, observationEvent, path } = getState()
 
     try {
-      await stopLocationAsync(observationEventInterrupted, tracking)
+      await stopLocationAsync()
     } catch (error: any) {
       captureException(error)
       log.error({

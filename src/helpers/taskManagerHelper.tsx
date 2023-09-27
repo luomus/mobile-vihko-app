@@ -1,8 +1,7 @@
 import { LocationObject } from 'expo-location'
-import { LineString, MultiLineString } from 'geojson'
 import { Vibration } from 'react-native'
 import { forms } from '../config/fields'
-import { GRID_EDGE_DISTANCE, PATH_BACKUP_INTERVALL } from '../config/location'
+import { GRID_EDGE_DISTANCE } from '../config/location'
 import i18n from '../languages/i18n'
 import {
   store,

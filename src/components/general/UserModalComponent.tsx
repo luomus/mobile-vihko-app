@@ -37,10 +37,8 @@ type Props = {
 const UserModalComponent = (props: Props) => {
 
   const credentials = useSelector((state: rootState) => state.credentials)
-  const observationEventInterrupted = useSelector((state: rootState) => state.observationEventInterrupted)
   const observing = useSelector((state: rootState) => state.observing)
   const path = useSelector((state: rootState) => state.path)
-  const tracking = useSelector((state: rootState) => state.tracking)
   const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
@@ -74,7 +72,7 @@ const UserModalComponent = (props: Props) => {
     if (observing) {
       const lineString = pathToLineStringConstructor(path)
       dispatch(eventPathUpdate(lineString))
-      await stopLocationAsync(observationEventInterrupted, tracking)
+      await stopLocationAsync()
     }
 
     try {
