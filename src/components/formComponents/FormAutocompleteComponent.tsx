@@ -42,31 +42,24 @@ const FormAutocompleteComponent = (props: Props) => {
   const observationId = useSelector((state: rootState) => state.observationId)
 
   const { t } = useTranslation()
-  const { register, unregister, setValue, formState, watch, clearErrors, setError, setFocus } = useFormContext()
+  const { register, unregister, setValue, formState, clearErrors, setError, setFocus } = useFormContext()
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: Canceler | undefined
 
   useEffect(() => {
-    let allFound = true
     const transformKeys = Object.keys(transform)
-    const registeredFields = Object.keys(watch())
+    let emptyQuery = false
 
     registerField(valueField)
     setValue(valueField, props.defaultValue, { shouldValidate: false })
 
     transformKeys.forEach(key => {
       if (transform[key] === valueField && props.defaultValue === '') {
-        allFound = false
-      } else if (transform[key] !== valueField && !registeredFields.includes(transform[key])) {
-        allFound = false
+        emptyQuery = true
       }
     })
 
-    if (allFound) {
-      setSelected(true)
-    }
-
-    if (RegExp(/MX.*/).test(props.defaultValue)) {
+    if (!emptyQuery) {
       initAutocompleteOnMCode(props.defaultValue)
     }
   }, [])
@@ -169,7 +162,7 @@ const FormAutocompleteComponent = (props: Props) => {
         const res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
         autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
 
-      //priotize filtered options over random options
+        //priotize filtered options over random options
       } else {
         const resultsWithFilters = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
         const resultsWithoutFilters = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelToken)
