@@ -226,6 +226,8 @@ export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTyp
       })
     }
 
+    if (!credentialsCopy.token) return Promise.resolve // don't try to log out if there's no token
+
     //logout from the API
     try {
       await userService.logout(credentialsCopy)

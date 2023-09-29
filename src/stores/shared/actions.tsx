@@ -286,7 +286,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     dispatch(clearRegion())
 
     //set old path if exists
-    const path: PathType | undefined = lineStringsToPathDeconstructor(observationEvent.events[observationEvent.events.length - 1].gatherings[0]?.geometry)
+    const path: PathType | undefined = lineStringsToPathDeconstructor(observationEvent.events[observationEvent.events.length - 1]?.gatherings[0]?.geometry)
 
     if (path) {
       path.push([])
