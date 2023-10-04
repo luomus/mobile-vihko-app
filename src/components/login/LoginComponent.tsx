@@ -96,7 +96,14 @@ const LoginComponent = (props: Props) => {
       }
 
       //user was not logged in
-      const tmpToken = await storageService.fetch(tmpTokenKey)
+      let tmpToken = null
+      try {
+        tmpToken = await storageService.fetch(tmpTokenKey)
+      } catch (error) {
+        setLoggingIn(false)
+        return
+      }
+
       if (tmpToken) {
         await pollLogin(tmpToken)
         await storageService.remove(tmpTokenKey)

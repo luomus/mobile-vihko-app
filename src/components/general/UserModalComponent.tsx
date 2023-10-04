@@ -75,6 +75,8 @@ const UserModalComponent = (props: Props) => {
       await stopLocationAsync()
     }
 
+    props.onClose()
+
     try {
       await dispatch(logoutUser())
     } catch (error: any) {
