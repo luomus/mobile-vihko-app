@@ -75,8 +75,6 @@ const UserModalComponent = (props: Props) => {
       await stopLocationAsync()
     }
 
-    props.onClose()
-
     try {
       await dispatch(logoutUser())
     } catch (error: any) {
@@ -88,12 +86,14 @@ const UserModalComponent = (props: Props) => {
 
     dispatch(resetReducer())
 
-    props.navigation.dispatch(
+    props.onClose()
+
+    setTimeout(() => props.navigation.dispatch(
       CommonActions.reset({
         index: 0,
         routes: [{ name: 'login' }]
       })
-    )
+    ), 500)
   }
 
   const setLanguageHelper = (lang: string) => {
