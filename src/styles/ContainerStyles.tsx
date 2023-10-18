@@ -341,26 +341,22 @@ const ContainerStyles = StyleSheet.create({
     marginBottom: 10
   },
   overviewContentContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingBottom: 15
+    alignItems: 'center'
   },
   overviewTextContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    width: '62%'
+    width: '100%'
   },
   overviewButtonsContainer: {
-    alignSelf: 'flex-end',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    width: '38%',
-    maxWidth: 150
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    padding: 5
   },
   observationInfoContainer: {
     padding: 5,
     backgroundColor: Colors.primary3,
+    borderRadius: 5,
     justifyContent: 'center'
   },
   observationListElementTextContainer: {
@@ -448,9 +444,10 @@ const ContainerStyles = StyleSheet.create({
     marginBottom: Dimensions.get('screen').width * 0.125
   },
   formSaveButtonContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.neutral5
+    backgroundColor: Colors.neutral5,
+    width: '100%'
   },
   formInputContainer: {
     padding: 10,

@@ -30,6 +30,7 @@ import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
 import { log } from '../../helpers/logger'
 import { captureException } from '../../helpers/sentry'
+import SchemaObjectComponent from './SchemaObjectComponent'
 
 type Props = {
   id: string,
@@ -260,42 +261,49 @@ const OverviewComponent = (props: Props) => {
     if (event) {
       return (
         <View style={Cs.overviewContentContainer}>
-          <View style={Cs.overviewTextContainer}>
-            {event.gatherings[0].locality ? <Text>{t('locality')}: {event.gatherings[0].locality}</Text> : null}
-            {event.gatherings[0].localityDescription ? <Text>{t('locality description')}: {event.gatherings[0].localityDescription}</Text> : null}
-            <Text>{t('date begin')}: {displayDateBegin()}</Text>
-            <Text>{t('date end')}: {displayDateEnd()}</Text>
-          </View>
-          <View style={Cs.overviewButtonsContainer}>
-            <ButtonComponent
-              onPressFunction={() => {
-                const id = {
-                  eventId: event.id,
-                  unitId: ''
-                }
-                dispatch(setObservationId(id))
-                props.onPressObservationEvent('overview')
-              }}
-              title={t('edit')} height={40} width={'100%'} buttonStyle={Bs.eventOptionsButton}
-              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-            />
-            <ButtonComponent onPressFunction={() => setModalVisibility(true)} title={t('submit')}
-              height={40} width={'100%'} buttonStyle={Bs.eventOptionsButton}
-              gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.buttonText} iconName={'send'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-            />
-            <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={t('delete')}
-              height={40} width={'100%'} buttonStyle={Bs.eventOptionsButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-            />
+          <View style={{ width: '100%', justifyContent: 'flex-start', flexDirection: 'row' }}>
             <ButtonComponent onPressFunction={() => handleBugReport()} title={t('bug report')}
-              height={40} width={'100%'} buttonStyle={Bs.eventOptionsButton}
+              height={40} width={140} buttonStyle={Bs.eventOptionsButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
               textStyle={Ts.buttonText} iconName={'bug-report'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
           </View>
+          <Text style={Ts.overviewHeader}>{t('observation event')}</Text>
+          <View style={{ backgroundColor: Colors.neutral5, width: '100%', borderRadius: 5 }}>
+            <View style={Cs.overviewTextContainer}>
+              {event.gatherings[0].locality ?
+                <SchemaObjectComponent title={t('locality')} value={event.gatherings[0].locality} />
+                : null
+              }
+              {event.gatherings[0].locality ?
+                <SchemaObjectComponent title={t('locality description')} value={event.gatherings[0].localityDescription} />
+                : null
+              }
+              <SchemaObjectComponent title={t('date begin')} value={displayDateBegin()} />
+              <SchemaObjectComponent title={t('date end')} value={displayDateEnd()} />
+            </View>
+            <View style={Cs.overviewButtonsContainer}>
+              <ButtonComponent
+                onPressFunction={() => {
+                  const id = {
+                    eventId: event.id,
+                    unitId: ''
+                  }
+                  dispatch(setObservationId(id))
+                  props.onPressObservationEvent('overview')
+                }}
+                title={t('edit')} height={40} width={120} buttonStyle={Bs.eventOptionsButton}
+                gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+              />
+              <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={t('delete')}
+                height={40} width={120} buttonStyle={Bs.eventOptionsButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              />
+            </View>
+          </View>
+          <Text style={Ts.overviewHeader}>{t('observations')}</Text>
         </View>
       )
     } else {
@@ -314,6 +322,25 @@ const OverviewComponent = (props: Props) => {
   } else {
     return (
       <>
+        <View style={Cs.formSaveButtonContainer}>
+          <ButtonComponent onPressFunction={() => setModalVisibility(true)}
+            title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}
+          />
+          <ButtonComponent onPressFunction={() => props.onPressHome()}
+            title={t('cancel')} height={40} width={80} buttonStyle={Bs.editObservationButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.darkText}
+          />
+          <ButtonComponent
+            onPressFunction={async () => { await sendObservationEvent(true) }}
+            testID={'saveButton'}
+            title={t('send public')} height={40} width={140} buttonStyle={Bs.editObservationButton}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}
+          />
+        </View>
         <FlatList
           data={observations}
           renderItem={renderObservation}
@@ -322,7 +349,9 @@ const OverviewComponent = (props: Props) => {
           style={Cs.overviewBaseContainer}
         />
         {props.children}
-        <SendEventModalComponent modalVisibility={modalVisibility} onCancel={setModalVisibility} sendObservationEvent={sendObservationEvent} />
+        <SendEventModalComponent onSubmit={undefined} onSend={sendObservationEvent}
+          modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
+          onCancel={() => setModalVisibility(false)} cancelTitle={t('cancel')} />
         <MessageComponent />
       </>
     )

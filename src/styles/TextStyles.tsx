@@ -162,6 +162,12 @@ const TextStyles = StyleSheet.create({
   },
 
   //overview component
+  overviewHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    alignSelf: 'flex-start',
+    paddingVertical: 5
+  },
   boldText: {
     fontWeight: 'bold'
   },

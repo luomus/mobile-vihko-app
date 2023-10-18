@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { View } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Icon } from 'react-native-elements'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
 import { set, get, merge, mergeWith, omit } from 'lodash'
@@ -299,6 +298,11 @@ const DocumentComponent = (props: Props) => {
     }))
   }
 
+  const submitAndSendPublic = async (submit: () => any) => {
+    await submit()
+    await sendObservationEvent(true)
+  }
+
   if (saving) {
     return (
       <LoadingComponent text={'saving'} />
@@ -316,18 +320,25 @@ const DocumentComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
-          <TouchableOpacity onPress={methods.handleSubmit(onSubmit, onError)} testID={'saveButton'}>
-            <Icon reverse color={Colors.successButton1} name='done' type='material-icons' raised size={30} />
-          </TouchableOpacity>
+          <ButtonComponent onPressFunction={() => setModalVisibility(true)}
+            title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}
+          />
+          <ButtonComponent onPressFunction={() => showCancel()}
+            title={t('cancel')} height={40} width={80} buttonStyle={Bs.editObservationButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.darkText}
+          />
+          <ButtonComponent
+            onPressFunction={async () => { await submitAndSendPublic(methods.handleSubmit(onSubmit, onError)) }}
+            testID={'saveButton'}
+            title={t('send public')} height={40} width={140} buttonStyle={Bs.editObservationButton}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}
+          />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} ref={scrollViewRef}>
-          <View style={Cs.buttonContainer}>
-            <ButtonComponent onPressFunction={() => showCancel()}
-              title={t('cancel')} height={40} width={150} buttonStyle={Bs.editObservationButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'close'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-            />
-          </View>
           {(event?.formID !== 'MHL.117' && !(path.length === 1 && path[0].length === 0)) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => deletePath()}
@@ -345,7 +356,9 @@ const DocumentComponent = (props: Props) => {
           </View>
         </KeyboardAwareScrollView>
         <MessageComponent />
-        <SendEventModalComponent modalVisibility={modalVisibility} onCancel={props.toHome} sendObservationEvent={sendObservationEvent} />
+        <SendEventModalComponent onSubmit={methods.handleSubmit(onSubmit, onError)} onSend={sendObservationEvent}
+          modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
+          onCancel={props.toHome} cancelTitle={t('saveWithoutSending')} />
         {props.children}
       </View>
     )

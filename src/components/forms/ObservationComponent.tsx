@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { Platform, Text, TouchableOpacity, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -513,18 +513,18 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
-          <TouchableOpacity onPress={methods.handleSubmit(onSubmit, onError)} testID={'saveButton'}>
-            <Icon reverse color={Colors.successButton1} name='done' type='material-icons' raised size={30} />
-          </TouchableOpacity>
+          <ButtonComponent onPressFunction={() => showCancel()}
+            title={t('cancel')} height={40} width={120} buttonStyle={Bs.editObservationButton}
+            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+            textStyle={Ts.buttonText} iconName={'close'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          />
+          <ButtonComponent onPressFunction={methods.handleSubmit(onSubmit, onError)} testID={'saveButton'}
+            title={t('save')} height={40} width={120} buttonStyle={Bs.editObservationButton}
+            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+            textStyle={Ts.buttonText} iconName={'check'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+          />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollViewRef}>
-          <View style={Cs.buttonContainer}>
-            <ButtonComponent onPressFunction={() => showCancel()}
-              title={t('cancel')} height={40} width={150} buttonStyle={Bs.editObservationButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'close'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-            />
-          </View>
           {observationId
             && !((schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID))
               && observationState?.id.includes('complete_list')) ?
