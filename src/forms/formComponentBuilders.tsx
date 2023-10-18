@@ -155,12 +155,19 @@ export const createInputElement = (
       keyboardType='default'
       isArrayItem={isArrayItem} parentCallback={callbackFunction}
     />
+  } else if (objectTitle === 'count') {
+    return <FormInputComponent
+      key={objectTitle} title={title} objectTitle={objectTitle}
+      parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
+      keyboardType='default' isArrayItem={isArrayItem} parentCallback={callbackFunction}
+      editable={editable} multiline={false}
+    />
   } else if (type === 'string') {
     return <FormInputComponent
       key={objectTitle} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='default' isArrayItem={isArrayItem} parentCallback={callbackFunction}
-      editable={editable}
+      editable={editable} multiline={true}
     />
   } else if (type === 'integer') {
     return <FormInputComponent
@@ -168,7 +175,7 @@ export const createInputElement = (
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='numeric'
       isArrayItem={isArrayItem} parentCallback={callbackFunction}
-      editable={editable}
+      editable={editable} multiline={false}
     />
   }
 }

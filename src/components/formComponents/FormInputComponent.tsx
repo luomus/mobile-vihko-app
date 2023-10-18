@@ -26,7 +26,8 @@ interface Props {
   defaultValue: string | number | Array<string> | undefined,
   isArrayItem: boolean,
   parentCallback: ((childValue: any) => void) | undefined,
-  editable: boolean
+  editable: boolean,
+  multiline: boolean
 }
 
 const FormInputComponent = (props: Props) => {
@@ -70,7 +71,7 @@ const FormInputComponent = (props: Props) => {
         }}
         defaultValue={currentValue}
         ref={textInput}
-        multiline
+        multiline={props.multiline}
         testID={props.title}
       />
     </View>
