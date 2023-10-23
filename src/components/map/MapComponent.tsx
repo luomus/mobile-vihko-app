@@ -18,7 +18,6 @@ import {
   setObservationLocation,
   clearObservationLocation,
   setObservationId,
-  clearObservationId,
   deleteObservation,
   setRegion,
   setEditing,
@@ -69,6 +68,7 @@ const MapComponent = (props: Props) => {
   const grid = useSelector((state: rootState) => state.grid)
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observationEventId = useSelector((state: rootState) => state.observationEventId)
   const observationZone = useSelector((state: rootState) => state.observationZone)
   const path = useSelector((state: rootState) => state.path)
   const position = useSelector((state: rootState) => state.position)
@@ -202,27 +202,25 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
-  const showSubmitDelete = (eventId: string, unitId: string) => {
+  const showSubmitDelete = (unitId: string) => {
     setMapModalVisibility(false)
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation?'),
-      onOk: () => submitDelete(eventId, unitId),
+      onOk: () => submitDelete(unitId),
       okLabel: t('delete')
     }))
   }
 
-  const submitDelete = async (eventId: string, unitId: string) => {
+  const submitDelete = async (unitId: string) => {
     try {
-      await dispatch(deleteObservation(eventId, unitId))
+      await dispatch(deleteObservation(observationEventId, unitId))
     } catch (error: any) {
       captureException(error)
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
       }))
-    } finally {
-      dispatch(clearObservationId())
     }
   }
 
@@ -239,19 +237,15 @@ const MapComponent = (props: Props) => {
   //sets observation ids and shifts screen to observation edit page, parameter
   //in onPressEditing will tell edit page that observation is being modified
   //from map, enabling return to correct screen when editing is finished
-  const shiftToEditPage = (eventId: string, unitId: string) => {
+  const shiftToEditPage = (unitId: string) => {
     setMapModalVisibility(false)
     cancelObservation()
-    dispatch(setObservationId({
-      eventId,
-      unitId
-    }))
+    dispatch(setObservationId(unitId))
     props.onPressEditing('map')
   }
 
   //preparations for opening the edit observation modal
-  const openMapModal = (units: Array<Record<string, any>>, eventId: string): void => {
-    dispatch(setObservationId({ eventId: eventId, unitId: null }))
+  const openMapModal = (units: Array<Record<string, any>>): void => {
     cancelObservation()
     stopCentering()
     //gets the list of nearby observations and saves them to a state, so they can be rendered in the modal
@@ -262,7 +256,6 @@ const MapComponent = (props: Props) => {
   //preparations for closing the edit modal
   const closeMapModal = (): void => {
     setMapModalVisibility(false)
-    dispatch(clearObservationId())
   }
 
   //draws user position to map

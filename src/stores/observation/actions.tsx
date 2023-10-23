@@ -13,6 +13,8 @@ import {
   CLEAR_OBSERVATION_EVENTS,
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
+  SET_OBSERVATION_EVENT_ID,
+  CLEAR_OBSERVATION_EVENT_ID
 } from './types'
 import { biomonForms, forms } from '../../config/fields'
 import { getCompleteList } from '../../services/atlasService'
@@ -42,13 +44,22 @@ export const setObserving = (observing: boolean): observationActionTypes => ({
   payload: observing
 })
 
-export const setObservationId = (id: Record<string, any>): observationActionTypes => ({
+export const setObservationId = (id: string): observationActionTypes => ({
   type: SET_OBSERVATION_ID,
   payload: id
 })
 
 export const clearObservationId = (): observationActionTypes => ({
   type: CLEAR_OBSERVATION_ID
+})
+
+export const setObservationEventId = (id: string): observationActionTypes => ({
+  type: SET_OBSERVATION_EVENT_ID,
+  payload: id
+})
+
+export const clearObservationEventId = (): observationActionTypes => ({
+  type: CLEAR_OBSERVATION_EVENT_ID
 })
 
 export const setObservationEventInterrupted = (interrupted: boolean): observationActionTypes => ({
@@ -288,6 +299,8 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         message: `${i18n.t('post failure')} ${error.message}`
       })
     }
+
+    dispatch(clearObservationEventId())
 
     try {
       await dispatch(deleteObservationEvent(id))

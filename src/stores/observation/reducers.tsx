@@ -6,8 +6,10 @@ import {
   SET_OBSERVATION_EVENT_INTERRUPTED,
   CLEAR_OBSERVATION_EVENTS,
   REPLACE_OBSERVATION_EVENTS,
-  CLEAR_OBSERVATION_ID,
   SET_OBSERVATION_ID,
+  CLEAR_OBSERVATION_ID,
+  SET_OBSERVATION_EVENT_ID,
+  CLEAR_OBSERVATION_EVENT_ID,
   SET_OBSERVING
 } from './types'
 
@@ -55,12 +57,23 @@ const observationEventsReducer = (state: ObservationEventType = initObsEventStat
   }
 }
 
-const observationIdReducer = (state = null, action : observationActionTypes) => {
+const observationIdReducer = (state = '', action : observationActionTypes) => {
   switch (action.type) {
     case SET_OBSERVATION_ID:
       return action.payload
     case CLEAR_OBSERVATION_ID:
-      return null
+      return ''
+    default:
+      return state
+  }
+}
+
+const observationEventIdReducer = (state = '', action : observationActionTypes) => {
+  switch (action.type) {
+    case SET_OBSERVATION_EVENT_ID:
+      return action.payload
+    case CLEAR_OBSERVATION_EVENT_ID:
+      return ''
     default:
       return state
   }
@@ -80,5 +93,6 @@ export {
   observationEventInterruptedReducer,
   observationEventsReducer,
   observationIdReducer,
+  observationEventIdReducer,
   observingReducer
 }

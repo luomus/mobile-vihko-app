@@ -71,6 +71,7 @@ const ObservationComponent = (props: Props) => {
   const observation = useSelector((state: rootState) => state.observation)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
+  const observationEventId = useSelector((state: rootState) => state.observationEventId)
   const schema = useSelector((state: rootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
@@ -133,7 +134,7 @@ const ObservationComponent = (props: Props) => {
   const init = () => {
     //clone events from reducer for modification
     const searchedEvent = observationEvent.events.find(event => {
-      return event.id === observationId?.eventId
+      return event.id === observationEventId
     })
 
     if (!searchedEvent) {
@@ -143,7 +144,7 @@ const ObservationComponent = (props: Props) => {
     //find the correct observation by id
     const searchedObservation = clone(
       searchedEvent.gatherings[0].units.find((observation: Record<string, any>) => {
-        return observation.id === observationId?.unitId
+        return observation.id === observationId
       })
     )
 
@@ -380,13 +381,13 @@ const ObservationComponent = (props: Props) => {
 
     //replace original observation with edited one
     try {
-      await dispatch(replaceObservationById(editedUnit, observationId?.eventId, observationId?.unitId))
+      await dispatch(replaceObservationById(editedUnit, observationEventId, observationId))
       dispatch(clearObservationLocation())
       dispatch(clearObservationId())
       if (editing.originalSourcePage === 'map') {
         props.toMap()
       } else if (editing.originalSourcePage === 'overview') {
-        props.toObservationEvent(observationId?.eventId)
+        props.toObservationEvent(observationEventId)
       } else if (editing.originalSourcePage === 'list') {
         props.toList()
       }
@@ -432,7 +433,7 @@ const ObservationComponent = (props: Props) => {
           props.toMap()
         } else if (editing.originalSourcePage === 'overview') {
           if (!observationId) { return }
-          props.toObservationEvent(observationId?.eventId)
+          props.toObservationEvent(observationEventId)
         } else if (editing.originalSourcePage === 'list') {
           props.toList()
         }
@@ -456,7 +457,7 @@ const ObservationComponent = (props: Props) => {
     setSaving(true)
     try {
       if (!observationState?.id.includes('complete_list')) {
-        await dispatch(deleteObservation(observationId?.eventId, observationId?.unitId))
+        await dispatch(deleteObservation(observationEventId, observationId))
         dispatch(clearObservationId())
         dispatch(clearObservationLocation())
 
@@ -467,7 +468,7 @@ const ObservationComponent = (props: Props) => {
         emptyObservation = omit(emptyObservation, 'notes')
         emptyObservation = omit(emptyObservation, 'images')
         try {
-          await dispatch(replaceObservationById(emptyObservation, observationId?.eventId, observationId?.unitId))
+          await dispatch(replaceObservationById(emptyObservation, observationEventId, observationId))
         } catch (error: any) {
           dispatch(setMessageState({
             type: 'err',
@@ -480,7 +481,7 @@ const ObservationComponent = (props: Props) => {
       if (editing.originalSourcePage === 'map') {
         props.toMap()
       } else if (editing.originalSourcePage === 'overview') {
-        props.toObservationEvent(observationId?.eventId)
+        props.toObservationEvent(observationEventId)
       } else if (editing.originalSourcePage === 'list') {
         props.toList()
       }

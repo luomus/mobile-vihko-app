@@ -10,7 +10,7 @@ import {
   LocationType,
   setCurrentObservationZone,
   setObserving,
-  setObservationId,
+  setObservationEventId,
   setObservationEventInterrupted,
   setMessageState,
   switchSchema,
@@ -308,10 +308,7 @@ const HomeComponent = (props: Props) => {
       onOk: async () => {
         setLoading(true)
 
-        dispatch(setObservationId({
-          eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
-          unitId: null
-        }))
+        dispatch(setObservationEventId(observationEvent?.events?.[observationEvent?.events?.length - 1].id))
 
         //save the path before stopping
         let location: LocationType

@@ -12,7 +12,6 @@ import {
   DispatchType,
   finishObservationEvent,
   replaceObservationEventById,
-  clearObservationId,
   uploadObservationEvent,
   setMessageState,
   logoutUser,
@@ -75,6 +74,7 @@ const DocumentComponent = (props: Props) => {
   const grid = useSelector((state: rootState) => state.grid)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const observationId = useSelector((state: rootState) => state.observationId)
+  const observationEventId = useSelector((state: rootState) => state.observationEventId)
   const path = useSelector((state: rootState) => state.path)
   const schema = useSelector((state: rootState) => state.schema)
 
@@ -84,7 +84,6 @@ const DocumentComponent = (props: Props) => {
     init()
 
     return () => {
-      dispatch(clearObservationId())
       setForm(null)
     }
   }, [])
@@ -102,7 +101,7 @@ const DocumentComponent = (props: Props) => {
   const init = () => {
     //find the correct event by id
     const searchedEvent = observationEvent.events.find(event => {
-      return event.id === observationId?.eventId
+      return event.id === observationEventId
     })
 
     if (searchedEvent) {
@@ -164,7 +163,7 @@ const DocumentComponent = (props: Props) => {
       }))
     }
 
-    if (event && observationId) {
+    if (event && observationEventId) {
       let editedEvent = {}
 
       Object.keys(data).forEach(key => {
@@ -187,14 +186,13 @@ const DocumentComponent = (props: Props) => {
 
       //replace events with the modified copy
       try {
-        await dispatch(replaceObservationEventById(editedEvent, observationId.eventId))
+        await dispatch(replaceObservationEventById(editedEvent, observationEventId))
         if (props.sourcePage !== 'overview') {
           await dispatch(finishObservationEvent())
           setModalVisibility(true)
         } else {
-          props.toObservationEvent(observationId?.eventId)
+          props.toObservationEvent(observationEventId)
         }
-        dispatch(clearObservationId())
       } catch (error: any) {
         dispatch(setMessageState({
           type: 'err',
@@ -257,7 +255,7 @@ const DocumentComponent = (props: Props) => {
           props.toHome()
         } else if (props.sourcePage === 'overview') {
           if (!observationId) { return }
-          props.toObservationEvent(observationId?.eventId)
+          props.toObservationEvent(observationEventId)
         }
       }
     }))

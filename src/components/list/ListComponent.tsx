@@ -123,12 +123,7 @@ const ListComponent = (props: Props) => {
   const renderBird: ListRenderItem<any> = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        const event = observationEvent.events[observationEvent.events.length - 1].id
-        const unitIdentifier = item.id
-        dispatch(setObservationId({
-          eventId: event,
-          unitId: unitIdentifier
-        }))
+        dispatch(setObservationId(item.id))
         props.onPressObservation('list')
         textInput?.current?.clear()
         setSearch('')

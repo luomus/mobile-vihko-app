@@ -6,7 +6,6 @@ import { convertLatLngToPoint } from '../../../helpers/geoJSONHelper'
 import {
   rootState,
   DispatchType,
-  clearObservationId,
   clearObservationLocation,
   deleteObservation,
   setEditing,
@@ -45,6 +44,7 @@ const MapComponent = (props: Props) => {
 
   const editing = useSelector((state: rootState) => state.editing)
   const observation = useSelector((state: rootState) => state.observation)
+  const observationEventId = useSelector((state: rootState) => state.observationEventId)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -87,22 +87,19 @@ const MapComponent = (props: Props) => {
     dispatch(clearObservationLocation())
   }
 
-  const shiftToEditPage = (eventId: string, unitId: string) => {
+  const shiftToEditPage = (unitId: string) => {
     setMapModalVisibility(false)
     cancelObservation()
-    dispatch(setObservationId({
-      eventId,
-      unitId
-    }))
+    dispatch(setObservationId(unitId))
     props.onPressEditing('map')
   }
 
-  const showSubmitDelete = (eventId: string, unitId: string) => {
+  const showSubmitDelete = (unitId: string) => {
     setMapModalVisibility(false)
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('remove observation?'),
-      onOk: () => submitDelete(eventId, unitId),
+      onOk: () => submitDelete(unitId),
       okLabel: t('delete')
     }))
   }
@@ -116,22 +113,19 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
-  const submitDelete = async (eventId: string, unitId: string) => {
+  const submitDelete = async (unitId: string) => {
     try {
-      await dispatch(deleteObservation(eventId, unitId))
+      await dispatch(deleteObservation(observationEventId, unitId))
     } catch (error: any) {
       captureException(error)
       dispatch(setMessageState({
         type: 'err',
         messageContent: error.message
       }))
-    } finally {
-      dispatch(clearObservationId())
     }
   }
 
-  const openMapModal = (units: Array<Record<string, any>>, eventId: string): void => {
-    dispatch(setObservationId({ eventId: eventId, unitId: null }))
+  const openMapModal = (units: Array<Record<string, any>>): void => {
     cancelObservation()
     //gets the list of nearby observations and saves them to a state, so they can be rendered in the modal
     setObservationOptions(units)
@@ -140,7 +134,6 @@ const MapComponent = (props: Props) => {
 
   const closeMapModal = (): void => {
     setMapModalVisibility(false)
-    dispatch(clearObservationId())
   }
 
   if (loading) {

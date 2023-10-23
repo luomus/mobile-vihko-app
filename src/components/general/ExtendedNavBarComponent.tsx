@@ -6,13 +6,13 @@ import {
   rootState,
   DispatchType,
   PathType,
-  setObservationId,
   setMessageState,
   setPath,
   eventPathUpdate,
   appendPath,
   LocationType,
-  setTracking
+  setTracking,
+  setObservationEventId
 } from '../../stores'
 import storageService from '../../services/storageService'
 import { biomonForms, forms } from '../../config/fields'
@@ -55,10 +55,7 @@ const ExtendedNavBarComponent = (props: Props) => {
       onOk: async () => {
         props.setLoading(true)
 
-        dispatch(setObservationId({
-          eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id,
-          unitId: null
-        }))
+        dispatch(setObservationEventId(observationEvent?.events?.[observationEvent?.events?.length - 1].id))
 
         if (JSON.stringify(path) !== JSON.stringify([[]])) {
           //save the path before stopping

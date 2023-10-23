@@ -29,6 +29,7 @@ import {
   setObservationId,
   clearObservationId,
   setObservationEventInterrupted,
+  clearObservationEventId,
   clearObservationEvents,
   replaceObservationEvents,
   initObservationEvents,
@@ -40,7 +41,8 @@ import {
   newObservation,
   deleteObservation,
   replaceLocationById,
-  replaceObservationById
+  replaceObservationById,
+  setObservationEventId
 } from './observation/actions'
 import {
   updateLocation,
@@ -90,6 +92,7 @@ import {
   observationEventsReducer,
   observationIdReducer,
   observingReducer,
+  observationEventIdReducer,
 } from './observation/reducers'
 import {
   firstLocationReducer,
@@ -114,8 +117,7 @@ import {
 } from './message/types'
 import {
   observationActionTypes,
-  ObservationEventType,
-  ObservationIdType
+  ObservationEventType
 } from './observation/types'
 import {
   locationActionTypes,
@@ -147,7 +149,8 @@ interface rootState {
   observation: Point | null,
   observationEventInterrupted: boolean,
   observationEvent: ObservationEventType,
-  observationId: ObservationIdType | null,
+  observationEventId: string,
+  observationId: string,
   observationZone: ObservationZonesType,
   observing: boolean,
   path: PathType,
@@ -167,6 +170,7 @@ const appReducer = combineReducers({
   observation: observationReducer,
   observationEventInterrupted: observationEventInterruptedReducer,
   observationEvent: observationEventsReducer,
+  observationEventId: observationEventIdReducer,
   observationId: observationIdReducer,
   observationZone: observationZoneReducer,
   observing: observingReducer,
@@ -211,6 +215,8 @@ export {
   setObserving,
   setObservationId,
   clearObservationId,
+  setObservationEventId,
+  clearObservationEventId,
   setObservationEventInterrupted,
   clearObservationEvents,
   replaceObservationEvents,

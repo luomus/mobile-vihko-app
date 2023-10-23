@@ -66,7 +66,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
   useEffect(() => {
     if (observationId) {
-      setUnitID(observationId.unitId)
+      setUnitID(observationId)
     }
   }, [observationId])
 

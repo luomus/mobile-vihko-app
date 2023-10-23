@@ -21,8 +21,8 @@ type Props = {
   confirmationButton: (isNew: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   cancelButton: () => void,
   mode: string,
-  openModal: (units: Array<Record<string, any>>, eventId: string) => void,
-  shiftToEditPage: (eventId: string, unitId: string) => void
+  openModal: (units: Array<Record<string, any>>) => void,
+  shiftToEditPage: (unitId: string) => void
 }
 
 const ObservationButtonsComponent = (props: Props) => {
@@ -53,7 +53,6 @@ const ObservationButtonsComponent = (props: Props) => {
     const units: BasicObject[] = observationEvent.events?.[observationEvent.events.length - 1]
       .gatherings[0].units
     const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, region, observation)
-    const eventId: string = observationEvent.events?.[observationEvent.events.length - 1].id
 
     if (haversineNeighbors.length >= 4) {
       return (
@@ -62,7 +61,7 @@ const ObservationButtonsComponent = (props: Props) => {
           {createButton(
             haversineNeighbors.length + ' ' + t('observation count'),
             Bs.observationNeighborsButton,
-            () => props.openModal(haversineNeighbors, eventId),
+            () => props.openModal(haversineNeighbors),
             'primary', 'edit', 'material-icons', 150
           )}
         </View>
@@ -80,7 +79,7 @@ const ObservationButtonsComponent = (props: Props) => {
               return createButton(
                 typeName.length > 14 ? typeName.substring(0, 12) + '...' : typeName,
                 Bs.observationNeighborsButton,
-                () => props.shiftToEditPage(eventId, neighbor.id),
+                () => props.shiftToEditPage(neighbor.id),
                 'primary', 'edit', 'material-icons', 150
               )
             })}
@@ -94,7 +93,7 @@ const ObservationButtonsComponent = (props: Props) => {
               createButton(
                 neighbor.identifications[0].taxon ? neighbor.identifications[0].taxon : neighbor.identifications[0].taxonVerbatim,
                 Bs.observationNeighborsButton,
-                () => props.shiftToEditPage(eventId, neighbor.id),
+                () => props.shiftToEditPage(neighbor.id),
                 'primary', 'edit', 'material-icons', 150, 110,
               )
             )}

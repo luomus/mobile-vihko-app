@@ -11,14 +11,15 @@ import { biomonForms, forms } from '../../config/fields'
 import {
   rootState,
   DispatchType,
-  setObservationId,
   uploadObservationEvent,
   setMessageState,
   deleteObservation,
   deleteObservationEvent,
   logoutUser,
   switchSchema,
-  resetReducer
+  resetReducer,
+  setObservationId,
+  setObservationEventId
 } from '../../stores'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
@@ -75,6 +76,8 @@ const OverviewComponent = (props: Props) => {
     }
 
     setObservations(searchedObservations)
+
+    dispatch(setObservationEventId(searchedEvent?.id))
 
     const lang = i18n.language
 
@@ -228,11 +231,8 @@ const OverviewComponent = (props: Props) => {
             <ButtonComponent
               onPressFunction={
                 () => {
-                  const id = {
-                    eventId: event.id,
-                    unitId: item.id
-                  }
-                  dispatch(setObservationId(id))
+                  dispatch(setObservationId(item.id))
+                  dispatch(setObservationEventId(event.id))
                   props.onPressObservation('overview')
                 }}
               title={t('edit')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
@@ -285,11 +285,7 @@ const OverviewComponent = (props: Props) => {
             <View style={Cs.overviewButtonsContainer}>
               <ButtonComponent
                 onPressFunction={() => {
-                  const id = {
-                    eventId: event.id,
-                    unitId: ''
-                  }
-                  dispatch(setObservationId(id))
+                  dispatch(setObservationEventId(event.id))
                   props.onPressObservationEvent('overview')
                 }}
                 title={t('edit')} height={40} width={120} buttonStyle={Bs.eventOptionsButton}

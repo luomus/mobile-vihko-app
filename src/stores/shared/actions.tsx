@@ -5,7 +5,7 @@ import { LocationObject } from 'expo-location'
 import { setCurrentObservationZone, clearRegion, setListOrder } from '../map/actions'
 import {
   clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
-  replaceObservationEventById, replaceObservationEvents, setObserving, clearObservationId
+  replaceObservationEventById, replaceObservationEvents, setObserving, setObservationEventId
 } from '../../stores/observation/actions'
 import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
 import { switchSchema } from '../schema/actions'
@@ -136,6 +136,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     }
 
     dispatch(replaceObservationEvents(newEvents))
+    dispatch(setObservationEventId(newID))
 
     //initialize complete list
     if (schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID)) {
@@ -295,6 +296,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       dispatch(setPath([[]]))
     }
 
+    dispatch(setObservationEventId(observationEvent.events[observationEvent.events.length - 1].id))
     dispatch(setObservationEventInterrupted(false))
     onPressMap()
     return Promise.resolve()
@@ -360,7 +362,6 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
 
     dispatch(setObserving(false))
     dispatch(clearObservationLocation())
-    dispatch(clearObservationId())
     dispatch(clearGrid())
     dispatch(setFirstLocation([60.192059, 24.945831]))
 
