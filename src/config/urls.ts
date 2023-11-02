@@ -34,7 +34,7 @@ export const getZonesUrl          = `${API_URL}/named-places`
 export const getLoginUrl          = `${API_URL}/login`
 export const pollLoginUrl         = `${API_URL}/login/check`
 export const getUserUrl           = `${API_URL}/person/`
-export const personTokenUrl       = `${API_URL}/person-token/`
+export const personTokenUrl       = `${API_URL}/person-token`
 
 //news url
 export const getNewsUrl           = `${API_URL}/news`

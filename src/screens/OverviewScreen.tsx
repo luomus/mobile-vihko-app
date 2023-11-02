@@ -23,6 +23,8 @@ const OverviewScreen = (props: Props) => {
       onPressHome={() => { props.navigation.navigate('home') }}
       onPressObservation={(sourcePage?: string) => { props.navigation.navigate('observation', { sourcePage }) }}
       onPressObservationEvent={(sourcePage?: string) => { props.navigation.navigate('document', { sourcePage }) }}
+      onPressSingleObservation={(rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) =>
+        props.navigation.navigate('singleObservation', { rules, defaults, sourcePage })}
       onLogout={() => {
         dispatch(
           CommonActions.reset({

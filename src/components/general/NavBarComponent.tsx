@@ -34,12 +34,11 @@ const NavBarComponent = (props: Props) => {
   const dispatch: DispatchType = useDispatch()
 
   const schema = useSelector((state: rootState) => state.schema)
-
-  //const { isNew } = props.route.params
+  const singleObservation = useSelector((state: rootState) => state.singleObservation)
 
   useEffect(() => {
     if (schema.formID === forms.tripForm) {
-      setFormName(t('trip form'))
+      singleObservation ? setFormName(t('single observation')) : setFormName(t('trip form'))
     } else if (schema.formID === forms.birdAtlas) {
       setFormName(t('bird atlas'))
     } else if (schema.formID === forms.fungiAtlas) {
@@ -77,7 +76,6 @@ const NavBarComponent = (props: Props) => {
     } else if (props.route.name === 'map') {
       return formName
     } else if (props.route.name === 'observation') {
-      //return t(isNew ? 'add observation' : 'edit observation')
       return t('edit observation')
     } else if (props.route.name === 'document') {
       return t('edit document')

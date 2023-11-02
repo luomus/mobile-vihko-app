@@ -8,6 +8,7 @@ const Form = (
   fields: string[],
   blacklist: Record<string, any> | null,
   schema: Record<string, any> | null,
+  secondSchema: Record<string, any> | null,
   overrideFields: Record<string, any> | null,
   additionalFields: Record<string, any> | null,
   fieldOrder: string[] | null = null,
@@ -215,7 +216,10 @@ const Form = (
     return orderedToReturn
   }
 
-  if (schema) {
+  if (schema && secondSchema) {
+    schemaToForm(null, defaults, schema)
+    schemaToForm(null, defaults, secondSchema)
+  } else if (schema) {
     schemaToForm(null, defaults, schema)
   }
 

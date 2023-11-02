@@ -45,9 +45,10 @@ import useChange from '../../helpers/useChange'
 
 type Props = {
   onPressHome: () => void,
-  onPressObservation: (isNew: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
+  onPressObservation: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   onPressEditing: (sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
+  onPressSingleObservation: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   onPop: () => void,
   onPressList: () => void
 }
@@ -74,6 +75,7 @@ const MapComponent = (props: Props) => {
   const position = useSelector((state: rootState) => state.position)
   const region = useSelector((state: rootState) => state.region)
   const schema = useSelector((state: rootState) => state.schema)
+  const singleObservation = useSelector((state: rootState) => state.singleObservation)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -199,7 +201,9 @@ const MapComponent = (props: Props) => {
       locChanged: true,
       originalSourcePage: editing.originalSourcePage
     }))
-    props.onPressEditing()
+    singleObservation
+      ? props.onPressSingleObservation(undefined, undefined, 'map')
+      : props.onPressEditing('map')
   }
 
   const showSubmitDelete = (unitId: string) => {
@@ -241,7 +245,9 @@ const MapComponent = (props: Props) => {
     setMapModalVisibility(false)
     cancelObservation()
     dispatch(setObservationId(unitId))
-    props.onPressEditing('map')
+    singleObservation
+      ? props.onPressSingleObservation(undefined, undefined, 'map')
+      : props.onPressEditing('map')
   }
 
   //preparations for opening the edit observation modal
@@ -412,9 +418,12 @@ const MapComponent = (props: Props) => {
   } else {
     return (
       <>
-        <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList}
-          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading}
-          observationButtonsState={observationButtonsState} />
+        {
+          singleObservation ? null :
+            <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList}
+              onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading}
+              observationButtonsState={observationButtonsState} />
+        }
         <View style={Cs.mapContainer}>
           <MapView
             testID='map-view'
@@ -471,7 +480,7 @@ const MapComponent = (props: Props) => {
           {observation ?
             observationButtonsState === 'newObservation' &&
             <ObservationButtonsComponent
-              confirmationButton={props.onPressObservation}
+              confirmationButton={observationEvent.events[observationEvent?.events?.length - 1].singleObservation ? props.onPressSingleObservation : props.onPressObservation}
               cancelButton={cancelObservation}
               mode={observationButtonsState}
               openModal={openMapModal}

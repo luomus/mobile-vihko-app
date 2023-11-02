@@ -10,6 +10,7 @@ import LoginScreen from '../screens/LoginScreen'
 import DocumentScreen from '../screens/DocumentScreen'
 import ListScreen from '../screens/ListScreen'
 import NavBarComponent from '../components/general/NavBarComponent'
+import SingleObservationScreen from '../screens/SingleObservationScreen'
 
 type RootStackParamList = {
   login: undefined,
@@ -20,10 +21,15 @@ type RootStackParamList = {
     defaults: Record<string, any> | undefined,
     sourcePage: string
   },
+  document: {
+    sourcePage: string
+  },
   overview: {
     id: string
   },
-  document: {
+  singleObservation: {
+    rules: Record<string, any> | undefined,
+    defaults: Record<string, any> | undefined,
     sourcePage: string
   },
   list: undefined
@@ -45,8 +51,9 @@ const Navigator = ({ initialRoute = 'login' }: {initialRoute: any}) => {
         <Stack.Screen name='home' component={HomeScreen} options={navigationOptions} />
         <Stack.Screen name='map' component={MapScreen} options={navigationOptions} />
         <Stack.Screen name='observation' component={ObservationScreen} options={navigationOptions} />
-        <Stack.Screen name='overview' component={OverviewScreen} options={navigationOptions} />
         <Stack.Screen name='document' component={DocumentScreen} options={navigationOptions} />
+        <Stack.Screen name='singleObservation' component={SingleObservationScreen} options={navigationOptions} />
+        <Stack.Screen name='overview' component={OverviewScreen} options={navigationOptions} />
         <Stack.Screen name='list' component={ListScreen} options={navigationOptions} />
       </Stack.Navigator>
     </NavigationContainer>

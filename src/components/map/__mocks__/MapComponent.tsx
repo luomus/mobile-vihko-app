@@ -28,7 +28,7 @@ import LoadingComponent from '../../general/LoadingComponent'
 
 type Props = {
   onPressHome: () => void,
-  onPressObservation: (isNew: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
+  onPressObservation: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   onPressEditing: (sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
   onPop: () => void,

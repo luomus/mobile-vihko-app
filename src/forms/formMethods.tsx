@@ -7,6 +7,7 @@ export const initForm = (
   defaults: any,
   rules: Record<string, any> | null = null,
   schema: Record<string, any> | null = null,
+  secondSchema: Record<string, any> | null = null,
   fieldScopes: Record<string, any> | null = null,
   fields: string[] | null = null,
   overrideFields: Record<string, any> | null = null,
@@ -24,7 +25,7 @@ export const initForm = (
     if (!fields) {
       setForm(null)
     } else {
-      setForm(Form(defaults, fields, null, schema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+      setForm(Form(defaults, fields, null, schema, secondSchema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
     }
   } else {
     if (fieldScopes === null) {
@@ -43,6 +44,6 @@ export const initForm = (
     const fields = fieldScope?.fields.concat(['images'])
     const blacklist = fieldScope?.blacklist
 
-    setForm(Form(defaults, fields, blacklist, schema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+    setForm(Form(defaults, fields, blacklist, schema, secondSchema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
   }
 }

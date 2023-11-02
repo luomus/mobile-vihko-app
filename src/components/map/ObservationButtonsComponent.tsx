@@ -18,7 +18,7 @@ interface BasicObject {
 }
 
 type Props = {
-  confirmationButton: (isNew: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
+  confirmationButton: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   cancelButton: () => void,
   mode: string,
   openModal: (units: Array<Record<string, any>>) => void,
@@ -111,13 +111,13 @@ const ObservationButtonsComponent = (props: Props) => {
       createButton(
         '+ ' + observation.button.label,
         Bs.observationButton,
-        () => props.confirmationButton(true, observation.rules, observation.button.default, 'map'),
+        () => props.confirmationButton(observation.rules, observation.button.default, 'map'),
         'primary', undefined, undefined, undefined
       )
     ) : createButton(
       '+ ' + t('observation'),
       Bs.observationButton,
-      () => props.confirmationButton(true, undefined, undefined, 'map'),
+      () => props.confirmationButton(undefined, undefined, 'map'),
       'primary', undefined, undefined, undefined
     )
   }
@@ -145,7 +145,7 @@ const ObservationButtonsComponent = (props: Props) => {
           {createButton(
             t('save'),
             Bs.observationButton,
-            () => props.confirmationButton(true, undefined, undefined, 'map'),
+            () => props.confirmationButton(undefined, undefined, 'map'),
             'primary', undefined, undefined, 120
           )}
           {createButton(

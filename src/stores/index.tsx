@@ -32,6 +32,7 @@ import {
   clearObservationEventId,
   clearObservationEvents,
   replaceObservationEvents,
+  setSingleObservation,
   initObservationEvents,
   uploadObservationEvent,
   newObservationEvent,
@@ -66,7 +67,9 @@ import {
   resetReducer,
   beginObservationEvent,
   continueObservationEvent,
-  finishObservationEvent
+  finishObservationEvent,
+  beginSingleObservation,
+  finishSingleObservation
 } from './shared/actions'
 import {
   loginUser,
@@ -91,8 +94,9 @@ import {
   observationEventInterruptedReducer,
   observationEventsReducer,
   observationIdReducer,
-  observingReducer,
   observationEventIdReducer,
+  observingReducer,
+  singleObservationReducer
 } from './observation/reducers'
 import {
   firstLocationReducer,
@@ -157,6 +161,7 @@ interface rootState {
   position: LocationType,
   region: Region,
   schema: SchemaType,
+  singleObservation: boolean,
   tracking: boolean
 }
 
@@ -178,6 +183,7 @@ const appReducer = combineReducers({
   position: positionReducer,
   region: regionReducer,
   schema: schemaReducer,
+  singleObservation: singleObservationReducer,
   tracking: trackingReducer
 })
 
@@ -220,6 +226,7 @@ export {
   setObservationEventInterrupted,
   clearObservationEvents,
   replaceObservationEvents,
+  setSingleObservation,
   initObservationEvents,
   uploadObservationEvent,
   newObservationEvent,
@@ -248,6 +255,8 @@ export {
   beginObservationEvent,
   continueObservationEvent,
   finishObservationEvent,
+  beginSingleObservation,
+  finishSingleObservation,
   loginUser,
   logoutUser,
   getPermissions,

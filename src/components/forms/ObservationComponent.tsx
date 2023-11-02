@@ -45,7 +45,6 @@ type Props = {
   toMap: () => void,
   toList: () => void,
   pushToMap: () => void,
-  isNew?: boolean,
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
   sourcePage?: string,
@@ -177,70 +176,70 @@ const ObservationComponent = (props: Props) => {
     if (observationId) {
       //flying squirrel edit observation
       if (observationState?.rules) {
-        initForm(setForm, observationState, observationState.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, observationState.rules, schemaVar, null, fieldScopes, null, null, null, null, lang, scrollViewRef)
         //trip form edit observation
       } else if (schema.formID === forms.tripForm) {
-        initForm(setForm, observationState, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.birdAtlas) {
         const additionalMHL117 = observationState?.id.includes('complete_list') ? null : additionalMHL117Fields
-        initForm(setForm, observationState, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
-        initForm(setForm, observationState, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.dragonflyForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.butterflyForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1040Fields, overrideMHL1040Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1040Fields, overrideMHL1040Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.largeFlowersForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1042Fields, overrideMHL1042Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1042Fields, overrideMHL1042Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.mothForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1043Fields, overrideMHL1043Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1043Fields, overrideMHL1043Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.bumblebeeForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1044Fields, overrideMHL1044Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1044Fields, overrideMHL1044Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.herpForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1045Fields, overrideMHL1045Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1045Fields, overrideMHL1045Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.subarcticForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1046Fields, overrideMHL1046Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1046Fields, overrideMHL1046Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.macrolichenForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1047Fields, overrideMHL1047Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1047Fields, overrideMHL1047Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.bracketFungiForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1048Fields, overrideMHL1048Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1048Fields, overrideMHL1048Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.practicalFungiForm) {
-        initForm(setForm, observationState, null, schemaVar, null, MHL1062Fields, overrideMHL1062Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, schemaVar, null, null, MHL1062Fields, overrideMHL1062Fields, null, null, lang, scrollViewRef)
       }
 
       //new observations
     } else {
       //flying squirrel new observation
       if (props.rules) {
-        initForm(setForm, defaultObject, props.rules, schemaVar, fieldScopes, null, null, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, props.rules, schemaVar, null, fieldScopes, null, null, null, null, lang, scrollViewRef)
         //trip form new observation
       } else if (schema.formID === forms.tripForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.birdAtlas) {
         const additionalMHL117 = observationState?.id.includes('complete_list') ? null : additionalMHL117Fields
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL117Fields, overrideMHL117Fields, additionalMHL117, MHL117FieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
-        initForm(setForm, defaultObject, null, schemaVar, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, JX652Fields, overrideJX652Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.dragonflyForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL932Fields, overrideMHL932Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.butterflyForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1040Fields, overrideMHL1040Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1040Fields, overrideMHL1040Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.largeFlowersForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1042Fields, overrideMHL1042Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1042Fields, overrideMHL1042Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.mothForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1043Fields, overrideMHL1043Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1043Fields, overrideMHL1043Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.bumblebeeForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1044Fields, overrideMHL1044Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1044Fields, overrideMHL1044Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.herpForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1045Fields, overrideMHL1045Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1045Fields, overrideMHL1045Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.subarcticForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1046Fields, overrideMHL1046Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1046Fields, overrideMHL1046Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.macrolichenForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1047Fields, overrideMHL1047Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1047Fields, overrideMHL1047Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.bracketFungiForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1048Fields, overrideMHL1048Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1048Fields, overrideMHL1048Fields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.practicalFungiForm) {
-        initForm(setForm, defaultObject, null, schemaVar, null, MHL1062Fields, overrideMHL1062Fields, null, null, lang, scrollViewRef)
+        initForm(setForm, defaultObject, null, schemaVar, null, null, MHL1062Fields, overrideMHL1062Fields, null, null, lang, scrollViewRef)
       }
     }
   }
@@ -252,9 +251,9 @@ const ObservationComponent = (props: Props) => {
 
   const onSubmit = async (data: { [key: string]: any }) => {
     if (!observationState) {
-      createNewObservation(data)
+      await createNewObservation(data)
     } else {
-      updateObservation(data)
+      await updateObservation(data)
     }
   }
 

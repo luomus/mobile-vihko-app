@@ -19,7 +19,8 @@ import {
   switchSchema,
   resetReducer,
   setObservationId,
-  setObservationEventId
+  setObservationEventId,
+  setSingleObservation
 } from '../../stores'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
@@ -38,6 +39,7 @@ type Props = {
   onPressHome: () => void,
   onPressObservation: (sourcePage?: string) => void,
   onPressObservationEvent: (sourcePage: string) => void,
+  onPressSingleObservation: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   onLogout: () => void,
   isFocused: () => boolean,
   children?: ReactChild
@@ -77,7 +79,7 @@ const OverviewComponent = (props: Props) => {
 
     setObservations(searchedObservations)
 
-    dispatch(setObservationEventId(searchedEvent?.id))
+    dispatch(setSingleObservation(searchedEvent?.singleObservation ? true : false))
 
     const lang = i18n.language
 
@@ -86,6 +88,7 @@ const OverviewComponent = (props: Props) => {
       const fetchedSchema = await storageService.fetch(`${searchedEvent.formID}${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
       setEventSchema(fetchedSchema)
       await dispatch(switchSchema(searchedEvent.formID, lang))
+      dispatch(setObservationEventId(searchedEvent?.id))
     }
 
     initEventSchema()
@@ -233,7 +236,9 @@ const OverviewComponent = (props: Props) => {
                 () => {
                   dispatch(setObservationId(item.id))
                   dispatch(setObservationEventId(event.id))
-                  props.onPressObservation('overview')
+                  event.singleObservation
+                    ? props.onPressSingleObservation(undefined, undefined, 'overview')
+                    : props.onPressObservation('overview')
                 }}
               title={t('edit')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
@@ -244,7 +249,9 @@ const OverviewComponent = (props: Props) => {
             <ButtonComponent
               onPressFunction={
                 () => {
-                  showDeleteObservation(event.id, item.id)
+                  event.singleObservation
+                    ? showDeleteObservationEvent(event.id)
+                    : showDeleteObservation(event.id, item.id)
                 }}
               title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
@@ -268,38 +275,42 @@ const OverviewComponent = (props: Props) => {
               textStyle={Ts.buttonText} iconName={'bug-report'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
             />
           </View>
-          <Text style={Ts.overviewHeader}>{t('observation event')}</Text>
-          <View style={{ backgroundColor: Colors.neutral5, width: '100%', borderRadius: 5 }}>
-            <View style={Cs.overviewTextContainer}>
-              {event.gatherings[0].locality ?
-                <SchemaObjectComponent title={t('locality')} value={event.gatherings[0].locality} />
-                : null
-              }
-              {event.gatherings[0].locality ?
-                <SchemaObjectComponent title={t('locality description')} value={event.gatherings[0].localityDescription} />
-                : null
-              }
-              <SchemaObjectComponent title={t('date begin')} value={displayDateBegin()} />
-              <SchemaObjectComponent title={t('date end')} value={displayDateEnd()} />
-            </View>
-            <View style={Cs.overviewButtonsContainer}>
-              <ButtonComponent
-                onPressFunction={() => {
-                  dispatch(setObservationEventId(event.id))
-                  props.onPressObservationEvent('overview')
-                }}
-                title={t('edit')} height={40} width={120} buttonStyle={Bs.eventOptionsButton}
-                gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-              />
-              <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={t('delete')}
-                height={40} width={120} buttonStyle={Bs.eventOptionsButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-              />
-            </View>
-          </View>
-          <Text style={Ts.overviewHeader}>{t('observations')}</Text>
+          {event.singleObservation ? null :
+            <>
+              <Text style={Ts.overviewHeader}>{t('observation event')}</Text>
+              <View style={{ backgroundColor: Colors.neutral5, width: '100%', borderRadius: 5 }}>
+                <View style={Cs.overviewTextContainer}>
+                  {event.gatherings[0].locality ?
+                    <SchemaObjectComponent title={t('locality')} value={event.gatherings[0].locality} />
+                    : null
+                  }
+                  {event.gatherings[0].locality ?
+                    <SchemaObjectComponent title={t('locality description')} value={event.gatherings[0].localityDescription} />
+                    : null
+                  }
+                  <SchemaObjectComponent title={t('date begin')} value={displayDateBegin()} />
+                  <SchemaObjectComponent title={t('date end')} value={displayDateEnd()} />
+                </View>
+                <View style={Cs.overviewButtonsContainer}>
+                  <ButtonComponent
+                    onPressFunction={() => {
+                      dispatch(setObservationEventId(event.id))
+                      props.onPressObservationEvent('overview')
+                    }}
+                    title={t('edit')} height={40} width={120} buttonStyle={Bs.eventOptionsButton}
+                    gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+                    textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                  />
+                  <ButtonComponent onPressFunction={() => showDeleteObservationEvent(event.id)} title={t('delete')}
+                    height={40} width={120} buttonStyle={Bs.eventOptionsButton}
+                    gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                    textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                  />
+                </View>
+              </View>
+            </>
+          }
+          <Text style={Ts.overviewHeader}>{event.singleObservation ? t('single observation') : t('observations')}</Text>
         </View>
       )
     } else {

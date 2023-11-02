@@ -108,7 +108,7 @@ export const logout = async (credentials: CredentialsType) => {
   const params = {
     'access_token': ACCESS_TOKEN
   }
-  const result = await axiosDelete(personTokenUrl + credentials.token, { params })
+  const result = await axiosDelete(personTokenUrl + '/' + credentials.token, { params })
 
   return result.data
 }

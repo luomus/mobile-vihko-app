@@ -14,12 +14,14 @@ const MapScreen = (props: Props) => {
   return (
     <MapComponent
       onPressHome={() => navigate('home')}
-      onPressObservation={(isNew: boolean, rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) =>
-        navigate('observation', { isNew, rules, defaults, sourcePage })}
+      onPressObservation={(rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) =>
+        navigate('observation', { rules, defaults, sourcePage })}
       onPressEditing={(sourcePage?: string) => navigate('observation', { sourcePage })}
       onPressFinishObservationEvent={(sourcePage: string) => {
         props.navigation.navigate('document', { sourcePage })
       }}
+      onPressSingleObservation={( rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) =>
+        navigate('singleObservation', { rules, defaults, sourcePage })}
       onPop={() => props.navigation.goBack()}
       onPressList={() => navigate('list')}
     />

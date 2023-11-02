@@ -10,7 +10,8 @@ import {
   JX519Fields, MHL117Fields, JX652Fields, MHL932Fields,
   MHL1040Fields, MHL1042Fields, MHL1043Fields, MHL1044Fields,
   MHL1045Fields, MHL1046Fields, MHL1047Fields, MHL1048Fields,
-  MHL1062Fields
+  MHL1062Fields,
+  singleObservationFields
 } from '../../config/fields'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../stores'
@@ -30,6 +31,7 @@ const ObservationInfoComponent = (props: Props) => {
 
   const credentials = useSelector((state: rootState) => state.credentials)
 
+  const schemaDocument = props.eventSchema.schema
   const schemaUnits = props.eventSchema.schema?.properties?.gatherings?.items?.properties?.units
 
   if (!schemaUnits) {
@@ -64,7 +66,7 @@ const ObservationInfoComponent = (props: Props) => {
         fields = getFields()
 
       } else if (props.event.formID === forms.tripForm) {
-        fields = JX519Fields
+        fields = props.event.singleObservation ? singleObservationFields : JX519Fields
       } else if (props.event.formID === forms.birdAtlas) {
         fields = MHL117Fields
       } else if (props.event.formID === forms.fungiAtlas) {
@@ -91,7 +93,13 @@ const ObservationInfoComponent = (props: Props) => {
         fields = MHL1062Fields
       }
 
-      if (schemaUnits && fields) {
+      if (props.event.singleObservation && schemaDocument && schemaUnits && fields) {
+        const unitFields = fields.filter(field => { return field !== 'secureLevel' && !field.includes('gatheringEvent') })
+        const documentFields = fields.filter(field => { return !unitFields.includes(field) })
+        const unitFieldList = await createSchemaObjectComponents(props.observation, unitFields, schemaUnits, credentials)
+        const documentFieldList = await createSchemaObjectComponents(props.event, documentFields, schemaDocument, credentials)
+        setList(unitFieldList.concat(documentFieldList))
+      } else if (schemaUnits && fields) {
         setList(await createSchemaObjectComponents(props.observation, fields, schemaUnits, credentials))
       }
     }
@@ -104,7 +112,9 @@ const ObservationInfoComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.observationInfoContainer}>
-        {props.observation.unitGathering?.geometry ? <MiniMapComponent observation={props.observation} event={props.event} /> : null}
+        {props.observation.unitGathering?.geometry
+          ? <MiniMapComponent geometry={props.observation.unitGathering.geometry} color={props.observation.color} />
+          : null}
         {list}
         {props.observation.images !== undefined && props.observation.images.length > 0 ?
           <View>

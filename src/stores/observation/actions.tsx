@@ -14,7 +14,8 @@ import {
   SET_OBSERVATION_ID,
   CLEAR_OBSERVATION_ID,
   SET_OBSERVATION_EVENT_ID,
-  CLEAR_OBSERVATION_EVENT_ID
+  CLEAR_OBSERVATION_EVENT_ID,
+  SET_SINGLE_OBSERVATION
 } from './types'
 import { biomonForms, forms } from '../../config/fields'
 import { getCompleteList } from '../../services/atlasService'
@@ -74,6 +75,11 @@ export const clearObservationEvents = (): observationActionTypes => ({
 export const replaceObservationEvents = (events: Record<string, any>[]): observationActionTypes => ({
   type: REPLACE_OBSERVATION_EVENTS,
   payload: events
+})
+
+export const setSingleObservation = (isSingleObservation: boolean): observationActionTypes => ({
+  type: SET_SINGLE_OBSERVATION,
+  payload: isSingleObservation
 })
 
 export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
@@ -260,6 +266,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         delete event.namedPlaceID
         event.gatherings.pop()
       }
+      if (event.singleObservation) delete event.singleObservation
 
     } catch (error: any) {
       captureException(error)

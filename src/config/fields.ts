@@ -1,5 +1,91 @@
 //this file defines which fields of schema are shown in different forms
 
+export const singleObservationFields = [
+  'identifications_0_taxon',
+  'count',
+  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_dateEnd',
+  'notes',
+  'images'
+]
+
+export const singleObservationFieldOrder = [
+  'identifications_0_taxon',
+  'count',
+  'unitGathering_geometry_radius',
+  'gatheringEvent_legPublic',
+  'secureLevel',
+  'gatheringEvent_dateBegin',
+  'gatheringEvent_dateEnd',
+  'notes',
+  'images'
+]
+
+export const overrideSingleObservationFields = {
+  'identifications_0_taxon': {
+    field: 'autocomplete',
+    params: {
+      target: 'taxon',
+      valueField: 'identifications_0_taxon',
+      validation: {
+        required: {
+          value: true,
+          message: 'must not be empty'
+        },
+        minLength: {
+          value: 2,
+          message: 'must be at least 2 letters'
+        },
+      },
+      transform: {
+        'key': 'unitFact_autocompleteSelectedTaxonID',
+        'shownName': 'identifications_0_taxon',
+        'payload_informalTaxonGroups': 'informalTaxonGroups'
+      }
+    }
+  },
+  'images': {
+    field: 'imagesKeywords',
+    params: {
+      keywords: [
+        'species',
+        'habitat',
+      ],
+      fi: [
+        'laji',
+        'habitaatti',
+      ],
+      sv: [
+        'arten',
+        'habitaten',
+      ],
+      en: [
+        'species',
+        'habitat',
+      ]
+    }
+  }
+}
+
+export const additionalSingleObservationFields = {
+  'unitGathering_geometry_radius': {
+    title: [
+      'Tarkkuus (m)',
+      'Noggrannhet (m)',
+      'Accuracy (m)'
+    ],
+    type: 'integer',
+    isArray: false,
+    typeOfArray: '',
+    isEnum: false,
+    enumDict: {},
+    defaultValue: undefined,
+    blacklist: null
+  }
+}
+
 export const JX519ObservationEventFields = [
   'gatheringEvent_legPublic',
   'secureLevel',

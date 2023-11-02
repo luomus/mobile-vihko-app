@@ -16,6 +16,7 @@ import {
   switchSchema,
   beginObservationEvent,
   continueObservationEvent,
+  beginSingleObservation,
   logoutUser,
   resetReducer,
   appendPath,
@@ -46,6 +47,8 @@ import { getVersionNumber } from '../../services/versionService'
 import i18n from '../../languages/i18n'
 import CompleteListModalComponent from './CompleteListModalComponent'
 import NewsComponent from './NewsComponent'
+import ButtonComponent from '../general/ButtonComponent'
+import Colors from '../../styles/Colors'
 
 type Props = {
   isFocused: () => boolean,
@@ -140,7 +143,7 @@ const HomeComponent = (props: Props) => {
 
     loadObservationEvents()
     initSentEvents()
-  }, [observing])
+  }, [observing, observationEvent.events.length])
 
   useEffect(() => {
     //set first zone in array as selected zone to avoid undefined values
@@ -239,6 +242,37 @@ const HomeComponent = (props: Props) => {
 
     try {
       await dispatch(beginObservationEvent(props.onPressMap, title, body))
+    } catch (error: any) {
+      if (error.severity === 'high') {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: () => {
+            props.onLogout()
+            dispatch(logoutUser())
+            dispatch(resetReducer())
+          }
+        }))
+      } else {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+        }))
+      }
+    }
+
+    setLoading(false)
+  }
+
+  const onBeginSingleObservation = async () => {
+    //save the used form before beginning an event
+    if (!observing) {
+      await dispatch(switchSchema('JX.519', i18n.language))
+      await storageService.save('formID', 'JX.519')
+    }
+
+    try {
+      await dispatch(beginSingleObservation(props.onPressMap))
     } catch (error: any) {
       if (error.severity === 'high') {
         dispatch(setMessageState({
@@ -373,6 +407,23 @@ const HomeComponent = (props: Props) => {
                 null
               }
             </>
+            <Text style={Ts.previousObservationsTitle}>{t('single observation')}</Text>
+            <View style={{ width: '90%', justifyContent: 'flex-start', flexDirection: 'row' }}>
+              <ButtonComponent onPressFunction={observing ? () => null : async () => await onBeginSingleObservation()} title={'+ ' + t('observation')}
+                height={40} width={100} buttonStyle={{
+                  paddingHorizontal: 5,
+                  paddingBottom: 5,
+                  flexDirection: 'row',
+                  borderRadius: 5,
+                  alignItems: 'center',
+                  justifyContent: 'flex-start'
+                }}
+                gradientColorStart={observing ? Colors.unavailableButton : Colors.primaryButton1}
+                gradientColorEnd={observing ? Colors.unavailableButton : Colors.primaryButton2}
+                shadowColor={observing ? Colors.neutralShadow : Colors.primaryShadow}
+                textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+              />
+            </View>
             <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
             <FormLauncherComponent formID={forms.tripForm} setModalVisibility={setTripModalVisibility} />
             <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={setAtlasInstructionModalVisibility} />

@@ -21,6 +21,8 @@ export const CLEAR_OBSERVATION_EVENT_ID = 'CLEAR_OBSERVATION_EVENT_ID'
 
 export const SET_OBSERVING = 'SET_OBSERVING'
 
+export const SET_SINGLE_OBSERVATION = 'SET_SINGLE_OBSERVATION'
+
 export interface ObservationEventType {
   events: Record<string, any>[],
 }
@@ -71,6 +73,11 @@ interface setObserving {
   payload: boolean
 }
 
+interface setSingleObservation {
+  type: typeof SET_SINGLE_OBSERVATION,
+  payload: boolean
+}
+
 export type observationActionTypes =
   clearObservationLocation |
   setObservationLocation |
@@ -81,4 +88,5 @@ export type observationActionTypes =
   clearObservationId |
   setObservationEventId |
   clearObservationEventId |
-  setObserving
+  setObserving |
+  setSingleObservation

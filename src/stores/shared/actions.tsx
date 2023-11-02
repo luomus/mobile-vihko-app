@@ -5,7 +5,7 @@ import { LocationObject } from 'expo-location'
 import { setCurrentObservationZone, clearRegion, setListOrder } from '../map/actions'
 import {
   clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
-  replaceObservationEventById, replaceObservationEvents, setObserving, setObservationEventId
+  replaceObservationEventById, replaceObservationEvents, setObserving, setObservationEventId, setSingleObservation
 } from '../../stores/observation/actions'
 import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
 import { switchSchema } from '../schema/actions'
@@ -18,7 +18,7 @@ import storageService from '../../services/storageService'
 import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser'
 import { setDateForDocument } from '../../helpers/dateHelper'
 import { log } from '../../helpers/logger'
-import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
+import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, watchPositionAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
 import { removeDuplicatesFromPath, setEventGeometry } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { SOURCE_ID } from 'react-native-dotenv'
@@ -36,7 +36,7 @@ export const resetReducer = () => ({
 export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
-    const { credentials, observationEvent, observationZone, schema, grid, tracking } = getState()
+    const { credentials, observationEvent, observationZone, schema, grid, tracking, singleObservation } = getState()
     const userId = credentials?.user?.id
 
     const region: Record<string, any> | undefined = observationZone.zones.find((region: Record<string, any>) => {
@@ -178,6 +178,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
 
     //reset map centering and redirect to map
     dispatch(setListOrder({ class: '' }))
+    dispatch(setSingleObservation(false))
     dispatch(clearRegion())
     dispatch(setObserving(true))
     onPressMap()
@@ -363,6 +364,156 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(setObserving(false))
     dispatch(clearObservationLocation())
     dispatch(clearGrid())
+    dispatch(setFirstLocation([60.192059, 24.945831]))
+
+    return Promise.resolve()
+  }
+}
+
+export const beginSingleObservation = (onPressMap: () => void): ThunkAction<Promise<any>, any, void,
+  locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
+  return async (dispatch, getState) => {
+    const { credentials, observationEvent, schema, grid } = getState()
+
+    const userId = credentials?.user?.id
+
+    //check that person token isn't expired
+    try {
+      await userService.checkTokenValidity(credentials.token)
+    } catch (error: any) {
+      captureException(error)
+      log.error({
+        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'high',
+          message: i18n.t('user token has expired')
+        })
+      }
+      if (error.message?.includes('WRONG SOURCE')) {
+        return Promise.reject({
+          severity: 'high',
+          message: i18n.t('person token is given for a different app')
+        })
+      }
+      return Promise.reject({
+        severity: 'low',
+        message: `${i18n.t('failed to check token')} ${error.message}`
+      })
+    }
+
+    const lang = i18n.language
+
+    const observationEventDefaults = {}
+    set(observationEventDefaults, 'editors', [userId])
+    set(observationEventDefaults, 'sourceID', SOURCE_ID)
+    set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
+
+    const dateTime = setDateForDocument()
+    set(observationEventDefaults, ['gatheringEvent', 'dateBegin'], dateTime)
+
+    const parsedObservationEvent = parseSchemaToNewObject(observationEventDefaults, ['gatherings_0_units'], schema[lang].schema)
+
+    const newID = 'observationEvent_' + uuid.v4()
+
+    const observationEventObject = {
+      id: newID,
+      formID: schema.formID,
+      grid: grid ? grid : undefined,
+      singleObservation: true,
+      ...parsedObservationEvent
+    }
+
+    const newEvents = observationEvent.events.concat(observationEventObject)
+
+    try {
+      await storageService.save('observationEvents', newEvents)
+    } catch (error) {
+      captureException(error)
+      log.error({
+        location: '/stores/shared/actions.tsx beginObservationEvent()/save()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: i18n.t('could not save new event to long term memory')
+      })
+    }
+
+    dispatch(setObservationEventId(newID))
+    dispatch(replaceObservationEvents(newEvents))
+
+    //attempt to start geolocation systems
+    try {
+      await watchPositionAsync((location: LocationObject) => dispatch(updateLocation(location)))
+    } catch (error: any) {
+      await dispatch(deleteObservationEvent(newID))
+      log.error({
+        location: '/stores/shared/actions.tsx beginObservationEvent()/watchLocationAsync()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
+      })
+    }
+
+    //reset map centering and redirect to map
+    dispatch(setSingleObservation(true))
+    dispatch(clearRegion())
+    dispatch(setObserving(true))
+    onPressMap()
+
+    return Promise.resolve()
+  }
+}
+
+export const finishSingleObservation = (): ThunkAction<Promise<any>, any, void,
+  locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
+  return async (dispatch, getState) => {
+    const { credentials, grid, firstLocation, observationEvent } = getState()
+
+    try {
+      await stopLocationAsync()
+    } catch (error: any) {
+      captureException(error)
+      log.error({
+        location: '/stores/shared/actions.tsx finishObservationEvent()/stopLocationAsync()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      return Promise.reject({
+        severity: 'low',
+        message: (`${i18n.t('failed to stop location updates')} ${error}`)
+      })
+    }
+
+    dispatch(setObservationEventInterrupted(false))
+
+    let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
+
+    if (event) {
+      event = setEventGeometry(event, undefined, firstLocation, grid)
+
+      dispatch(clearPath())
+      dispatch(clearLocation())
+
+      //replace events with modified list
+      try {
+        dispatch(replaceObservationEventById(event, event.id))
+      } catch (error) {
+        captureException(error)
+        return Promise.reject(error)
+      }
+    }
+
+    dispatch(setObserving(false))
+    dispatch(clearObservationLocation())
     dispatch(setFirstLocation([60.192059, 24.945831]))
 
     return Promise.resolve()

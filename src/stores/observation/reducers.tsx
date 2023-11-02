@@ -10,7 +10,8 @@ import {
   CLEAR_OBSERVATION_ID,
   SET_OBSERVATION_EVENT_ID,
   CLEAR_OBSERVATION_EVENT_ID,
-  SET_OBSERVING
+  SET_OBSERVING,
+  SET_SINGLE_OBSERVATION
 } from './types'
 
 const initObsEventState: ObservationEventType = {
@@ -88,11 +89,21 @@ const observingReducer = (state = false, action : observationActionTypes) => {
   }
 }
 
+const singleObservationReducer = (state = false, action : observationActionTypes) => {
+  switch (action.type) {
+    case SET_SINGLE_OBSERVATION:
+      return action.payload
+    default:
+      return state
+  }
+}
+
 export {
   observationReducer,
   observationEventInterruptedReducer,
   observationEventsReducer,
   observationIdReducer,
   observationEventIdReducer,
-  observingReducer
+  observingReducer,
+  singleObservationReducer
 }

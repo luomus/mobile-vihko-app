@@ -78,12 +78,16 @@ const UnfinishedEventComponent = (props: Props) => {
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
             textStyle={Ts.buttonText} iconName={'map-outline'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
           />
-          <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('stop')}
-            height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
-            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'stop'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-            testID={'stopFromHomeComponent'}
-          />
+          {
+            observationEvent?.events?.[observationEvent?.events?.length - 1].singleObservation
+              ? null
+              : <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('stop')}
+                height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={'stop'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                testID={'stopFromHomeComponent'}
+              />
+          }
         </View>
         <View style={Os.horizontalLine} />
       </View>)
