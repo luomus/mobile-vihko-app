@@ -1,5 +1,5 @@
 import React, { useState, ReactChild, useEffect } from 'react'
-import { FlatList, ListRenderItem, Text, View } from 'react-native'
+import { ActionSheetIOS, FlatList, ListRenderItem, Platform, Text, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -220,6 +220,20 @@ const OverviewComponent = (props: Props) => {
     return false
   })
 
+  const onPressOptionsIOS = async () =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: [t('send private'), t('cancel')],
+        userInterfaceStyle: 'dark',
+        cancelButtonIndex: 1
+      },
+      async buttonIndex => {
+        if (buttonIndex === 0) {
+          await sendObservationEvent(false)
+        }
+      }
+    )
+
   const renderObservation: ListRenderItem<Record<string, any>> = ({ item }) => {
 
     if (!event || !eventSchema) return null
@@ -330,7 +344,7 @@ const OverviewComponent = (props: Props) => {
     return (
       <>
         <View style={Cs.formSaveButtonContainer}>
-          <ButtonComponent onPressFunction={() => setModalVisibility(true)}
+          <ButtonComponent onPressFunction={async () => { Platform.OS === 'ios' ? await onPressOptionsIOS() : setModalVisibility(true) }}
             title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}

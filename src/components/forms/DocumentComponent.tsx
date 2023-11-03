@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { View } from 'react-native'
+import { ActionSheetIOS, Platform, View } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -296,10 +296,28 @@ const DocumentComponent = (props: Props) => {
     }))
   }
 
-  const submitAndSendPublic = async (submit: () => any) => {
+  const submitAndSend = async (submit: () => any, send: boolean, isPublic: boolean) => {
     await submit()
-    await sendObservationEvent(true)
+    send
+      ? await sendObservationEvent(isPublic)
+      : props.toHome()
   }
+
+  const onPressOptionsIOS = async () =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: [t('send private'), t('saveWithoutSending'), t('cancel')],
+        userInterfaceStyle: 'dark',
+        cancelButtonIndex: 2
+      },
+      async buttonIndex => {
+        if (buttonIndex === 0) {
+          await submitAndSend(methods.handleSubmit(onSubmit, onError), true, false)
+        } else if (buttonIndex === 1) {
+          await submitAndSend(methods.handleSubmit(onSubmit, onError), false, false)
+        }
+      }
+    )
 
   if (saving) {
     return (
@@ -318,7 +336,7 @@ const DocumentComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
-          <ButtonComponent onPressFunction={() => setModalVisibility(true)}
+          <ButtonComponent onPressFunction={async () => { Platform.OS === 'ios' ? await onPressOptionsIOS() : setModalVisibility(true) }}
             title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}
@@ -329,7 +347,7 @@ const DocumentComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.darkText}
           />
           <ButtonComponent
-            onPressFunction={async () => { await submitAndSendPublic(methods.handleSubmit(onSubmit, onError)) }}
+            onPressFunction={async () => { await submitAndSend(methods.handleSubmit(onSubmit, onError), true, true) }}
             testID={'saveButton'}
             title={t('send public')} height={40} width={140} buttonStyle={Bs.editObservationButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
