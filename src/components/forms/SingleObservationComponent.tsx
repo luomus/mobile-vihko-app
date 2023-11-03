@@ -21,7 +21,6 @@ import {
   resetReducer,
   replaceObservationEventById,
   finishSingleObservation,
-  setObservationEventId,
 } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import MessageComponent from '../general/MessageComponent'

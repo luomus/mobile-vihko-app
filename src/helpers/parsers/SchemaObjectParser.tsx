@@ -32,7 +32,7 @@ const parseObjectToComponents = async (
   let value = get(inputObject, path, null)
 
   //parse the dates to readable format for ui
-  if (field.includes('date')) {
+  if (field.includes('date') && value) {
     value = parseDateFromDocumentToUI(value)
   }
 

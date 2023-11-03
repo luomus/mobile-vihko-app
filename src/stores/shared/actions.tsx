@@ -36,7 +36,7 @@ export const resetReducer = () => ({
 export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
   mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
   return async (dispatch, getState) => {
-    const { credentials, observationEvent, observationZone, schema, grid, tracking, singleObservation } = getState()
+    const { credentials, observationEvent, observationZone, schema, grid, tracking } = getState()
     const userId = credentials?.user?.id
 
     const region: Record<string, any> | undefined = observationZone.zones.find((region: Record<string, any>) => {
