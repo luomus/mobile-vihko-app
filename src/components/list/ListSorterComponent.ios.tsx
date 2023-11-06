@@ -92,8 +92,7 @@ const ListSorterComponent = (props: Props) => {
   const onPress = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: Object.values(dictionary),
-        userInterfaceStyle: 'dark'
+        options: Object.values(dictionary)
       },
       buttonIndex => dispatch(setListOrder({ class: Object.keys(dictionary)[buttonIndex] }))
     )

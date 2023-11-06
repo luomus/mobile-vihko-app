@@ -42,8 +42,7 @@ const FormPickerComponent = (props: Props) => {
   const onPress = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: pickerValues,
-        userInterfaceStyle: 'dark'
+        options: pickerValues
       },
       buttonIndex => {
         setSelected(pickerValues[buttonIndex])

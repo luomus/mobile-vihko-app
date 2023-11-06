@@ -307,7 +307,6 @@ const DocumentComponent = (props: Props) => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: [t('send private'), t('saveWithoutSending'), t('cancel')],
-        userInterfaceStyle: 'dark',
         cancelButtonIndex: 2
       },
       async buttonIndex => {

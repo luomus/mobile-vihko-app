@@ -53,7 +53,8 @@ const ContainerStyles = StyleSheet.create({
   },
   modalCloseContainer: {
     alignSelf: 'flex-end',
-    marginRight: 10
+    marginRight: 5,
+    marginBottom: 5
   },
   modalLoadingContainer: {
     alignItems: 'center',

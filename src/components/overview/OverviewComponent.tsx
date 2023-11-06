@@ -224,7 +224,6 @@ const OverviewComponent = (props: Props) => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: [t('send private'), t('cancel')],
-        userInterfaceStyle: 'dark',
         cancelButtonIndex: 1
       },
       async buttonIndex => {

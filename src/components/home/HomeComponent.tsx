@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Linking, View, Text, ScrollView, BackHandler, Platform } from 'react-native'
 import ObservationEventListComponent from './EventListElementComponent'
 import { useTranslation } from 'react-i18next'
+import { Icon } from 'react-native-elements'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import {
@@ -37,6 +38,8 @@ import UnfinishedEventComponent from './UnifinishedEventComponent'
 import SentEventComponent from './SentEventComponent'
 import ZoneModalComponent from './ZoneModalComponent'
 import AtlasInstructionModalComponent from './AtlasInstructionModalComponent'
+import CompleteListModalComponent from './CompleteListModalComponent'
+import FormInfoModalComponent from './FormInfoModalComponent'
 import GridModalComponent from './GridModalComponent'
 import DefaultModalComponent from './DefaultModalComponent'
 import { getCurrentLocation } from '../../helpers/geolocationHelper'
@@ -45,7 +48,6 @@ import { updateIsAvailable } from '../../helpers/versionHelper'
 import { getSentEvents } from '../../services/documentService'
 import { getVersionNumber } from '../../services/versionService'
 import i18n from '../../languages/i18n'
-import CompleteListModalComponent from './CompleteListModalComponent'
 import NewsComponent from './NewsComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import Colors from '../../styles/Colors'
@@ -78,6 +80,8 @@ const HomeComponent = (props: Props) => {
   const [bracketFungiModalVisibility, setBracketFungiModalVisibility] = useState<boolean>(false)
   const [practicalFungiModalVisibility, setPracticalFungiModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
+  const [birdAtlasInfoModalVisibility, setBirdAtlasInfoModalVisibility] = useState<boolean>(false)
+  const [completeListInfoModalVisibility, setCompleteListInfoModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
   const credentials = useSelector((state: rootState) => state.credentials)
@@ -424,10 +428,28 @@ const HomeComponent = (props: Props) => {
                 textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
               />
             </View>
-            <Text style={Ts.previousObservationsTitle}>{t('new observation event')}</Text>
+
+            <Text style={Ts.previousObservationsTitle}>{t('general forms')}</Text>
             <FormLauncherComponent formID={forms.tripForm} setModalVisibility={setTripModalVisibility} />
-            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={setAtlasInstructionModalVisibility} />
             <FormLauncherComponent formID={forms.fungiAtlas} setModalVisibility={setFungiModalVisibility} />
+            <>
+              {
+                credentials.permissions?.includes('HR.2951') ?
+                  <FormLauncherComponent formID={forms.lolife} setModalVisibility={setZoneModalVisibility} />
+                  : null
+              }
+            </>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'flex-start' }}>
+              <Text style={Ts.previousObservationsTitle}>{t('bird atlas')}</Text>
+              <Icon onPress={() => { setBirdAtlasInfoModalVisibility(true) }} name='info' type='material-icons' color={Colors.primary5} size={22} />
+            </View>
+            <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={setAtlasInstructionModalVisibility} />
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'flex-start' }}>
+              <Text style={Ts.previousObservationsTitle}>{t('complete lists')}</Text>
+              <Icon onPress={() => { setCompleteListInfoModalVisibility(true) }} name='info' type='material-icons' color={Colors.primary5} size={22} />
+            </View>
             <FormLauncherComponent formID={forms.dragonflyForm} setModalVisibility={setDragonflyModalVisibility} />
             <FormLauncherComponent formID={forms.butterflyForm} setModalVisibility={setButterflyModalVisibility} />
             <FormLauncherComponent formID={forms.largeFlowersForm} setModalVisibility={setLargeFlowersModalVisibility} />
@@ -438,13 +460,7 @@ const HomeComponent = (props: Props) => {
             <FormLauncherComponent formID={forms.macrolichenForm} setModalVisibility={setMacrolichenModalVisibility} />
             <FormLauncherComponent formID={forms.bracketFungiForm} setModalVisibility={setBracketFungiModalVisibility} />
             <FormLauncherComponent formID={forms.practicalFungiForm} setModalVisibility={setPracticalFungiModalVisibility} />
-            <>
-              {
-                credentials.permissions?.includes('HR.2951') ?
-                  <FormLauncherComponent formID={forms.lolife} setModalVisibility={setZoneModalVisibility} />
-                  : null
-              }
-            </>
+
             <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
             <>{observationEvents}</>
             <Text style={Ts.previousObservationsTitle}>{t('sent observation events')}</Text>
@@ -500,6 +516,10 @@ const HomeComponent = (props: Props) => {
         <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={setLoading} />
+        <FormInfoModalComponent modalVisibility={birdAtlasInfoModalVisibility} setModalVisibility={setBirdAtlasInfoModalVisibility}
+          content={t('instructions.bird.intro')} />
+        <FormInfoModalComponent modalVisibility={completeListInfoModalVisibility} setModalVisibility={setCompleteListInfoModalVisibility}
+          content={t('complete list description')} />
         <MessageComponent />
       </>
     )
