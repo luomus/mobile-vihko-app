@@ -449,7 +449,7 @@ export const beginSingleObservation = (onPressMap: () => void): ThunkAction<Prom
 
     //attempt to start geolocation systems
     try {
-      await watchPositionAsync((location: LocationObject) => dispatch(updateLocation(location)))
+      await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), '', '', false)
     } catch (error: any) {
       await dispatch(deleteObservationEvent(newID))
       log.error({

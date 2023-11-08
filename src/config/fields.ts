@@ -7,6 +7,7 @@ export const singleObservationFields = [
   'secureLevel',
   'gatheringEvent_dateBegin',
   'gatheringEvent_dateEnd',
+  'atlasCode',
   'notes',
   'images'
 ]
@@ -19,6 +20,7 @@ export const singleObservationFieldOrder = [
   'secureLevel',
   'gatheringEvent_dateBegin',
   'gatheringEvent_dateEnd',
+  'atlasCode',
   'notes',
   'images'
 ]
