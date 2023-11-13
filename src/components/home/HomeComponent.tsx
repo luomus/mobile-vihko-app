@@ -80,7 +80,6 @@ const HomeComponent = (props: Props) => {
   const [bracketFungiModalVisibility, setBracketFungiModalVisibility] = useState<boolean>(false)
   const [practicalFungiModalVisibility, setPracticalFungiModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
-  const [birdAtlasInfoModalVisibility, setBirdAtlasInfoModalVisibility] = useState<boolean>(false)
   const [completeListInfoModalVisibility, setCompleteListInfoModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -440,10 +439,7 @@ const HomeComponent = (props: Props) => {
               }
             </>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'flex-start' }}>
-              <Text style={Ts.previousObservationsTitle}>{t('bird atlas')}</Text>
-              <Icon onPress={() => { setBirdAtlasInfoModalVisibility(true) }} name='info' type='material-icons' color={Colors.primary5} size={22} />
-            </View>
+            <Text style={Ts.previousObservationsTitle}>{t('complete lists')} - {t('bird atlas')}</Text>
             <FormLauncherComponent formID={forms.birdAtlas} setModalVisibility={setAtlasInstructionModalVisibility} />
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'flex-start' }}>
@@ -516,8 +512,6 @@ const HomeComponent = (props: Props) => {
         <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={setLoading} />
-        <FormInfoModalComponent modalVisibility={birdAtlasInfoModalVisibility} setModalVisibility={setBirdAtlasInfoModalVisibility}
-          content={t('instructions.bird.intro')} />
         <FormInfoModalComponent modalVisibility={completeListInfoModalVisibility} setModalVisibility={setCompleteListInfoModalVisibility}
           content={t('complete list description')} />
         <MessageComponent />
