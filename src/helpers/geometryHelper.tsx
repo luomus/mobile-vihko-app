@@ -20,7 +20,9 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
   } else if (eventHasGrid) {
     event.gatherings[0].geometry = grid.geometry
   } else if (eventHasUnits) {
-    event.gatherings[0].geometry = createUnitBoundingBox(event.gatherings[0].units)
+    event.singleObservation
+      ? event.gatherings[0].geometry = event.gatherings[0].units[0].unitGathering.geometry
+      : event.gatherings[0].geometry = createUnitBoundingBox(event.gatherings[0].units)
   } else if (eventHasFirstLocation) {
     event.gatherings[0].geometry = {
       coordinates: [

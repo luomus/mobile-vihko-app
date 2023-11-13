@@ -235,6 +235,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         delete newUnit.id
         delete newUnit.rules
         delete newUnit.color
+        if (event.singleObservation) delete newUnit.unitGathering
 
         return Promise.resolve(newUnit)
       }))
