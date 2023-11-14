@@ -349,14 +349,14 @@ const OverviewComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}
           />
           <ButtonComponent onPressFunction={() => props.onPressHome()}
-            title={t('cancel')} height={40} width={80} buttonStyle={Bs.editObservationButton}
+            title={t('cancel')} height={40} width={90} buttonStyle={Bs.editObservationButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.darkText}
           />
           <ButtonComponent
             onPressFunction={async () => { await sendObservationEvent(true) }}
             testID={'saveButton'}
-            title={t('send public')} height={40} width={140} buttonStyle={Bs.editObservationButton}
+            title={t('send public')} height={40} width={160} buttonStyle={Bs.editObservationButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}
           />

@@ -49,7 +49,6 @@ import { getSentEvents } from '../../services/documentService'
 import { getVersionNumber } from '../../services/versionService'
 import i18n from '../../languages/i18n'
 import NewsComponent from './NewsComponent'
-import ButtonComponent from '../general/ButtonComponent'
 import Colors from '../../styles/Colors'
 
 type Props = {
