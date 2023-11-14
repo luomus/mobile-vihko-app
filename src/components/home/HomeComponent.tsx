@@ -410,23 +410,10 @@ const HomeComponent = (props: Props) => {
                 null
               }
             </>
+
             <Text style={Ts.previousObservationsTitle}>{t('single observation')}</Text>
-            <View style={{ width: '90%', justifyContent: 'flex-start', flexDirection: 'row' }}>
-              <ButtonComponent onPressFunction={observing ? () => null : async () => await onBeginSingleObservation()} title={'+ ' + t('observation')}
-                height={40} width={100} buttonStyle={{
-                  paddingHorizontal: 5,
-                  paddingBottom: 5,
-                  flexDirection: 'row',
-                  borderRadius: 5,
-                  alignItems: 'center',
-                  justifyContent: 'flex-start'
-                }}
-                gradientColorStart={observing ? Colors.unavailableButton : Colors.primaryButton1}
-                gradientColorEnd={observing ? Colors.unavailableButton : Colors.primaryButton2}
-                shadowColor={observing ? Colors.neutralShadow : Colors.primaryShadow}
-                textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
-              />
-            </View>
+            <FormLauncherComponent formID={'single'} setModalVisibility={setTripModalVisibility}
+              alternativeEffect={async () => await onBeginSingleObservation()} />
 
             <Text style={Ts.previousObservationsTitle}>{t('general forms')}</Text>
             <FormLauncherComponent formID={forms.tripForm} setModalVisibility={setTripModalVisibility} />

@@ -128,6 +128,7 @@
   "instructions.overview": "Tässä voit ryhtyä muokkaamaan havaintotapahtuman tietoja, lähettää sen Vihkoon tai poistaa sen.\n\nJos lähetätä havaintotapahtuman Vihkoon, voit jatkaa havaintojen muokkaamista Vihkossa osoitteessa <0>Laji.fi/vihko</0>, mutta et enää Mobiilivihkossa.\n\nVoit myös muokata yksittäisiä havaintoja.\n\n<1>Lisää ohjeita</1>",
   "instructions.practicalFungi.intro": "Ruokasienestäjän listalla voit tallettaa täydellisiä lajilistoja ruokasienistä, myrkyllisistä sienistä sekä joistain näkyvistä ruokasienestäjille tutuista lajeista.",
   "instructions.singleObservation": "Tässä voit kirjata havainnolle tarkempia tietoja tai muokata niitä.\n\nLajin tai muun taksonin nimi on pakollinen, muita tietoja voit täydentää tarpeen mukaan.\n\nMääräkenttään voit kirjata määrän numeroina, sanallisen kuvauksen runsaudesta tai tarkempia määrään liittyviä tietoja. Esim.\n\n- 5\n\n- runsas\n\n- 3 kukkivaa ja 10 kukkimatonta\n\n- 1Ä, /3 ad p\n\n<0>Lisää ohjeita</0>",
+  "instructions.singleObservation.intro": "Lähetä yksittäishavaintoja kaikista lajiryhmistä.",
   "instructions.subarctic.intro": "Tunturikasvilomakkeen avulla voit tallettaa täydellisiä lajilistoja tunturikasveista.",
   "instructions.trip.intro": "Retkilomakkeella voit tallentaa havaintoja kaikista lajiryhmistä.",
   "interrupted observation event": "Keskeytynyt havaintotapahtuma",

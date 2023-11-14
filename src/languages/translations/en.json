@@ -128,6 +128,7 @@
   "instructions.overview": "Here you can start editing the information of the observation event, sending it to Notebook or deleting it.\n\nIf you send an observation event to Notebook, you can continue editing the observations in Notebook at <0>Laji.fi/vihko</0>, but no longer in the Nature Notebook.\n\nYou can also edit individual observations.\n\n<1>More instructions</1>",
   "instructions.practicalFungi.intro": "Form for saving complete checklists of practical fungi.",
   "instructions.singleObservation": "Here you can add or edit more detailed information for the observation.\n\nThe name of the species or other taxon is mandatory, you can complete other information as needed.\n\nIn the count field, you can enter the quantity in numbers, a verbal description of the abundance, or more detailed information related to the quantity. E. g.\n\n- 5\n\n- abundant\n\n- 3 flowering and 10 non-flowering\n\n- 1Ä, /3 ad p\n\n<0>More instructions</0>",
+  "instructions.singleObservation.intro": "Send single observations from all taxon groups.",
   "instructions.subarctic.intro": "Form for saving complete checklists of Finnish subarctic plants from fjells and northern Lapland.",
   "instructions.trip.intro": "Save nature observations from all taxon groups to species.fi database.",
   "interrupted observation event": "Interrupted observation event",

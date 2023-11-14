@@ -12,6 +12,7 @@ import Colors from '../../styles/Colors'
 type Props = {
   formID: string,
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
+  alternativeEffect?: () => any
 }
 
 const FormLauncherComponent = (props: Props) => {
@@ -24,7 +25,10 @@ const FormLauncherComponent = (props: Props) => {
   const observing = useSelector((state: rootState) => state.observing)
 
   useEffect(() => {
-    if (props.formID === forms.tripForm) {
+    if (props.formID === 'single') {
+      setTitle(t('single observation'))
+      setDescription(t('instructions.singleObservation.intro'))
+    } else if (props.formID === forms.tripForm) {
       setTitle(t('trip form'))
       setDescription(t('instructions.trip.intro'))
     } else if (props.formID === forms.birdAtlas) {
@@ -69,6 +73,14 @@ const FormLauncherComponent = (props: Props) => {
     }
   }, [i18n.language])
 
+  const onPress = async () => {
+    if (props.alternativeEffect) {
+      await props.alternativeEffect()
+    } else {
+      props.setModalVisibility(true)
+    }
+  }
+
   if (observing) {
     return (
       <View style={{ marginVertical: 5, width: '90%' }}>
@@ -83,7 +95,7 @@ const FormLauncherComponent = (props: Props) => {
   } else {
     return (
       <View style={{ marginVertical: 5, width: '90%' }}>
-        <TouchableOpacity onPress={() => { props.setModalVisibility(true) }} activeOpacity={0.8} style={[Cs.shadowElement, { shadowColor: Colors.primaryShadow }]}>
+        <TouchableOpacity onPress={async () => await onPress()} activeOpacity={0.8} style={[Cs.shadowElement, { shadowColor: Colors.primaryShadow }]}>
           <View style={Cs.eventLauncherContainer}>
             <Text style={[Ts.formLauncherTitle, { color: Colors.primary5 }]}>{title}</Text>
             <Text style={[Ts.formLauncherText, { color: Colors.neutral9 }]}>{description}</Text>
