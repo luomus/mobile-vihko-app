@@ -299,6 +299,9 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
 
     dispatch(setObservationEventId(observationEvent.events[observationEvent.events.length - 1].id))
     dispatch(setObservationEventInterrupted(false))
+    if (observationEvent.events[observationEvent.events.length - 1].singleObservation) {
+      dispatch(setSingleObservation(observationEvent.events[observationEvent.events.length - 1].singleObservation))
+    }
     onPressMap()
     return Promise.resolve()
   }
