@@ -267,6 +267,8 @@ const HomeComponent = (props: Props) => {
   }
 
   const onBeginSingleObservation = async () => {
+    setLoading(true)
+
     //save the used form before beginning an event
     if (!observing) {
       await dispatch(switchSchema('JX.519', i18n.language))

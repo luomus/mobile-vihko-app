@@ -146,7 +146,7 @@ const OverviewComponent = (props: Props) => {
     }
   }
 
-  const sendObservationEvent = async (isPublic: boolean) => {
+  const sendDocument = async (isPublic: boolean) => {
     setModalVisibility(false)
     setSending(true)
     try {
@@ -228,7 +228,7 @@ const OverviewComponent = (props: Props) => {
       },
       async buttonIndex => {
         if (buttonIndex === 0) {
-          await sendObservationEvent(false)
+          await sendDocument(false)
         }
       }
     )
@@ -354,7 +354,7 @@ const OverviewComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.darkText}
           />
           <ButtonComponent
-            onPressFunction={async () => { await sendObservationEvent(true) }}
+            onPressFunction={async () => { await sendDocument(true) }}
             testID={'saveButton'}
             title={t('send public')} height={40} width={160} buttonStyle={Bs.editObservationButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
@@ -369,8 +369,8 @@ const OverviewComponent = (props: Props) => {
           style={Cs.overviewBaseContainer}
         />
         {props.children}
-        <SendEventModalComponent onSubmit={undefined} onSend={sendObservationEvent}
-          modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
+        <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
+          onSendPrivate={async () => await sendDocument(false)}
           onCancel={() => setModalVisibility(false)} cancelTitle={t('cancel')} />
         <MessageComponent />
       </>

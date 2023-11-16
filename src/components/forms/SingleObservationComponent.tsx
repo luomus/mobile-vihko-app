@@ -204,17 +204,25 @@ const SingleObservationComponent = (props: Props) => {
     scrollViewRef?.current?.scrollToPosition(0, 0, false)
   }
 
-  const onSubmit = async (data: { [key: string]: any }) => {
+  const onSubmit = async (data: { [key: string]: any }, sendMode: string) => {
     if (!observationState) {
-      await createNewObservation(data)
+      await submitObservation(data)
     } else {
       await updateObservation(data)
     }
 
-    await submitEvent(data)
+    await submitDocument(data)
+
+    if (sendMode === 'public') {
+      await sendDocument(true)
+    } else if (sendMode === 'private') {
+      await sendDocument(false)
+    } else {
+      props.toHome()
+    }
   }
 
-  const createNewObservation = async (data: { [key: string]: any }) => {
+  const submitObservation = async (data: { [key: string]: any }) => {
     setSaving(true)
 
     const newUnit: Record<string, any> = {}
@@ -367,7 +375,7 @@ const SingleObservationComponent = (props: Props) => {
     }
   }
 
-  const submitEvent = async (data: { [key: string]: any }) => {
+  const submitDocument = async (data: { [key: string]: any }) => {
     setSaving(true)
 
     //set editing off if it is on
@@ -427,7 +435,7 @@ const SingleObservationComponent = (props: Props) => {
     }
   }
 
-  const sendObservationEvent = async (isPublic: boolean) => {
+  const sendDocument = async (isPublic: boolean) => {
 
     setModalVisibility(false)
     setSending(true)
@@ -502,13 +510,6 @@ const SingleObservationComponent = (props: Props) => {
     }))
   }
 
-  const submitAndSend = async (submit: () => any, send: boolean, isPublic: boolean) => {
-    await submit()
-    send
-      ? await sendObservationEvent(isPublic)
-      : props.toHome()
-  }
-
   const onPressOptionsIOS = async () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
@@ -517,9 +518,9 @@ const SingleObservationComponent = (props: Props) => {
       },
       async buttonIndex => {
         if (buttonIndex === 0) {
-          await submitAndSend(methods.handleSubmit(onSubmit, onError), true, false)
+          methods.handleSubmit((data) => onSubmit(data, 'private'), onError)
         } else if (buttonIndex === 1) {
-          await submitAndSend(methods.handleSubmit(onSubmit, onError), false, false)
+          methods.handleSubmit((data) => onSubmit(data, 'not'), onError)
         }
       }
     )
@@ -552,7 +553,7 @@ const SingleObservationComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.darkText}
           />
           <ButtonComponent
-            onPressFunction={async () => { await submitAndSend(methods.handleSubmit(onSubmit, onError), true, true) }}
+            onPressFunction={methods.handleSubmit((data) => onSubmit(data, 'public'), onError)}
             testID={'saveButton'}
             title={t('send public')} height={40} width={160} buttonStyle={Bs.editObservationButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
@@ -581,9 +582,9 @@ const SingleObservationComponent = (props: Props) => {
         </KeyboardAwareScrollView>
         {props.children}
         <MessageComponent />
-        <SendEventModalComponent onSubmit={methods.handleSubmit(onSubmit, onError)} onSend={sendObservationEvent}
-          modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
-          onCancel={props.toHome} cancelTitle={t('saveWithoutSending')} />
+        <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
+          onSendPrivate={methods.handleSubmit((data) => onSubmit(data, 'private'), onError)}
+          onCancel={methods.handleSubmit((data) => onSubmit(data, 'not'), onError)} cancelTitle={t('saveWithoutSending')} />
       </View>
     )
   }
