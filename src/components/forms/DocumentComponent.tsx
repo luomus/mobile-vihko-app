@@ -308,7 +308,7 @@ const DocumentComponent = (props: Props) => {
     }))
   }
 
-  const onPressOptionsIOS = async () =>
+  const onPressOptionsIOS = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: [t('send private'), t('saveWithoutSending'), t('cancel')],
@@ -316,9 +316,9 @@ const DocumentComponent = (props: Props) => {
       },
       async buttonIndex => {
         if (buttonIndex === 0) {
-          methods.handleSubmit((data) => onSubmit(data, 'private'), onError)
+          methods.handleSubmit((data) => onSubmit(data, 'private'), onError)()
         } else if (buttonIndex === 1) {
-          methods.handleSubmit((data) => onSubmit(data, 'not'), onError)
+          methods.handleSubmit((data) => onSubmit(data, 'not'), onError)()
         }
       }
     )
@@ -340,7 +340,7 @@ const DocumentComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
-          <ButtonComponent onPressFunction={async () => { Platform.OS === 'ios' ? await onPressOptionsIOS() : setModalVisibility(true) }}
+          <ButtonComponent onPressFunction={() => { Platform.OS === 'ios' ? onPressOptionsIOS() : setModalVisibility(true) }}
             title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}
