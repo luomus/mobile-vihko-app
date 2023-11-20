@@ -519,7 +519,7 @@ const ObservationComponent = (props: Props) => {
           />
           <ButtonComponent onPressFunction={methods.handleSubmit(onSubmit, onError)} testID={'saveButton'}
             title={t('save')} height={40} width={120} buttonStyle={Bs.editObservationButton}
-            gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
+            gradientColorStart={Colors.successButton1} gradientColorEnd={Colors.successButton2} shadowColor={Colors.successShadow}
             textStyle={Ts.buttonText} iconName={'check'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
