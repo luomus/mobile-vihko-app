@@ -105,9 +105,9 @@ const NavBarComponent = (props: Props) => {
       </View>
       <View style={{ flex: 4, flexDirection: 'row', justifyContent: 'flex-end' }}>
         <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => setInfoModalVisibility(true)} />
-        {props.route.name !== 'login' ?
-          <Icon iconStyle={Bs.headerButton} name='perm-identity' type='material-icons' size={25} onPress={() => setUserModalVisibility(true)} testID='usermodal-visibility-button' /> :
-          <Icon iconStyle={Bs.headerUnavailableButton} name='perm-identity' type='material-icons' size={25} onPress={() => null} />
+        {['login', 'observation', 'document', 'singleObservation'].includes(props.route.name) ?
+          <Icon iconStyle={Bs.headerUnavailableButton} name='perm-identity' type='material-icons' size={25} onPress={() => null} /> :
+          <Icon iconStyle={Bs.headerButton} name='perm-identity' type='material-icons' size={25} onPress={() => setUserModalVisibility(true)} testID='usermodal-visibility-button' />
         }
         {props.route.name !== 'login' && props.route.name !== 'home' ?
           <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25}
