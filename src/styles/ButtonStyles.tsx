@@ -4,6 +4,11 @@ import Colors from './Colors'
 const ButtonStyles = StyleSheet.create({
 
   //general
+  defaultButton: {
+    padding: 5,
+    borderRadius: 5,
+    alignItems: 'center'
+  },
   iconButton: {
     padding: 5,
     borderRadius: 5

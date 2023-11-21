@@ -48,10 +48,10 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   const stopObserving = () => {
     dispatch(setMessageState({
-      type: 'dangerConf',
+      type: 'conf',
       messageContent: t('stop observing'),
-      okLabel: t('stop'),
-      cancelLabel: t('do not stop'),
+      okLabel: t('stop event'),
+      cancelLabel: t('cancel'),
       onOk: async () => {
         props.setLoading(true)
 
@@ -79,7 +79,7 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   const pauseObserving = async () => {
     dispatch(setMessageState({
-      type: 'dangerConf',
+      type: 'conf',
       messageContent: t('pause tracking'),
       okLabel: t('pause'),
       cancelLabel: t('cancel'),
@@ -107,7 +107,7 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   const unpauseObserving = async () => {
     dispatch(setMessageState({
-      type: 'dangerConf',
+      type: 'conf',
       messageContent: t('unpause tracking'),
       okLabel: t('continue'),
       cancelLabel: t('cancel'),

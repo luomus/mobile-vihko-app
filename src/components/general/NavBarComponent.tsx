@@ -88,10 +88,10 @@ const NavBarComponent = (props: Props) => {
 
   const homeButtonHandler = (screen: string) => {
     dispatch(setMessageState({
-      type: 'dangerConf',
+      type: screen === 'observation' ? 'redConf' : 'conf',
       messageContent: screen === 'observation' ? t('discard observation?') : t('discard document?'),
       cancelLabel: t('cancel'),
-      okLabel: t('exit'),
+      okLabel: screen === 'observation' ? t('discard without saving') : t('continue observing'),
       onOk: () => {
         props.navigation.navigate('home')
       }

@@ -424,9 +424,6 @@ const ContainerStyles = StyleSheet.create({
   //message component
   messageButtonsContainer: {
     alignSelf: 'center',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
     marginTop: 5
   },
 

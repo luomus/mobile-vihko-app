@@ -257,10 +257,10 @@ const DocumentComponent = (props: Props) => {
 
   const showCancel = () => {
     dispatch(setMessageState({
-      type: 'dangerConf',
+      type: 'conf',
       messageContent: t('discard document?'),
       cancelLabel: t('cancel'),
-      okLabel: t('exit'),
+      okLabel: t('continue observing'),
       onOk: () => {
         if (props.sourcePage === 'map') {
           props.toMap()

@@ -101,10 +101,10 @@ const ObservationComponent = (props: Props) => {
     if (props.isFocused()) {
 
       dispatch(setMessageState({
-        type: 'dangerConf',
+        type: 'redConf',
         messageContent: t('discard observation?'),
         cancelLabel: t('cancel'),
-        okLabel: t('exit'),
+        okLabel: t('discard without saving'),
         onOk: () => {
           cleanUp()
         }
@@ -432,10 +432,10 @@ const ObservationComponent = (props: Props) => {
 
   const showCancel = () => {
     dispatch(setMessageState({
-      type: 'dangerConf',
+      type: 'redConf',
       messageContent: t('discard observation?'),
       cancelLabel: t('cancel'),
-      okLabel: t('exit'),
+      okLabel: t('discard without saving'),
       onOk: () => {
         cleanUp()
         if (editing.originalSourcePage === 'map') {
@@ -524,14 +524,14 @@ const ObservationComponent = (props: Props) => {
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
           <ButtonComponent onPressFunction={() => showCancel()}
-            title={t('cancel')} height={40} width={120} buttonStyle={Bs.editObservationButton}
+            title={t('cancel')} height={40} width={120} buttonStyle={Bs.defaultButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'close'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
           />
           <ButtonComponent onPressFunction={methods.handleSubmit(onSubmit, onError)} testID={'saveButton'}
-            title={t('save')} height={40} width={120} buttonStyle={Bs.editObservationButton}
+            title={t('save')} height={40} width={120} buttonStyle={Bs.defaultButton}
             gradientColorStart={Colors.successButton1} gradientColorEnd={Colors.successButton2} shadowColor={Colors.successShadow}
-            textStyle={Ts.buttonText} iconName={'check'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
           />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollViewRef}>

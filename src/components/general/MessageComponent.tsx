@@ -84,6 +84,13 @@ const MessageComponent = () => {
           {neutralButton(rightButtonLabel, 'cancel')}
         </View>
       )
+    } else if (leftButtonType === 'danger' && rightButtonType === 'neutral') {
+      return (
+        <View style={Cs.messageButtonsContainer}>
+          {dangerButton(leftButtonLabel, 'check')}
+          {neutralButton(rightButtonLabel, 'cancel')}
+        </View>
+      )
     } else {
       return (
         <View style={Cs.messageButtonsContainer}>
@@ -94,22 +101,32 @@ const MessageComponent = () => {
     }
   }
 
-  const primaryButton = (label: string, iconName: string): React.JSX.Element => {
+  const primaryButton = (label: string, buttonType: string): React.JSX.Element => {
     return (
-      <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
-        height={40} width={120} buttonStyle={Bs.textAndIconButton}
+      <ButtonComponent onPressFunction={buttonType === 'check' ? onOk : onCancel} title={label}
+        height={40} width={220} buttonStyle={Bs.textAndIconButton}
         gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-        textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
       />
     )
   }
 
-  const neutralButton = (label: string, iconName: string): React.JSX.Element => {
+  const neutralButton = (label: string, buttonType: string): React.JSX.Element => {
     return (
-      <ButtonComponent onPressFunction={iconName === 'check' ? onOk : onCancel} title={label}
-        height={40} width={120} buttonStyle={Bs.textAndIconButton}
+      <ButtonComponent onPressFunction={buttonType === 'check' ? onOk : onCancel} title={label}
+        height={40} width={220} buttonStyle={Bs.textAndIconButton}
         gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-        textStyle={Ts.buttonText} iconName={iconName} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+      />
+    )
+  }
+
+  const dangerButton = (label: string, buttonType: string): React.JSX.Element => {
+    return (
+      <ButtonComponent onPressFunction={buttonType === 'check' ? onOk : onCancel} title={label}
+        height={40} width={220} buttonStyle={Bs.textAndIconButton}
+        gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
+        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
       />
     )
   }
@@ -121,6 +138,8 @@ const MessageComponent = () => {
         return oneButtonCreator('neutral', buttonLabel())
       case 'conf':
         return twoButtonCreator('primary', leftLabel(), 'neutral', rightLabel())
+      case 'redConf':
+        return twoButtonCreator('danger', leftLabel(), 'neutral', rightLabel())
       case 'dangerConf':
         return twoButtonCreator('neutral', leftLabel(), 'primary', rightLabel())
     }

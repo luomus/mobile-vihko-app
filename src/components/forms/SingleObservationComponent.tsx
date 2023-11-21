@@ -107,10 +107,10 @@ const SingleObservationComponent = (props: Props) => {
     if (props.isFocused()) {
 
       dispatch(setMessageState({
-        type: 'dangerConf',
+        type: 'redConf',
         messageContent: t('discard observation?'),
         cancelLabel: t('cancel'),
-        okLabel: t('exit'),
+        okLabel: t('discard without saving'),
         onOk: () => {
           cleanUp()
         }
@@ -503,10 +503,10 @@ const SingleObservationComponent = (props: Props) => {
 
   const showCancel = () => {
     dispatch(setMessageState({
-      type: 'dangerConf',
+      type: 'redConf',
       messageContent: t('discard observation?'),
       cancelLabel: t('cancel'),
-      okLabel: t('exit'),
+      okLabel: t('discard without saving'),
       onOk: () => {
         cleanUp()
         if (editing.originalSourcePage === 'map') {

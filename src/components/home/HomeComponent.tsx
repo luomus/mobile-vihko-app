@@ -339,10 +339,10 @@ const HomeComponent = (props: Props) => {
 
   const stopObserving = () => {
     dispatch(setMessageState({
-      type: 'dangerConf',
+      type: 'conf',
       messageContent: t('stop observing'),
-      okLabel: t('stop'),
-      cancelLabel: t('do not stop'),
+      okLabel: t('stop event'),
+      cancelLabel: t('cancel'),
       onOk: async () => {
         setLoading(true)
 

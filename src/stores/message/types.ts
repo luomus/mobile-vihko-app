@@ -3,7 +3,7 @@ export const POP_MESSAGE_STATE = 'POP_MESSAGE_STATE'
 export const SET_MESSAGE_STATE = 'SET_MESSAGE_STATE'
 
 export interface MessageType {
-  type: 'msg' | 'conf' | 'dangerConf' | 'err' | null,
+  type: 'msg' | 'conf' | 'redConf' | 'dangerConf' | 'err' | null,
   messageContent: string | null,
   okLabel?: string,
   cancelLabel?: string,
