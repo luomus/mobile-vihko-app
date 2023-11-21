@@ -92,6 +92,7 @@ const SingleObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: props.sourcePage
       }))
     }
@@ -129,6 +130,7 @@ const SingleObservationComponent = (props: Props) => {
     dispatch(setEditing({
       started: false,
       locChanged: false,
+      originalLocation: editing.originalLocation,
       originalSourcePage: editing.originalSourcePage
     }))
     dispatch(clearObservationId())
@@ -273,6 +275,11 @@ const SingleObservationComponent = (props: Props) => {
       set(newUnit, 'color', color)
     }
 
+    if (!(newUnit.unitGathering.geometry.coordinates[0] === observation?.coordinates[0]
+      && newUnit.unitGathering.geometry.coordinates[1] === observation?.coordinates[1])) {
+      newUnit.unitGathering.geometry = observation
+    }
+
     //update the event state before saving document fields
     const eventCopy = event
     if (eventCopy) eventCopy.gatherings[0].units.push(newUnit)
@@ -326,6 +333,7 @@ const SingleObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: editing.originalSourcePage
       }))
     }
@@ -362,6 +370,7 @@ const SingleObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: ''
       }))
 
@@ -383,6 +392,7 @@ const SingleObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: editing.originalSourcePage
       }))
     }
@@ -478,6 +488,7 @@ const SingleObservationComponent = (props: Props) => {
     dispatch(setEditing({
       started: true,
       locChanged: false,
+      originalLocation: observation ? observation : editing.originalLocation,
       originalSourcePage: editing.originalSourcePage
     }))
     props.pushToMap()

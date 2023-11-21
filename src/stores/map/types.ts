@@ -1,3 +1,4 @@
+import { Point } from 'geojson'
 import { Region } from 'react-native-maps'
 
 export const SET_EDITING = 'SET_EDITING'
@@ -15,6 +16,7 @@ export const SET_REGION = 'SET_REGION'
 export interface EditingType {
   started: boolean,
   locChanged: boolean,
+  originalLocation: Point,
   originalSourcePage: string
 }
 

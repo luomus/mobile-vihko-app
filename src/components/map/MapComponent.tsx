@@ -84,7 +84,7 @@ const MapComponent = (props: Props) => {
   const mapViewRef = useRef<MapView | null>(null)
 
   useInterval(() => {
-    if (centered) followUser()
+    if (centered && !editing.started) followUser()
   }, initialized ? delay : null)
 
   //performs the zoom from initial region to user location
@@ -102,9 +102,11 @@ const MapComponent = (props: Props) => {
       longitudeDelta: 0.01000000000000000
     }
 
-    dispatch(setRegion(initialRegion))
-    moveToRegion(initialRegion)
-    dispatch(setFirstLocation([coords.latitude, coords.longitude]))
+    if (!editing.started) {
+      dispatch(setRegion(initialRegion))
+      moveToRegion(initialRegion)
+      dispatch(setFirstLocation([coords.latitude, coords.longitude]))
+    }
 
     setInitialized(true)
 
@@ -121,6 +123,13 @@ const MapComponent = (props: Props) => {
         latitudeDelta: 0.01000000000000000,
         longitudeDelta: 0.01000000000000000
       }))
+      moveToRegion({
+        ...convertPointToLatLng(observation),
+        latitudeDelta: 0.01000000000000000,
+        longitudeDelta: 0.01000000000000000
+      })
+    } else {
+      followUser()
     }
   }, [editing])
 
@@ -199,6 +208,7 @@ const MapComponent = (props: Props) => {
     dispatch(setEditing({
       started: true,
       locChanged: true,
+      originalLocation: editing.originalLocation,
       originalSourcePage: editing.originalSourcePage
     }))
     singleObservation
@@ -233,9 +243,15 @@ const MapComponent = (props: Props) => {
     dispatch(setEditing({
       started: false,
       locChanged: false,
+      originalLocation: editing.originalLocation,
       originalSourcePage: editing.originalSourcePage
     }))
-    props.onPressEditing()
+
+    if (singleObservation) dispatch(setObservationLocation(editing.originalLocation))
+
+    singleObservation
+      ? props.onPressSingleObservation(undefined, undefined, 'map')
+      : props.onPressEditing()
   }
 
   //sets observation ids and shifts screen to observation edit page, parameter

@@ -86,6 +86,7 @@ const ObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: props.sourcePage
       }))
     }
@@ -123,6 +124,7 @@ const ObservationComponent = (props: Props) => {
     dispatch(setEditing({
       started: false,
       locChanged: false,
+      originalLocation: editing.originalLocation,
       originalSourcePage: editing.originalSourcePage
     }))
     dispatch(clearObservationId())
@@ -305,6 +307,11 @@ const ObservationComponent = (props: Props) => {
       set(newUnit, 'color', color)
     }
 
+    if (!(newUnit.unitGathering.geometry.coordinates[0] === observation?.coordinates[0]
+      && newUnit.unitGathering.geometry.coordinates[1] === observation?.coordinates[1])) {
+      newUnit.unitGathering.geometry = observation
+    }
+
     //add the new observation to latest event, clear location
     //and redirect to map after user oks message
     try {
@@ -355,6 +362,7 @@ const ObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: editing.originalSourcePage
       }))
     }
@@ -394,6 +402,7 @@ const ObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: ''
       }))
 
@@ -414,6 +423,7 @@ const ObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: true,
         locChanged: false,
+        originalLocation: observation ? observation : editing.originalLocation,
         originalSourcePage: editing.originalSourcePage
       }))
       props.pushToMap()
@@ -487,6 +497,7 @@ const ObservationComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: ''
       }))
     } catch (error: any) {

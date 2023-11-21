@@ -78,6 +78,7 @@ const MapComponent = (props: Props) => {
     dispatch(setEditing({
       started: true,
       locChanged: true,
+      originalLocation: editing.originalLocation,
       originalSourcePage: editing.originalSourcePage
     }))
     props.onPressEditing()
@@ -108,6 +109,7 @@ const MapComponent = (props: Props) => {
     dispatch(setEditing({
       started: false,
       locChanged: false,
+      originalLocation: editing.originalLocation,
       originalSourcePage: editing.originalSourcePage
     }))
     props.onPressEditing()

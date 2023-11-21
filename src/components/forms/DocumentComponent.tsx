@@ -171,6 +171,7 @@ const DocumentComponent = (props: Props) => {
       dispatch(setEditing({
         started: false,
         locChanged: false,
+        originalLocation: editing.originalLocation,
         originalSourcePage: editing.originalSourcePage
       }))
     }
