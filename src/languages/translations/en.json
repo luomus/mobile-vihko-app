@@ -201,6 +201,7 @@
   "saveWithoutSending": "Save without sending",
   "saving": "Saving...",
   "select language": "Select language",
+  "send description": "Draft can be sent to Vihko, where it is editable before publishing. Save without sending -option lets you edit the observations in Mobiilivihko before sending.",
   "send observation event to server?": "Document was saved on this device. Submit it to Notebook? After submission, it can only be edited at laji.fi/en/vihko.",
   "send private": "Submit draft",
   "send public": "Submit as public",

@@ -201,6 +201,7 @@
   "saveWithoutSending": "Tallenna lähettämättä",
   "saving": "Tallennetaan...",
   "select language": "Valitse kieli",
+  "send description": "Luonnos voidaan lähettää Vihkoon, jossa se on muokattavissa ennen julkaisua. Tallenna lähettämättä -vaihtoehdon avulla havaintoja voi muokata Mobiilivihkossa ennen lähetystä.",
   "send observation event to server?": "Havaintoerä on tallennettu tälle laitteelle. Lähetätkö sen Vihkoon? Lähetyksen jälkeen sitä voi muokata vain osoitteessa laji.fi/vihko.",
   "send private": "Lähetä luonnoksena",
   "send public": "Lähetä julkisena",

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import Modal from 'react-native-modal'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -29,6 +29,7 @@ const SendEventModalComponent = (props: Props) => {
     <Modal isVisible={props.modalVisibility} backdropOpacity={0.5}
       onBackButtonPress={() => props.setModalVisibility(false)} onBackdropPress={() => props.setModalVisibility(false)}>
       <View style={Cs.modalContainer}>
+        <Text style={{ padding: 5 }}>{t('send description')}</Text>
         {schema.formID !== forms.lolife && schema.formID !== forms.birdAtlas &&
           <ButtonComponent
             onPressFunction={

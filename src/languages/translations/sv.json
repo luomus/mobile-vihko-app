@@ -201,6 +201,7 @@
   "saveWithoutSending": "Spara utan att skicka",
   "saving": "Sparar...",
   "select language": "Välj språk",
+  "send description": "Utkastet kan skickas till Vihko, där det kan redigeras före publicering. Med alternativet Spara utan att skicka kan observationen redigeras i Mobiilivihko innan den skickas.",
   "send observation event to server?": "Observationsuppsättningen sparades på den här enheten. Vill du skicka den till Skrivbok? Efter inlämning kan den endast redigeras på laji.fi/sv/vihko.",
   "send private": "Skicka utkast",
   "send public": "Skicka offentligt",
