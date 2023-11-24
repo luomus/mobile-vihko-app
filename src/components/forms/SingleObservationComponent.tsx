@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { mergeWith, omit } from 'lodash'
+import uuid from 'react-native-uuid'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
   rootState,
@@ -21,23 +22,26 @@ import {
   resetReducer,
   replaceObservationEventById,
   finishSingleObservation,
+  deleteObservationEvent,
 } from '../../stores'
+import SendEventModalComponent from '../general/SendEventModalComponent'
+import MiniMapComponent from '../overview/MiniMapComponent'
+import ConfirmationModalComponent from '../general/ConfimationModalComponent'
 import ButtonComponent from '../general/ButtonComponent'
 import MessageComponent from '../general/MessageComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 import { initForm } from '../../forms/formMethods'
 import { get, set, clone, merge } from 'lodash'
-import uuid from 'react-native-uuid'
 import i18n from '../../languages/i18n'
 import LoadingComponent from '../general/LoadingComponent'
 import {
-  forms, biomonForms, singleObservationFields, singleObservationFieldOrder, overrideSingleObservationFields, additionalSingleObservationFields, JX519Fields, JX519ObservationEventFields
+  forms, biomonForms,
+  singleObservationFields, singleObservationFieldOrder, overrideSingleObservationFields, additionalSingleObservationFields,
+  JX519Fields, JX519ObservationEventFields
 } from '../../config/fields'
-import Colors from '../../styles/Colors'
-import SendEventModalComponent from '../general/SendEventModalComponent'
-import MiniMapComponent from '../overview/MiniMapComponent'
 
 type Props = {
   toObservationEvent: (id: string) => void,
@@ -60,12 +64,13 @@ const SingleObservationComponent = (props: Props) => {
   const methods = useForm()
   const { t } = useTranslation()
   const [saving, setSaving] = useState<boolean>(false)
+  const [sending, setSending] = useState<boolean>(false)
   const lang = i18n.language
   const [event, setEvent] = useState<Record<string, any> | undefined>(undefined)
   const [form, setForm] = useState<Array<React.JSX.Element | undefined> | null>(null)
   const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
-  const [sending, setSending] = useState<boolean>(false)
+  const [confirmationModalVisibility, setConfirmationModalVisibility] = useState<boolean>(false)
 
   //reference for scrollView
   const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
@@ -494,6 +499,15 @@ const SingleObservationComponent = (props: Props) => {
     props.pushToMap()
   }
 
+  const deleteEvent = async () => {
+    if (!event) return
+    setSaving(true)
+    await dispatch(finishSingleObservation())
+    await dispatch(deleteObservationEvent(event.id))
+    props.toHome()
+    setSaving(false)
+  }
+
   const showMessage = (content: string) => {
     dispatch(setMessageState({
       type: 'msg',
@@ -596,7 +610,10 @@ const SingleObservationComponent = (props: Props) => {
         <MessageComponent />
         <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
           onSendPrivate={methods.handleSubmit((data) => onSubmit(data, 'private'), onError)}
-          onCancel={methods.handleSubmit((data) => onSubmit(data, 'not'), onError)} cancelTitle={t('saveWithoutSending')} />
+          onCancel={methods.handleSubmit((data) => onSubmit(data, 'not'), onError)} cancelTitle={t('saveWithoutSending')}
+          setConfirmationModalVisibility={setConfirmationModalVisibility} eventId={event?.id} />
+        <ConfirmationModalComponent modalVisibility={confirmationModalVisibility} setModalVisibility={setConfirmationModalVisibility}
+          deleteEvent={deleteEvent} />
       </View>
     )
   }

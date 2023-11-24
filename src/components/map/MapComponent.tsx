@@ -434,12 +434,9 @@ const MapComponent = (props: Props) => {
   } else {
     return (
       <>
-        {
-          singleObservation ? null :
-            <ExtendedNavBarComponent onPressMap={undefined} onPressList={props.onPressList}
-              onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading}
-              observationButtonsState={observationButtonsState} />
-        }
+        <ExtendedNavBarComponent onPressHome={props.onPressHome} onPressMap={undefined} onPressList={props.onPressList}
+          onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading}
+          observationButtonsState={observationButtonsState} />
         <View style={Cs.mapContainer}>
           <MapView
             testID='map-view'

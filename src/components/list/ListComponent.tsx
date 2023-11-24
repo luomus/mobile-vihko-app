@@ -180,7 +180,7 @@ const ListComponent = (props: Props) => {
   } else {
     return (
       <>
-        <ExtendedNavBarComponent onPressMap={props.onPressMap} onPressList={undefined}
+        <ExtendedNavBarComponent onPressHome={undefined} onPressMap={props.onPressMap} onPressList={undefined}
           onPressFinishObservationEvent={props.onPressFinishObservationEvent} setLoading={setLoading}
           observationButtonsState={''} />
         <View style={Cs.listContainer}>

@@ -12,7 +12,9 @@ import {
   appendPath,
   LocationType,
   setTracking,
-  setObservationEventId
+  setObservationEventId,
+  finishSingleObservation,
+  deleteObservationEvent
 } from '../../stores'
 import storageService from '../../services/storageService'
 import { biomonForms, forms } from '../../config/fields'
@@ -26,6 +28,7 @@ import Colors from '../../styles/Colors'
 import { log } from '../../helpers/logger'
 
 type Props = {
+  onPressHome: (() => void) | undefined,
   onPressMap: (() => void) | undefined,
   onPressList: (() => void) | undefined,
   onPressFinishObservationEvent: (sourcePage: string) => void,
@@ -44,6 +47,7 @@ const ExtendedNavBarComponent = (props: Props) => {
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
   const path = useSelector((state: rootState) => state.path)
   const schema = useSelector((state: rootState) => state.schema)
+  const singleObservation = useSelector((state: rootState) => state.singleObservation)
   const tracking = useSelector((state: rootState) => state.tracking)
 
   const stopObserving = () => {
@@ -144,6 +148,14 @@ const ExtendedNavBarComponent = (props: Props) => {
     }))
   }
 
+  const deleteEvent = async () => {
+    props.setLoading(true)
+    await dispatch(finishSingleObservation())
+    await dispatch(deleteObservationEvent(observationEvent?.events?.[observationEvent?.events?.length - 1].id))
+    if (props.onPressHome !== undefined) props.onPressHome()
+    props.setLoading(false)
+  }
+
   const showError = (error: string) => {
     dispatch(setMessageState({
       type: 'err',
@@ -153,48 +165,64 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   const changingLocation = props.observationButtonsState === 'changeLocation'
 
-  return (
-    <View style={Cs.stopObservingContainer}>
-      <View style={{ flexDirection: 'row' }}>
-        <Text style={Ts.trackingText}>{tracking ? t('tracking') : t('no tracking')}</Text>
+  if (singleObservation) {
+    return (
+      <View style={Cs.stopObservingSingleContainer}>
+        <View style={{ paddingHorizontal: 2, width: 80, alignSelf: 'flex-end' }}>
+          <ButtonComponent
+            onPressFunction={async () => { await deleteEvent() }}
+            title={t('cancel')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
+            gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2}
+            shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
+            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin
+          />
+        </View>
       </View>
-      <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
-        <View style={{ paddingHorizontal: 2, width: 80 }}>
-          <ButtonComponent disabled={changingLocation || grid?.outsideBorders === 'true'}
-            onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
-            title={tracking ? t('pause') : t('continue')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-            gradientColorStart={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
-            gradientColorEnd={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
-            shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
-            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
-          />
+    )
+  } else {
+    return (
+      <View style={Cs.stopObservingContainer}>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={Ts.trackingText}>{tracking ? t('tracking') : t('no tracking')}</Text>
         </View>
-        <View style={{ paddingHorizontal: 2, width: 80 }}>
-          <ButtonComponent disabled={changingLocation}
-            onPressFunction={() => { stopObserving() }} title={t('stop')}
-            height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-            gradientColorStart={!changingLocation ? Colors.dangerButton1 : Colors.unavailableButton}
-            gradientColorEnd={!changingLocation ? Colors.dangerButton2 : Colors.unavailableButton}
-            shadowColor={!changingLocation ? Colors.dangerShadow : Colors.neutralShadow} textStyle={Ts.buttonText}
-            iconName={undefined} iconType={undefined} iconSize={undefined}
-            contentColor={!changingLocation ? Colors.whiteText : Colors.darkText} noMargin
-          />
-        </View>
-        {schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID) ?
+        <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
           <View style={{ paddingHorizontal: 2, width: 80 }}>
-            <ButtonComponent disabled={changingLocation}
-              onPressFunction={() => props.onPressMap ? props.onPressMap() : props.onPressList ? props.onPressList() : undefined}
-              title={props.onPressMap ? t('map') : t('list')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
-              gradientColorStart={!changingLocation ? Colors.neutralButton : Colors.unavailableButton}
-              gradientColorEnd={!changingLocation ? Colors.neutralButton : Colors.unavailableButton}
+            <ButtonComponent disabled={changingLocation || grid?.outsideBorders === 'true'}
+              onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
+              title={tracking ? t('pause') : t('continue')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
+              gradientColorStart={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
+              gradientColorEnd={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
               shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
               iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
             />
           </View>
-          : null}
+          <View style={{ paddingHorizontal: 2, width: 80 }}>
+            <ButtonComponent disabled={changingLocation}
+              onPressFunction={() => { stopObserving() }} title={t('stop')}
+              height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
+              gradientColorStart={!changingLocation ? Colors.dangerButton1 : Colors.unavailableButton}
+              gradientColorEnd={!changingLocation ? Colors.dangerButton2 : Colors.unavailableButton}
+              shadowColor={!changingLocation ? Colors.dangerShadow : Colors.neutralShadow} textStyle={Ts.buttonText}
+              iconName={undefined} iconType={undefined} iconSize={undefined}
+              contentColor={!changingLocation ? Colors.whiteText : Colors.darkText} noMargin
+            />
+          </View>
+          {schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID) ?
+            <View style={{ paddingHorizontal: 2, width: 80 }}>
+              <ButtonComponent disabled={changingLocation}
+                onPressFunction={() => props.onPressMap ? props.onPressMap() : props.onPressList ? props.onPressList() : undefined}
+                title={props.onPressMap ? t('map') : t('list')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
+                gradientColorStart={!changingLocation ? Colors.neutralButton : Colors.unavailableButton}
+                gradientColorEnd={!changingLocation ? Colors.neutralButton : Colors.unavailableButton}
+                shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
+                iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
+              />
+            </View>
+            : null}
+        </View>
       </View>
-    </View>
-  )
+    )
+  }
 }
 
 export default ExtendedNavBarComponent

@@ -193,6 +193,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     const { credentials, observationEventInterrupted, observationEvent, tracking } = getState()
 
     if (!observationEventInterrupted) {
+      dispatch(setObservationEventId(observationEvent.events[observationEvent.events.length - 1].id))
       onPressMap()
       return Promise.resolve()
     }

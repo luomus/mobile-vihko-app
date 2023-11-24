@@ -17,7 +17,9 @@ import {
   logoutUser,
   resetReducer,
   clearPath,
-  setEditing
+  setEditing,
+  finishSingleObservation,
+  deleteObservationEvent
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import MessageComponent from '../general/MessageComponent'
@@ -44,6 +46,7 @@ import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
+import ConfirmationModalComponent from '../general/ConfimationModalComponent'
 
 type Props = {
   toHome: () => void,
@@ -66,6 +69,7 @@ const DocumentComponent = (props: Props) => {
   //for sending modal
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
   const [sending, setSending] = useState<boolean>(false)
+  const [confirmationModalVisibility, setConfirmationModalVisibility] = useState<boolean>(false)
 
   //reference for scrollView
   const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
@@ -255,6 +259,15 @@ const DocumentComponent = (props: Props) => {
     setSending(false)
   }
 
+  const deleteEvent = async () => {
+    if (!event) return
+    setSaving(true)
+    await dispatch(finishSingleObservation())
+    await dispatch(deleteObservationEvent(event.id))
+    props.toHome()
+    setSaving(false)
+  }
+
   const showCancel = () => {
     dispatch(setMessageState({
       type: 'conf',
@@ -380,7 +393,10 @@ const DocumentComponent = (props: Props) => {
         <MessageComponent />
         <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
           onSendPrivate={methods.handleSubmit((data) => onSubmit(data, 'private'), onError)}
-          onCancel={methods.handleSubmit((data) => onSubmit(data, 'not'), onError)} cancelTitle={t('saveWithoutSending')} />
+          onCancel={methods.handleSubmit((data) => onSubmit(data, 'not'), onError)} cancelTitle={t('saveWithoutSending')}
+          setConfirmationModalVisibility={setConfirmationModalVisibility} eventId={observationEventId} />
+        <ConfirmationModalComponent modalVisibility={confirmationModalVisibility} setModalVisibility={setConfirmationModalVisibility}
+          deleteEvent={deleteEvent} />
         {props.children}
       </View>
     )

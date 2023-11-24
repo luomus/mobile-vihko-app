@@ -265,6 +265,13 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row'
   },
+  stopObservingSingleContainer: {
+    paddingBottom: 10,
+    paddingHorizontal: 10,
+    backgroundColor: Colors.primary5,
+    alignContent: 'flex-end',
+    alignItems: 'flex-end'
+  },
   mapContainer: {
     flex: 1,
     backgroundColor: Colors.neutral3,

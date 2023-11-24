@@ -16,13 +16,17 @@ type Props = {
   setModalVisibility: React.Dispatch<React.SetStateAction<boolean>>,
   onSendPrivate: () => any,
   onCancel: () => any,
-  cancelTitle: string
+  cancelTitle: string,
+  setConfirmationModalVisibility: React.Dispatch<React.SetStateAction<boolean>> | undefined,
+  eventId: string | undefined
 }
 
 const SendEventModalComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
+  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observing = useSelector((state: rootState) => state.observing)
   const schema = useSelector((state: rootState) => state.schema)
 
   return (
@@ -54,6 +58,21 @@ const SendEventModalComponent = (props: Props) => {
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
         />
+        {observing && observationEvent.events[observationEvent.events.length - 1].id === props.eventId ?
+          <ButtonComponent
+            onPressFunction={
+              () => {
+                if (!props.setConfirmationModalVisibility) return
+                props.setModalVisibility(false)
+                props.setConfirmationModalVisibility(true)
+              }}
+            title={t('end without saving')}
+            height={40} width={200} buttonStyle={Bs.sendEventModalButton}
+            gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
+            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+          />
+          : null
+        }
       </View>
     </Modal>
   )

@@ -371,7 +371,8 @@ const OverviewComponent = (props: Props) => {
         {props.children}
         <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
           onSendPrivate={async () => await sendDocument(false)}
-          onCancel={() => setModalVisibility(false)} cancelTitle={t('cancel')} />
+          onCancel={() => setModalVisibility(false)} cancelTitle={t('cancel')}
+          setConfirmationModalVisibility={undefined} eventId={event.id} />
         <MessageComponent />
       </>
     )
