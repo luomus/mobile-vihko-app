@@ -1378,6 +1378,31 @@ export const overrideObservationEventFields = {
   },
 }
 
+export const atlasCodeAbbreviations: { [key: string]: any } = {
+  '': '',
+  'MY.atlasCodeEnum1': '1 Ei pesi',
+  'MY.atlasCodeEnum2': '2 Laulu ym. 1 pv',
+  'MY.atlasCodeEnum3': '3 Naaras/Pari 1 pv',
+  'MY.atlasCodeEnum4': '4 Laulu ym. yli 1 pv',
+  'MY.atlasCodeEnum5': '5 Naaras/Pari yli pv',
+  'MY.atlasCodeEnum6': '6 Viittaa pesintään',
+  'MY.atlasCodeEnum61': '61 Käy pesäpaikalla',
+  'MY.atlasCodeEnum62': '62 Rakentaa pesää',
+  'MY.atlasCodeEnum63': '63 Varoittelee poikasista',
+  'MY.atlasCodeEnum64': '64 Houkuttelee pois',
+  'MY.atlasCodeEnum65': '65 Hyökkäilee',
+  'MY.atlasCodeEnum66': '66 Pesää rakennettu',
+  'MY.atlasCodeEnum7': '7 Epäsuorasti pesintä',
+  'MY.atlasCodeEnum71': '71 Pesitty pesä',
+  'MY.atlasCodeEnum72': '72 Käy pesässä',
+  'MY.atlasCodeEnum73': '73 Maastopoikaset',
+  'MY.atlasCodeEnum74': '74 Kantaa ruokaa/ulosteita',
+  'MY.atlasCodeEnum75': '75 Hautova emo',
+  'MY.atlasCodeEnum8': '8 Todistettu pesintä',
+  'MY.atlasCodeEnum81': '81 Kuultu pesäpoikaset',
+  'MY.atlasCodeEnum82': '82 Pesässä munia/poikasia'
+}
+
 export const forms: Record<string, any> = {
   tripForm: 'JX.519',
   birdAtlas: 'MHL.117',

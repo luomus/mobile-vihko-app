@@ -4,6 +4,7 @@ import { ActionSheetIOS, View, Text, TextInput, TouchableOpacity } from 'react-n
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
+import { atlasCodeAbbreviations } from '../../config/fields'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Os from '../../styles/OtherStyles'
@@ -22,6 +23,7 @@ const FormPickerComponent = (props: Props) => {
   const { register, setValue, formState } = useFormContext()
   const [selected, setSelected] = useState(props.selectedValue === null ? null : props.dictionary[props.selectedValue])
   const [pickerValues, setPickerValues] = useState<Array<string>>([])
+  const [abbreviations, setAbbreviations] = useState<Array<string>>([])
 
   const { t } = useTranslation()
 
@@ -32,17 +34,27 @@ const FormPickerComponent = (props: Props) => {
       register(props.objectTitle)
     }
     setValue(props.objectTitle, props.selectedValue)
+
     const valueSet = []
     for (const key in props.dictionary) {
       valueSet.push(props.dictionary[key])
     }
     setPickerValues(valueSet)
+
+    const abbreviationSet = []
+    if (props.objectTitle === 'atlasCode') {
+      for (const key in props.dictionary) {
+        abbreviationSet.push(atlasCodeAbbreviations[key])
+      }
+    }
+
+    setAbbreviations(abbreviationSet)
   }, [])
 
   const onPress = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: pickerValues
+        options: abbreviations.length === 0 ? pickerValues : abbreviations
       },
       buttonIndex => {
         setSelected(pickerValues[buttonIndex])

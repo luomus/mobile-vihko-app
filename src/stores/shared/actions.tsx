@@ -50,32 +50,32 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     }
 
     //check that person token isn't expired
-    try {
-      await userService.checkTokenValidity(credentials.token)
-    } catch (error: any) {
-      captureException(error)
-      log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
-        error: error,
-        user_id: credentials.user.id
-      })
-      if (error.message?.includes('INVALID TOKEN')) {
-        return Promise.reject({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return Promise.reject({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return Promise.reject({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
-    }
+    // try {
+    //   await userService.checkTokenValidity(credentials.token)
+    // } catch (error: any) {
+    //   captureException(error)
+    //   log.error({
+    //     location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
+    //     error: error,
+    //     user_id: credentials.user.id
+    //   })
+    //   if (error.message?.includes('INVALID TOKEN')) {
+    //     return Promise.reject({
+    //       severity: 'high',
+    //       message: i18n.t('user token has expired')
+    //     })
+    //   }
+    //   if (error.message?.includes('WRONG SOURCE')) {
+    //     return Promise.reject({
+    //       severity: 'high',
+    //       message: i18n.t('person token is given for a different app')
+    //     })
+    //   }
+    //   return Promise.reject({
+    //     severity: 'low',
+    //     message: `${i18n.t('failed to check token')} ${error.message}`
+    //   })
+    // }
 
     if (schema.formID !== forms.lolife) {
       dispatch(setCurrentObservationZone('empty'))
@@ -243,32 +243,32 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     }
 
     //check that person token isn't expired
-    try {
-      await userService.checkTokenValidity(credentials.token)
-    } catch (error: any) {
-      captureException(error)
-      log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
-        error: error,
-        user_id: credentials.user.id
-      })
-      if (error.message?.includes('INVALID TOKEN')) {
-        return Promise.reject({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return Promise.reject({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return Promise.reject({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
-    }
+    // try {
+    //   await userService.checkTokenValidity(credentials.token)
+    // } catch (error: any) {
+    //   captureException(error)
+    //   log.error({
+    //     location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
+    //     error: error,
+    //     user_id: credentials.user.id
+    //   })
+    //   if (error.message?.includes('INVALID TOKEN')) {
+    //     return Promise.reject({
+    //       severity: 'high',
+    //       message: i18n.t('user token has expired')
+    //     })
+    //   }
+    //   if (error.message?.includes('WRONG SOURCE')) {
+    //     return Promise.reject({
+    //       severity: 'high',
+    //       message: i18n.t('person token is given for a different app')
+    //     })
+    //   }
+    //   return Promise.reject({
+    //     severity: 'low',
+    //     message: `${i18n.t('failed to check token')} ${error.message}`
+    //   })
+    // }
 
     //attempt to start geolocation systems
     try {
@@ -382,32 +382,32 @@ export const beginSingleObservation = (onPressMap: () => void): ThunkAction<Prom
     const userId = credentials?.user?.id
 
     //check that person token isn't expired
-    try {
-      await userService.checkTokenValidity(credentials.token)
-    } catch (error: any) {
-      captureException(error)
-      log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
-        error: error,
-        user_id: credentials.user.id
-      })
-      if (error.message?.includes('INVALID TOKEN')) {
-        return Promise.reject({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return Promise.reject({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return Promise.reject({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
-    }
+    // try {
+    //   await userService.checkTokenValidity(credentials.token)
+    // } catch (error: any) {
+    //   captureException(error)
+    //   log.error({
+    //     location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
+    //     error: error,
+    //     user_id: credentials.user.id
+    //   })
+    //   if (error.message?.includes('INVALID TOKEN')) {
+    //     return Promise.reject({
+    //       severity: 'high',
+    //       message: i18n.t('user token has expired')
+    //     })
+    //   }
+    //   if (error.message?.includes('WRONG SOURCE')) {
+    //     return Promise.reject({
+    //       severity: 'high',
+    //       message: i18n.t('person token is given for a different app')
+    //     })
+    //   }
+    //   return Promise.reject({
+    //     severity: 'low',
+    //     message: `${i18n.t('failed to check token')} ${error.message}`
+    //   })
+    // }
 
     const lang = i18n.language
 
