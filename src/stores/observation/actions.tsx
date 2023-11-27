@@ -131,32 +131,32 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     }
 
     //check that person token isn't expired
-    // try {
-    //   await userService.checkTokenValidity(credentials.token)
-    // } catch (error: any) {
-    //   captureException(error)
-    //   log.error({
-    //     location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
-    //     error: error,
-    //     user_id: credentials.user.id
-    //   })
-    //   if (error.message?.includes('INVALID TOKEN')) {
-    //     return Promise.reject({
-    //       severity: 'high',
-    //       message: i18n.t('user token has expired')
-    //     })
-    //   }
-    //   if (error.message?.includes('WRONG SOURCE')) {
-    //     return Promise.reject({
-    //       severity: 'high',
-    //       message: i18n.t('person token is given for a different app')
-    //     })
-    //   }
-    //   return Promise.reject({
-    //     severity: 'low',
-    //     message: `${i18n.t('failed to check token')} ${error.message}`
-    //   })
-    // }
+    try {
+      await userService.checkTokenValidity(credentials.token)
+    } catch (error: any) {
+      captureException(error)
+      log.error({
+        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      if (error.message?.includes('INVALID TOKEN')) {
+        return Promise.reject({
+          severity: 'high',
+          message: i18n.t('user token has expired')
+        })
+      }
+      if (error.message?.includes('WRONG SOURCE')) {
+        return Promise.reject({
+          severity: 'high',
+          message: i18n.t('person token is given for a different app')
+        })
+      }
+      return Promise.reject({
+        severity: 'low',
+        message: `${i18n.t('failed to check token')} ${error.message}`
+      })
+    }
 
     //define whether the event will be released publicly or privately
     event = definePublicity(event, isPublic)

@@ -47,7 +47,7 @@ const ConfirmationModalComponent = (props: Props) => {
             await props.deleteEvent()
             props.setModalVisibility(false)
           }}
-          title={t('continue')} height={40} width={200} buttonStyle={Bs.sendEventModalButton}
+          title={t('stop')} height={40} width={200} buttonStyle={Bs.sendEventModalButton}
           gradientColorStart={confirmed ? Colors.dangerButton1 : Colors.unavailableButton}
           gradientColorEnd={confirmed ? Colors.dangerButton2 : Colors.unavailableButton}
           shadowColor={confirmed ? Colors.dangerShadow : Colors.neutralShadow} textStyle={Ts.buttonText}
