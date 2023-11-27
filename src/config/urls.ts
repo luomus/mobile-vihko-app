@@ -57,6 +57,9 @@ export const versionNumberUrl     = 'https://cdn.laji.fi/mobiilivihko/version.tx
 //play store url
 export const playStoreUrl         = 'market://details?id=org.luomus.mobi'
 
+//app store url
+export const appStoreUrl          = 'itms-apps://itunes.apple.com/app/1645835323'
+
 //laji.fi
 export const lajiHomepageEn       = `${LAJI_URL}/en`
 export const lajiHomepageFi       =  LAJI_URL

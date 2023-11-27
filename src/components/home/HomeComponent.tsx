@@ -28,7 +28,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import * as Clipboard from 'expo-clipboard'
 import { forms } from '../../config/fields'
-import { playStoreUrl } from '../../config/urls'
+import { appStoreUrl, playStoreUrl } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
 import LoadingComponent from '../general/LoadingComponent'
 import AppJSON from '../../../app.json'
@@ -113,12 +113,12 @@ const HomeComponent = (props: Props) => {
           messageContent: t('update app'),
           cancelLabel: t('no'),
           okLabel: t('yes'),
-          onOk: () => Linking.openURL(playStoreUrl)
+          onOk: () => Platform.OS === 'android' ? Linking.openURL(playStoreUrl) : Linking.openURL(appStoreUrl)
         }))
       }
     }
 
-    if (Platform.OS === 'android') checkUpdates()
+    checkUpdates()
 
     if (isUnfinished) {
       const initTracking = async () => {
