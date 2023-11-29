@@ -52,6 +52,7 @@ const OverviewComponent = (props: Props) => {
   const [event, setEvent] = useState<Record<string, any> | null>(null)
   const [observations, setObservations] = useState<Record<string, any>[] | null>(null)
   const [eventSchema, setEventSchema] = useState<Record<string, any> | null>(null)
+  const [showSuccess, setShowSuccess] = useState<boolean>(false)
 
   const credentials = useSelector((state: rootState) => state.credentials)
   const observationEvent = useSelector((state: rootState) => state.observationEvent)
@@ -93,13 +94,6 @@ const OverviewComponent = (props: Props) => {
 
     initEventSchema()
   }, [observationEvent])
-
-  const showMessage = (content: string) => {
-    dispatch(setMessageState({
-      type: 'msg',
-      messageContent: content
-    }))
-  }
 
   const showDeleteObservation = (eventId: string, unitId: string) => {
     dispatch(setMessageState({
@@ -151,15 +145,26 @@ const OverviewComponent = (props: Props) => {
     setSending(true)
     try {
       await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
-      showMessage(t('post success'))
-      props.onPressHome()
+      setShowSuccess(true)
+      setTimeout(() => {
+        setShowSuccess(false)
+        props.onPressHome()
+        setSending(false)
+      }, 2000)
     } catch (error: any) {
       captureException(error)
       if (error.severity === 'low') {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
-          onOk: () => props.onPressHome()
+          onOk: () => {
+            setShowSuccess(true)
+            setTimeout(() => {
+              setShowSuccess(false)
+              props.onPressHome()
+              setSending(false)
+            }, 2000)
+          }
         }))
         //log user out from the app if the token has expired
       } else {
@@ -170,12 +175,11 @@ const OverviewComponent = (props: Props) => {
             props.onLogout()
             dispatch(logoutUser())
             dispatch(resetReducer())
+            setSending(false)
           }
         }))
       }
     }
-
-    setSending(false)
   }
 
   const handleBugReport = () => {
@@ -331,13 +335,13 @@ const OverviewComponent = (props: Props) => {
     }
   }
 
-  if (!event || !observations || !eventSchema) {
+  if (sending) {
+    return (
+      <LoadingComponent text={showSuccess ? t('post success') : t('sending')} completed={showSuccess} />
+    )
+  } else if (!event || !observations || !eventSchema) {
     return (
       <LoadingComponent text={t('loading')} />
-    )
-  } else if (sending) {
-    return (
-      <LoadingComponent text={t('sending')} />
     )
   } else {
     return (

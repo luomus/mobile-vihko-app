@@ -71,6 +71,7 @@ const SingleObservationComponent = (props: Props) => {
   const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
   const [confirmationModalVisibility, setConfirmationModalVisibility] = useState<boolean>(false)
+  const [showSuccess, setShowSuccess] = useState<boolean>(false)
 
   //reference for scrollView
   const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
@@ -456,9 +457,13 @@ const SingleObservationComponent = (props: Props) => {
     setSending(true)
     try {
       await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
-      showMessage(t('post success'))
       setForm(null)
-      props.toHome()
+      setShowSuccess(true)
+      setTimeout(() => {
+        setShowSuccess(false)
+        props.toHome()
+        setSending(false)
+      }, 2000)
     } catch (error: any) {
       if (error.severity === 'low') {
         dispatch(setMessageState({
@@ -466,8 +471,14 @@ const SingleObservationComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             setForm(null)
-            props.toHome()
-            if (error.message.includes(t('locality failure'))) showMessage(t('post success'))
+            if (error.message.includes(t('locality failure'))) {
+              setShowSuccess(true)
+              setTimeout(() => {
+                setShowSuccess(false)
+                props.toHome()
+                setSending(false)
+              }, 2000)
+            }
           }
         }))
         //log user out from the app if the token has expired
@@ -479,12 +490,11 @@ const SingleObservationComponent = (props: Props) => {
             props.onLogout()
             dispatch(logoutUser())
             dispatch(resetReducer())
+            setSending(false)
           }
         }))
       }
     }
-
-    setSending(false)
   }
 
   //redirects navigator to map for selection of new observation location
@@ -506,13 +516,6 @@ const SingleObservationComponent = (props: Props) => {
     await dispatch(deleteObservationEvent(event.id))
     props.toHome()
     setSaving(false)
-  }
-
-  const showMessage = (content: string) => {
-    dispatch(setMessageState({
-      type: 'msg',
-      messageContent: content
-    }))
   }
 
   const showCancel = () => {
@@ -562,7 +565,7 @@ const SingleObservationComponent = (props: Props) => {
     )
   } else if (sending) {
     return (
-      <LoadingComponent text={t('sending')} />
+      <LoadingComponent text={showSuccess ? t('post success') : t('sending')} completed={showSuccess} />
     )
   } else {
     return (
@@ -607,7 +610,6 @@ const SingleObservationComponent = (props: Props) => {
           </View>
         </KeyboardAwareScrollView>
         {props.children}
-        <MessageComponent />
         <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
           onSendPrivate={methods.handleSubmit((data) => onSubmit(data, 'private'), onError)}
           onCancel={methods.handleSubmit((data) => onSubmit(data, 'not'), onError)} cancelTitle={t('saveWithoutSending')}
