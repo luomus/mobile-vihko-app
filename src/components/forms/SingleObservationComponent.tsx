@@ -540,8 +540,8 @@ const SingleObservationComponent = (props: Props) => {
   const onPressOptionsIOS = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: [t('send private'), t('saveWithoutSending'), t('cancel')],
-        cancelButtonIndex: 2,
+        options: [t('send private'), t('saveWithoutSending'), t('end without saving'), t('cancel')],
+        cancelButtonIndex: 3,
         title: t('send description')
       },
       buttonIndex => {
@@ -549,6 +549,8 @@ const SingleObservationComponent = (props: Props) => {
           methods.handleSubmit((data) => onSubmit(data, 'private'), onError)()
         } else if (buttonIndex === 1) {
           methods.handleSubmit((data) => onSubmit(data, 'not'), onError)()
+        } else if (buttonIndex === 2) {
+          setConfirmationModalVisibility(true)
         }
       }
     )

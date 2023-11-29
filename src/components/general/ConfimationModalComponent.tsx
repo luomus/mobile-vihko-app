@@ -25,7 +25,7 @@ const ConfirmationModalComponent = (props: Props) => {
       onBackButtonPress={() => props.setModalVisibility(false)} onBackdropPress={() => props.setModalVisibility(false)}>
       <View style={Cs.modalContainer}>
         <Text style={{ padding: 5 }}>{t('confirmation description')}</Text>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', padding: 10 }}>
           <Text style={{ padding: 5, alignSelf: 'center' }}>{t('confirm')}</Text>
           <Switch
             style={Cs.padding5Container}
@@ -51,7 +51,7 @@ const ConfirmationModalComponent = (props: Props) => {
           gradientColorStart={confirmed ? Colors.dangerButton1 : Colors.unavailableButton}
           gradientColorEnd={confirmed ? Colors.dangerButton2 : Colors.unavailableButton}
           shadowColor={confirmed ? Colors.dangerShadow : Colors.neutralShadow} textStyle={Ts.buttonText}
-          iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={confirmed ? Colors.whiteText : Colors.darkText} noMargin
+          iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={confirmed ? Colors.whiteText : Colors.darkText}
         />
         <ButtonComponent
           onPressFunction={
