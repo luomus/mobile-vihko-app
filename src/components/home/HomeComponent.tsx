@@ -198,6 +198,8 @@ const HomeComponent = (props: Props) => {
       }))
     }
 
+    sentEvents = sentEvents.filter(event => event.publicityRestrictions === 'MZ.publicityRestrictionsPublic').slice(0, 5)
+
     sentEvents.sort((a, b) => {
       const dateA = new Date(a.dateCreated)
       const dateB = new Date(b.dateCreated)

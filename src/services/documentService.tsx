@@ -58,9 +58,9 @@ export const getSentEvents = async (credentials: CredentialsType) => {
   const params = {
     'personToken': credentials.token,
     'access_token': ACCESS_TOKEN,
-    'pageSize': 5,
+    'pageSize': 10,
     'sourceID': SOURCE_ID,
-    'selectedFields': 'dateCreated,formID'
+    'selectedFields': 'dateCreated,formID,publicityRestrictions'
   }
 
   const result = await get(documentsUrl, { params })
