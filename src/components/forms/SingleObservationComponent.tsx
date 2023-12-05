@@ -41,6 +41,7 @@ import {
   singleObservationFields, singleObservationFieldOrder, overrideSingleObservationFields, additionalSingleObservationFields,
   JX519Fields, JX519ObservationEventFields
 } from '../../config/fields'
+import MessageComponent from '../general/MessageComponent'
 
 type Props = {
   toObservationEvent: (id: string) => void,
@@ -611,13 +612,14 @@ const SingleObservationComponent = (props: Props) => {
             </FormProvider>
           </View>
         </KeyboardAwareScrollView>
-        {props.children}
+        <MessageComponent />
         <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
           onSendPrivate={methods.handleSubmit((data) => onSubmit(data, 'private'), onError)}
           onCancel={methods.handleSubmit((data) => onSubmit(data, 'not'), onError)} cancelTitle={t('saveWithoutSending')}
           setConfirmationModalVisibility={setConfirmationModalVisibility} eventId={event?.id} />
         <ConfirmationModalComponent modalVisibility={confirmationModalVisibility} setModalVisibility={setConfirmationModalVisibility}
           deleteEvent={deleteEvent} />
+        {props.children}
       </View>
     )
   }
