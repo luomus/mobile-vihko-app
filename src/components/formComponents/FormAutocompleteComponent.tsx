@@ -261,9 +261,9 @@ const FormAutocompleteComponent = (props: Props) => {
           onBlur={onBlur}
           onChangeText={onChangeText}
           defaultValue={defaultValue}
+          autoCorrect={false}
           testID={'autocomplete'}
-        >
-        </TextInput>
+        />
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           {loading ?
             <ActivityIndicator size={25} color={Colors.primary5} />

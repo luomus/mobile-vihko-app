@@ -38,6 +38,7 @@ const ZoneFilterPickerComponent = (props: Props) => {
         placeholderTextColor={Colors.neutral5}
         style={Cs.zoneListFilterInput}
         ref={textInput}
+        autoCorrect={false}
       />
       <Icon
         name='cancel'

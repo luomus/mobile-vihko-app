@@ -71,6 +71,7 @@ const FormInputComponent = (props: Props) => {
         }}
         defaultValue={currentValue}
         ref={textInput}
+        autoCorrect={false}
         multiline={props.multiline}
         testID={props.title}
       />

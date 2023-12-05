@@ -111,6 +111,7 @@ const FormCountSelectorComponent = (props: Props) => {
           setCurrentValue(text)
         }}
         defaultValue={currentValue}
+        autoCorrect={false}
         multiline
         testID={props.title}
       />

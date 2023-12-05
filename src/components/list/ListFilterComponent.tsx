@@ -24,6 +24,7 @@ const ListFilterComponent = (props: Props) => {
         placeholderTextColor={Colors.neutral6}
         style={Cs.listFilterInput}
         ref={props.textInput}
+        autoCorrect={false}
       />
       <Icon
         name='cancel'
