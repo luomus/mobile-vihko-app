@@ -541,6 +541,7 @@ const SingleObservationComponent = (props: Props) => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: [t('send private'), t('saveWithoutSending'), t('end without saving'), t('cancel')],
+        destructiveButtonIndex: 2,
         cancelButtonIndex: 3,
         title: t('send description')
       },
