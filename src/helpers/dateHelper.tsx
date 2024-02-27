@@ -9,7 +9,9 @@ export const setDateForDocument = () => {
 
 //parses date from format 'yyyy-MM-ddTHH:mm' to 'dd.MM.yyyy HH.mm'
 export const parseDateFromDocumentToUI = (date: string, type?: string | undefined) => {
-  if (type === 'date')
+  if (date === '') {
+    return ''
+  } else if (type === 'date')
     return moment(date, 'YYYY-MM-DDTHH:mm').format('DD.MM.YYYY')
   else if (type === 'time')
     return moment(date, 'YYYY-MM-DDTHH:mm').format('HH.mm')
