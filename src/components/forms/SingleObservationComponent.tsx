@@ -66,7 +66,7 @@ const SingleObservationComponent = (props: Props) => {
   const [saving, setSaving] = useState<boolean>(false)
   const [sending, setSending] = useState<boolean>(false)
   const lang = i18n.language
-  const [event, setEvent] = useState<Record<string, any> | undefined>(undefined)
+  const [eventState, setEventState] = useState<Record<string, any> | undefined>(undefined)
   const [form, setForm] = useState<Array<React.JSX.Element | undefined> | null>(null)
   const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
@@ -175,17 +175,17 @@ const SingleObservationComponent = (props: Props) => {
     })
 
     if (searchedEvent) {
-      setEvent(searchedEvent)
+      setEventState(searchedEvent)
     }
   }
 
   const onUninitializedForm = () => {
     //if editing observation but observation not yet extracted from observation event
-    if (observationId && !observationState) {
+    if (observationId && (!eventState || !observationState)) {
       return
     }
 
-    const schemaVar = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
+    const observationSchema = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
     const defaultObject: Record<string, any> = {}
 
     if (props.defaults) {
@@ -196,14 +196,14 @@ const SingleObservationComponent = (props: Props) => {
 
     set(defaultObject, ['unitGathering', 'geometry'], observation)
 
-    const schemaWithoutUnits = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
+    const eventSchema = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
 
     //edit observation
-    if (observationId) {
-      initForm(setForm, observationState, null, schemaVar, schemaWithoutUnits, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, lang, scrollViewRef)
+    if (observationId && eventState && observationState) {
+      initForm(setForm, observationState, eventState, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, lang, scrollViewRef)
       //new observation
     } else {
-      initForm(setForm, defaultObject, null, schemaVar, schemaWithoutUnits, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, lang, scrollViewRef)
+      initForm(setForm, defaultObject, null, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, lang, scrollViewRef)
     }
   }
 
@@ -287,9 +287,9 @@ const SingleObservationComponent = (props: Props) => {
     }
 
     //update the event state before saving document fields
-    const eventCopy = event
+    const eventCopy = eventState
     if (eventCopy) eventCopy.gatherings[0].units.push(newUnit)
-    setEvent(eventCopy)
+    setEventState(eventCopy)
 
     //add the new observation to latest event, clear location
     try {
@@ -364,9 +364,9 @@ const SingleObservationComponent = (props: Props) => {
     }
 
     //update the event state before saving document fields
-    const eventCopy = event
+    const eventCopy = eventState
     if (eventCopy) eventCopy.gatherings[0].units = [editedUnit]
-    setEvent(eventCopy)
+    setEventState(eventCopy)
 
     //replace original observation with edited one
     try {
@@ -403,7 +403,7 @@ const SingleObservationComponent = (props: Props) => {
       }))
     }
 
-    if (event && observationEventId) {
+    if (eventState && observationEventId) {
       let editedEvent = {}
 
       Object.keys(data).forEach(key => {
@@ -426,7 +426,7 @@ const SingleObservationComponent = (props: Props) => {
         }
       }
 
-      editedEvent = mergeWith(event, editedEvent, customizer)
+      editedEvent = mergeWith(eventState, editedEvent, customizer)
 
       //replace events with the modified copy
       try {
@@ -456,7 +456,7 @@ const SingleObservationComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
+      await dispatch(uploadObservationEvent(eventState?.id, i18n.language, isPublic))
       setForm(null)
       setShowSuccess(true)
       setTimeout(() => {
@@ -499,7 +499,7 @@ const SingleObservationComponent = (props: Props) => {
 
   //redirects navigator to map for selection of new observation location
   const editObservationLocation = () => {
-    dispatch(setObservationLocation(observation ? observation : event?.gatherings[0]?.geometry))
+    dispatch(setObservationLocation(observation ? observation : eventState?.gatherings[0]?.geometry))
     dispatch(setEditing({
       started: true,
       locChanged: false,
@@ -510,10 +510,10 @@ const SingleObservationComponent = (props: Props) => {
   }
 
   const deleteEvent = async () => {
-    if (!event) return
+    if (!eventState) return
     setSaving(true)
     await dispatch(finishSingleObservation())
-    await dispatch(deleteObservationEvent(event.id))
+    await dispatch(deleteObservationEvent(eventState.id))
     props.toHome()
     setSaving(false)
   }
@@ -593,9 +593,9 @@ const SingleObservationComponent = (props: Props) => {
           />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollViewRef}>
-          {(observation || event?.gatherings[0]?.geometry) ?
+          {(observation || eventState?.gatherings[0]?.geometry) ?
             <View style={{ width: '95%', alignSelf: 'center' }}>
-              <MiniMapComponent geometry={observation ? observation : event?.gatherings[0]?.geometry} color={Colors.observationColor} />
+              <MiniMapComponent geometry={observation ? observation : eventState?.gatherings[0]?.geometry} color={Colors.observationColor} />
             </View>
             : null
           }
@@ -616,7 +616,7 @@ const SingleObservationComponent = (props: Props) => {
         <SendEventModalComponent modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}
           onSendPrivate={methods.handleSubmit((data) => onSubmit(data, 'private'), onError)}
           onCancel={methods.handleSubmit((data) => onSubmit(data, 'not'), onError)} cancelTitle={t('saveWithoutSending')}
-          setConfirmationModalVisibility={setConfirmationModalVisibility} eventId={event?.id} />
+          setConfirmationModalVisibility={setConfirmationModalVisibility} eventId={eventState?.id} />
         <ConfirmationModalComponent modalVisibility={confirmationModalVisibility} setModalVisibility={setConfirmationModalVisibility}
           deleteEvent={deleteEvent} />
         {props.children}

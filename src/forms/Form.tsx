@@ -5,6 +5,7 @@ import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParse
 
 const Form = (
   defaults: Record<string, any> | undefined,
+  secondDefaults: Record<string, any> | undefined,
   fields: string[],
   blacklist: Record<string, any> | null,
   schema: Record<string, any> | null,
@@ -80,7 +81,7 @@ const Form = (
     let fieldDefaultValue: any = fieldParams.defaultValue
     let fieldBlacklist: string[] | null = null
 
-    if (defaultObject) {
+    if (defaultObject !== undefined) {
       fieldDefaultValue = defaultObject
     }
 
@@ -218,7 +219,7 @@ const Form = (
 
   if (schema && secondSchema) {
     schemaToForm(null, defaults, schema)
-    schemaToForm(null, defaults, secondSchema)
+    schemaToForm(null, secondDefaults, secondSchema)
   } else if (schema) {
     schemaToForm(null, defaults, schema)
   }
@@ -230,6 +231,9 @@ const Form = (
 
       if (defaults) {
         fieldDefault = get(defaults, key.split('_'))
+      }
+      if (secondDefaults) {
+        fieldDefault = get(secondDefaults, key.split('_'))
       }
 
       fieldDefault = fieldDefault || defaultValue

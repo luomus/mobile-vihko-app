@@ -5,9 +5,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 export const initForm = (
   setForm: React.Dispatch<React.SetStateAction<(React.JSX.Element | undefined)[] | null>>,
   defaults: any,
-  rules: Record<string, any> | null = null,
+  secondDefaults: any,
   schema: Record<string, any> | null = null,
   secondSchema: Record<string, any> | null = null,
+  rules: Record<string, any> | null = null,
   fieldScopes: Record<string, any> | null = null,
   fields: string[] | null = null,
   overrideFields: Record<string, any> | null = null,
@@ -25,7 +26,7 @@ export const initForm = (
     if (!fields) {
       setForm(null)
     } else {
-      setForm(Form(defaults, fields, null, schema, secondSchema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+      setForm(Form(defaults, secondDefaults, fields, null, schema, secondSchema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
     }
   } else {
     if (fieldScopes === null) {
@@ -44,6 +45,6 @@ export const initForm = (
     const fields = fieldScope?.fields.concat(['images'])
     const blacklist = fieldScope?.blacklist
 
-    setForm(Form(defaults, fields, blacklist, schema, secondSchema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+    setForm(Form(defaults, secondDefaults, fields, blacklist, schema, secondSchema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
   }
 }
