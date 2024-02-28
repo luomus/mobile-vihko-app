@@ -61,10 +61,7 @@ const FormDatePickerComponent = (props: Props) => {
       setCurrentValue('')
       setValue(props.objectTitle, '')
     } else if (!currentValue || currentValue === '') {
-      setCurrentValue(parseDateFromDateObjectToDocument(date, props.pickerType))
-      setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType))
-      setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType))
-      setValue(props.objectTitle, parseDateFromDateObjectToDocument(date, props.pickerType))
+      initDatePicker()
     } else {
       setValue(props.objectTitle, currentValue)
     }
@@ -102,6 +99,13 @@ const FormDatePickerComponent = (props: Props) => {
     combinedDate !== '' ? setCurrentValue(combinedDate) : null
   }, [currentDate, currentTime])
 
+  const initDatePicker = () => {
+    setCurrentValue(parseDateFromDateObjectToDocument(date, props.pickerType))
+    setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType))
+    setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType))
+    setValue(props.objectTitle, parseDateFromDateObjectToDocument(date, props.pickerType))
+  }
+
   const onChangeDate = (event: DateTimePickerEvent, date: Date | undefined) => {
     date !== undefined ? setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
   }
@@ -118,6 +122,13 @@ const FormDatePickerComponent = (props: Props) => {
     return currentValue
   }
 
+  const initModal = () => {
+    if (currentValue === '') {
+      initDatePicker()
+    }
+    setModalVisibility(true)
+  }
+
   return (
     <View style={Cs.formInputContainer}>
       <Text>{props.title}</Text>
@@ -127,7 +138,7 @@ const FormDatePickerComponent = (props: Props) => {
           value={currentValue !== '' ? parseDateFromDocumentToUI(createParseableTime(), props.pickerType) : ''}
           editable={false}
         />
-        <ButtonComponent onPressFunction={() => setModalVisibility(true)}
+        <ButtonComponent onPressFunction={() => initModal()}
           title={undefined} height={40} width={45} buttonStyle={Bs.neutralIconButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText} noMargin
