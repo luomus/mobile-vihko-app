@@ -54,8 +54,7 @@ const FormDatePickerComponent = (props: Props) => {
     register(props.objectTitle)
 
     if (singleObservation && props.objectTitle.includes('dateEnd') && !props.defaultValue) {
-      setCurrentValue('')
-      setValue(props.objectTitle, '')
+      clearDatePicker()
     } else if (!currentValue || currentValue === '') {
       initDatePicker()
     } else {
@@ -102,6 +101,11 @@ const FormDatePickerComponent = (props: Props) => {
     setValue(props.objectTitle, parseDateFromDateObjectToDocument(date, props.pickerType))
   }
 
+  const clearDatePicker = () => {
+    setCurrentValue('')
+    setValue(props.objectTitle, '')
+  }
+
   const onChangeDate = (event: DateTimePickerEvent, date: Date | undefined) => {
     setShowDate(false)
     props.pickerType === 'date' ? null : setShowTime(true)
@@ -114,6 +118,10 @@ const FormDatePickerComponent = (props: Props) => {
   }
 
   const onOpenDatePicker = () => {
+    if (currentValue === '') {
+      initDatePicker()
+    }
+
     if (props.pickerType === 'time') {
       setShowTime(true)
     } else {
@@ -139,9 +147,15 @@ const FormDatePickerComponent = (props: Props) => {
           editable={false}
         />
         <ButtonComponent onPressFunction={() => onOpenDatePicker()}
-          title={undefined} height={40} width={45} buttonStyle={Bs.neutralIconButton}
+          title={undefined} height={40} width={45} buttonStyle={Bs.datePickerButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-          textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText} noMargin
+          textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+        />
+        <ButtonComponent
+          onPressFunction={() => clearDatePicker()}
+          title={undefined} height={40} width={45} buttonStyle={Bs.datePickerButton}
+          gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
+          textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
         />
       </View>
       {showDate && (

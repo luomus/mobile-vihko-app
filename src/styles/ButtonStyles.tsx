@@ -173,8 +173,7 @@ const ButtonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  neutralIconButton: {
-    backgroundColor: Colors.neutralButton,
+  datePickerButton: {
     borderRadius: 5,
     paddingTop: 2
   },

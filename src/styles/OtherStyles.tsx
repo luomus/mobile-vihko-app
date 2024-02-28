@@ -35,7 +35,9 @@ const OtherStyles = StyleSheet.create({
     borderWidth: 1,
     height: 40,
     marginRight: 5,
-    width: '90%',
+    marginTop: 5,
+    width: '65%',
+    alignSelf: 'flex-start'
   },
   hiddenComponent: {
     height: 0,
