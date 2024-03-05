@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import { useFormContext } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { rootState } from '../../stores'
+import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import { DispatchType, rootState, setMessageState } from '../../stores'
 import Os from '../../styles/OtherStyles'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -50,6 +51,10 @@ const FormDatePickerComponent = (props: Props) => {
 
   const singleObservation = useSelector((state: rootState) => state.singleObservation)
 
+  const dispatch: DispatchType = useDispatch()
+
+  const { t } = useTranslation()
+
   useEffect(() => {
     register(props.objectTitle)
 
@@ -79,13 +84,17 @@ const FormDatePickerComponent = (props: Props) => {
       combinedDate = combinedDate + date.getHours() + ':' + date.getMinutes()
     } else if (props.objectTitle.includes('dateEnd') && Date.parse(dateBegin) > Date.parse(combinedDate)) { // dateEnd is earlier than dateBegin
       combinedDate = dateBegin
+      onInvalidDate(t('ended before starting'))
     } else if (props.objectTitle.includes('dateBegin') && Date.parse(combinedDate) > Date.parse(dateEnd)) { // dateBegin is later than dateEnd
       combinedDate = dateEnd
+      onInvalidDate(t('started after ending'))
     } else if (props.objectTitle.includes('time') && Date.parse(dateBegin) === Date.parse(dateEnd)) {
       if (props.objectTitle.includes('End') && Date.parse(dateBegin + 'T' + timeStart) > Date.parse(dateEnd + 'T' + combinedDate)) { // timeEnd is earlier than timeStart
         combinedDate = timeStart
+        onInvalidDate(t('ended before starting'))
       } else if (props.objectTitle.includes('Start') && Date.parse(dateBegin + 'T' + combinedDate) > Date.parse(dateEnd + 'T' + timeEnd)) { // timeStart is later than timeEnd
         combinedDate = timeEnd
+        onInvalidDate(t('started after ending'))
       }
     }
 
@@ -115,6 +124,14 @@ const FormDatePickerComponent = (props: Props) => {
   const onChangeTime = (event: DateTimePickerEvent, date: Date | undefined) => {
     setShowTime(false)
     date !== undefined ? setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
+  }
+
+  const onInvalidDate = (message: string) => {
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: message,
+      backdropOpacity: 0.3
+    }))
   }
 
   const onOpenDatePicker = () => {
@@ -151,11 +168,10 @@ const FormDatePickerComponent = (props: Props) => {
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
         />
-        <ButtonComponent
-          onPressFunction={() => clearDatePicker()}
+        <ButtonComponent onPressFunction={() => clearDatePicker()}
           title={undefined} height={40} width={45} buttonStyle={Bs.datePickerButton}
-          gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-          textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+          gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+          textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
         />
       </View>
       {showDate && (
@@ -179,6 +195,7 @@ const FormDatePickerComponent = (props: Props) => {
             value={currentValue !== '' ? new Date(parseDateFromDocumentToFullISO(createParseableTime())) : date}
             mode='time'
             onChange={onChangeTime}
+            // minimumDate and maximumDate aren't available for Android time mode
           />
         </View>
       )}

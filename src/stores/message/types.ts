@@ -9,7 +9,8 @@ export interface MessageType {
   cancelLabel?: string,
   onOk?: () => void,
   onCancel?: () => void,
-  testID?: string
+  backdropOpacity?: number,
+  testID?: string,
 }
 
 interface clearMessageState {

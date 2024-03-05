@@ -28,7 +28,7 @@ export const MAX_VEL = 33.33
 export const MIN_DIST = 10
 
 //maximum speed increase z-score/sigma for accepting a path point into the path
-export const Z_SCORE = 3
+export const Z_SCORE = 1
 
 //distance from 10km ykj grid square edge where warning is triggered
 export const GRID_EDGE_DISTANCE = 100

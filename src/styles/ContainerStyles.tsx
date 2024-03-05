@@ -508,6 +508,10 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start'
   },
+  datePickerOptionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
   iOSDatePickerContainer: {
     alignSelf: 'center',
     flexDirection: 'column',

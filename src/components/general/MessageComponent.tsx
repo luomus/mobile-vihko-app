@@ -146,7 +146,8 @@ const MessageComponent = () => {
   }
 
   return (
-    <Modal isVisible={isVisible} onBackButtonPress={onBackButtonPress}>
+    <Modal isVisible={isVisible} onBackButtonPress={onBackButtonPress}
+      backdropOpacity={topMessage?.backdropOpacity ? topMessage.backdropOpacity : 0.7}>
       <View style={Cs.messageModalContainer} testID={topMessage?.testID}>
         {message.length <= 1 ?
           null :

@@ -39,6 +39,16 @@ const OtherStyles = StyleSheet.create({
     width: '65%',
     alignSelf: 'flex-start'
   },
+  dateOptionsPicker: {
+    padding: 10,
+    borderColor: Colors.neutral5,
+    borderWidth: 1,
+    height: 40,
+    marginRight: 5,
+    marginTop: 5,
+    width: '80%',
+    alignSelf: 'flex-start'
+  },
   hiddenComponent: {
     height: 0,
   },

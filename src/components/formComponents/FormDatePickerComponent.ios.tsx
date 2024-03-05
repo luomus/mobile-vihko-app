@@ -147,11 +147,10 @@ const FormDatePickerComponent = (props: Props) => {
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
           textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
         />
-        <ButtonComponent
-          onPressFunction={() => clearDatePicker()}
+        <ButtonComponent onPressFunction={() => clearDatePicker()}
           title={undefined} height={40} width={45} buttonStyle={Bs.datePickerButton}
-          gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-          textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+          gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+          textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
         />
       </View>
       <Modal isVisible={modalVisibility} onBackButtonPress={() => setModalVisibility(false)}>
@@ -179,6 +178,12 @@ const FormDatePickerComponent = (props: Props) => {
                   value={currentValue !== '' ? new Date(parseDateFromDocumentToFullISO(createParseableTime())) : date}
                   mode='time'
                   onChange={onChangeTime}
+                  minimumDate={props.objectTitle.includes('dateEnd')
+                    ? (dateBegin ? new Date(parseDateFromDocumentToFullISO(dateBegin, props.pickerType)) : undefined)
+                    : undefined}
+                  maximumDate={props.objectTitle.includes('dateBegin')
+                    ? (dateEnd ? new Date(parseDateFromDocumentToFullISO(dateEnd, props.pickerType)) : undefined)
+                    : undefined}
                 />
               </View>
           }

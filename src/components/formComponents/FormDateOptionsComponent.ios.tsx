@@ -99,8 +99,8 @@ const FormDateOptionsComponent = (props: Props) => {
 
   const onLockIntoCurrentDate = () => {
     setCurrentValue(parseDateFromDateObjectToDocument(date))
-    onChangeDate({ type: 'set', nativeEvent: {} }, date)
-    onChangeTime({ type: 'set', nativeEvent: {} }, date)
+    onChangeDate({ type: 'set', nativeEvent: { timestamp: 1, utcOffset: 1 } }, date)
+    onChangeTime({ type: 'set', nativeEvent: { timestamp: 1, utcOffset: 1 } }, date)
     setValue(props.objectTitle, parseDateFromDateObjectToDocument(date))
     setSelected(true)
   }
@@ -137,7 +137,7 @@ const FormDateOptionsComponent = (props: Props) => {
     <View style={Cs.formInputContainer}>
       <Text>{props.title}</Text>
       {!selected ?
-        <View style={Cs.datePickerContainer}>
+        <View style={Cs.datePickerOptionsContainer}>
           <ButtonComponent onPressFunction={() => onLockIntoCurrentDate()}
             title={t('timestamp')} height={40} width={120} buttonStyle={Bs.timeButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
@@ -152,14 +152,14 @@ const FormDateOptionsComponent = (props: Props) => {
         :
         <View style={Cs.datePickerContainer}>
           <TextInput
-            style={Os.datePicker}
+            style={Os.dateOptionsPicker}
             value={parseDateFromDocumentToUI(currentValue)}
             editable={false}
           />
           <ButtonComponent onPressFunction={() => clearDateAndTime()}
             title={undefined} height={40} width={45} buttonStyle={Bs.iconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText} noMargin
+            textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
           />
         </View>
       }
