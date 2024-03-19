@@ -358,7 +358,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
 
       //replace events with modified list
       try {
-        dispatch(replaceObservationEventById(event, event.id))
+        await dispatch(replaceObservationEventById(event, event.id))
       } catch (error) {
         captureException(error)
         return Promise.reject(error)
