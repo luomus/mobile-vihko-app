@@ -2,7 +2,7 @@ import { LocationObject } from 'expo-location'
 import { PathPoint } from '../stores'
 import * as math from 'mathjs'
 import haversine from 'haversine-distance'
-import { MAX_VEL, MIN_DIST, Z_SCORE } from '../config/location'
+import { MAX_VEL, MIN_DIST, PATH_WINDOW_SIZE, Z_SCORE } from '../config/location'
 import { LineString, MultiLineString } from 'geojson'
 import moment from 'moment'
 import { lineStringConstructor } from './geoJSONHelper'
@@ -109,10 +109,14 @@ const gpsOutlierFilter = (path: PathPoint[], locations: LocationObject[]) => {
     }
 
     if (index !== 0) {
-      pathWindow = pathLength < 10 - pointsLength ? [...path, ...points] : [...path.slice(-10 + pointsLength), ...points]
+      pathWindow = pathLength < PATH_WINDOW_SIZE - pointsLength
+        ? [...path, ...points]
+        : [...path.slice(-PATH_WINDOW_SIZE + pointsLength), ...points]
       lastPoint = pathWindow[pathWindow.length - 1]
     } else {
-      pathWindow = pathLength < 10 - pointsLength ? [...path, ...points] : [...path.slice(-10 + pointsLength), ...points]
+      pathWindow = pathLength < PATH_WINDOW_SIZE - pointsLength
+        ? [...path, ...points]
+        : [...path.slice(-PATH_WINDOW_SIZE + pointsLength), ...points]
       lastPoint = pathWindow[pathWindow.length - 1]
     }
 

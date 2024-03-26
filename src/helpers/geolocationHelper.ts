@@ -6,11 +6,11 @@ import { Polygon } from 'geojson'
 import {
   LOCATION_BACKGROUND_TASK,
   LOCATION_ACCURACY,
-  LOCATION_MIN_T_INTERVALL,
-  LOCATION_MIN_X_INTERVALL,
+  LOCATION_MIN_T_INTERVAL,
+  LOCATION_MIN_X_INTERVAL,
   PATH_ACCURACY,
-  PATH_MIN_T_INTERVALL,
-  PATH_MIN_X_INTERVALL
+  PATH_MIN_T_INTERVAL,
+  PATH_MIN_X_INTERVAL
 } from '../config/location'
 import i18n from '../languages/i18n'
 import { captureException } from './sentry'
@@ -122,8 +122,8 @@ export const watchPositionAsync = async (updateLocation: (location: LocationObje
   try {
     positionWatcher = await Location.watchPositionAsync({
       accuracy: LOCATION_ACCURACY,
-      distanceInterval: LOCATION_MIN_X_INTERVALL,
-      timeInterval: LOCATION_MIN_T_INTERVALL,
+      distanceInterval: LOCATION_MIN_X_INTERVAL,
+      timeInterval: LOCATION_MIN_T_INTERVAL,
     }, (location) => {
       return updateLocation(location)
     })
@@ -138,8 +138,8 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
     try {
       await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
         accuracy: PATH_ACCURACY,
-        distanceInterval: PATH_MIN_X_INTERVALL,
-        timeInterval: PATH_MIN_T_INTERVALL,
+        distanceInterval: PATH_MIN_X_INTERVAL,
+        timeInterval: PATH_MIN_T_INTERVAL,
         foregroundService: {
           notificationTitle: title,
           notificationBody: body,
