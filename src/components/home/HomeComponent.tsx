@@ -145,7 +145,7 @@ const HomeComponent = (props: Props) => {
 
     loadObservationEvents()
     initSentEvents()
-  }, [observing, observationEvent.events.length])
+  }, [observing])
 
   useEffect(() => {
     //set first zone in array as selected zone to avoid undefined values

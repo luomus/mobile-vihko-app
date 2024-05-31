@@ -21,10 +21,6 @@ const TextStyles = StyleSheet.create({
     alignSelf: 'stretch',
     padding: 10
   },
-  languageAndAtlasCodeButtonText: {
-    padding: 8,
-    fontSize: 15
-  },
   mapToListButtonText: {
     padding: 5,
     fontSize: 15
@@ -42,7 +38,7 @@ const TextStyles = StyleSheet.create({
     padding: 8,
     color: Colors.neutral9
   },
-  languageButtonText: {
+  selectionButtonText: {
     padding: 5,
     alignSelf: 'center',
     fontSize: 15,

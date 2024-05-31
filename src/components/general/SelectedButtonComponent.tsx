@@ -1,7 +1,5 @@
 import React from 'react'
 import { StyleProp, Text, TextStyle, TouchableOpacity } from 'react-native'
-// @ts-ignore
-import InsetShadow from 'react-native-inset-shadow'
 
 type Props = {
   onPress: () => void,
@@ -18,11 +16,12 @@ const SelectedButtonComponent = (props: Props) => {
   return (
     <TouchableOpacity
       onPress={() => { props.onPress() }} activeOpacity={0.8}
-      style={[{ width: props.width, height: props.height, borderRadius: 5, backgroundColor: props.color },
-        props.noMargin ? null : { margin: 5 }]}>
-      <InsetShadow shadowRadius={5} shadowOffset={5} shadowOpacity={0.9} containerStyle={{ borderRadius: 5, alignItems: 'center' }}>
-        <Text style={props.textStyle}>{props.title}</Text>
-      </InsetShadow>
+      style={[
+        { height: props.height, width: props.width, backgroundColor: props.color, borderRadius: 5, paddingTop: 4 },
+        props.noMargin ? null : { margin: 5 }
+      ]}
+    >
+      <Text style={[props.textStyle, { color: props.textColor }]}>{props.title}</Text>
     </TouchableOpacity>
   )
 }

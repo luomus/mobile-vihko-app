@@ -58,7 +58,6 @@
     "react-native-autocomplete-input": "^5.3.2",
     "react-native-dotenv": "^3.3.1",
     "react-native-elements": "^3.4.3",
-    "react-native-inset-shadow": "^1.0.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-logs": "^3.0.4",
     "react-native-maps": "1.14.0",

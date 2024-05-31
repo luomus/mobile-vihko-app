@@ -63,7 +63,7 @@ const FormAtlasCodeComponent = (props: Props) => {
                 onPress={() => null}
                 title={atlasCode} height={40} width={80}
                 color={Colors.unavailableButton}
-                textStyle={Ts.languageAndAtlasCodeButtonText}
+                textStyle={Ts.selectionButtonText}
                 textColor={Colors.darkText} noMargin
               />
               :

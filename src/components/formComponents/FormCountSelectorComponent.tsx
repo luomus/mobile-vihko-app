@@ -79,7 +79,7 @@ const FormCountSelectorComponent = (props: Props) => {
                 onPress={() => null}
                 title={element.title} height={40} width={90}
                 color={Colors.unavailableButton}
-                textStyle={Ts.languageAndAtlasCodeButtonText}
+                textStyle={Ts.selectionButtonText}
                 textColor={Colors.darkText}
               />
               :
@@ -89,7 +89,7 @@ const FormCountSelectorComponent = (props: Props) => {
                 gradientColorStart={element.color}
                 gradientColorEnd={element.color}
                 shadowColor={Colors.neutralShadow}
-                textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+                textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
                 contentColor={Colors.blackText}
               />
           }

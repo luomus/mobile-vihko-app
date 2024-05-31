@@ -138,9 +138,9 @@ const UserModalComponent = (props: Props) => {
             <SelectedButtonComponent
               onPress={setLanguageHelper('fi')}
               title={'FI'} height={40} width={80}
-              color={Colors.neutral3}
-              textStyle={Ts.languageAndAtlasCodeButtonText}
-              textColor={Colors.darkText}
+              color={Colors.neutral5}
+              textStyle={Ts.selectionButtonText}
+              textColor={Colors.blackText}
             />
             :
             <ButtonComponent
@@ -149,7 +149,7 @@ const UserModalComponent = (props: Props) => {
               gradientColorStart={i18n.language === 'fi' ? Colors.primaryButton1 : Colors.neutralButton}
               gradientColorEnd={i18n.language === 'fi' ? Colors.primaryButton2 : Colors.neutralButton}
               shadowColor={i18n.language === 'fi' ? Colors.primaryShadow : Colors.neutralShadow}
-              textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+              textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
               contentColor={i18n.language === 'fi' ? Colors.whiteText : Colors.darkText}
             />
           }
@@ -157,9 +157,9 @@ const UserModalComponent = (props: Props) => {
             <SelectedButtonComponent
               onPress={setLanguageHelper('sv')}
               title={'SV'} height={40} width={80}
-              color={Colors.neutral3}
-              textStyle={Ts.languageAndAtlasCodeButtonText}
-              textColor={Colors.darkText}
+              color={Colors.neutral5}
+              textStyle={Ts.selectionButtonText}
+              textColor={Colors.blackText}
             />
             :
             <ButtonComponent
@@ -168,7 +168,7 @@ const UserModalComponent = (props: Props) => {
               gradientColorStart={i18n.language === 'sv' ? Colors.primaryButton1 : Colors.neutralButton}
               gradientColorEnd={i18n.language === 'sv' ? Colors.primaryButton2 : Colors.neutralButton}
               shadowColor={i18n.language === 'sv' ? Colors.primaryShadow : Colors.neutralShadow}
-              textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+              textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
               contentColor={i18n.language === 'sv' ? Colors.whiteText : Colors.darkText}
             />
           }
@@ -176,9 +176,9 @@ const UserModalComponent = (props: Props) => {
             <SelectedButtonComponent
               onPress={setLanguageHelper('en')}
               title={'EN'} height={40} width={80}
-              color={Colors.neutral3}
-              textStyle={Ts.languageAndAtlasCodeButtonText}
-              textColor={Colors.darkText}
+              color={Colors.neutral5}
+              textStyle={Ts.selectionButtonText}
+              textColor={Colors.blackText}
             />
             :
             <ButtonComponent
@@ -187,7 +187,7 @@ const UserModalComponent = (props: Props) => {
               gradientColorStart={i18n.language === 'en' ? Colors.primaryButton1 : Colors.neutralButton}
               gradientColorEnd={i18n.language === 'en' ? Colors.primaryButton2 : Colors.neutralButton}
               shadowColor={i18n.language === 'en' ? Colors.primaryShadow : Colors.neutralShadow}
-              textStyle={Ts.languageButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+              textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
               contentColor={i18n.language === 'en' ? Colors.whiteText : Colors.darkText}
             />
           }
