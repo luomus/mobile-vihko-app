@@ -18,8 +18,13 @@ export const postTmpToken = async (tmpToken: string) => {
     'tmpToken': tmpToken,
     'access_token': ACCESS_TOKEN
   }
+  //headers are required here to prevent 400 error until new API is finished
+  const headers = {
+    'Accept': 'application/json, text/plain, */*',
+    'Content-Type': undefined
+  }
   try {
-    const result = await post(pollLoginUrl, null, { params })
+    const result = await post(pollLoginUrl, null, { params, headers })
     //successfully received the token
     return result.data
   } catch (error) {

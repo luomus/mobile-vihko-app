@@ -12,7 +12,7 @@ export const LOCATION_MIN_X_INTERVAL = 5
 export const PATH_ACCURACY = 5
 
 //path minimum intervals of update
-export const PATH_MIN_T_INTERVAL = 500
+export const PATH_MIN_T_INTERVAL = 5000
 export const PATH_MIN_X_INTERVAL = 30
 
 //number of updates before path is added to observation event and saved to async
