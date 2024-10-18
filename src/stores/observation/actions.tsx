@@ -279,7 +279,6 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
     }
 
     try {
-      console.log('Upload', JSON.stringify(eventWithLocality, null, 2))
       await postObservationEvent(eventWithLocality, credentials)
     } catch (error: any) {
       if (error.response?.status.toString() === '422') {

@@ -83,7 +83,7 @@ const LoginComponent = (props: Props) => {
   //check if user has previously logged in, redirect to home screen if is
   const loadData = async () => {
     setLoggingIn(true)
-    await storageService.clear()
+
     try {
       await dispatch(initLocalCredentials()).unwrap()
     } catch (error: any) {
