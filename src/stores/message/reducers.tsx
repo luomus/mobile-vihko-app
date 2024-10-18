@@ -1,22 +1,23 @@
-import {
-  MessageType,
-  messageActionTypes,
-  CLEAR_MESSAGE_STATE,
-  POP_MESSAGE_STATE,
-  SET_MESSAGE_STATE
-} from './types'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { MessageType } from './types'
 
-const initState: MessageType[] = []
+const initialState: MessageType[] = []
 
-export const messageReducer = (state: MessageType[] = initState, action: messageActionTypes) => {
-  switch (action.type) {
-    case CLEAR_MESSAGE_STATE:
-      return initState
-    case POP_MESSAGE_STATE:
+const messageSlice = createSlice({
+  name: 'message',
+  initialState,
+  reducers: {
+    clearMessageState() {
+      return initialState
+    },
+    popMessageState(state) {
       return state.splice(1)
-    case SET_MESSAGE_STATE:
+    },
+    setMessageState(state, action: PayloadAction<MessageType>) {
       return state.concat(action.payload)
-    default:
-      return state
+    }
   }
-}
+})
+
+export const { clearMessageState, popMessageState, setMessageState } = messageSlice.actions
+export default messageSlice.reducer

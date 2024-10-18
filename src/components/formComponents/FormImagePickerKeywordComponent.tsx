@@ -4,7 +4,7 @@ import { View, Text, ImageBackground, ScrollView } from 'react-native'
 import { Icon } from 'react-native-elements'
 import RadioForm from 'react-native-simple-radio-button'
 import { useTranslation } from 'react-i18next'
-import { rootState, DispatchType, setMessageState } from '../../stores'
+import { RootState, DispatchType, setMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
@@ -36,7 +36,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
   const keywords: Record<string, any> = props.params
   const localized: string[] = props.params[props.lang]
 
-  const credentials = useSelector((state: rootState) => state.credentials)
+  const credentials = useSelector((state: RootState) => state.credentials)
 
   const dispatch: DispatchType = useDispatch()
 

@@ -3,7 +3,7 @@ import { ActivityIndicator, NativeSyntheticEvent, Platform, Text, TextInput, Tex
 import { useSelector } from 'react-redux'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import Autocomplete from 'react-native-autocomplete-input'
 import Cs from '../../styles/ContainerStyles'
@@ -39,7 +39,7 @@ const FormAutocompleteComponent = (props: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [unitID, setUnitID] = useState<string>('')
 
-  const observationId = useSelector((state: rootState) => state.observationId)
+  const observationId = useSelector((state: RootState) => state.observationId)
 
   const { t } = useTranslation()
   const { register, unregister, setValue, formState, clearErrors, setError, setFocus } = useFormContext()
@@ -73,9 +73,7 @@ const FormAutocompleteComponent = (props: Props) => {
   //set focus into the taxon autocomplete's input field so user can start typing immediately
   useEffect(() => {
     if (valueField === 'identifications_0_taxon' || valueField === 'identifications_0_taxonVerbatim') {
-      setTimeout(() => { //does not work without the timeout
-        setFocus(valueField)
-      }, 500)
+      setFocus(valueField)
     }
   }, [setFocus])
 

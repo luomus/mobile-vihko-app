@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -51,7 +51,7 @@ const FormDateOptionsComponent = (props: Props) => {
   const dateBegin = watch('gatheringEvent_dateBegin')
   const dateEnd = watch('gatheringEvent_dateEnd')
 
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
 
   const { t } = useTranslation()
 

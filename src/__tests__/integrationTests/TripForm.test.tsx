@@ -28,8 +28,8 @@ const initializeComponent = async (store:any) => {
   }
   await store.dispatch(setCredentials(credentials))
 
-  await store.dispatch(switchSchema('JX.519', i18n.language))
-  await store.dispatch(beginObservationEvent(onPressMap, fi['gps notification title'], fi['gps notification body']))
+  await store.dispatch(switchSchema({ formID: 'JX.519', lang: i18n.language }))
+  await store.dispatch(beginObservationEvent({ onPressMap, title: fi['gps notification title'], body: fi['gps notification body'] }))
 }
 
 const testPressLocation = {

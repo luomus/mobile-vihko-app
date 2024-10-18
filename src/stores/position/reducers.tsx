@@ -1,85 +1,109 @@
-import {
-  LocationType,
-  PathType,
-  locationActionTypes,
-  CLEAR_LOCATION,
-  UPDATE_LOCATION,
-  SET_FIRST_LOCATION,
-  CLEAR_PATH,
-  SET_PATH,
-  GridType,
-  SET_GRID,
-  CLEAR_GRID,
-  SET_COORDS,
-  SET_PAUSE,
-  SET_OUTSIDE_BORDERS,
-  SET_TRACKING,
-} from './types'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { LocationType, PathType, GridType } from './types'
+import { appendPath } from '..'
 
-const firstLocationReducer = (state: Array<number> = [60.192059, 	24.945831], action: locationActionTypes) => {
-  switch (action.type) {
-    case SET_FIRST_LOCATION:
+const pathInitialState: PathType = [[]]
+
+const positionInitialState: LocationType = null
+
+const gridInitialState: GridType = null
+
+const firstLocationSlice = createSlice({
+  name: 'firstLocation',
+  initialState: [60.192059, 24.945831],
+  reducers: {
+    setFirstLocation(state, action: PayloadAction<Array<number>>) {
       return action.payload
-    default:
-      return state
+    }
   }
-}
+})
 
-const pathReducer = (state: PathType = [[]], action: locationActionTypes) => {
-  switch (action.type) {
-    case SET_PATH:
+const pathSlice = createSlice({
+  name: 'path',
+  initialState: pathInitialState,
+  reducers: {
+    clearPath() {
+      return pathInitialState
+    },
+    setPath(state, action: PayloadAction<PathType>) {
       return action.payload
-    case CLEAR_PATH:
-      return [[]]
-    default:
-      return state
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(appendPath.fulfilled, () => {})
   }
-}
+})
 
-const positionReducer = (state: LocationType = null, action: locationActionTypes) => {
-  switch (action.type) {
-    case UPDATE_LOCATION:
-      return action.payload
-    case CLEAR_LOCATION:
+const positionSlice = createSlice({
+  name: 'position',
+  initialState: positionInitialState as LocationType,
+  reducers: {
+    clearLocation() {
       return null
-    default:
-      return state
-  }
-}
-
-const gridReducer = (state: GridType = null, action: locationActionTypes) => {
-  switch (action.type) {
-    case SET_GRID:
+    },
+    updateLocation(state: LocationType, action: PayloadAction<LocationType>) {
       return action.payload
-    case CLEAR_GRID:
-      return null
-    case SET_COORDS:
-      return {
-        ...state,
-        ...action.payload
-      }
-    case SET_PAUSE:
-      return {
-        ...state,
-        pauseGridCheck: action.payload
-      }
-    case SET_OUTSIDE_BORDERS:
-      return {
-        ...state,
-        outsideBorders: action.payload
-      }
-    default:
-      return state
+    }
   }
-}
+})
 
-const trackingReducer = (state = true, action: locationActionTypes) => {
-  switch (action.type) {
-    case SET_TRACKING:
+const gridSlice = createSlice({
+  name: 'grid',
+  initialState: gridInitialState as GridType,
+  reducers: {
+    clearGrid() {
+      return gridInitialState
+    },
+    setGrid(state: GridType, action: PayloadAction<GridType>) {
       return action.payload
-    default:
-      return state
+    },
+    setGridCoords(state: GridType, action: PayloadAction<{ n: number, e: number }>) {
+      if (state !== null) {
+        return {
+          ...state,
+          n: action.payload.n,
+          e: action.payload.e
+        }
+      }
+    },
+    setGridPause(state: GridType, action: PayloadAction<boolean>) {
+      if (state !== null) {
+        return {
+          ...state,
+          pauseGridCheck: action.payload
+        }
+      }
+    },
+    setOutsideBorders(state: GridType, action: PayloadAction<'false' | 'pending' | 'true'>) {
+      if (state !== null) {
+        return {
+          ...state,
+          outsideBorders: action.payload
+        }
+      }
+    }
   }
-}
+})
 
-export { firstLocationReducer, pathReducer, positionReducer, gridReducer, trackingReducer }
+const trackingSlice = createSlice({
+  name: 'tracking',
+  initialState: true,
+  reducers: {
+    setTracking(state, action: PayloadAction<boolean>) {
+      return action.payload
+    }
+  }
+})
+
+export const { setFirstLocation } = firstLocationSlice.actions
+export const { clearPath, setPath } = pathSlice.actions
+export const { clearLocation, updateLocation } = positionSlice.actions
+export const { clearGrid, setGrid, setGridCoords, setGridPause, setOutsideBorders } = gridSlice.actions
+export const { setTracking } = trackingSlice.actions
+
+export const firstLocationReducer = firstLocationSlice.reducer
+export const pathReducer = pathSlice.reducer
+export const positionReducer = positionSlice.reducer
+export const gridReducer = gridSlice.reducer
+export const trackingReducer = trackingSlice.reducer

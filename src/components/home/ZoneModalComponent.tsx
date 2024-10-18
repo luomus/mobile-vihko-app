@@ -5,7 +5,7 @@ import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
-  rootState,
+  RootState,
   DispatchType,
   setCurrentObservationZone,
   initObservationZones,
@@ -55,9 +55,9 @@ const ZoneModalComponent = (props: Props) => {
     }
   >()
 
-  const observationZone = useSelector((state: rootState) => state.observationZone)
-  const schema = useSelector((state: rootState) => state.schema)
-  const tracking = useSelector((state: rootState) => state.tracking)
+  const observationZone = useSelector((state: RootState) => state.observationZone)
+  const schema = useSelector((state: RootState) => state.schema)
+  const tracking = useSelector((state: RootState) => state.tracking)
 
   const { t } = useTranslation()
 
@@ -84,7 +84,7 @@ const ZoneModalComponent = (props: Props) => {
     }
 
     const initLolifeSchema = async () => {
-      await dispatch(switchSchema(forms.lolife, i18n.language))
+      await dispatch(switchSchema({ formID: forms.lolife, lang: i18n.language })).unwrap()
       setInitializing(false)
     }
 
@@ -163,7 +163,7 @@ const ZoneModalComponent = (props: Props) => {
   const refreshZonesList = async () => {
     try {
       props.setLoading(true)
-      await dispatch(initObservationZones())
+      await dispatch(initObservationZones()).unwrap()
     } catch (error: any) {
       captureException(error)
       showError(error.message)

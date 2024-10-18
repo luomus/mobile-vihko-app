@@ -1,16 +1,6 @@
 import 'dotenv/config'
 
 module.exports = ({ config }) => {
-
-  const sentry = {
-    'file': 'sentry-expo/upload-sourcemaps',
-    'config': {
-      'organization': 'luomus',
-      'project': 'mobiilivihko'
-    }
-  }
-  config.hooks.postPublish.push(sentry)
-
   return {
     ...config,
     android: {

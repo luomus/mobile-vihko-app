@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
-  rootState,
+  RootState,
   DispatchType,
   PathType,
   setMessageState,
@@ -42,13 +42,13 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const credentials = useSelector((state: rootState) => state.credentials)
-  const grid = useSelector((state: rootState) => state.grid)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const path = useSelector((state: rootState) => state.path)
-  const schema = useSelector((state: rootState) => state.schema)
-  const singleObservation = useSelector((state: rootState) => state.singleObservation)
-  const tracking = useSelector((state: rootState) => state.tracking)
+  const credentials = useSelector((state: RootState) => state.credentials)
+  const grid = useSelector((state: RootState) => state.grid)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const path = useSelector((state: RootState) => state.path)
+  const schema = useSelector((state: RootState) => state.schema)
+  const singleObservation = useSelector((state: RootState) => state.singleObservation)
+  const tracking = useSelector((state: RootState) => state.tracking)
 
   const stopObserving = () => {
     dispatch(setMessageState({
@@ -65,10 +65,10 @@ const ExtendedNavBarComponent = (props: Props) => {
           //save the path before stopping
           try {
             const location: LocationType = await getCurrentLocation(true)
-            await dispatch(appendPath([location]))
+            await dispatch(appendPath({ locations: [location] })).unwrap()
 
             if (path) {
-              await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+              await dispatch(eventPathUpdate({ lineStringPath: pathToLineStringConstructor(path) })).unwrap()
             }
           } catch (error: any) {
             showError(error.message + ' ' + t('latest path point missing'))
@@ -94,10 +94,10 @@ const ExtendedNavBarComponent = (props: Props) => {
         if (JSON.stringify(path) !== JSON.stringify([[]])) {
           try {
             const location: LocationType = await getCurrentLocation(true)
-            await dispatch(appendPath([location]))
+            await dispatch(appendPath({ locations: [location] })).unwrap()
 
             if (path) {
-              await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+              await dispatch(eventPathUpdate({ lineStringPath: pathToLineStringConstructor(path) })).unwrap()
             }
           } catch (error: any) {
             showError(error.message + ' ' + t('latest path point missing'))
@@ -132,7 +132,7 @@ const ExtendedNavBarComponent = (props: Props) => {
           await watchBackgroundLocationAsync(title, body)
         } catch (error: any) {
           log.error({
-            location: '/stores/shared/actions.tsx continueObservationEvent()/watchLocationAsync()',
+            location: '/components/general/ExtendedNavBarComponent.tsx unpauseObserving()/watchBackgroundLocationAsync()',
             error: error,
             user_id: credentials.user ? credentials.user.id : 'No user id.'
           })
@@ -150,8 +150,8 @@ const ExtendedNavBarComponent = (props: Props) => {
 
   const deleteEvent = async () => {
     props.setLoading(true)
-    await dispatch(finishSingleObservation())
-    await dispatch(deleteObservationEvent(observationEvent?.events?.[observationEvent?.events?.length - 1].id))
+    await dispatch(finishSingleObservation()).unwrap()
+    await dispatch(deleteObservationEvent({ eventId: observationEvent?.events?.[observationEvent?.events?.length - 1].id })).unwrap()
     if (props.onPressHome !== undefined) props.onPressHome()
     props.setLoading(false)
   }

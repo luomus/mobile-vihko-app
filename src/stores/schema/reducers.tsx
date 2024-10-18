@@ -1,8 +1,6 @@
-import {
-  schemaActionTypes,
-  SchemaType,
-  SET_SCHEMA
-} from './types'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { SchemaType } from './types'
+import { initSchema, switchSchema } from './actions'
 
 const initSchemaState: SchemaType = {
   fi: null,
@@ -11,17 +9,25 @@ const initSchemaState: SchemaType = {
   formID: ''
 }
 
-const schemaReducer = (state = initSchemaState, action : schemaActionTypes) => {
-  switch (action.type) {
-    case SET_SCHEMA:
-      return {
-        ...action.payload,
-      }
-    default:
-      return state
+const schemaSlice = createSlice({
+  name: 'schema',
+  initialState: initSchemaState,
+  reducers: {
+    setSchema(state, action: PayloadAction<SchemaType>) {
+      if (action.payload.fi) state.fi = action.payload.fi
+      if (action.payload.en) state.en = action.payload.en
+      if (action.payload.sv) state.sv = action.payload.sv
+      if (action.payload.formID) state.formID = action.payload.formID
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(initSchema.fulfilled, () => { })
+      .addCase(initSchema.rejected, () => { })
+      .addCase(switchSchema.fulfilled, () => { })
+      .addCase(switchSchema.rejected, () => { })
   }
-}
+})
 
-export {
-  schemaReducer
-}
+export const { setSchema } = schemaSlice.actions
+export const schemaReducer = schemaSlice.reducer

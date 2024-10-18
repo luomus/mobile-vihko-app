@@ -1,10 +1,4 @@
-import {
-  userActionTypes,
-  SET_CREDENTIALS,
-  CLEAR_CREDENTIALS,
-  CredentialsType,
-} from './types'
-import { ThunkAction } from 'redux-thunk'
+import { clearCredentials, RootState, setCredentials } from '../'
 import userService, { getProfile, pollUserLogin } from '../../services/userService'
 import { getFormPermissions } from '../../services/formPermissionService'
 import storageService from '../../services/storageService'
@@ -12,22 +6,28 @@ import i18n from '../../languages/i18n'
 import { stopLocationAsync } from '../../helpers/geolocationHelper'
 import { log } from '../../helpers/logger'
 import { captureException } from '../../helpers/sentry'
+import { CredentialsType } from './types'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promise<any>, any, void, userActionTypes> => {
-  return async dispatch => {
+interface loginUserParams {
+  tmpToken: string,
+  setCanceler: React.Dispatch<React.SetStateAction<(() => void | undefined) | undefined>>
+}
 
+export const loginUser = createAsyncThunk<void, loginUserParams, { rejectValue: Record<string, any> }>(
+  'credentials/loginUser',
+  async ({ tmpToken, setCanceler }, { dispatch, rejectWithValue }) => {
     let credentials: CredentialsType
 
     try {
       //start polling for credentials from server, error thrown when timeout of 180 seconds reached,
       //else dispatch credetials to store
       credentials = await pollUserLogin(tmpToken, setCanceler)
-      dispatch(setCredentials(credentials))
 
       //in case of error, credentials stay null
     } catch (error: any) {
       if (error.canceled) {
-        return Promise.reject({ canceled: true })
+        return rejectWithValue({ canceled: true })
       }
 
       if (error.timeout) {
@@ -35,7 +35,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
           location: '/stores/user/actions.tsx loginUser()',
           error: error
         })
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'fatal',
           message: i18n.t('login timed out'),
           user_id: 'undefined'
@@ -43,14 +43,14 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
       }
 
       if (error.message?.includes('INVALID TOKEN')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'low',
           message: i18n.t('user token has expired')
         })
       }
 
       if (error.message?.includes('WRONG SOURCE')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'fatal',
           message: i18n.t('person token is given for a different app')
         })
@@ -63,7 +63,7 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
         error: error,
         user_id: 'undefined'
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'fatal',
         message: `${i18n.t('failed to load credentials from server')} ${error.message}`
       })
@@ -75,25 +75,65 @@ export const loginUser = (tmpToken: string, setCanceler: any): ThunkAction<Promi
 
       //if asyncstorage fails, set error as such, allows user to continue anyway
     } catch (locError) {
-      captureException(locError)
+      // captureException(locError)
       log.error({
         location: '/stores/user/actions.tsx loginUser()',
         error: locError,
         user_id: 'undefined'
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('failed to save credentials locally')
       })
     }
 
-    return Promise.resolve()
+    if (!credentials) {
+      return rejectWithValue({ message: 'no credentials' })
+    } else {
+      dispatch(setCredentials(credentials))
+    }
   }
-}
+)
 
-export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials } = getState()
+export const initLocalCredentials = createAsyncThunk<void, undefined, { rejectValue: Record<string, any> }>(
+  'credentials/initLocalCredentials',
+  async (_, { dispatch, rejectWithValue }) => {
+    let localCredentials
+
+    try {
+      localCredentials = await storageService.fetch('credentials')
+    } catch (error) {
+      captureException(error)
+      log.error({
+        location: '/stores/user/actions.tsx initLocalCredentials()',
+        error: error,
+        user_id: 'undefined'
+      })
+      return rejectWithValue({
+        severity: 'high',
+        message: i18n.t('failed to load credentials from local')
+      })
+    }
+
+    if (!localCredentials) {
+      return rejectWithValue({ message: 'no local credentials' })
+    } else {
+      dispatch(setCredentials(localCredentials))
+    }
+  }
+)
+
+export const getPermissions = createAsyncThunk<void, undefined, { rejectValue: Record<string, any> }>(
+  'credentials/getPermissions',
+  async (_, { dispatch, getState, rejectWithValue }) => {
+    const { credentials } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     let permissionsArr = []
 
@@ -109,7 +149,7 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('failed to load permissions')} ${error.message}`
       })
@@ -119,8 +159,6 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
       ...credentials,
       permissions: permissionsArr
     }
-
-    dispatch(setCredentials(newCredentials))
 
     //try to save credentials to asyncstorage to remember logged in user after app shutdown
     try {
@@ -134,19 +172,31 @@ export const getPermissions = (): ThunkAction<Promise<any>, any, void, userActio
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('failed to save credentials locally')
       })
     }
 
-    return Promise.resolve()
+    if (!newCredentials) {
+      return rejectWithValue({ message: 'no credentials' })
+    } else {
+      dispatch(setCredentials(newCredentials))
+    }
   }
-}
+)
 
-export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials } = getState()
+export const getMetadata = createAsyncThunk<void, undefined, { rejectValue: Record<string, any> }>(
+  'credentials/getMetadata',
+  async (_, { dispatch, getState, rejectWithValue }) => {
+    const { credentials } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     let metadata
 
@@ -162,7 +212,7 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('failed to load metadata')} ${error.message}`
       })
@@ -172,8 +222,6 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
       ...credentials,
       metadata
     }
-
-    dispatch(setCredentials(newCredentials))
 
     //try to save credentials to asyncstorage to remember logged in user after app shutdown
     try {
@@ -193,99 +241,65 @@ export const getMetadata = (): ThunkAction<Promise<any>, any, void, userActionTy
       })
     }
 
-    return Promise.resolve()
+    if (!newCredentials) {
+      return rejectWithValue({ message: 'no credentials' })
+    } else {
+      dispatch(setCredentials(newCredentials))
+    }
   }
-}
+)
 
-export const logoutUser = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observing } = getState()
+export const logoutUser = createAsyncThunk<void, undefined, { rejectValue: Record<string, any> }>(
+  'credentials/logoutUser',
+  async (_, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observing } = getState() as RootState
 
     const credentialsCopy = credentials
+
+    if (credentialsCopy.token === null || credentialsCopy.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     //stop recording when logging out
     if (observing) {
       await stopLocationAsync()
     }
 
-    //clear credentials
     try {
       storageService.remove('credentials')
-      dispatch(clearCredentials())
-
     } catch (error) {
-      captureException(error)
-      log.error({
-        location: '/stores/user/actions.tsx logoutUser()',
-        error: error,
-        user_id: credentials.user.id
-      })
-      return Promise.reject({
-        severity: 'low',
-        message: i18n.t('failed to remove credentials from local storage')
-      })
-    }
-
-    if (!credentialsCopy.token) return Promise.resolve // don't try to log out if there's no token
-
-    //logout from the API
-    try {
-      await userService.logout(credentialsCopy)
-
-    } catch (error: any) {
       captureException(error)
       log.error({
         location: '/stores/user/actions.tsx logoutUser()',
         error: error,
         user_id: credentialsCopy.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
-        message: `${i18n.t('failed to logout from laji.fi server')} ${error.message}`
+        message: i18n.t('failed to remove credentials from local storage')
       })
     }
 
-    return Promise.resolve
-  }
-}
-
-export const initLocalCredentials = (): ThunkAction<Promise<any>, any, void, userActionTypes> => {
-  return async dispatch => {
-    let credentials
-
-    try {
-      credentials = await storageService.fetch('credentials')
-
-      //managed to fetch credentials from storage, but user was not logged in
-      if (!credentials) {
-        return Promise.reject()
+    if (credentialsCopy.token) {
+      try {
+        await userService.logout(credentialsCopy)
+      } catch (error: any) {
+        captureException(error)
+        log.error({
+          location: '/stores/user/actions.tsx logoutUser()',
+          error: error,
+          user_id: credentialsCopy.user.id
+        })
+        return rejectWithValue({
+          severity: 'low',
+          message: `${i18n.t('failed to logout from laji.fi server')} ${error.message}`
+        })
       }
-
-      //failed to fetch credentials from storage
-    } catch (error) {
-      captureException(error)
-      log.error({
-        location: '/stores/user/actions.tsx initLocalCredentials()',
-        error: error,
-        user_id: 'undefined'
-      })
-      return Promise.reject({
-        severity: 'high',
-        message: i18n.t('failed to load credentials from local')
-      })
     }
 
-    dispatch(setCredentials(credentials))
-
-    return Promise.resolve()
+    dispatch(clearCredentials())
   }
-}
-
-export const setCredentials = (credentials: CredentialsType): userActionTypes => ({
-  type: SET_CREDENTIALS,
-  payload: credentials,
-})
-
-export const clearCredentials = (): userActionTypes => ({
-  type: CLEAR_CREDENTIALS
-})
+)

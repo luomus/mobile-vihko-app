@@ -4,11 +4,11 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
-import { set, get, merge, mergeWith, omit } from 'lodash'
+import { set, get, merge, mergeWith, omit, cloneDeep } from 'lodash'
 import moment from 'moment'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
-  rootState,
+  RootState,
   DispatchType,
   finishObservationEvent,
   replaceObservationEventById,
@@ -60,7 +60,7 @@ type Props = {
 
 const DocumentComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
-  const [event, setEvent] = useState<Record<string, any> | undefined>(undefined)
+  const [eventState, setEventState] = useState<Record<string, any> | undefined>(undefined)
   const [form, setForm] = useState<Array<React.JSX.Element | undefined> | null>(null)
   const [saving, setSaving] = useState<boolean>(false)
   //for react-hook-form
@@ -75,13 +75,13 @@ const DocumentComponent = (props: Props) => {
   //reference for scrollView
   const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
 
-  const editing = useSelector((state: rootState) => state.editing)
-  const grid = useSelector((state: rootState) => state.grid)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const observationId = useSelector((state: rootState) => state.observationId)
-  const observationEventId = useSelector((state: rootState) => state.observationEventId)
-  const path = useSelector((state: rootState) => state.path)
-  const schema = useSelector((state: rootState) => state.schema)
+  const editing = useSelector((state: RootState) => state.editing)
+  const grid = useSelector((state: RootState) => state.grid)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const observationId = useSelector((state: RootState) => state.observationId)
+  const observationEventId = useSelector((state: RootState) => state.observationEventId)
+  const path = useSelector((state: RootState) => state.path)
+  const schema = useSelector((state: RootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -110,43 +110,43 @@ const DocumentComponent = (props: Props) => {
     })
 
     if (searchedEvent) {
-      setEvent(searchedEvent)
+      setEventState(searchedEvent)
     }
   }
 
   const onUninitalizedForm = () => {
-    if (event) {
+    if (eventState) {
       const lang = i18n.language
       const eventSchema = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
       //set the form
       if (schema.formID === forms.lolife) {
-        initForm(setForm, event, null, eventSchema, null, null, null, observationEventFields, overrideObservationEventFields, null, null, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, observationEventFields, overrideObservationEventFields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.tripForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.birdAtlas) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, MHL117ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, MHL117ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
-        initForm(setForm, event, null, eventSchema, null, null, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.dragonflyForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL932ObservationEventFields, overrideMHL932ObservationEventFields, null, MHL932ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL932ObservationEventFields, overrideMHL932ObservationEventFields, null, MHL932ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.butterflyForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1040ObservationEventFields, overrideMHL1040ObservationEventFields, null, MHL1040ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1040ObservationEventFields, overrideMHL1040ObservationEventFields, null, MHL1040ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.largeFlowersForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1042ObservationEventFields, overrideMHL1042ObservationEventFields, null, MHL1042ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1042ObservationEventFields, overrideMHL1042ObservationEventFields, null, MHL1042ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.mothForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1043ObservationEventFields, overrideMHL1043ObservationEventFields, null, MHL1043ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1043ObservationEventFields, overrideMHL1043ObservationEventFields, null, MHL1043ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.bumblebeeForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1044ObservationEventFields, overrideMHL1044ObservationEventFields, null, MHL1044ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1044ObservationEventFields, overrideMHL1044ObservationEventFields, null, MHL1044ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.herpForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, null, MHL1045ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, null, MHL1045ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.subarcticForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, null, MHL1046ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, null, MHL1046ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.macrolichenForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, null, MHL1047ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, null, MHL1047ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.bracketFungiForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, null, MHL1048ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, null, MHL1048ObservationEventFieldOrder, lang, scrollViewRef)
       } else if (schema.formID === forms.practicalFungiForm) {
-        initForm(setForm, event, null, eventSchema, null, null, null, MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, null, MHL1062ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, null, MHL1062ObservationEventFieldOrder, lang, scrollViewRef)
       }
     }
   }
@@ -157,18 +157,26 @@ const DocumentComponent = (props: Props) => {
   }
 
   const onSubmit = async (data: { [key: string]: any }, sendMode: string) => {
-    await submitDocument(data)
+    const eventCopy = cloneDeep(eventState)
+    if (!eventCopy) return
+
+    const eventWithGeometry = await submitDocument(data, eventCopy)
+    if (!eventWithGeometry) return
 
     if (sendMode === 'public') {
-      await sendDocument(true)
+      await sendDocument(true, eventWithGeometry)
     } else if (sendMode === 'private') {
-      await sendDocument(false)
+      await sendDocument(false, eventWithGeometry)
     } else {
-      props.toHome()
+      if (props.sourcePage !== 'overview') {
+        props.toHome()
+      } else {
+        props.toObservationEvent(observationEventId)
+      }
     }
   }
 
-  const submitDocument = async (data: { [key: string]: any }) => {
+  const submitDocument = async (data: { [key: string]: any }, event: Record<string, any>) => {
     setSaving(true)
 
     //set editing off if it is on
@@ -202,15 +210,13 @@ const DocumentComponent = (props: Props) => {
 
       editedEvent = mergeWith(event, editedEvent, customizer)
 
+      let eventWithGeometry: Record<string, any> = {}
+
       //replace events with the modified copy
       try {
-        await dispatch(replaceObservationEventById(editedEvent, observationEventId))
-        if (props.sourcePage !== 'overview') {
-          await dispatch(finishObservationEvent())
-          setModalVisibility(true)
-        } else {
-          props.toObservationEvent(observationEventId)
-        }
+        await dispatch(replaceObservationEventById({ newEvent: editedEvent, eventId: observationEventId })).unwrap()
+        eventWithGeometry = await dispatch(finishObservationEvent()).unwrap()
+        setModalVisibility(true)
       } catch (error: any) {
         dispatch(setMessageState({
           type: 'err',
@@ -221,14 +227,16 @@ const DocumentComponent = (props: Props) => {
       } finally {
         setSaving(false)
       }
+
+      return eventWithGeometry
     }
   }
 
-  const sendDocument = async (isPublic: boolean) => {
+  const sendDocument = async (isPublic: boolean, event: Record<string, any>) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
+      await dispatch(uploadObservationEvent({ event, lang: i18n.language, isPublic })).unwrap()
       setForm(null)
       setShowSuccess(true)
       setTimeout(() => {
@@ -260,7 +268,7 @@ const DocumentComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser())
+            dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
             setSending(false)
           }
@@ -270,10 +278,10 @@ const DocumentComponent = (props: Props) => {
   }
 
   const deleteEvent = async () => {
-    if (!event) return
+    if (!eventState) return
     setSaving(true)
-    await dispatch(finishSingleObservation())
-    await dispatch(deleteObservationEvent(event.id))
+    await dispatch(finishSingleObservation()).unwrap()
+    await dispatch(deleteObservationEvent({ eventId: eventState.id })).unwrap()
     props.toHome()
     setSaving(false)
   }
@@ -380,7 +388,7 @@ const DocumentComponent = (props: Props) => {
           />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} ref={scrollViewRef}>
-          {(event?.formID !== 'MHL.117' && !(path.length === 1 && path[0].length === 0)) ?
+          {(eventState?.formID !== 'MHL.117' && !(path.length === 1 && path[0].length === 0)) ?
             <View style={Cs.buttonContainer}>
               <ButtonComponent onPressFunction={() => deletePath()}
                 title={t('delete path')} height={40} width={150} buttonStyle={Bs.editObservationButton}

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import i18n from '../../languages/i18n'
 import { biomonForms, forms } from '../../config/fields'
 import {
-  rootState,
+  RootState,
   DispatchType,
   uploadObservationEvent,
   setMessageState,
@@ -54,8 +54,8 @@ const OverviewComponent = (props: Props) => {
   const [eventSchema, setEventSchema] = useState<Record<string, any> | null>(null)
   const [showSuccess, setShowSuccess] = useState<boolean>(false)
 
-  const credentials = useSelector((state: rootState) => state.credentials)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const credentials = useSelector((state: RootState) => state.credentials)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -88,7 +88,7 @@ const OverviewComponent = (props: Props) => {
       if (searchedEvent === null) { return }
       const fetchedSchema = await storageService.fetch(`${searchedEvent.formID}${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
       setEventSchema(fetchedSchema)
-      await dispatch(switchSchema(searchedEvent.formID, lang))
+      await dispatch(switchSchema({ formID: searchedEvent.formID, lang })).unwrap()
       dispatch(setObservationEventId(searchedEvent?.id))
     }
 
@@ -107,7 +107,7 @@ const OverviewComponent = (props: Props) => {
 
   const handleDeleteObservation = async (eventId: string, unitId: string) => {
     try {
-      await dispatch(deleteObservation(eventId, unitId))
+      await dispatch(deleteObservation({ eventId, unitId })).unwrap()
     } catch (error: any) {
       captureException(error)
       dispatch(setMessageState({
@@ -129,7 +129,7 @@ const OverviewComponent = (props: Props) => {
 
   const handleDeleteObservationEvent = async (eventId: string) => {
     try {
-      await dispatch(deleteObservationEvent(eventId))
+      await dispatch(deleteObservationEvent({ eventId })).unwrap()
       props.onPressHome()
     } catch (error: any) {
       captureException(error)
@@ -144,7 +144,13 @@ const OverviewComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await dispatch(uploadObservationEvent(event?.id, i18n.language, isPublic))
+      if (!event) {
+        throw {
+          severity: 'low',
+          message: `${i18n.t('failed to load credentials from local')}`
+        }
+      }
+      await dispatch(uploadObservationEvent({ event, lang: i18n.language, isPublic })).unwrap()
       setShowSuccess(true)
       setTimeout(() => {
         setShowSuccess(false)
@@ -173,7 +179,7 @@ const OverviewComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser())
+            dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
             setSending(false)
           }

@@ -17,7 +17,7 @@ import {
 import { pathToLineStringConstructor } from './geoJSONHelper'
 import { convertWGS84ToYKJ } from './geolocationHelper'
 
-export const locationBackgroundTask = (locations: Array<LocationObject>) => {
+export const locationBackgroundTask = async (locations: Array<LocationObject>) => {
   const showAlert = (message: string) => {
     store.dispatch(setMessageState({
       type: 'err',
@@ -26,7 +26,7 @@ export const locationBackgroundTask = (locations: Array<LocationObject>) => {
   }
 
   if (locations) {
-    const { grid, observationEvent, path } = store.getState() as
+    const { grid, observationEvent } = store.getState() as
       { grid: GridType, observationEvent: ObservationEventType, path: PathType }
 
     const indLast = observationEvent.events.length - 1
@@ -36,8 +36,8 @@ export const locationBackgroundTask = (locations: Array<LocationObject>) => {
 
     // locationBackgroundTask adds a new path point, unless the user has left the atlas square
     if (notOutsideBorders) {
-      store.dispatch(appendPath(locations))
-      store.dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+      const newPath = await store.dispatch(appendPath({ locations })).unwrap()
+      store.dispatch(eventPathUpdate({ lineStringPath: pathToLineStringConstructor(newPath) })).unwrap()
     }
 
     if (observationEvent?.events[indLast]?.formID === forms.birdAtlas && grid && locations[0]?.coords) {
@@ -45,8 +45,7 @@ export const locationBackgroundTask = (locations: Array<LocationObject>) => {
 
       // check if user is approaching square borders or returning back
       if (!grid.pauseGridCheck && (ykjCoords[0] < grid.e * 10000 + GRID_EDGE_DISTANCE || ykjCoords[0] > grid.e * 10000 + 10000 - GRID_EDGE_DISTANCE
-        || ykjCoords[1] < grid.n * 10000 + GRID_EDGE_DISTANCE || ykjCoords[1] > grid.n * 10000 + 10000 - GRID_EDGE_DISTANCE))
-      {
+        || ykjCoords[1] < grid.n * 10000 + GRID_EDGE_DISTANCE || ykjCoords[1] > grid.n * 10000 + 10000 - GRID_EDGE_DISTANCE)) {
         store.dispatch(setGridPause(true))
         Vibration.vibrate([500, 1000, 500, 1000, 500])
         showAlert(i18n.t('leaving grid'))
@@ -62,10 +61,8 @@ export const locationBackgroundTask = (locations: Array<LocationObject>) => {
         || ykjCoords[1] < grid.n * 10000 || ykjCoords[1] > grid.n * 10000 + 10000)
       ) {
         store.dispatch(setOutsideBorders('pending'))
-
       } else if (grid.outsideBorders !== 'false' && !(ykjCoords[0] < grid.e * 10000 || ykjCoords[0] > grid.e * 10000 + 10000
-        || ykjCoords[1] < grid.n * 10000 || ykjCoords[1] > grid.n * 10000 + 10000))
-      {
+        || ykjCoords[1] < grid.n * 10000 || ykjCoords[1] > grid.n * 10000 + 10000)) {
         store.dispatch(setOutsideBorders('false'))
       }
     }

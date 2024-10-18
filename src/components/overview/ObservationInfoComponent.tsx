@@ -14,7 +14,7 @@ import {
   singleObservationFields
 } from '../../config/fields'
 import { useSelector } from 'react-redux'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 
 type Props = {
   event: Record<string, any>,
@@ -29,7 +29,7 @@ const ObservationInfoComponent = (props: Props) => {
   const [list, setList] = useState<Array<any> | null>(null)
   const { t } = useTranslation()
 
-  const credentials = useSelector((state: rootState) => state.credentials)
+  const credentials = useSelector((state: RootState) => state.credentials)
 
   const schemaDocument = props.eventSchema.schema
   const schemaUnits = props.eventSchema.schema?.properties?.gatherings?.items?.properties?.units

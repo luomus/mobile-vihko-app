@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createFilter } from 'react-native-search-filter'
 import { Icon } from 'react-native-elements'
 import {
-  rootState,
+  RootState,
   DispatchType,
   setListOrder,
   setObservationId
@@ -32,10 +32,10 @@ const ListComponent = (props: Props) => {
 
   const textInput = useRef<TextInput | null>(null)
 
-  const grid = useSelector((state: rootState) => state.grid)
-  const listOrder = useSelector((state: rootState) => state.listOrder)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const schema = useSelector((state: rootState) => state.schema)
+  const grid = useSelector((state: RootState) => state.grid)
+  const listOrder = useSelector((state: RootState) => state.listOrder)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const schema = useSelector((state: RootState) => state.schema)
 
   const [observed, setObserved] = useState<any[] | undefined>(undefined)
   const [observedUnedited, setObservedUnedited] = useState<any[] | undefined>(undefined)

@@ -4,7 +4,7 @@ import { LatLng } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { convertLatLngToPoint } from '../../../helpers/geoJSONHelper'
 import {
-  rootState,
+  RootState,
   DispatchType,
   clearObservationLocation,
   deleteObservation,
@@ -42,9 +42,9 @@ const MapComponent = (props: Props) => {
   const [observationButtonsState, setObservationButtonsState] = useState('')
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
 
-  const editing = useSelector((state: rootState) => state.editing)
-  const observation = useSelector((state: rootState) => state.observation)
-  const observationEventId = useSelector((state: rootState) => state.observationEventId)
+  const editing = useSelector((state: RootState) => state.editing)
+  const observation = useSelector((state: RootState) => state.observation)
+  const observationEventId = useSelector((state: RootState) => state.observationEventId)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -117,7 +117,7 @@ const MapComponent = (props: Props) => {
 
   const submitDelete = async (unitId: string) => {
     try {
-      await dispatch(deleteObservation(observationEventId, unitId))
+      await dispatch(deleteObservation({ eventId: observationEventId, unitId })).unwrap()
     } catch (error: any) {
       captureException(error)
       dispatch(setMessageState({

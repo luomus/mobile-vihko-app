@@ -13,7 +13,7 @@ import {
   pathToLineStringConstructor
 } from '../../helpers/geoJSONHelper'
 import {
-  rootState,
+  RootState,
   DispatchType,
   setObservationLocation,
   clearObservationLocation,
@@ -65,17 +65,18 @@ const MapComponent = (props: Props) => {
   const [observationButtonsState, setObservationButtonsState] = useState('')
   const [observationOptions, setObservationOptions] = useState<Record<string, any>[]>([])
 
-  const editing = useSelector((state: rootState) => state.editing)
-  const grid = useSelector((state: rootState) => state.grid)
-  const observation = useSelector((state: rootState) => state.observation)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const observationEventId = useSelector((state: rootState) => state.observationEventId)
-  const observationZone = useSelector((state: rootState) => state.observationZone)
-  const path = useSelector((state: rootState) => state.path)
-  const position = useSelector((state: rootState) => state.position)
-  const region = useSelector((state: rootState) => state.region)
-  const schema = useSelector((state: rootState) => state.schema)
-  const singleObservation = useSelector((state: rootState) => state.singleObservation)
+  const editing = useSelector((state: RootState) => state.editing)
+  const grid = useSelector((state: RootState) => state.grid)
+  const observation = useSelector((state: RootState) => state.observation)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const observationEventId = useSelector((state: RootState) => state.observationEventId)
+  const observationZone = useSelector((state: RootState) => state.observationZone)
+  const path = useSelector((state: RootState) => state.path)
+  const position = useSelector((state: RootState) => state.position)
+  const region = useSelector((state: RootState) => state.region)
+  const schema = useSelector((state: RootState) => state.schema)
+  const singleObservation = useSelector((state: RootState) => state.singleObservation)
+  const tracking = useSelector((state: RootState) => state.tracking)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -228,7 +229,7 @@ const MapComponent = (props: Props) => {
 
   const submitDelete = async (unitId: string) => {
     try {
-      await dispatch(deleteObservation(observationEventId, unitId))
+      await dispatch(deleteObservation({ eventId: observationEventId, unitId })).unwrap()
     } catch (error: any) {
       captureException(error)
       dispatch(setMessageState({
@@ -303,7 +304,7 @@ const MapComponent = (props: Props) => {
   const pathOverlay = () => {
     if (path[path.length - 1]?.length >= 1 && position) {
       const pathToDraw = path.map((subpath, index) => {
-        if (index === path.length - 1) {
+        if (index === path.length - 1 && tracking) {
           return subpath.concat([[
             position.coords.longitude,
             position.coords.latitude,
@@ -493,7 +494,7 @@ const MapComponent = (props: Props) => {
           {observation ?
             observationButtonsState === 'newObservation' &&
             <ObservationButtonsComponent
-              confirmationButton={observationEvent.events[observationEvent?.events?.length - 1].singleObservation ? props.onPressSingleObservation : props.onPressObservation}
+              confirmationButton={observationEvent?.events[observationEvent?.events?.length - 1]?.singleObservation ? props.onPressSingleObservation : props.onPressObservation}
               cancelButton={cancelObservation}
               mode={observationButtonsState}
               openModal={openMapModal}

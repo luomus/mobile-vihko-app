@@ -1,57 +1,26 @@
-import { Region } from 'react-native-maps'
-import { ThunkAction } from 'redux-thunk'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 import i18n from '../../languages/i18n'
-import {
-  mapActionTypes,
-  SET_CURRENT_OBS_ZONE,
-  CLEAR_CURRENT_OBS_ZONE,
-  GET_OBS_ZONES_SUCCESS,
-  SET_REGION,
-  CLEAR_REGION,
-  SET_EDITING,
-  SET_LIST_ORDER,
-  EditingType,
-  ListOrderType,
-} from './types'
 import { getZones } from '../../services/zoneService'
 import storageService from '../../services/storageService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { log } from '../../helpers/logger'
 import { captureException } from '../../helpers/sentry'
+import { RootState, setObservationZones } from '..'
 
-export const setRegion = (region: Region): mapActionTypes => ({
-  type: SET_REGION,
-  payload: region,
-})
-
-export const clearRegion = (): mapActionTypes => ({
-  type: CLEAR_REGION
-})
-
-export const setCurrentObservationZone = ( id: string ): mapActionTypes => ({
-  type: SET_CURRENT_OBS_ZONE,
-  payload: id
-})
-
-export const clearCurrentObservationZone = (): mapActionTypes => ({
-  type: CLEAR_CURRENT_OBS_ZONE
-})
-
-export const initObservationZones = (): ThunkAction<Promise<any>, any, void, mapActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials } = getState()
+export const initObservationZones = createAsyncThunk<void, undefined, { rejectValue: Record<string, any> | unknown }>(
+  'observationZone/initObservationZones',
+  async(_, { dispatch, getState, rejectWithValue }) => {
+    const { credentials } = getState() as RootState
 
     let zones: Record<string, any>[]
     let error: Record<string, any> | null = null
 
-    //check connection exists and try to fetch observation zones from server
     try {
       await netStatusChecker()
       zones = await getZones()
     } catch (netError) {
       captureException(netError)
       try {
-        //couldn't load zones from server. Check for local copy, if found inform user of use of local copy.
         zones = await storageService.fetch('zones')
         error = {
           severity: 'low',
@@ -62,7 +31,6 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
           error: netError,
           user_id: credentials.user?.id
         })
-      //if local copy does not exist inform user that no zones are available
       } catch (localError) {
         captureException(localError)
         error = {
@@ -74,7 +42,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
           error: localError,
           user_id: credentials.user?.id
         })
-        return Promise.reject(error)
+        return rejectWithValue(localError)
       }
     }
 
@@ -103,10 +71,7 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
 
     zones = firstElement.concat(zones)
 
-    dispatch(getObservationZonesSuccess(zones))
-
     if (!error) {
-      //try to save loaded zone to asyncStorage, warn user if error happens
       try {
         await storageService.save('zones', zones)
       } catch (localError) {
@@ -120,27 +85,12 @@ export const initObservationZones = (): ThunkAction<Promise<any>, any, void, map
           error: localError,
           user_id: credentials.user?.id
         })
-        return Promise.reject(error)
+        return rejectWithValue(localError)
       }
     } else {
-      return Promise.reject(error)
+      return rejectWithValue(error)
     }
 
-    return Promise.resolve()
+    dispatch(setObservationZones(zones))
   }
-}
-
-export const getObservationZonesSuccess = (zones: any[]): mapActionTypes => ({
-  type: GET_OBS_ZONES_SUCCESS,
-  payload: zones
-})
-
-export const setEditing = (editing: EditingType): mapActionTypes => ({
-  type: SET_EDITING,
-  payload: editing
-})
-
-export const setListOrder = (order: ListOrderType): mapActionTypes => ({
-  type: SET_LIST_ORDER,
-  payload: order
-})
+)

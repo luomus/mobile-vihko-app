@@ -1,95 +1,32 @@
-import { ThunkAction } from 'redux-thunk'
 import { LocationObject } from 'expo-location'
 import {
-  UPDATE_LOCATION,
-  CLEAR_LOCATION,
-  SET_PATH,
-  CLEAR_PATH,
-  locationActionTypes,
   PathType,
-  PathPoint,
-  SET_FIRST_LOCATION,
-  GridType,
-  SET_GRID,
-  CLEAR_GRID,
-  SET_COORDS,
-  SET_PAUSE,
-  SET_OUTSIDE_BORDERS,
-  SET_TRACKING,
+  PathPoint
 } from './types'
 import { gpsOutlierFilter } from '../../helpers/pathFilters'
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { RootState, setPath } from '..'
 
-export const updateLocation = (location: LocationObject | null): locationActionTypes => ({
-  type: UPDATE_LOCATION,
-  payload: location,
-})
+interface appendPathParams {
+  locations: LocationObject[]
+}
 
-export const clearLocation = (): locationActionTypes => ({
-  type: CLEAR_LOCATION
-})
-
-export const appendPath = (locations: LocationObject[]): ThunkAction<Promise<any>, any, void, locationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { path } : { path: PathType } = getState()
+export const appendPath = createAsyncThunk<PathType, appendPathParams, { rejectValue: Record<string, any> }>(
+  'path/appendPath',
+  async ({ locations }, { dispatch, getState }) => {
+    const { path }: { path: PathType } = getState() as RootState
     const currentPath: Array<PathPoint> = path.slice(-1)[0]
 
     if (locations.length > 0) {
       const points = gpsOutlierFilter(currentPath, locations)
 
-      if (!points) {
-        return Promise.resolve()
+      if (points) {
+        const newPath = [...path.slice(0, -1), [...currentPath, ...points]]
+        dispatch(setPath(newPath))
+        return newPath
       }
-
-      const newPath = [...path.slice(0, -1), [ ...currentPath, ...points ]]
-
-      dispatch({
-        type: SET_PATH,
-        payload: newPath
-      })
     }
-    Promise.resolve()
+
+    return path
   }
-}
-
-export const setPath = (points: PathType): locationActionTypes => ({
-  type: SET_PATH,
-  payload: points
-})
-
-export const clearPath = (): locationActionTypes => ({
-  type: CLEAR_PATH
-})
-
-export const setFirstLocation = (coordinates: Array<number>): locationActionTypes => ({
-  type: SET_FIRST_LOCATION,
-  payload: coordinates
-})
-
-export const setGrid = (grid: GridType): locationActionTypes => ({
-  type: SET_GRID,
-  payload: grid
-})
-
-export const clearGrid = (): locationActionTypes => ({
-  type: CLEAR_GRID
-})
-
-export const setGridCoords = (coordinates: {n: number, e: number}): locationActionTypes => ({
-  type: SET_COORDS,
-  payload: coordinates
-})
-
-export const setGridPause = (state: boolean): locationActionTypes => ({
-  type: SET_PAUSE,
-  payload: state
-})
-
-export const setOutsideBorders = (state: 'false' | 'pending' | 'true'): locationActionTypes => ({
-  type: SET_OUTSIDE_BORDERS,
-  payload: state
-})
-
-export const setTracking = (state: boolean): locationActionTypes => ({
-  type: SET_TRACKING,
-  payload: state
-})
+)

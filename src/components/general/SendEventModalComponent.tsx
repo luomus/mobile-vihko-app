@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 import Modal from 'react-native-modal'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import ButtonComponent from './ButtonComponent'
 import { forms } from '../../config/fields'
 import Bs from '../../styles/ButtonStyles'
@@ -25,9 +25,9 @@ const SendEventModalComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const observing = useSelector((state: rootState) => state.observing)
-  const schema = useSelector((state: rootState) => state.schema)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const observing = useSelector((state: RootState) => state.observing)
+  const schema = useSelector((state: RootState) => state.schema)
 
   return (
     <Modal isVisible={props.modalVisibility} backdropOpacity={0.5}

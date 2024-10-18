@@ -8,14 +8,10 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import { listOfHaversineNeighbors } from '../../helpers/geometryHelper'
 import { useUiSchemaFields, lolifeObservationTypes } from '../../config/fields'
 import i18n from '../../languages/i18n'
-
-interface BasicObject {
-  [key: string]: any
-}
 
 type Props = {
   confirmationButton: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
@@ -27,10 +23,10 @@ type Props = {
 
 const ObservationButtonsComponent = (props: Props) => {
 
-  const observation = useSelector((state: rootState) => state.observation)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const region = useSelector((state: rootState) => state.region)
-  const schema = useSelector((state: rootState) => state.schema)
+  const observation = useSelector((state: RootState) => state.observation)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const region = useSelector((state: RootState) => state.region)
+  const schema = useSelector((state: RootState) => state.schema)
 
   const { t } = useTranslation()
 
@@ -50,8 +46,9 @@ const ObservationButtonsComponent = (props: Props) => {
   }
 
   const createLeftSideButtonsList = () => {
-    const units: BasicObject[] = observationEvent.events?.[observationEvent.events.length - 1]
-      .gatherings[0].units
+    if (observationEvent.events.length === 0) { return undefined }
+
+    const units: Record<string, any>[] = observationEvent.events[observationEvent.events.length - 1]?.gatherings[0].units
     const haversineNeighbors: Array<Record<string, any>> = listOfHaversineNeighbors(units, region, observation)
 
     if (haversineNeighbors.length >= 4) {

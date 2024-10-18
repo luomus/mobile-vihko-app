@@ -1,18 +1,30 @@
-import { ThunkAction } from 'redux-thunk'
 import uuid from 'react-native-uuid'
-import { clone, set } from 'lodash'
+import { cloneDeep, set } from 'lodash'
 import { LocationObject } from 'expo-location'
-import { setCurrentObservationZone, clearRegion, setListOrder } from '../map/actions'
 import {
-  clearObservationLocation, deleteObservationEvent, setObservationEventInterrupted,
-  replaceObservationEventById, replaceObservationEvents, setObserving, setObservationEventId, setSingleObservation
-} from '../../stores/observation/actions'
-import { clearLocation, updateLocation, clearPath, setPath, setFirstLocation } from '../position/actions'
-import { switchSchema } from '../schema/actions'
-import { mapActionTypes } from '../map/types'
-import { messageActionTypes } from '../message/types'
-import { observationActionTypes } from '../observation/types'
-import { locationActionTypes, PathType } from '../position/types'
+  setCurrentObservationZone,
+  clearRegion,
+  setListOrder,
+  clearObservationLocation,
+  deleteObservationEvent,
+  setObservationEventInterrupted,
+  replaceObservationEventById,
+  replaceObservationEvents,
+  setObserving,
+  setObservationEventId,
+  setSingleObservation,
+  initCompleteList,
+  clearLocation,
+  updateLocation,
+  clearPath,
+  setPath,
+  setFirstLocation,
+  switchSchema,
+  clearGrid,
+  setGrid,
+  RootState
+} from '../../stores'
+import { PathType } from '../position/types'
 import i18n from '../../languages/i18n'
 import storageService from '../../services/storageService'
 import { parseSchemaToNewObject } from '../../helpers/parsers/SchemaObjectParser'
@@ -23,21 +35,55 @@ import { removeDuplicatesFromPath, setEventGeometry } from '../../helpers/geomet
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { SOURCE_ID } from 'react-native-dotenv'
 import userService from '../../services/userService'
-import { clearGrid, setGrid } from '../position/actions'
-import { initCompleteList } from '../../stores/observation/actions'
 import { biomonForms, forms } from '../../config/fields'
 import { temporalOutlierFilter } from '../../helpers/pathFilters'
 import { captureException } from '@sentry/react-native'
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-export const resetReducer = () => ({
-  type: 'RESET_STORE'
+interface beginObservationParams {
+  onPressMap: () => void,
+  title: string,
+  body: string
+}
+
+interface beginSingleObservationParams {
+  onPressMap: () => void
+}
+
+const resetSlice = createSlice({
+  name: 'reset',
+  initialState: {},
+  reducers: {
+    resetReducer() { }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(beginObservationEvent.fulfilled, () => { })
+      .addCase(beginObservationEvent.rejected, () => { })
+      .addCase(continueObservationEvent.fulfilled, () => { })
+      .addCase(continueObservationEvent.rejected, () => { })
+      .addCase(finishObservationEvent.fulfilled, () => { })
+      .addCase(finishObservationEvent.rejected, () => { })
+      .addCase(beginSingleObservation.fulfilled, () => { })
+      .addCase(beginSingleObservation.rejected, () => { })
+      .addCase(finishSingleObservation.fulfilled, () => { })
+      .addCase(finishSingleObservation.rejected, () => { })
+  }
 })
 
-export const beginObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
-  mapActionTypes | observationActionTypes | locationActionTypes | messageActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent, observationZone, schema, grid, tracking } = getState()
+export const beginObservationEvent = createAsyncThunk<void, beginObservationParams, { rejectValue: Record<string, any> }>(
+  'reset/beginObservationEvent',
+  async ({ onPressMap, title, body }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent, observationZone, schema, grid, tracking } = getState() as RootState
     const userId = credentials?.user?.id
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     const region: Record<string, any> | undefined = observationZone.zones.find((region: Record<string, any>) => {
       return region.id === observationZone.currentZoneId
@@ -60,18 +106,18 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         user_id: credentials.user.id
       })
       if (error.message?.includes('INVALID TOKEN')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'high',
           message: i18n.t('user token has expired')
         })
       }
       if (error.message?.includes('WRONG SOURCE')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'high',
           message: i18n.t('person token is given for a different app')
         })
       }
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('failed to check token')} ${error.message}`
       })
@@ -129,7 +175,7 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('could not save new event to long term memory')
       })
@@ -141,11 +187,14 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     //initialize complete list
     if (schema.formID === forms.birdAtlas || Object.values(biomonForms).includes(schema.formID)) {
       try {
-        await dispatch(initCompleteList(lang, schema.formID, grid.n.toString().slice(0, 2) + ':' + grid.e.toString().slice(0, 2)))
+        const gridNumber = grid !== null
+          ? grid.n.toString().slice(0, 2) + ':' + grid.e.toString().slice(0, 2)
+          : ''
+        await dispatch(initCompleteList({ lang, formID: schema.formID, gridNumber })).unwrap()
         if (Object.values(biomonForms).includes(schema.formID)) dispatch(clearGrid())
       } catch (error: any) {
-        await dispatch(deleteObservationEvent(newID))
-        return Promise.reject({
+        await dispatch(deleteObservationEvent({ eventId: newID })).unwrap()
+        return rejectWithValue({
           severity: 'low',
           message: error.message
         })
@@ -164,13 +213,13 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
         tracking
       )
     } catch (error: any) {
-      await dispatch(deleteObservationEvent(newID))
+      await dispatch(deleteObservationEvent({ eventId: newID })).unwrap()
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/watchLocationAsync()',
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
       })
@@ -182,15 +231,20 @@ export const beginObservationEvent = (onPressMap: () => void, title: string, bod
     dispatch(clearRegion())
     dispatch(setObserving(true))
     onPressMap()
-
-    return Promise.resolve()
   }
-}
+)
 
-export const continueObservationEvent = (onPressMap: () => void, title: string, body: string): ThunkAction<Promise<any>, any, void,
-  locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEventInterrupted, observationEvent, tracking } = getState()
+export const continueObservationEvent = createAsyncThunk<any, beginObservationParams, { rejectValue: Record<string, any> }>(
+  'reset/continueObservationEvent',
+  async ({ onPressMap, title, body }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEventInterrupted, observationEvent, tracking } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     if (!observationEventInterrupted) {
       dispatch(setObservationEventId(observationEvent.events[observationEvent.events.length - 1].id))
@@ -203,7 +257,8 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
     const formID = observationEvent.events[observationEvent.events.length - 1].formID
 
     //switch schema
-    await dispatch(switchSchema(formID, i18n.language))
+    const lang = i18n.language
+    await dispatch(switchSchema({ formID, lang })).unwrap()
 
     if (formID === forms.lolife) {
       const currentObservationZone = await storageService.fetch('currentZoneId')
@@ -222,7 +277,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
           error: error,
           user_id: credentials.user.id
         })
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'low',
           message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
         })
@@ -253,18 +308,18 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
         user_id: credentials.user.id
       })
       if (error.message?.includes('INVALID TOKEN')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'high',
           message: i18n.t('user token has expired')
         })
       }
       if (error.message?.includes('WRONG SOURCE')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'high',
           message: i18n.t('person token is given for a different app')
         })
       }
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('failed to check token')} ${error.message}`
       })
@@ -279,7 +334,7 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
       })
@@ -304,14 +359,20 @@ export const continueObservationEvent = (onPressMap: () => void, title: string, 
       dispatch(setSingleObservation(observationEvent.events[observationEvent.events.length - 1].singleObservation))
     }
     onPressMap()
-    return Promise.resolve()
   }
-}
+)
 
-export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
-  locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, grid, firstLocation, observationEvent, path } = getState()
+export const finishObservationEvent = createAsyncThunk<Record<string, any>, undefined, { rejectValue: Record<string, any> | unknown }>(
+  'reset/finishObservationEvent',
+  async (_, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, grid, firstLocation, observationEvent, path } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     try {
       await stopLocationAsync()
@@ -322,7 +383,7 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: (`${i18n.t('failed to stop location updates')} ${error}`)
       })
@@ -330,8 +391,16 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
 
     dispatch(setObservationEventInterrupted(false))
 
-    let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
+    const event = cloneDeep(observationEvent.events?.[observationEvent.events.length - 1])
+
     let lineStringPath = pathToLineStringConstructor(path)
+
+    if (!event) {
+      return rejectWithValue({
+        severity: 'low',
+        message: (i18n.t('failed to stop location updates'))
+      })
+    }
 
     //remove unused complete list observations from bird atlas events
     if (event.formID === forms.birdAtlas || Object.values(biomonForms).includes(event.formID)) {
@@ -350,19 +419,17 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
       lineStringPath ? lineStringPath = temporalOutlierFilter(lineStringPath, endDate) : null
     }
 
-    if (event) {
-      event = setEventGeometry(event, lineStringPath, firstLocation, grid)
+    const eventWithGeometry = setEventGeometry(event, lineStringPath, firstLocation, grid)
 
-      dispatch(clearPath())
-      dispatch(clearLocation())
+    dispatch(clearPath())
+    dispatch(clearLocation())
 
-      //replace events with modified list
-      try {
-        await dispatch(replaceObservationEventById(event, event.id))
-      } catch (error) {
-        captureException(error)
-        return Promise.reject(error)
-      }
+    //replace events with modified list
+    try {
+      await dispatch(replaceObservationEventById({ newEvent: eventWithGeometry, eventId: eventWithGeometry.id })).unwrap()
+    } catch (error) {
+      captureException(error)
+      return rejectWithValue(error)
     }
 
     dispatch(setObserving(false))
@@ -370,14 +437,21 @@ export const finishObservationEvent = (): ThunkAction<Promise<any>, any, void,
     dispatch(clearGrid())
     dispatch(setFirstLocation([60.192059, 24.945831]))
 
-    return Promise.resolve()
+    return eventWithGeometry
   }
-}
+)
 
-export const beginSingleObservation = (onPressMap: () => void): ThunkAction<Promise<any>, any, void,
-  locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent, schema, grid } = getState()
+export const beginSingleObservation = createAsyncThunk<void, beginSingleObservationParams, { rejectValue: Record<string, any> }>(
+  'reset/beginSingleObservationEvent',
+  async ({ onPressMap }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent, schema, grid } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     const userId = credentials?.user?.id
 
@@ -392,18 +466,18 @@ export const beginSingleObservation = (onPressMap: () => void): ThunkAction<Prom
         user_id: credentials.user.id
       })
       if (error.message?.includes('INVALID TOKEN')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'high',
           message: i18n.t('user token has expired')
         })
       }
       if (error.message?.includes('WRONG SOURCE')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'high',
           message: i18n.t('person token is given for a different app')
         })
       }
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('failed to check token')} ${error.message}`
       })
@@ -442,7 +516,7 @@ export const beginSingleObservation = (onPressMap: () => void): ThunkAction<Prom
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('could not save new event to long term memory')
       })
@@ -455,13 +529,13 @@ export const beginSingleObservation = (onPressMap: () => void): ThunkAction<Prom
     try {
       await watchLocationAsync((location: LocationObject) => dispatch(updateLocation(location)), '', '', false)
     } catch (error: any) {
-      await dispatch(deleteObservationEvent(newID))
+      await dispatch(deleteObservationEvent({ eventId: newID })).unwrap()
       log.error({
         location: '/stores/shared/actions.tsx beginObservationEvent()/watchLocationAsync()',
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('could not use gps so event was not started')} ${error.message}`
       })
@@ -472,15 +546,20 @@ export const beginSingleObservation = (onPressMap: () => void): ThunkAction<Prom
     dispatch(clearRegion())
     dispatch(setObserving(true))
     onPressMap()
-
-    return Promise.resolve()
   }
-}
+)
 
-export const finishSingleObservation = (): ThunkAction<Promise<any>, any, void,
-  locationActionTypes | mapActionTypes | messageActionTypes | observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, grid, firstLocation, observationEvent } = getState()
+export const finishSingleObservation = createAsyncThunk<Record<string, any>, undefined, { rejectValue: Record<string, any> | unknown }>(
+  'reset/finishSingleObservationEvent',
+  async (_, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, grid, firstLocation, observationEvent } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     try {
       await stopLocationAsync()
@@ -491,7 +570,7 @@ export const finishSingleObservation = (): ThunkAction<Promise<any>, any, void,
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: (`${i18n.t('failed to stop location updates')} ${error}`)
       })
@@ -499,27 +578,34 @@ export const finishSingleObservation = (): ThunkAction<Promise<any>, any, void,
 
     dispatch(setObservationEventInterrupted(false))
 
-    let event = clone(observationEvent.events?.[observationEvent.events.length - 1])
+    const event = cloneDeep(observationEvent.events?.[observationEvent.events.length - 1])
 
-    if (event) {
-      event = setEventGeometry(event, undefined, firstLocation, grid)
+    if (!event) {
+      return rejectWithValue({
+        severity: 'low',
+        message: (i18n.t('failed to stop location updates'))
+      })
+    }
 
-      dispatch(clearPath())
-      dispatch(clearLocation())
+    const eventWithGeometry = setEventGeometry(event, undefined, firstLocation, grid)
 
-      //replace events with modified list
-      try {
-        dispatch(replaceObservationEventById(event, event.id))
-      } catch (error) {
-        captureException(error)
-        return Promise.reject(error)
-      }
+    dispatch(clearPath())
+    dispatch(clearLocation())
+
+    //replace events with modified list
+    try {
+      dispatch(replaceObservationEventById({ newEvent: eventWithGeometry, eventId: eventWithGeometry.id })).unwrap()
+    } catch (error) {
+      captureException(error)
+      return rejectWithValue(error)
     }
 
     dispatch(setObserving(false))
     dispatch(clearObservationLocation())
     dispatch(setFirstLocation([60.192059, 24.945831]))
 
-    return Promise.resolve()
+    return eventWithGeometry
   }
-}
+)
+
+export const { resetReducer } = resetSlice.actions

@@ -7,7 +7,7 @@ import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import {
-  rootState,
+  RootState,
   DispatchType,
   setGrid,
   setRegion,
@@ -50,8 +50,8 @@ const GridModalComponent = (props: Props) => {
   const [centered, setCentered] = useState(true)
   const [mapType, setMapType] = useState<MapType>('terrain')
 
-  const position = useSelector((state: rootState) => state.position)
-  const region = useSelector((state: rootState) => state.region)
+  const position = useSelector((state: RootState) => state.position)
+  const region = useSelector((state: RootState) => state.region)
 
   const { t } = useTranslation()
 
@@ -160,7 +160,7 @@ const GridModalComponent = (props: Props) => {
       }))
     }
 
-    setTracking(true)
+    dispatch(setTracking(true))
     await storageService.save('tracking', true)
 
     props.setModalVisibility(false)

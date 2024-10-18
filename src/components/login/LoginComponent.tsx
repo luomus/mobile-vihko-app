@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  rootState,
+  RootState,
   DispatchType,
   initObservationEvents,
   resetReducer,
@@ -41,7 +41,7 @@ const LoginComponent = (props: Props) => {
   const [loggingIn, setLoggingIn] = useState<boolean>(true)
   const [polling, setPolling] = useState<boolean>(false)
   const [canceler, setCanceler] = useState<() => void | undefined>()
-  const credentials = useSelector((state: rootState) => state.credentials)
+  const credentials = useSelector((state: RootState) => state.credentials)
   const dispatch: DispatchType = useDispatch()
   const { t } = useTranslation()
 
@@ -71,7 +71,7 @@ const LoginComponent = (props: Props) => {
   //logout user and reset reducers on fatal error
   const onFatalError = async () => {
     try {
-      await dispatch(logoutUser())
+      await dispatch(logoutUser()).unwrap()
     } catch (error: any) { //catch if logout fails
       captureException(error)
       showError(error.message)
@@ -83,9 +83,9 @@ const LoginComponent = (props: Props) => {
   //check if user has previously logged in, redirect to home screen if is
   const loadData = async () => {
     setLoggingIn(true)
-
+    await storageService.clear()
     try {
-      await dispatch(initLocalCredentials())
+      await dispatch(initLocalCredentials()).unwrap()
     } catch (error: any) {
 
       //failed to fetch credentials from storage
@@ -118,7 +118,7 @@ const LoginComponent = (props: Props) => {
     if (!connected) return
 
     await Promise.all([
-      dispatch(initObservationEvents()),
+      dispatch(initObservationEvents()).unwrap(),
       initLanguage()
     ]).catch((error: any) => {
       captureException(error)
@@ -126,8 +126,8 @@ const LoginComponent = (props: Props) => {
     })
 
     try {
-      await dispatch(getPermissions())
-      await dispatch(getMetadata())
+      await dispatch(getPermissions()).unwrap()
+      await dispatch(getMetadata()).unwrap()
     } catch (error: any) {
       captureException(error)
       showError(error.message)
@@ -140,7 +140,7 @@ const LoginComponent = (props: Props) => {
   const pollLogin = async (tmpToken: string) => {
     try {
       setPolling(true)
-      await dispatch(loginUser(tmpToken, setCanceler))
+      await dispatch(loginUser({ tmpToken, setCanceler })).unwrap()
 
     } catch (error: any) {
       //stop polling if user canceled the login

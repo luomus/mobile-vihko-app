@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { get } from 'lodash'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
@@ -19,7 +19,7 @@ const AtlasCodeStampComponent = (props: Props) => {
   const [color, setColor] = useState<string>('#FFFFFF')
   const [atlasCode, setAtlasCode] = useState<string>('0')
 
-  const schema = useSelector((state: rootState) => state.schema)
+  const schema = useSelector((state: RootState) => state.schema)
 
   const { t } = useTranslation()
 

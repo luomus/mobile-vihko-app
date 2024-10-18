@@ -4,11 +4,11 @@ import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { mergeWith, omit } from 'lodash'
+import { cloneDeep, mergeWith, omit } from 'lodash'
 import uuid from 'react-native-uuid'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
-  rootState,
+  RootState,
   DispatchType,
   newObservation,
   clearObservationLocation,
@@ -76,12 +76,12 @@ const SingleObservationComponent = (props: Props) => {
   //reference for scrollView
   const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
 
-  const editing = useSelector((state: rootState) => state.editing)
-  const observation = useSelector((state: rootState) => state.observation)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const observationId = useSelector((state: rootState) => state.observationId)
-  const observationEventId = useSelector((state: rootState) => state.observationEventId)
-  const schema = useSelector((state: rootState) => state.schema)
+  const editing = useSelector((state: RootState) => state.editing)
+  const observation = useSelector((state: RootState) => state.observation)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const observationId = useSelector((state: RootState) => state.observationId)
+  const observationEventId = useSelector((state: RootState) => state.observationEventId)
+  const schema = useSelector((state: RootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -175,7 +175,7 @@ const SingleObservationComponent = (props: Props) => {
     })
 
     if (searchedEvent) {
-      setEventState(searchedEvent)
+      setEventState(cloneDeep(searchedEvent))
     }
   }
 
@@ -213,18 +213,23 @@ const SingleObservationComponent = (props: Props) => {
   }
 
   const onSubmit = async (data: { [key: string]: any }, sendMode: string) => {
+    let event: Record<string, any> | undefined
     if (!observationState) {
-      await submitObservation(data)
+      event = await submitObservation(data)
     } else {
       await updateObservation(data)
     }
 
-    await submitDocument(data)
+    if (!event) return
+
+    const eventWithDocumentFields = await submitDocument(data, event)
+
+    if (!eventWithDocumentFields) return
 
     if (sendMode === 'public') {
-      await sendDocument(true)
+      await sendDocument(true, eventWithDocumentFields)
     } else if (sendMode === 'private') {
-      await sendDocument(false)
+      await sendDocument(false, eventWithDocumentFields)
     } else {
       props.toHome()
     }
@@ -287,15 +292,17 @@ const SingleObservationComponent = (props: Props) => {
     }
 
     //update the event state before saving document fields
-    const eventCopy = eventState
+    const eventCopy = cloneDeep(eventState)
+
     if (eventCopy) eventCopy.gatherings[0].units.push(newUnit)
-    setEventState(eventCopy)
+    // setEventState(cloneDeep(eventCopy))
 
     //add the new observation to latest event, clear location
     try {
-      await dispatch(newObservation(newUnit))
+      await dispatch(newObservation({ unit: newUnit })).unwrap()
       dispatch(clearObservationLocation())
       setSaving(false)
+      return eventCopy
     } catch (error: any) {
       setSaving(false)
       dispatch(setMessageState({
@@ -364,13 +371,13 @@ const SingleObservationComponent = (props: Props) => {
     }
 
     //update the event state before saving document fields
-    const eventCopy = eventState
+    const eventCopy = cloneDeep(eventState)
     if (eventCopy) eventCopy.gatherings[0].units = [editedUnit]
-    setEventState(eventCopy)
+    setEventState(cloneDeep(eventCopy))
 
     //replace original observation with edited one
     try {
-      await dispatch(replaceObservationById(editedUnit, observationEventId, observationId))
+      await dispatch(replaceObservationById({ newUnit: editedUnit, eventId: observationEventId, unitId: observationId })).unwrap()
       dispatch(clearObservationLocation())
       dispatch(clearObservationId())
       dispatch(setEditing({
@@ -390,7 +397,7 @@ const SingleObservationComponent = (props: Props) => {
     }
   }
 
-  const submitDocument = async (data: { [key: string]: any }) => {
+  const submitDocument = async (data: { [key: string]: any }, event: Record<string, any>) => {
     setSaving(true)
 
     //set editing off if it is on
@@ -403,7 +410,7 @@ const SingleObservationComponent = (props: Props) => {
       }))
     }
 
-    if (eventState && observationEventId) {
+    if (event && observationEventId) {
       let editedEvent = {}
 
       Object.keys(data).forEach(key => {
@@ -426,13 +433,15 @@ const SingleObservationComponent = (props: Props) => {
         }
       }
 
-      editedEvent = mergeWith(eventState, editedEvent, customizer)
+      editedEvent = mergeWith(event, editedEvent, customizer)
+
+      let eventWithGeometry: Record<string, any> = {}
 
       //replace events with the modified copy
       try {
-        await dispatch(replaceObservationEventById(editedEvent, observationEventId))
+        await dispatch(replaceObservationEventById({ newEvent: editedEvent, eventId: observationEventId })).unwrap()
         if (props.sourcePage !== 'overview') {
-          await dispatch(finishSingleObservation())
+          eventWithGeometry = await dispatch(finishSingleObservation()).unwrap()
           setModalVisibility(true)
         } else {
           props.toObservationEvent(observationEventId)
@@ -448,15 +457,16 @@ const SingleObservationComponent = (props: Props) => {
       } finally {
         setSaving(false)
       }
+
+      return eventWithGeometry
     }
   }
 
-  const sendDocument = async (isPublic: boolean) => {
-
+  const sendDocument = async (isPublic: boolean, event: Record<string, any>) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await dispatch(uploadObservationEvent(eventState?.id, i18n.language, isPublic))
+      await dispatch(uploadObservationEvent({ event, lang: i18n.language, isPublic })).unwrap()
       setForm(null)
       setShowSuccess(true)
       setTimeout(() => {
@@ -488,7 +498,7 @@ const SingleObservationComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser())
+            dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
             setSending(false)
           }
@@ -512,8 +522,8 @@ const SingleObservationComponent = (props: Props) => {
   const deleteEvent = async () => {
     if (!eventState) return
     setSaving(true)
-    await dispatch(finishSingleObservation())
-    await dispatch(deleteObservationEvent(eventState.id))
+    await dispatch(finishSingleObservation()).unwrap()
+    await dispatch(deleteObservationEvent({ eventId: eventState.id })).unwrap()
     props.toHome()
     setSaving(false)
   }

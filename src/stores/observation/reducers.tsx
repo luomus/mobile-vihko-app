@@ -1,109 +1,144 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Point } from 'geojson'
 import {
-  observationActionTypes,
-  ObservationEventType,
-  CLEAR_OBSERVATION,
-  SET_OBSERVATION,
-  SET_OBSERVATION_EVENT_INTERRUPTED,
-  CLEAR_OBSERVATION_EVENTS,
-  REPLACE_OBSERVATION_EVENTS,
-  SET_OBSERVATION_ID,
-  CLEAR_OBSERVATION_ID,
-  SET_OBSERVATION_EVENT_ID,
-  CLEAR_OBSERVATION_EVENT_ID,
-  SET_OBSERVING,
-  SET_SINGLE_OBSERVATION
-} from './types'
+  deleteObservation,
+  deleteObservationEvent,
+  eventPathUpdate,
+  initCompleteList,
+  initObservationEvents,
+  newObservation,
+  replaceObservationById,
+  replaceObservationEventById,
+  uploadObservationEvent
+} from './actions'
+import { ObservationEventType } from './types'
+
+const initObservationState: Point | null = null
 
 const initObsEventState: ObservationEventType = {
   events: []
 }
 
-const observationReducer = (state = null, action : observationActionTypes) => {
-  switch (action.type) {
-    case SET_OBSERVATION:
+const initIdState = ''
+
+const observationSlice = createSlice({
+  name: 'observation',
+  initialState: initObservationState as Point | null,
+  reducers: {
+    clearObservationLocation() {
+      return initObservationState
+    },
+    setObservationLocation(state: Point | null, action: PayloadAction<Point | null>) {
       return action.payload
-    case CLEAR_OBSERVATION:
-      return null
-    default:
-      return state
-  }
-}
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(newObservation.fulfilled, () => {})
+      .addCase(newObservation.rejected, () => {})
+      .addCase(deleteObservation.fulfilled, () => {})
+      .addCase(deleteObservation.rejected, () => {})
+      .addCase(replaceObservationById.fulfilled, () => {})
+      .addCase(replaceObservationById.rejected, () => {})
+  },
+})
 
-const observationEventInterruptedReducer = (state = false, action : observationActionTypes) => {
-  switch (action.type) {
-    case SET_OBSERVATION_EVENT_INTERRUPTED:
+const observationEventInterruptedSlice = createSlice({
+  name: 'observationEventInterrupted',
+  initialState: false,
+  reducers: {
+    setObservationEventInterrupted(state, action: PayloadAction<boolean>) {
       return action.payload
-    default:
-      return state
+    }
   }
-}
+})
 
-const observationEventsReducer = (state: ObservationEventType = initObsEventState, action : observationActionTypes) => {
-  let newState
-  switch (action.type) {
-    case REPLACE_OBSERVATION_EVENTS:
-      newState = {
-        ...state,
-        events: action.payload
-      }
-      return newState
-    case CLEAR_OBSERVATION_EVENTS:
-      newState = {
-        ...state,
-        events: []
-      }
-      return newState
-    default:
-      return state
-  }
-}
+const observationEventsSlice = createSlice({
+  name: 'observationEvents',
+  initialState: initObsEventState,
+  reducers: {
+    clearObservationEvents(state) {
+      state.events = []
+    },
+    replaceObservationEvents(state, action: PayloadAction<Record<string, any>[]>) {
+      state.events = action.payload
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(initObservationEvents.fulfilled, () => {})
+      .addCase(initObservationEvents.rejected, () => {})
+      .addCase(uploadObservationEvent.fulfilled, () => {})
+      .addCase(uploadObservationEvent.rejected, () => {})
+      .addCase(replaceObservationEventById.fulfilled, () => {})
+      .addCase(replaceObservationEventById.rejected, () => {})
+      .addCase(deleteObservationEvent.fulfilled, () => {})
+      .addCase(deleteObservationEvent.rejected, () => {})
+      .addCase(eventPathUpdate.fulfilled, () => {})
+      .addCase(eventPathUpdate.rejected, () => {})
+      .addCase(initCompleteList.fulfilled, () => {})
+      .addCase(initCompleteList.rejected, () => {})
+  },
+})
 
-const observationIdReducer = (state = '', action : observationActionTypes) => {
-  switch (action.type) {
-    case SET_OBSERVATION_ID:
+const observationIdSlice = createSlice({
+  name: 'observationId',
+  initialState: initIdState,
+  reducers: {
+    clearObservationId() {
+      return initIdState
+    },
+    setObservationId(state, action: PayloadAction<string>) {
       return action.payload
-    case CLEAR_OBSERVATION_ID:
-      return ''
-    default:
-      return state
+    }
   }
-}
+})
 
-const observationEventIdReducer = (state = '', action : observationActionTypes) => {
-  switch (action.type) {
-    case SET_OBSERVATION_EVENT_ID:
+const observationEventIdSlice = createSlice({
+  name: 'observationEventId',
+  initialState: initIdState,
+  reducers: {
+    clearObservationEventId() {
+      return initIdState
+    },
+    setObservationEventId(state, action: PayloadAction<string>) {
       return action.payload
-    case CLEAR_OBSERVATION_EVENT_ID:
-      return ''
-    default:
-      return state
+    }
   }
-}
+})
 
-const observingReducer = (state = false, action : observationActionTypes) => {
-  switch (action.type) {
-    case SET_OBSERVING:
+const observingSlice = createSlice({
+  name: 'observing',
+  initialState: false,
+  reducers: {
+    setObserving(state, action: PayloadAction<boolean>) {
       return action.payload
-    default:
-      return state
+    }
   }
-}
+})
 
-const singleObservationReducer = (state = false, action : observationActionTypes) => {
-  switch (action.type) {
-    case SET_SINGLE_OBSERVATION:
+const singleObservationSlice = createSlice({
+  name: 'singleObservation',
+  initialState: false,
+  reducers: {
+    setSingleObservation(state, action: PayloadAction<boolean>) {
       return action.payload
-    default:
-      return state
+    }
   }
-}
+})
 
-export {
-  observationReducer,
-  observationEventInterruptedReducer,
-  observationEventsReducer,
-  observationIdReducer,
-  observationEventIdReducer,
-  observingReducer,
-  singleObservationReducer
-}
+export const { clearObservationLocation, setObservationLocation } = observationSlice.actions
+export const { setObservationEventInterrupted } = observationEventInterruptedSlice.actions
+export const { clearObservationEvents, replaceObservationEvents } = observationEventsSlice.actions
+export const { clearObservationId, setObservationId } = observationIdSlice.actions
+export const { clearObservationEventId, setObservationEventId } = observationEventIdSlice.actions
+export const { setObserving } = observingSlice.actions
+export const { setSingleObservation } = singleObservationSlice.actions
+
+export const observationReducer = observationSlice.reducer
+export const observationEventInterruptedReducer = observationEventInterruptedSlice.reducer
+export const observationEventsReducer = observationEventsSlice.reducer
+export const observationIdReducer = observationIdSlice.reducer
+export const observationEventIdReducer = observationEventIdSlice.reducer
+export const observingReducer = observingSlice.reducer
+export const singleObservationReducer = singleObservationSlice.reducer

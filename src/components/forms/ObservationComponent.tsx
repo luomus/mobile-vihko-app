@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { omit } from 'lodash'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
-  rootState,
+  RootState,
   DispatchType,
   newObservation,
   clearObservationLocation,
@@ -66,12 +66,12 @@ const ObservationComponent = (props: Props) => {
   //reference for scrollView
   const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
 
-  const editing = useSelector((state: rootState) => state.editing)
-  const observation = useSelector((state: rootState) => state.observation)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const observationId = useSelector((state: rootState) => state.observationId)
-  const observationEventId = useSelector((state: rootState) => state.observationEventId)
-  const schema = useSelector((state: rootState) => state.schema)
+  const editing = useSelector((state: RootState) => state.editing)
+  const observation = useSelector((state: RootState) => state.observation)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const observationId = useSelector((state: RootState) => state.observationId)
+  const observationEventId = useSelector((state: RootState) => state.observationEventId)
+  const schema = useSelector((state: RootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -178,7 +178,7 @@ const ObservationComponent = (props: Props) => {
     if (observationId) {
       //flying squirrel edit observation
       if (observationState?.rules) {
-        initForm(setForm, observationState, null, observationState.rules, observationSchema, null, fieldScopes, null, null, null, null, lang, scrollViewRef)
+        initForm(setForm, observationState, null, observationSchema, null, observationState.rules, fieldScopes, null, null, null, null, lang, scrollViewRef)
         //trip form edit observation
       } else if (schema.formID === forms.tripForm) {
         initForm(setForm, observationState, null, observationSchema, null, null, null, JX519Fields, overrideJX519Fields, additionalJX519Fields, JX519FieldOrder, lang, scrollViewRef)
@@ -315,7 +315,7 @@ const ObservationComponent = (props: Props) => {
     //add the new observation to latest event, clear location
     //and redirect to map after user oks message
     try {
-      await dispatch(newObservation(newUnit))
+      await dispatch(newObservation({ unit: newUnit })).unwrap()
       dispatch(clearObservationLocation())
       setSaving(false)
       if (editing.originalSourcePage === 'map') {
@@ -388,7 +388,7 @@ const ObservationComponent = (props: Props) => {
 
     //replace original observation with edited one
     try {
-      await dispatch(replaceObservationById(editedUnit, observationEventId, observationId))
+      await dispatch(replaceObservationById({ newUnit: editedUnit, eventId: observationEventId, unitId: observationId })).unwrap()
       dispatch(clearObservationLocation())
       dispatch(clearObservationId())
       if (editing.originalSourcePage === 'map') {
@@ -466,7 +466,7 @@ const ObservationComponent = (props: Props) => {
     setSaving(true)
     try {
       if (!observationState?.id.includes('complete_list')) {
-        await dispatch(deleteObservation(observationEventId, observationId))
+        await dispatch(deleteObservation({ eventId: observationEventId, unitId: observationId })).unwrap()
         dispatch(clearObservationId())
         dispatch(clearObservationLocation())
 
@@ -477,7 +477,7 @@ const ObservationComponent = (props: Props) => {
         emptyObservation = omit(emptyObservation, 'notes')
         emptyObservation = omit(emptyObservation, 'images')
         try {
-          await dispatch(replaceObservationById(emptyObservation, observationEventId, observationId))
+          await dispatch(replaceObservationById({ newUnit: emptyObservation, eventId: observationEventId, unitId: observationId })).unwrap()
         } catch (error: any) {
           dispatch(setMessageState({
             type: 'err',

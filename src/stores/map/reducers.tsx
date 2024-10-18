@@ -1,17 +1,11 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Region } from 'react-native-maps'
 import {
-  mapActionTypes,
   EditingType,
   ListOrderType,
-  ObservationZonesType,
-  SET_EDITING,
-  CLEAR_CURRENT_OBS_ZONE,
-  GET_OBS_ZONES_SUCCESS,
-  SET_CURRENT_OBS_ZONE,
-  CLEAR_REGION,
-  SET_REGION,
-  SET_LIST_ORDER
+  ObservationZonesType
 } from './types'
-import { Region } from 'react-native-maps'
+import { initObservationZones } from './actions'
 
 const initEditingState: EditingType = {
   started: false,
@@ -33,62 +27,66 @@ const initZoneState: ObservationZonesType = {
   zones: []
 }
 
-const editingReducer = (state: EditingType = initEditingState, action: mapActionTypes) => {
-  let newState
-  switch (action.type) {
-    case SET_EDITING:
-      newState = action.payload
-      return newState
-    default:
-      return state
-  }
-}
-
-const listOrderReducer = (state: ListOrderType = initListOrderState, action: mapActionTypes) => {
-  switch (action.type) {
-    case SET_LIST_ORDER:
+const editingSlice = createSlice({
+  name: 'editing',
+  initialState: initEditingState,
+  reducers: {
+    setEditing(state, action: PayloadAction<EditingType>) {
       return action.payload
-    default:
-      return state
+    }
   }
-}
+})
 
-const observationZoneReducer = (state = initZoneState, action: mapActionTypes) => {
-  switch (action.type) {
-    case CLEAR_CURRENT_OBS_ZONE:
-      return {
-        ...state,
-        currentZoneId: ''
-      }
-    case GET_OBS_ZONES_SUCCESS:
-      return {
-        ...initZoneState,
-        zones: action.payload
-      }
-    case SET_CURRENT_OBS_ZONE:
-      return {
-        ...state,
-        currentZoneId: action.payload
-      }
-    default:
-      return state
+const listOrderSlice = createSlice({
+  name: 'listOrder',
+  initialState: initListOrderState,
+  reducers: {
+    setListOrder(state, action: PayloadAction<ListOrderType>) {
+      return action.payload
+    }
   }
-}
+})
 
-const regionReducer = (state: Region = initRegionState, action: mapActionTypes) => {
-  switch (action.type) {
-    case CLEAR_REGION:
+const observationZoneSlice = createSlice({
+  name: 'observationZone',
+  initialState: initZoneState,
+  reducers: {
+    clearCurrentObservationZone(state) {
+      state.currentZoneId = ''
+    },
+    setObservationZones(state, action: PayloadAction<any[]>) {
+      state.zones = action.payload
+    },
+    setCurrentObservationZone(state, action: PayloadAction<string>) {
+      state.currentZoneId = action.payload
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(initObservationZones.fulfilled, () => { })
+      .addCase(initObservationZones.rejected, () => { })
+  }
+})
+
+const regionSlice = createSlice({
+  name: 'region',
+  initialState: initRegionState,
+  reducers: {
+    clearRegion() {
       return initRegionState
-    case SET_REGION:
+    },
+    setRegion(state, action: PayloadAction<Region>) {
       return action.payload
-    default:
-      return state
+    }
   }
-}
+})
 
-export {
-  editingReducer,
-  listOrderReducer,
-  observationZoneReducer,
-  regionReducer
-}
+export const { setEditing } = editingSlice.actions
+export const { setListOrder } = listOrderSlice.actions
+export const { clearCurrentObservationZone, setObservationZones, setCurrentObservationZone } = observationZoneSlice.actions
+export const { clearRegion, setRegion } = regionSlice.actions
+
+export const editingReducer = editingSlice.reducer
+export const listOrderReducer = listOrderSlice.reducer
+export const observationZoneReducer = observationZoneSlice.reducer
+export const regionReducer = regionSlice.reducer

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import i18n from '../../languages/i18n'
 import { useTranslation } from 'react-i18next'
 import { forms } from '../../config/fields'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
@@ -22,7 +22,7 @@ const FormLauncherComponent = (props: Props) => {
   const [title, setTitle] = useState<string>(t('trip form'))
   const [description, setDescription] = useState<string>(t('instructions.trip.intro'))
 
-  const observing = useSelector((state: rootState) => state.observing)
+  const observing = useSelector((state: RootState) => state.observing)
 
   useEffect(() => {
     if (props.formID === 'single') {

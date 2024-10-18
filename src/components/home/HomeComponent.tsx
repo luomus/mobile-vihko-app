@@ -6,7 +6,7 @@ import { Icon } from 'react-native-elements'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import {
-  rootState,
+  RootState,
   DispatchType,
   LocationType,
   setCurrentObservationZone,
@@ -82,11 +82,11 @@ const HomeComponent = (props: Props) => {
   const [completeListInfoModalVisibility, setCompleteListInfoModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
-  const credentials = useSelector((state: rootState) => state.credentials)
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const observationZone = useSelector((state: rootState) => state.observationZone)
-  const observing = useSelector((state: rootState) => state.observing)
-  const path = useSelector((state: rootState) => state.path)
+  const credentials = useSelector((state: RootState) => state.credentials)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const observationZone = useSelector((state: RootState) => state.observationZone)
+  const observing = useSelector((state: RootState) => state.observing)
+  const path = useSelector((state: RootState) => state.path)
 
   const { t } = useTranslation()
   const dispatch: DispatchType = useDispatch()
@@ -100,7 +100,7 @@ const HomeComponent = (props: Props) => {
     let isUnfinished = false
 
     if (length >= 1) {
-      isUnfinished = !observationEvent.events[length - 1].gatheringEvent?.dateEnd
+      isUnfinished = (observationEvent.events[length - 1].gatheringEvent?.dateEnd === undefined)
     }
 
     const checkUpdates = async () => {
@@ -139,13 +139,16 @@ const HomeComponent = (props: Props) => {
   }, [])
 
   useEffect(() => {
+    loadObservationEvents()
+  }, [observationEvent.events, observing])
+
+  useEffect(() => {
     const initSentEvents = async () => {
       await loadSentEvents()
     }
 
-    loadObservationEvents()
     initSentEvents()
-  }, [observing])
+  }, [observationEvent.events.length])
 
   useEffect(() => {
     //set first zone in array as selected zone to avoid undefined values
@@ -237,7 +240,7 @@ const HomeComponent = (props: Props) => {
 
     //save the used form before beginning an event
     if (!observing) {
-      await dispatch(switchSchema(formID, i18n.language))
+      await dispatch(switchSchema({ formID, lang: i18n.language })).unwrap()
       await storageService.save('formID', formID)
     }
 
@@ -245,7 +248,7 @@ const HomeComponent = (props: Props) => {
     const body: string = t('gps notification body')
 
     try {
-      await dispatch(beginObservationEvent(props.onPressMap, title, body))
+      await dispatch(beginObservationEvent({ onPressMap: props.onPressMap, title, body })).unwrap()
     } catch (error: any) {
       if (error.severity === 'high') {
         dispatch(setMessageState({
@@ -253,7 +256,7 @@ const HomeComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser())
+            dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
           }
         }))
@@ -273,12 +276,12 @@ const HomeComponent = (props: Props) => {
 
     //save the used form before beginning an event
     if (!observing) {
-      await dispatch(switchSchema('JX.519', i18n.language))
+      await dispatch(switchSchema({ formID: 'JX.519', lang: i18n.language })).unwrap()
       await storageService.save('formID', 'JX.519')
     }
 
     try {
-      await dispatch(beginSingleObservation(props.onPressMap))
+      await dispatch(beginSingleObservation({ onPressMap: props.onPressMap })).unwrap()
     } catch (error: any) {
       if (error.severity === 'high') {
         dispatch(setMessageState({
@@ -286,7 +289,7 @@ const HomeComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser())
+            dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
           }
         }))
@@ -308,7 +311,7 @@ const HomeComponent = (props: Props) => {
     const body: string = t('gps notification body')
 
     try {
-      await dispatch(continueObservationEvent(props.onPressMap, title, body))
+      await dispatch(continueObservationEvent({ onPressMap: props.onPressMap, title, body })).unwrap()
     } catch (error: any) {
       if (error.severity === 'high') {
         dispatch(setMessageState({
@@ -316,7 +319,7 @@ const HomeComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser())
+            dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
           }
         }))
@@ -354,13 +357,13 @@ const HomeComponent = (props: Props) => {
         let location: LocationType
         try {
           location = await getCurrentLocation(true)
-          await dispatch(appendPath([location]))
+          await dispatch(appendPath({ locations: [location] })).unwrap()
         } catch (error: any) {
           showError('Could not get the last location of path: ' + error)
         }
 
         if (path) {
-          await dispatch(eventPathUpdate(pathToLineStringConstructor(path)))
+          await dispatch(eventPathUpdate({ lineStringPath: pathToLineStringConstructor(path) })).unwrap()
         }
 
         setLoading(false)

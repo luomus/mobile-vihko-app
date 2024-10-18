@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -50,7 +50,7 @@ const FormDateOptionsComponent = (props: Props) => {
   const dateBegin = watch('gatheringEvent_dateBegin')
   const dateEnd = watch('gatheringEvent_dateEnd')
 
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
 
   const { t } = useTranslation()
 
@@ -63,7 +63,7 @@ const FormDateOptionsComponent = (props: Props) => {
     }
 
     //when observing in the same day as when the event was started, do not give option to pick date
-    if (sameDay(observationEvent.events[observationEvent.events.length - 1].gatheringEvent.dateBegin, parseDateFromDateObjectToDocument(date))) {
+    if (sameDay(observationEvent.events[observationEvent.events.length - 1]?.gatheringEvent?.dateBegin, parseDateFromDateObjectToDocument(date))) {
       setDifferentDay(false)
     }
   }, [])
@@ -73,7 +73,7 @@ const FormDateOptionsComponent = (props: Props) => {
     let combinedDate
 
     if (currentTime && currentDate) {
-      combinedDate = currentDate.substring(0, 10) + 'T' + currentTime.substring(11, 16)
+      combinedDate = currentDate?.substring(0, 10) + 'T' + currentTime?.substring(11, 16)
     } else {
       return
     }

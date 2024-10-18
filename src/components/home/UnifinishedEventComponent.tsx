@@ -1,7 +1,7 @@
 import React, { useState, useEffect, } from 'react'
 import { View, Text } from 'react-native'
 import { useSelector } from 'react-redux'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import { biomonForms, forms } from '../../config/fields'
 import { parseDateFromDocumentToUI } from '../../helpers/dateHelper'
@@ -21,9 +21,9 @@ const UnfinishedEventComponent = (props: Props) => {
 
   const [unfinishedEvent, setUnfinishedEvent] = useState<Record<string, any> | null>(null)
 
-  const observationEvent = useSelector((state: rootState) => state.observationEvent)
-  const observationEventInterrupted = useSelector((state: rootState) => state.observationEventInterrupted)
-  const tracking = useSelector((state: rootState) => state.tracking)
+  const observationEvent = useSelector((state: RootState) => state.observationEvent)
+  const observationEventInterrupted = useSelector((state: RootState) => state.observationEventInterrupted)
+  const tracking = useSelector((state: RootState) => state.tracking)
 
   const { t } = useTranslation()
 
@@ -71,7 +71,7 @@ const UnfinishedEventComponent = (props: Props) => {
         </Text>
         <Text style={Ts.unfinishedEventTextClear}>{t('started at') + ': ' + displayDateTime()}</Text>
         <Text style={Ts.unfinishedEventTextFaded}>{t('observations in list') + ': ' + observationCount() + ' ' +
-          (unfinishedEvent.gatherings[0].units.length === 1 ? t('piece') : t('pieces'))}</Text>
+          (unfinishedEvent?.gatherings[0]?.units?.length === 1 ? t('piece') : t('pieces'))}</Text>
         <View style={Cs.unfinishedEventButtonsContainer}>
           <ButtonComponent onPressFunction={() => props.onContinueObservationEvent(tracking)} title={t('to map')}
             height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
@@ -79,7 +79,7 @@ const UnfinishedEventComponent = (props: Props) => {
             textStyle={Ts.buttonText} iconName={'map-outline'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
           />
           {
-            observationEvent?.events?.[observationEvent?.events?.length - 1].singleObservation
+            observationEvent?.events?.[observationEvent?.events?.length - 1]?.singleObservation
               ? null
               : <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('stop')}
                 height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}

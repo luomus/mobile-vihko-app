@@ -1,22 +1,9 @@
-import { Point, Geometry, LineString, MultiLineString } from 'geojson'
-import { ThunkAction } from 'redux-thunk'
+import { LineString, MultiLineString } from 'geojson'
 import { clone, cloneDeep, set } from 'lodash'
 import i18n from 'i18next'
 import uuid from 'react-native-uuid'
-import {
-  observationActionTypes,
-  SET_OBSERVATION,
-  CLEAR_OBSERVATION,
-  SET_OBSERVING,
-  SET_OBSERVATION_EVENT_INTERRUPTED,
-  REPLACE_OBSERVATION_EVENTS,
-  CLEAR_OBSERVATION_EVENTS,
-  SET_OBSERVATION_ID,
-  CLEAR_OBSERVATION_ID,
-  SET_OBSERVATION_EVENT_ID,
-  CLEAR_OBSERVATION_EVENT_ID,
-  SET_SINGLE_OBSERVATION
-} from './types'
+import moment from 'moment'
+import { RootState, replaceObservationEvents, clearObservationEventId } from '..'
 import { biomonForms, forms } from '../../config/fields'
 import { getCompleteList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
@@ -30,68 +17,64 @@ import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJS
 import { saveImages } from '../../helpers/imageHelper'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import { captureException } from '../../helpers/sentry'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const setObservationLocation = (point: Point | null): observationActionTypes => ({
-  type: SET_OBSERVATION,
-  payload: point,
-})
+interface uploadObservationParams {
+  event: Record<string, any>,
+  lang: string,
+  isPublic: boolean
+}
 
-export const clearObservationLocation = (): observationActionTypes => ({
-  type: CLEAR_OBSERVATION
-})
+interface replaceObservationEventByIdParams {
+  newEvent: Record<string, any>,
+  eventId: string
+}
 
-export const setObserving = (observing: boolean): observationActionTypes => ({
-  type: SET_OBSERVING,
-  payload: observing
-})
+interface deleteObservationEventParams {
+  eventId: string
+}
 
-export const setObservationId = (id: string): observationActionTypes => ({
-  type: SET_OBSERVATION_ID,
-  payload: id
-})
+interface eventPathUpdateParams {
+  lineStringPath: LineString | MultiLineString | undefined
+}
 
-export const clearObservationId = (): observationActionTypes => ({
-  type: CLEAR_OBSERVATION_ID
-})
+interface newObservationParams {
+  unit: Record<string, any>
+}
 
-export const setObservationEventId = (id: string): observationActionTypes => ({
-  type: SET_OBSERVATION_EVENT_ID,
-  payload: id
-})
+interface deleteObservationParams {
+  eventId: string,
+  unitId: string
+}
 
-export const clearObservationEventId = (): observationActionTypes => ({
-  type: CLEAR_OBSERVATION_EVENT_ID
-})
+interface replaceObservationByIdParams {
+  newUnit: Record<string, any>,
+  eventId: string,
+  unitId: string
+}
 
-export const setObservationEventInterrupted = (interrupted: boolean): observationActionTypes => ({
-  type: SET_OBSERVATION_EVENT_INTERRUPTED,
-  payload: interrupted
-})
+interface initCompleteListParams {
+  lang: string,
+  formID: string,
+  gridNumber: string
+}
 
-export const clearObservationEvents = (): observationActionTypes => ({
-  type: CLEAR_OBSERVATION_EVENTS
-})
+export const initObservationEvents = createAsyncThunk<void, undefined, { rejectValue: Record<string, any> }>(
+  'observationEvents/initObservationEvents',
+  async (_, { dispatch, getState, rejectWithValue }) => {
+    const { credentials } = getState() as RootState
 
-export const replaceObservationEvents = (events: Record<string, any>[]): observationActionTypes => ({
-  type: REPLACE_OBSERVATION_EVENTS,
-  payload: events
-})
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
-export const setSingleObservation = (isSingleObservation: boolean): observationActionTypes => ({
-  type: SET_SINGLE_OBSERVATION,
-  payload: isSingleObservation
-})
-
-export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials } = getState()
+    let observationEvents: Array<Record<string, any>>
 
     try {
-      const observationEvents: Array<Record<string, any>> = await storageService.fetch('observationEvents')
-      if (observationEvents !== null) {
-        dispatch(replaceObservationEvents(observationEvents))
-        return Promise.resolve()
-      }
+      observationEvents = await storageService.fetch('observationEvents')
     } catch (error) {
       captureException(error)
       log.error({
@@ -99,20 +82,32 @@ export const initObservationEvents = (): ThunkAction<Promise<void>, any, void, o
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('error on loading observation events, overwrite risk')
       })
     }
+
+    if (observationEvents) {
+      dispatch(replaceObservationEvents(observationEvents))
+    } else {
+      rejectWithValue({ message: 'no events' })
+    }
   }
-}
+)
 
-export const uploadObservationEvent = (id: string, lang: string, isPublic: boolean): ThunkAction<Promise<void>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent, schema } = getState()
+export const uploadObservationEvent = createAsyncThunk<void, uploadObservationParams, { rejectValue: Record<string, any> | unknown }>(
+  'observationEvents/uploadObservationEvent',
+  async ({ event, lang, isPublic }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, schema } = getState() as RootState
+    const eventClone = cloneDeep(event)
 
-    let event: Record<string, any> = cloneDeep(observationEvent.events.find((event: Record<string, any>) => event.id === id))
-    const units: Record<string, any>[] = event.gatherings[0].units
+    if (credentials.token === null || credentials.user === null || eventClone === undefined) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     //check that internet can be reached
     try {
@@ -124,7 +119,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         error: 'Network error (no connection)',
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: error.message
       })
@@ -136,45 +131,47 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     } catch (error: any) {
       captureException(error)
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
+        location: '/stores/observation/actions.tsx uploadObservationEvent()/checkTokenValidity()',
         error: error,
         user_id: credentials.user.id
       })
       if (error.message?.includes('INVALID TOKEN')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'high',
           message: i18n.t('user token has expired')
         })
       }
       if (error.message?.includes('WRONG SOURCE')) {
-        return Promise.reject({
+        return rejectWithValue({
           severity: 'high',
           message: i18n.t('person token is given for a different app')
         })
       }
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('failed to check token')} ${error.message}`
       })
     }
 
     //define whether the event will be released publicly or privately
-    event = definePublicity(event, isPublic)
+    const eventWithPublicity = definePublicity(eventClone, isPublic)
 
-    if (schema.formID !== forms.lolife && event.formID !== forms.birdAtlas && !Object.values(biomonForms).includes(event.formID)) {
-      event = loopThroughUnits(event)
-    } else if (event.formID === forms.birdAtlas || Object.values(biomonForms).includes(event.formID)) {
-      event = loopThroughBirdUnits(event)
+    let eventWithLoop: Record<string, any> | undefined = {}
+    if (schema.formID !== forms.lolife && eventWithPublicity.formID !== forms.birdAtlas && !Object.values(biomonForms).includes(eventWithPublicity.formID)) {
+      eventWithLoop = loopThroughUnits(eventWithPublicity)
+    } else if (eventWithPublicity.formID === forms.birdAtlas || Object.values(biomonForms).includes(eventWithPublicity.formID)) {
+      eventWithLoop = loopThroughBirdUnits(eventWithPublicity)
     }
 
     let localityErrorMessage = ''
 
+    let eventWithLocality: Record<string, any> | undefined = {}
     //if there isn't an observation zone, use APIs to get a proper locality name
     //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
-    if (event.formID !== forms.lolife) {
-      if (overlapsFinland(event.gatherings[0].geometry)) {
+    if (eventWithLoop.formID && eventWithLoop.formID !== forms.lolife) {
+      if (overlapsFinland(eventWithLoop.gatherings[0].geometry)) {
         try {
-          await fetchFinland(event, lang, credentials)
+          eventWithLocality = await fetchFinland(eventWithLoop, lang, credentials)
         } catch (error: any) {
           if (error.severity && error.severity === 'low') {
             localityErrorMessage = error.message
@@ -182,22 +179,25 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         }
       } else {
         try {
-          await fetchForeign(event, lang, credentials)
+          eventWithLocality = await fetchForeign(eventWithLoop, lang, credentials)
         } catch (error: any) {
           if (error.severity && error.severity === 'low') {
             localityErrorMessage = error.message
           }
         }
       }
+    } else {
+      eventWithLocality = eventWithPublicity
     }
 
+    if (!eventWithLocality) return
     //convert possible MultiLineStrings to GeometryCollections containing LineStrings which laji-map can edit properly
-    if (event.gatherings[0].geometry?.type === 'MultiLineString') {
-      event.gatherings[0].geometry = convertMultiLineStringToGCWrappedLineString(event.gatherings[0].geometry)
+    if (eventWithLocality.gatherings[0].geometry?.type === 'MultiLineString') {
+      eventWithLocality.gatherings[0].geometry = convertMultiLineStringToGCWrappedLineString(eventWithLocality.gatherings[0].geometry)
     }
 
-    if (event.gatherings[1]?.geometry?.type === 'MultiLineString') {
-      event.gatherings[1].geometry = convertMultiLineStringToGCWrappedLineString(event.gatherings[1].geometry)
+    if (eventWithLocality.gatherings[1]?.geometry?.type === 'MultiLineString') {
+      eventWithLocality.gatherings[1].geometry = convertMultiLineStringToGCWrappedLineString(eventWithLocality.gatherings[1].geometry)
     }
 
     let imageErrorMessage = ''
@@ -205,7 +205,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     //for each observation in observation event try to send images to server
     //using saveImages, and clean out local properties
     try {
-      const newUnits = await Promise.all(units.map(async (unit: Record<string, any>) => {
+      const newUnits = await Promise.all(eventWithLocality.gatherings[0].units.map(async (unit: Record<string, any>) => {
         let newUnit: Record<string, any>
         let newImages
 
@@ -235,21 +235,21 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         delete newUnit.id
         delete newUnit.rules
         delete newUnit.color
-        if (event.singleObservation) delete newUnit.unitGathering
+        if (eventWithLocality.singleObservation) delete newUnit.unitGathering
 
         return Promise.resolve(newUnit)
       }))
 
-      event.gatherings[0].units = newUnits
+      eventWithLocality.gatherings[0].units = newUnits
 
-      if (event.gatherings[0].units.length < 1) {
-        if (event.formID !== forms.lolife) {
-          event.gatherings[0].units.push({
+      if (eventWithLocality.gatherings[0].units.length < 1) {
+        if (eventWithLocality.formID !== forms.lolife) {
+          eventWithLocality.gatherings[0].units.push({
             'taxonConfidence': 'MY.taxonConfidenceSure',
             'recordBasis': 'MY.recordBasisHumanObservation'
           })
         } else {
-          event.gatherings[0].units.push({
+          eventWithLocality.gatherings[0].units.push({
             'taxonConfidence': 'MY.taxonConfidenceSure',
             'recordBasis': ''
           })
@@ -257,40 +257,42 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
       }
 
       //add ykjSquareNumber to bird atlas events
-      if (event.formID === 'MHL.117' && event.grid.n && event.grid.e) {
-        set(event, 'gatherings[0].gatheringFact.ykjSquareNumber', '' + event.grid.n + ':' + event.grid.e)
+      if (eventWithLocality.formID === 'MHL.117' && eventWithLocality.grid.n && eventWithLocality.grid.e) {
+        set(eventWithLocality, 'gatherings[0].gatheringFact.ykjSquareNumber', '' + eventWithLocality.grid.n + ':' + eventWithLocality.grid.e)
       }
 
-      delete event.id
-      delete event.grid
-      if (event.namedPlaceID && event.namedPlaceID === 'empty') {
-        delete event.namedPlaceID
-        event.gatherings.pop()
+      delete eventWithLocality.id
+      delete eventWithLocality.grid
+      if (eventWithLocality.namedPlaceID && eventWithLocality.namedPlaceID === 'empty') {
+        delete eventWithLocality.namedPlaceID
+        eventWithLocality.gatherings.pop()
       }
-      if (event.singleObservation) delete event.singleObservation
+      if (!eventWithLocality.gatheringEvent.dateEnd || !(moment(eventWithLocality.gatheringEvent.dateEnd).isValid())) delete eventWithLocality.gatheringEvent.dateEnd
+      if (eventWithLocality.singleObservation) delete eventWithLocality.singleObservation
 
     } catch (error: any) {
       captureException(error)
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: error.message
       })
     }
 
     try {
-      await postObservationEvent(event, credentials)
+      console.log('Upload', JSON.stringify(eventWithLocality, null, 2))
+      await postObservationEvent(eventWithLocality, credentials)
     } catch (error: any) {
       if (error.response?.status.toString() === '422') {
         captureException({
           error,
           extra: {
-            payload: JSON.stringify(event),
+            payload: JSON.stringify(eventWithLocality),
           }
         })
         log.error({
           location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
           error: error.response.data.error,
-          data: event,
+          data: eventWithLocality,
           user_id: credentials.user.id
         })
       } else {
@@ -302,7 +304,7 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
         })
       }
 
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: `${i18n.t('post failure')} ${error.message}`
       })
@@ -311,58 +313,40 @@ export const uploadObservationEvent = (id: string, lang: string, isPublic: boole
     dispatch(clearObservationEventId())
 
     try {
-      await dispatch(deleteObservationEvent(id))
-    } catch (error) {
+      await dispatch(deleteObservationEvent({ eventId: event.id })).unwrap()
+    } catch (error: unknown) {
       captureException(error)
-      return Promise.reject(error)
+      return rejectWithValue(error)
     }
 
     if (localityErrorMessage !== '') {
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: localityErrorMessage
       })
     }
 
     if (imageErrorMessage !== '') {
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: imageErrorMessage
       })
     }
-
-    return Promise.resolve()
   }
-}
+)
 
-export const newObservationEvent = (newEvent: Record<string, any>): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
-    const newEvents = observationEvent.events.concat(newEvent)
+export const replaceObservationEventById = createAsyncThunk<void, replaceObservationEventByIdParams, { rejectValue: Record<string, any> }>(
+  'observationEvents/replaceObservationEventById',
+  async ({ newEvent, eventId }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent } = getState() as RootState
 
-    try {
-      await storageService.save('observationEvents', newEvents)
-    } catch (error) {
-      captureException(error)
-      log.error({
-        location: '/stores/observation/actions.tsx newObservationEvent()',
-        error: error,
-        user_id: credentials.user.id
-      })
-      return Promise.reject({
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
         severity: 'low',
-        message: i18n.t('could not save new event to long term memory')
+        message: `${i18n.t('failed to load credentials from local')}`
       })
     }
 
-    dispatch(replaceObservationEvents(newEvents))
-    return Promise.resolve()
-  }
-}
-
-export const replaceObservationEventById = (newEvent: Record<string, any>, eventId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
         return newEvent
@@ -380,22 +364,32 @@ export const replaceObservationEventById = (newEvent: Record<string, any>, event
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('could not save event to storage')
       })
     }
 
     dispatch(replaceObservationEvents(newEvents))
-
-    return Promise.resolve()
   }
-}
+)
 
-export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
-    const newEvents = observationEvent.events.filter((event: Record<string, any>) => event.id !== eventId)
+export const deleteObservationEvent = createAsyncThunk<void, deleteObservationEventParams, { rejectValue: Record<string, any> }>(
+  'observationEvents/deleteObservationEvent',
+  async ({ eventId }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent } = getState() as RootState
+
+    const eventsCopy = cloneDeep(observationEvent)
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
+
+    const filteredEvents = eventsCopy.events.filter((event: Record<string, any>) => event.id !== eventId)
+    const newEvents = filteredEvents ? filteredEvents : []
 
     try {
       await storageService.save('observationEvents', newEvents)
@@ -406,40 +400,66 @@ export const deleteObservationEvent = (eventId: string): ThunkAction<Promise<any
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('error removing observation event')
       })
     }
     dispatch(replaceObservationEvents(newEvents))
-    return Promise.resolve()
   }
-}
+)
 
-export const eventPathUpdate = (lineStringPath: LineString | MultiLineString | undefined): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { observationEvent } = getState()
+export const eventPathUpdate = createAsyncThunk<void, eventPathUpdateParams, { rejectValue: Record<string, any> }>(
+  'observationEvents/eventPathUpdate',
+  async ({ lineStringPath }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
 
+    if (newEvent === undefined) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
+
     if (lineStringPath) {
       newEvent.gatherings[0].geometry = lineStringPath
-
       newEvents.push(newEvent)
-
-      storageService.save('observationEvents', newEvents)
       dispatch(replaceObservationEvents(newEvents))
     }
   }
-}
+)
 
-export const newObservation = (unit: Record<string, any>): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
+export const newObservation = createAsyncThunk<void, newObservationParams, { rejectValue: Record<string, any> }>(
+  'observation/newObservation',
+  async ({ unit }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     const events = clone(observationEvent.events)
     const event = cloneDeep(events.pop())
+
+    if (event === undefined) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     event.gatherings[0].units.push(unit)
     events.push(event)
@@ -453,20 +473,28 @@ export const newObservation = (unit: Record<string, any>): ThunkAction<Promise<a
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('error saving new observation')
       })
     }
 
     dispatch(replaceObservationEvents(events))
-    Promise.resolve()
   }
-}
+)
 
-export const deleteObservation = (eventId: string, unitId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
+export const deleteObservation = createAsyncThunk<void, deleteObservationParams, { rejectValue: Record<string, any> }>(
+  'observation/deleteObservation',
+  async ({ eventId, unitId }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
+
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
         const newEvent = cloneDeep(event)
@@ -489,57 +517,27 @@ export const deleteObservation = (eventId: string, unitId: string): ThunkAction<
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('error deleting observation')
       })
     }
 
     dispatch(replaceObservationEvents(newEvents))
-    return Promise.resolve()
   }
-}
+)
 
-export const replaceLocationById = (geometry: Geometry, eventId: string, unitId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
-    const newEvents = observationEvent.events.map((event: Record<string, any>) => {
-      if (event.id === eventId) {
-        const newEvent = cloneDeep(event)
-        newEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
-          if (unit.id === unitId) {
-            unit.unitGathering.geometry = geometry
-          }
-        })
-        return newEvent
-      } else {
-        return event
-      }
-    })
+export const replaceObservationById = createAsyncThunk<void, replaceObservationByIdParams, { rejectValue: Record<string, any> }>(
+  'observation/replaceObservationById',
+  async ({ newUnit, eventId, unitId }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent } = getState() as RootState
 
-    try {
-      await storageService.save('observationEvents', newEvents)
-    } catch (error) {
-      captureException(error)
-      log.error({
-        location: '/stores/observation/actions.tsx replaceLocationById()',
-        error: error,
-        user_id: credentials.user.id
-      })
-      return Promise.reject({
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
         severity: 'low',
-        message: i18n.t('could not save modifications to long term memory')
+        message: `${i18n.t('failed to load credentials from local')}`
       })
     }
-
-    dispatch(replaceObservationEvents(newEvents))
-    return Promise.resolve()
-  }
-}
-
-export const replaceObservationById = (newUnit: Record<string, any>, eventId: string, unitId: string): ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
 
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
@@ -565,21 +563,27 @@ export const replaceObservationById = (newUnit: Record<string, any>, eventId: st
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('error modifying observation')
       })
     }
 
     dispatch(replaceObservationEvents(newEvents))
-    return Promise.resolve()
   }
-}
+)
 
-export const initCompleteList = (lang: string, formID: string, gridNumber: string):
-  ThunkAction<Promise<any>, any, void, observationActionTypes> => {
-  return async (dispatch, getState) => {
-    const { credentials, observationEvent } = getState()
+export const initCompleteList = createAsyncThunk<void, initCompleteListParams, { rejectValue: Record<string, any> }>(
+  'observation/initCompleteList',
+  async ({ lang, formID, gridNumber }, { dispatch, getState, rejectWithValue }) => {
+    const { credentials, observationEvent } = getState() as RootState
+
+    if (credentials.token === null || credentials.user === null) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     const mapInformalTaxonGroups = (informalTaxonGroups: Record<string, any>) => {
       return informalTaxonGroups.map((group: any) => {
@@ -590,6 +594,13 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
     const newEvents = clone(observationEvent.events)
     const newEvent = cloneDeep(newEvents.pop())
     const observations: Record<string, any>[] = []
+
+    if (newEvent === undefined) {
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to load credentials from local')}`
+      })
+    }
 
     let taxonList: Record<string, any>[] = []
 
@@ -615,7 +626,7 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('failed to fetch taxon list')
       })
@@ -683,13 +694,12 @@ export const initCompleteList = (lang: string, formID: string, gridNumber: strin
         error: error,
         user_id: credentials.user.id
       })
-      return Promise.reject({
+      return rejectWithValue({
         severity: 'low',
         message: i18n.t('error saving new observation')
       })
     }
 
     dispatch(replaceObservationEvents(newEvents))
-    Promise.resolve()
   }
-}
+)

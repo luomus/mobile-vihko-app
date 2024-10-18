@@ -9,22 +9,22 @@ import { captureException } from './sentry'
 
 //define whether the event will be released publicly or privately
 export const definePublicity = (event: Record<string, any>, isPublic: boolean): Record<string, any> => {
-  const modifiedEvent = event
+  let publicityRestrictions: string = ''
 
   if (isPublic) {
-    modifiedEvent.publicityRestrictions = 'MZ.publicityRestrictionsPublic'
+    publicityRestrictions = 'MZ.publicityRestrictionsPublic'
   } else {
-    modifiedEvent.publicityRestrictions = 'MZ.publicityRestrictionsPrivate'
+    publicityRestrictions = 'MZ.publicityRestrictionsPrivate'
   }
 
-  return modifiedEvent
+  return {
+    ...event,
+    publicityRestrictions
+  }
 }
 
 export const loopThroughUnits = (event: Record<string, any>): Record<string, any> => {
-
-  const modifiedEvent: Record<string, any> = event
-
-  modifiedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
+  event.gatherings[0].units.forEach((unit: Record<string, any>) => {
     if (unit.images && unit.images.length > 0) {
       unit.recordBasis = 'MY.recordBasisHumanObservationPhoto'
     } else {
@@ -38,14 +38,21 @@ export const loopThroughUnits = (event: Record<string, any>): Record<string, any
     }
   })
 
-  return modifiedEvent
+  const gatherings = [
+    { ...event.gatherings[0], units: event.gatherings[0].units },
+    ...event.gatherings.slice(1)
+  ]
+
+  return {
+    ...event,
+    gatherings
+  }
 }
 
 export const loopThroughBirdUnits = (event: Record<string, any>): Record<string, any> => {
+  const units = event.gatherings[0].units
 
-  const modifiedEvent: Record<string, any> = event
-
-  modifiedEvent.gatherings[0].units.forEach((unit: Record<string, any>) => {
+  units.forEach((unit: Record<string, any>) => {
     if (unit.scientificName) {
       delete unit.scientificName
     }
@@ -54,7 +61,15 @@ export const loopThroughBirdUnits = (event: Record<string, any>): Record<string,
     }
   })
 
-  return modifiedEvent
+  const gatherings = [
+    { ...event.gatherings[0], units },
+    ...event.gatherings.slice(1)
+  ]
+
+  return {
+    ...event,
+    gatherings
+  }
 }
 
 //calls the helper function for fetching and processing locality details for finnish events
@@ -75,10 +90,20 @@ export const fetchFinland = async (event: Record<string, any>, lang: string, cre
   } else if (localityDetails.status === 'fail') {
     await fetchForeign(event, lang, credentials)
   } else {
-    //inserts the fetched values to the event
-    event.gatherings[0].biologicalProvince = localityDetails.biologicalProvince
-    event.gatherings[0].country = localityDetails.country
-    event.gatherings[0].municipality = localityDetails.municipality
+    const gatherings = [
+      {
+        ...event.gatherings[0],
+        biologicalProvince: localityDetails.biologicalProvince,
+        country: localityDetails.country,
+        municipality: localityDetails.municipality
+      },
+      ...event.gatherings.slice(1)
+    ]
+
+    return {
+      ...event,
+      gatherings
+    }
   }
 }
 
@@ -101,10 +126,20 @@ export const fetchForeign = async (event: Record<string, any>, lang: string, cre
     })
   }
 
-  //inserts the fetched values to the event
-  event.gatherings[0].administrativeProvince = localityDetails.administrativeProvince
-  event.gatherings[0].country = localityDetails.country
-  event.gatherings[0].municipality = localityDetails.municipality
+  const gatherings = [
+    {
+      ...event.gatherings[0],
+      biologicalProvince: localityDetails.biologicalProvince,
+      country: localityDetails.country,
+      municipality: localityDetails.municipality
+    },
+    ...event.gatherings.slice(1)
+  ]
+
+  return {
+    ...event,
+    gatherings
+  }
 }
 
 //if observation event was made in finland, this function will be called
@@ -138,7 +173,7 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   }
 
   if (localityDetails.result.status === 'INVALID_REQUEST') {
-    captureException(localityDetails.result.error_message)
+    // captureException(localityDetails.result.error_message)
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
       error: localityDetails.result.error_message,

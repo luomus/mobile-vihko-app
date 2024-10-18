@@ -2,29 +2,31 @@ import { Polygon, Point, LineString, MultiLineString } from 'geojson'
 import haversine from 'haversine-distance'
 import { FINLAND_BOUNDS } from '../config/location'
 import { forms } from '../config/fields'
+import { cloneDeep } from 'lodash'
 
 export const setEventGeometry = (event: Record<string, any>, lineStringPath: LineString | MultiLineString | undefined,
   firstLocation: any, grid: any) => {
+  const eventCopy = cloneDeep(event)
 
-  const eventHasNamedPlace = event.namedPlaceID && event.namedPlaceID !== 'empty'
+  const eventHasNamedPlace = eventCopy.namedPlaceID && eventCopy.namedPlaceID !== 'empty'
   const eventHasPath = lineStringPath !== undefined
-  const eventHasGrid = event.formID === forms.birdAtlas
-  const eventHasUnits = event.gatherings[0].units
+  const eventHasGrid = eventCopy.formID === forms.birdAtlas
+  const eventHasUnits = eventCopy.gatherings[0].units
     .filter((unit: Record<string, any>) => !unit.id.includes('complete_list')).length >= 1
   const eventHasFirstLocation = firstLocation
 
   if (eventHasNamedPlace) {
-    event.gatherings[0].geometry = event.gatherings[1].geometry
+    eventCopy.gatherings[0].geometry = eventCopy.gatherings[1].geometry
   } else if (eventHasPath) {
-    event.gatherings[0].geometry = lineStringPath
+    eventCopy.gatherings[0].geometry = lineStringPath
   } else if (eventHasGrid) {
-    event.gatherings[0].geometry = grid.geometry
+    eventCopy.gatherings[0].geometry = grid.geometry
   } else if (eventHasUnits) {
-    event.singleObservation
-      ? event.gatherings[0].geometry = event.gatherings[0].units[0].unitGathering.geometry
-      : event.gatherings[0].geometry = createUnitBoundingBox(event.gatherings[0].units)
+    eventCopy.singleObservation
+      ? eventCopy.gatherings[0].geometry = eventCopy.gatherings[0].units[0].unitGathering.geometry
+      : eventCopy.gatherings[0].geometry = createUnitBoundingBox(eventCopy.gatherings[0].units)
   } else if (eventHasFirstLocation) {
-    event.gatherings[0].geometry = {
+    eventCopy.gatherings[0].geometry = {
       coordinates: [
         firstLocation[1],
         firstLocation[0]
@@ -33,7 +35,7 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
     }
     //coordinates of luomus as the last option
   } else {
-    event.gatherings[0].geometry = {
+    eventCopy.gatherings[0].geometry = {
       coordinates: [
         24.931409060955048,
         60.17128187292611
@@ -43,14 +45,14 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
   }
 
   if (eventHasNamedPlace && eventHasPath) {
-    if (event.gatherings[1]) {
-      event.gatherings[1].geometry = lineStringPath
+    if (eventCopy.gatherings[1]) {
+      eventCopy.gatherings[1].geometry = lineStringPath
     } else {
-      event.gatherings.push({ geometry: lineStringPath })
+      eventCopy.gatherings.push({ geometry: lineStringPath })
     }
   }
 
-  return event
+  return eventCopy
 }
 
 //this is called in HomeComponent, if there was no path geometry

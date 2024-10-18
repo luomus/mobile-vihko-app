@@ -2,16 +2,16 @@ import React, { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { appendPath, DispatchType, LocationType, rootState, setOutsideBorders, setPath, setTracking } from '../../stores'
+import { appendPath, DispatchType, LocationType, RootState, setOutsideBorders, setPath, setTracking } from '../../stores'
 import Colors from '../../styles/Colors'
 import storageService from '../../services/storageService'
 import { getCurrentLocation } from '../../helpers/geolocationHelper'
 
 const GridWarningComponent = () => {
 
-  const grid = useSelector((state: rootState) => state.grid)
-  const path = useSelector((state: rootState) => state.path)
-  const tracking = useSelector((state: rootState) => state.tracking)
+  const grid = useSelector((state: RootState) => state.grid)
+  const path = useSelector((state: RootState) => state.path)
+  const tracking = useSelector((state: RootState) => state.tracking)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -24,7 +24,7 @@ const GridWarningComponent = () => {
           dispatch(setOutsideBorders('true'))
 
           const location: LocationType = await getCurrentLocation(true)
-          await dispatch(appendPath([location]))
+          await dispatch(appendPath({ locations: [location] })).unwrap()
 
           dispatch(setTracking(false))
           await storageService.save('tracking', false)

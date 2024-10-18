@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { ActionSheetIOS, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { DispatchType, rootState, setListOrder } from '../../stores'
+import { DispatchType, RootState, setListOrder } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
@@ -17,7 +17,7 @@ type Props = {
 
 const ListSorterComponent = (props: Props) => {
 
-  const listOrder = useSelector((state: rootState) => state.listOrder)
+  const listOrder = useSelector((state: RootState) => state.listOrder)
 
   const dispatch: DispatchType = useDispatch()
 

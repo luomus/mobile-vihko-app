@@ -13,6 +13,7 @@ web-build/
 web-report/
 coverage/
 **/keys.ts
+.idea/*
 
 # macOS
 .DS_Store

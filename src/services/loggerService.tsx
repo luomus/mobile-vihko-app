@@ -3,7 +3,7 @@ import { loggerUrl } from '../config/urls'
 import { ACCESS_TOKEN } from 'react-native-dotenv'
 import { brand, modelName, osName, osVersion } from 'expo-device'
 import AppJSON from '../../app.json'
-import { captureException } from '../helpers/sentry'
+// import { captureException } from '../helpers/sentry'
 
 export const sendError = async (rawMsg: {error: string|undefined, data: string|undefined, location: string|undefined, user_id: string|undefined}) => {
 
@@ -29,6 +29,6 @@ export const sendError = async (rawMsg: {error: string|undefined, data: string|u
       }
     )
   } catch (e) {
-    captureException(e)
+    // captureException(e)
   }
 }

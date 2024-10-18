@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import {
-  rootState,
+  RootState,
   DispatchType,
   setMessageState
 } from '../../stores'
@@ -33,8 +33,8 @@ const NavBarComponent = (props: Props) => {
 
   const dispatch: DispatchType = useDispatch()
 
-  const schema = useSelector((state: rootState) => state.schema)
-  const singleObservation = useSelector((state: rootState) => state.singleObservation)
+  const schema = useSelector((state: RootState) => state.schema)
+  const singleObservation = useSelector((state: RootState) => state.singleObservation)
 
   useEffect(() => {
     if (schema.formID === forms.tripForm) {

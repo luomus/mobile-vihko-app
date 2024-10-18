@@ -1,66 +1,26 @@
-import {
-  createStore,
-  combineReducers,
-  applyMiddleware,
-  AnyAction
-} from 'redux'
-import thunk, { ThunkDispatch } from 'redux-thunk'
+import { UnknownAction } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
+import { ThunkDispatch } from 'redux-thunk'
 
-//actions
 import {
-  setRegion,
-  clearRegion,
-  setEditing,
-  setListOrder,
-  setCurrentObservationZone,
-  clearCurrentObservationZone,
-  initObservationZones,
-  getObservationZonesSuccess
+  initObservationZones
 } from './map/actions'
 import {
-  setMessageState,
-  popMessageState,
-  clearMessageState
-} from './message/actions'
-import {
-  setObservationLocation,
-  clearObservationLocation,
-  setObserving,
-  setObservationId,
-  clearObservationId,
-  setObservationEventInterrupted,
-  clearObservationEventId,
-  clearObservationEvents,
-  replaceObservationEvents,
-  setSingleObservation,
   initObservationEvents,
   uploadObservationEvent,
-  newObservationEvent,
   replaceObservationEventById,
   deleteObservationEvent,
   eventPathUpdate,
   newObservation,
   deleteObservation,
-  replaceLocationById,
   replaceObservationById,
-  setObservationEventId
+  initCompleteList
 } from './observation/actions'
 import {
-  updateLocation,
-  clearLocation,
-  appendPath,
-  setPath,
-  clearPath,
-  setFirstLocation,
-  setGrid,
-  clearGrid,
-  setGridCoords,
-  setGridPause,
-  setOutsideBorders,
-  setTracking,
+  appendPath
 } from './position/actions'
 import {
-  setSchema,
+  initSchema,
   switchSchema
 } from './schema/actions'
 import {
@@ -73,22 +33,31 @@ import {
 } from './shared/actions'
 import {
   loginUser,
-  logoutUser,
   initLocalCredentials,
-  setCredentials,
-  clearCredentials,
   getPermissions,
-  getMetadata
+  getMetadata,
+  logoutUser
 } from './user/actions'
 
-//reducers
+import { schemaReducer, setSchema } from './schema/reducers'
 import {
   editingReducer,
   listOrderReducer,
   observationZoneReducer,
-  regionReducer
+  regionReducer,
+  setEditing,
+  setListOrder,
+  clearCurrentObservationZone,
+  setObservationZones,
+  setCurrentObservationZone,
+  clearRegion,
+  setRegion
 } from './map/reducers'
-import { messageReducer } from './message/reducers'
+import messageReducer, {
+  clearMessageState,
+  popMessageState,
+  setMessageState
+} from './message/reducers'
 import {
   observationReducer,
   observationEventInterruptedReducer,
@@ -96,111 +65,99 @@ import {
   observationIdReducer,
   observationEventIdReducer,
   observingReducer,
-  singleObservationReducer
+  singleObservationReducer,
+  setObservationLocation,
+  clearObservationLocation,
+  setObserving,
+  setObservationId,
+  clearObservationId,
+  setObservationEventInterrupted,
+  clearObservationEventId,
+  clearObservationEvents,
+  replaceObservationEvents,
+  setSingleObservation,
+  setObservationEventId
 } from './observation/reducers'
 import {
   firstLocationReducer,
   pathReducer,
   positionReducer,
   gridReducer,
-  trackingReducer
+  trackingReducer,
+  updateLocation,
+  clearLocation,
+  setPath,
+  clearPath,
+  setFirstLocation,
+  setGrid,
+  clearGrid,
+  setGridCoords,
+  setGridPause,
+  setOutsideBorders,
+  setTracking,
 } from './position/reducers'
-import { schemaReducer } from './schema/reducers'
-import { credentialsReducer } from './user/reducers'
+import credentialsReducer, {
+  clearCredentials,
+  setCredentials
+} from './user/reducers'
 
 //types
 import {
-  mapActionTypes,
   EditingType,
   ListOrderType,
   ObservationZonesType
 } from './map/types'
 import {
-  messageActionTypes,
   MessageType
 } from './message/types'
 import {
-  observationActionTypes,
   ObservationEventType
 } from './observation/types'
 import {
-  locationActionTypes,
   LocationType,
   PathType,
   PathPoint,
   GridType
 } from './position/types'
 import {
-  schemaActionTypes,
   SchemaType
 } from './schema/types'
 import {
-  userActionTypes,
   CredentialsType,
   UserType
 } from './user/types'
 
-import { Point } from 'geojson'
-import { Region } from 'react-native-maps'
-
-interface rootState {
-  credentials: CredentialsType,
-  editing: EditingType,
-  firstLocation: number[],
-  grid: GridType,
-  listOrder: ListOrderType,
-  message: MessageType[],
-  observation: Point | null,
-  observationEventInterrupted: boolean,
-  observationEvent: ObservationEventType,
-  observationEventId: string,
-  observationId: string,
-  observationZone: ObservationZonesType,
-  observing: boolean,
-  path: PathType,
-  position: LocationType,
-  region: Region,
-  schema: SchemaType,
-  singleObservation: boolean,
-  tracking: boolean
-}
-
-const appReducer = combineReducers({
-  credentials: credentialsReducer,
-  editing: editingReducer,
-  firstLocation: firstLocationReducer,
-  grid: gridReducer,
-  listOrder: listOrderReducer,
-  message: messageReducer,
-  observation: observationReducer,
-  observationEventInterrupted: observationEventInterruptedReducer,
-  observationEvent: observationEventsReducer,
-  observationEventId: observationEventIdReducer,
-  observationId: observationIdReducer,
-  observationZone: observationZoneReducer,
-  observing: observingReducer,
-  path: pathReducer,
-  position: positionReducer,
-  region: regionReducer,
-  schema: schemaReducer,
-  singleObservation: singleObservationReducer,
-  tracking: trackingReducer
+export const store = configureStore({
+  reducer: {
+    credentials: credentialsReducer,
+    editing: editingReducer,
+    firstLocation: firstLocationReducer,
+    grid: gridReducer,
+    listOrder: listOrderReducer,
+    message: messageReducer,
+    observation: observationReducer,
+    observationEventInterrupted: observationEventInterruptedReducer,
+    observationEvent: observationEventsReducer,
+    observationEventId: observationEventIdReducer,
+    observationId: observationIdReducer,
+    observationZone: observationZoneReducer,
+    observing: observingReducer,
+    path: pathReducer,
+    position: positionReducer,
+    region: regionReducer,
+    schema: schemaReducer,
+    singleObservation: singleObservationReducer,
+    tracking: trackingReducer
+  },
+  // middleware: getDefaultMiddleware => getDefaultMiddleware({
+  //   serializableCheck: false
+  // })
 })
 
-const rootReducer = (state: any, action: any) => {
-  if (action.type === 'RESET_STORE') {
-    state = undefined
-  }
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
-  return appReducer(state, action)
-}
-
-const store = createStore(rootReducer, applyMiddleware(thunk))
-
-type DispatchType = ThunkDispatch<any, void, AnyAction>
-export { store }
-
-export type { rootState }
+type DispatchType = ThunkDispatch<any, void, UnknownAction>
 export type { DispatchType }
 
 //actions
@@ -209,10 +166,10 @@ export {
   clearRegion,
   setEditing,
   setListOrder,
-  setCurrentObservationZone,
   clearCurrentObservationZone,
+  setCurrentObservationZone,
+  setObservationZones,
   initObservationZones,
-  getObservationZonesSuccess,
   setMessageState,
   popMessageState,
   clearMessageState,
@@ -229,14 +186,13 @@ export {
   setSingleObservation,
   initObservationEvents,
   uploadObservationEvent,
-  newObservationEvent,
   replaceObservationEventById,
   deleteObservationEvent,
   eventPathUpdate,
   newObservation,
   deleteObservation,
-  replaceLocationById,
   replaceObservationById,
+  initCompleteList,
   updateLocation,
   clearLocation,
   appendPath,
@@ -250,6 +206,7 @@ export {
   setOutsideBorders,
   setTracking,
   setSchema,
+  initSchema,
   switchSchema,
   resetReducer,
   beginObservationEvent,
@@ -258,31 +215,25 @@ export {
   beginSingleObservation,
   finishSingleObservation,
   loginUser,
-  logoutUser,
+  initLocalCredentials,
   getPermissions,
   getMetadata,
-  initLocalCredentials,
+  logoutUser,
   setCredentials,
   clearCredentials
 }
 
 export type {
-  mapActionTypes,
   EditingType,
   ListOrderType,
   ObservationZonesType,
-  messageActionTypes,
   MessageType,
-  observationActionTypes,
   ObservationEventType,
-  locationActionTypes,
   LocationType,
   PathType,
   PathPoint,
   GridType,
-  schemaActionTypes,
   SchemaType,
-  userActionTypes,
   CredentialsType,
   UserType
 }

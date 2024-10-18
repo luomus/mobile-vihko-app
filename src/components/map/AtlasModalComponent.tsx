@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import { gridPreviewUrl, resultServiceUrl } from '../../config/urls'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
@@ -16,7 +16,7 @@ type Props = {
 
 const AtlasModalComponent = (props: Props) => {
 
-  const grid = useSelector((state: rootState) => state.grid)
+  const grid = useSelector((state: RootState) => state.grid)
 
   const { t } = useTranslation()
 

@@ -6,7 +6,7 @@ import { Icon } from 'react-native-elements'
 import { CommonActions, ParamListBase } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import {
-  rootState,
+  RootState,
   DispatchType,
   resetReducer,
   logoutUser,
@@ -36,10 +36,10 @@ type Props = {
 
 const UserModalComponent = (props: Props) => {
 
-  const credentials = useSelector((state: rootState) => state.credentials)
-  const observing = useSelector((state: rootState) => state.observing)
-  const path = useSelector((state: rootState) => state.path)
-  const schema = useSelector((state: rootState) => state.schema)
+  const credentials = useSelector((state: RootState) => state.credentials)
+  const observing = useSelector((state: RootState) => state.observing)
+  const path = useSelector((state: RootState) => state.path)
+  const schema = useSelector((state: RootState) => state.schema)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -71,12 +71,12 @@ const UserModalComponent = (props: Props) => {
   const logout = async () => {
     if (observing) {
       const lineString = pathToLineStringConstructor(path)
-      dispatch(eventPathUpdate(lineString))
+      dispatch(eventPathUpdate({ lineStringPath: lineString })).unwrap()
       await stopLocationAsync()
     }
 
     try {
-      await dispatch(logoutUser())
+      await dispatch(logoutUser()).unwrap()
     } catch (error: any) {
       dispatch(setMessageState({
         type: 'dangerConf',
@@ -100,7 +100,7 @@ const UserModalComponent = (props: Props) => {
     return async () => {
       await saveLanguage(lang)
       if (schema) {
-        await dispatch(switchSchema(schema.formID, lang))
+        await dispatch(switchSchema({ formID: schema.formID, lang })).unwrap()
       }
       props.onClose()
     }

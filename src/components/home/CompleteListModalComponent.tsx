@@ -5,7 +5,7 @@ import Checkbox from 'expo-checkbox'
 import Modal from 'react-native-modal'
 import { useTranslation } from 'react-i18next'
 import {
-  rootState,
+  RootState,
   DispatchType,
   setTracking,
   updateLocation,
@@ -36,7 +36,7 @@ const CompleteListModalComponent = (props: Props) => {
   const [northing, setNorthing] = useState<string>('00')
   const [easting, setEasting] = useState<string>('00')
 
-  const tracking = useSelector((state: rootState) => state.tracking)
+  const tracking = useSelector((state: RootState) => state.tracking)
 
   const { t } = useTranslation()
 

@@ -3,7 +3,7 @@ import { ScrollView, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Modal from 'react-native-modal'
 import { Icon } from 'react-native-elements'
-import { rootState } from '../../stores'
+import { RootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import { forms, lolifeObservationTypes } from '../../config/fields'
 import Bs from '../../styles/ButtonStyles'
@@ -23,7 +23,7 @@ type Props = {
 
 const MapModalComponent = (props: Props) => {
 
-  const schema = useSelector((state: rootState) => state.schema)
+  const schema = useSelector((state: RootState) => state.schema)
 
   const { t } = useTranslation()
 

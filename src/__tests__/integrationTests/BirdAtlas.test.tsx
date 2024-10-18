@@ -27,7 +27,7 @@ const initializeComponent = async (store:any) => {
   }
   await store.dispatch(setCredentials(credentials))
 
-  await store.dispatch(switchSchema('MHL.117', i18n.language))
+  await store.dispatch(switchSchema({ formID: 'MHL.117', lang: i18n.language }))
 }
 
 const testPressLocation = {
