@@ -1,5 +1,5 @@
+import { ScrollView } from 'react-native'
 import Form from './Form'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 //called in component to initalize to any of the forms
 export const initForm = (
@@ -15,7 +15,7 @@ export const initForm = (
   additionalFields: Record<string, any> | null = null,
   fieldOrder: string[] | null = null,
   lang: string,
-  scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>
+  scrollView: React.MutableRefObject<ScrollView | null>
 ) => {
 
   if (!schema) {

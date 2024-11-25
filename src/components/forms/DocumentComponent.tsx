@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, ReactChild } from 'react'
-import { ActionSheetIOS, Platform, View } from 'react-native'
+import { ActionSheetIOS, Platform, ScrollView, View } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useTranslation } from 'react-i18next'
 import { set, get, merge, mergeWith, omit, cloneDeep } from 'lodash'
 import moment from 'moment'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import {
   RootState,
   DispatchType,
@@ -73,7 +73,7 @@ const DocumentComponent = (props: Props) => {
   const [showSuccess, setShowSuccess] = useState<boolean>(false)
 
   //reference for scrollView
-  const scrollViewRef = useRef<KeyboardAwareScrollView | null>(null)
+  const scrollViewRef = useRef<ScrollView | null>(null)
 
   const editing = useSelector((state: RootState) => state.editing)
   const grid = useSelector((state: RootState) => state.grid)
@@ -153,7 +153,7 @@ const DocumentComponent = (props: Props) => {
 
   //as complete list field is the only possible validation error, scroll to top when validation error occurs
   const onError = async () => {
-    scrollViewRef?.current?.scrollToPosition(0, 0, false)
+    scrollViewRef?.current?.scrollTo(0, 0, false)
   }
 
   const onSubmit = async (data: { [key: string]: any }, sendMode: string) => {

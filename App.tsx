@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import * as TaskManager from 'expo-task-manager'
 import * as Sentry from '@sentry/react-native'
 import { SENTRY_DSN } from 'react-native-dotenv'
+import { KeyboardProvider } from 'react-native-keyboard-controller'
 import {
   store,
   resetReducer,
@@ -30,7 +31,9 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Navigator initialRoute={'login'} />
+      <KeyboardProvider>
+        <Navigator initialRoute={'login'} />
+      </KeyboardProvider>
     </Provider>
   )
 }

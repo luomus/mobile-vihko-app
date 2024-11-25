@@ -8,11 +8,11 @@ global.window = global
 
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage)
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
-jest.mock('react-native-keyboard-aware-scroll-view', () => {
-  return {
-    KeyboardAwareScrollView: jest.fn().mockImplementation(({ children }) => children)
-  }
-})
+// jest.mock('react-native-keyboard-aware-scroll-view', () => {
+//   return {
+//     KeyboardAwareScrollView: jest.fn().mockImplementation(({ children }) => children)
+//   }
+// })
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 // jest.mock('./src/helpers/axiosHelper')

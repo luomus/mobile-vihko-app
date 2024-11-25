@@ -72,9 +72,11 @@ const FormAutocompleteComponent = (props: Props) => {
 
   //set focus into the taxon autocomplete's input field so user can start typing immediately
   useEffect(() => {
-    if (valueField === 'identifications_0_taxon' || valueField === 'identifications_0_taxonVerbatim') {
-      setFocus(valueField)
-    }
+    setTimeout(() => {
+      if (valueField === 'identifications_0_taxon' || valueField === 'identifications_0_taxonVerbatim') {
+        setFocus(valueField)
+      }
+    }, 500)
   }, [setFocus])
 
   //this timeout clears taxon name -field's errors (and the error notification) in 5 sec

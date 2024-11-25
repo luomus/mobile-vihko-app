@@ -2,7 +2,6 @@
   "expo": {
     "name": "Mobiilivihko",
     "slug": "mobile-vihko-app",
-    "privacy": "public",
     "owner": "luomus",
     "platforms": [
       "android",

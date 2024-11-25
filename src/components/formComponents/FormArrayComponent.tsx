@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, View } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { ScrollView, Text, View } from 'react-native'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -17,7 +16,7 @@ interface Props {
   defaultValue: Array<string> | undefined,
   editable: boolean,
   firstEditable: boolean,
-  scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>,
+  scrollView: React.MutableRefObject<ScrollView | null>,
   createInputElement: (
     title: string, objectTitle: string, parentObjectTitle: string,
     type: string, defaultValue: string | number | Array<string> | undefined, isArrayItem: boolean,
@@ -132,7 +131,7 @@ const FormArrayComponent = (props: Props) => {
         height: height,
       }
 
-      props.scrollView.current?.scrollToPosition(0, (measurements.fy + measurements.height), false)
+      props.scrollView.current?.scrollTo(0, (measurements.fy + measurements.height), false)
     })
   }
 

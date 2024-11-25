@@ -1,5 +1,4 @@
 import React from 'react'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import FormInputComponent from '../components/formComponents/FormInputComponent'
 import FormImagePickerComponent from '../components/formComponents/FormImagePickerComponent'
 import FormImageKeywordPickerComponent from '../components/formComponents/FormImagePickerKeywordComponent'
@@ -13,6 +12,7 @@ import FormSwitchComponent from '../components/formComponents/FormSwitchComponen
 import FormHiddenComponent from '../components/formComponents/FormHiddenComponent'
 import FormAutocompleteComponent, { AutocompleteParams } from '../components/formComponents/FormAutocompleteComponent'
 import FormCountSelectorComponent from '../components/formComponents/FormCountSelectorComponent'
+import { ScrollView } from 'react-native'
 
 export const createAutocompleteField = (
   title: string,
@@ -117,7 +117,7 @@ export const createImageKeywordPicker = (
 export const createArray = (
   title: string, objectTitle: string, parentObjectTitle: string, type: string,
   defaultValue: Array<string> | undefined, editable: boolean,
-  firstEditable: boolean, scrollView: React.MutableRefObject<KeyboardAwareScrollView | null>
+  firstEditable: boolean, scrollView: React.MutableRefObject<ScrollView | null>
 ) => {
   return <FormArrayComponent
     key={parentObjectTitle} title={title} objectTitle={objectTitle} parentObjectTitle={parentObjectTitle}
