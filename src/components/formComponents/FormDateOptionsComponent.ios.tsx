@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Text, TextInput, View } from 'react-native'
+import { Modal, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import Modal from 'react-native-modal'
 import { RootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Os from '../../styles/OtherStyles'
@@ -163,32 +162,38 @@ const FormDateOptionsComponent = (props: Props) => {
           />
         </View>
       }
-      <Modal isVisible={modalVisibility} onBackButtonPress={() => setModalVisibility(false)}>
-        <View style={Cs.iOSDatePickerContainer}>
-          {
-            differentDay ?
-              <View style={Cs.padding5Container}>
-                <DateTimePicker
-                  value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue)) : date}
-                  mode='time'
-                  onChange={onChangeTime}
+      <Modal visible={modalVisibility} onRequestClose={() => { setModalVisibility(false) }}>
+        <TouchableWithoutFeedback onPress={() => { setModalVisibility(false) }}>
+          <View style={Cs.transparentModalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={Cs.iOSDatePickerContainer}>
+                {
+                  differentDay ?
+                    <View style={Cs.padding5Container}>
+                      <DateTimePicker
+                        value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue)) : date}
+                        mode='time'
+                        onChange={onChangeTime}
+                      />
+                    </View>
+                    : null
+                }
+                <View style={Cs.padding5Container}>
+                  <DateTimePicker
+                    value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue)) : date}
+                    mode='time'
+                    onChange={onChangeTime}
+                  />
+                </View>
+                <ButtonComponent onPressFunction={() => setModalVisibility(false)}
+                  title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
                 />
               </View>
-              : null
-          }
-          <View style={Cs.padding5Container}>
-            <DateTimePicker
-              value={currentValue ? new Date(parseDateFromDocumentToFullISO(currentValue)) : date}
-              mode='time'
-              onChange={onChangeTime}
-            />
+            </TouchableWithoutFeedback>
           </View>
-          <ButtonComponent onPressFunction={() => setModalVisibility(false)}
-            title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-          />
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   )

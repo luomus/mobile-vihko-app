@@ -1,7 +1,6 @@
 import React from 'react'
-import { View, Text, Linking } from 'react-native'
+import { Modal, View, Text, Linking, TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import Modal from 'react-native-modal'
 import { Icon } from 'react-native-elements'
 import { CommonActions, ParamListBase } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
@@ -107,102 +106,108 @@ const UserModalComponent = (props: Props) => {
   }
 
   return (
-    <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
-      <View style={Cs.userModalContainer}>
-        <Icon
-          type={'material-icons'}
-          name={'cancel'}
-          size={30}
-          color={Colors.dangerButton2}
-          containerStyle={Cs.modalCloseContainer}
-          onPress={() => props.onClose()}
-        />
-        <View style={Cs.userDetailsContainer}>
-          <View>
-            <Text style={{ color: Colors.neutral9 }}>
-              {credentials.user !== null ? t('logged in') + ' ' + credentials.user.fullName : null}
-            </Text>
-          </View>
-          <View style={Cs.logoutButtonContainer}>
-            <ButtonComponent onPressFunction={() => showLogoutDialogue()} title={undefined}
-              height={40} width={40} buttonStyle={Bs.logoutButton}
-              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText} testID='logout-button'
-            />
-          </View>
-          <MessageComponent />
+    <Modal visible={props.isVisible} onRequestClose={() => { props.onClose() }} transparent>
+      <TouchableWithoutFeedback onPress={() => { props.onClose() }}>
+        <View style={Cs.transparentModalContainer}>
+          <TouchableWithoutFeedback>
+            <View style={Cs.userModalContainer}>
+              <Icon
+                type={'material-icons'}
+                name={'cancel'}
+                size={30}
+                color={Colors.dangerButton2}
+                containerStyle={Cs.modalCloseContainer}
+                onPress={() => props.onClose()}
+              />
+              <View style={Cs.userDetailsContainer}>
+                <View>
+                  <Text style={{ color: Colors.neutral9 }}>
+                    {credentials.user !== null ? t('logged in') + ' ' + credentials.user.fullName : null}
+                  </Text>
+                </View>
+                <View style={Cs.logoutButtonContainer}>
+                  <ButtonComponent onPressFunction={() => showLogoutDialogue()} title={undefined}
+                    height={40} width={40} buttonStyle={Bs.logoutButton}
+                    gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                    textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText} testID='logout-button'
+                  />
+                </View>
+                <MessageComponent />
+              </View>
+              <Text style={Ts.languageText}>{t('select language')}:</Text>
+              <View style={Cs.languageContainer}>
+                {i18n.language === 'fi' ?
+                  <SelectedButtonComponent
+                    onPress={setLanguageHelper('fi')}
+                    title={'FI'} height={40} width={80}
+                    color={Colors.neutral5}
+                    textStyle={Ts.selectionButtonText}
+                    textColor={Colors.blackText}
+                  />
+                  :
+                  <ButtonComponent
+                    onPressFunction={setLanguageHelper('fi')}
+                    title={'FI'} height={40} width={80} buttonStyle={Bs.logoutButton}
+                    gradientColorStart={i18n.language === 'fi' ? Colors.primaryButton1 : Colors.neutralButton}
+                    gradientColorEnd={i18n.language === 'fi' ? Colors.primaryButton2 : Colors.neutralButton}
+                    shadowColor={i18n.language === 'fi' ? Colors.primaryShadow : Colors.neutralShadow}
+                    textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+                    contentColor={i18n.language === 'fi' ? Colors.whiteText : Colors.darkText}
+                  />
+                }
+                {i18n.language === 'sv' ?
+                  <SelectedButtonComponent
+                    onPress={setLanguageHelper('sv')}
+                    title={'SV'} height={40} width={80}
+                    color={Colors.neutral5}
+                    textStyle={Ts.selectionButtonText}
+                    textColor={Colors.blackText}
+                  />
+                  :
+                  <ButtonComponent
+                    onPressFunction={setLanguageHelper('sv')}
+                    title={'SV'} height={40} width={80} buttonStyle={Bs.logoutButton}
+                    gradientColorStart={i18n.language === 'sv' ? Colors.primaryButton1 : Colors.neutralButton}
+                    gradientColorEnd={i18n.language === 'sv' ? Colors.primaryButton2 : Colors.neutralButton}
+                    shadowColor={i18n.language === 'sv' ? Colors.primaryShadow : Colors.neutralShadow}
+                    textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+                    contentColor={i18n.language === 'sv' ? Colors.whiteText : Colors.darkText}
+                  />
+                }
+                {i18n.language === 'en' ?
+                  <SelectedButtonComponent
+                    onPress={setLanguageHelper('en')}
+                    title={'EN'} height={40} width={80}
+                    color={Colors.neutral5}
+                    textStyle={Ts.selectionButtonText}
+                    textColor={Colors.blackText}
+                  />
+                  :
+                  <ButtonComponent
+                    onPressFunction={setLanguageHelper('en')}
+                    title={'EN'} height={40} width={80} buttonStyle={Bs.logoutButton}
+                    gradientColorStart={i18n.language === 'en' ? Colors.primaryButton1 : Colors.neutralButton}
+                    gradientColorEnd={i18n.language === 'en' ? Colors.primaryButton2 : Colors.neutralButton}
+                    shadowColor={i18n.language === 'en' ? Colors.primaryShadow : Colors.neutralShadow}
+                    textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+                    contentColor={i18n.language === 'en' ? Colors.whiteText : Colors.darkText}
+                  />
+                }
+              </View>
+              <Text style={Ts.languageText}>{t('delete account')}:</Text>
+              <View style={Cs.languageContainer}>
+                <ButtonComponent
+                  onPressFunction={() => showAccountDeletionDialogue()}
+                  title={t('delete')} height={40} width={100} buttonStyle={Bs.textAndIconButton}
+                  gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2}
+                  shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
+                  iconName={'delete-forever'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-        <Text style={Ts.languageText}>{t('select language')}:</Text>
-        <View style={Cs.languageContainer}>
-          {i18n.language === 'fi' ?
-            <SelectedButtonComponent
-              onPress={setLanguageHelper('fi')}
-              title={'FI'} height={40} width={80}
-              color={Colors.neutral5}
-              textStyle={Ts.selectionButtonText}
-              textColor={Colors.blackText}
-            />
-            :
-            <ButtonComponent
-              onPressFunction={setLanguageHelper('fi')}
-              title={'FI'} height={40} width={80} buttonStyle={Bs.logoutButton}
-              gradientColorStart={i18n.language === 'fi' ? Colors.primaryButton1 : Colors.neutralButton}
-              gradientColorEnd={i18n.language === 'fi' ? Colors.primaryButton2 : Colors.neutralButton}
-              shadowColor={i18n.language === 'fi' ? Colors.primaryShadow : Colors.neutralShadow}
-              textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
-              contentColor={i18n.language === 'fi' ? Colors.whiteText : Colors.darkText}
-            />
-          }
-          {i18n.language === 'sv' ?
-            <SelectedButtonComponent
-              onPress={setLanguageHelper('sv')}
-              title={'SV'} height={40} width={80}
-              color={Colors.neutral5}
-              textStyle={Ts.selectionButtonText}
-              textColor={Colors.blackText}
-            />
-            :
-            <ButtonComponent
-              onPressFunction={setLanguageHelper('sv')}
-              title={'SV'} height={40} width={80} buttonStyle={Bs.logoutButton}
-              gradientColorStart={i18n.language === 'sv' ? Colors.primaryButton1 : Colors.neutralButton}
-              gradientColorEnd={i18n.language === 'sv' ? Colors.primaryButton2 : Colors.neutralButton}
-              shadowColor={i18n.language === 'sv' ? Colors.primaryShadow : Colors.neutralShadow}
-              textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
-              contentColor={i18n.language === 'sv' ? Colors.whiteText : Colors.darkText}
-            />
-          }
-          {i18n.language === 'en' ?
-            <SelectedButtonComponent
-              onPress={setLanguageHelper('en')}
-              title={'EN'} height={40} width={80}
-              color={Colors.neutral5}
-              textStyle={Ts.selectionButtonText}
-              textColor={Colors.blackText}
-            />
-            :
-            <ButtonComponent
-              onPressFunction={setLanguageHelper('en')}
-              title={'EN'} height={40} width={80} buttonStyle={Bs.logoutButton}
-              gradientColorStart={i18n.language === 'en' ? Colors.primaryButton1 : Colors.neutralButton}
-              gradientColorEnd={i18n.language === 'en' ? Colors.primaryButton2 : Colors.neutralButton}
-              shadowColor={i18n.language === 'en' ? Colors.primaryShadow : Colors.neutralShadow}
-              textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
-              contentColor={i18n.language === 'en' ? Colors.whiteText : Colors.darkText}
-            />
-          }
-        </View>
-        <Text style={Ts.languageText}>{t('delete account')}:</Text>
-        <View style={Cs.languageContainer}>
-          <ButtonComponent
-            onPressFunction={() => showAccountDeletionDialogue()}
-            title={t('delete')} height={40} width={100} buttonStyle={Bs.textAndIconButton}
-            gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2}
-            shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
-            iconName={'delete-forever'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
-          />
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   )
 }

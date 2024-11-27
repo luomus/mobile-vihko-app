@@ -1,6 +1,5 @@
 import React from 'react'
-import { Image, Linking, ScrollView, Text, View } from 'react-native'
-import Modal from 'react-native-modal'
+import { Image, Linking, Modal, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { Trans, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
@@ -88,37 +87,43 @@ const InstructionModalComponent = (props: Props) => {
   }
 
   return (
-    <Modal isVisible={props.isVisible} onBackButtonPress={props.onClose} onBackdropPress={props.onClose}>
-      <View style={Cs.messageModalContainer}>
-        <ScrollView style={{ margin: 10 }}>
-          <Icon
-            type={'material-icons'}
-            name={'cancel'}
-            size={30}
-            color={Colors.dangerButton2}
-            containerStyle={Cs.modalCloseContainer}
-            onPress={() => props.onClose()}
-          />
-          <Text>
-            <Trans i18nKey={'instructions.' + props.screen} components={links} />
-          </Text>
-          <Image
-            resizeMode={'contain'}
-            source={require('../../../assets/finbif.png')}
-            style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
-          />
-          <Image
-            resizeMode={'contain'}
-            source={require('../../../assets/hy.png')}
-            style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
-          />
-          <Image
-            resizeMode={'contain'}
-            source={require('../../../assets/life.png')}
-            style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
-          />
-        </ScrollView>
-      </View>
+    <Modal visible={props.isVisible} onRequestClose={() => { props.onClose() }}>
+      <TouchableWithoutFeedback onPress={() => props.onClose()}>
+        <View style={Cs.transparentModalContainer}>
+          <TouchableWithoutFeedback>
+            <View style={Cs.messageModalContainer}>
+              <ScrollView style={{ margin: 10 }}>
+                <Icon
+                  type={'material-icons'}
+                  name={'cancel'}
+                  size={30}
+                  color={Colors.dangerButton2}
+                  containerStyle={Cs.modalCloseContainer}
+                  onPress={() => props.onClose()}
+                />
+                <Text>
+                  <Trans i18nKey={'instructions.' + props.screen} components={links} />
+                </Text>
+                <Image
+                  resizeMode={'contain'}
+                  source={require('../../../assets/finbif.png')}
+                  style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
+                />
+                <Image
+                  resizeMode={'contain'}
+                  source={require('../../../assets/hy.png')}
+                  style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
+                />
+                <Image
+                  resizeMode={'contain'}
+                  source={require('../../../assets/life.png')}
+                  style={{ alignSelf: 'center', maxWidth: 150, maxHeight: 150 }}
+                />
+              </ScrollView>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   )
 }

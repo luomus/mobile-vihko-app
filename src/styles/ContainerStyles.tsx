@@ -28,7 +28,6 @@ const ContainerStyles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
-    alignSelf: 'center',
     backgroundColor: Colors.neutral3,
     maxHeight: '90%',
     width: '90%',
@@ -41,7 +40,6 @@ const ContainerStyles = StyleSheet.create({
     padding: 10
   },
   modalContainer: {
-    alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',
     padding: 10,
@@ -58,12 +56,25 @@ const ContainerStyles = StyleSheet.create({
   },
   modalLoadingContainer: {
     alignItems: 'center',
-    alignSelf: 'center',
     backgroundColor: 'white',
     borderRadius: 5,
     justifyContent: 'center',
     height: 100,
     width: 100,
+  },
+  newModalContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'black'
+  },
+  transparentModalContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
+    backgroundColor: Colors.transparentBlack
   },
   loadingContainer: {
     flex: 1,
@@ -165,6 +176,14 @@ const ContainerStyles = StyleSheet.create({
     width: '90%',
     marginTop: 10
   },
+  zoneModalContainer: {
+    backgroundColor: Colors.neutral2,
+    borderRadius: 10,
+    padding: 10,
+    maxHeight: '90%',
+    width: '90%',
+    maxWidth: 400
+  },
   zoneEventLauncherContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -197,7 +216,6 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   atlasInstructionContainer: {
-    alignSelf: 'center',
     backgroundColor: Colors.neutral2,
     borderRadius: 10,
     maxHeight: '90%',
@@ -211,7 +229,6 @@ const ContainerStyles = StyleSheet.create({
     padding: 5
   },
   gridModalContainer: {
-    alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',
     padding: 10,
@@ -323,7 +340,6 @@ const ContainerStyles = StyleSheet.create({
     maxWidth: '55%'
   },
   mapModalContainer: {
-    alignSelf: 'center',
     alignItems: 'center',
     flexDirection: 'column',
     padding: 20,
@@ -513,7 +529,6 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'center'
   },
   iOSDatePickerContainer: {
-    alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',
     padding: 10,

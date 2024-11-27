@@ -373,6 +373,14 @@ const HomeComponent = (props: Props) => {
     }))
   }
 
+  const openNextModal = (
+    currentModalSetter: React.Dispatch<React.SetStateAction<boolean>>,
+    nextModalSetter: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    currentModalSetter(false)
+    nextModalSetter(true)
+  }
+
   const clipboardConfirmation = (logs: any[] | null) => {
     if (logs !== null && logs.length > 0) {
       dispatch(setMessageState({
@@ -465,8 +473,8 @@ const HomeComponent = (props: Props) => {
         </ScrollView>
         <DefaultModalComponent modalVisibility={tripModalVisibility} setModalVisibility={setTripModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.tripForm) }} formID={forms.tripForm} />
-        <AtlasInstructionModalComponent modalVisibility={atlasInstructionModalVisibility}
-          setModalVisibility={setAtlasInstructionModalVisibility} setGridModalVisibility={setGridModalVisibility} />
+        <AtlasInstructionModalComponent modalVisibility={atlasInstructionModalVisibility} setModalVisibility={setAtlasInstructionModalVisibility}
+          setGridModalVisibility={setGridModalVisibility} openNextModal={openNextModal} />
         <GridModalComponent modalVisibility={gridModalVisibility} setModalVisibility={setGridModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.birdAtlas) }}
           setLoading={setLoading} />

@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { FlatList, ListRenderItem, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import Modal from 'react-native-modal'
+import { FlatList, ListRenderItem, Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import { createFilter } from 'react-native-search-filter'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
@@ -72,20 +71,26 @@ const ZoneFilterPickerComponent = (props: Props) => {
   const filteredZones = props.options.filter(createFilter(search, ['label']))
 
   return (
-    <Modal isVisible={props.visible} backdropOpacity={10} onBackButtonPress={props.onCancel}>
-      <View style={Cs.filterPickerOverlayContainer}>
-        <ButtonComponent onPressFunction={() => props.onCancel()} title={t('cancel')}
-          height={40} width={120} buttonStyle={Bs.textAndIconButton}
-          gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-          textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
-        />
-        <FlatList
-          data={filteredZones}
-          renderItem={renderZone}
-          ListHeaderComponent={FilterInput}
-          style={Cs.filterPickerContainer}
-        />
-      </View>
+    <Modal visible={props.visible} onRequestClose={() => { props.onCancel() }}>
+      <TouchableWithoutFeedback onPress={() => { props.onCancel() }}>
+        <View style={Cs.newModalContainer}>
+          <TouchableWithoutFeedback>
+            <View style={Cs.filterPickerOverlayContainer}>
+              <ButtonComponent onPressFunction={() => props.onCancel()} title={t('cancel')}
+                height={40} width={120} buttonStyle={Bs.textAndIconButton}
+                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+              />
+              <FlatList
+                data={filteredZones}
+                renderItem={renderZone}
+                ListHeaderComponent={FilterInput}
+                style={Cs.filterPickerContainer}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   )
 }

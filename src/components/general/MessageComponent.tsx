@@ -1,8 +1,7 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { Modal, View, Text, TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { Icon } from 'react-native-elements'
-import Modal from 'react-native-modal'
 import { DispatchType, RootState, popMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
@@ -146,26 +145,31 @@ const MessageComponent = () => {
   }
 
   return (
-    <Modal isVisible={isVisible} onBackButtonPress={onBackButtonPress}
-      backdropOpacity={topMessage?.backdropOpacity ? topMessage.backdropOpacity : 0.7}>
-      <View style={Cs.messageModalContainer} testID={topMessage?.testID}>
-        {message.length <= 1 ?
-          null :
-          <Text style={Ts.alignedRightText}>
-            1/{message.length}
-          </Text>
-        }
-        <View>
-          {topMessage?.type === 'err' ?
-            <Icon type={'material-icons'} name={'report-problem'} color={'red'} size={50} />
-            : null
-          }
-          <Text style={Cs.padding5Container}>
-            {topMessage?.messageContent}
-          </Text>
+    <Modal visible={isVisible} onRequestClose={() => onBackButtonPress()} transparent>
+      <TouchableWithoutFeedback onPress={() => { onBackButtonPress() }}>
+        <View style={Cs.transparentModalContainer}>
+          <TouchableWithoutFeedback>
+            <View style={Cs.messageModalContainer} testID={topMessage?.testID}>
+              {message.length <= 1 ?
+                null :
+                <Text style={Ts.alignedRightText}>
+                  1/{message.length}
+                </Text>
+              }
+              <View>
+                {topMessage?.type === 'err' ?
+                  <Icon type={'material-icons'} name={'report-problem'} color={'red'} size={50} />
+                  : null
+                }
+                <Text style={Cs.padding5Container}>
+                  {topMessage?.messageContent}
+                </Text>
+              </View>
+              {buttonLayoutSelector()}
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-        {buttonLayoutSelector()}
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   )
 }

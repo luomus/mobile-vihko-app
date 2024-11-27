@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, TextInput, View } from 'react-native'
-import Modal from 'react-native-modal'
+import { Modal, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../stores'
 import Os from '../../styles/OtherStyles'
@@ -153,46 +152,52 @@ const FormDatePickerComponent = (props: Props) => {
           textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
         />
       </View>
-      <Modal isVisible={modalVisibility} onBackButtonPress={() => setModalVisibility(false)}>
-        <View style={Cs.iOSDatePickerContainer}>
-          {
-            props.pickerType === 'time' ? null :
-              <View style={Cs.padding5Container}>
-                <DateTimePicker
-                  value={currentValue !== '' ? new Date(parseDateFromDocumentToFullISO(currentValue, props.pickerType)) : date}
-                  mode='date'
-                  onChange={onChangeDate}
-                  minimumDate={props.objectTitle.includes('dateEnd')
-                    ? (dateBegin ? new Date(parseDateFromDocumentToFullISO(dateBegin, props.pickerType)) : undefined)
-                    : undefined}
-                  maximumDate={props.objectTitle.includes('dateBegin')
-                    ? (dateEnd ? new Date(parseDateFromDocumentToFullISO(dateEnd, props.pickerType)) : undefined)
-                    : undefined}
+      <Modal visible={modalVisibility} onRequestClose={() => { setModalVisibility(false) }}>
+        <TouchableWithoutFeedback onPress={() => { setModalVisibility(false) }}>
+          <View style={Cs.transparentModalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={Cs.iOSDatePickerContainer}>
+                {
+                  props.pickerType === 'time' ? null :
+                    <View style={Cs.padding5Container}>
+                      <DateTimePicker
+                        value={currentValue !== '' ? new Date(parseDateFromDocumentToFullISO(currentValue, props.pickerType)) : date}
+                        mode='date'
+                        onChange={onChangeDate}
+                        minimumDate={props.objectTitle.includes('dateEnd')
+                          ? (dateBegin ? new Date(parseDateFromDocumentToFullISO(dateBegin, props.pickerType)) : undefined)
+                          : undefined}
+                        maximumDate={props.objectTitle.includes('dateBegin')
+                          ? (dateEnd ? new Date(parseDateFromDocumentToFullISO(dateEnd, props.pickerType)) : undefined)
+                          : undefined}
+                      />
+                    </View>
+                }
+                {
+                  props.pickerType === 'date' ? null :
+                    <View style={Cs.padding5Container}>
+                      <DateTimePicker
+                        value={currentValue !== '' ? new Date(parseDateFromDocumentToFullISO(createParseableTime())) : date}
+                        mode='time'
+                        onChange={onChangeTime}
+                        minimumDate={props.objectTitle.includes('dateEnd')
+                          ? (dateBegin ? new Date(parseDateFromDocumentToFullISO(dateBegin, props.pickerType)) : undefined)
+                          : undefined}
+                        maximumDate={props.objectTitle.includes('dateBegin')
+                          ? (dateEnd ? new Date(parseDateFromDocumentToFullISO(dateEnd, props.pickerType)) : undefined)
+                          : undefined}
+                      />
+                    </View>
+                }
+                <ButtonComponent onPressFunction={() => setModalVisibility(false)}
+                  title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
                 />
               </View>
-          }
-          {
-            props.pickerType === 'date' ? null :
-              <View style={Cs.padding5Container}>
-                <DateTimePicker
-                  value={currentValue !== '' ? new Date(parseDateFromDocumentToFullISO(createParseableTime())) : date}
-                  mode='time'
-                  onChange={onChangeTime}
-                  minimumDate={props.objectTitle.includes('dateEnd')
-                    ? (dateBegin ? new Date(parseDateFromDocumentToFullISO(dateBegin, props.pickerType)) : undefined)
-                    : undefined}
-                  maximumDate={props.objectTitle.includes('dateBegin')
-                    ? (dateEnd ? new Date(parseDateFromDocumentToFullISO(dateEnd, props.pickerType)) : undefined)
-                    : undefined}
-                />
-              </View>
-          }
-          <ButtonComponent onPressFunction={() => setModalVisibility(false)}
-            title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
-            gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-          />
-        </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   )
