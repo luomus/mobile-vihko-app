@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View } from 'react-native'
-import { Icon } from 'react-native-elements'
 import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -289,14 +288,10 @@ const MapComponent = (props: Props) => {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
       }}
+      icon={require('../../../assets/location.png')}
       zIndex={3}
-      anchor={{ x: 0.5, y: 0.5 }}>
-      <Icon
-        type={'material-icons'}
-        name={'my-location'}
-        size={50}
-      />
-    </Marker>
+      anchor={{ x: 0.5, y: 0.5 }}
+    />
     : null
   )
 
