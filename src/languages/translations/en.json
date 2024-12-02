@@ -162,6 +162,7 @@
   "moth form": "Diurnal Moths",
   "must be at least 2 letters": "Taxon name must be at least 2 letters.",
   "must choose list type": "Complete list type must not be empty.",
+  "must enter time": "Time must not be empty.",
   "must not be empty": "Taxon name must not be empty.",
   "nest": "Nest",
   "new observation event": "New observation event",

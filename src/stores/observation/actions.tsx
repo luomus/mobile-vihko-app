@@ -267,7 +267,20 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
         delete eventWithLocality.namedPlaceID
         eventWithLocality.gatherings.pop()
       }
-      if (!eventWithLocality.gatheringEvent.dateEnd || !(moment(eventWithLocality.gatheringEvent.dateEnd).isValid())) delete eventWithLocality.gatheringEvent.dateEnd
+      if (
+        !eventWithLocality.gatheringEvent.dateBegin
+        || eventWithLocality.gatheringEvent.dateBegin === ''
+        || !(moment(eventWithLocality.gatheringEvent.dateBegin).isValid())
+      ) {
+        delete eventWithLocality.gatheringEvent.dateBegin
+      }
+      if (
+        !eventWithLocality.gatheringEvent.dateEnd
+        || eventWithLocality.gatheringEvent.dateEnd === ''
+        || !(moment(eventWithLocality.gatheringEvent.dateEnd).isValid())
+      ) {
+        delete eventWithLocality.gatheringEvent.dateEnd
+      }
       if (eventWithLocality.singleObservation) delete eventWithLocality.singleObservation
 
     } catch (error: any) {

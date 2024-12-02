@@ -153,7 +153,7 @@ const DocumentComponent = (props: Props) => {
 
   //as complete list field is the only possible validation error, scroll to top when validation error occurs
   const onError = async () => {
-    scrollViewRef?.current?.scrollTo(0, 0, false)
+    scrollViewRef?.current?.scrollTo({ x: 0, y: 0, animated: false })
   }
 
   const onSubmit = async (data: { [key: string]: any }, sendMode: string) => {

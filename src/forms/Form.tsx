@@ -113,6 +113,20 @@ const Form = (
         case 'countSelectorField':
           toReturn.push(createCountSelectorField(fieldTitle, path, fieldDefaultValue))
           return
+        case 'dateBegin':
+          let pickerType: string | undefined
+          if (fields.includes('gatheringEvent_timeStart') || fields.includes('gatheringEvent_timeEnd')) {
+            pickerType = 'date'
+          }
+          toReturn.push(createDateTimePicker(fieldTitle, path, '', pickerType, fieldDefaultValue, overrideFields[path].params.validation))
+          return
+        case 'dateEnd':
+          let pickerType2: string | undefined
+          if (fields.includes('gatheringEvent_timeStart') || fields.includes('gatheringEvent_timeEnd')) {
+            pickerType = 'date'
+          }
+          toReturn.push(createDateTimePicker(fieldTitle, path, '', pickerType2, fieldDefaultValue, overrideFields[path].params.validation))
+          return
       }
     }
 
@@ -172,14 +186,6 @@ const Form = (
       toReturn.push(createPicker(translatedTitle, path, defaultValue, enumDict, blacklist))
     } else if (type === 'boolean') {
       toReturn.push(createSwitch(translatedTitle, path, defaultValue))
-    } else if (path.includes('gatheringEvent_date')) {
-      let pickerType
-
-      if (fields.includes('gatheringEvent_timeStart') || fields.includes('gatheringEvent_timeEnd')) {
-        pickerType = 'date'
-      }
-
-      toReturn.push(createDateTimePicker(translatedTitle, path, '', pickerType, defaultValue))
     } else if (path.includes('gatheringEvent_time')) {
       toReturn.push(createDateTimePicker(translatedTitle, path, '', 'time', defaultValue))
     } else {

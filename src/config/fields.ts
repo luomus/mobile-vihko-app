@@ -68,6 +68,28 @@ export const overrideSingleObservationFields = {
         'habitat',
       ]
     }
+  },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
   }
 }
 
@@ -183,6 +205,28 @@ export const overrideJX519ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const additionalJX519Fields = {
@@ -290,6 +334,28 @@ export const overrideMHL117ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const additionalMHL117Fields = {
@@ -431,6 +497,28 @@ export const overrideJX652ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL932ObservationEventFields = [
@@ -512,6 +600,28 @@ export const overrideMHL932ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL932ObservationEventFieldOrder = [
@@ -608,6 +718,28 @@ export const overrideMHL1040ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1040ObservationEventFieldOrder = [
@@ -700,6 +832,28 @@ export const overrideMHL1042ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1042ObservationEventFieldOrder = [
@@ -792,6 +946,28 @@ export const overrideMHL1043ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1043ObservationEventFieldOrder = [
@@ -887,6 +1063,28 @@ export const overrideMHL1044ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1044ObservationEventFieldOrder = [
@@ -981,6 +1179,28 @@ export const overrideMHL1045ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1045ObservationEventFieldOrder = [
@@ -1071,6 +1291,28 @@ export const overrideMHL1046ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1046ObservationEventFieldOrder = [
@@ -1159,6 +1401,28 @@ export const overrideMHL1047ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1047ObservationEventFieldOrder = [
@@ -1249,6 +1513,28 @@ export const overrideMHL1048ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1048ObservationEventFieldOrder = [
@@ -1335,6 +1621,28 @@ export const overrideMHL1062ObservationEventFields = {
       'Locality names (municipality is saved automatically)'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const MHL1062ObservationEventFieldOrder = [
@@ -1376,6 +1684,28 @@ export const overrideObservationEventFields = {
       'Location roughening'
     ]
   },
+  'gatheringEvent_dateBegin': {
+    field: 'dateBegin',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  },
+  'gatheringEvent_dateEnd': {
+    field: 'dateEnd',
+    params: {
+      validation: {
+        required: {
+          value: true,
+          message: 'must enter time'
+        },
+      }
+    }
+  }
 }
 
 export const atlasCodeAbbreviations: { [key: string]: any } = {

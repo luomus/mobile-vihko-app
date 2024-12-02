@@ -12,6 +12,7 @@ import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/dat
 import ButtonComponent from '../general/ButtonComponent'
 import { parseDateFromDocumentToUI, parseDateFromDocumentToFullISO, parseDateFromDateObjectToDocument } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
+import { ErrorMessage } from '@hookform/error-message'
 
 interface Props {
   title: string,
@@ -33,11 +34,12 @@ interface Props {
   'web-search' |
   undefined,
   defaultValue: string,
-  pickerType: string | undefined
+  pickerType: string | undefined,
+  validation?: Record<string, any>
 }
 
 const FormDatePickerComponent = (props: Props) => {
-  const { register, setValue, watch } = useFormContext()
+  const { register, setValue, formState, watch } = useFormContext()
   const [currentValue, setCurrentValue] = useState<string>(props.defaultValue)
   const [currentDate, setCurrentDate] = useState<string>(props.defaultValue)
   const [currentTime, setCurrentTime] = useState<string>(props.defaultValue)
@@ -56,7 +58,11 @@ const FormDatePickerComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    register(props.objectTitle)
+    if (props.validation) {
+      register(props.objectTitle, props.validation)
+    } else {
+      register(props.objectTitle)
+    }
 
     if (singleObservation && props.objectTitle.includes('dateEnd') && !props.defaultValue) {
       clearDatePicker()
@@ -154,9 +160,27 @@ const FormDatePickerComponent = (props: Props) => {
     return currentValue
   }
 
+  const errorMessageTranslation = (errorMessage: string): React.JSX.Element => {
+    const errorTranslation = t(errorMessage)
+    return <Text style={Ts.redText}>{errorTranslation}</Text>
+  }
+
+
   return (
     <View style={Cs.formInputContainer}>
-      <Text>{props.title}</Text>
+      <View style={Cs.rowContainer}>
+        <Text>{props.title}</Text>
+        {
+          props.validation?.required ?
+            <Text style={Ts.redText}> *</Text>
+            : null
+        }
+      </View>
+      <ErrorMessage
+        errors={formState.errors}
+        name={props.objectTitle}
+        render={({ message }) => <Text style={Ts.redText}><>{errorMessageTranslation(message)}</></Text>}
+      />
       <View style={Cs.datePickerContainer}>
         <TextInput
           style={Os.datePicker}
@@ -195,7 +219,7 @@ const FormDatePickerComponent = (props: Props) => {
             value={currentValue !== '' ? new Date(parseDateFromDocumentToFullISO(createParseableTime())) : date}
             mode='time'
             onChange={onChangeTime}
-            // minimumDate and maximumDate aren't available for Android time mode
+          // minimumDate and maximumDate aren't available for Android time mode
           />
         </View>
       )}

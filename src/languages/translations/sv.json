@@ -162,6 +162,7 @@
   "moth form": "Dygnsfjärilar",
   "must be at least 2 letters": "Artens namn måste vara åtminstone 2 bokstäver långt.",
   "must choose list type": "Artlistans fullständighet kan inte vara tom.",
+  "must enter time": "Tid får inte vara tom.",
   "must not be empty": "Artens namn får inte vara tom.",
   "nest": "Bo",
   "new observation event": "Ny observationsuppsättning",

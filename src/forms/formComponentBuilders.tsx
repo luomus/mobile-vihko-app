@@ -134,12 +134,12 @@ export const createSwitch = (
 
 export const createDateTimePicker = (
   title: string, objectTitle: string, parentObjectTitle: string,
-  pickerType: string | undefined, defaultValue: string,
+  pickerType: string | undefined, defaultValue: string, validation?: Record<string, any>
 ) => {
   return <FormDatePickerComponent
     key={objectTitle} title={title} objectTitle={objectTitle}
     parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
-    keyboardType='default' pickerType={pickerType}
+    keyboardType='default' pickerType={pickerType} validation={validation}
   />
 }
 
