@@ -75,6 +75,13 @@ export const createUnitBoundingBox = (units: Record<string, any>[]): Polygon | P
   //returns a bounding box based on unit coordinates
   const boundingBox: Record<string, any> = calculateBoundingBoxBoundaries(points)
 
+  if (boundingBox.maxLat === boundingBox.minLat && boundingBox.maxLng === boundingBox.minLng) {
+    return {
+      type: 'Point',
+      coordinates: points[0]
+    }
+  }
+
   return {
     type: 'Polygon',
     coordinates: [[

@@ -1,4 +1,4 @@
-import { Point, LineString, Polygon, MultiLineString } from 'geojson'
+import { Point, LineString, MultiLineString } from 'geojson'
 import moment from 'moment'
 import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../services/localityService'
 import { centerOfBoundingBox, centerOfGeometry } from './geometryHelper'
@@ -109,7 +109,7 @@ export const fetchFinland = async (event: Record<string, any>, lang: string, cre
 
 //calls the helper function for fetching and processing locality details for foreign country events
 export const fetchForeign = async (event: Record<string, any>, lang: string, credentials: CredentialsType) => {
-  const boundingBox: Polygon | Point | null = centerOfGeometry(event.gatherings[0].geometry, event.gatherings[0].units)
+  const boundingBox: Point | null = centerOfGeometry(event.gatherings[0].geometry, event.gatherings[0].units)
 
   //can't fetch foreign, unless there's a geometry for the event
   if (!boundingBox) { return }
