@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, Text, ImageBackground, ScrollView } from 'react-native'
+import { View, Text, ImageBackground, ScrollView, ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements'
 import RadioForm from 'react-native-simple-radio-button'
 import { useTranslation } from 'react-i18next'
@@ -32,6 +32,7 @@ type Props = {
 const ImagePickerKeywordComponent = (props: Props) => {
   const { register, setValue, setError, clearErrors, formState } = useFormContext()
   const [images, setImages] = useState<Array<Record<string, any>>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
+  const [loading, setLoading] = useState<boolean>(false)
   const { t } = useTranslation()
   const keywords: Record<string, any> = props.params
   const localized: string[] = props.params[props.lang]
@@ -54,6 +55,8 @@ const ImagePickerKeywordComponent = (props: Props) => {
 
   const attachImage = async (useCamera: boolean) => {
     try {
+      setLoading(true)
+
       let permissionResult: ImagePicker.CameraPermissionResponse | ImagePicker.MediaLibraryPermissionResponse
 
       if (useCamera) {
@@ -102,6 +105,8 @@ const ImagePickerKeywordComponent = (props: Props) => {
       setTimeout(() => {
         clearErrors(props.objectTitle)
       }, 5000)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -249,18 +254,22 @@ const ImagePickerKeywordComponent = (props: Props) => {
             <ScrollView horizontal={true}>
               {renderImages()}
             </ScrollView>
-            <View style={Cs.imageButtonsRowContainer}>
-              <ButtonComponent onPressFunction={imageFromLibrary}
-                title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-              />
-              <ButtonComponent onPressFunction={imageFromCamera}
-                title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
-                gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-              />
-            </View>
+            {loading ?
+              <ActivityIndicator size={25} color={Colors.primary5} />
+              :
+              <View style={Cs.imageButtonsRowContainer}>
+                <ButtonComponent onPressFunction={imageFromLibrary}
+                  title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
+                <ButtonComponent onPressFunction={imageFromCamera}
+                  title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
+                  gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+                  textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                />
+              </View>
+            }
           </View>
         </View>
       </>
