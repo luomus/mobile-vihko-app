@@ -4,6 +4,7 @@ import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PR
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { LineString, MultiLineString } from 'geojson'
+import { Icon } from 'react-native-elements'
 import {
   convertGC2FC,
   convertLatLngToPoint,
@@ -288,10 +289,15 @@ const MapComponent = (props: Props) => {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
       }}
-      icon={require('../../../assets/location.png')}
       zIndex={3}
       anchor={{ x: 0.5, y: 0.5 }}
-    />
+    >
+      <Icon
+        name='my-location'
+        type='material-icons'
+        size={50}
+      />
+    </Marker>
     : null
   )
 
