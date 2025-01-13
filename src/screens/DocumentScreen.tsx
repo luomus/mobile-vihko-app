@@ -20,13 +20,13 @@ const DocumentScreen = (props: Props) => {
   return (
     <DocumentComponent
       toHome={() => {
-        props.navigation.navigate('home')
+        props.navigation.popTo('home')
       }}
       toObservationEvent={(id: string) => {
-        props.navigation.navigate('overview', { id })
+        props.navigation.popTo('overview', { id })
       }}
       toMap={() => {
-        props.navigation.navigate('map')
+        props.navigation.popTo('map')
       }}
       onLogout={() => {
         dispatch(
