@@ -16,13 +16,13 @@ type Props = {
 
 const ObservationScreen = (props: Props) => {
 
-  const { push, isFocused, popTo } = props.navigation
+  const { push, isFocused, popTo, replace } = props.navigation
   const { rules, defaults, sourcePage } = props.route.params
 
   return (
     <ObservationComponent
-      toObservationEvent={(id: string) => popTo('overview', { id })}
-      toMap={() => popTo('map')}
+      toObservationEvent={(id: string) => replace('overview', { id })}
+      toMap={() => replace('map')}
       toList={() => popTo('list')}
       pushToMap={() => push('map')}
       rules={rules}

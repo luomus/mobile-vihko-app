@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { ParamListBase, Route } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
-import {
-  RootState,
-  DispatchType,
-  setMessageState
-} from '../../stores'
+import { RootState } from '../../stores'
 import i18n from '../../languages/i18n'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
@@ -30,8 +26,6 @@ const NavBarComponent = (props: Props) => {
   const [infoModalVisibility, setInfoModalVisibility] = useState<boolean>(false)
   const [userModalVisibility, setUserModalVisibility] = useState<boolean>(false)
   const [formName, setFormName] = useState<string>(t('trip form'))
-
-  const dispatch: DispatchType = useDispatch()
 
   const schema = useSelector((state: RootState) => state.schema)
   const singleObservation = useSelector((state: RootState) => state.singleObservation)
@@ -86,18 +80,6 @@ const NavBarComponent = (props: Props) => {
     }
   }
 
-  const homeButtonHandler = (screen: string) => {
-    dispatch(setMessageState({
-      type: screen === 'observation' ? 'redConf' : 'conf',
-      messageContent: screen === 'observation' ? t('discard observation?') : t('discard document?'),
-      cancelLabel: t('cancel'),
-      okLabel: screen === 'observation' ? t('discard without saving') : t('continue observing'),
-      onOk: () => {
-        props.navigation.navigate('home')
-      }
-    }))
-  }
-
   return (
     <View style={Cs.navBarContainer}>
       <View style={{ flex: 6 }}>
@@ -109,15 +91,12 @@ const NavBarComponent = (props: Props) => {
           <Icon iconStyle={Bs.headerUnavailableButton} name='perm-identity' type='material-icons' size={25} onPress={() => null} /> :
           <Icon iconStyle={Bs.headerButton} name='perm-identity' type='material-icons' size={25} onPress={() => setUserModalVisibility(true)} testID='usermodal-visibility-button' />
         }
-        {props.route.name !== 'login' && props.route.name !== 'home' ?
-          <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25}
-            onPress={
-              props.route.name !== 'observation' && props.route.name !== 'document'
-                ? () => props.navigation.navigate('home')
-                : () => homeButtonHandler(props.route.name)
-            }
-          /> :
-          <Icon iconStyle={Bs.headerUnavailableButton} name='home' type='material-icons' size={25} onPress={() => null} testID={'homeButton'} />
+        {(props.route.name !== 'login' && props.route.name !== 'home' && props.route.name !== 'observation'
+          && props.route.name !== 'document' && props.route.name !== 'singleObservation')
+          ? <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25}
+            onPress={ () => props.navigation.popTo('home') }
+          />
+          : <Icon iconStyle={Bs.headerUnavailableButton} name='home' type='material-icons' size={25} onPress={() => null} testID={'homeButton'} />
         }
         <InstructionModalComponent isVisible={infoModalVisibility} screen={props.route.name} onClose={() => setInfoModalVisibility(false)} />
         <UserModalComponent isVisible={userModalVisibility} onClose={() => setUserModalVisibility(false)} navigation={props.navigation} />

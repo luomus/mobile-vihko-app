@@ -10,10 +10,10 @@ type Props = {
 
 const MapScreen = (props: Props) => {
 
-  const { navigate } = props.navigation
+  const { navigate, replace } = props.navigation
   return (
     <MapComponent
-      onPressHome={() => navigate('home')}
+      onPressHome={() => replace('home')}
       onPressObservation={(rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) =>
         navigate('observation', { rules, defaults, sourcePage })}
       onPressEditing={(sourcePage?: string) => navigate('observation', { sourcePage })}

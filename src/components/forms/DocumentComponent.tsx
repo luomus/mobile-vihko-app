@@ -18,7 +18,6 @@ import {
   resetReducer,
   clearPath,
   setEditing,
-  finishSingleObservation,
   deleteObservationEvent
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
@@ -78,7 +77,6 @@ const DocumentComponent = (props: Props) => {
   const editing = useSelector((state: RootState) => state.editing)
   const grid = useSelector((state: RootState) => state.grid)
   const observationEvent = useSelector((state: RootState) => state.observationEvent)
-  const observationId = useSelector((state: RootState) => state.observationId)
   const observationEventId = useSelector((state: RootState) => state.observationEventId)
   const path = useSelector((state: RootState) => state.path)
   const schema = useSelector((state: RootState) => state.schema)
@@ -280,7 +278,7 @@ const DocumentComponent = (props: Props) => {
   const deleteEvent = async () => {
     if (!eventState) return
     setSaving(true)
-    await dispatch(finishSingleObservation()).unwrap()
+    await dispatch(finishObservationEvent()).unwrap()
     await dispatch(deleteObservationEvent({ eventId: eventState.id })).unwrap()
     props.toHome()
     setSaving(false)
@@ -298,7 +296,7 @@ const DocumentComponent = (props: Props) => {
         } else if (props.sourcePage === 'home') {
           props.toHome()
         } else if (props.sourcePage === 'overview') {
-          if (!observationId) { return }
+          if (!observationEventId) { return }
           props.toObservationEvent(observationEventId)
         }
       }
