@@ -73,7 +73,7 @@ const FormAutocompleteComponent = (props: Props) => {
   //set focus into the taxon autocomplete's input field so user can start typing immediately
   useEffect(() => {
     setTimeout(() => {
-      if (valueField === 'identifications_0_taxon' || valueField === 'identifications_0_taxonVerbatim') {
+      if (!observationId.includes('complete_list') && (valueField === 'identifications_0_taxon' || valueField === 'identifications_0_taxonVerbatim')) {
         setFocus(valueField)
       }
     }, 500)

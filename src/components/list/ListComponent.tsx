@@ -124,9 +124,9 @@ const ListComponent = (props: Props) => {
     <TouchableOpacity
       onPress={() => {
         dispatch(setObservationId(item.id))
-        props.onPressObservation('list')
         textInput?.current?.clear()
         setSearch('')
+        props.onPressObservation('list')
       }}
       key={item.key}
       style={Cs.listElementContainer}
