@@ -26,7 +26,7 @@ const DocumentScreen = (props: Props) => {
         props.navigation.replace('overview', { id })
       }}
       toMap={() => {
-        props.navigation.replace('map')
+        props.navigation.navigate('map')
       }}
       onLogout={() => {
         dispatch(

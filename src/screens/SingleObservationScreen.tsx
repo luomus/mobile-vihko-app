@@ -16,13 +16,13 @@ type Props = {
 
 const SingleObservationScreen = (props: Props) => {
 
-  const { dispatch, push, isFocused, popTo, replace } = props.navigation
+  const { dispatch, push, isFocused, popTo, replace, navigate } = props.navigation
   const { rules, defaults, sourcePage } = props.route.params
 
   return (
     <SingleObservationComponent
       toObservationEvent={(id: string) => replace('overview', { id })}
-      toMap={() => replace('map')}
+      toMap={() => navigate('map')}
       toList={() => popTo('list')}
       pushToMap={() => push('map')}
       rules={rules}
