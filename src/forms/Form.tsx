@@ -114,18 +114,12 @@ const Form = (
           toReturn.push(createCountSelectorField(fieldTitle, path, fieldDefaultValue))
           return
         case 'dateBegin':
+        case 'dateEnd':
           let pickerType: string | undefined
           if (fields.includes('gatheringEvent_timeStart') || fields.includes('gatheringEvent_timeEnd')) {
             pickerType = 'date'
           }
           toReturn.push(createDateTimePicker(fieldTitle, path, '', pickerType, fieldDefaultValue, overrideFields[path].params.validation))
-          return
-        case 'dateEnd':
-          let pickerType2: string | undefined
-          if (fields.includes('gatheringEvent_timeStart') || fields.includes('gatheringEvent_timeEnd')) {
-            pickerType = 'date'
-          }
-          toReturn.push(createDateTimePicker(fieldTitle, path, '', pickerType2, fieldDefaultValue, overrideFields[path].params.validation))
           return
       }
     }
