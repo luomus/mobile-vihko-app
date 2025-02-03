@@ -83,12 +83,7 @@ export const overrideSingleObservationFields = {
   'gatheringEvent_dateEnd': {
     field: 'dateEnd',
     params: {
-      validation: {
-        required: {
-          value: true,
-          message: 'must enter time'
-        },
-      }
+      validation: {}
     }
   }
 }
