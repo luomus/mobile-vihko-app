@@ -11,7 +11,7 @@ const messageSlice = createSlice({
       return initialState
     },
     popMessageState(state) {
-      return state.splice(1)
+      return state.slice(1)
     },
     setMessageState(state, action: PayloadAction<MessageType>) {
       return state.concat(action.payload)
