@@ -4,6 +4,7 @@ import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Picker } from '@react-native-picker/picker'
 import { ErrorMessage } from '@hookform/error-message'
+import { atlasCodeAbbreviations } from '../../config/fields'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 
@@ -19,6 +20,8 @@ interface Props {
 const FormPickerComponent = (props: Props) => {
   const { register, setValue, formState } = useFormContext()
   const [selected, setSelected] = useState(props.selectedValue)
+  const [pickerValues, setPickerValues] = useState<Array<string>>([])
+  const [abbreviations, setAbbreviations] = useState<Array<string>>([])
 
   const { t } = useTranslation()
 
@@ -29,6 +32,20 @@ const FormPickerComponent = (props: Props) => {
       register(props.objectTitle)
     }
     setValue(props.objectTitle, props.selectedValue)
+
+    const valueSet = []
+    for (const key in props.dictionary) {
+      valueSet.push(props.dictionary[key])
+    }
+    setPickerValues(valueSet)
+
+    if (props.objectTitle === 'atlasCode') {
+      const abbreviationSet = []
+      for (const key in props.dictionary) {
+        abbreviationSet.push(atlasCodeAbbreviations[key])
+      }
+      setAbbreviations(abbreviationSet)
+    }
   }, [])
 
   return (
@@ -53,9 +70,15 @@ const FormPickerComponent = (props: Props) => {
           onValueChange={itemValue => {
             setSelected(itemValue)
             setValue(props.objectTitle, itemValue)
-          }
-          }>
-          {props.pickerItems}
+          }}
+        >
+          {props.objectTitle === 'atlasCode' && abbreviations.length > 0
+            ? abbreviations.map((abbreviation, index) => (
+              <Picker.Item key={index} label={abbreviation} value={Object.keys(props.dictionary)[index]} />
+            ))
+            : pickerValues.map((value, index) => (
+              <Picker.Item key={index} label={value} value={Object.keys(props.dictionary)[index]} />
+            ))}
         </Picker>
       </View>
     </View>

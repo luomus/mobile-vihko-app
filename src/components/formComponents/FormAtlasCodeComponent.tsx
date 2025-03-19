@@ -6,6 +6,7 @@ import i18n from '../../languages/i18n'
 import { ErrorMessage } from '@hookform/error-message'
 import SelectedButtonComponent from '../general/SelectedButtonComponent'
 import AtlasCodeStampComponent from '../general/AtlasCodeStampComponent'
+import { atlasCodeAbbreviations } from '../../config/fields'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
@@ -93,7 +94,11 @@ const FormAtlasCodeComponent = (props: Props) => {
         render={({ message }) => <Text style={Ts.redText}><>{errorMessageTranslation(message)}</></Text>}
       />
       <View style={Cs.atlasCodeChosenContainer}>
-        <Text>{!selectedKey || selectedKey === '' ? t('no atlas code') : props.dictionary[selectedKey]}</Text>
+        <Text>
+          {!selectedKey || selectedKey === ''
+            ? t('no atlas code')
+            : atlasCodeAbbreviations[selectedKey] || props.dictionary[selectedKey]}
+        </Text>
       </View>
       <View style={Cs.atlasCodeSelectionContainer}>
         {elementList}
