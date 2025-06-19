@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View } from 'react-native'
-import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile, PROVIDER_GOOGLE } from 'react-native-maps'
+import { Platform, View } from 'react-native'
+import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile } from 'react-native-maps'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { LineString, MultiLineString } from 'geojson'
@@ -324,7 +324,7 @@ const MapComponent = (props: Props) => {
         <Geojson
           geojson={wrapGeometryInFC(pathLine)}
           strokeWidth={5}
-          strokeColor={Colors.pathColor}
+          strokeColor={Colors.mapElementColor}
           zIndex={2}
         />
         : null
@@ -341,7 +341,18 @@ const MapComponent = (props: Props) => {
       coordinate={convertPointToLatLng(observation)}
       onDragEnd={(event) => markObservation(event.nativeEvent.coordinate)}
       zIndex={4}
-    />
+    >
+      {
+        Platform.OS === 'ios' ?
+          <Icon
+            type={'material-icons'}
+            name={'location-pin'}
+            size={45}
+            color={Colors.mapElementColor}
+          />
+          : null
+      }
+    </Marker>
     : null
   )
 
@@ -420,7 +431,18 @@ const MapComponent = (props: Props) => {
           coordinate={coordinate}
           pinColor={color}
           zIndex={3}
-        />
+        >
+          {
+            Platform.OS === 'ios' ?
+              <Icon
+                type={'material-icons'}
+                name={'location-pin'}
+                size={45}
+                color={color}
+              />
+              : null
+          }
+        </Marker>
       )
     })
   }
@@ -443,7 +465,6 @@ const MapComponent = (props: Props) => {
           <MapView
             testID='map-view'
             ref={mapViewRef}
-            provider={PROVIDER_GOOGLE}
             initialRegion={region}
             onPanDrag={() => stopCentering()}
             onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}

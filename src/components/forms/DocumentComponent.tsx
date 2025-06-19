@@ -14,7 +14,6 @@ import {
   replaceObservationEventById,
   uploadObservationEvent,
   setMessageState,
-  logoutUser,
   resetReducer,
   clearPath,
   setEditing,
@@ -266,7 +265,6 @@ const DocumentComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
-            dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
             setSending(false)
           }

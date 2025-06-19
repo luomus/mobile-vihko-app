@@ -1,11 +1,12 @@
 import React from 'react'
-import MapView, { Marker, Region, UrlTile, PROVIDER_GOOGLE } from 'react-native-maps'
+import MapView, { Marker, Region, UrlTile } from 'react-native-maps'
 import { mapUrl as urlTemplate } from '../../config/urls'
 import { convertPointToLatLng } from '../../helpers/geoJSONHelper'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 import { Point } from 'geojson'
-import { View, Text } from 'react-native'
+import { View, Text, Platform } from 'react-native'
+import { Icon } from 'react-native-elements'
 
 interface Props {
   geometry: Point,
@@ -28,7 +29,18 @@ const MiniMapComponent = (props: Props) => {
         coordinate={coordinate}
         pinColor={props.color ? props.color : Colors.observationColor}
         zIndex={5}
-      />
+      >
+        {
+          Platform.OS === 'ios' ?
+            <Icon
+              type={'material-icons'}
+              name={'location-pin'}
+              size={45}
+              color={Colors.observationColor}
+            />
+            : null
+        }
+      </Marker>
     )
   }
 
@@ -42,7 +54,6 @@ const MiniMapComponent = (props: Props) => {
   return (
     <View>
       <MapView
-        provider={PROVIDER_GOOGLE}
         region={region}
         rotateEnabled={false}
         scrollEnabled={false}

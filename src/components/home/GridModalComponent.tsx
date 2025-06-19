@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Linking, Modal, View, Text, ActivityIndicator, TouchableWithoutFeedback } from 'react-native'
-import MapView, { LatLng, MapType, Marker, PROVIDER_GOOGLE, Region, UrlTile, WMSTile } from 'react-native-maps'
+import MapView, { LatLng, MapType, Marker, Region, UrlTile, WMSTile } from 'react-native-maps'
 import { Icon } from 'react-native-elements'
 import { LocationObject } from 'expo-location'
 import { useDispatch, useSelector } from 'react-redux'
@@ -279,7 +279,6 @@ const GridModalComponent = (props: Props) => {
                     <MapView
                       ref={miniMapRef}
                       initialRegion={region}
-                      provider={PROVIDER_GOOGLE}
                       maxZoomLevel={18.9}
                       minZoomLevel={5}
                       mapType={mapType === 'terrain' ? 'terrain' : mapType}

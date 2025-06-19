@@ -78,7 +78,7 @@ const UserModalComponent = (props: Props) => {
       await dispatch(logoutUser()).unwrap()
     } catch (error: any) {
       dispatch(setMessageState({
-        type: 'dangerConf',
+        type: 'err',
         messageContent: error.message
       }))
     }

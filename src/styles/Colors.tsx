@@ -13,7 +13,7 @@ export default {
   warning4: '#D1C000',
 
   //map screen colors
-  pathColor: '#FF0000',
+  mapElementColor: '#FF0000',
   observationColor: '#0000CD',
   trackColor: '#FFD700',
   fecesColor: '#7CFC00',
