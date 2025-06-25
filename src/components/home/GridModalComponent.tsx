@@ -42,7 +42,7 @@ const GridModalComponent = (props: Props) => {
   const [gridCoords, setGridCoords] = useState<[number, number]>([373, 777])
   const [gridName, setGridName] = useState<string>('')
   const [initialized, setInitialized] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [northing, setNorthing] = useState<string>('000')
   const [ownLocation, setOwnLocation] = useState<[number, number]>([373, 777])
 
@@ -59,8 +59,12 @@ const GridModalComponent = (props: Props) => {
   const miniMapRef = useRef<MapView | null>(null)
 
   useEffect(() => {
+    const setLocationAsync = async () => {
+      await setLocation(true)
+    }
+
     if (props.modalVisibility) {
-      setLocation(true)
+      setLocationAsync()
     } else {
       setInitialized(false)
     }
@@ -73,7 +77,6 @@ const GridModalComponent = (props: Props) => {
   const setLocation = async (reloadModal: boolean) => {
     let location: LocationObject
     try {
-      if (reloadModal) setLoading(true)
       location = await getCurrentLocation(false, 5)
       dispatch(updateLocation(location))
     } catch (error: any) {

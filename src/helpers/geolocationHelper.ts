@@ -62,6 +62,7 @@ export const getCurrentLocation = async (usePreviousLocation?: boolean, location
           clearTimeout(timer)
           resolve(currentLocation)
         } catch (error: any) {
+          clearTimeout(timer)
           reject()
         }
       })
