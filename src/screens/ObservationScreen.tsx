@@ -22,7 +22,7 @@ const ObservationScreen = (props: Props) => {
   return (
     <ObservationComponent
       toObservationEvent={(id: string) => replace('overview', { id })}
-      toMap={() => popTo('map')}
+      toMap={() => replace('map')}
       toList={() => popTo('list')}
       pushToMap={() => push('map')}
       rules={rules}

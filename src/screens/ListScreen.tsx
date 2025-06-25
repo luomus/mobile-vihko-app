@@ -10,7 +10,7 @@ type Props = {
 const ListScreen = (props: Props) => {
   return (
     <ListComponent
-      onPressMap={() => props.navigation.popTo('map')}
+      onPressMap={() => props.navigation.replace('map')}
       onPressObservation={(sourcePage?: string) => { props.navigation.navigate('observation', { sourcePage }) }}
       onPressFinishObservationEvent={(sourcePage: string) => {
         props.navigation.navigate('document', { sourcePage })
