@@ -11,6 +11,7 @@ import {
   DispatchType,
   newObservation,
   clearObservationLocation,
+  replaceObservationEventById,
   replaceObservationById,
   clearObservationId,
   deleteObservation,
@@ -61,6 +62,7 @@ const ObservationComponent = (props: Props) => {
   const lang = i18n.language
   const [form, setForm] = useState<Array<React.JSX.Element | undefined> | null>(null)
   const [observationState, setObservationState] = useState<Record<string, any> | undefined>(undefined)
+  const [observationEventState, setObservationEventState] = useState<Record<string, any> | undefined>(undefined)
 
   //reference for scrollView
   const scrollViewRef = useRef<ScrollView | null>(null)
@@ -146,6 +148,8 @@ const ObservationComponent = (props: Props) => {
     if (!searchedEvent) {
       return
     }
+
+    setObservationEventState(clone(searchedEvent))
 
     //find the correct observation by id
     const searchedObservation = clone(
@@ -363,7 +367,31 @@ const ObservationComponent = (props: Props) => {
 
     //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
     if (editing.started && editing.locChanged) {
-      observation ? set(editedUnit, ['unitGathering', 'geometry'], merge(get(editedUnit, ['unitGathering', 'geometry']), observation)) : null
+      if (observation) {
+        set(editedUnit, ['unitGathering', 'geometry'], merge(get(editedUnit, ['unitGathering', 'geometry']), observation))
+
+        if (observationEventState?.gatheringEvent?.dateEnd && observationEventState?.gatherings[0]?.geometry?.type === 'Point') {
+          const observationEventCopy = {
+            ...observationEventState,
+            gatherings: [
+              {
+                ...observationEventState.gatherings[0],
+                geometry: editedUnit.unitGathering.geometry
+              },
+              ...observationEventState.gatherings.slice(1)
+            ]
+          }
+          try {
+            await dispatch(replaceObservationEventById({ newEvent: observationEventCopy, eventId: observationEventId })).unwrap()
+          } catch (error: any) {
+            dispatch(setMessageState({
+              type: 'err',
+              messageContent: error.message
+            }))
+          }
+        }
+      }
+
       dispatch(setEditing({
         started: false,
         locChanged: false,
