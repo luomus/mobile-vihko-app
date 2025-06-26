@@ -49,7 +49,6 @@ type Props = {
   onPressEditing: (sourcePage?: string) => void,
   onPressFinishObservationEvent: (sourcePage: string) => void,
   onPressSingleObservation: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
-  onPop: () => void,
   onPressList: () => void
 }
 

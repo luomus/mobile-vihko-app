@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactChild } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getTempTokenAndLoginUrl } from '../../services/userService'
@@ -33,7 +33,7 @@ import { captureException } from '../../helpers/sentry'
 type Props = {
   onSuccessfulLogin: () => void,
   onReset: () => void,
-  children?: ReactChild
+  children?: JSX.Element | JSX.Element[]
 }
 
 const LoginComponent = (props: Props) => {

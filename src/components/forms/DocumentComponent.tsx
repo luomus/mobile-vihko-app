@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ReactChild } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { ActionSheetIOS, Platform, ScrollView, View } from 'react-native'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -51,7 +51,7 @@ type Props = {
   toObservationEvent: (id: string) => void,
   toMap: () => void,
   onLogout: () => void,
-  children?: ReactChild,
+  children?: JSX.Element | JSX.Element[],
   sourcePage: string,
   isFocused: () => boolean
 }

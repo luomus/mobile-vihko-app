@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ReactChild } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { ActionSheetIOS, Platform, ScrollView, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -51,9 +51,8 @@ type Props = {
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
   sourcePage?: string,
-  children?: ReactChild,
+  children?: JSX.Element | JSX.Element[],
   isFocused: () => boolean,
-  goBack: () => void,
   toHome: () => void,
   onLogout: () => void,
 }
@@ -140,7 +139,15 @@ const SingleObservationComponent = (props: Props) => {
       originalSourcePage: editing.originalSourcePage
     }))
     dispatch(clearObservationId())
-    props.goBack()
+    if (props.sourcePage === 'map') {
+      props.toMap()
+    } else if (props.sourcePage === 'list') {
+      props.toList()
+    } else if (props.sourcePage === 'overview') {
+      props.toObservationEvent(observationEventId)
+    } else if (props.sourcePage === 'home') {
+      props.toHome()
+    }
   }
 
   //initialization (only for editing observations)

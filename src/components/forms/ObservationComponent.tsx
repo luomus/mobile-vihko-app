@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ReactChild } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { ScrollView, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -48,9 +48,8 @@ type Props = {
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
   sourcePage?: string,
-  children?: ReactChild,
-  isFocused: () => boolean,
-  goBack: () => void
+  children?: JSX.Element | JSX.Element[],
+  isFocused: () => boolean
 }
 
 const ObservationComponent = (props: Props) => {
@@ -128,7 +127,13 @@ const ObservationComponent = (props: Props) => {
       originalSourcePage: editing.originalSourcePage
     }))
     dispatch(clearObservationId())
-    props.goBack()
+    if (props.sourcePage === 'map') {
+      props.toMap()
+    } else if (props.sourcePage === 'list') {
+      props.toList()
+    } else if (props.sourcePage === 'overview') {
+      props.toObservationEvent(observationEventId)
+    }
   }
 
   //initialization (only for editing observations)

@@ -1,4 +1,4 @@
-import React, { useState, ReactChild, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ActionSheetIOS, FlatList, ListRenderItem, Platform, Text, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import Cs from '../../styles/ContainerStyles'
@@ -42,7 +42,7 @@ type Props = {
   onPressSingleObservation: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   onLogout: () => void,
   isFocused: () => boolean,
-  children?: ReactChild
+  children?: JSX.Element | JSX.Element[]
 }
 
 const OverviewComponent = (props: Props) => {

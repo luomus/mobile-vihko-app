@@ -16,7 +16,7 @@ type Props = {
 
 const ObservationScreen = (props: Props) => {
 
-  const { push, isFocused, popTo, replace, goBack } = props.navigation
+  const { push, isFocused, popTo, replace } = props.navigation
   const { rules, defaults, sourcePage } = props.route.params
 
   return (
@@ -29,7 +29,6 @@ const ObservationScreen = (props: Props) => {
       defaults={defaults}
       sourcePage={sourcePage}
       isFocused={isFocused}
-      goBack={() => goBack()}
     />
   )
 }

@@ -22,7 +22,6 @@ const MapScreen = (props: Props) => {
       }}
       onPressSingleObservation={( rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) =>
         navigate('singleObservation', { rules, defaults, sourcePage })}
-      onPop={() => props.navigation.goBack()}
       onPressList={() => navigate('list')}
     />
   )

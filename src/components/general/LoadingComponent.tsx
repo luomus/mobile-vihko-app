@@ -1,4 +1,4 @@
-import React, { ReactChild } from 'react'
+import React from 'react'
 import { Text, View, ActivityIndicator } from 'react-native'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
@@ -9,7 +9,7 @@ import { Icon } from 'react-native-elements'
 type Props = {
   text: string,
   completed?: boolean,
-  children?: ReactChild
+  children?: JSX.Element | JSX.Element[]
 }
 
 const LoadingComponent = (props: Props) => {
