@@ -9,7 +9,7 @@ type Props = {
 
 const HomeScreen = (props: Props) => {
 
-  const { dispatch, isFocused, navigate } = props.navigation
+  const { dispatch, isFocused, navigate, replace } = props.navigation
   return (
     <HomeComponent
       isFocused={() => isFocused()}
@@ -22,9 +22,7 @@ const HomeScreen = (props: Props) => {
           })
         )
       }}
-      onPressObservationEvent={(id: string) => {
-        props.navigation.navigate('overview', { id })
-      }}
+      onPressObservationEvent={(id: string) => replace('overview', { id })}
       onPressFinishObservationEvent={(sourcePage: string) => {
         props.navigation.navigate('document', { sourcePage })
       }}

@@ -4,7 +4,7 @@ import { createSchemaObjectComponents } from '../../helpers/parsers/SchemaObject
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
-import MiniMapComponent from './MiniMapComponent'
+// import MiniMapComponent from './MiniMapComponent'
 import {
   forms,
   JX519Fields, MHL117Fields, JX652Fields, MHL932Fields,
@@ -112,9 +112,9 @@ const ObservationInfoComponent = (props: Props) => {
   } else {
     return (
       <View style={Cs.observationInfoContainer}>
-        {props.observation.unitGathering?.geometry
+        {/* {props.observation.unitGathering?.geometry
           ? <MiniMapComponent geometry={props.observation.unitGathering.geometry} color={props.observation.color} />
-          : null}
+          : null} */}
         {list}
         {props.observation.images !== undefined && props.observation.images.length > 0 ?
           <View>
