@@ -18,6 +18,9 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(jest-)?@?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|@sentry/react-native|native-base)'
   ],
+  modulePathIgnorePatterns: [
+    '.*__mocks__.*'
+  ]
   // collectCoverage: true,
   // collectCoverageFrom: [
   //     "**/*.{js,jsx}",

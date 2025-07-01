@@ -13,7 +13,7 @@ jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
 //     KeyboardAwareScrollView: jest.fn().mockImplementation(({ children }) => children)
 //   }
 // })
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+// jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 // jest.mock('./src/helpers/axiosHelper')
 jest.mock('./src/helpers/geolocationHelper')
