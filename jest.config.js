@@ -1,5 +1,5 @@
 module.exports = {
-  preset: 'react-native',
+  preset: 'jest-expo',
   moduleFileExtensions: [
     'ts',
     'tsx',
@@ -9,14 +9,13 @@ module.exports = {
     'node'
   ],
   transform: {
-    '^.+\\.(ts|tsx)?$': 'ts-jest',
-    '^.+\\.jsx?$': 'babel-jest'
+    '^.+\\.(ts|tsx|js|jsx)?$': 'babel-jest'
   },
   setupFilesAfterEnv: [
     '<rootDir>/setupTests.js'
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(jest-)?@?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|@sentry/react-native|native-base)'
+    'node_modules/(?!(jest-)?@?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|@sentry/react-native|native-base|react-redux)'
   ],
   modulePathIgnorePatterns: [
     '.*__mocks__.*'

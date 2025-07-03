@@ -10,7 +10,8 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:jest/recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
+    'plugin:testing-library/react'
   ],
   'globals': {
     'Atomics': 'readonly',

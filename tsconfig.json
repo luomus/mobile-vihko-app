@@ -7,16 +7,18 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react",
+    "jsx": "react-native",
+    "module": "NodeNext",
+    "target": "esnext",
     "lib": [
       "es6"
     ],
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "noEmit": true,
     "strict": true,
-    "target": "esnext",
     "skipLibCheck": true
   },
+  "include": ["src", "**/*.ts", "**/*.tsx", "__tests__"],
   "exclude": [
     "node_modules",
     "babel.config.js",
