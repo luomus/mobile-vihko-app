@@ -78,7 +78,8 @@
           "organization": "luomus"
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-build-properties"
     ],
     "extra": {
       "eas": {

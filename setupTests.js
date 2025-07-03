@@ -1,6 +1,7 @@
 import '@testing-library/jest-native/extend-expect'
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock'
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock.js'
+import mockKeyboardController from 'react-native-keyboard-controller/jest'
 
 //react-hook-form
 global.window = {}
@@ -8,11 +9,7 @@ global.window = global
 
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage)
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
-// jest.mock('react-native-keyboard-aware-scroll-view', () => {
-//   return {
-//     KeyboardAwareScrollView: jest.fn().mockImplementation(({ children }) => children)
-//   }
-// })
+jest.mock('react-native-keyboard-controller', () => mockKeyboardController)
 // jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 // jest.mock('./src/helpers/axiosHelper')
