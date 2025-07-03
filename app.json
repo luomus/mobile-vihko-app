@@ -77,7 +77,8 @@
           "project": "mobiilivihko",
           "organization": "luomus"
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "extra": {
       "eas": {
