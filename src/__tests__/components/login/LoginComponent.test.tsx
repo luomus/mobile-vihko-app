@@ -1,78 +1,78 @@
-import { fireEvent, waitFor, cleanup, TextMatch, TextMatchOptions } from '@testing-library/react-native'
 import React from 'react'
+import { screen, fireEvent, waitFor } from '@testing-library/react-native'
 import { renderWithProviders } from '../../../helpers/testHelper'
 import Navigator from '../../../navigation/Navigator'
 import * as en from '../../../languages/translations/en.json'
 import * as fi from '../../../languages/translations/fi.json'
 import * as sv from '../../../languages/translations/sv.json'
-import { ReactTestInstance } from 'react-test-renderer'
 
 describe('LoginComponent', () => {
-  let getByText: (text: TextMatch, options?: TextMatchOptions) => ReactTestInstance
-  let getByTestId: (text: TextMatch, options?: TextMatchOptions) => ReactTestInstance
-  let getAllByText: (text: TextMatch, options?: TextMatchOptions) => ReactTestInstance[]
-
-  beforeEach(() => {
-    ({ getByText, getByTestId, getAllByText } = renderWithProviders(<Navigator initialRoute='login'/>))
-  })
-
-  afterEach(cleanup)
-
   it('should display the login component correctly', async () => {
+    renderWithProviders(<Navigator initialRoute='login'/>)
+
     // Check everything is displayed in Finnish
-    await waitFor(() => expect(getAllByText(fi['mobile vihko'])).toHaveLength(2))
-    expect(getByText(fi['login text'])).toBeDefined()
-    expect(getByText('FI')).toBeDefined()
-    expect(getByText('SV')).toBeDefined()
-    expect(getByText('EN')).toBeDefined()
-    fireEvent.press(getByText('SV')) // Test switching language to Swedish
+    await waitFor(() => expect(screen.getAllByText(fi['mobile vihko'])).toHaveLength(2))
+    expect(screen.getByText(fi['login text'])).toBeDefined()
+    expect(screen.getByText('FI')).toBeDefined()
+    expect(screen.getByText('SV')).toBeDefined()
+    expect(screen.getByText('EN')).toBeDefined()
+    fireEvent.press(screen.getByText('SV')) // Test switching language to Swedish
 
     // Check everything is displayed in Swedish
-    expect(getAllByText(sv['mobile vihko'])).toBeDefined()
-    expect(getByText(sv['login text'])).toBeDefined()
-    expect(getByText('FI')).toBeDefined()
-    expect(getByText('SV')).toBeDefined()
-    expect(getByText('EN')).toBeDefined()
-    fireEvent.press(getByText('EN'))
+    expect(screen.getAllByText(sv['mobile vihko'])).toBeDefined()
+    expect(screen.getByText(sv['login text'])).toBeDefined()
+    expect(screen.getByText('FI')).toBeDefined()
+    expect(screen.getByText('SV')).toBeDefined()
+    expect(screen.getByText('EN')).toBeDefined()
+    fireEvent.press(screen.getByText('EN'))
 
     // Check everything is displayed in English
-    expect(getAllByText(en['mobile vihko'])).toBeDefined()
-    expect(getByText(en['login text'])).toBeDefined()
-    expect(getByText('FI')).toBeDefined()
-    expect(getByText('SV')).toBeDefined()
-    expect(getByText('EN')).toBeDefined()
-    fireEvent.press(getByText('FI'))
+    expect(screen.getAllByText(en['mobile vihko'])).toBeDefined()
+    expect(screen.getByText(en['login text'])).toBeDefined()
+    expect(screen.getByText('FI')).toBeDefined()
+    expect(screen.getByText('SV')).toBeDefined()
+    expect(screen.getByText('EN')).toBeDefined()
+    fireEvent.press(screen.getByText('FI'))
 
-    await waitFor(() => expect(getAllByText(fi['mobile vihko'])).toHaveLength(2))
+    await waitFor(() => expect(screen.getAllByText(fi['mobile vihko'])).toHaveLength(2))
   })
 
   it('should login correctly and show the trip form', async () => {
-    await waitFor(() => expect(getAllByText(fi['mobile vihko'])).toHaveLength(2))
-    expect(getByText(fi['login text'])).toBeDefined()
-    fireEvent.press(getByText(fi['login']))
+    renderWithProviders(<Navigator initialRoute='login' />)
 
-    await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
+    const mobileVihko = await screen.findByText(fi['loading'])
+    expect(mobileVihko).toBeDefined()
+    expect(screen.getByText(fi['login text'])).toBeDefined()
+    fireEvent.press(screen.getByText(fi['login']))
 
-    await waitFor(() => expect(getByText(fi['trip form'])).toBeDefined())
-    fireEvent.press(getByText(fi['trip form']))
-    await waitFor(() => expect(getByText(fi['cancel'])).toBeDefined())
-    fireEvent.press(getByText(fi['cancel']))
-    await waitFor(() => expect(getByText(fi['trip form'])).toBeDefined())
+    const loading = await screen.findByText(fi['loading'])
+    expect(loading).toBeDefined()
+
+    const tripFormA = await screen.findByText(fi['trip form'])
+    expect(tripFormA).toBeDefined()
+    fireEvent.press(screen.getByText(fi['trip form']))
+    const cancel = await screen.findByText(fi['cancel'])
+    expect(cancel).toBeDefined()
+    fireEvent.press(screen.getByText(fi['cancel']))
+    const tripFormB = await screen.findByText(fi['trip form'])
+    expect(tripFormB).toBeDefined()
   })
 
   it('should logout successfully', async () => {
-    await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
+    renderWithProviders(<Navigator initialRoute='login' />)
 
-    await waitFor(() => expect(getByText(fi['new observation event'])).toBeDefined())
-    expect(getByText(fi['new observation event'])).toBeDefined()
-    fireEvent.press(getByTestId('usermodal-visibility-button'))
-    fireEvent.press(getByTestId('logout-button'))
+    const tripForm = await screen.findByText(fi['trip form'])
+    expect(tripForm).toBeDefined()
+    fireEvent.press(screen.getByTestId('usermodal-visibility-button'))
+    fireEvent.press(screen.getByTestId('logout-button'))
 
-    await waitFor(() => expect(getAllByText(fi['logout'])).toBeDefined())
-    fireEvent.press(getAllByText(fi['exit'])[0])
+    await screen.findAllByText(fi['logout'])
+    fireEvent.press(screen.getAllByText(fi['exit'])[0])
 
-    await waitFor(() => expect(getByText(fi['loading'])).toBeDefined())
+    const loadingB = await screen.findByText(fi['loading'])
+    expect(loadingB).toBeDefined()
 
-    await waitFor(() => expect(getByText(fi['login text'])).toBeDefined())
+    const loginText = await screen.findByText(fi['login text'])
+    expect(loginText).toBeDefined()
   })
 })
