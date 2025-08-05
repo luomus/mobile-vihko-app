@@ -127,7 +127,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
 
     //check that person token isn't expired
     try {
-      await userService.checkTokenValidity(credentials.token)
+      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       captureException(error)
       log.error({
@@ -135,22 +135,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
         error: error,
         user_id: credentials.user.id
       })
-      if (error.message?.includes('INVALID TOKEN')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return rejectWithValue({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
+      return rejectWithValue(error)
     }
 
     //define whether the event will be released publicly or privately

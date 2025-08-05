@@ -27,6 +27,7 @@ import { log } from '../../helpers/logger'
 import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
+import userService from '../../services/userService'
 import { initLanguage, saveLanguage } from '../../helpers/languageHelper'
 import { captureException } from '../../helpers/sentry'
 
@@ -116,6 +117,27 @@ const LoginComponent = (props: Props) => {
   const initializeApp = async () => {
     const connected = await checkNetworkStatus()
     if (!connected) return
+
+    try {
+      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
+    } catch (error: any) {
+      if (error.severity === 'low') {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message
+        }))
+      } else {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: () => {
+            props.onReset()
+            dispatch(logoutUser()).unwrap()
+            dispatch(resetReducer())
+          }
+        }))
+      }
+    }
 
     await Promise.all([
       dispatch(initObservationEvents()).unwrap(),

@@ -17,7 +17,8 @@ import {
   resetReducer,
   clearPath,
   setEditing,
-  deleteObservationEvent
+  deleteObservationEvent,
+  logoutUser
 } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import MessageComponent from '../general/MessageComponent'
@@ -265,6 +266,7 @@ const DocumentComponent = (props: Props) => {
           messageContent: error.message,
           onOk: () => {
             props.onLogout()
+            dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
             setSending(false)
           }

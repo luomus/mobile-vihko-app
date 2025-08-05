@@ -97,7 +97,7 @@ export const beginObservationEvent = createAsyncThunk<void, beginObservationPara
 
     //check that person token isn't expired
     try {
-      await userService.checkTokenValidity(credentials.token)
+      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       captureException(error)
       log.error({
@@ -105,22 +105,7 @@ export const beginObservationEvent = createAsyncThunk<void, beginObservationPara
         error: error,
         user_id: credentials.user.id
       })
-      if (error.message?.includes('INVALID TOKEN')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return rejectWithValue({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
+      return rejectWithValue(error)
     }
 
     if (schema.formID !== forms.lolife) {
@@ -299,30 +284,15 @@ export const continueObservationEvent = createAsyncThunk<any, beginObservationPa
 
     //check that person token isn't expired
     try {
-      await userService.checkTokenValidity(credentials.token)
+      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       captureException(error)
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
+        location: '/stores/shared/actions.tsx continueObservationEvent()/checkTokenValidity()',
         error: error,
         user_id: credentials.user.id
       })
-      if (error.message?.includes('INVALID TOKEN')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return rejectWithValue({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
+      return rejectWithValue(error)
     }
 
     //attempt to start geolocation systems
@@ -457,30 +427,15 @@ export const beginSingleObservation = createAsyncThunk<void, beginSingleObservat
 
     //check that person token isn't expired
     try {
-      await userService.checkTokenValidity(credentials.token)
+      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       captureException(error)
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()/checkTokenValidity()',
+        location: '/stores/shared/actions.tsx beginSingleObservation()/checkTokenValidity()',
         error: error,
         user_id: credentials.user.id
       })
-      if (error.message?.includes('INVALID TOKEN')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return rejectWithValue({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
+      return rejectWithValue(error)
     }
 
     const lang = i18n.language
@@ -512,7 +467,7 @@ export const beginSingleObservation = createAsyncThunk<void, beginSingleObservat
     } catch (error) {
       captureException(error)
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()/save()',
+        location: '/stores/shared/actions.tsx beginSingleObservation()/save()',
         error: error,
         user_id: credentials.user.id
       })
@@ -531,7 +486,7 @@ export const beginSingleObservation = createAsyncThunk<void, beginSingleObservat
     } catch (error: any) {
       await dispatch(deleteObservationEvent({ eventId: newID })).unwrap()
       log.error({
-        location: '/stores/shared/actions.tsx beginObservationEvent()/watchLocationAsync()',
+        location: '/stores/shared/actions.tsx beginSingleObservation()/watchLocationAsync()',
         error: error,
         user_id: credentials.user.id
       })
