@@ -51,7 +51,7 @@ type Props = {
   rules?: Record<string, any>,
   defaults?: Record<string, any>,
   sourcePage?: string,
-  children?: JSX.Element | JSX.Element[],
+  children?: React.JSX.Element | React.JSX.Element[],
   isFocused: () => boolean,
   toHome: () => void,
   onLogout: () => void,
@@ -349,7 +349,9 @@ const SingleObservationComponent = (props: Props) => {
 
     //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
     if (editing.started && editing.locChanged) {
-      observation ? set(editedUnit, ['unitGathering', 'geometry'], merge(get(editedUnit, ['unitGathering', 'geometry']), observation)) : null
+      if (observation) {
+        set(editedUnit, ['unitGathering', 'geometry'], merge(get(editedUnit, ['unitGathering', 'geometry']), observation))
+      }
       dispatch(setEditing({
         started: false,
         locChanged: false,
@@ -591,7 +593,15 @@ const SingleObservationComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
-          <ButtonComponent onPressFunction={() => { Platform.OS === 'ios' ? onPressOptionsIOS() : setModalVisibility(true) }}
+          <ButtonComponent
+            onPressFunction={() =>
+            {
+              if (Platform.OS === 'ios') {
+                onPressOptionsIOS()
+              } else {
+                setModalVisibility(true)
+              }
+            }}
             title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}

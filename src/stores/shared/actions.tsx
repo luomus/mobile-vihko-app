@@ -386,7 +386,9 @@ export const finishObservationEvent = createAsyncThunk<Record<string, any>, unde
     if (lineStringPath?.type === 'LineString' || lineStringPath?.type === 'MultiLineString') {
       lineStringPath = removeDuplicatesFromPath(lineStringPath)
       const endDate = event.gatheringEvent.timeEnd ? event.gatheringEvent.dateEnd + 'T' + event.gatheringEvent.timeEnd : event.gatheringEvent.dateEnd
-      lineStringPath ? lineStringPath = temporalOutlierFilter(lineStringPath, endDate) : null
+      if (lineStringPath) {
+        lineStringPath = temporalOutlierFilter(lineStringPath, endDate)
+      }
     }
 
     const eventWithGeometry = setEventGeometry(event, lineStringPath, firstLocation, grid)

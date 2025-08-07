@@ -93,7 +93,9 @@ const FormDateOptionsComponent = (props: Props) => {
     setValue(props.objectTitle, combinedDate)
 
     //set combined date as current value (which is shown to user)
-    combinedDate !== '' ? setCurrentValue(combinedDate) : null
+    if (combinedDate !== '') {
+      setCurrentValue(combinedDate)
+    }
   }, [currentDate, currentTime])
 
   const onLockIntoCurrentDate = () => {
@@ -105,7 +107,9 @@ const FormDateOptionsComponent = (props: Props) => {
   }
 
   const onChangeDate = (event: DateTimePickerEvent, date: Date | undefined) => {
-    date !== undefined ? setCurrentDate(parseDateFromDateObjectToDocument(date)) : null
+    if (date !== undefined) {
+      setCurrentDate(parseDateFromDateObjectToDocument(date))
+    }
   }
 
   const onChangeTime = (event: DateTimePickerEvent, date: Date | undefined) => {
@@ -115,7 +119,9 @@ const FormDateOptionsComponent = (props: Props) => {
       setCurrentDate(observationEvent.events[observationEvent.events.length - 1].gatheringEvent.dateBegin)
     }
 
-    date !== undefined ? setCurrentTime(parseDateFromDateObjectToDocument(date)) : null
+    if (date !== undefined) {
+      setCurrentTime(parseDateFromDateObjectToDocument(date))
+    }
 
     if (date !== undefined) {
       setSelected(true)

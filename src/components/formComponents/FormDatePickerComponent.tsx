@@ -106,7 +106,9 @@ const FormDatePickerComponent = (props: Props) => {
 
     setValue(props.objectTitle, combinedDate)
 
-    combinedDate !== '' ? setCurrentValue(combinedDate) : null
+    if (combinedDate !== '') {
+      setCurrentValue(combinedDate)
+    }
   }, [currentDate, currentTime])
 
   const initDatePicker = () => {
@@ -123,13 +125,19 @@ const FormDatePickerComponent = (props: Props) => {
 
   const onChangeDate = (event: DateTimePickerEvent, date: Date | undefined) => {
     setShowDate(false)
-    props.pickerType === 'date' ? null : setShowTime(true)
-    date !== undefined ? setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
+    if (props.pickerType !== 'date') {
+      setShowTime(true)
+    }
+    if (date !== undefined) {
+      setCurrentDate(parseDateFromDateObjectToDocument(date, props.pickerType))
+    }
   }
 
   const onChangeTime = (event: DateTimePickerEvent, date: Date | undefined) => {
     setShowTime(false)
-    date !== undefined ? setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType)) : null
+    if (date !== undefined) {
+      setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType))
+    }
   }
 
   const onInvalidDate = (message: string) => {

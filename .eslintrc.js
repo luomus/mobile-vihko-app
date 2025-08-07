@@ -55,6 +55,7 @@ module.exports = {
     'no-trailing-spaces': 'error',
     'no-const-assign': 'error',
     'no-console': 0,
+    'no-loss-of-precision': 'off',
     'object-curly-spacing': [
       'error', 'always'
     ],
@@ -75,7 +76,9 @@ module.exports = {
     ],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-loss-of-precision': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off'
+    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', { 'caughtErrors': 'none' }],
+    '@typescript-eslint/no-require-imports': 'off'
   },
   'settings': {
     'react': {

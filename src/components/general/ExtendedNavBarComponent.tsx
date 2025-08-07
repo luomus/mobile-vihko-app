@@ -188,7 +188,13 @@ const ExtendedNavBarComponent = (props: Props) => {
         <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
           <View style={{ paddingHorizontal: 2, width: 80 }}>
             <ButtonComponent disabled={changingLocation || grid?.outsideBorders === 'true'}
-              onPressFunction={async () => { tracking ? await pauseObserving() : await unpauseObserving() }}
+              onPressFunction={async () => {
+                if (tracking) {
+                  await pauseObserving()
+                } else {
+                  await unpauseObserving()
+                }
+              }}
               title={tracking ? t('pause') : t('continue')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
               gradientColorStart={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
               gradientColorEnd={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}

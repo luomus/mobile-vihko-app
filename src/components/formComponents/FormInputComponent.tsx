@@ -64,9 +64,11 @@ const FormInputComponent = (props: Props) => {
         keyboardType={props.keyboardType}
         editable={props.editable}
         onChangeText={text => {
-          props.isArrayItem && props.parentCallback
-            ? props.parentCallback({ objectTitle: props.objectTitle, value: parseInput(text) })
-            : setValue(props.objectTitle, parseInput(text))
+          if (props.isArrayItem && props.parentCallback) {
+            props.parentCallback({ objectTitle: props.objectTitle, value: parseInput(text) })
+          } else {
+            setValue(props.objectTitle, parseInput(text))
+          }
           setCurrentValue(text)
         }}
         defaultValue={currentValue}

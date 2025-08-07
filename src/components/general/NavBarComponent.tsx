@@ -32,7 +32,11 @@ const NavBarComponent = (props: Props) => {
 
   useEffect(() => {
     if (schema.formID === forms.tripForm) {
-      singleObservation ? setFormName(t('single observation')) : setFormName(t('trip form'))
+      if (singleObservation) {
+        setFormName(t('single observation'))
+      } else {
+        setFormName(t('trip form'))
+      }
     } else if (schema.formID === forms.birdAtlas) {
       setFormName(t('bird atlas'))
     } else if (schema.formID === forms.fungiAtlas) {

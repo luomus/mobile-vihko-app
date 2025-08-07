@@ -41,7 +41,11 @@ const EventListElementComponent = (props: Props) => {
 
   useEffect(() => {
     if (props.observationEvent.formID === forms.tripForm) {
-      props.observationEvent.singleObservation ? setTitle(t('single observation')) : setTitle(t('trip form'))
+      if (props.observationEvent.singleObservation) {
+        setTitle(t('single observation'))
+      } else {
+        setTitle(t('trip form'))
+      }
     } else if (props.observationEvent.formID === forms.birdAtlas) {
       setTitle(t('bird atlas'))
     } else if (props.observationEvent.formID === forms.fungiAtlas) {

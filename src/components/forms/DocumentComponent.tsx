@@ -52,7 +52,7 @@ type Props = {
   toObservationEvent: (id: string) => void,
   toMap: () => void,
   onLogout: () => void,
-  children?: JSX.Element | JSX.Element[],
+  children?: React.JSX.Element | React.JSX.Element[],
   sourcePage: string,
   isFocused: () => boolean
 }
@@ -367,7 +367,15 @@ const DocumentComponent = (props: Props) => {
     return (
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
-          <ButtonComponent onPressFunction={() => { Platform.OS === 'ios' ? onPressOptionsIOS() : setModalVisibility(true) }}
+          <ButtonComponent
+            onPressFunction={() =>
+            {
+              if (Platform.OS === 'ios') {
+                onPressOptionsIOS()
+              } else {
+                setModalVisibility(true)
+              }
+            }}
             title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}

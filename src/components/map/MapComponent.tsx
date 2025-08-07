@@ -211,9 +211,11 @@ const MapComponent = (props: Props) => {
       originalLocation: editing.originalLocation,
       originalSourcePage: editing.originalSourcePage
     }))
-    singleObservation
-      ? props.onPressSingleObservation(undefined, undefined, 'map')
-      : props.onPressEditing('map')
+    if (singleObservation) {
+      props.onPressSingleObservation(undefined, undefined, 'map')
+    } else {
+      props.onPressEditing('map')
+    }
   }
 
   const showSubmitDelete = (unitId: string) => {
@@ -249,9 +251,11 @@ const MapComponent = (props: Props) => {
 
     if (singleObservation) dispatch(setObservationLocation(editing.originalLocation))
 
-    singleObservation
-      ? props.onPressSingleObservation(undefined, undefined, 'map')
-      : props.onPressEditing()
+    if (singleObservation) {
+      props.onPressSingleObservation(undefined, undefined, 'map')
+    } else {
+      props.onPressEditing()
+    }
   }
 
   //sets observation ids and shifts screen to observation edit page, parameter
@@ -261,9 +265,11 @@ const MapComponent = (props: Props) => {
     setMapModalVisibility(false)
     cancelObservation()
     dispatch(setObservationId(unitId))
-    singleObservation
-      ? props.onPressSingleObservation(undefined, undefined, 'map')
-      : props.onPressEditing('map')
+    if (singleObservation) {
+      props.onPressSingleObservation(undefined, undefined, 'map')
+    } else {
+      props.onPressEditing('map')
+    }
   }
 
   //preparations for opening the edit observation modal
@@ -447,7 +453,11 @@ const MapComponent = (props: Props) => {
   }
 
   const toggleMapType = () => {
-    mapType === 'terrain' ? setMapType('satellite') : setMapType('terrain')
+    if (mapType === 'terrain') {
+      setMapType('satellite')
+    } else {
+      setMapType('terrain')
+    }
   }
 
   if (loading) {

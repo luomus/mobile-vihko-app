@@ -22,9 +22,11 @@ export const setEventGeometry = (event: Record<string, any>, lineStringPath: Lin
   } else if (eventHasGrid) {
     eventCopy.gatherings[0].geometry = grid.geometry
   } else if (eventHasUnits) {
-    eventCopy.singleObservation
-      ? eventCopy.gatherings[0].geometry = eventCopy.gatherings[0].units[0].unitGathering.geometry
-      : eventCopy.gatherings[0].geometry = createUnitBoundingBox(eventCopy.gatherings[0].units)
+    if (eventCopy.singleObservation) {
+      eventCopy.gatherings[0].geometry = eventCopy.gatherings[0].units[0].unitGathering.geometry
+    } else {
+      eventCopy.gatherings[0].geometry = createUnitBoundingBox(eventCopy.gatherings[0].units)
+    }
   } else if (eventHasFirstLocation) {
     eventCopy.gatherings[0].geometry = {
       coordinates: [

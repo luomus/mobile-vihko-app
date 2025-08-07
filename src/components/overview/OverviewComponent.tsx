@@ -42,7 +42,7 @@ type Props = {
   onPressSingleObservation: (rules?: Record<string, any>, defaults?: Record<string, any>, sourcePage?: string) => void,
   onLogout: () => void,
   isFocused: () => boolean,
-  children?: JSX.Element | JSX.Element[]
+  children?: React.JSX.Element | React.JSX.Element[]
 }
 
 const OverviewComponent = (props: Props) => {
@@ -259,9 +259,11 @@ const OverviewComponent = (props: Props) => {
                 () => {
                   dispatch(setObservationId(item.id))
                   dispatch(setObservationEventId(event.id))
-                  event.singleObservation
-                    ? props.onPressSingleObservation(undefined, undefined, 'overview')
-                    : props.onPressObservation('overview')
+                  if (event.singleObservation) {
+                    props.onPressSingleObservation(undefined, undefined, 'overview')
+                  } else {
+                    props.onPressObservation('overview')
+                  }
                 }}
               title={t('edit')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
@@ -272,9 +274,11 @@ const OverviewComponent = (props: Props) => {
             <ButtonComponent
               onPressFunction={
                 () => {
-                  event.singleObservation
-                    ? showDeleteObservationEvent(event.id)
-                    : showDeleteObservation(event.id, item.id)
+                  if (event.singleObservation) {
+                    showDeleteObservationEvent(event.id)
+                  } else {
+                    showDeleteObservation(event.id, item.id)
+                  }
                 }}
               title={t('remove')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
@@ -353,7 +357,14 @@ const OverviewComponent = (props: Props) => {
     return (
       <>
         <View style={Cs.formSaveButtonContainer}>
-          <ButtonComponent onPressFunction={async () => { Platform.OS === 'ios' ? await onPressOptionsIOS() : setModalVisibility(true) }}
+          <ButtonComponent
+            onPressFunction={async () => {
+              if (Platform.OS === 'ios') {
+                await onPressOptionsIOS()
+              } else {
+                setModalVisibility(true)
+              }
+            }}
             title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
             textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}
