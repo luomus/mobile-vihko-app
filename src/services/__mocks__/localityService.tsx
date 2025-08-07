@@ -2,135 +2,137 @@ import { LineString, MultiLineString, Point } from 'geojson'
 
 export const getLocalityDetailsFromLajiApi = async (geometry: MultiLineString | LineString | Point, lang: string) => {
   return {
-    'results': [
-      {
-        'address_components': [
-          {
-            'long_name': 'Uusimaa',
-            'short_name': 'U',
-            'types': [
-              'biogeographicalProvince',
-            ],
-          },
-        ],
-        'formatted_address': 'Uusimaa (U)',
-        'geometry': {
-          'bounds': {
-            'northeast': {
-              'lat': 60.9551,
-              'lng': 26.87533,
+    'result': {
+      'results': [
+        {
+          'address_components': [
+            {
+              'long_name': 'Uusimaa',
+              'short_name': 'U',
+              'types': [
+                'biogeographicalProvince',
+              ],
             },
-            'southwest': {
-              'lat': 59.611003,
-              'lng': 22.658911,
+          ],
+          'formatted_address': 'Uusimaa (U)',
+          'geometry': {
+            'bounds': {
+              'northeast': {
+                'lat': 60.9551,
+                'lng': 26.87533,
+              },
+              'southwest': {
+                'lat': 59.611003,
+                'lng': 22.658911,
+              },
+            },
+            'location': {
+              'lat': '60.283051',
+              'lng': '24.767121',
+            },
+            'location_type': 'APPROXIMATE',
+            'viewport': {
+              'northeast': {
+                'lat': 60.9551,
+                'lng': 26.87533,
+              },
+              'southwest': {
+                'lat': 59.611003,
+                'lng': 22.658911,
+              },
             },
           },
-          'location': {
-            'lat': '60.283051',
-            'lng': '24.767121',
-          },
-          'location_type': 'APPROXIMATE',
-          'viewport': {
-            'northeast': {
-              'lat': 60.9551,
-              'lng': 26.87533,
-            },
-            'southwest': {
-              'lat': 59.611003,
-              'lng': 22.658911,
-            },
-          },
+          'place_id': 'ML.253',
+          'types': [
+            'biogeographicalProvince',
+          ],
         },
-        'place_id': 'ML.253',
-        'types': [
-          'biogeographicalProvince',
-        ],
-      },
-      {
-        'address_components': [
-          {
-            'short_name': 'Uusimaa',
-            'types': [
-              'region',
-            ],
-          },
-        ],
-        'formatted_address': 'Uusimaa',
-        'geometry': {
-          'bounds': {
-            'northeast': {
-              'lat': 60.852328909136,
-              'lng': 26.649098268891,
+        {
+          'address_components': [
+            {
+              'short_name': 'Uusimaa',
+              'types': [
+                'region',
+              ],
             },
-            'southwest': {
-              'lat': 59.611003765602,
-              'lng': 22.658921499564,
+          ],
+          'formatted_address': 'Uusimaa',
+          'geometry': {
+            'bounds': {
+              'northeast': {
+                'lat': 60.852328909136,
+                'lng': 26.649098268891,
+              },
+              'southwest': {
+                'lat': 59.611003765602,
+                'lng': 22.658921499564,
+              },
             },
-          },
-          'location': {
-            'lat': '60.231666',
-            'lng': '24.654010',
-          },
-          'location_type': 'APPROXIMATE',
-          'viewport': {
-            'northeast': {
-              'lat': 60.852328909136,
-              'lng': 26.649098268891,
+            'location': {
+              'lat': '60.231666',
+              'lng': '24.654010',
             },
-            'southwest': {
-              'lat': 59.611003765602,
-              'lng': 22.658921499564,
+            'location_type': 'APPROXIMATE',
+            'viewport': {
+              'northeast': {
+                'lat': 60.852328909136,
+                'lng': 26.649098268891,
+              },
+              'southwest': {
+                'lat': 59.611003765602,
+                'lng': 22.658921499564,
+              },
             },
           },
+          'types': [
+            'region',
+          ],
         },
-        'types': [
-          'region',
-        ],
-      },
-      {
-        'address_components': [
-          {
-            'short_name': 'Helsinki',
-            'types': [
-              'municipality',
-            ],
-          },
-        ],
-        'formatted_address': 'Helsinki',
-        'geometry': {
-          'bounds': {
-            'northeast': {
-              'lat': 60.297839,
-              'lng': 25.254493,
+        {
+          'address_components': [
+            {
+              'short_name': 'Helsinki',
+              'types': [
+                'municipality',
+              ],
             },
-            'southwest': {
-              'lat': 59.922482,
-              'lng': 24.782792,
+          ],
+          'formatted_address': 'Helsinki',
+          'geometry': {
+            'bounds': {
+              'northeast': {
+                'lat': 60.297839,
+                'lng': 25.254493,
+              },
+              'southwest': {
+                'lat': 59.922482,
+                'lng': 24.782792,
+              },
             },
-          },
-          'location': {
-            'lat': '60.110161',
-            'lng': '25.018642',
-          },
-          'location_type': 'APPROXIMATE',
-          'viewport': {
-            'northeast': {
-              'lat': 60.297839,
-              'lng': 25.254493,
+            'location': {
+              'lat': '60.110161',
+              'lng': '25.018642',
             },
-            'southwest': {
-              'lat': 59.922482,
-              'lng': 24.782792,
+            'location_type': 'APPROXIMATE',
+            'viewport': {
+              'northeast': {
+                'lat': 60.297839,
+                'lng': 25.254493,
+              },
+              'southwest': {
+                'lat': 59.922482,
+                'lng': 24.782792,
+              },
             },
           },
+          'place_id': 'ML.660',
+          'types': [
+            'municipality',
+          ],
         },
-        'place_id': 'ML.660',
-        'types': [
-          'municipality',
-        ],
-      },
-    ],
-    'status': 'OK',
+      ],
+      'status': 'OK',
+    }
   }
 }
 

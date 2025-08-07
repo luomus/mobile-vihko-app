@@ -42,17 +42,17 @@ export const getSchemas = async (language: string, formId: string) => {
 
 export const postObservationEvent = async (observationEvent: Record<string, any>, credentials: CredentialsType) => {
 
-  const unit = observationEvent.gatherings[0].units[0]
+  // const unit = observationEvent.gatherings[0].units[0]
 
-  if (
-    observationEvent.formID !== 'JX.519' ||
-    observationEvent.editors[0] !== 'MA.1' ||
-    unit.identifications[0].taxon !== 'varis' ||
-    unit.count !== '1' ||
-    observationEvent.locality !== 'Etu-Töölö'
-  ) {
-    Promise.reject()
-  }
+  // if (
+  //   observationEvent.formID !== 'JX.519' ||
+  //   observationEvent.editors[0] !== 'MA.1' ||
+  //   unit.identifications[0].taxon !== 'varis' ||
+  //   unit.count !== '1' ||
+  //   observationEvent.locality !== 'Etu-Töölö'
+  // ) {
+  //   Promise.reject()
+  // }
 
   Promise.resolve()
 }

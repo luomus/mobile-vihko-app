@@ -1,4 +1,10 @@
+import { createAsyncThunk } from '@reduxjs/toolkit'
 import { CredentialsType } from '../../stores'
+import i18n from '../../languages/i18n'
+
+interface checkTokenValidityParams {
+  credentials: CredentialsType
+}
 
 export const getTempTokenAndLoginUrl = async () => {
   return {
@@ -44,13 +50,46 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
   }
 }
 
-export const checkTokenValidity = async (personToken: string) => {
+export const getTokenValidity = async (personToken: string) => {
   return {
     'next': '',
     'personId': 'MA.1',
     'target': 'KE.1141',
   }
 }
+
+export const checkTokenValidity = createAsyncThunk<void, checkTokenValidityParams, { rejectValue: Record<string, any> }>(
+  'userService/checkTokenValidity',
+  async ({ credentials }, { rejectWithValue }) => {
+    try {
+      if (!credentials.token) {
+        return rejectWithValue({
+          severity: 'high',
+          message: i18n.t('user token is missing')
+        })
+      }
+      await getTokenValidity(credentials.token)
+      return
+    } catch (error: any) {
+      if (error.message?.includes('INVALID TOKEN')) {
+        return rejectWithValue({
+          severity: 'high',
+          message: i18n.t('user token has expired')
+        })
+      }
+      if (error.message?.includes('WRONG SOURCE')) {
+        return rejectWithValue({
+          severity: 'high',
+          message: i18n.t('person token is given for a different app')
+        })
+      }
+      return rejectWithValue({
+        severity: 'low',
+        message: `${i18n.t('failed to check token')} ${error.message}`
+      })
+    }
+  }
+)
 
 export const getProfile = async () => {
   return {

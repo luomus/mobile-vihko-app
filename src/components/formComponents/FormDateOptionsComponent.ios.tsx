@@ -63,7 +63,7 @@ const FormDateOptionsComponent = (props: Props) => {
     }
 
     //when observing in the same day as when the event was started, do not give option to pick date
-    if (sameDay(observationEvent.events[observationEvent.events.length - 1].gatheringEvent.dateBegin, parseDateFromDateObjectToDocument(date))) {
+    if (sameDay(observationEvent.events[observationEvent.events.length - 1]?.gatheringEvent?.dateBegin, parseDateFromDateObjectToDocument(date))) {
       setDifferentDay(false)
     }
   }, [])
@@ -73,7 +73,7 @@ const FormDateOptionsComponent = (props: Props) => {
     let combinedDate
 
     if (currentTime && currentDate) {
-      combinedDate = currentDate.substring(0, 10) + 'T' + currentTime.substring(11, 16)
+      combinedDate = currentDate?.substring(0, 10) + 'T' + currentTime?.substring(11, 16)
     } else {
       return
     }

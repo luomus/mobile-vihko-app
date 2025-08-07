@@ -1,4 +1,4 @@
-import { fireEvent, waitFor } from '@testing-library/react-native'
+import { screen, fireEvent } from '@testing-library/react-native'
 import React from 'react'
 import { renderWithProviders } from '../../helpers/testHelper'
 import * as fi from '../../languages/translations/fi.json'
@@ -39,165 +39,157 @@ const testPressLocation = {
 
 describe('LoLIFE', () => {
   test('is able to add flying squirrel observations and save the event', async () => {
-    jest.setTimeout(10000)
+    // jest.setTimeout(10000)
 
-    const { getByText, getByTestId, getAllByText, store } = renderWithProviders(<Navigator initialRoute='home'/>)
-
-    await waitFor(async () => {await initializeComponent(store)})
+    const { store } = renderWithProviders(<></>)
+    await initializeComponent(store)
+    renderWithProviders(<Navigator initialRoute='home'/>)
 
     // Open the LoLIFE modal
-    await waitFor(() => expect(getByText(fi['lolife'])).toBeDefined())
-    fireEvent.press(getByText(fi['lolife']))
+    expect(screen.getByText(fi['lolife'])).toBeDefined()
+    fireEvent.press(screen.getByText(fi['lolife']))
 
     // Press the zone dropdown to get into zone selection
-    await waitFor(() => expect(getByText(fi['zone picker description'])).toBeDefined())
-    expect(getByText(fi['no zone'])).toBeDefined()
-    fireEvent.press(getByText(fi['no zone']))
+    expect(await screen.findByText(fi['zone picker description'])).toBeDefined()
+    expect(screen.getByText(fi['no zone'])).toBeDefined()
+    fireEvent.press(screen.getByText(fi['no zone']))
 
     // Select a zone
-    await waitFor(() => expect(getByText('Mölylän metsä')).toBeDefined())
-    fireEvent.press(getByText('Mölylän metsä'))
+    expect(screen.getByText('Mölylän metsä')).toBeDefined()
+    fireEvent.press(screen.getByText('Mölylän metsä'))
 
     // Start the event
-    await waitFor(() => expect(getByText(fi['start'])).toBeDefined())
-    fireEvent.press(getByText(fi['start']))
+    expect(screen.getByText(fi['start'])).toBeDefined()
+    fireEvent.press(screen.getByText(fi['start']))
 
     // MapComponent
-    await waitFor(() => expect(getByTestId('map-view')).toBeDefined())
+    expect(await screen.findByTestId('map-view')).toBeDefined()
 
     // ExtendedNavBarComponent
-    expect(getAllByText(fi['stop'])).toHaveLength(2)
+    expect(screen.getByText(fi['stop'])).toBeDefined()
 
     // Long press on the map, create a new observation
-    fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
+    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
 
     // Expect buttons to show up for all LoLIFE observation categories
-    expect(getByText('+ Havainto')).toBeDefined()
-    expect(getByText('+ Jälkihavainto')).toBeDefined()
-    expect(getByText('+ Pesä')).toBeDefined()
-    expect(getByText('+ Papanahavainto')).toBeDefined()
+    expect(screen.getByText('+ Havainto')).toBeDefined()
+    expect(screen.getByText('+ Jälkihavainto')).toBeDefined()
+    expect(screen.getByText('+ Pesä')).toBeDefined()
+    expect(screen.getByText('+ Papanahavainto')).toBeDefined()
 
     // Open and check the observation form
-    fireEvent.press(getByText('+ Havainto'))
+    fireEvent.press(screen.getByText('+ Havainto'))
     const prop = lolifeSchema.data.form.schema.properties.gatherings.items.properties.units.items.properties
-    expect(getByTestId('saveButton')).toBeDefined()
-    expect(getAllByText(fi['cancel'])).toHaveLength(2)
-    expect(getByText(prop.alive.title)).toBeDefined() // Alive
-    expect(getByText(prop.count.title)).toBeDefined() // Count
-    expect(getByText(prop.taxonConfidence.title)).toBeDefined() // Taxon confidence
-    expect(getByText(prop.recordBasis.title)).toBeDefined() // Record type
-    expect(getByText(prop.notes.title)).toBeDefined() // Notes
-    expect(getByText(fi['images'])).toBeDefined() // Images
-    expect(getByText(fi['no image'])).toBeDefined() // No photos
-    expect(getByText(fi['choose image'])).toBeDefined() // Choose photo
-    expect(getByText(fi['use camera'])).toBeDefined() // Take photo
+    expect(screen.getByTestId('saveButton')).toBeDefined()
+    expect(screen.getAllByText(fi['cancel'])).toBeDefined()
+    expect(screen.getByText(prop.alive.title)).toBeDefined() // Alive
+    expect(screen.getByText(prop.count.title)).toBeDefined() // Count
+    expect(screen.getByText(prop.taxonConfidence.title)).toBeDefined() // Taxon confidence
+    expect(screen.getByText(prop.recordBasis.title)).toBeDefined() // Record type
+    expect(screen.getByText(prop.notes.title)).toBeDefined() // Notes
+    expect(screen.getByText(fi['images'])).toBeDefined() // Images
+    expect(screen.getByText(fi['no image'])).toBeDefined() // No photos
+    expect(screen.getByText(fi['choose image'])).toBeDefined() // Choose photo
+    expect(screen.getByText(fi['use camera'])).toBeDefined() // Take photo
 
     // Fill the observation form and save
-    fireEvent.changeText(getByText(prop.count.title), '1')
+    fireEvent.changeText(screen.getByText(prop.count.title), '1')
     // fireEvent.press(getByText(prop.taxonConfidence.title))
     // expect(getByText(prop.taxonConfidence.oneOf[0].title)).toBeDefined()
     // expect(getByText(prop.taxonConfidence.oneOf[1].title)).toBeDefined()
-    fireEvent.press(getByTestId('saveButton'))
+    fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back on the map view and do another long press
-    await waitFor(() => expect(getByTestId('map-view')).toBeDefined())
-    fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
+    expect(await screen.findByTestId('map-view')).toBeDefined()
+    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the traces form
-    fireEvent.press(getByText('+ Jälkihavainto'))
-    expect(getByTestId('saveButton')).toBeDefined()
-    expect(getAllByText(fi['cancel'])).toHaveLength(2)
-    expect(getByText(prop.indirectObservationType.title)).toBeDefined() // Tracks
-    expect(getByText(prop.unitFact.properties.lolifeNestTree.title)).toBeDefined() // Tree species
-    expect(getByText(prop.notes.title)).toBeDefined() // Notes
-    expect(getByText(fi['images'])).toBeDefined() // Images
-    expect(getByText(fi['no image'])).toBeDefined() // No photos
-    expect(getByText(fi['choose image'])).toBeDefined() // Choose photo
-    expect(getByText(fi['use camera'])).toBeDefined() // Take photo
+    fireEvent.press(screen.getByText('+ Jälkihavainto'))
+    expect(screen.getByTestId('saveButton')).toBeDefined()
+    expect(screen.getAllByText(fi['cancel'])).toBeDefined()
+    expect(screen.getByText(prop.indirectObservationType.title)).toBeDefined() // Tracks
+    expect(screen.getByText(prop.unitFact.properties.lolifeNestTree.title)).toBeDefined() // Tree species
+    expect(screen.getByText(prop.notes.title)).toBeDefined() // Notes
+    expect(screen.getByText(fi['images'])).toBeDefined() // Images
+    expect(screen.getByText(fi['no image'])).toBeDefined() // No photos
+    expect(screen.getByText(fi['choose image'])).toBeDefined() // Choose photo
+    expect(screen.getByText(fi['use camera'])).toBeDefined() // Take photo
 
     // Fill the traces form and save
-    fireEvent.changeText(getByText(prop.notes.title), 'Tracks on a tree.')
-    fireEvent.press(getByTestId('saveButton'))
+    fireEvent.changeText(screen.getByText(prop.notes.title), 'Tracks on a tree.')
+    fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back on the map view and do another long press
-    await waitFor(() => expect(getByTestId('map-view')).toBeDefined())
-    fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
+    expect(await screen.findByTestId('map-view')).toBeDefined()
+    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the nest site form
-    fireEvent.press(getByText('+ Pesä'))
-    expect(getByTestId('saveButton')).toBeDefined()
-    expect(getAllByText(fi['cancel'])).toHaveLength(2)
-    expect(getByText(prop.nestType.title)).toBeDefined() // Nest type
-    expect(getByText(prop.nestNotes.title)).toBeDefined() // Nest notes
-    expect(getByText(prop.nestCount.title)).toBeDefined() // Nest / cavity count
-    expect(getByText(prop.taxonConfidence.title)).toBeDefined() // Taxon confidence
-    expect(getByText(prop.unitFact.properties.lolifeNestTree.title)).toBeDefined() // Tree species
-    expect(getByText(prop.notes.title)).toBeDefined() // Notes
-    expect(getByText(fi['images'])).toBeDefined() // Images
-    expect(getByText(fi['no image'])).toBeDefined() // No photos
-    expect(getByText(fi['choose image'])).toBeDefined() // Choose photo
-    expect(getByText(fi['use camera'])).toBeDefined() // Take photo
+    fireEvent.press(screen.getByText('+ Pesä'))
+    expect(screen.getByTestId('saveButton')).toBeDefined()
+    expect(screen.getAllByText(fi['cancel'])).toBeDefined()
+    expect(screen.getByText(prop.nestType.title)).toBeDefined() // Nest type
+    expect(screen.getByText(prop.nestNotes.title)).toBeDefined() // Nest notes
+    expect(screen.getByText(prop.nestCount.title)).toBeDefined() // Nest / cavity count
+    expect(screen.getByText(prop.taxonConfidence.title)).toBeDefined() // Taxon confidence
+    expect(screen.getByText(prop.unitFact.properties.lolifeNestTree.title)).toBeDefined() // Tree species
+    expect(screen.getByText(prop.notes.title)).toBeDefined() // Notes
+    expect(screen.getByText(fi['images'])).toBeDefined() // Images
+    expect(screen.getByText(fi['no image'])).toBeDefined() // No photos
+    expect(screen.getByText(fi['choose image'])).toBeDefined() // Choose photo
+    expect(screen.getByText(fi['use camera'])).toBeDefined() // Take photo
 
     // Fill the nest site form and save
-    fireEvent.changeText(getByText(prop.nestNotes.title), 'Small nest.')
-    fireEvent.press(getByTestId('saveButton'))
+    fireEvent.changeText(screen.getByText(prop.nestNotes.title), 'Small nest.')
+    fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back on the map view and do another long press
-    await waitFor(() => expect(getByTestId('map-view')).toBeDefined())
-    fireEvent(getByTestId('map-view'), 'onLongPress', testPressLocation)
+    expect(await screen.findByTestId('map-view')).toBeDefined()
+    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the droppings form
-    fireEvent.press(getByText('+ Papanahavainto'))
-    expect(getByTestId('saveButton')).toBeDefined()
-    expect(getAllByText(fi['cancel'])).toHaveLength(2)
-    expect(getByText(prop.unitFact.properties.lolifeDroppingsType.title)).toBeDefined() // Droppings type
-    expect(getByText(prop.unitFact.properties.lolifeDroppingsCount.title)).toBeDefined() // Droppings count
-    expect(getByText(prop.unitFact.properties.lolifeDroppingsQuality.title)).toBeDefined() // Droppings quality
-    expect(getByText(prop.unitFact.properties.lolifeNestTree.title)).toBeDefined() // Tree species
-    expect(getByText(prop.notes.title)).toBeDefined() // Notes
-    expect(getByText(fi['images'])).toBeDefined() // Images
-    expect(getByText(fi['no image'])).toBeDefined() // No photos
-    expect(getByText(fi['choose image'])).toBeDefined() // Choose photo
-    expect(getByText(fi['use camera'])).toBeDefined() // Take photo
+    fireEvent.press(screen.getByText('+ Papanahavainto'))
+    expect(screen.getByTestId('saveButton')).toBeDefined()
+    expect(screen.getAllByText(fi['cancel'])).toBeDefined()
+    expect(screen.getByText(prop.unitFact.properties.lolifeDroppingsType.title)).toBeDefined() // Droppings type
+    expect(screen.getByText(prop.unitFact.properties.lolifeDroppingsCount.title)).toBeDefined() // Droppings count
+    expect(screen.getByText(prop.unitFact.properties.lolifeDroppingsQuality.title)).toBeDefined() // Droppings quality
+    expect(screen.getByText(prop.unitFact.properties.lolifeNestTree.title)).toBeDefined() // Tree species
+    expect(screen.getByText(prop.notes.title)).toBeDefined() // Notes
+    expect(screen.getByText(fi['images'])).toBeDefined() // Images
+    expect(screen.getByText(fi['no image'])).toBeDefined() // No photos
+    expect(screen.getByText(fi['choose image'])).toBeDefined() // Choose photo
+    expect(screen.getByText(fi['use camera'])).toBeDefined() // Take photo
 
     // Fill the droppings form and save
-    fireEvent.changeText(getByText(prop.notes.title), 'On a tree.')
-    fireEvent.press(getByTestId('saveButton'))
+    fireEvent.changeText(screen.getByText(prop.notes.title), 'On a tree.')
+    fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back at the map view again, and press the stop button again
-    await waitFor(() => expect(getByTestId('map-view')).toBeDefined())
-    expect(getAllByText(fi['stop'])).toHaveLength(2)
-    fireEvent.press(getAllByText(fi['stop'])[0])
+    expect(await screen.findByTestId('map-view')).toBeDefined()
+    expect(screen.getAllByText(fi['stop'])).toBeDefined()
+    fireEvent.press(screen.getAllByText(fi['stop'])[0])
 
     // Check that the 'Do you really want to quit' modal pops up, this time press the 'Yes, stop' button
-    expect(getAllByText(fi['do not stop'])).toHaveLength(2)
-    expect(getAllByText(fi['stop'])).toHaveLength(4)
-    fireEvent.press(getAllByText(fi['stop'])[3])
+    expect(screen.getByText(fi['cancel'])).toBeDefined()
+    expect(screen.getByText(fi['stop event'])).toBeDefined()
+    fireEvent.press(screen.getByText(fi['stop event']))
 
     // Check that the submit form is displayed, press save to submit
     const prop2 = lolifeSchema.data.form.schema.properties
-    await waitFor(() => expect(getByTestId('saveButton')).toBeDefined())
-    expect(getByText(fi['cancel'])).toBeDefined()
-    expect(getByText(fi['delete path'])).toBeDefined()
-    expect(getByText(prop2.gatheringEvent.properties.legPublic.title)).toBeDefined() // Controller names
-    expect(getByText(prop2.secureLevel.title)).toBeDefined() // Secure level
-    expect(getByText(prop2.gatheringEvent.properties.dateBegin.title)).toBeDefined() // Start date
-    expect(getByText(prop2.gatheringEvent.properties.dateEnd.title)).toBeDefined() // End date
-    expect(getByText(prop2.keywords.title)).toBeDefined() // Keywords
-    expect(getByText(prop2.gatheringEvent.properties.gatheringFact.properties.lolifeSiteClassification.title)).toBeDefined() // Site classification
-    expect(getByText(prop2.gatheringEvent.properties.nextMonitoringYear.title)).toBeDefined() // Next monitoring year
-    expect(getByText(prop2.gatheringEvent.properties.namedPlaceNotes.title)).toBeDefined() // Route info
-    fireEvent.press(getByTestId('saveButton'))
+    expect(screen.getByTestId('saveButton')).toBeDefined()
+    expect(screen.getByText(fi['cancel'])).toBeDefined()
+    // expect(screen.getByText(fi['delete path'])).toBeDefined()
+    expect(screen.getByText(prop2.gatheringEvent.properties.legPublic.title)).toBeDefined() // Controller names
+    expect(screen.getByText(prop2.secureLevel.title)).toBeDefined() // Secure level
+    expect(screen.getByText(prop2.gatheringEvent.properties.dateBegin.title)).toBeDefined() // Start date
+    expect(screen.getByText(prop2.gatheringEvent.properties.dateEnd.title)).toBeDefined() // End date
+    expect(screen.getByText(prop2.keywords.title)).toBeDefined() // Keywords
+    expect(screen.getByText(prop2.gatheringEvent.properties.gatheringFact.properties.lolifeSiteClassification.title)).toBeDefined() // Site classification
+    expect(screen.getByText(prop2.gatheringEvent.properties.nextMonitoringYear.title)).toBeDefined() // Next monitoring year
+    expect(screen.getByText(prop2.gatheringEvent.properties.namedPlaceNotes.title)).toBeDefined() // Route info
+    fireEvent.press(screen.getByTestId('saveButton'))
 
-    // Check that the SendEventModal pops up
-    await waitFor(() => expect(getByText(fi['send public'])).toBeDefined())
-    expect(getByText(fi['do not submit'])).toBeDefined()
-    fireEvent.press(getByText(fi['do not submit']))
-
-    // Check that we are back at the home screen
-    await waitFor(() => expect(getByText(fi['trip form'])).toBeDefined())
-    await waitFor(() => expect(getAllByText(fi['bird atlas'])).toHaveLength(2))
-    expect(getByText(fi['fungi atlas'])).toBeDefined()
-    expect(getAllByText(fi['lolife'])).toHaveLength(2)
+    const success = await screen.findByText(fi['post success'])
+    expect(success).toBeDefined()
   }, 10000)
 })

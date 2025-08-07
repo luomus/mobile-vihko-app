@@ -10,6 +10,9 @@ global.window = global
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage)
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
 jest.mock('react-native-keyboard-controller', () => mockKeyboardController)
+jest.mock('@sentry/react-native', () => ({
+  captureException: jest.fn()
+}))
 // jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 // jest.mock('./src/helpers/axiosHelper')
