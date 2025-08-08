@@ -3,12 +3,11 @@ import { clone, cloneDeep, set } from 'lodash'
 import i18n from 'i18next'
 import uuid from 'react-native-uuid'
 import moment from 'moment'
-import { RootState, replaceObservationEvents, clearObservationEventId } from '..'
+import { RootState, replaceObservationEvents, clearObservationEventId, checkTokenValidity } from '..'
 import { biomonForms, forms } from '../../config/fields'
 import { getCompleteList } from '../../services/atlasService'
 import { postObservationEvent } from '../../services/documentService'
 import storageService from '../../services/storageService'
-import userService from '../../services/userService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
@@ -127,7 +126,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
 
     //check that person token isn't expired
     try {
-      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
+      await dispatch(checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       captureException(error)
       log.error({

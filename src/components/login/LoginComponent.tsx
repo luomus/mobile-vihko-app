@@ -13,7 +13,8 @@ import {
   initLocalCredentials,
   setMessageState,
   getPermissions,
-  getMetadata
+  getMetadata,
+  checkTokenValidity
 } from '../../stores'
 import Colors from '../../styles/Colors'
 import Cs from '../../styles/ContainerStyles'
@@ -27,14 +28,13 @@ import { log } from '../../helpers/logger'
 import { openBrowserAsync } from 'expo-web-browser'
 import ButtonComponent from '../general/ButtonComponent'
 import storageService from '../../services/storageService'
-import userService from '../../services/userService'
 import { initLanguage, saveLanguage } from '../../helpers/languageHelper'
 import { captureException } from '../../helpers/sentry'
 
 type Props = {
   onSuccessfulLogin: () => void,
   onReset: () => void,
-  children?: JSX.Element | JSX.Element[]
+  children?: React.JSX.Element | React.JSX.Element[]
 }
 
 const LoginComponent = (props: Props) => {
@@ -119,7 +119,7 @@ const LoginComponent = (props: Props) => {
     if (!connected) return
 
     try {
-      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
+      await dispatch(checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       if (error.severity === 'low') {
         dispatch(setMessageState({

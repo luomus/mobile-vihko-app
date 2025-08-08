@@ -58,39 +58,6 @@ export const getTokenValidity = async (personToken: string) => {
   }
 }
 
-export const checkTokenValidity = createAsyncThunk<void, checkTokenValidityParams, { rejectValue: Record<string, any> }>(
-  'userService/checkTokenValidity',
-  async ({ credentials }, { rejectWithValue }) => {
-    try {
-      if (!credentials.token) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('user token is missing')
-        })
-      }
-      await getTokenValidity(credentials.token)
-      return
-    } catch (error: any) {
-      if (error.message?.includes('INVALID TOKEN')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return rejectWithValue({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
-    }
-  }
-)
-
 export const getProfile = async () => {
   return {
     '@context': 'http://schema.laji.fi/context/profile.jsonld',
@@ -115,4 +82,4 @@ export const logout = async (credentials: CredentialsType) => {
   return {}
 }
 
-export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken, checkTokenValidity, getProfile, logout }
+export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken, getTokenValidity, getProfile, logout }

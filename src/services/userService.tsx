@@ -3,13 +3,6 @@ import { getLoginUrl, pollLoginUrl, getUserUrl, personTokenUrl } from '../config
 import { ACCESS_TOKEN, SOURCE_ID } from 'react-native-dotenv'
 import { CredentialsType } from '../stores'
 import { captureException } from '../helpers/sentry'
-import { createAsyncThunk } from '@reduxjs/toolkit'
-import i18n from '../languages/i18n'
-import { log } from '../helpers/logger'
-
-interface checkTokenValidityParams {
-  credentials: CredentialsType
-}
 
 export const getTempTokenAndLoginUrl = async () => {
   const params = {
@@ -107,45 +100,6 @@ export const getTokenValidity = async (personToken: string) => {
   return result.data
 }
 
-export const checkTokenValidity = createAsyncThunk<void, checkTokenValidityParams, { rejectValue: Record<string, any> }>(
-  'userService/checkTokenValidity',
-  async ({ credentials }, { rejectWithValue }) => {
-    try {
-      if (!credentials.token) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('user token is missing')
-        })
-      }
-      await getTokenValidity(credentials.token)
-      return
-    } catch (error: any) {
-      captureException(error)
-      log.error({
-        location: '/services/userService.tsx checkTokenValidity()',
-        error: error,
-        user_id: credentials.user?.id
-      })
-      if (error.message?.includes('INVALID TOKEN')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('user token has expired')
-        })
-      }
-      if (error.message?.includes('WRONG SOURCE')) {
-        return rejectWithValue({
-          severity: 'high',
-          message: i18n.t('person token is given for a different app')
-        })
-      }
-      return rejectWithValue({
-        severity: 'low',
-        message: `${i18n.t('failed to check token')} ${error.message}`
-      })
-    }
-  }
-)
-
 export const getProfile = async (personToken: string) => {
   const params = {
     'access_token': ACCESS_TOKEN
@@ -164,4 +118,4 @@ export const logout = async (credentials: CredentialsType) => {
   return result.data
 }
 
-export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken, checkTokenValidity, getProfile, logout }
+export default { getTempTokenAndLoginUrl, postTmpToken, getUserByPersonToken, getTokenValidity, getProfile, logout }

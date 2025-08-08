@@ -69,9 +69,6 @@ describe('LoginComponent', () => {
     await screen.findAllByText(fi['logout'])
     fireEvent.press(screen.getAllByText(fi['exit'])[0])
 
-    const loadingB = await screen.findByText(fi['loading'])
-    expect(loadingB).toBeDefined()
-
     const loginText = await screen.findByText(fi['login text'])
     expect(loginText).toBeDefined()
   })

@@ -22,6 +22,7 @@ import {
   switchSchema,
   clearGrid,
   setGrid,
+  checkTokenValidity,
   RootState
 } from '../../stores'
 import { PathType } from '../position/types'
@@ -34,7 +35,6 @@ import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocation
 import { removeDuplicatesFromPath, setEventGeometry } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
 import { SOURCE_ID } from 'react-native-dotenv'
-import userService from '../../services/userService'
 import { biomonForms, forms } from '../../config/fields'
 import { temporalOutlierFilter } from '../../helpers/pathFilters'
 import { captureException } from '@sentry/react-native'
@@ -97,7 +97,7 @@ export const beginObservationEvent = createAsyncThunk<void, beginObservationPara
 
     //check that person token isn't expired
     try {
-      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
+      await dispatch(checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       captureException(error)
       log.error({
@@ -284,7 +284,7 @@ export const continueObservationEvent = createAsyncThunk<any, beginObservationPa
 
     //check that person token isn't expired
     try {
-      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
+      await dispatch(checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       captureException(error)
       log.error({
@@ -429,7 +429,7 @@ export const beginSingleObservation = createAsyncThunk<void, beginSingleObservat
 
     //check that person token isn't expired
     try {
-      await dispatch(userService.checkTokenValidity({ credentials })).unwrap()
+      await dispatch(checkTokenValidity({ credentials })).unwrap()
     } catch (error: any) {
       captureException(error)
       log.error({

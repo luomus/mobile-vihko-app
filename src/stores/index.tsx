@@ -36,6 +36,7 @@ import {
   initLocalCredentials,
   getPermissions,
   getMetadata,
+  checkTokenValidity,
   logoutUser
 } from './user/actions'
 
@@ -218,6 +219,7 @@ export {
   initLocalCredentials,
   getPermissions,
   getMetadata,
+  checkTokenValidity,
   logoutUser,
   setCredentials,
   clearCredentials
