@@ -1,10 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'
 import { CredentialsType } from '../../stores'
-import i18n from '../../languages/i18n'
-
-interface checkTokenValidityParams {
-  credentials: CredentialsType
-}
 
 export const getTempTokenAndLoginUrl = async () => {
   return {

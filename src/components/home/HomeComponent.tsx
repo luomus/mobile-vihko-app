@@ -254,10 +254,10 @@ const HomeComponent = (props: Props) => {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
-          onOk: () => {
-            props.onLogout()
-            dispatch(logoutUser()).unwrap()
+          onOk: async () => {
+            await dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
+            props.onLogout()
           }
         }))
       } else {
@@ -287,10 +287,10 @@ const HomeComponent = (props: Props) => {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
-          onOk: () => {
-            props.onLogout()
-            dispatch(logoutUser()).unwrap()
+          onOk: async () => {
+            await dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
+            props.onLogout()
           }
         }))
       } else {
@@ -317,10 +317,10 @@ const HomeComponent = (props: Props) => {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
-          onOk: () => {
-            props.onLogout()
-            dispatch(logoutUser()).unwrap()
+          onOk: async () => {
+            await dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
+            props.onLogout()
           }
         }))
       } else {

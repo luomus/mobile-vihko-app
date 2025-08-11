@@ -272,7 +272,7 @@ export const checkTokenValidity = createAsyncThunk<void, checkTokenValidityParam
         error: error,
         user_id: credentials.user?.id
       })
-      if (error.message?.includes('INVALID TOKEN')) {
+      if (error.message?.includes('INVALID TOKEN') || error.message?.includes('400')) {
         return rejectWithValue({
           severity: 'high',
           message: i18n.t('user token has expired')

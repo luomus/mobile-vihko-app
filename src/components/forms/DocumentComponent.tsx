@@ -264,11 +264,11 @@ const DocumentComponent = (props: Props) => {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
-          onOk: () => {
-            props.onLogout()
-            dispatch(logoutUser()).unwrap()
-            dispatch(resetReducer())
+          onOk: async () => {
             setSending(false)
+            await dispatch(logoutUser()).unwrap()
+            dispatch(resetReducer())
+            props.onLogout()
           }
         }))
       }

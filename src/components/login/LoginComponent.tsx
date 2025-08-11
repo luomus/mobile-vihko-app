@@ -130,12 +130,14 @@ const LoginComponent = (props: Props) => {
         dispatch(setMessageState({
           type: 'err',
           messageContent: error.message,
-          onOk: () => {
-            props.onReset()
-            dispatch(logoutUser()).unwrap()
+          onOk: async () => {
+            await dispatch(logoutUser()).unwrap()
             dispatch(resetReducer())
+            props.onReset()
           }
         }))
+        setLoggingIn(false)
+        return
       }
     }
 
