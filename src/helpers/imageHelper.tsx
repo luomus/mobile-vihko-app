@@ -186,7 +186,10 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
         error: error,
         user_id: credentials.user?.id
       })
-      throw new Error(`${i18n.t('image post failure')} ${error.message}`)
+      return Promise.reject({
+        severity: 'high',
+        message: `${i18n.t('image post failure')} ${error.message}`
+      })
     }
   }
 

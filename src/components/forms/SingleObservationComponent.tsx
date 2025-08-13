@@ -500,7 +500,15 @@ const SingleObservationComponent = (props: Props) => {
             }
           }
         }))
-        //log user out from the app if the token has expired
+      } else if (error.severity === 'high') {
+        dispatch(setMessageState({
+          type: 'err',
+          messageContent: error.message,
+          onOk: async () => {
+            setSending(false)
+            props.toHome()
+          }
+        }))
       } else {
         dispatch(setMessageState({
           type: 'err',

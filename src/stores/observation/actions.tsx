@@ -103,7 +103,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
 
     if (credentials.token === null || credentials.user === null || eventClone === undefined) {
       return rejectWithValue({
-        severity: 'low',
+        severity: 'high',
         message: `${i18n.t('failed to load credentials from local')}`
       })
     }
@@ -119,7 +119,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
         user_id: credentials.user.id
       })
       return rejectWithValue({
-        severity: 'low',
+        severity: 'high',
         message: error.message
       })
     }
@@ -134,7 +134,10 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
         error: error,
         user_id: credentials.user.id
       })
-      return rejectWithValue(error)
+      return rejectWithValue({
+        severity: 'fatal',
+        message: error.message
+      })
     }
 
     //define whether the event will be released publicly or privately
@@ -270,7 +273,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
     } catch (error: any) {
       captureException(error)
       return rejectWithValue({
-        severity: 'low',
+        severity: error.severity,
         message: error.message
       })
     }
