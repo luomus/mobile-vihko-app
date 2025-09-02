@@ -6,8 +6,8 @@ export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/
 //grid lines and labels url
 export const gridUrl              = 'https://geoserver-dev.laji.fi/geoserver/LajiMapData/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&STYLES&LAYERS=LajiMapData%3AatlasGridsWGS84&SRS=EPSG%3A3857&WIDTH={width}&HEIGHT={height}&BBOX={minX}%2C{minY}%2C{maxX}%2C{maxY}'
 
-//graphql url
-export const graphqlUrl           = `${API_URL}/graphql`
+//forms url
+export const formsUrl             = `${API_URL}/forms`
 
 //documents url
 export const documentsUrl         = `${API_URL}/documents`
