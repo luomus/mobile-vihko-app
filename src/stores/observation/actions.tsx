@@ -281,7 +281,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
     try {
       await postObservationEvent(eventWithLocality, credentials)
     } catch (error: any) {
-      if (error.response?.status.toString() === '422') {
+      if (error.response?.status === 400 || error.response?.status === 422) {
         captureException({
           error,
           extra: {
@@ -304,7 +304,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
       }
 
       return rejectWithValue({
-        severity: 'low',
+        severity: 'high',
         message: `${i18n.t('post failure')} ${error.message}`
       })
     }
