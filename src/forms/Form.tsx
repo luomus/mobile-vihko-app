@@ -1,4 +1,8 @@
-import { createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker, createAutocompleteField, createImageKeywordPicker, createAtlasCodeField, createDateTimePicker, createCountSelectorField } from './formComponentBuilders'
+import {
+  createPicker, createInputElement, createArray, createSwitch, createHidden, createImagePicker,
+  createAutocompleteField, createImageKeywordPicker, createAtlasCodeField, createDateTimePicker,
+  createCountSelectorField, createHabitatClassificationField
+} from './formComponentBuilders'
 import { get, omit, set } from 'lodash'
 import { parseObjectForFieldParams } from '../helpers/parsers/SchemaToInputParser'
 import { ScrollView } from 'react-native'
@@ -13,6 +17,7 @@ const Form = (
   overrideFields: Record<string, any> | null,
   additionalFields: Record<string, any> | null,
   fieldOrder: string[] | null = null,
+  uiSchemaContext: Record<string, any> | null = null,
   lang: string,
   scrollView: React.MutableRefObject<ScrollView | null>
 ) => {
@@ -22,6 +27,7 @@ const Form = (
     path: string | null,
     defaultObject: any,
     schema: Record<string, any>,
+    parentTitle?: string
   ) => {
     const keysBlacklist = ['type', 'title', 'enum', 'enumNames', 'excludeFromCopy', 'required']
     const keys = Object.keys(schema)
@@ -32,15 +38,15 @@ const Form = (
 
     } else if (keys.includes('items')) {
       if (path && schema['items']['properties']) {
-        schemaToForm(`${path}_0`, defaultObject?.['0'], schema['items'])
+        schemaToForm(`${path}_0`, defaultObject?.['0'], schema['items'], schema.title || parentTitle)
 
       } else {
-        schemaToForm(path, defaultObject, schema['items'])
+        schemaToForm(path, defaultObject, schema['items'], schema.title || parentTitle)
 
       }
     } else {
       if (path && keys.some(key => keysBlacklist.includes(key))) {
-        const fieldParams = parseObjectForFieldParams(schema)
+        const fieldParams = parseObjectForFieldParams(schema, parentTitle)
         createField(path, defaultObject, fieldParams)
         return
       }
@@ -54,12 +60,12 @@ const Form = (
         }
 
         if (fields.includes(newPath)) {
-          const fieldParams = parseObjectForFieldParams(schema[key])
+          const fieldParams = parseObjectForFieldParams(schema[key], parentTitle)
           createField(newPath, defaultObject?.[key], fieldParams)
         } else if (schema[key]['properties'] || schema[key]['items']) {
           schemaToForm(newPath, defaultObject?.[key], schema[key])
         } else if (defaultObject || schema[key]['default']) {
-          const fieldParams = parseObjectForFieldParams(schema[key])
+          const fieldParams = parseObjectForFieldParams(schema[key], parentTitle)
           createField(newPath, defaultObject?.[key], fieldParams)
         }
       })
@@ -90,6 +96,9 @@ const Form = (
       switch (overrideFields[path].field) {
         case 'autocomplete':
           toReturn.push(createAutocompleteField(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, lang, index))
+          return
+        case 'habitatClassification':
+          toReturn.push(createHabitatClassificationField(fieldTitle, path, fieldDefaultValue, uiSchemaContext, fieldEnumDict, lang, index))
           return
         case 'imagesKeywords':
           toReturn.push(createImageKeywordPicker(fieldTitle, path, fieldDefaultValue, overrideFields[path].params, lang))

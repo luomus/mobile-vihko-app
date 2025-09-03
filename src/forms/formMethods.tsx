@@ -14,6 +14,7 @@ export const initForm = (
   overrideFields: Record<string, any> | null = null,
   additionalFields: Record<string, any> | null = null,
   fieldOrder: string[] | null = null,
+  uiSchemaContext: Record<string, any> | null = null,
   lang: string,
   scrollView: React.MutableRefObject<ScrollView | null>
 ) => {
@@ -26,7 +27,7 @@ export const initForm = (
     if (!fields) {
       setForm(null)
     } else {
-      setForm(Form(defaults, secondDefaults, fields, null, schema, secondSchema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+      setForm(Form(defaults, secondDefaults, fields, null, schema, secondSchema, overrideFields, additionalFields, fieldOrder, uiSchemaContext, lang, scrollView))
     }
   } else {
     if (fieldScopes === null) {
@@ -45,6 +46,6 @@ export const initForm = (
     const fields = fieldScope?.fields.concat(['images'])
     const blacklist = fieldScope?.blacklist
 
-    setForm(Form(defaults, secondDefaults, fields, blacklist, schema, secondSchema, overrideFields, additionalFields, fieldOrder, lang, scrollView))
+    setForm(Form(defaults, secondDefaults, fields, blacklist, schema, secondSchema, overrideFields, additionalFields, fieldOrder, uiSchemaContext, lang, scrollView))
   }
 }

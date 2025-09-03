@@ -180,6 +180,12 @@ export const overrideJX519Fields = {
       'Tid',
       'Time'
     ]
+  },
+  'habitat': {
+    field: 'habitatClassification',
+    params: {
+      validation: {}
+    }
   }
 }
 
@@ -199,6 +205,12 @@ export const overrideJX519ObservationEventFields = {
       'Ortnamn (kommunen sparar automatiskt)',
       'Locality names (municipality is saved automatically)'
     ]
+  },
+  'gatherings_0_habitat': {
+    field: 'habitatClassification',
+    params: {
+      validation: {}
+    }
   },
   'gatheringEvent_dateBegin': {
     field: 'dateBegin',
@@ -250,6 +262,7 @@ export const JX519FieldOrder = [
   'wild',
   'atlasCode',
   'notes',
+  'habitat',
   'images'
 ]
 

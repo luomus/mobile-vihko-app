@@ -116,35 +116,36 @@ const DocumentComponent = (props: Props) => {
     if (eventState) {
       const lang = i18n.language
       const eventSchema = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
+      const uiSchemaContext = schema[lang]?.uiSchemaContext || null
       //set the form
       if (schema.formID === forms.lolife) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, observationEventFields, overrideObservationEventFields, null, null, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, observationEventFields, overrideObservationEventFields, null, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.tripForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, JX519ObservationEventFields, overrideJX519ObservationEventFields, null, null, uiSchemaContext, lang, scrollViewRef)
       } else if (schema.formID === forms.birdAtlas) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, MHL117ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL117ObservationEventFields, overrideMHL117ObservationEventFields, null, MHL117ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.fungiAtlas) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, JX652ObservationEventFields, overrideJX652ObservationEventFields, null, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.dragonflyForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL932ObservationEventFields, overrideMHL932ObservationEventFields, null, MHL932ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL932ObservationEventFields, overrideMHL932ObservationEventFields, null, MHL932ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.butterflyForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1040ObservationEventFields, overrideMHL1040ObservationEventFields, null, MHL1040ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1040ObservationEventFields, overrideMHL1040ObservationEventFields, null, MHL1040ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.largeFlowersForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1042ObservationEventFields, overrideMHL1042ObservationEventFields, null, MHL1042ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1042ObservationEventFields, overrideMHL1042ObservationEventFields, null, MHL1042ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.mothForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1043ObservationEventFields, overrideMHL1043ObservationEventFields, null, MHL1043ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1043ObservationEventFields, overrideMHL1043ObservationEventFields, null, MHL1043ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.bumblebeeForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1044ObservationEventFields, overrideMHL1044ObservationEventFields, null, MHL1044ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1044ObservationEventFields, overrideMHL1044ObservationEventFields, null, MHL1044ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.herpForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, null, MHL1045ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, null, MHL1045ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.subarcticForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, null, MHL1046ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, null, MHL1046ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.macrolichenForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, null, MHL1047ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, null, MHL1047ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.bracketFungiForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, null, MHL1048ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, null, MHL1048ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.practicalFungiForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, null, MHL1062ObservationEventFieldOrder, lang, scrollViewRef)
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, null, MHL1062ObservationEventFieldOrder, null, lang, scrollViewRef)
       }
     }
   }

@@ -193,6 +193,7 @@ const SingleObservationComponent = (props: Props) => {
     }
 
     const observationSchema = schema[lang]?.schema?.properties?.gatherings?.items?.properties?.units || null
+    const uiSchemaContext = schema[lang]?.uiSchemaContext || null
     const defaultObject: Record<string, any> = {}
 
     if (props.defaults) {
@@ -207,10 +208,10 @@ const SingleObservationComponent = (props: Props) => {
 
     //edit observation
     if (observationId && eventState && observationState) {
-      initForm(setForm, observationState, eventState, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, lang, scrollViewRef)
+      initForm(setForm, observationState, eventState, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, uiSchemaContext, lang, scrollViewRef)
       //new observation
     } else {
-      initForm(setForm, defaultObject, null, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, lang, scrollViewRef)
+      initForm(setForm, defaultObject, null, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, uiSchemaContext, lang, scrollViewRef)
     }
   }
 

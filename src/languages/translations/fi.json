@@ -1,4 +1,5 @@
 {
+  "add": "Lisää",
   "add observation": "Lisää havainto",
   "autocomplete network error": "Automaattisessa hakukentässä tapahtui verkkovirhe.",
   "bird atlas": "Lintuatlas",
@@ -206,6 +207,7 @@
   "saveWithoutSending": "Tallenna lähettämättä",
   "saving": "Tallennetaan...",
   "select language": "Valitse kieli",
+  "selected": "Valittu",
   "send description": "Luonnoksena lähetetyt havainnot tallentuvat Vihkoon, mutta näkyvät vain itsellesi. Voit muokata ja julkaista niitä Vihkossa (laji.fi/vihko).\n\nLähettämättä tallennetut havainnot tallentuvat vain tälle puhelimelle.",
   "send observation event to server?": "Havaintoerä on tallennettu tälle laitteelle. Lähetätkö sen Vihkoon? Lähetyksen jälkeen sitä voi muokata vain osoitteessa laji.fi/vihko.",
   "send private": "Lähetä luonnoksena",

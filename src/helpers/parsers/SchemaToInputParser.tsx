@@ -21,7 +21,7 @@ export const parsePathForFieldParams = (inputObject: Record<string, any>, path: 
 }
 
 //parses object containing the information of a single property for field parameters required by its input field
-export const parseObjectForFieldParams = (inputObject: Record<string, any>) => {
+export const parseObjectForFieldParams = (inputObject: Record<string, any>, parentTitle?: string) => {
   let title = ''
   let type = ''
   let isEnum = false
@@ -56,6 +56,8 @@ export const parseObjectForFieldParams = (inputObject: Record<string, any>) => {
       defaultValue = inputObject.default
     }
   })
+
+  if (title === '' && parentTitle) title = parentTitle
 
   return { title, type, isEnum, enumDict, isArray, typeOfArray, defaultValue }
 }

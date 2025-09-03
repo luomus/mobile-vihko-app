@@ -83,11 +83,13 @@ export const initSchema = createAsyncThunk<Record<string, any>, schemaParams, { 
 
         schema = {
           schema: fetchedSchema.schema,
-          uiSchemaParams: uiSchemaParams
+          uiSchemaParams: uiSchemaParams,
+          uiSchemaContext: fetchedSchema.uiSchemaContext
         }
       } else {
         schema = {
           schema: fetchedSchema.schema,
+          uiSchemaContext: fetchedSchema.uiSchemaContext,
           timestamp: Date.now()
         }
       }

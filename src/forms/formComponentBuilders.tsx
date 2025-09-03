@@ -12,6 +12,7 @@ import FormSwitchComponent from '../components/formComponents/FormSwitchComponen
 import FormHiddenComponent from '../components/formComponents/FormHiddenComponent'
 import FormAutocompleteComponent, { AutocompleteParams } from '../components/formComponents/FormAutocompleteComponent'
 import FormCountSelectorComponent from '../components/formComponents/FormCountSelectorComponent'
+import FormHabitatClassificationComponent from '../components/formComponents/FormHabitatClassificationComponent'
 import { ScrollView } from 'react-native'
 
 export const createAutocompleteField = (
@@ -26,6 +27,22 @@ export const createAutocompleteField = (
   return <FormAutocompleteComponent
     key={objectTitle} title={title} defaultValue={defaultValue}
     autocompleteParams={autocompleteParams} lang={lang} index={index}
+  />
+}
+
+export const createHabitatClassificationField = (
+  title: string,
+  objectTitle: string,
+  defaultValue: string[],
+  uiSchemaContext: Record<string, any> | null,
+  habitatDictionary: Record<string, string>,
+  lang: string,
+  index: number,
+) => {
+  return <FormHabitatClassificationComponent
+    key={objectTitle} title={title} objectTitle={objectTitle} defaultValue={defaultValue}
+    uiSchemaContext={uiSchemaContext} habitatDictionary={habitatDictionary}
+    lang={lang} index={index}
   />
 }
 
