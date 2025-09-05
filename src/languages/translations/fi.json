@@ -55,6 +55,7 @@
   "end without saving": "Lopeta tallentamatta",
   "ended before starting": "Kellonajan muutos peruttu: Lopetusaika ei voi olla ennen aloitusta.",
   "error deleting observation": "Havainnon poistaminen levyltä epäonnistui.",
+  "error deleting unused images": "Käyttämättömien kuvien poistaminen levyltä epäonnistui.",
   "error loading zones from server": "Havaintoalueiden lataaminen palvelimelta epäonnistui, käytetään laitteeseen tallennettuja alueita,",
   "error loading zones from server and internal": "Havaintoalueiden lataaminen palvelimelta ja laitteen tallennustilasta epäonnistui, liito-oravahavainnot tehtävä ilman havaintoaluetta (alueen voi lisätä myöhemmin),",
   "error modifying observation": "Havaintoon tehtyjen muutosten tallentaminen levylle epäonnistui.",

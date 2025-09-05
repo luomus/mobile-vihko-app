@@ -55,6 +55,7 @@
   "end without saving": "End without saving",
   "ended before starting": "Date change cancelled: End time can't be before start time.",
   "error deleting observation": "Failed to delete observation from storage.",
+  "error deleting unused images": "Failed to delete unused images from cache.",
   "error loading zones from server": "Failed to load observation zones from server, using locally stored zones,",
   "error loading zones from server and internal": "Failed to load observation zones from server and local storage, flying squirrel observations have to be recorded without observation zone (zone can be added later),",
   "error modifying observation": "Failed to save the modifications made on the observation to storage.",

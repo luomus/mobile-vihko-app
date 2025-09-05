@@ -13,7 +13,7 @@ import { overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
 import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign, loopThroughBirdUnits } from '../../helpers/uploadHelper'
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
-import { saveImages } from '../../helpers/imageHelper'
+import { deleteAllUnusedImages, saveImages } from '../../helpers/imageHelper'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import { captureException } from '../../helpers/sentry'
 import { createAsyncThunk } from '@reduxjs/toolkit'
@@ -91,6 +91,15 @@ export const initObservationEvents = createAsyncThunk<void, undefined, { rejectV
       dispatch(replaceObservationEvents(observationEvents))
     } else {
       rejectWithValue({ message: 'no events' })
+    }
+
+    try {
+      await deleteAllUnusedImages(observationEvents)
+    } catch (error: any) {
+      return rejectWithValue({
+        severity: 'low',
+        message: error.message
+      })
     }
   }
 )

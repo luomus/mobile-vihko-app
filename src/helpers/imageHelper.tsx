@@ -191,6 +191,15 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
         message: `${i18n.t('image post failure')} ${error.message}`
       })
     }
+
+    try {
+      await deleteImagesByCondition(filePath => uris.includes(filePath))
+    } catch (error: any) {
+      return Promise.reject({
+        severity: 'low',
+        message: error.message
+      })
+    }
   }
 
   //if there isn't default media metadata, use "all rights reserved":
@@ -240,6 +249,68 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
       user_id: credentials.user?.id
     })
 
-    throw new Error(`${i18n.t('metadata post failure')}  ${error.message}`)
+    throw new Error(`${i18n.t('metadata post failure')} ${error.message}`)
+  }
+}
+
+const deleteImagesByCondition = async (
+  condition: (filePath: string) => boolean
+) => {
+  const imageDir = `${FileSystem.cacheDirectory}ImagePicker`
+  let allFilePaths: string[] = []
+
+  try {
+    const files = await FileSystem.readDirectoryAsync(imageDir)
+    allFilePaths = files.map(file => `${imageDir}/${file}`)
+  } catch (error) {
+    captureException(error)
+    log.error({
+      location: '/helpers/imageHelper.tsx saveImages()/deleteImagesByCondition()',
+      error: error
+    })
+    throw new Error(`${i18n.t('error deleting unused images')} ${error}`)
+  }
+
+  await Promise.all(
+    allFilePaths
+      .filter(condition)
+      .map(async (filePath) => {
+        try {
+          await FileSystem.deleteAsync(filePath, { idempotent: true })
+        } catch (error) {
+          captureException(error)
+          log.error({
+            location: '/helpers/imageHelper.tsx saveImages()/deleteImagesByCondition()',
+            error: error
+          })
+          throw new Error(`${i18n.t('error deleting unused images')} ${error}`)
+        }
+      })
+  )
+}
+
+export const deleteAllUnusedImages = async (events: Record<string, any>) => {
+  const imageDir = `${FileSystem.cacheDirectory}ImagePicker`
+  const usedFilePaths: string[] = []
+
+  events.forEach((event: Record<string, any>) => {
+    event.gatherings[0].units.forEach((unit: Record<string, any>) => {
+      if (unit.images?.length > 0) {
+        unit.images.forEach((image: Record<string, any>) => {
+          if (image.uri.includes(imageDir)) {
+            usedFilePaths.push(image.uri)
+          }
+        })
+      }
+    })
+  })
+
+  try {
+    await deleteImagesByCondition(filePath => !usedFilePaths.includes(filePath))
+  } catch (error: any) {
+    return Promise.reject({
+      severity: 'low',
+      message: error.message
+    })
   }
 }
