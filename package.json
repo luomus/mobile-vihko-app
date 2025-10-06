@@ -23,7 +23,7 @@
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/native-stack": "^7.2.0",
     "@reduxjs/toolkit": "^2.8.2",
-    "@sentry/react-native": "~7.1.0",
+    "@sentry/react-native": "^6.22.0",
     "@types/geojson": "^7946.0.8",
     "@types/react-native-autocomplete-input": "^5.1.1",
     "@types/react-native-dotenv": "^0.2.0",
