@@ -94,7 +94,7 @@ export const initObservationEvents = createAsyncThunk<void, undefined, { rejectV
     }
 
     try {
-      await deleteAllUnusedImages(observationEvents)
+      await deleteAllUnusedImages(observationEvents ? observationEvents : [])
     } catch (error: any) {
       return rejectWithValue({
         severity: 'low',

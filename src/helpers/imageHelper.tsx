@@ -1,4 +1,4 @@
-import * as FileSystem from 'expo-file-system'
+import { Directory, File, Paths } from 'expo-file-system'
 import * as MediaLibrary from 'expo-media-library'
 import i18n from 'i18next'
 import { CredentialsType } from '../stores'
@@ -17,7 +17,8 @@ interface BasicObject {
 }
 
 const processImage = async (uri: string) => {
-  const fileInfo = await FileSystem.getInfoAsync(uri, { size: true })
+  const file = new File(uri)
+  const fileInfo = file.info()
   const size = fileInfo.exists ? fileInfo.size : 0
   const name = uri.substring(uri.lastIndexOf('/') + 1)
   let type = uri.substring(uri.lastIndexOf('.') + 1)
@@ -256,12 +257,12 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 const deleteImagesByCondition = async (
   condition: (filePath: string) => boolean
 ) => {
-  const imageDir = `${FileSystem.cacheDirectory}ImagePicker`
+  const imageDir = new Directory(Paths.cache, 'ImagePicker')
   let allFilePaths: string[] = []
 
   try {
-    const files = await FileSystem.readDirectoryAsync(imageDir)
-    allFilePaths = files.map(file => `${imageDir}/${file}`)
+    const files = imageDir.list()
+    allFilePaths = files.map(file => file.uri)
   } catch (error) {
     captureException(error)
     log.error({
@@ -276,7 +277,8 @@ const deleteImagesByCondition = async (
       .filter(condition)
       .map(async (filePath) => {
         try {
-          await FileSystem.deleteAsync(filePath, { idempotent: true })
+          const deleteFile = new File(filePath)
+          deleteFile.delete()
         } catch (error) {
           captureException(error)
           log.error({
@@ -290,14 +292,14 @@ const deleteImagesByCondition = async (
 }
 
 export const deleteAllUnusedImages = async (events: Record<string, any>) => {
-  const imageDir = `${FileSystem.cacheDirectory}ImagePicker`
+  const imageDir = new Directory(Paths.cache, 'ImagePicker')
   const usedFilePaths: string[] = []
 
   events.forEach((event: Record<string, any>) => {
     event.gatherings[0].units.forEach((unit: Record<string, any>) => {
       if (unit.images?.length > 0) {
         unit.images.forEach((image: Record<string, any>) => {
-          if (image.uri.includes(imageDir)) {
+          if (image.uri.includes(imageDir.uri)) {
             usedFilePaths.push(image.uri)
           }
         })
