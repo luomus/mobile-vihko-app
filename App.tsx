@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import * as TaskManager from 'expo-task-manager'
 import * as Sentry from '@sentry/react-native'
 import { SENTRY_DSN } from 'react-native-dotenv'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 import {
   store,
@@ -31,9 +32,11 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <KeyboardProvider>
-        <Navigator initialRoute={'login'} />
-      </KeyboardProvider>
+      <SafeAreaProvider>
+        <KeyboardProvider>
+          <Navigator initialRoute={'login'} />
+        </KeyboardProvider>
+      </SafeAreaProvider>
     </Provider>
   )
 }

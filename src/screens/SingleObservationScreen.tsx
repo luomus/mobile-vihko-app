@@ -1,4 +1,5 @@
 import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { CommonActions, ParamListBase, RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import SingleObservationComponent from '../components/forms/SingleObservationComponent'
@@ -20,27 +21,29 @@ const SingleObservationScreen = (props: Props) => {
   const { rules, defaults, sourcePage } = props.route.params
 
   return (
-    <SingleObservationComponent
-      toObservationEvent={(id: string) => replace('overview', { id })}
-      toMap={() => replace('map')}
-      toList={() => popTo('list')}
-      pushToMap={() => push('map')}
-      rules={rules}
-      defaults={defaults}
-      sourcePage={sourcePage}
-      isFocused={isFocused}
-      toHome={() => {
-        props.navigation.replace('home')
-      }}
-      onLogout={() => {
-        dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'login' }]
-          })
-        )
-      }}
-    />
+    <SafeAreaView style={{ flex: 1 }} edges={['right', 'bottom', 'left']}>
+      <SingleObservationComponent
+        toObservationEvent={(id: string) => replace('overview', { id })}
+        toMap={() => replace('map')}
+        toList={() => popTo('list')}
+        pushToMap={() => push('map')}
+        rules={rules}
+        defaults={defaults}
+        sourcePage={sourcePage}
+        isFocused={isFocused}
+        toHome={() => {
+          props.navigation.replace('home')
+        }}
+        onLogout={() => {
+          dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'login' }]
+            })
+          )
+        }}
+      />
+    </SafeAreaView>
   )
 }
 
