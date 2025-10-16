@@ -67,6 +67,7 @@
   "exit": "Exit",
   "exit app?": "Are you sure that you want to quit the application?",
   "failed to check token": "Failed to check user token on server.",
+  "failed to delete unused images": "Failed to delete unused images from cache.",
   "failed to fetch grid name": "Failed to fetch the Atlas grid's name from the server.",
   "failed to fetch location": "Failed to fetch current location.",
   "failed to fetch sent events": "Failed to fetch submitted events from the server.",

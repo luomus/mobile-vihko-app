@@ -98,7 +98,7 @@ export const initObservationEvents = createAsyncThunk<void, undefined, { rejectV
     } catch (error: any) {
       return rejectWithValue({
         severity: 'low',
-        message: error.message
+        message: `${i18n.t('failed to delete unused images')} ${error.message}`
       })
     }
   }

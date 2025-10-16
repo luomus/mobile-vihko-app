@@ -67,6 +67,7 @@
   "exit": "Avsluta",
   "exit app?": "Är du säker på att du vill paus observeringen och avsluta programmet?",
   "failed to check token": "Misslyckades med att kolla upp inloggningsinformationen från servern.",
+  "failed to delete unused images": "Misslyckades med att ta bort oanvända bilder.",
   "failed to fetch grid name": "Misslyckades med att hämta atlasrutans namn från servern.",
   "failed to fetch location": "Misslyckades med att definiera platsen.",
   "failed to fetch sent events": "Misslyckades med att ladda skickade observationsuppsättningen från servern.",

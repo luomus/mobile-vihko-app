@@ -67,6 +67,7 @@
   "exit": "Poistu",
   "exit app?": "Haluatko varmasti keskeyttää havainnoinnin ja poistua sovelluksesta?",
   "failed to check token": "Kirjautumistietojen tarkastaminen palvelimella epäonnistui.",
+  "failed to delete unused images": "Käyttämättömien kuvien poistaminen sovelluksesta epäonnistui.",
   "failed to fetch grid name": "Atlasruudun nimen hakeminen palvelimelta epäonnistui.",
   "failed to fetch location": "Sijainnin määrittely epäonnistui.",
   "failed to fetch sent events": "Lähetettyjen havaintotapahtumien hakeminen palvelimelta epäonnistui.",
