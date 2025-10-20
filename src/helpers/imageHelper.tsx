@@ -198,7 +198,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     } catch (error: any) {
       return Promise.reject({
         severity: 'low',
-        message: error.message
+        message: `${i18n.t('failed to delete unused images')} ${error.message}`
       })
     }
   }
@@ -291,9 +291,13 @@ const deleteImagesByCondition = async (
   )
 }
 
-export const deleteAllUnusedImages = async (events: Record<string, any>) => {
+export const deleteAllUnusedImages = async (events: Record<string, any> | null) => {
   const imageDir = new Directory(Paths.cache, 'ImagePicker')
   const usedFilePaths: string[] = []
+
+  if (!events || events.length === 0) {
+    return
+  }
 
   events.forEach((event: Record<string, any>) => {
     event.gatherings[0].units.forEach((unit: Record<string, any>) => {

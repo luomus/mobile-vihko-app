@@ -179,6 +179,12 @@ const HomeComponent = (props: Props) => {
   const loadObservationEvents = () => {
     const events: Array<React.JSX.Element> = []
     const indexLast: number = observationEvent.events.length - 1
+
+    if (observationEvent.events.length === 0) {
+      setObservationEvents(events)
+      return
+    }
+
     observationEvent.events.forEach((event: Record<string, any>, index: number) => {
       if (observing && index === indexLast) {
         return
