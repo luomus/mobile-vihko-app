@@ -209,7 +209,7 @@
   "saveWithoutSending": "Save without sending",
   "saving": "Saving...",
   "select language": "Select language",
-  "selected": "Selected",
+  "selected habitat": "Selected habitats",
   "send description": "Observations sent as a draft are saved in Vihko, but are only visible to you. You can edit and publish them in Vihko (laji.fi/en/vihko).\n\nObservations saved without sending are only stored on this phone.",
   "send observation event to server?": "Document was saved on this device. Submit it to Notebook? After submission, it can only be edited at laji.fi/en/vihko.",
   "send private": "Submit draft",

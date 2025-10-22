@@ -49,7 +49,7 @@ const FormHabitatClassificationComponent = (props: Props) => {
       value: props.habitatDictionary[key]
     }))
 
-    setOptionsTier1([{ key: '', value: '' }, ...tier1Values])
+    setOptionsTier1(tier1Values)
   }
 
   const initDefaults = () => {
@@ -63,9 +63,11 @@ const FormHabitatClassificationComponent = (props: Props) => {
   }
 
   const selectTier1Item = (item: { key: string, value: string } | null) => {
-    if (!item) {
+    if (!item || item.key === '') {
       setOptionsTier2([])
       setOptionsTier3([])
+      setCurrentSelection(null)
+      setValue(props.objectTitle, selectedHabitats.map(hab => hab.key))
       return
     }
     const habitatTree = props.uiSchemaContext?.habitat?.tree
@@ -95,15 +97,17 @@ const FormHabitatClassificationComponent = (props: Props) => {
     setCurrentSelection(item)
     setValue(props.objectTitle, [...selectedHabitats.map(habitat => habitat.key), item.key])
 
-    setOptionsTier2([{ key: '', value: '' }, ...tier2Values])
+    setOptionsTier2(tier2Values)
     setOptionsTier3([])
     setSelectedTier2(null)
     setSelectedTier3(null)
   }
 
   const selectTier2Item = (item: { key: string, value: string } | null) => {
-    if (!item) {
+    if (!item || item.key === '') {
       setOptionsTier3([])
+      setCurrentSelection(null)
+      setValue(props.objectTitle, selectedHabitats.map(hab => hab.key))
       return
     }
     const habitatTree = props.uiSchemaContext?.habitat?.tree
@@ -136,7 +140,7 @@ const FormHabitatClassificationComponent = (props: Props) => {
     setCurrentSelection(item)
     setValue(props.objectTitle, [...selectedHabitats.map(habitat => habitat.key), item.key])
 
-    setOptionsTier3([{ key: '', value: '' }, ...tier3Values])
+    setOptionsTier3(tier3Values)
     setSelectedTier3(null)
   }
 
@@ -155,10 +159,13 @@ const FormHabitatClassificationComponent = (props: Props) => {
     const newHabitats = [...selectedHabitats, selectedHabitat]
     const newHabitatsKeys = newHabitats.map(habitat => habitat.key)
 
-    setCurrentSelection(null)
     setSelectedHabitats(newHabitats)
     setValue(props.objectTitle, newHabitatsKeys)
+    clearSelection()
+  }
 
+  const clearSelection = () => {
+    setCurrentSelection(null)
     setSelectedTier1(null)
     setSelectedTier2(null)
     setSelectedTier3(null)
@@ -172,67 +179,94 @@ const FormHabitatClassificationComponent = (props: Props) => {
     setValue(props.objectTitle, [...newHabitats.map(habitat => habitat.key), currentSelection ? currentSelection.key : []])
   }
 
-  const onPressTier1 = () =>
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: optionsTier1.map(option => option.value)
-      },
-      buttonIndex => {
-        setSelectedTier1(optionsTier1[buttonIndex])
-        selectTier1Item(optionsTier1[buttonIndex])
-      }
-    )
+  const onPressTier1 = () => {
+    const placeholderLabel = ''
+    const optionValues = optionsTier1.map(option => option.value)
+    const options = [placeholderLabel, ...optionValues, t('cancel')]
+    const cancelButtonIndex = options.length - 1
 
-  const onPressTier2 = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: optionsTier2.map(option => option.value)
+        options,
+        cancelButtonIndex
       },
       buttonIndex => {
-        setSelectedTier2(optionsTier2[buttonIndex])
-        selectTier2Item(optionsTier2[buttonIndex])
-      }
-    )
+        if (buttonIndex === cancelButtonIndex) return
 
-  const onPressTier3 = () =>
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: optionsTier3.map(option => option.value)
-      },
-      buttonIndex => {
-        setSelectedTier3(optionsTier3[buttonIndex])
-        setCurrentSelection(optionsTier3[buttonIndex])
+        if (buttonIndex === 0) {
+          setSelectedTier1(null)
+          selectTier1Item(null)
+        } else {
+          const selected = optionsTier1[buttonIndex - 1]
+          setSelectedTier1(selected)
+          selectTier1Item(selected)
+        }
       }
     )
+  }
+
+  const onPressTier2 = () => {
+    const placeholderLabel = ''
+    const optionValues = optionsTier2.map(option => option.value)
+    const options = [placeholderLabel, ...optionValues, t('cancel')]
+    const cancelButtonIndex = options.length - 1
+
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex
+      },
+      buttonIndex => {
+        if (buttonIndex === cancelButtonIndex) return
+
+        if (buttonIndex === 0) {
+          setSelectedTier2(null)
+          selectTier2Item(null)
+        } else {
+          const selected = optionsTier2[buttonIndex - 1]
+          setSelectedTier2(selected)
+          selectTier2Item(selected)
+        }
+      }
+    )
+  }
+
+  const onPressTier3 = () => {
+    const placeholderLabel = ''
+    const optionValues = optionsTier3.map(option => option.value)
+    const options = [placeholderLabel, ...optionValues, t('cancel')]
+    const cancelButtonIndex = options.length - 1
+
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex
+      },
+      buttonIndex => {
+        if (buttonIndex === cancelButtonIndex) return
+
+        if (buttonIndex === 0) {
+          setSelectedTier3(null)
+        } else {
+          const selected = optionsTier1[buttonIndex - 1]
+          setSelectedTier3(selected)
+        }
+      }
+    )
+  }
 
   return (
     <View style={[Cs.padding10Container, { zIndex: Platform.OS === 'ios' ? props.index : undefined }]}>
       <View style={Cs.rowContainer}>
         <Text>{props.title}</Text>
       </View>
-      <TouchableOpacity onPress={() => onPressTier1()} style={Cs.iOSPickerContainer}>
-        <TextInput
-          style={Os.iOSPickerInput}
-          value={selectedTier1?.value || ''}
-          editable={false}
-          onPressOut={() => onPressTier1()}
-          multiline
-        />
-        <Icon
-          name='arrow-drop-down'
-          type='material-icons'
-          color={Colors.neutral7}
-          size={22}
-        />
-      </TouchableOpacity>
-      {
-        optionsTier2.length > 0 &&
-        <TouchableOpacity onPress={() => onPressTier2()} style={Cs.iOSPickerContainer}>
+      <View>
+        <TouchableOpacity onPress={() => onPressTier1()} style={Cs.iOSPickerContainer}>
           <TextInput
             style={Os.iOSPickerInput}
-            value={selectedTier2?.value || ''}
+            value={selectedTier1?.value || ''}
             editable={false}
-            onPressOut={() => onPressTier2()}
+            onPressOut={() => onPressTier1()}
             multiline
           />
           <Icon
@@ -242,54 +276,85 @@ const FormHabitatClassificationComponent = (props: Props) => {
             size={22}
           />
         </TouchableOpacity>
-      }
-      {
-        optionsTier3.length > 0 &&
-        <TouchableOpacity onPress={() => onPressTier3()} style={Cs.iOSPickerContainer}>
-          <TextInput
-            style={Os.iOSPickerInput}
-            value={selectedTier3?.value || ''}
-            editable={false}
-            onPressOut={() => onPressTier3()}
-            multiline
-          />
-          <Icon
-            name='arrow-drop-down'
-            type='material-icons'
-            color={Colors.neutral7}
-            size={22}
-          />
-        </TouchableOpacity>
-      }
-      <View style={{
-        paddingVertical: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignContent: 'center'
-      }}>
-        <ButtonComponent onPressFunction={() => addHabitat()} title={t('add')}
-          height={40} width={100} buttonStyle={Bs.textAndIconButton}
-          gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-          textStyle={Ts.buttonText} iconName={'add'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
-        />
-      </View>
-      <View style={{ padding: 10, borderRadius: 5 }}>
-        <Text>{t('selected')}:</Text>
-        {selectedHabitats.map((habitat, idx) => (
-          <View key={idx} style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text key={habitat.key}>- {habitat.value}</Text>
-            <Icon
-              name='delete'
-              type='material-icons'
-              color={'red'}
-              size={22}
-              onPress={() => deleteHabitat(idx)}
+        {
+          optionsTier2.length > 0 &&
+          <TouchableOpacity onPress={() => onPressTier2()} style={Cs.iOSPickerContainer}>
+            <TextInput
+              style={Os.iOSPickerInput}
+              value={selectedTier2?.value || ''}
+              editable={false}
+              onPressOut={() => onPressTier2()}
+              multiline
             />
-          </View>
-        ))}
-        {currentSelection &&
-          <Text key={currentSelection.key}>- {currentSelection.value}</Text>
+            <Icon
+              name='arrow-drop-down'
+              type='material-icons'
+              color={Colors.neutral7}
+              size={22}
+            />
+          </TouchableOpacity>
         }
+        {
+          optionsTier3.length > 0 &&
+          <TouchableOpacity onPress={() => onPressTier3()} style={Cs.iOSPickerContainer}>
+            <TextInput
+              style={Os.iOSPickerInput}
+              value={selectedTier3?.value || ''}
+              editable={false}
+              onPressOut={() => onPressTier3()}
+              multiline
+            />
+            <Icon
+              name='arrow-drop-down'
+              type='material-icons'
+              color={Colors.neutral7}
+              size={22}
+            />
+          </TouchableOpacity>
+        }
+        <View style={{
+          paddingVertical: 5,
+          flexDirection: 'row',
+          alignItems: 'center',
+          alignContent: 'center'
+        }}>
+          {currentSelection &&
+            <ButtonComponent onPressFunction={() => addHabitat()} title={t('add')}
+              height={40} width={100} buttonStyle={Bs.textAndIconButton}
+              gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
+              textStyle={Ts.buttonText} iconName={'add'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            />
+          }
+        </View>
+        <View style={{ padding: 10, borderRadius: 5 }}>
+          {(currentSelection || selectedHabitats.length > 0) &&
+            <Text>{t('selected habitat')}:</Text>
+          }
+          {(currentSelection || selectedHabitats.length > 0) &&
+            (currentSelection ? [currentSelection, ...selectedHabitats] : selectedHabitats).map((habitat, idx) => (
+              <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                <Text key={habitat.key}>- {habitat.value}</Text>
+                <Icon
+                  name='delete'
+                  type='material-icons'
+                  color={'red'}
+                  size={22}
+                  onPress={() => {
+                    if (currentSelection && idx === 0) {
+                      clearSelection()
+                    } else {
+                      const deleteIdx = currentSelection ? idx - 1 : idx
+                      deleteHabitat(deleteIdx)
+                    }
+                  }}
+                />
+              </View>
+            ))
+          }
+          {selectedHabitats.length > 0 && currentSelection &&
+            <Text key={currentSelection.key}>- {currentSelection.value}</Text>
+          }
+        </View>
       </View>
     </View>
   )

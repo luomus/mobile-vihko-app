@@ -209,7 +209,7 @@
   "saveWithoutSending": "Spara utan att skicka",
   "saving": "Sparar...",
   "select language": "Välj språk",
-  "selected": "Vald",
+  "selected habitat": "Utvalda habitat",
   "send description": "Observationer som skickas som ett utkast sparas i Vihko, men är bara synliga för dig. Du kan redigera och publicera dem i Vihko (laji.fi/sv/vihko).\n\nObservationer som sparats utan att skickas lagras endast på den här telefonen.",
   "send observation event to server?": "Observationsuppsättningen sparades på den här enheten. Vill du skicka den till Skrivbok? Efter inlämning kan den endast redigeras på laji.fi/sv/vihko.",
   "send private": "Skicka utkast",
