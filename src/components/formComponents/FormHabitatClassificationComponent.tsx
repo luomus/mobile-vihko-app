@@ -259,11 +259,11 @@ const FormHabitatClassificationComponent = (props: Props) => {
         </View>
         <View style={{ padding: 10, borderRadius: 5 }}>
           {(currentSelection || selectedHabitats.length > 0) &&
-            <Text>{t('selected habitat')}:</Text>
+            <Text style={{ marginBottom: 10 }}>{t('selected habitat')}:</Text>
           }
           {(currentSelection || selectedHabitats.length > 0) &&
             (currentSelection ? [currentSelection, ...selectedHabitats] : selectedHabitats).map((habitat, idx) => (
-              <View key={habitat.key} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+              <View key={habitat.key} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
                 <Text>- {habitat.value}</Text>
                 <Icon
                   name='delete'
