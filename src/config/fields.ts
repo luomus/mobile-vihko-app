@@ -209,7 +209,12 @@ export const overrideJX519ObservationEventFields = {
   'gatherings_0_habitat': {
     field: 'habitatClassification',
     params: {
-      validation: {}
+      validation: {
+        duplicate: {
+          value: true,
+          message: 'must not have duplicates'
+        },
+      },
     }
   },
   'gatheringEvent_dateBegin': {

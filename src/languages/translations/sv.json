@@ -167,6 +167,7 @@
   "must choose list type": "Artlistans fullständighet kan inte vara tom.",
   "must enter time": "Tid får inte vara tom.",
   "must not be empty": "Artens namn får inte vara tom.",
+  "must not have duplicates": "Man kan inte välja samma habitat två gånger.",
   "nest": "Bo",
   "new observation event": "Ny observationsuppsättning",
   "new trip": "Ny utfärd",

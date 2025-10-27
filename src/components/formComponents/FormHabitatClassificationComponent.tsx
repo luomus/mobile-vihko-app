@@ -9,6 +9,7 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import ButtonComponent from '../general/ButtonComponent'
+import { ErrorMessage } from '@hookform/error-message'
 
 interface Props {
   title: string,
@@ -30,11 +31,17 @@ const FormHabitatClassificationComponent = (props: Props) => {
   const [selectedHabitats, setSelectedHabitats] = useState<{ key: string, value: string }[]>([])
   const [currentSelection, setCurrentSelection] = useState<{ key: string, value: string } | null>(null)
 
-  const { register, setValue } = useFormContext()
+  const { register, setValue, setError, clearErrors, formState } = useFormContext()
   const { t } = useTranslation()
 
   useEffect(() => {
-    register(props.objectTitle)
+    register(props.objectTitle, {
+      validate: (value: any) => {
+        if (!value) return true
+        if (!Array.isArray(value)) return true
+        return (new Set(value).size === value.length) || 'must not have duplicates'
+      }
+    })
     initOptions()
     initDefaults()
   }, [])
@@ -156,11 +163,18 @@ const FormHabitatClassificationComponent = (props: Props) => {
       selectedHabitat = selectedTier1
     }
 
+    if (selectedHabitats.some(h => h.key === selectedHabitat!.key)) {
+      setError(props.objectTitle, { type: 'duplicate', message: 'must not have duplicates' })
+      return
+    }
+
+    clearErrors(props.objectTitle)
+
     const newHabitats = [...selectedHabitats, selectedHabitat]
     const newHabitatsKeys = newHabitats.map(habitat => habitat.key)
 
     setSelectedHabitats(newHabitats)
-    setValue(props.objectTitle, newHabitatsKeys)
+    setValue(props.objectTitle, newHabitatsKeys, { shouldValidate: true })
     clearSelection()
   }
 
@@ -176,11 +190,22 @@ const FormHabitatClassificationComponent = (props: Props) => {
   const deleteHabitat = (index: number) => {
     const newHabitats = selectedHabitats.filter((_, i) => i !== index)
     setSelectedHabitats(newHabitats)
-    setValue(props.objectTitle, [...newHabitats.map(habitat => habitat.key), currentSelection ? currentSelection.key : []])
+    setValue(props.objectTitle, newHabitats.map(habitat => habitat.key), { shouldValidate: true })
+    clearErrors(props.objectTitle)
+  }
+
+  const errorMessageTranslation = (errorMessage: string): React.JSX.Element => {
+    const errorTranslation = t(errorMessage)
+    return <Text style={Ts.redText}>{errorTranslation}</Text>
   }
 
   return (
     <View style={[Cs.padding10Container, { zIndex: Platform.OS === 'ios' ? props.index : undefined }]}>
+      <ErrorMessage
+        errors={formState.errors}
+        name={props.objectTitle}
+        render={({ message }) => <Text style={Ts.redText}><>{errorMessageTranslation(message)}</></Text>}
+      />
       <View style={Cs.rowContainer}>
         <Text>{props.title}</Text>
       </View>

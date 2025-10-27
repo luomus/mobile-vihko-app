@@ -167,6 +167,7 @@
   "must choose list type": "Complete list type must not be empty.",
   "must enter time": "Time must not be empty.",
   "must not be empty": "Taxon name must not be empty.",
+  "must not have duplicates": "Same habitat can't be selected twice.",
   "nest": "Nest",
   "new observation event": "New observation event",
   "new trip": "New trip",
