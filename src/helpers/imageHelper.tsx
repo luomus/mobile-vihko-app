@@ -263,7 +263,13 @@ const deleteImagesByCondition = async (
   try {
     const files = imageDir.list()
     allFilePaths = files.map(file => file.uri)
-  } catch (error) {
+  } catch (error: any) {
+    // if directory is missing, nothing to delete -> return silently
+    const msg = (error && (error.message || '')).toString().toLowerCase()
+    if (msg.includes('no such file') || msg.includes('not found')) {
+      return
+    }
+
     captureException(error)
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()/deleteImagesByCondition()',
