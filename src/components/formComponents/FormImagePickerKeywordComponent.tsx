@@ -61,11 +61,9 @@ const ImagePickerKeywordComponent = (props: Props) => {
 
       if (useCamera) {
         permissionResult = await ImagePicker.requestCameraPermissionsAsync()
-      } else {
-        permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-      }
-      if (permissionResult.granted === false) {
-        return false
+        if (permissionResult.granted === false) {
+          return false
+        }
       }
 
       let pickerResult: ImagePicker.ImagePickerResult

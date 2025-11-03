@@ -7,7 +7,7 @@
       "android",
       "ios"
     ],
-    "version": "1.7.8",
+    "version": "1.7.9",
     "orientation": "portrait",
     "splash": {
       "image": "./assets/splashscreen.png",
@@ -22,7 +22,7 @@
     ],
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 115,
+      "versionCode": 116,
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIconAndroid.png",
         "backgroundColor": "#FFFFFF"
@@ -43,7 +43,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.luomus.mobi",
-      "buildNumber": "1.4.8",
+      "buildNumber": "1.4.9",
       "icon": "./assets/appIconIOS.png",
       "supportsTablet": true,
       "infoPlist": {

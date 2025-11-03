@@ -44,11 +44,9 @@ const ImagePickerComponent = (props: Props) => {
 
       if (useCamera) {
         permissionResult = await ImagePicker.requestCameraPermissionsAsync()
-      } else {
-        permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-      }
-      if (permissionResult.granted === false) {
-        return false
+        if (permissionResult.granted === false) {
+          return false
+        }
       }
 
       let pickerResult: ImagePicker.ImagePickerResult
@@ -198,7 +196,7 @@ const ImagePickerComponent = (props: Props) => {
             <ScrollView horizontal={true}>
               {renderImages()}
             </ScrollView>
-            { loading ?
+            {loading ?
               <ActivityIndicator size={25} color={Colors.primary5} />
               :
               <View style={Cs.imageButtonsRowContainer}>
