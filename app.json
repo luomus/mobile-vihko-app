@@ -7,7 +7,7 @@
       "android",
       "ios"
     ],
-    "version": "1.7.9",
+    "version": "1.7.10",
     "orientation": "portrait",
     "splash": {
       "image": "./assets/splashscreen.png",
@@ -22,7 +22,7 @@
     ],
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 116,
+      "versionCode": 117,
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIconAndroid.png",
         "backgroundColor": "#FFFFFF"
@@ -32,9 +32,9 @@
         "android.permission.SYSTEM_ALERT_WINDOW"
       ],
       "permissions": [
-        "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION",
-        "FOREGROUND_SERVICE"
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
       ]
     },
     "androidStatusBar": {
@@ -43,7 +43,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.luomus.mobi",
-      "buildNumber": "1.4.9",
+      "buildNumber": "1.4.10",
       "icon": "./assets/appIconIOS.png",
       "supportsTablet": true,
       "infoPlist": {

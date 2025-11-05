@@ -1,5 +1,4 @@
 import { Directory, File, Paths } from 'expo-file-system'
-import * as MediaLibrary from 'expo-media-library'
 import i18n from 'i18next'
 import { CredentialsType } from '../stores'
 import { sendImages, sendMetadata } from '../services/imageService'
@@ -134,16 +133,10 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 
       invalidFile = true
 
-      if (!image.fromGallery) {
-        await MediaLibrary.saveToLibraryAsync(image.uri)
-      }
     } else if (!isValidFileSize(image.size)) {
 
       fileTooLarge = true
 
-      if (!image.fromGallery) {
-        await MediaLibrary.saveToLibraryAsync(image.uri)
-      }
     } else {
       // @ts-ignore
       formDataBody.append('data', image)
