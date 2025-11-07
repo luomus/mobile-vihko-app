@@ -21,8 +21,7 @@ export const postObservationEvent = async (observationEvent: Record<string, any>
 
   const params = {
     personToken: credentials.token,
-    access_token: ACCESS_TOKEN,
-    validationErrorFormat: 'remote'
+    access_token: ACCESS_TOKEN
   }
 
   await post(documentsUrl, observationEvent, { params })
