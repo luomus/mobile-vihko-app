@@ -8,7 +8,7 @@ import { captureException } from './sentry'
 const JPEG_EXTENSIONS = ['jpeg', 'jpg']
 const TIFF_EXTENSIONS = ['tiff', 'tif']
 const SNGL_EXTENSIONS = ['bmp', 'gif', 'png']
-const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/bmp', 'image/tiff', 'image/gif']
+const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/bmp', 'image/tiff', 'image/gif', 'heic']
 const MAX_FILE_SIZE = 20000000
 
 interface BasicObject {
