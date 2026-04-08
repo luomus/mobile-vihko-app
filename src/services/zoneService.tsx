@@ -1,5 +1,5 @@
 import { get } from '../helpers/axiosHelper'
-import { ACCESS_TOKEN } from 'react-native-dotenv'
+import Config from '../config/env'
 import { getZonesUrl } from '../config/urls'
 
 export const getZones = async () => {
@@ -7,7 +7,7 @@ export const getZones = async () => {
     'collectionID': 'HR.2951',
     'includePublic': true,
     'includeUnits': false,
-    'access_token': ACCESS_TOKEN,
+    'access_token': Config.ACCESS_TOKEN,
     'pageSize': 1000
   }
 

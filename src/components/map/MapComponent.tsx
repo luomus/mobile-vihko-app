@@ -82,7 +82,6 @@ const MapComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const mapViewRef = useRef<MapView | null>(null)
-  const initialRegionRef = useRef(region)
 
   useInterval(() => {
     if (centered && !editing.started) followUser()
@@ -475,7 +474,7 @@ const MapComponent = (props: Props) => {
           <MapView
             testID='map-view'
             ref={mapViewRef}
-            initialRegion={initialRegionRef.current}
+            initialRegion={region}
             onPanDrag={() => stopCentering()}
             onLongPress={(event) => markObservation(event.nativeEvent.coordinate)}
             onRegionChangeComplete={(region) => {

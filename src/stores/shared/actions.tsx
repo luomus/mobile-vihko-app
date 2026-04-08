@@ -34,7 +34,7 @@ import { log } from '../../helpers/logger'
 import { convertWGS84ToYKJ, getCurrentLocation, stopLocationAsync, watchLocationAsync, YKJCoordinateIntoWGS84Grid } from '../../helpers/geolocationHelper'
 import { removeDuplicatesFromPath, setEventGeometry } from '../../helpers/geometryHelper'
 import { pathToLineStringConstructor, lineStringsToPathDeconstructor } from '../../helpers/geoJSONHelper'
-import { SOURCE_ID } from 'react-native-dotenv'
+import Config from '../../config/env'
 import { biomonForms, forms } from '../../config/fields'
 import { temporalOutlierFilter } from '../../helpers/pathFilters'
 import { captureException } from '@sentry/react-native'
@@ -116,7 +116,7 @@ export const beginObservationEvent = createAsyncThunk<void, beginObservationPara
 
     const observationEventDefaults = {}
     set(observationEventDefaults, 'editors', [userId])
-    set(observationEventDefaults, 'sourceID', SOURCE_ID)
+    set(observationEventDefaults, 'sourceID', Config.SOURCE_ID)
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
 
     const dateTime = setDateForDocument()
@@ -444,7 +444,7 @@ export const beginSingleObservation = createAsyncThunk<void, beginSingleObservat
 
     const observationEventDefaults = {}
     set(observationEventDefaults, 'editors', [userId])
-    set(observationEventDefaults, 'sourceID', SOURCE_ID)
+    set(observationEventDefaults, 'sourceID', Config.SOURCE_ID)
     set(observationEventDefaults, ['gatheringEvent', 'leg'], [userId])
 
     const dateTime = setDateForDocument()

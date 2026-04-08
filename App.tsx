@@ -3,7 +3,7 @@ import { LogBox } from 'react-native'
 import { Provider } from 'react-redux'
 import * as TaskManager from 'expo-task-manager'
 import * as Sentry from '@sentry/react-native'
-import { SENTRY_DSN } from 'react-native-dotenv'
+import Config from './src/config/env'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 import {
@@ -15,7 +15,7 @@ import { LOCATION_BACKGROUND_TASK } from './src/config/location'
 import { locationBackgroundTask } from './src/helpers/taskManagerHelper'
 
 Sentry.init({
-  dsn: SENTRY_DSN,
+  dsn: Config.SENTRY_DSN,
   debug: false
 })
 

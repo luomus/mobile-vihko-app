@@ -7,7 +7,7 @@
       "android",
       "ios"
     ],
-    "version": "1.7.14",
+    "version": "1.8.0",
     "orientation": "portrait",
     "splash": {
       "image": "./assets/splashscreen.png",
@@ -22,7 +22,7 @@
     ],
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 121,
+      "versionCode": 122,
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIconAndroid.png",
         "backgroundColor": "#FFFFFF"
@@ -43,7 +43,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.luomus.mobi",
-      "buildNumber": "1.4.14",
+      "buildNumber": "1.8.0",
       "icon": "./assets/appIconIOS.png",
       "supportsTablet": true,
       "infoPlist": {
@@ -71,15 +71,23 @@
           "isAndroidForegroundServiceEnabled": true
         }
       ],
+      "expo-build-properties",
+      "expo-web-browser",
+      "@react-native-community/datetimepicker",
+      [
+        "react-native-maps",
+        {
+          "androidGoogleMapsApiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
+        }
+      ],
+      "@sentry/react-native",
       [
         "@sentry/react-native/expo",
         {
           "project": "mobiilivihko",
           "organization": "luomus"
         }
-      ],
-      "expo-web-browser",
-      "expo-build-properties"
+      ]
     ],
     "extra": {
       "eas": {

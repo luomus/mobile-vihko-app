@@ -1,5 +1,5 @@
 import { autocompleteUrl } from '../config/urls'
-import { ACCESS_TOKEN } from 'react-native-dotenv'
+import Config from '../config/env'
 import { get } from '../helpers/axiosHelper'
 import axios, { AxiosResponse, Canceler } from 'axios'
 
@@ -14,7 +14,7 @@ export const getTaxonAutocomplete = async (target: string, q: string, filters: R
     'matchType': 'exact,partial',
     'includeHidden': false,
     'excludeNameTypes': 'MX.hasMisappliedName,MX.hasMisspelledName,MX.hasUncertainSynonym,MX.hasOrthographicVariant',
-    'access_token': ACCESS_TOKEN
+    'access_token': Config.ACCESS_TOKEN
   }
 
   if (filters) {

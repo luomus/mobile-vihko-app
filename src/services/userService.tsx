@@ -1,12 +1,12 @@
 import { get, post, axiosDelete } from '../helpers/axiosHelper'
 import { getLoginUrl, pollLoginUrl, getUserUrl, personTokenUrl } from '../config/urls'
-import { ACCESS_TOKEN, SOURCE_ID } from 'react-native-dotenv'
+import Config from '../config/env'
 import { CredentialsType } from '../stores'
 import { captureException } from '../helpers/sentry'
 
 export const getTempTokenAndLoginUrl = async () => {
   const params = {
-    'access_token': ACCESS_TOKEN
+    'access_token': Config.ACCESS_TOKEN
   }
   const result = await get(getLoginUrl, { params })
 
@@ -16,7 +16,7 @@ export const getTempTokenAndLoginUrl = async () => {
 export const postTmpToken = async (tmpToken: string) => {
   const params = {
     'tmpToken': tmpToken,
-    'access_token': ACCESS_TOKEN
+    'access_token': Config.ACCESS_TOKEN
   }
   //headers are required here to prevent 400 error until new API is finished
   const headers = {
@@ -35,27 +35,18 @@ export const postTmpToken = async (tmpToken: string) => {
 
 export const getUserByPersonToken = async (personToken: string) => {
   const params = {
-    'access_token': ACCESS_TOKEN
+    'access_token': Config.ACCESS_TOKEN
   }
   const fetchResult = await get(getUserUrl + '/' + personToken, { params })
   return fetchResult.data
 }
 
 export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
-  let poller: NodeJS.Timeout
-  let timeout: NodeJS.Timeout
+  let poller: ReturnType<typeof setInterval>
+  let timeout: ReturnType<typeof setTimeout>
 
   const userPromise = new Promise<CredentialsType> ((resolve, reject) => {
-    //starts a 180 second timeout which stops above polling interval
-    timeout = setTimeout(() => {
-      clearInterval(poller)
-      reject({
-        timeout: true
-      })
-    }, 180000)
-
-    //polls user token from server every 3 seconds until token is not null
-    poller = setInterval(async () => {
+    const poll = async () => {
       const result = await postTmpToken(tmpToken)
       if (result.token) {
         try {
@@ -74,7 +65,19 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
           reject(error)
         }
       }
-    }, 3000)
+    }
+
+    //starts a 180 second timeout which stops above polling interval
+    timeout = setTimeout(() => {
+      clearInterval(poller)
+      reject({
+        timeout: true
+      })
+    }, 180000)
+
+    //poll immediately, then every 3 seconds
+    poll()
+    poller = setInterval(poll, 3000)
 
     setCanceler(() => () => {
       clearInterval(poller)
@@ -90,19 +93,18 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
 
 export const getTokenValidity = async (personToken: string) => {
   const params = {
-    'access_token': ACCESS_TOKEN
+    'access_token': Config.ACCESS_TOKEN
   }
 
   const result = await get(personTokenUrl + '/' + personToken, { params })
-
-  if (SOURCE_ID && result.data.target !== SOURCE_ID) throw new Error('WRONG SOURCE')
+  if (Config.SOURCE_ID && result.data.target !== Config.SOURCE_ID) throw new Error('WRONG SOURCE')
 
   return result.data
 }
 
 export const getProfile = async (personToken: string) => {
   const params = {
-    'access_token': ACCESS_TOKEN
+    'access_token': Config.ACCESS_TOKEN
   }
   const result = await get(getUserUrl + '/' + personToken + '/profile', { params })
 
@@ -111,7 +113,7 @@ export const getProfile = async (personToken: string) => {
 
 export const logout = async (credentials: CredentialsType) => {
   const params = {
-    'access_token': ACCESS_TOKEN
+    'access_token': Config.ACCESS_TOKEN
   }
   const result = await axiosDelete(personTokenUrl + '/' + credentials.token, { params })
 
