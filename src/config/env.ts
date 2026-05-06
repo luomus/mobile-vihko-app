@@ -3,10 +3,8 @@ const Config = {
   API_URL: process.env.EXPO_PUBLIC_API_URL ?? '',
   ATLAS_API_URL: process.env.EXPO_PUBLIC_ATLAS_API_URL ?? '',
   GEOCODING_API_KEY: process.env.EXPO_PUBLIC_GEOCODING_API_KEY ?? '',
-  GOOGLE_MAPS_API_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY ?? '',
   LAJI_AUTH_URL: process.env.EXPO_PUBLIC_LAJI_AUTH_URL ?? '',
   LAJI_URL: process.env.EXPO_PUBLIC_LAJI_URL ?? '',
-  SENTRY_AUTH_TOKEN: process.env.EXPO_PUBLIC_SENTRY_AUTH_TOKEN ?? '',
   SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN ?? '',
   SOURCE_ID: process.env.EXPO_PUBLIC_SOURCE_ID ?? '',
 }

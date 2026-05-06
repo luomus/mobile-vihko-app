@@ -16,7 +16,8 @@ import { locationBackgroundTask } from './src/helpers/taskManagerHelper'
 
 Sentry.init({
   dsn: Config.SENTRY_DSN,
-  debug: false
+  debug: false,
+  sendDefaultPii: true
 })
 
 LogBox.ignoreLogs(['EventEmitter.removeListener'])

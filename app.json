@@ -80,10 +80,11 @@
           "androidGoogleMapsApiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
         }
       ],
-      "@sentry/react-native",
       [
         "@sentry/react-native/expo",
         {
+          "url": "https://sentry.io/",
+          "note": "Use SENTRY_AUTH_TOKEN env to authenticate with Sentry.",
           "project": "mobiilivihko",
           "organization": "luomus"
         }
