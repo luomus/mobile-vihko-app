@@ -75,12 +75,6 @@
       "expo-web-browser",
       "@react-native-community/datetimepicker",
       [
-        "react-native-maps",
-        {
-          "androidGoogleMapsApiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
-        }
-      ],
-      [
         "@sentry/react-native/expo",
         {
           "url": "https://sentry.io/",
