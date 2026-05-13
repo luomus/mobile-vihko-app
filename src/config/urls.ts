@@ -1,5 +1,7 @@
 import Config from './env'
 
+export const infoLajiUrl          = 'https://info.laji.fi'
+
 //map url
 export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
@@ -66,18 +68,15 @@ export const lajiHomepageFi       = `${Config.LAJI_URL}`
 export const lajiHomepageSv       = `${Config.LAJI_URL}/sv`
 
 //instructions
-export const instructionsEn       = `${Config.LAJI_URL}/en/about/4981`
-export const instructionsFi       = `${Config.LAJI_URL}/about/4981`
-export const instructionsSv       = `${Config.LAJI_URL}/sv/about/4981`
+export const instructions         = `${infoLajiUrl}/etusivu/vihko-havaintojarjestelma/mobiilivihko`
 
 //privacy policy
-export const privacyPolicyEn      = `${Config.LAJI_URL}/about/848`
-export const privacyPolicyFi      = `${Config.LAJI_URL}/about/713`
+export const privacyPolicyEn      = `${infoLajiUrl}/en/frontpage/mission/privacy-policy`
+export const privacyPolicyFi      = `${infoLajiUrl}/etusivu/lajitietokeskus/tietosuojaseloste`
 
 //terms of service
-export const termsOfServiceEn     = `${Config.LAJI_URL}/en/vihko/terms-of-service`
-export const termsOfServiceFi     = `${Config.LAJI_URL}/vihko/terms-of-service`
-export const termsOfServiceSv     = `${Config.LAJI_URL}/sv/vihko/terms-of-service`
+export const termsOfServiceEn     = `${infoLajiUrl}/en/frontpage/mission/terms-of-services`
+export const termsOfServiceFi     = `${infoLajiUrl}/etusivu/lajitietokeskus/kayttoehdot`
 
 //vihko
 export const vihkoEn              = `${Config.LAJI_URL}/en/vihko`

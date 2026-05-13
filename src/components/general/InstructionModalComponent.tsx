@@ -5,8 +5,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
 import {
-  instructionsEn, instructionsFi, instructionsSv, lajiHomepageEn, lajiHomepageFi, lajiHomepageSv,
-  privacyPolicyEn, privacyPolicyFi, termsOfServiceEn, termsOfServiceFi, termsOfServiceSv,
+  instructions, lajiHomepageEn, lajiHomepageFi, lajiHomepageSv,
+  privacyPolicyEn, privacyPolicyFi, termsOfServiceEn, termsOfServiceFi,
   vihkoEn, vihkoFi, vihkoSv, lolifeEn, lolifeFi, lolifeSv
 } from '../../config/urls'
 
@@ -22,7 +22,6 @@ const InstructionModalComponent = (props: Props) => {
   let links = []
 
   let lajiHomepage = ''
-  let instructions = ''
   let lolifePage = ''
   let privacyPolicy = ''
   let termsOfService = ''
@@ -30,21 +29,18 @@ const InstructionModalComponent = (props: Props) => {
 
   if (i18n.language === 'fi') {
     lajiHomepage = lajiHomepageFi
-    instructions = instructionsFi
     lolifePage = lolifeFi
     privacyPolicy = privacyPolicyFi
     termsOfService = termsOfServiceFi
     vihkoPage = vihkoFi
   } else if (i18n.language === 'sv') {
     lajiHomepage = lajiHomepageSv
-    instructions = instructionsSv
     lolifePage = lolifeSv
     privacyPolicy = privacyPolicyEn
-    termsOfService = termsOfServiceSv
+    termsOfService = termsOfServiceEn
     vihkoPage = vihkoSv
   } else {
     lajiHomepage = lajiHomepageEn
-    instructions = instructionsEn
     lolifePage = lolifeEn
     privacyPolicy = privacyPolicyEn
     termsOfService = termsOfServiceEn
