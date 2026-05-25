@@ -27,6 +27,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import * as Clipboard from 'expo-clipboard'
+import Config from '../../config/env'
 import { forms } from '../../config/fields'
 import { appStoreUrl, playStoreUrl } from '../../config/urls'
 import MessageComponent from '../general/MessageComponent'
@@ -45,7 +46,7 @@ import DefaultModalComponent from './DefaultModalComponent'
 import { getCurrentLocation } from '../../helpers/geolocationHelper'
 import { pathToLineStringConstructor } from '../../helpers/geoJSONHelper'
 import { updateIsAvailable } from '../../helpers/versionHelper'
-import { getSentEvents } from '../../services/documentService'
+import lajiApiService from '../../api/services/lajiApiService'
 import { getVersionNumber } from '../../services/versionService'
 import i18n from '../../languages/i18n'
 import NewsComponent from './NewsComponent'
@@ -199,7 +200,14 @@ const HomeComponent = (props: Props) => {
     let sentEvents: Record<string, any>[] = []
 
     try {
-      sentEvents = await getSentEvents(credentials)
+      if (credentials.token) {
+        sentEvents = await lajiApiService.getDocuments(
+          credentials.token,
+          ['id', 'formID', 'dateCreated', 'publicityRestrictions'],
+          Config.SOURCE_ID,
+          5
+        )
+      }
     } catch (error: any) {
       dispatch(setMessageState({
         type: 'err',
@@ -207,7 +215,7 @@ const HomeComponent = (props: Props) => {
       }))
     }
 
-    sentEvents = sentEvents.filter(event => event.publicityRestrictions === 'MZ.publicityRestrictionsPublic').slice(0, 5)
+    sentEvents = sentEvents.filter(event => event.publicityRestrictions === 'MZ.publicityRestrictionsPublic')
 
     sentEvents.sort((a, b) => {
       const dateA = new Date(a.dateCreated)

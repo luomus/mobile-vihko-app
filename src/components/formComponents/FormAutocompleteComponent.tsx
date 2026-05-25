@@ -10,7 +10,6 @@ import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { get, debounce } from 'lodash'
-import { Canceler } from 'axios'
 import { ErrorMessage } from '@hookform/error-message'
 import { useFormContext } from 'react-hook-form'
 import { convert } from '../../helpers/taxonAutocomplete'
@@ -44,7 +43,7 @@ const FormAutocompleteComponent = (props: Props) => {
   const { t } = useTranslation()
   const { register, unregister, setValue, formState, clearErrors, setError, setFocus } = useFormContext()
   const { target, filters, valueField, validation, transform } = props.autocompleteParams
-  let cancel: Canceler | undefined
+  let cancel: (() => void) | undefined
 
   useEffect(() => {
     const transformKeys = Object.keys(transform)
@@ -96,7 +95,7 @@ const FormAutocompleteComponent = (props: Props) => {
     try {
       setLoading(true)
 
-      const res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelToken)
+      const res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelFn)
 
       if (res.result[0]?.payload?.matchType === 'exactMatches') {
         const payload = res.result[0].payload
@@ -145,7 +144,7 @@ const FormAutocompleteComponent = (props: Props) => {
     })
   }
 
-  const setCancelToken = (c: Canceler) => {
+  const setCancelFn = (c: () => void) => {
     cancel = c
   }
 
@@ -163,13 +162,13 @@ const FormAutocompleteComponent = (props: Props) => {
 
       //do not include non-filtered options for fungi atlas
       if (!filters || filters.informalTaxonGroup === 'MVL.233,MVL.321') {
-        const res = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
+      const res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelFn)
         autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
 
         //priotize filtered options over random options
       } else {
-        const resultsWithFilters = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelToken)
-        const resultsWithoutFilters = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelToken)
+        const resultsWithFilters = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelFn)
+        const resultsWithoutFilters = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelFn)
         const res = {
           query: resultsWithFilters.query,
           result: resultsWithFilters.result.concat(resultsWithoutFilters.result)

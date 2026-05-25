@@ -32,5 +32,5 @@ export const saveLanguage = async (language: string): Promise<void> => {
     })
   }
 
-  Promise.resolve()
+  return Promise.resolve()
 }

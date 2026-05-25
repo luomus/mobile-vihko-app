@@ -1,6 +1,4 @@
-import { Canceler } from 'axios'
-
-export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any> | null, lang: string, limit: number, setCancelToken: ((c: Canceler) => void) | null) => {
+export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any> | null, lang: string, limit: number, setCancelFn: ((c: () => void) => void) | null) => {
   return {
     query: q,
     result: [

@@ -6,7 +6,7 @@ import moment from 'moment'
 import { RootState, replaceObservationEvents, clearObservationEventId, checkTokenValidity } from '..'
 import { biomonForms, forms } from '../../config/fields'
 import { getCompleteList } from '../../services/atlasService'
-import { postObservationEvent } from '../../services/documentService'
+import lajiApiService from '../../api/services/lajiApiService'
 import storageService from '../../services/storageService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { overlapsFinland } from '../../helpers/geometryHelper'
@@ -288,7 +288,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
     }
 
     try {
-      await postObservationEvent(eventWithLocality, credentials)
+      await lajiApiService.postDocument(eventWithLocality, credentials.token)
     } catch (error: any) {
       if (error.response?.status === 400 || error.response?.status === 422) {
         captureException({
@@ -298,7 +298,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
           }
         })
         log.error({
-          location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
+          location: '/stores/observation/actions.tsx uploadObservationEvent()/postDocument()',
           error: error.response.data.error,
           data: eventWithLocality,
           user_id: credentials.user.id
@@ -306,7 +306,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
       } else {
         captureException(error)
         log.error({
-          location: '/stores/observation/actions.tsx uploadObservationEvent()/postObservationEvent()',
+          location: '/stores/observation/actions.tsx uploadObservationEvent()/postDocument()',
           error: error,
           user_id: credentials.user.id
         })

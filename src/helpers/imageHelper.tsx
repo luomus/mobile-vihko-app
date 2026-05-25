@@ -1,7 +1,7 @@
 import { Directory, File, Paths } from 'expo-file-system'
 import i18n from 'i18next'
+import lajiApiService from '../api/services/lajiApiService'
 import { CredentialsType } from '../stores'
-import { sendImages, sendMetadata } from '../services/imageService'
 import { log } from '../helpers/logger'
 import { captureException } from './sentry'
 
@@ -172,11 +172,11 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     })
   } else {
     try {
-      res = await sendImages(formDataBody, credentials.token)
+      res = await lajiApiService.postImage(formDataBody, credentials.token)
     } catch (error: any) {
       captureException(error)
       log.error({
-        location: '/helpers/imageHelper.tsx saveImages()/sendImages()',
+        location: '/helpers/imageHelper.tsx saveImages()/postImage()',
         error: error,
         user_id: credentials.user?.id
       })
@@ -205,7 +205,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 
   //for each tempid in response send metadata and store the received permanent ID
   try {
-    const idArr: string[] = await Promise.all(res.data.map(async (tempImage: BasicObject, index: number) => {
+    const idArr: string[] = await Promise.all(res.map(async (tempImage: BasicObject, index: number) => {
       const tempId = tempImage.id
       const keyword: string = keywords[index]
       let metadata
@@ -224,21 +224,22 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
         throw new Error('No credentials.')
       }
 
+      let metadataRes
       try {
-        res = await sendMetadata(tempId, metadata, credentials.token)
+        metadataRes = await lajiApiService.postImageMetadata(tempId, metadata, credentials.token)
       } catch (error) {
         captureException(error)
         return Promise.reject(error)
       }
 
-      return Promise.resolve(res.data.id)
+      return Promise.resolve(metadataRes.id)
     }))
 
     return idArr
   } catch (error: any) {
     captureException(error)
     log.error({
-      location: '/helpers/imageHelper.tsx saveImages()/sendMetadata()',
+      location: '/helpers/imageHelper.tsx saveImages()/postImageMetadata()',
       error: error,
       user_id: credentials.user?.id
     })

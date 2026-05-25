@@ -1,6 +1,6 @@
 import { clearCredentials, RootState, setCredentials } from '../'
 import userService, { getProfile, pollUserLogin } from '../../services/userService'
-import { getFormPermissions } from '../../services/formPermissionService'
+import lajiApiService from '../../api/services/lajiApiService'
 import storageService from '../../services/storageService'
 import i18n from '../../languages/i18n'
 import { stopLocationAsync } from '../../helpers/geolocationHelper'
@@ -143,7 +143,7 @@ export const getPermissions = createAsyncThunk<void, undefined, { rejectValue: R
 
     //try to fetch users form permissions to join into the credentials
     try {
-      const permissions = await getFormPermissions(credentials.token)
+      const permissions = await lajiApiService.getFormPermissions(credentials.token)
       permissionsArr = [...permissions.admins, ...permissions.editors]
 
     } catch (error: any) {

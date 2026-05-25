@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import { setSchema } from '..'
 import { SchemaType } from './types'
-import { getSchemas } from '../../services/documentService'
+import lajiApiService from '../../api/services/lajiApiService'
 import storageService from '../../services/storageService'
 import { parseUiSchemaToObservations } from '../../helpers/parsers/UiSchemaParser'
 import { log } from '../../helpers/logger'
@@ -43,7 +43,7 @@ export const initSchema = createAsyncThunk<Record<string, any>, schemaParams, { 
 
     try {
       //try loading schema and uiSchema from server
-      fetchedSchema = await getSchemas(lang, formID)
+      fetchedSchema = await lajiApiService.getForm(formID)
     } catch (downloadError) {
       captureException(downloadError)
       try {

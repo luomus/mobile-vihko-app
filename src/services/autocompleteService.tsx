@@ -1,11 +1,9 @@
 import { autocompleteUrl } from '../config/urls'
 import Config from '../config/env'
 import { get } from '../helpers/axiosHelper'
-import axios, { AxiosResponse, Canceler } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
-const CancelToken = axios.CancelToken
-
-export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any> | null, lang: string, limit: number, setCancelToken: ((c: Canceler) => void) | null) => {
+export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any> | null, lang: string, limit: number, setCancelFn: ((c: () => void) => void) | null) => {
   let params = {
     'q': q,
     'lang': lang,
@@ -31,11 +29,13 @@ export const getTaxonAutocomplete = async (target: string, q: string, filters: R
   try {
     let result: AxiosResponse<any>
 
-    if (setCancelToken !== null) {
+    if (setCancelFn !== null) {
+      const controller = new AbortController()
+      setCancelFn(() => controller.abort())
       result = await get(autocompleteUrl + target, {
         params,
         headers,
-        cancelToken: new CancelToken((c) => setCancelToken(c))
+        signal: controller.signal
       })
     } else {
       result = await get(autocompleteUrl + target, {

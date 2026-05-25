@@ -10,9 +10,10 @@ import fungiAtlasEn from '../../schemas/fungiAtlasEn.json'
 import lolifeFi from '../../schemas/lolifeFi.json'
 import lolifeSv from '../../schemas/lolifeSv.json'
 import lolifeEn from '../../schemas/lolifeEn.json'
-import { CredentialsType } from '../../stores'
+import i18n from '../../languages/i18n'
 
-export const getSchemas = async (language: string, formId: string) => {
+export const getForm = async (formId: string) => {
+  const language = i18n.language
   if (language === 'fi' && formId === 'JX.519') {
     return tripFormFi.data.form
   } else if (language === 'sv' && formId === 'JX.519') {
@@ -40,7 +41,18 @@ export const getSchemas = async (language: string, formId: string) => {
   }
 }
 
-export const postObservationEvent = async (observationEvent: Record<string, any>, credentials: CredentialsType) => {
+export const getDocument = async (personToken: string, selectedFields: string[], sourceID: string, pageSize: number) => {
+  return [{
+    'aggregateBy': {
+      'document.createdDate': '2023-02-09',
+      'document.documentId': 'http://tun.fi/JX.1111',
+      'document.formId': 'http://tun.fi/MHL.117'
+    },
+    'count': 1
+  }]
+}
+
+export const postDocument = async (document: Record<string, any>, personToken: string) => {
 
   // const unit = observationEvent.gatherings[0].units[0]
 
@@ -55,15 +67,4 @@ export const postObservationEvent = async (observationEvent: Record<string, any>
   // }
 
   Promise.resolve()
-}
-
-export const getSentEvents = async (credentials: CredentialsType) => {
-  return [{
-    'aggregateBy': {
-      'document.createdDate': '2023-02-09',
-      'document.documentId': 'http://tun.fi/JX.1111',
-      'document.formId': 'http://tun.fi/MHL.117'
-    },
-    'count': 1
-  }]
 }
