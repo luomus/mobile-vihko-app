@@ -9,9 +9,8 @@ import {
   forms,
   JX519Fields, MHL117Fields, JX652Fields, MHL932Fields,
   MHL1040Fields, MHL1042Fields, MHL1043Fields, MHL1044Fields,
-  MHL1045Fields, MHL1046Fields, MHL1047Fields, MHL1048Fields,
-  MHL1062Fields, MHL1212Fields, MHL1213Fields,
-  singleObservationFields
+  MHL1045Fields, MHL1046Fields, MHL1047Fields, MHL1062Fields,
+  MHL1212Fields, MHL1213Fields, singleObservationFields
 } from '../../config/fields'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../stores'
@@ -87,8 +86,6 @@ const ObservationInfoComponent = (props: Props) => {
         fields = MHL1046Fields
       } else if (props.event.formID === forms.macrolichenForm) {
         fields = MHL1047Fields
-      } else if (props.event.formID === forms.bracketFungiForm) {
-        fields = MHL1048Fields
       } else if (props.event.formID === forms.practicalFungiForm) {
         fields = MHL1062Fields
       } else if (props.event.formID === forms.oldForestPolyporesForm) {

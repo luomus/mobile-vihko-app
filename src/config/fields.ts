@@ -1450,118 +1450,6 @@ export const MHL1047ObservationEventFieldOrder = [
   'gatherings_0_notes',
 ]
 
-export const MHL1048ObservationEventFields = [
-  'secureLevel',
-  'gatheringEvent_completeList_completeListType',
-  'gatheringEvent_dateBegin',
-  'gatheringEvent_timeStart',
-  'gatheringEvent_dateEnd',
-  'gatheringEvent_timeEnd',
-  'gatherings_0_locality',
-  'gatherings_0_localityDescription',
-  'gatherings_0_notes',
-]
-
-export const overrideMHL1048Fields = {
-  'identifications_0_taxonVerbatim': {
-    field: 'autocomplete',
-    params: {
-      target: 'taxon',
-      filters: {
-        taxonSet: 'MX.taxonSetBiomonCompleteListBracketFungi'
-      },
-      valueField: 'identifications_0_taxonVerbatim',
-      validation: {
-        required: {
-          value: true,
-          message: 'must not be empty'
-        },
-        minLength: {
-          value: 2,
-          message: 'must be at least 2 letters'
-        },
-      },
-      transform: {
-        'key': 'unitFact_autocompleteSelectedTaxonID',
-        'shownName': 'identifications_0_taxonVerbatim',
-        'payload_informalTaxonGroups': 'informalTaxonGroups'
-      }
-    }
-  }
-}
-
-export const MHL1048Fields = [
-  'identifications_0_taxonVerbatim',
-  'recordBasis',
-  'substrateClassification',
-  'substrateNotes',
-  'taxonConfidence',
-  'notes',
-  'images',
-  'count'
-]
-
-export const overrideMHL1048ObservationEventFields = {
-  'secureLevel': {
-    field: 'inputTitleOverridden',
-    title: [
-      'Paikan karkeistus',
-      'Plats skyddning',
-      'Location roughening'
-    ]
-  },
-  'gatheringEvent_completeList_completeListType': {
-    field: 'completeListField',
-    params: {
-      validation: {
-        validate: (value: string) => value !== 'empty' || 'must choose list type'
-      }
-    }
-  },
-  'gatherings_0_locality': {
-    field: 'inputTitleOverridden',
-    title: [
-      'Paikannimet (kunta tallentuu automaattisesti)',
-      'Ortnamn (kommunen sparar automatiskt)',
-      'Locality names (municipality is saved automatically)'
-    ]
-  },
-  'gatheringEvent_dateBegin': {
-    field: 'dateBegin',
-    params: {
-      validation: {
-        required: {
-          value: true,
-          message: 'must enter time'
-        },
-      }
-    }
-  },
-  'gatheringEvent_dateEnd': {
-    field: 'dateEnd',
-    params: {
-      validation: {
-        required: {
-          value: true,
-          message: 'must enter time'
-        },
-      }
-    }
-  }
-}
-
-export const MHL1048ObservationEventFieldOrder = [
-  'secureLevel',
-  'gatheringEvent_completeList_completeListType',
-  'gatheringEvent_dateBegin',
-  'gatheringEvent_timeStart',
-  'gatheringEvent_dateEnd',
-  'gatheringEvent_timeEnd',
-  'gatherings_0_locality',
-  'gatherings_0_localityDescription',
-  'gatherings_0_notes',
-]
-
 export const MHL1062ObservationEventFields = [
   'secureLevel',
   'gatheringEvent_completeList_completeListType',
@@ -1974,7 +1862,6 @@ export const forms: Record<string, any> = {
   herpForm: 'MHL.1045',
   subarcticForm: 'MHL.1046',
   macrolichenForm: 'MHL.1047',
-  bracketFungiForm: 'MHL.1048',
   practicalFungiForm: 'MHL.1062',
   oldForestPolyporesForm: 'MHL.1212',
   indicatorLichensForm: 'MHL.1213',
@@ -1990,7 +1877,6 @@ export const biomonForms: Record<string, any> = {
   herpForm: 'MHL.1045',
   subarcticForm: 'MHL.1046',
   macrolichenForm: 'MHL.1047',
-  bracketFungiForm: 'MHL.1048',
   practicalFungiForm: 'MHL.1062',
   oldForestPolyporesForm: 'MHL.1212',
   indicatorLichensForm: 'MHL.1213'
