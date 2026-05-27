@@ -623,6 +623,8 @@ export const initCompleteList = createAsyncThunk<void, initCompleteListParams, {
     if (formID === forms.macrolichenForm) taxonSetID = 'MX.taxonSetBiomonCompleteListMacrolichens'
     if (formID === forms.bracketFungiForm) taxonSetID = 'MX.taxonSetBiomonCompleteListBracketFungi'
     if (formID === forms.practicalFungiForm) taxonSetID = 'MX.taxonSetBiomonCompleteListPracticalFungi'
+    if (formID === forms.oldForestPolyporesForm) taxonSetID = 'MX.taxonSetPriodiversityOldForestPolypores'
+    if (formID === forms.indicatorLichensForm) taxonSetID = 'MX.taxonSetPriodiversityIndicatorLichens'
 
     try {
       taxonList = await getCompleteList(taxonSetID, gridNumber)

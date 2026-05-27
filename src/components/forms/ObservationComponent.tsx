@@ -37,7 +37,8 @@ import {
   MHL1043Fields, overrideMHL1043Fields, MHL1044Fields, overrideMHL1044Fields,
   MHL1045Fields, overrideMHL1045Fields, MHL1046Fields, overrideMHL1046Fields,
   MHL1047Fields, overrideMHL1047Fields, MHL1048Fields, overrideMHL1048Fields,
-  MHL1062Fields, overrideMHL1062Fields
+  MHL1062Fields, overrideMHL1062Fields, MHL1212Fields, overrideMHL1212Fields,
+  MHL1213Fields, overrideMHL1213Fields
 } from '../../config/fields'
 import Colors from '../../styles/Colors'
 
@@ -217,6 +218,10 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, observationState, null, observationSchema, null, null, null, MHL1048Fields, overrideMHL1048Fields, null, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.practicalFungiForm) {
         initForm(setForm, observationState, null, observationSchema, null, null, null, MHL1062Fields, overrideMHL1062Fields, null, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.oldForestPolyporesForm) {
+        initForm(setForm, observationState, null, observationSchema, null, null, null, MHL1212Fields, overrideMHL1212Fields, null, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.indicatorLichensForm) {
+        initForm(setForm, observationState, null, observationSchema, null, null, null, MHL1213Fields, overrideMHL1213Fields, null, null, null, lang, scrollViewRef)
       }
 
       //new observations
@@ -252,6 +257,10 @@ const ObservationComponent = (props: Props) => {
         initForm(setForm, defaultObject, null, observationSchema, null, null, null, MHL1048Fields, overrideMHL1048Fields, null, null, null, lang, scrollViewRef)
       } else if (schema.formID === forms.practicalFungiForm) {
         initForm(setForm, defaultObject, null, observationSchema, null, null, null, MHL1062Fields, overrideMHL1062Fields, null, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.oldForestPolyporesForm) {
+        initForm(setForm, defaultObject, null, observationSchema, null, null, null, MHL1212Fields, overrideMHL1212Fields, null, null, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.indicatorLichensForm) {
+        initForm(setForm, defaultObject, null, observationSchema, null, null, null, MHL1213Fields, overrideMHL1213Fields, null, null, null, lang, scrollViewRef)
       }
     }
   }

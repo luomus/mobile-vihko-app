@@ -78,6 +78,8 @@ const HomeComponent = (props: Props) => {
   const [macrolichenModalVisibility, setMacrolichenModalVisibility] = useState<boolean>(false)
   const [bracketFungiModalVisibility, setBracketFungiModalVisibility] = useState<boolean>(false)
   const [practicalFungiModalVisibility, setPracticalFungiModalVisibility] = useState<boolean>(false)
+  const [oldForestPolyporesModalVisibility, setOldForestPolyporesModalVisibility] = useState<boolean>(false)
+  const [indicatorLichensModalVisibility, setIndicatorLichensModalVisibility] = useState<boolean>(false)
   const [zoneModalVisibility, setZoneModalVisibility] = useState<boolean>(false)
   const [completeListInfoModalVisibility, setCompleteListInfoModalVisibility] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
@@ -463,6 +465,8 @@ const HomeComponent = (props: Props) => {
             <FormLauncherComponent formID={forms.macrolichenForm} setModalVisibility={setMacrolichenModalVisibility} />
             <FormLauncherComponent formID={forms.bracketFungiForm} setModalVisibility={setBracketFungiModalVisibility} />
             <FormLauncherComponent formID={forms.practicalFungiForm} setModalVisibility={setPracticalFungiModalVisibility} />
+            <FormLauncherComponent formID={forms.oldForestPolyporesForm} setModalVisibility={setOldForestPolyporesModalVisibility} />
+            <FormLauncherComponent formID={forms.indicatorLichensForm} setModalVisibility={setIndicatorLichensModalVisibility} />
 
             <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
             <>{observationEvents}</>
@@ -516,6 +520,12 @@ const HomeComponent = (props: Props) => {
         <CompleteListModalComponent modalVisibility={practicalFungiModalVisibility}
           setModalVisibility={setPracticalFungiModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.practicalFungiForm) }}
           formID={forms.practicalFungiForm} />
+        <CompleteListModalComponent modalVisibility={oldForestPolyporesModalVisibility}
+          setModalVisibility={setOldForestPolyporesModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.oldForestPolyporesForm) }}
+          formID={forms.oldForestPolyporesForm} />
+        <CompleteListModalComponent modalVisibility={indicatorLichensModalVisibility}
+          setModalVisibility={setIndicatorLichensModalVisibility} onBeginObservationEvent={() => { onBeginObservationEvent(forms.indicatorLichensForm) }}
+          formID={forms.indicatorLichensForm} />
         <ZoneModalComponent modalVisibility={zoneModalVisibility} setModalVisibility={setZoneModalVisibility}
           onBeginObservationEvent={() => { onBeginObservationEvent(forms.lolife) }}
           setLoading={setLoading} />
