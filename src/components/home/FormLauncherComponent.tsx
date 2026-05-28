@@ -61,12 +61,15 @@ const FormLauncherComponent = (props: Props) => {
     } else if (props.formID === forms.macrolichenForm) {
       setTitle(t('macrolichen form'))
       setDescription(t('instructions.macrolichen.intro'))
-    } else if (props.formID === forms.bracketFungiForm) {
-      setTitle(t('bracket fungi form'))
-      setDescription(t('instructions.bracketFungi.intro'))
     } else if (props.formID === forms.practicalFungiForm) {
       setTitle(t('practical fungi form'))
       setDescription(t('instructions.practicalFungi.intro'))
+    } else if (props.formID === forms.oldForestPolyporesForm) {
+      setTitle(t('old forest polypores form'))
+      setDescription(t('instructions.oldForestPolypores.intro'))
+    } else if (props.formID === forms.indicatorLichensForm) {
+      setTitle(t('indicator lichen form'))
+      setDescription(t('instructions.indicatorLichens.intro'))
     } else {
       setTitle(t('lolife'))
       setDescription(t('instructions.lolife.intro'))

@@ -57,10 +57,12 @@ const NavBarComponent = (props: Props) => {
       setFormName(t('subarctic form'))
     } else if (schema.formID === forms.macrolichenForm) {
       setFormName(t('macrolichen form'))
-    } else if (schema.formID === forms.bracketFungiForm) {
-      setFormName(t('bracket fungi form'))
     } else if (schema.formID === forms.practicalFungiForm) {
       setFormName(t('practical fungi form'))
+    } else if (schema.formID === forms.oldForestPolyporesForm) {
+      setFormName(t('old forest polypores form'))
+    } else if (schema.formID === forms.indicatorLichensForm) {
+      setFormName(t('indicator lichen form'))
     } else {
       setFormName(t('lolife'))
     }

@@ -103,10 +103,12 @@ const CompleteListModalComponent = (props: Props) => {
       formTranslation = t('subarctic form')
     } else if (props.formID === forms.macrolichenForm) {
       formTranslation = t('macrolichen form')
-    } else if (props.formID === forms.bracketFungiForm) {
-      formTranslation = t('bracket fungi form')
     } else if (props.formID === forms.practicalFungiForm) {
       formTranslation = t('practical fungi form')
+    } else if (props.formID === forms.oldForestPolyporesForm) {
+      formTranslation = t('old forest polypores form')
+    } else if (props.formID === forms.indicatorLichensForm) {
+      formTranslation = t('indicator lichen form')
     }
 
     return t('do you want to start an event?') + ' ' + formTranslation + '?'

@@ -39,8 +39,9 @@ import {
   MHL1045ObservationEventFields, overrideMHL1045ObservationEventFields, MHL1045ObservationEventFieldOrder,
   MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, MHL1046ObservationEventFieldOrder,
   MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, MHL1047ObservationEventFieldOrder,
-  MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, MHL1048ObservationEventFieldOrder,
-  MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, MHL1062ObservationEventFieldOrder
+  MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, MHL1062ObservationEventFieldOrder,
+  MHL1212ObservationEventFields, overrideMHL1212ObservationEventFields, MHL1212ObservationEventFieldOrder,
+  MHL1213ObservationEventFields, overrideMHL1213ObservationEventFields, MHL1213ObservationEventFieldOrder
 } from '../../config/fields'
 import ButtonComponent from '../general/ButtonComponent'
 import Bs from '../../styles/ButtonStyles'
@@ -142,10 +143,12 @@ const DocumentComponent = (props: Props) => {
         initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1046ObservationEventFields, overrideMHL1046ObservationEventFields, null, MHL1046ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.macrolichenForm) {
         initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1047ObservationEventFields, overrideMHL1047ObservationEventFields, null, MHL1047ObservationEventFieldOrder, null, lang, scrollViewRef)
-      } else if (schema.formID === forms.bracketFungiForm) {
-        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1048ObservationEventFields, overrideMHL1048ObservationEventFields, null, MHL1048ObservationEventFieldOrder, null, lang, scrollViewRef)
       } else if (schema.formID === forms.practicalFungiForm) {
         initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1062ObservationEventFields, overrideMHL1062ObservationEventFields, null, MHL1062ObservationEventFieldOrder, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.oldForestPolyporesForm) {
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1212ObservationEventFields, overrideMHL1212ObservationEventFields, null, MHL1212ObservationEventFieldOrder, null, lang, scrollViewRef)
+      } else if (schema.formID === forms.indicatorLichensForm) {
+        initForm(setForm, eventState, null, eventSchema, null, null, null, MHL1213ObservationEventFields, overrideMHL1213ObservationEventFields, null, MHL1213ObservationEventFieldOrder, null, lang, scrollViewRef)
       }
     }
   }

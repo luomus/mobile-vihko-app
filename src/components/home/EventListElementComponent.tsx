@@ -66,10 +66,12 @@ const EventListElementComponent = (props: Props) => {
       setTitle(t('subarctic form'))
     } else if (props.observationEvent.formID === forms.macrolichenForm) {
       setTitle(t('macrolichen form'))
-    } else if (props.observationEvent.formID === forms.bracketFungiForm) {
-      setTitle(t('bracket fungi form'))
     } else if (props.observationEvent.formID === forms.practicalFungiForm) {
       setTitle(t('practical fungi form'))
+    } else if (props.observationEvent.formID === forms.oldForestPolyporesForm) {
+      setTitle(t('old forest polypores form'))
+    } else if (props.observationEvent.formID === forms.indicatorLichensForm) {
+      setTitle(t('indicator lichen form'))
     } else {
       setTitle(t('lolife'))
     }
