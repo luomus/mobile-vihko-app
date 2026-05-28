@@ -82,7 +82,11 @@
           "project": "mobiilivihko",
           "organization": "luomus"
         }
-      ]
+      ],
+      "@sentry/react-native",
+      "@react-native-community/datetimepicker",
+      "expo-web-browser",
+      "expo-build-properties"
     ],
     "extra": {
       "eas": {
