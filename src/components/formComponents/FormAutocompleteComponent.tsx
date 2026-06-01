@@ -95,13 +95,11 @@ const FormAutocompleteComponent = (props: Props) => {
     try {
       setLoading(true)
 
-      const res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelFn)
+      const res = await getTaxonAutocomplete(query.toLowerCase(), null, setCancelFn)
 
-      if (res.result[0]?.payload?.matchType === 'exactMatches') {
-        const payload = res.result[0].payload
+      if (res.results[0]?.matchType === 'exactMatches') {
         setSelected(true)
-
-        setQuery(payload.matchingName)
+        setQuery(res.results[0].matchingName)
       }
 
     } catch (error: any) {
@@ -136,7 +134,7 @@ const FormAutocompleteComponent = (props: Props) => {
   const addSelectionToForm = (item: Record<string, any>) => {
     Object.keys(transform).forEach(key => {
       registerField(transform[key])
-      if (key.includes('informalTaxonGroup')) {
+      if (key.includes('informalGroups')) {
         setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))), { shouldValidate: false })
       } else {
         setValue(transform[key], get(item, key.split('_')), { shouldValidate: false })
@@ -156,31 +154,31 @@ const FormAutocompleteComponent = (props: Props) => {
       }
 
       let autocompleteOptions: {
-        data: Record<string, any>
+        autocompleteResult: Record<string, any>
         element: React.JSX.Element
       }[] = []
 
       //do not include non-filtered options for fungi atlas
       if (!filters || filters.informalTaxonGroup === 'MVL.233,MVL.321') {
-      const res = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelFn)
-        autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query))
+        const res = await getTaxonAutocomplete(query.toLowerCase(), null, setCancelFn)
+        autocompleteOptions = removeDuplicates(res.results).map(result => convert(result, res.query))
 
         //priotize filtered options over random options
       } else {
-        const resultsWithFilters = await getTaxonAutocomplete(target, query.toLowerCase(), filters, props.lang, 5, setCancelFn)
-        const resultsWithoutFilters = await getTaxonAutocomplete(target, query.toLowerCase(), null, props.lang, 5, setCancelFn)
+        const resultsWithFilters = await getTaxonAutocomplete(query.toLowerCase(), filters, setCancelFn)
+        const resultsWithoutFilters = await getTaxonAutocomplete(query.toLowerCase(), null, setCancelFn)
         const res = {
           query: resultsWithFilters.query,
-          result: resultsWithFilters.result.concat(resultsWithoutFilters.result)
+          results: resultsWithFilters.results.concat(resultsWithoutFilters.results)
         }
-        autocompleteOptions = removeDuplicates(res.result).map(result => convert(result, res.query)).slice(0, 5)
+        autocompleteOptions = removeDuplicates(res.results).map(result => convert(result, res.query)).slice(0, 5)
       }
 
       setOptions(autocompleteOptions)
 
-      if (autocompleteOptions[0]?.data.payload?.matchType === 'exactMatches') {
+      if (autocompleteOptions[0]?.autocompleteResult.matchType === 'exactMatches') {
         setSelected(true)
-        addSelectionToForm(autocompleteOptions[0].data)
+        addSelectionToForm(autocompleteOptions[0].autocompleteResult)
       }
 
       cancel = undefined
@@ -220,10 +218,9 @@ const FormAutocompleteComponent = (props: Props) => {
   }
 
   const onSelection = (item: Record<string, any>) => {
-    setQuery(item.payload.vernacularName ? item.payload.vernacularName : item.payload.scientificName)
+    setQuery(item.vernacularName ? item.vernacularName : item.scientificName)
     setSelected(true)
     setHideResult(true)
-
     addSelectionToForm(item)
   }
 
@@ -314,7 +311,7 @@ const FormAutocompleteComponent = (props: Props) => {
               keyExtractor: (_, idx) => idx.toString(),
               renderItem: ({ item }) => {
                 return (
-                  <TouchableOpacity onPress={() => onSelection(item.data)}
+                  <TouchableOpacity onPress={() => onSelection(item.autocompleteResult)}
                     style={{ backgroundColor: Colors.neutral2 }}>
                     <Text style={{ paddingHorizontal: 10, marginLeft: Platform.OS === 'ios' ? 10 : 0 }}>{item.element}</Text>
                   </TouchableOpacity>

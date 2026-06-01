@@ -1,116 +1,141 @@
-export const getTaxonAutocomplete = async (target: string, q: string, filters: Record<string, any> | null, lang: string, limit: number, setCancelFn: ((c: () => void) => void) | null) => {
+export const getTaxonAutocomplete = async (q: string, filters: Record<string, any> | null, setCancelFn: ((c: () => void) => void) | null) => {
   return {
     query: q,
-    result: [
+    results: [
       {
+        'matchingName': 'vari',
+        'nameType': 'MX.vernacularName',
+        'id': 'MX.46490',
+        'checklist': 'MR.1',
+        'scientificName': 'Varecia variegata',
+        'scientificNameAuthorship': '(Kerr, 1792)',
+        'taxonRank': 'MX.species',
+        'cursiveName': true,
+        'finnish': false,
+        'species': true,
+        'vernacularName': 'vari',
+        'informalGroups': [
+          {
+            'id': 'MVL.2',
+            'name': 'Nisäkkäät'
+          }
+        ],
+        'kingdomScientificName': 'Animalia',
+        'type': 'exactMatches',
+        'key': 'MX.46490',
+        'value': 'vari'
+      },
+      {
+        'matchingName': 'varis',
+        'nameType': 'MX.vernacularName',
+        'id': 'MX.73566',
+        'checklist': 'MR.1',
+        'scientificName': 'Corvus corone',
+        'scientificNameAuthorship': 'Linnaeus, 1758',
+        'taxonRank': 'MX.species',
+        'cursiveName': true,
+        'finnish': true,
+        'species': true,
+        'vernacularName': 'varis',
+        'informalGroups': [
+          {
+            'id': 'MVL.1',
+            'name': 'Linnut'
+          }
+        ],
+        'kingdomScientificName': 'Animalia',
+        'type': 'partialMatches',
         'key': 'MX.73566',
-        'value': 'varis',
-        'payload': {
-          'matchingName': 'varis',
-          'informalTaxonGroups': [
-            {
-              'id': 'MVL.1',
-              'name': 'Linnut'
-            }
-          ],
-          'scientificName': 'Corvus corone',
-          'scientificNameAuthorship': 'Linnaeus, 1758',
-          'taxonRankId': 'MX.species',
-          'matchType': 'partialMatches',
-          'cursiveName': true,
-          'finnish': true,
-          'species': true,
-          'nameType': 'MX.vernacularName',
-          'vernacularName': 'varis'
-        }
+        'value': 'varis'
       },
       {
-        'key': 'MX.36287',
-        'value': 'vihervarpunen',
-        'payload': {
-          'matchingName': 'vihervarpunen',
-          'informalTaxonGroups': [
-            {
-              'id': 'MVL.1',
-              'name': 'Linnut'
-            }
-          ],
-          'scientificName': 'Carduelis spinus',
-          'scientificNameAuthorship': '(Linnaeus, 1758)',
-          'taxonRankId': 'MX.species',
-          'matchType': 'partialMatches',
-          'cursiveName': true,
-          'finnish': true,
-          'species': true,
-          'nameType': 'MX.vernacularName',
-          'vernacularName': 'vihervarpunen'
-        }
+        'matchingName': 'variksenmarja',
+        'nameType': 'MX.vernacularName',
+        'id': 'MX.38646',
+        'checklist': 'MR.1',
+        'scientificName': 'Empetrum nigrum',
+        'scientificNameAuthorship': 'L.',
+        'taxonRank': 'MX.species',
+        'cursiveName': true,
+        'finnish': true,
+        'species': true,
+        'vernacularName': 'variksenmarja',
+        'informalGroups': [
+          {
+            'id': 'MVL.343',
+            'name': 'Putkilokasvit'
+          },
+          {
+            'id': 'MVL.1062',
+            'name': 'Marjakasvit'
+          }
+        ],
+        'kingdomScientificName': 'Plantae',
+        'type': 'partialMatches',
+        'key': 'MX.38646',
+        'value': 'variksenmarja'
       },
       {
-        'key': 'MX.34021',
-        'value': 'svartvit flugsnappare',
-        'payload': {
-          'matchingName': 'svartvit flugsnappare',
-          'informalTaxonGroups': [
-            {
-              'id': 'MVL.1',
-              'name': 'Linnut'
-            }
-          ],
-          'scientificName': 'Ficedula hypoleuca',
-          'scientificNameAuthorship': '(Pallas, 1764)',
-          'taxonRankId': 'MX.species',
-          'matchType': 'partialMatches',
-          'cursiveName': true,
-          'finnish': true,
-          'species': true,
-          'nameType': 'MX.vernacularName',
-          'vernacularName': 'kirjosieppo'
-        }
+        'matchingName': 'variksenmarjanruoste',
+        'nameType': 'MX.vernacularName',
+        'id': 'MX.4984651',
+        'checklist': 'MR.1',
+        'scientificName': 'Chrysomyxa empetri',
+        'scientificNameAuthorship': '(Pers.) J. Schröt.',
+        'taxonRank': 'MX.species',
+        'cursiveName': true,
+        'finnish': true,
+        'species': true,
+        'vernacularName': 'variksenmarjanruoste',
+        'informalGroups': [
+          {
+            'id': 'MVL.233',
+            'name': 'Sienet ja jäkälät'
+          },
+          {
+            'id': 'MVL.564',
+            'name': 'Parasiittiset piensienet'
+          },
+          {
+            'id': 'MVL.583',
+            'name': 'Ruostesienet'
+          }
+        ],
+        'kingdomScientificName': 'Fungi',
+        'type': 'partialMatches',
+        'key': 'MX.4984651',
+        'value': 'variksenmarjanruoste'
       },
       {
-        'key': 'MX.36573',
-        'value': 'varpunen',
-        'payload': {
-          'matchingName': 'varpunen',
-          'informalTaxonGroups': [
-            {
-              'id': 'MVL.1',
-              'name': 'Linnut'
-            }
-          ],
-          'scientificName': 'Passer domesticus',
-          'scientificNameAuthorship': '(Linnaeus, 1758)',
-          'taxonRankId': 'MX.species',
-          'matchType': 'partialMatches',
-          'cursiveName': true,
-          'finnish': true,
-          'species': true,
-          'nameType': 'MX.vernacularName',
-          'vernacularName': 'varpunen'
-        }
-      },
-      {
-        'key': 'MX.34549',
-        'value': 'svartmes',
-        'payload': {
-          'matchingName': 'svartmes',
-          'informalTaxonGroups': [
-            {
-              'id': 'MVL.1',
-              'name': 'Linnut'
-            }
-          ],
-          'scientificName': 'Periparus ater',
-          'scientificNameAuthorship': '(Linnaeus, 1758)',
-          'taxonRankId': 'MX.species',
-          'matchType': 'partialMatches',
-          'cursiveName': true,
-          'finnish': true,
-          'species': true,
-          'nameType': 'MX.vernacularName',
-          'vernacularName': 'kuusitiainen'
-        }
+        'matchingName': 'Varicellaria hemisphaerica',
+        'nameType': 'MX.scientificName',
+        'id': 'MX.66344',
+        'checklist': 'MR.1',
+        'scientificName': 'Varicellaria hemisphaerica',
+        'scientificNameAuthorship': '(Flörke) I. Schmitt & Lumbsch',
+        'taxonRank': 'MX.species',
+        'cursiveName': true,
+        'finnish': true,
+        'species': true,
+        'vernacularName': 'jalosirotejäkälä',
+        'informalGroups': [
+          {
+            'id': 'MVL.233',
+            'name': 'Sienet ja jäkälät'
+          },
+          {
+            'id': 'MVL.25',
+            'name': 'Jäkälät ja likenikoliset sienet'
+          },
+          {
+            'id': 'MVL.381',
+            'name': 'Jäkälät'
+          }
+        ],
+        'kingdomScientificName': 'Fungi',
+        'type': 'partialMatches',
+        'key': 'MX.66344',
+        'value': 'Varicellaria hemisphaerica'
       }
     ]
   }

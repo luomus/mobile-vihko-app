@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { getTempTokenAndLoginUrl } from '../../services/userService'
+import lajiApiService from '../../api/services/lajiApiService'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   RootState,
@@ -198,7 +198,7 @@ const LoginComponent = (props: Props) => {
 
     //attempt to get temporary login url for webview
     try {
-      result = await getTempTokenAndLoginUrl()
+      result = await lajiApiService.getLogin()
       await storageService.save(tmpTokenKey, result.tmpToken)
     } catch (error: any) {
       captureException(error)

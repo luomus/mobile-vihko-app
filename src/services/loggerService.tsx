@@ -1,6 +1,4 @@
-import axios from 'axios'
-import { loggerUrl } from '../config/urls'
-import Config from '../config/env'
+import lajiApiService from '../api/services/lajiApiService'
 import { brand, modelName, osName, osVersion } from 'expo-device'
 import AppJSON from '../../app.json'
 // import { captureException } from '../helpers/sentry'
@@ -19,15 +17,7 @@ export const sendError = async (rawMsg: {error: string|undefined, data: string|u
   }
 
   try {
-    return await axios.post(
-      loggerUrl,
-      errorData,
-      {
-        params: {
-          access_token: Config.ACCESS_TOKEN
-        }
-      }
-    )
+    return await lajiApiService.postError(errorData)
   } catch (e) {
     // captureException(e)
   }

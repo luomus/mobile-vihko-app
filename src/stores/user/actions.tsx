@@ -1,6 +1,6 @@
 import { clearCredentials, RootState, setCredentials } from '../'
-import userService, { getProfile, pollUserLogin } from '../../services/userService'
 import lajiApiService from '../../api/services/lajiApiService'
+import { pollUserLogin } from '../../services/userService'
 import storageService from '../../services/storageService'
 import i18n from '../../languages/i18n'
 import { stopLocationAsync } from '../../helpers/geolocationHelper'
@@ -206,7 +206,7 @@ export const getMetadata = createAsyncThunk<void, undefined, { rejectValue: Reco
 
     //try to get users media metadata
     try {
-      const profile = await getProfile(credentials.token)
+      const profile = await lajiApiService.getProfile(credentials.token)
       metadata = profile.settings?.defaultMediaMetadata
 
     } catch (error: any) {
@@ -263,7 +263,7 @@ export const checkTokenValidity = createAsyncThunk<void, checkTokenValidityParam
           message: i18n.t('user token is missing')
         })
       }
-      await userService.getTokenValidity(credentials.token)
+      await lajiApiService.getPerson(credentials.token)
       return
     } catch (error: any) {
       captureException(error)
@@ -328,7 +328,7 @@ export const logoutUser = createAsyncThunk<void, undefined, { rejectValue: Recor
 
     if (credentialsCopy.token) {
       try {
-        await userService.logout(credentialsCopy)
+        await lajiApiService.deleteAuthenticationEvent(credentialsCopy.token)
       } catch (error: any) {
         captureException(error)
         log.error({

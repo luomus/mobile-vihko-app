@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import i18n from '../../languages/i18n'
-import { getZones } from '../../services/zoneService'
+import lajiApiService from '../../api/services/lajiApiService'
 import storageService from '../../services/storageService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { log } from '../../helpers/logger'
@@ -17,7 +17,8 @@ export const initObservationZones = createAsyncThunk<void, undefined, { rejectVa
 
     try {
       await netStatusChecker()
-      zones = await getZones()
+      const namedPlaceResponse = await lajiApiService.getNamedPlaces('HR.2951')
+      zones = namedPlaceResponse.results
     } catch (netError) {
       captureException(netError)
       try {

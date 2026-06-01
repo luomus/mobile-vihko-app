@@ -1,6 +1,7 @@
 import { Point, LineString, MultiLineString } from 'geojson'
 import moment from 'moment'
-import { getLocalityDetailsFromLajiApi, getLocalityDetailsFromGoogleAPI } from '../services/localityService'
+import lajiApiService from '../api/services/lajiApiService'
+import { getLocalityDetailsFromGoogleAPI } from '../services/localityService'
 import { centerOfBoundingBox, centerOfGeometry } from './geometryHelper'
 import { log } from '../helpers/logger'
 import i18n from 'i18next'
@@ -151,7 +152,7 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
 
   //call the service to fetch from Laji API
   try {
-    localityDetails = await getLocalityDetailsFromLajiApi(geometry, lang)
+    localityDetails = await lajiApiService.postCoordinates(geometry)
   } catch (error: any) {
     captureException(error)
     log.error({
@@ -166,23 +167,22 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   }
 
   //if no response, return status: 'fail' so it can be handled in uploadObservationEvent -action
-  if (localityDetails.result.status === 'ZERO_RESULTS') {
+  if (localityDetails.status === 'ZERO_RESULTS') {
     return {
       status: 'fail'
     }
   }
 
-  if (localityDetails.result.status === 'INVALID_REQUEST') {
-    // captureException(localityDetails.result.error_message)
+  if (localityDetails.status === 'INVALID_REQUEST') {
     log.error({
       location: '/stores/observation/actions.tsx defineLocalityInFinland()',
-      error: localityDetails.result.error_message,
+      error: localityDetails.error_message,
       data: geometry,
       user_id: credentials.user?.id
     })
     return Promise.reject({
       severity: 'low',
-      message: `${i18n.t('locality failure')} ${localityDetails.result.error_message}`
+      message: `${i18n.t('locality failure')} ${localityDetails.error_message}`
     })
   }
 
@@ -192,7 +192,7 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
   let municipality = ''
 
   //loop through results and add provinces and municipalities to the list, separated by commas
-  localityDetails.result.results.forEach((result: Record<string, any>) => {
+  localityDetails.results.forEach((result: Record<string, any>) => {
     if (result.types[0] === 'biogeographicalProvince') {
       if (biologicalProvince === '') {
         biologicalProvince = result.formatted_address

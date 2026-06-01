@@ -25,8 +25,8 @@ const lajiApiService = {
     })
     return response.data
   },
-  postImageMetadata: async (tempId: string, metadata: object, personToken: string) => {
-    const response = await lajiApi.post('/images/' + tempId, JSON.stringify(metadata), {
+  postImageMetadata: async (tmpId: string, metadata: object, personToken: string) => {
+    const response = await lajiApi.post('/images/' + tmpId, JSON.stringify(metadata), {
       params: { personToken },
       headers: {
         'accept': 'application/json',
@@ -35,13 +35,66 @@ const lajiApiService = {
     })
     return response.data
   },
-  getLocality: async (geometry: Point | LineString | MultiLineString) => {
-    const response = await lajiApi.post('/locality', geometry, {
+  postCoordinates: async (geometry: Point | LineString | MultiLineString) => {
+    const response = await lajiApi.post('/coordinates/location', geometry, {
       headers: {
         'Accept': 'application/json'
       }
     })
     return response.data
+  },
+  postError: async (errorData: { message: string, meta: Record<string, any> }) => {
+    const response = await lajiApi.post('/logger/error', errorData)
+    return response
+  },
+  getAutocomplete: async (query: string, filters?: Record<string, any>, signal?: AbortSignal) => {
+    const response = await lajiApi.get('/autocomplete/taxa', {
+      headers: {
+        'Accept': 'application/json',
+        'API-Version': '1'
+      },
+      params: {
+        query,
+        limit: 5,
+        matchType: 'exact,partial',
+        nameTypes: '!MX.hasMisappliedName,!MX.hasMisspelledName,!MX.hasUncertainSynonym,!MX.hasOrthographicVariant',
+        includeHidden: false,
+        ...filters
+      },
+      signal: signal ? signal : undefined
+    })
+    return response.data
+  },
+  getNews: async (tag: string) => {
+    const response = await lajiApi.get('/news', { params: { tag, page: 1 } })
+    return response.data
+  },
+  getNamedPlaces: async (collectionID: string) => {
+    const response = await lajiApi.get('/namedPlaces', { params: { collectionID, includePublic: true, includeUnits: false, pageSize: 1000 } })
+    return response.data
+  },
+  getLogin: async () => {
+    const response = await lajiApi.get('/login')
+    return response.data
+  },
+  postLoginCheck: async (tmpToken: string) => {
+    const response = await lajiApi.post('/login/check', null, { params: { tmpToken } })
+    return response.data
+  },
+  getPerson: async (personToken: string) => {
+    const response = await lajiApi.get('/person/' + personToken)
+    return response.data
+  },
+  getProfile: async (personToken: string) => {
+    const response = await lajiApi.get('/person/' + personToken + '/profile')
+    return response.data
+  },
+  getAuthenticationEvent: async (personToken: string) => {
+    const response = await lajiApi.get('/authentication-event/' + personToken)
+    return response.data
+  },
+  deleteAuthenticationEvent: async (personToken: string) => {
+    await lajiApi.delete('/authentication-event/' + personToken)
   }
 }
 

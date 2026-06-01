@@ -3,87 +3,87 @@ import { Text, View } from 'react-native'
 import uuid from 'react-native-uuid'
 
 interface Converter {
-  (data: Record<string, any>, uery: string): {data: Record<string, any>, element: React.JSX.Element}
+  (autocompleteResult: Record<string, any>, query: string): {autocompleteResult: Record<string, any>, element: React.JSX.Element}
 }
 
-const scientificNameOrTaxonIdCoverter = (data: Record<string, any>, query: string) => {
-  data.shownName = data.payload.matchingName
+const scientificNameOrTaxonIdCoverter = (autocompleteResult: Record<string, any>, query: string) => {
+  autocompleteResult.shownName = autocompleteResult.matchingName
 
   return {
-    data,
+    autocompleteResult,
     element: <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-      {renderScientificName(data.payload.matchingName, query)}
+      {renderScientificName(autocompleteResult.matchingName, query)}
     </View>
   }
 }
 
-const speciesCodeConverter = (data: Record<string, any>, query: string) => {
-  data.shownName = data.payload.matchingName
+const speciesCodeConverter = (autocompleteResult: Record<string, any>, query: string) => {
+  autocompleteResult.shownName = autocompleteResult.matchingName
 
   return {
-    data,
+    autocompleteResult,
     element: <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-      <Text>{renderOtherName(data.payload.matchingName, query)}{' - '}{renderScientificName(data.payload.scientificName, query)}</Text>
+      <Text>{renderOtherName(autocompleteResult.matchingName, query)}{' - '}{renderScientificName(autocompleteResult.scientificName, query)}</Text>
     </View>
   }
 }
 
-const primaryVernacularNameConverter = (data: Record<string, any>, query: string) => {
+const primaryVernacularNameConverter = (autocompleteResult: Record<string, any>, query: string) => {
   //if there is no vernacular name in users language
-  if (!data.payload.vernacularName) {
-    data.shownName = data.payload.scientificName
+  if (!autocompleteResult.vernacularName) {
+    autocompleteResult.shownName = autocompleteResult.scientificName
 
     return {
-      data,
+      autocompleteResult,
       element: <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-        <Text>{renderScientificName(data.payload.scientificName, query)}{' ('}{renderOtherName(data.payload.matchingName, query)}{') - '}{renderScientificName(data.payload.scientificName, query)}</Text>
+        <Text>{renderScientificName(autocompleteResult.scientificName, query)}{' ('}{renderOtherName(autocompleteResult.matchingName, query)}{') - '}{renderScientificName(autocompleteResult.scientificName, query)}</Text>
       </View>
     }
   }
 
   //if else use vernacular name as usual
-  data.shownName = data.payload.vernacularName
+  autocompleteResult.shownName = autocompleteResult.vernacularName
 
   return {
-    data,
+    autocompleteResult,
     element: <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-      <Text>{renderOtherName(data.payload.vernacularName, query) }{' - '}{renderScientificName(data.payload.scientificName, query)}</Text>
+      <Text>{renderOtherName(autocompleteResult.vernacularName, query) }{' - '}{renderScientificName(autocompleteResult.scientificName, query)}</Text>
     </View>
   }
 }
 
-const otherVernacularNameConverter = (data: Record<string, any>, query: string) => {
+const otherVernacularNameConverter = (autocompleteResult: Record<string, any>, query: string) => {
   //if there is no vernacular name in users language
-  if (!data.payload.vernacularName) {
+  if (!autocompleteResult.vernacularName) {
 
-    data.shownName = data.payload.scientificName
+    autocompleteResult.shownName = autocompleteResult.scientificName
 
     return {
-      data,
+      autocompleteResult,
       element: <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-        <Text>{renderScientificName(data.payload.scientificName, query)}{' ('}{renderOtherName(data.payload.matchingName, query)}{') - '}{renderScientificName(data.payload.scientificName, query)}</Text>
+        <Text>{renderScientificName(autocompleteResult.scientificName, query)}{' ('}{renderOtherName(autocompleteResult.matchingName, query)}{') - '}{renderScientificName(autocompleteResult.scientificName, query)}</Text>
       </View>
     }
   }
 
   //else replace secondary vernacular in matching name with user language vernacular name and render it
-  data.shownName = data.payload.vernacularName
+  autocompleteResult.shownName = autocompleteResult.vernacularName
 
   return {
-    data,
+    autocompleteResult,
     element: <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-      <Text>{renderOtherName(data.payload.matchingName, query)}{'('}{renderOtherName(data.payload.vernacularName, query) }{') - '}{renderScientificName(data.payload.scientificName, query)}</Text>
+      <Text>{renderOtherName(autocompleteResult.matchingName, query)}{'('}{renderOtherName(autocompleteResult.vernacularName, query) }{') - '}{renderScientificName(autocompleteResult.scientificName, query)}</Text>
     </View>
   }
 }
 
-const synonymScientificNameConverter = (data: Record<string, any>, query: string) => {
-  data.shownName = data.payload.scientificName
+const synonymScientificNameConverter = (autocompleteResult: Record<string, any>, query: string) => {
+  autocompleteResult.shownName = autocompleteResult.scientificName
 
   return {
-    data,
+    autocompleteResult,
     element: <View style={{ paddingTop: 10, paddingBottom: 10 }}>
-      <Text>{renderScientificName(data.payload.scientificName, query)}{' ('}{renderOtherName(data.payload.matchingName, query)}{')'}</Text>
+      <Text>{renderScientificName(autocompleteResult.scientificName, query)}{' ('}{renderOtherName(autocompleteResult.matchingName, query)}{')'}</Text>
     </View>
   }
 }
@@ -108,10 +108,9 @@ const getConverter = (nameType: string) => {
   return synonymScientificNameConverter
 }
 
-export const convert = (data: Record<string, any>, query: string) => {
-  const converter = getConverter(data.payload.nameType)
-
-  return converter(data, query)
+export const convert = (autocompleteResult: Record<string, any>, query: string) => {
+  const converter = getConverter(autocompleteResult.nameType)
+  return converter(autocompleteResult, query)
 }
 
 const renderScientificName = (scientificName: string, query: string) => {

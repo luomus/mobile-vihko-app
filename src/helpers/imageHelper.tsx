@@ -206,7 +206,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
   //for each tempid in response send metadata and store the received permanent ID
   try {
     const idArr: string[] = await Promise.all(res.map(async (tempImage: BasicObject, index: number) => {
-      const tempId = tempImage.id
+      const tmpId = tempImage.id
       const keyword: string = keywords[index]
       let metadata
       if (keywords) {
@@ -226,7 +226,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 
       let metadataRes
       try {
-        metadataRes = await lajiApiService.postImageMetadata(tempId, metadata, credentials.token)
+        metadataRes = await lajiApiService.postImageMetadata(tmpId, metadata, credentials.token)
       } catch (error) {
         captureException(error)
         return Promise.reject(error)

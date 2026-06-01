@@ -1,32 +1,7 @@
-import { localityUrl, googleGeocodingAPIURL } from '../config/urls'
+import { googleGeocodingAPIURL } from '../config/urls'
 import Config from '../config/env'
-import { get, post } from '../helpers/axiosHelper'
-import { LineString, MultiLineString, Point } from 'geojson'
-
-export const getLocalityDetailsFromLajiApi = async (geometry: MultiLineString | LineString | Point, lang: string) => {
-
-  const params = {
-    'lang': lang,
-    'access_token': Config.ACCESS_TOKEN
-  }
-
-  const headers = {
-    'Accept': 'application/json'
-  }
-
-  const result = await post(
-    localityUrl,
-    geometry,
-    {
-      params,
-      headers
-    }
-  )
-
-  return {
-    result: result.data
-  }
-}
+import { get } from '../helpers/axiosHelper'
+import { Point } from 'geojson'
 
 export const getLocalityDetailsFromGoogleAPI = async (point: Point, lang: string) => {
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import lajiApiService from '../../api/services/lajiApiService'
 import { View, Text, TouchableOpacity, Linking } from 'react-native'
 import i18n from '../../languages/i18n'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
-import { getNews } from '../../services/newsService'
 import { newsPage } from '../../config/urls'
 
 interface Props {
@@ -18,7 +18,7 @@ const NewsComponent = (props: Props) => {
 
   useEffect(() => {
     const getNewsAsync = async () => {
-      const news = await getNews(i18n.language, props.tag)
+      const news = await lajiApiService.getNews(props.tag)
       if (news.results
         && (props.thisDay && news.posted >= Date.now() - (24 * 60 * 60 * 1000) || !props.thisDay)
       ) {

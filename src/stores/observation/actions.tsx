@@ -659,20 +659,20 @@ export const initCompleteList = createAsyncThunk<void, initCompleteListParams, {
 
     //fetch taxon details concurrently and initialize bird list observations
     await Promise.all(taxonList.map(async (item: Record<string, any>) => {
-      const res = await getTaxonAutocomplete('taxon', item.id, null, lang, 1, null)
+      const res = await getTaxonAutocomplete(item.id, null, null)
       const observation = {}
 
       if (taxonSetID === 'BirdAtlas') {
         set(observation, 'id', `complete_list_${uuid.v4()}`)
         set(observation, 'identifications', [{ taxon: getTaxonName(item) }])
-        set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
+        set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.results[0].informalTaxonGroups))
         set(observation, 'scientificName', item.scientificName)
         set(observation, 'taxonomicOrder', item.taxonomicOrder)
         set(observation, 'unitFact', { autocompleteSelectedTaxonID: item.id })
       } else {
         set(observation, 'id', `complete_list_${uuid.v4()}`)
         set(observation, 'identifications', [{ taxonID: item.id, taxonVerbatim: getTaxonName(item) }])
-        set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.result[0].payload.informalTaxonGroups))
+        set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.results[0].informalTaxonGroups))
         set(observation, 'scientificName', item.scientificName)
         set(observation, 'taxonomicOrder', item.taxonomicOrder)
       }
