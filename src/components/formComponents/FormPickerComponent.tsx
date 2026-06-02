@@ -6,6 +6,7 @@ import { Picker } from '@react-native-picker/picker'
 import { ErrorMessage } from '@hookform/error-message'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
+import Colors from '../../styles/Colors'
 
 interface Props {
   title: string,
@@ -57,6 +58,9 @@ const FormPickerComponent = (props: Props) => {
         <Picker
           selectedValue={selected}
           numberOfLines={10}
+          itemStyle={{
+            color: Colors.blackText
+          }}
           onValueChange={itemValue => {
             setSelected(itemValue)
             setValue(props.objectTitle, itemValue)
