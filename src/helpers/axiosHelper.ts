@@ -1,20 +1,17 @@
 import axios from 'axios'
 import { log } from './logger'
 import { captureException } from './sentry'
-import { autocompleteUrl, pollLoginUrl } from '../config/urls'
 
 export const get = async (url: string, config?: object) => {
   try {
     const promise = config ? axios.get(url, config) : axios.get(url)
     return await promise
   } catch (error) {
-    if (url !== pollLoginUrl && url !== autocompleteUrl) {
-      log.error({
-        location: '/helpers/axiosHelper.ts get(' + url + ',' + config + ')',
-        error: error
-      })
-      captureException(error)
-    }
+    log.error({
+      location: '/helpers/axiosHelper.ts get(' + url + ',' + config + ')',
+      error: error
+    })
+    captureException(error)
     throw error
   }
 }

@@ -1,5 +1,6 @@
 import Config from './env'
 
+//info.laji.fi url
 export const infoLajiUrl          = 'https://info.laji.fi'
 
 //map url
@@ -7,39 +8,6 @@ export const mapUrl               = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/
 
 //grid lines and labels url
 export const gridUrl              = 'https://geoserver-dev.laji.fi/geoserver/LajiMapData/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&STYLES&LAYERS=LajiMapData%3AatlasGridsWGS84&SRS=EPSG%3A3857&WIDTH={width}&HEIGHT={height}&BBOX={minX}%2C{minY}%2C{maxX}%2C{maxY}'
-
-//forms url
-export const formsUrl             = `${Config.API_URL}/forms`
-
-//documents url
-export const documentsUrl         = `${Config.API_URL}/documents`
-
-//image urls
-export const postImageUrl         = `${Config.API_URL}/images`
-
-//autocomplete url
-export const autocompleteUrl      = `${Config.API_URL}/autocomplete/`
-
-//locality url
-export const localityUrl          = `${Config.API_URL}/coordinates/location`
-
-//logger url
-export const loggerUrl            = `${Config.API_URL}/logger/error`
-
-//form permission url
-export const formPermissionUrl    = `${Config.API_URL}/formPermissions`
-
-//observation zone urls
-export const getZonesUrl          = `${Config.API_URL}/named-places`
-
-//login urls
-export const getLoginUrl          = `${Config.API_URL}/login`
-export const pollLoginUrl         = `${Config.API_URL}/login/check`
-export const getUserUrl           = `${Config.API_URL}/person/`
-export const personTokenUrl       = `${Config.API_URL}/person-token`
-
-//news url
-export const getNewsUrl           = `${Config.API_URL}/news`
 
 //complete list url
 export const completeListUrl      = `${Config.ATLAS_API_URL}/taxon/biomon`
