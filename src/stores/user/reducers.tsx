@@ -6,7 +6,7 @@ const initialState: CredentialsType = {
   user: null,
   token: null
 }
-
+//!!
 const credentialsSlice = createSlice({
   name: 'credentials',
   initialState,

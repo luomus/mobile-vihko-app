@@ -42,7 +42,7 @@ const lajiApiService = {
       return lolifeEn.data.form
     }
   },
-  getDocuments: async (personToken: string, selectedFields: string[], sourceID: string, pageSize: number) => {
+  getDocuments: async (selectedFields: string[], sourceID: string, pageSize: number) => {
     return [{
       'aggregateBy': {
         'document.createdDate': '2023-02-09',
@@ -52,10 +52,10 @@ const lajiApiService = {
       'count': 1
     }]
   },
-  postDocument: async (document: Record<string, any>, personToken: string) => {
+  postDocument: async (document: Record<string, any>) => {
     return Promise.resolve()
   },
-  getFormPermissions: async (personToken: string) => {
+  getFormPermissions: async () => {
     return {
       'admins': [],
       'editors': [
@@ -65,7 +65,7 @@ const lajiApiService = {
       'personID': 'MA.1',
     }
   },
-  postImage: async (formDataBody: FormData, personToken: string) => {
+  postImage: async (formDataBody: FormData) => {
     return {
       'config': {
         'adapter': [],
@@ -291,7 +291,7 @@ const lajiApiService = {
       'statusText': undefined,
     }
   },
-  postImageMetadata: async (tmpId: string, metadata: object, personToken: string) => {
+  postImageMetadata: async (tmpId: string, metadata: object) => {
     return {
       'config': {
         'adapter': [],
@@ -1027,7 +1027,7 @@ const lajiApiService = {
       'token': 'Pfk3NA3n6tXMSY6QJMFdWw5w2e8jvlqkiMnpqP0IEJdlgw7m'
     }
   },
-  getPerson: async (personToken: string) => {
+  getPerson: async () => {
     return {
       '@context': 'http://schema.laji.fi/context/person-en.jsonld',
       'defaultLanguage': 'fi',
@@ -1059,14 +1059,14 @@ const lajiApiService = {
       'userID': 'MA.1'
     }
   },
-  getAuthenticationEvent: async (personToken: string) => {
+  getAuthenticationEvent: async () => {
     return {
       'next': '',
       'personId': 'MA.1',
       'target': 'KE.1141',
     }
   },
-  deleteAuthenticationEvent: async (personToken: string) => {
+  deleteAuthenticationEvent: async () => {
     return {}
   }
 }

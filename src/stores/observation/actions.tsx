@@ -288,7 +288,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
     }
 
     try {
-      await lajiApiService.postDocument(eventWithLocality, credentials.token)
+      await lajiApiService.postDocument(eventWithLocality)
     } catch (error: any) {
       if (error.response?.status === 400 || error.response?.status === 422) {
         captureException({

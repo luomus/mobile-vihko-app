@@ -23,6 +23,7 @@ import {
   appendPath,
   eventPathUpdate,
   setTracking,
+  getPermissions
 } from '../../stores'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
@@ -169,6 +170,7 @@ const HomeComponent = (props: Props) => {
 
     const logHandler = async () => {
       if (pressCounter === 5) {
+        await dispatch(getPermissions())
         const logs: any[] = await storageService.fetch('logs')
         clipboardConfirmation(logs)
         setPressCounter(0)
@@ -203,7 +205,6 @@ const HomeComponent = (props: Props) => {
     try {
       if (credentials.token) {
         sentEvents = await lajiApiService.getDocuments(
-          credentials.token,
           ['id', 'formID', 'dateCreated', 'publicityRestrictions'],
           Config.SOURCE_ID,
           5

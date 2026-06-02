@@ -2,6 +2,13 @@ import { log } from '../helpers/logger'
 import { captureException } from '../helpers/sentry'
 import i18n from '../languages/i18n'
 
+export const attachApiVersionInterceptor = (client: any) => {
+  client.interceptors.request.use((config: any) => {
+    config.headers['API-Version'] = '1'
+    return config
+  })
+}
+
 export const attachAuthInterceptor = (client: any, token: string) => {
   client.interceptors.request.use((config: any) => {
     if (token) {
@@ -14,6 +21,18 @@ export const attachAuthInterceptor = (client: any, token: string) => {
 export const attachLangInterceptor = (client: any) => {
   client.interceptors.request.use((config: any) => {
     config.headers['Accept-Language'] = i18n.language ?? 'fi'
+    return config
+  })
+}
+
+export const attachPersonTokenInterceptor = (client: any, getToken: () => string | null) => {
+  client.interceptors.request.use((config: any) => {
+    const token = getToken()
+    if (token) {
+      config.headers['Person-Token'] = token
+    } else {
+      delete config.headers['Person-Token']
+    }
     return config
   })
 }

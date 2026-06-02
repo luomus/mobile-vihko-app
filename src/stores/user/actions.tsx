@@ -143,10 +143,11 @@ export const getPermissions = createAsyncThunk<void, undefined, { rejectValue: R
 
     //try to fetch users form permissions to join into the credentials
     try {
-      const permissions = await lajiApiService.getFormPermissions(credentials.token)
+      const permissions = await lajiApiService.getFormPermissions()
       permissionsArr = [...permissions.admins, ...permissions.editors]
 
     } catch (error: any) {
+      console.log('failed to get permissions', error)
       captureException(error)
       log.error({
         location: '/stores/user/actions.tsx getPermissions()',
@@ -206,7 +207,7 @@ export const getMetadata = createAsyncThunk<void, undefined, { rejectValue: Reco
 
     //try to get users media metadata
     try {
-      const profile = await lajiApiService.getProfile(credentials.token)
+      const profile = await lajiApiService.getProfile()
       metadata = profile.settings?.defaultMediaMetadata
 
     } catch (error: any) {
@@ -263,7 +264,7 @@ export const checkTokenValidity = createAsyncThunk<void, checkTokenValidityParam
           message: i18n.t('user token is missing')
         })
       }
-      await lajiApiService.getPerson(credentials.token)
+      await lajiApiService.getPerson()
       return
     } catch (error: any) {
       captureException(error)
@@ -328,7 +329,7 @@ export const logoutUser = createAsyncThunk<void, undefined, { rejectValue: Recor
 
     if (credentialsCopy.token) {
       try {
-        await lajiApiService.deleteAuthenticationEvent(credentialsCopy.token)
+        await lajiApiService.deleteAuthenticationEvent()
       } catch (error: any) {
         captureException(error)
         log.error({

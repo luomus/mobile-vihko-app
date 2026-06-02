@@ -6,28 +6,26 @@ const lajiApiService = {
     const response = await lajiApi.get('/forms/' + formId)
     return response.data
   },
-  getDocuments: async (personToken: string, selectedFields: string[], sourceID: string, pageSize: number) => {
-    const response = await lajiApi.get('/documents', { params: { personToken, selectedFields, sourceID, pageSize } })
+  getDocuments: async (selectedFields: string[], sourceID: string, pageSize: number) => {
+    const response = await lajiApi.get('/documents', { params: { selectedFields, sourceID, pageSize } })
     return response.data.results
   },
-  postDocument: async (document: Record<string, any>, personToken: string) => {
-    const response = await lajiApi.post('/documents', document, { params: { personToken } })
+  postDocument: async (document: Record<string, any>) => {
+    const response = await lajiApi.post('/documents', document)
     return response.data
   },
-  getFormPermissions: async (personToken: string) => {
-    const response = await lajiApi.get('/formPermissions', { params: { personToken } })
+  getFormPermissions: async () => {
+    const response = await lajiApi.get('/form-permissions')
     return response.data
   },
-  postImage: async (formDataBody: FormData, personToken: string) => {
+  postImage: async (formDataBody: FormData) => {
     const response = await lajiApi.post('/images', formDataBody, {
-      params: { personToken },
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     return response.data
   },
-  postImageMetadata: async (tmpId: string, metadata: object, personToken: string) => {
+  postImageMetadata: async (tmpId: string, metadata: object) => {
     const response = await lajiApi.post('/images/' + tmpId, JSON.stringify(metadata), {
-      params: { personToken },
       headers: {
         'accept': 'application/json',
         'content-type': 'application/json'
@@ -70,7 +68,7 @@ const lajiApiService = {
     return response.data
   },
   getNamedPlaces: async (collectionID: string) => {
-    const response = await lajiApi.get('/namedPlaces', { params: { collectionID, includePublic: true, includeUnits: false, pageSize: 1000 } })
+    const response = await lajiApi.get('/named-places', { params: { collectionID, includePublic: true, includeUnits: false, pageSize: 1000 } })
     return response.data
   },
   getLogin: async () => {
@@ -81,20 +79,20 @@ const lajiApiService = {
     const response = await lajiApi.post('/login/check', null, { params: { tmpToken } })
     return response.data
   },
-  getPerson: async (personToken: string) => {
-    const response = await lajiApi.get('/person/' + personToken)
+  getPerson: async () => {
+    const response = await lajiApi.get('/person')
     return response.data
   },
-  getProfile: async (personToken: string) => {
-    const response = await lajiApi.get('/person/' + personToken + '/profile')
+  getProfile: async () => {
+    const response = await lajiApi.get('/person/profile')
     return response.data
   },
-  getAuthenticationEvent: async (personToken: string) => {
-    const response = await lajiApi.get('/authentication-event/' + personToken)
+  getAuthenticationEvent: async () => {
+    const response = await lajiApi.get('/authentication-event')
     return response.data
   },
-  deleteAuthenticationEvent: async (personToken: string) => {
-    await lajiApi.delete('/authentication-event/' + personToken)
+  deleteAuthenticationEvent: async () => {
+    await lajiApi.delete('/authentication-event')
   }
 }
 

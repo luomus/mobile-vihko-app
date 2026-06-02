@@ -172,7 +172,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     })
   } else {
     try {
-      res = await lajiApiService.postImage(formDataBody, credentials.token)
+      res = await lajiApiService.postImage(formDataBody)
     } catch (error: any) {
       captureException(error)
       log.error({
@@ -226,7 +226,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 
       let metadataRes
       try {
-        metadataRes = await lajiApiService.postImageMetadata(tmpId, metadata, credentials.token)
+        metadataRes = await lajiApiService.postImageMetadata(tmpId, metadata)
       } catch (error) {
         captureException(error)
         return Promise.reject(error)
