@@ -7,5 +7,5 @@ const createClient = (baseURL: string, defaultHeaders: Record<string, string> = 
     headers: defaultHeaders
   })
 
-export const lajiApi = createClient('https://apitest.laji.fi')
+export const lajiApi = createClient(Config.API_URL)
 export const atlasApi = createClient(Config.ATLAS_API_URL)
