@@ -117,8 +117,8 @@ const FormAutocompleteComponent = (props: Props) => {
     })
   }
 
-  const mapInformalTaxonGroups = (informalTaxonGroups: Record<string, any>) => {
-    return informalTaxonGroups.map((group: any) => {
+  const mapInformalGroups = (informalGroups: Record<string, any>) => {
+    return informalGroups.map((group: any) => {
       return typeof group === 'string' ? group : group.id
     })
   }
@@ -135,7 +135,7 @@ const FormAutocompleteComponent = (props: Props) => {
     Object.keys(transform).forEach(key => {
       registerField(transform[key])
       if (key.includes('informalGroups')) {
-        setValue(transform[key], mapInformalTaxonGroups(get(item, key.split('_'))), { shouldValidate: false })
+        setValue(transform[key], mapInformalGroups(get(item, key.split('_'))), { shouldValidate: false })
       } else {
         setValue(transform[key], get(item, key.split('_')), { shouldValidate: false })
       }

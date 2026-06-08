@@ -593,8 +593,8 @@ export const initCompleteList = createAsyncThunk<void, initCompleteListParams, {
       })
     }
 
-    const mapInformalTaxonGroups = (informalTaxonGroups: Record<string, any>) => {
-      return informalTaxonGroups.map((group: any) => {
+    const mapInformalGroups = (informalGroups: Record<string, any>) => {
+      return informalGroups.map((group: any) => {
         return typeof group === 'string' ? group : group.id
       })
     }
@@ -665,14 +665,14 @@ export const initCompleteList = createAsyncThunk<void, initCompleteListParams, {
       if (taxonSetID === 'BirdAtlas') {
         set(observation, 'id', `complete_list_${uuid.v4()}`)
         set(observation, 'identifications', [{ taxon: getTaxonName(item) }])
-        set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.results[0].informalTaxonGroups))
+        set(observation, 'informalTaxonGroups', mapInformalGroups(res.results[0].informalGroups))
         set(observation, 'scientificName', item.scientificName)
         set(observation, 'taxonomicOrder', item.taxonomicOrder)
         set(observation, 'unitFact', { autocompleteSelectedTaxonID: item.id })
       } else {
         set(observation, 'id', `complete_list_${uuid.v4()}`)
         set(observation, 'identifications', [{ taxonID: item.id, taxonVerbatim: getTaxonName(item) }])
-        set(observation, 'informalTaxonGroups', mapInformalTaxonGroups(res.results[0].informalTaxonGroups))
+        set(observation, 'informalTaxonGroups', mapInformalGroups(res.results[0].informalGroups))
         set(observation, 'scientificName', item.scientificName)
         set(observation, 'taxonomicOrder', item.taxonomicOrder)
       }
