@@ -30,8 +30,6 @@ export const attachPersonTokenInterceptor = (client: any, getToken: () => string
     const token = getToken()
     if (token) {
       config.headers['Person-Token'] = token
-    } else {
-      delete config.headers['Person-Token']
     }
     return config
   })

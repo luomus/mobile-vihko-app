@@ -79,16 +79,16 @@ const lajiApiService = {
     const response = await lajiApi.post('/login/check', null, { params: { tmpToken } })
     return response.data
   },
-  getPerson: async () => {
-    const response = await lajiApi.get('/person')
+  getPerson: async (personToken: string) => {
+    const response = await lajiApi.get('/person', { headers: { 'Person-Token': personToken } })
     return response.data
   },
   getProfile: async () => {
     const response = await lajiApi.get('/person/profile')
     return response.data
   },
-  getAuthenticationEvent: async () => {
-    const response = await lajiApi.get('/authentication-event')
+  getAuthenticationEvent: async (personToken: string) => {
+    const response = await lajiApi.get('/authentication-event', { headers: { 'Person-Token': personToken } })
     return response.data
   },
   deleteAuthenticationEvent: async () => {

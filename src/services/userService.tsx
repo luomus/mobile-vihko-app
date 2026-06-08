@@ -17,8 +17,8 @@ export const pollUserLogin = async (tmpToken: string, setCanceler: any) => {
       }
       if (result.token) {
         try {
-          await lajiApiService.getAuthenticationEvent()
-          const userData = await lajiApiService.getPerson()
+          await lajiApiService.getAuthenticationEvent(result.token)
+          const userData = await lajiApiService.getPerson(result.token)
           clearInterval(poller)
           clearTimeout(timeout)
           resolve({

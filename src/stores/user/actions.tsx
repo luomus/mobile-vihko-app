@@ -147,7 +147,6 @@ export const getPermissions = createAsyncThunk<void, undefined, { rejectValue: R
       permissionsArr = [...permissions.admins, ...permissions.editors]
 
     } catch (error: any) {
-      console.log('failed to get permissions', error)
       captureException(error)
       log.error({
         location: '/stores/user/actions.tsx getPermissions()',
@@ -264,7 +263,7 @@ export const checkTokenValidity = createAsyncThunk<void, checkTokenValidityParam
           message: i18n.t('user token is missing')
         })
       }
-      await lajiApiService.getPerson()
+      await lajiApiService.getPerson(credentials.token)
       return
     } catch (error: any) {
       captureException(error)

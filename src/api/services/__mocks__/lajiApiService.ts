@@ -1059,7 +1059,7 @@ const lajiApiService = {
       'userID': 'MA.1'
     }
   },
-  getAuthenticationEvent: async () => {
+  getAuthenticationEvent: async (personToken: string) => {
     return {
       'next': '',
       'personId': 'MA.1',
