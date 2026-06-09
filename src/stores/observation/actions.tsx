@@ -213,7 +213,10 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
             if (error.severity && error.severity === 'low') {
               imageErrorMessage = error.message
             } else {
-              return Promise.reject(error)
+              return Promise.reject({
+                message: error.message,
+                severity: error.severity ? error.severity : 'high'
+              })
             }
           }
 

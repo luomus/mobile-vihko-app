@@ -177,12 +177,13 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
       captureException(error)
       log.error({
         location: '/helpers/imageHelper.tsx saveImages()/postImage()',
-        error: error,
+        status: error.response?.status,
+        data: error.response?.data,
         user_id: credentials.user?.id
       })
       return Promise.reject({
         severity: 'high',
-        message: `${i18n.t('image post failure')} ${error.message}`
+        message: `${i18n.t('image post failure')} ${error.response?.data?.message ?? error.message}`
       })
     }
 
@@ -227,7 +228,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
       let metadataRes
       try {
         metadataRes = await lajiApiService.postImageMetadata(tmpId, metadata)
-      } catch (error) {
+      } catch (error: any) {
         captureException(error)
         return Promise.reject(error)
       }
@@ -240,11 +241,11 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     captureException(error)
     log.error({
       location: '/helpers/imageHelper.tsx saveImages()/postImageMetadata()',
-      error: error,
+      status: error.response?.status,
+      data: error.response?.data,
       user_id: credentials.user?.id
     })
-
-    throw new Error(`${i18n.t('metadata post failure')} ${error.message}`)
+    throw new Error(`${i18n.t('metadata post failure')} ${error.response?.data?.message ?? error.message}`)
   }
 }
 
