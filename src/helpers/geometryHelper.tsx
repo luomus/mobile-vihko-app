@@ -1,6 +1,5 @@
 import { Polygon, Point, LineString, MultiLineString } from 'geojson'
 import haversine from 'haversine-distance'
-import { FINLAND_BOUNDS } from '../config/location'
 import { forms } from '../config/fields'
 import { cloneDeep } from 'lodash'
 
@@ -96,65 +95,6 @@ export const createUnitBoundingBox = (units: Record<string, any>[]): Polygon | P
   }
 }
 
-//makes preparations for creating a combined bounding box (from path and units) which is used for determining
-//center of bounding box for Google Geocoding API
-export const centerOfGeometry = (geometry: any, units: Array<Record<string, any>>): Point | null => {
-
-  //if event's geometry is a bounding box, it means that it doesn't have a path, so there's no point to make a combined BB
-  if (geometry.type !== 'LineString' && geometry.type !== 'MultiLineString') {
-    return centerOfBoundingBox(geometry)
-  }
-
-  //makes an array of unit coordinates
-  const points: Array<Array<number>> = units.map((unit: Record<string, any>) => {
-    return unit.unitGathering.geometry.coordinates
-  })
-
-  //creates a combined bounding box (from path and units) that is required for Google Geocoding API's center point
-  //notice that the case where there isn't a path is already handled in createCombinedGeometry!
-  let boundingBox: Record<string, any>
-  let pathPoints: Array<Array<number>> = []
-
-  //extract the points from path LineString or MultiLineString
-  if (geometry.type === 'LineString') {
-    pathPoints = geometry.coordinates
-  } else if (geometry.type === 'MultiLineString') {
-    geometry.coordinates.forEach((coords: Array<Array<number>>) => {
-      pathPoints.push(...coords)
-    })
-  }
-
-  //if there is no unit geometries (and there is a path, as !path scenario was handled in createCombinedGeometry)
-  //create bounding box from only path geometry, else use unit and path geometries to create BB
-  if (!points) {
-    if (pathPoints.length === 0) {
-      return null
-    }
-
-    boundingBox = calculateBoundingBoxBoundaries(pathPoints)
-  } else {
-    const combinedCoordinates: Array<Array<number>> = [
-      ...points,
-      ...pathPoints
-    ]
-
-    boundingBox = calculateBoundingBoxBoundaries(combinedCoordinates)
-  }
-
-  const combinedBoundingBox: Polygon = {
-    type: 'Polygon',
-    coordinates: [[
-      [boundingBox.maxLng, boundingBox.maxLat],
-      [boundingBox.minLng, boundingBox.maxLat],
-      [boundingBox.minLng, boundingBox.minLat],
-      [boundingBox.maxLng, boundingBox.minLat],
-      [boundingBox.maxLng, boundingBox.maxLat],
-    ]]
-  }
-
-  return centerOfBoundingBox(combinedBoundingBox)
-}
-
 //takes list of coordinates as input and outputs max/min lng/lat of the created BB of coordinates
 const calculateBoundingBoxBoundaries = (coordinates: Array<Array<number>>): Record<string, any> => {
   let maxLat = -90
@@ -212,64 +152,6 @@ export const centerOfBoundingBox = (geometry: Polygon | Point): Point => {
     type: 'Point',
     coordinates: [avgLng, avgLat]
   }
-}
-
-//returns true if event geometry overlaps finland, else false
-export const overlapsFinland = (geometry: MultiLineString | LineString | Polygon | Point): boolean => {
-
-  //helper function that checks whether a single point is inside finnish boundaries
-  const pointOverlapsFinland = (coordinates: Array<number>) => {
-    if ((coordinates[0] < FINLAND_BOUNDS[0][0] && coordinates[0] > FINLAND_BOUNDS[1][0]) &&
-      (coordinates[1] < FINLAND_BOUNDS[0][1] && coordinates[1] > FINLAND_BOUNDS[1][1])) {
-      return true
-    }
-    return false
-  }
-
-  //if the geometry is a Point, check if the point is inside finnish borders
-  if (geometry.type === 'Point') {
-    return pointOverlapsFinland(geometry.coordinates)
-  }
-
-  //if the geometry is a LineString, check if even one of the points is inside finnish borders, if so, return true
-  if (geometry.type === 'LineString') {
-    let somePointsOverlapFinland = false
-    geometry.coordinates.forEach((point: Array<number>) => {
-      if (pointOverlapsFinland(point)) {
-        somePointsOverlapFinland = true
-      }
-    })
-    return somePointsOverlapFinland
-  }
-  //same for GeometryCollection of LineStrings
-  if (geometry.type === 'MultiLineString') {
-    let somePointsOverlapFinland = false
-
-    geometry.coordinates.forEach((coords: Array<Array<number>>) => {
-      coords.forEach((point: Array<number>) => {
-        if (pointOverlapsFinland(point)) {
-          somePointsOverlapFinland = true
-        }
-      })
-    })
-
-    return somePointsOverlapFinland
-  }
-
-  //if the geometry is a bounding box, find out the max/min lng/lat of the BB
-  const boundingBox = calculateBoundingBoxBoundaries(geometry.coordinates[0])
-
-  //if one rectangle is on left side of the other
-  if (boundingBox.maxLat <= FINLAND_BOUNDS[1][1] || FINLAND_BOUNDS[0][1] <= boundingBox.minLat) {
-    return false
-  }
-
-  //if one rectangle is above the other
-  if (boundingBox.minLng >= FINLAND_BOUNDS[0][0] || FINLAND_BOUNDS[1][0] >= boundingBox.maxLng) {
-    return false
-  }
-
-  return true
 }
 
 export const removeDuplicatesFromPath = (lineString: LineString | MultiLineString | undefined): LineString | MultiLineString | undefined => {

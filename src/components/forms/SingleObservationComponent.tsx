@@ -476,7 +476,7 @@ const SingleObservationComponent = (props: Props) => {
     setModalVisibility(false)
     setSending(true)
     try {
-      await dispatch(uploadObservationEvent({ event, lang: i18n.language, isPublic })).unwrap()
+      await dispatch(uploadObservationEvent({ event, isPublic })).unwrap()
       setForm(null)
       setShowSuccess(true)
       setTimeout(() => {

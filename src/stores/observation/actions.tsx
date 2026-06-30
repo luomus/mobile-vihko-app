@@ -9,9 +9,8 @@ import { getCompleteList } from '../../services/atlasService'
 import lajiApiService from '../../api/services/lajiApiService'
 import storageService from '../../services/storageService'
 import { netStatusChecker } from '../../helpers/netStatusHelper'
-import { overlapsFinland } from '../../helpers/geometryHelper'
 import { log } from '../../helpers/logger'
-import { definePublicity, loopThroughUnits, fetchFinland, fetchForeign, loopThroughBirdUnits } from '../../helpers/uploadHelper'
+import { definePublicity, loopThroughUnits, fetchLocality, loopThroughBirdUnits } from '../../helpers/uploadHelper'
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
 import { deleteAllUnusedImages, saveImages } from '../../helpers/imageHelper'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
@@ -20,7 +19,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 
 interface uploadObservationParams {
   event: Record<string, any>,
-  lang: string,
   isPublic: boolean
 }
 
@@ -106,7 +104,7 @@ export const initObservationEvents = createAsyncThunk<void, undefined, { rejectV
 
 export const uploadObservationEvent = createAsyncThunk<void, uploadObservationParams, { rejectValue: Record<string, any> | unknown }>(
   'observationEvents/uploadObservationEvent',
-  async ({ event, lang, isPublic }, { dispatch, getState, rejectWithValue }) => {
+  async ({ event, isPublic }, { dispatch, getState, rejectWithValue }) => {
     const { credentials, schema } = getState() as RootState
     const eventClone = cloneDeep(event)
 
@@ -162,24 +160,15 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
     let localityErrorMessage = ''
 
     let eventWithLocality: Record<string, any> | undefined = {}
-    //if there isn't an observation zone, use APIs to get a proper locality name
-    //if event geometry overlaps finland, use fetchFinland, else use fetchForeign
+    //if there isn't a named place, get locality from API
     if (eventWithLoop.formID && eventWithLoop.formID !== forms.lolife) {
-      if (overlapsFinland(eventWithLoop.gatherings[0].geometry)) {
-        try {
-          eventWithLocality = await fetchFinland(eventWithLoop, lang, credentials)
-        } catch (error: any) {
-          if (error.severity && error.severity === 'low') {
-            localityErrorMessage = error.message
-          }
-        }
-      } else {
-        try {
-          eventWithLocality = await fetchForeign(eventWithLoop, lang, credentials)
-        } catch (error: any) {
-          if (error.severity && error.severity === 'low') {
-            localityErrorMessage = error.message
-          }
+      try {
+        eventWithLocality = await fetchLocality(eventWithLoop, credentials)
+      } catch (error: any) {
+        console.log('error', error)
+        if (error.severity && error.severity === 'low') {
+          localityErrorMessage = error.message
+          eventWithLocality = eventWithLoop
         }
       }
     } else {

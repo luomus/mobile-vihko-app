@@ -11,8 +11,7 @@
     "module": "NodeNext",
     "target": "esnext",
     "lib": [
-      "es6",
-      "es2016"
+      "es2019"
     ],
     "moduleResolution": "nodenext",
     "noEmit": true,

@@ -150,7 +150,7 @@ const OverviewComponent = (props: Props) => {
           message: `${i18n.t('failed to load credentials from local')}`
         }
       }
-      await dispatch(uploadObservationEvent({ event, lang: i18n.language, isPublic })).unwrap()
+      await dispatch(uploadObservationEvent({ event, isPublic })).unwrap()
       setShowSuccess(true)
       setTimeout(() => {
         setShowSuccess(false)

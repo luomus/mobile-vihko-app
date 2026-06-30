@@ -1,8 +1,5 @@
-import { Point, LineString, MultiLineString } from 'geojson'
 import moment from 'moment'
 import lajiApiService from '../api/services/lajiApiService'
-import { getLocalityDetailsFromGoogleAPI } from '../services/localityService'
-import { centerOfBoundingBox, centerOfGeometry } from './geometryHelper'
 import { log } from '../helpers/logger'
 import i18n from 'i18next'
 import { CredentialsType } from '../stores'
@@ -73,90 +70,16 @@ export const loopThroughBirdUnits = (event: Record<string, any>): Record<string,
   }
 }
 
-//calls the helper function for fetching and processing locality details for finnish events
-export const fetchFinland = async (event: Record<string, any>, lang: string, credentials: CredentialsType) => {
-  let localityDetails
+export const fetchLocality = async (event: Record<string, any>, credentials: CredentialsType) => {
+  const geometry = event.gatherings[0].geometry
+  let locality
+
   try {
-    localityDetails = await defineLocalityInFinland(event.gatherings[0].geometry, lang, credentials)
-  } catch (error: any) {
-    return Promise.reject({
-      severity: error.severity,
-      message: error.message
-    })
-  }
-
-  //if it turns out that country wasn't finland, fetch foreign
-  if (!localityDetails) {
-    return
-  } else if (localityDetails.status === 'fail') {
-    await fetchForeign(event, lang, credentials)
-  } else {
-    const gatherings = [
-      {
-        ...event.gatherings[0],
-        biologicalProvince: localityDetails.biologicalProvince,
-        country: localityDetails.country,
-        municipality: localityDetails.municipality
-      },
-      ...event.gatherings.slice(1)
-    ]
-
-    return {
-      ...event,
-      gatherings
-    }
-  }
-}
-
-//calls the helper function for fetching and processing locality details for foreign country events
-export const fetchForeign = async (event: Record<string, any>, lang: string, credentials: CredentialsType) => {
-  const boundingBox: Point | null = centerOfGeometry(event.gatherings[0].geometry, event.gatherings[0].units)
-
-  //can't fetch foreign, unless there's a geometry for the event
-  if (!boundingBox) { return }
-
-  //foreign country details are fetched based on the center point of combined bounding box
-  const center = centerOfBoundingBox(boundingBox)
-  let localityDetails
-  try {
-    localityDetails = await defineLocalityForeign(center, lang, credentials)
-  } catch (error: any) {
-    return Promise.reject({
-      severity: error.severity,
-      message: error.message
-    })
-  }
-
-  const gatherings = [
-    {
-      ...event.gatherings[0],
-      biologicalProvince: localityDetails.biologicalProvince,
-      country: localityDetails.country,
-      municipality: localityDetails.municipality
-    },
-    ...event.gatherings.slice(1)
-  ]
-
-  return {
-    ...event,
-    gatherings
-  }
-}
-
-//if observation event was made in finland, this function will be called
-//and it processes the localities fetched from laji-api
-export const defineLocalityInFinland = async (geometry: MultiLineString | LineString | Point, lang: string,
-  credentials: CredentialsType): Promise<Record<string, string>> => {
-
-  let localityDetails
-
-  //call the service to fetch from Laji API
-  try {
-    localityDetails = await lajiApiService.postCoordinates(geometry)
+    locality = await lajiApiService.postCoordinates(geometry)
   } catch (error: any) {
     captureException(error)
     log.error({
-      location: '/stores/observation/actions.tsx defineLocalityInFinland()',
+      location: '/stores/observation/actions.tsx defineLocality()',
       error: error,
       user_id: credentials.user?.id
     })
@@ -166,38 +89,40 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
     })
   }
 
-  //if no response, return status: 'fail' so it can be handled in uploadObservationEvent -action
-  if (localityDetails.status === 'ZERO_RESULTS') {
-    return {
-      status: 'fail'
-    }
-  }
-
-  if (localityDetails.status === 'INVALID_REQUEST') {
+  if (locality.status === 'INVALID_REQUEST') {
     log.error({
-      location: '/stores/observation/actions.tsx defineLocalityInFinland()',
-      error: localityDetails.error_message,
+      location: '/stores/observation/actions.tsx defineLocality()',
+      error: locality.error_message,
       data: geometry,
       user_id: credentials.user?.id
     })
     return Promise.reject({
       severity: 'low',
-      message: `${i18n.t('locality failure')} ${localityDetails.error_message}`
+      message: `${i18n.t('locality failure')} ${locality.error_message}`
     })
   }
 
-  //store list of provinces and municipalities in string variables
-  let biologicalProvince = ''
-  const country: string = i18n.t('finland') //because country is always finland here, just use the translation
-  let municipality = ''
+  if (!locality || locality.status === 'ZERO_RESULTS') {
+    return
+  }
 
-  //loop through results and add provinces and municipalities to the list, separated by commas
-  localityDetails.results.forEach((result: Record<string, any>) => {
+  let biologicalProvince = ''
+  let country = ''
+  let municipality = ''
+  let administrativeProvince = ''
+
+  locality.results.forEach((result: Record<string, any>) => {
     if (result.types[0] === 'biogeographicalProvince') {
       if (biologicalProvince === '') {
         biologicalProvince = result.formatted_address
       } else {
         biologicalProvince = biologicalProvince + ', ' + result.formatted_address
+      }
+    } else if (result.types[0] === 'country') {
+      if (country === '') {
+        country = result.formatted_address
+      } else {
+        country = country + ', ' + result.formatted_address
       }
     } else if (result.types[0] === 'municipality') {
       if (municipality === '') {
@@ -208,70 +133,54 @@ export const defineLocalityInFinland = async (geometry: MultiLineString | LineSt
     }
   })
 
-  return {
-    biologicalProvince: biologicalProvince,
-    country: country,
-    municipality: municipality,
-  }
-}
+  if (!biologicalProvince) {
+    const administrativeProvinceArray: Array<string> = []
+    const countryArray: Array<string> = []
+    const municipalityArray: Array<string> = []
 
-//if observation event was made in a foreign country, this function will be called
-//and it processes the localities fetched from google geocoding api
-export const defineLocalityForeign = async (geometry: Point, lang: string, credentials: CredentialsType): Promise<Record<string, string>> => {
-
-  let localityDetails
-
-  //call the service to fetch from Google Geocoding API
-  try {
-    const response = await getLocalityDetailsFromGoogleAPI(geometry, lang)
-    localityDetails = response.data.results
-  } catch (error: any) {
-    captureException(error)
-    log.error({
-      location: '/stores/observation/actions.tsx defineLocalityForeign()',
-      error: error,
-      user_id: credentials.user?.id
-    })
-    return Promise.reject({
-      severity: 'low',
-      message: `${i18n.t('locality failure')} ${error.message}`
-    })
-  }
-
-  //store list of provinces, countries and municipalities in string arrays
-  const administrativeProvinceArray: Array<string> = []
-  const countryArray: Array<string> = []
-  const municipalityArray: Array<string> = []
-
-  //loop through results and add provinces, countries and municipalities to the arrays, without duplicates
-  localityDetails.forEach((point: Record<string, any>) => {
-    point.address_components.forEach((component: Record<string, any>) => {
-      component.types.forEach((type: string) => {
-        if (type === 'administrative_area_level_1') {
-          if (!administrativeProvinceArray.includes(component.long_name)) {
-            administrativeProvinceArray.push(component.long_name)
+    //loop through results and add provinces, countries and municipalities to the arrays, without duplicates
+    locality.results.forEach((result: Record<string, any>) => {
+      result.address_components.forEach((component: Record<string, any>) => {
+        component.types.forEach((type: string) => {
+          if (type === 'administrative_area_level_1') {
+            if (!administrativeProvinceArray.includes(component.long_name)) {
+              administrativeProvinceArray.push(component.long_name)
+            }
+          } else if (type === 'country') {
+            if (!countryArray.includes(component.long_name)) {
+              countryArray.push(component.long_name)
+            }
+          } else if (type === 'administrative_area_level_2' || type === 'administrative_area_level_3') {
+            if (!municipalityArray.includes(component.long_name)) {
+              municipalityArray.push(component.long_name)
+            }
           }
-        } else if (type === 'country') {
-          if (!countryArray.includes(component.long_name)) {
-            countryArray.push(component.long_name)
-          }
-        } else if (type === 'administrative_area_level_2' || type === 'administrative_area_level_3') {
-          if (!municipalityArray.includes(component.long_name)) {
-            municipalityArray.push(component.long_name)
-          }
-        }
+        })
       })
     })
-  })
 
-  //form strings separated by commas from the arrays
-  const administrativeProvince: string = administrativeProvinceArray.join(', ')
-  const country: string = countryArray.join(', ')
-  const municipality: string = municipalityArray.join(', ')
+    //form strings separated by commas from the arrays
+    administrativeProvince = administrativeProvinceArray.join(', ')
+    country = countryArray.join(', ')
+    municipality = municipalityArray.join(', ')
+  }
+
+  const localityFields: Record<string, string> = {}
+  if (biologicalProvince) localityFields.biologicalProvince = biologicalProvince
+  if (country) localityFields.country = country
+  if (municipality) localityFields.municipality = municipality
+  if (administrativeProvince) locality.administrativeProvince = administrativeProvince
+
+  const gatherings = [
+    {
+      ...event.gatherings[0],
+      ...localityFields
+    },
+    ...event.gatherings.slice(1)
+  ]
 
   return {
-    administrativeProvince: administrativeProvince,
-    country: country,
-    municipality: municipality,
+    ...event,
+    gatherings
   }
 }
