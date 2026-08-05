@@ -97,7 +97,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
       const res = await getTaxonAutocomplete(query.toLowerCase(), null, setCancelFn)
 
-      if (res.results[0]?.matchType === 'exactMatches') {
+      if (res.results[0]?.type === 'exactMatches') {
         setSelected(true)
         setQuery(res.results[0].matchingName)
       }
@@ -176,7 +176,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
       setOptions(autocompleteOptions)
 
-      if (autocompleteOptions[0]?.autocompleteResult.matchType === 'exactMatches') {
+      if (autocompleteOptions[0]?.autocompleteResult.type === 'exactMatches') {
         setSelected(true)
         addSelectionToForm(autocompleteOptions[0].autocompleteResult)
       }
