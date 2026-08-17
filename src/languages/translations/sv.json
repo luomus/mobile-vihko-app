@@ -51,6 +51,7 @@
   "edit observation": "Redigera observationen",
   "edit observations": "Redigera observationerna",
   "empty": "Tom",
+  "empty image": "Vissa bilder var tomma så de skickades inte med dokumentet.",
   "end without saving": "Avsluta utan att spara",
   "ended before starting": "Datumändring avbruten: Sluttiden kan inte vara före starttiden.",
   "error deleting observation": "Misslyckades med att ta bort observationen från disken.",

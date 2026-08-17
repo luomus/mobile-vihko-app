@@ -51,6 +51,7 @@
   "edit observation": "Edit observation",
   "edit observations": "Edit observations",
   "empty": "Empty",
+  "empty image": "Some images were empty so those were not sent with the document.",
   "end without saving": "End without saving",
   "ended before starting": "Date change cancelled: End time can't be before start time.",
   "error deleting observation": "Failed to delete observation from storage.",

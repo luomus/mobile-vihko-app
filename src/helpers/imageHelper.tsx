@@ -122,6 +122,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
   let invalidFile = (images.length <= 0)
   const invalidFileTypes: string[] = []
   let fileTooLarge = false
+  let hasEmptyImages = false
 
   const formDataBody = new FormData()
 
@@ -132,6 +133,10 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
       }
 
       invalidFile = true
+
+    } else if (image.size === 0) {
+
+      hasEmptyImages = true
 
     } else if (!isValidFileSize(image.size)) {
 
@@ -157,6 +162,18 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     return Promise.reject({
       severity: 'low',
       message: `${i18n.t('incorrect format')} ${getAllowedMediaFormatsAsString()}.`
+    })
+  } else if (hasEmptyImages) {
+    log.error({
+      location: '/helpers/imageHelper.tsx saveImages()',
+      error: {
+        message: 'Empty images.',
+        user_id: credentials.user?.id
+      }
+    })
+    return Promise.reject({
+      severity: 'low',
+      message: i18n.t('empty image')
     })
   } else if (fileTooLarge) {
     log.error({
