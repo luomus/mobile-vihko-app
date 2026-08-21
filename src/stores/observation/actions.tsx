@@ -1,3 +1,4 @@
+import * as MediaLibrary from 'expo-media-library'
 import { LineString, MultiLineString } from 'geojson'
 import { clone, cloneDeep, set } from 'lodash'
 import i18n from 'i18next'
@@ -12,7 +13,7 @@ import { netStatusChecker } from '../../helpers/netStatusHelper'
 import { log } from '../../helpers/logger'
 import { definePublicity, loopThroughUnits, fetchLocality, loopThroughBirdUnits } from '../../helpers/uploadHelper'
 import { convertMultiLineStringToGCWrappedLineString } from '../../helpers/geoJSONHelper'
-import { deleteAllUnusedImages, saveImages } from '../../helpers/imageHelper'
+import { deleteAllUnusedImages, postImages } from '../../helpers/imageHelper'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
 import { captureException } from '../../helpers/sentry'
 import { createAsyncThunk } from '@reduxjs/toolkit'
@@ -28,7 +29,8 @@ interface replaceObservationEventByIdParams {
 }
 
 interface deleteObservationEventParams {
-  eventId: string
+  eventId: string,
+  keepImages?: boolean
 }
 
 interface eventPathUpdateParams {
@@ -196,7 +198,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
 
         if (unit.images && unit.images?.length > 0) {
           try {
-            newImages = await saveImages(unit.images, credentials)
+            newImages = await postImages(unit.images, credentials)
           } catch (error: any) {
             captureException(error)
             if (error.severity && error.severity === 'low') {
@@ -313,9 +315,8 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
     dispatch(clearObservationEventId())
 
     try {
-      await dispatch(deleteObservationEvent({ eventId: event.id })).unwrap()
+      await dispatch(deleteObservationEvent({ eventId: event.id, keepImages: true })).unwrap()
     } catch (error: unknown) {
-      captureException(error)
       return rejectWithValue(error)
     }
 
@@ -376,7 +377,7 @@ export const replaceObservationEventById = createAsyncThunk<void, replaceObserva
 
 export const deleteObservationEvent = createAsyncThunk<void, deleteObservationEventParams, { rejectValue: Record<string, any> }>(
   'observationEvents/deleteObservationEvent',
-  async ({ eventId }, { dispatch, getState, rejectWithValue }) => {
+  async ({ eventId, keepImages }, { dispatch, getState, rejectWithValue }) => {
     const { credentials, observationEvent } = getState() as RootState
 
     const eventsCopy = cloneDeep(observationEvent)
@@ -390,6 +391,16 @@ export const deleteObservationEvent = createAsyncThunk<void, deleteObservationEv
 
     const filteredEvents = eventsCopy.events.filter((event: Record<string, any>) => event.id !== eventId)
     const newEvents = filteredEvents ? filteredEvents : []
+
+    let assetRefs: MediaLibrary.AssetRef[] = []
+
+    if (!keepImages) {
+      const images = eventsCopy.events
+        .find((event: Record<string, any>) => event.id === eventId)
+        ?.gatherings[0].units.flatMap((unit: Record<string, any>) => unit.images || [])
+
+      assetRefs = images?.map((image: Record<string, any>) => image.assetId) || []
+    }
 
     try {
       await storageService.save('observationEvents', newEvents)
@@ -406,6 +417,23 @@ export const deleteObservationEvent = createAsyncThunk<void, deleteObservationEv
       })
     }
     dispatch(replaceObservationEvents(newEvents))
+
+    if (assetRefs.length > 0) {
+      try {
+        await MediaLibrary.deleteAssetsAsync(assetRefs)
+      } catch (error) {
+        captureException(error)
+        log.error({
+          location: '/stores/observation/actions.tsx deleteObservationEvent()',
+          error: error,
+          user_id: credentials.user.id
+        })
+        return rejectWithValue({
+          severity: 'low',
+          message: i18n.t('failed to delete image')
+        })
+      }
+    }
   }
 )
 
@@ -495,6 +523,8 @@ export const deleteObservation = createAsyncThunk<void, deleteObservationParams,
       })
     }
 
+    let assetRefs: MediaLibrary.AssetRef[] = []
+
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
         const newEvent = cloneDeep(event)
@@ -502,6 +532,10 @@ export const deleteObservation = createAsyncThunk<void, deleteObservationParams,
         newEvent.gatherings[0].units = units.filter((unit: any) =>
           unit.id !== unitId
         )
+
+        const images = units.find((unit: Record<string, any>) => unit.id === unitId)?.images
+        assetRefs = images?.map((image: Record<string, any>) => image.assetId) || []
+
         return newEvent
       } else {
         return event
@@ -524,6 +558,21 @@ export const deleteObservation = createAsyncThunk<void, deleteObservationParams,
     }
 
     dispatch(replaceObservationEvents(newEvents))
+
+    try {
+      await MediaLibrary.deleteAssetsAsync(assetRefs)
+    } catch (error) {
+      captureException(error)
+      log.error({
+        location: '/stores/observation/actions.tsx deleteObservation()',
+        error: error,
+        user_id: credentials.user.id
+      })
+      return rejectWithValue({
+        severity: 'low',
+        message: i18n.t('failed to delete image')
+      })
+    }
   }
 )
 

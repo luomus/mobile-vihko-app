@@ -14,6 +14,7 @@ import FormAutocompleteComponent, { AutocompleteParams } from '../components/for
 import FormCountSelectorComponent from '../components/formComponents/FormCountSelectorComponent'
 import FormHabitatClassificationComponent from '../components/formComponents/FormHabitatClassificationComponent'
 import { ScrollView } from 'react-native'
+import { ImageType } from '../helpers/imageHelper'
 
 export const createAutocompleteField = (
   title: string,
@@ -116,7 +117,7 @@ export const createImagePicker = (
 export const createImageKeywordPicker = (
   title: string,
   objectTitle: string,
-  defaultValue: Array<Record<string, any>>,
+  defaultValue: ImageType[],
   params: any,
   lang: string,
 ) => {

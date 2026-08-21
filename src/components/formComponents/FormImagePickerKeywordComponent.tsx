@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView, ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements'
 import RadioForm from 'react-native-simple-radio-button'
 import { useTranslation } from 'react-i18next'
-import { RootState, DispatchType, setMessageState } from '../../stores'
+import * as MediaLibrary from 'expo-media-library'
+import { DispatchType, setMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
-import * as ImagePicker from 'expo-image-picker'
+import { createImage, ImageType } from '../../helpers/imageHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
-import { log } from '../../helpers/logger'
 import { ErrorMessage } from '@hookform/error-message'
 import { captureException } from '../../helpers/sentry'
 
@@ -25,19 +25,17 @@ type Props = {
   title: string,
   params: Record<string, any>,
   objectTitle: string,
-  defaultValue: Array<Record<string, any>>,
+  defaultValue: ImageType[],
   lang: string,
 }
 
 const ImagePickerKeywordComponent = (props: Props) => {
-  const { register, setValue, setError, clearErrors, formState } = useFormContext()
-  const [images, setImages] = useState<Array<Record<string, any>>>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
+  const { register, setValue, formState } = useFormContext()
+  const [images, setImages] = useState<ImageType[]>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const [loading, setLoading] = useState<boolean>(false)
   const { t } = useTranslation()
   const keywords: Record<string, any> = props.params
   const localized: string[] = props.params[props.lang]
-
-  const credentials = useSelector((state: RootState) => state.credentials)
 
   const dispatch: DispatchType = useDispatch()
 
@@ -56,53 +54,13 @@ const ImagePickerKeywordComponent = (props: Props) => {
   const attachImage = async (useCamera: boolean) => {
     try {
       setLoading(true)
-
-      let permissionResult: ImagePicker.CameraPermissionResponse | ImagePicker.MediaLibraryPermissionResponse
-
-      if (useCamera) {
-        permissionResult = await ImagePicker.requestCameraPermissionsAsync()
-        if (permissionResult.granted === false) {
-          return false
-        }
+      const newImage = await createImage(useCamera)
+      setImages(images.concat(newImage))
+      setValue(props.objectTitle, images.concat(newImage))
+    } catch (error: any) {
+      if (error.severity === 'high') {
+        showError(error.message)
       }
-
-      let pickerResult: ImagePicker.ImagePickerResult
-      let fromGallery = false
-
-      if (useCamera) {
-        pickerResult = await ImagePicker.launchCameraAsync()
-      } else {
-        pickerResult = await ImagePicker.launchImageLibraryAsync()
-        fromGallery = true
-      }
-
-      if (!pickerResult.canceled) {
-        const uri = pickerResult.assets[0].uri
-
-        setImages(images.concat({
-          uri: uri,
-          fromGallery: fromGallery,
-          keywords: ''
-        }))
-        setValue(props.objectTitle, images.concat({
-          uri: uri,
-          fromGallery: fromGallery,
-          keywords: ''
-        }))
-      }
-      return !pickerResult.canceled
-
-    } catch (error) {
-      captureException(error)
-      setError(props.objectTitle, { message: t('image attachment failure'), type: 'manual' })
-      log.error({
-        location: '/components/formComponents/FormImagePickerKeywordComponent attachImage()',
-        error: error,
-        user_id: credentials.user?.id
-      })
-      setTimeout(() => {
-        clearErrors(props.objectTitle)
-      }, 5000)
     } finally {
       setLoading(false)
     }
@@ -116,28 +74,47 @@ const ImagePickerKeywordComponent = (props: Props) => {
     return attachImage(true)
   }
 
-  const removeImage = (uri: string) => {
+  const deleteImage = async (uri: string) => {
+    const imageToDelete = images.find(i => i.uri === uri)
     const updatedImages = images.filter(i => i.uri !== uri)
     setImages(updatedImages)
     setValue(props.objectTitle, updatedImages)
+    if (imageToDelete?.assetId) {
+      try {
+        const { granted } = await MediaLibrary.requestPermissionsAsync(false, ['photo'])
+        if (!granted) return
+        const assetRef: MediaLibrary.AssetRef = imageToDelete.assetId as string
+        await MediaLibrary.deleteAssetsAsync([assetRef])
+      } catch (error) {
+        captureException(error)
+        setImages(images)
+        setValue(props.objectTitle, images)
+      }
+    }
   }
 
-  const showRemoveImage = (uri: string) => {
+  const showDeleteImage = async (uri: string) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('delete image?'),
       okLabel: t('delete'),
       cancelLabel: t('cancel'),
-      onOk: () => removeImage(uri)
+      onOk: async () => await deleteImage(uri)
+    }))
+  }
+
+  const showError = (error: string) => {
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: error
     }))
   }
 
   const onRadioButtonSelect = (value: number, uri: string) => {
-    const updatedImages: Record<string, any>[] = images.map(image => {
+    const updatedImages: ImageType[] = images.map(image => {
       if (image.uri === uri) {
         return {
-          uri,
-          fromGallery: image.fromGallery,
+          ...image,
           keywords: localized[value],
         }
       } else {
@@ -155,7 +132,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
   }
 
   const renderImages = () => {
-    return images.map((image: Record<string, any>) => {
+    return images.map((image: ImageType) => {
       let initial = -1
 
       //checks the keywords of all languages to find out which index was chosen in the radio button
@@ -178,7 +155,7 @@ const ImagePickerKeywordComponent = (props: Props) => {
                 type='material-icons'
                 color={'red'}
                 size={22}
-                onPress={() => { showRemoveImage(image.uri) }}
+                onPress={async () => { await showDeleteImage(image.uri) }}
               />
             </View>
           </ImageBackground>

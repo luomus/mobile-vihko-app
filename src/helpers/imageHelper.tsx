@@ -1,4 +1,6 @@
 import { Directory, File, Paths } from 'expo-file-system'
+import * as MediaLibrary from 'expo-media-library'
+import * as ImagePicker from 'expo-image-picker'
 import i18n from 'i18next'
 import lajiApiService from '../api/services/lajiApiService'
 import { CredentialsType } from '../stores'
@@ -13,6 +15,96 @@ const MAX_FILE_SIZE = 20000000
 
 interface BasicObject {
   [key: string]: any
+}
+
+export interface ImageType {
+  uri: string;
+  fromGallery: boolean;
+  keywords: string;
+  assetId: string | undefined;
+}
+
+export const createImage = async (useCamera: boolean): Promise<ImageType> => {
+  let imagePickerPermission: ImagePicker.CameraPermissionResponse | ImagePicker.MediaLibraryPermissionResponse
+
+  if (useCamera) {
+    imagePickerPermission = await ImagePicker.requestCameraPermissionsAsync()
+    if (imagePickerPermission.granted === false) {
+      return Promise.reject({
+        severity: 'high',
+        message: i18n.t('camera permission denied')
+      })
+    }
+  }
+
+  let pickerResult: ImagePicker.ImagePickerResult
+  let fromGallery = false
+
+  if (useCamera) {
+    pickerResult = await ImagePicker.launchCameraAsync()
+  } else {
+    pickerResult = await ImagePicker.launchImageLibraryAsync()
+    fromGallery = true
+  }
+
+  if (pickerResult.canceled) {
+    return Promise.reject({
+      severity: 'low',
+      message: i18n.t('image picker cancelled')
+    })
+  }
+
+  try {
+    const uri = pickerResult.assets[0].uri
+
+    // save image to album and capture asset ID for later deletion
+    let assetId: string | undefined
+    const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(false, ['photo'])
+    if (mediaLibraryPermission.granted) {
+      const asset = await MediaLibrary.createAssetAsync(uri)
+      assetId = asset.id
+      const albums = await MediaLibrary.getAlbumsAsync()
+      const foundAlbum = albums.find(a => a.title === 'Mobiilivihko')
+      if (foundAlbum) {
+        await MediaLibrary.addAssetsToAlbumAsync([asset], foundAlbum, false)
+      } else {
+        await MediaLibrary.createAlbumAsync('Mobiilivihko', asset, false)
+      }
+
+      // re-fetch asset ID since moving to album may assign a new MediaStore ID
+      const album = foundAlbum ?? (await MediaLibrary.getAlbumsAsync()).find(a => a.title === 'Mobiilivihko')
+      if (album) {
+        const firstPageAssets = await MediaLibrary.getAssetsAsync({ album })
+
+        const allAssets = [...firstPageAssets.assets]
+        let page = firstPageAssets
+
+        while (page.hasNextPage) {
+          page = await MediaLibrary.getAssetsAsync({
+            album,
+            after: page.endCursor,
+          })
+          allAssets.push(...page.assets)
+        }
+
+        const movedAsset = allAssets.find(a => a.filename === asset.filename)
+        if (movedAsset) assetId = movedAsset.id
+      }
+    }
+
+    const newImage: ImageType = { uri, fromGallery, keywords: '', assetId }
+    return newImage
+  } catch (error) {
+    captureException(error)
+    log.error({
+      location: '/helpers/imageHelper.tsx createImage()',
+      error: error
+    })
+    return Promise.reject({
+      severity: 'high',
+      message: `${i18n.t('image attachment failure')} ${error}`
+    })
+  }
 }
 
 const processImage = async (uri: string) => {
@@ -83,7 +175,7 @@ export const isValidFileSize = (size: number) => {
   return size <= MAX_FILE_SIZE
 }
 
-export const saveImages = async (images: Array<any>, credentials: CredentialsType) => {
+export const postImages = async (images: Array<any>, credentials: CredentialsType) => {
 
   if (!credentials.token) {
     return
@@ -106,7 +198,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
   } catch (error) {
     captureException(error)
     log.error({
-      location: '/helpers/imageHelper.tsx saveImages()/processImages()',
+      location: '/helpers/imageHelper.tsx postImages()/processImages()',
       error: error,
       user_id: credentials.user?.id
     })
@@ -152,7 +244,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
 
   if (invalidFile) {
     log.error({
-      location: '/helpers/imageHelper.tsx saveImages()',
+      location: '/helpers/imageHelper.tsx postImages()',
       error: {
         types: invalidFileTypes,
         message: 'Invalid file types',
@@ -165,7 +257,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     })
   } else if (hasEmptyImages) {
     log.error({
-      location: '/helpers/imageHelper.tsx saveImages()',
+      location: '/helpers/imageHelper.tsx postImages()',
       error: {
         message: 'Empty images.',
         user_id: credentials.user?.id
@@ -177,7 +269,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     })
   } else if (fileTooLarge) {
     log.error({
-      location: '/helpers/imageHelper.tsx saveImages()',
+      location: '/helpers/imageHelper.tsx postImages()',
       error: {
         message: 'Too large files.',
         user_id: credentials.user?.id
@@ -193,7 +285,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
     } catch (error: any) {
       captureException(error)
       log.error({
-        location: '/helpers/imageHelper.tsx saveImages()/postImage()',
+        location: '/helpers/imageHelper.tsx postImages()/postImage()',
         status: error.response?.status,
         data: error.response?.data,
         user_id: credentials.user?.id
@@ -257,7 +349,7 @@ export const saveImages = async (images: Array<any>, credentials: CredentialsTyp
   } catch (error: any) {
     captureException(error)
     log.error({
-      location: '/helpers/imageHelper.tsx saveImages()/postImageMetadata()',
+      location: '/helpers/imageHelper.tsx postImages()/postImageMetadata()',
       status: error.response?.status,
       data: error.response?.data,
       user_id: credentials.user?.id
@@ -284,7 +376,7 @@ const deleteImagesByCondition = async (
 
     captureException(error)
     log.error({
-      location: '/helpers/imageHelper.tsx saveImages()/deleteImagesByCondition()',
+      location: '/helpers/imageHelper.tsx deleteImagesByCondition()',
       error: error
     })
     throw new Error(`${i18n.t('error deleting unused images')} ${error}`)
@@ -300,7 +392,7 @@ const deleteImagesByCondition = async (
         } catch (error) {
           captureException(error)
           log.error({
-            location: '/helpers/imageHelper.tsx saveImages()/deleteImagesByCondition()',
+            location: '/helpers/imageHelper.tsx deleteImagesByCondition()',
             error: error
           })
           throw new Error(`${i18n.t('error deleting unused images')} ${error}`)

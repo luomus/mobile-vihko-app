@@ -71,6 +71,15 @@
           "isAndroidForegroundServiceEnabled": true
         }
       ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Mobiilivihko needs access to your photos to manage observation images.",
+          "savePhotosPermission": "Mobiilivihko needs permission to save and delete observation images.",
+          "isAccessMediaLocationEnabled": true,
+          "granularPermissions": ["photo"]
+        }
+      ],
       "expo-build-properties",
       "expo-web-browser",
       "@react-native-community/datetimepicker",
