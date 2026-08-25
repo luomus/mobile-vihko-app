@@ -57,32 +57,19 @@ const ImagePickerComponent = (props: Props) => {
     return attachImage(true)
   }
 
-  const deleteImage = async (uri: string) => {
-    const imageToDelete = images.find(i => i.uri === uri)
+  const deleteImage = (uri: string) => {
     const updatedImages = images.filter(i => i.uri !== uri)
     setImages(updatedImages)
     setValue(props.objectTitle, updatedImages)
-    if (imageToDelete?.assetId) {
-      try {
-        const { granted } = await MediaLibrary.requestPermissionsAsync(false, ['photo'])
-        if (!granted) return
-        const assetRef: MediaLibrary.AssetRef = imageToDelete.assetId as string
-        await MediaLibrary.deleteAssetsAsync([assetRef])
-      } catch (error) {
-        captureException(error)
-        setImages(images)
-        setValue(props.objectTitle, images)
-      }
-    }
   }
 
-  const showDeleteImage = async (uri: string) => {
+  const showDeleteImage = (uri: string) => {
     dispatch(setMessageState({
       type: 'dangerConf',
       messageContent: t('delete image?'),
       okLabel: t('delete'),
       cancelLabel: t('cancel'),
-      onOk: async () => await deleteImage(uri)
+      onOk: () => deleteImage(uri)
     }))
   }
 
@@ -111,7 +98,7 @@ const ImagePickerComponent = (props: Props) => {
               type='material-icons'
               color={'red'}
               size={22}
-              onPress={async () => { await showDeleteImage(image.uri) }}
+              onPress={() => { showDeleteImage(image.uri) }}
             />
           </View>
         </ImageBackground>

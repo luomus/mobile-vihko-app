@@ -32,7 +32,7 @@
   "delete account description": "Är du säker på att du vill ta bort ditt Laji-fi användarkonto? Om du trycker på 'Radera' kommer du att loggas ut från Mobiilivihko och omdirigeras till en sida där du loggar in, varefter du trycker på knappen under rubriken 'Radera konto' från botten av sidan.",
   "delete bird atlas path 1": "Om du gör det kommer observationerna på din artlista att placeras till atlasrutan",
   "delete bird atlas path 2": "Observationer med oprecis läge är mindre värda för bevarande och forskningsanvändning.",
-  "delete image?": "Vill du säkert radera den här bilden?",
+  "delete image?": "Vill du säkert radera den här bilden från observationen?",
   "delete path": "Ta bort rutten",
   "delete path description": "Är du säker på att du vill ta bort rutten för observationsuppsättningen? Att ta bort en rutt kan inte ångras.",
   "delete path description 1": "Rutten innehåller",

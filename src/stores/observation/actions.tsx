@@ -1,4 +1,3 @@
-import * as MediaLibrary from 'expo-media-library'
 import { LineString, MultiLineString } from 'geojson'
 import { clone, cloneDeep, set } from 'lodash'
 import i18n from 'i18next'
@@ -29,8 +28,7 @@ interface replaceObservationEventByIdParams {
 }
 
 interface deleteObservationEventParams {
-  eventId: string,
-  keepImages?: boolean
+  eventId: string
 }
 
 interface eventPathUpdateParams {
@@ -315,7 +313,7 @@ export const uploadObservationEvent = createAsyncThunk<void, uploadObservationPa
     dispatch(clearObservationEventId())
 
     try {
-      await dispatch(deleteObservationEvent({ eventId: event.id, keepImages: true })).unwrap()
+      await dispatch(deleteObservationEvent({ eventId: event.id })).unwrap()
     } catch (error: unknown) {
       return rejectWithValue(error)
     }
@@ -377,7 +375,7 @@ export const replaceObservationEventById = createAsyncThunk<void, replaceObserva
 
 export const deleteObservationEvent = createAsyncThunk<void, deleteObservationEventParams, { rejectValue: Record<string, any> }>(
   'observationEvents/deleteObservationEvent',
-  async ({ eventId, keepImages }, { dispatch, getState, rejectWithValue }) => {
+  async ({ eventId }, { dispatch, getState, rejectWithValue }) => {
     const { credentials, observationEvent } = getState() as RootState
 
     const eventsCopy = cloneDeep(observationEvent)
@@ -391,16 +389,6 @@ export const deleteObservationEvent = createAsyncThunk<void, deleteObservationEv
 
     const filteredEvents = eventsCopy.events.filter((event: Record<string, any>) => event.id !== eventId)
     const newEvents = filteredEvents ? filteredEvents : []
-
-    let assetRefs: MediaLibrary.AssetRef[] = []
-
-    if (!keepImages) {
-      const images = eventsCopy.events
-        .find((event: Record<string, any>) => event.id === eventId)
-        ?.gatherings[0].units.flatMap((unit: Record<string, any>) => unit.images || [])
-
-      assetRefs = images?.map((image: Record<string, any>) => image.assetId) || []
-    }
 
     try {
       await storageService.save('observationEvents', newEvents)
@@ -416,24 +404,8 @@ export const deleteObservationEvent = createAsyncThunk<void, deleteObservationEv
         message: i18n.t('error removing observation event')
       })
     }
-    dispatch(replaceObservationEvents(newEvents))
 
-    if (assetRefs.length > 0) {
-      try {
-        await MediaLibrary.deleteAssetsAsync(assetRefs)
-      } catch (error) {
-        captureException(error)
-        log.error({
-          location: '/stores/observation/actions.tsx deleteObservationEvent()',
-          error: error,
-          user_id: credentials.user.id
-        })
-        return rejectWithValue({
-          severity: 'low',
-          message: i18n.t('failed to delete image')
-        })
-      }
-    }
+    dispatch(replaceObservationEvents(newEvents))
   }
 )
 
@@ -523,8 +495,6 @@ export const deleteObservation = createAsyncThunk<void, deleteObservationParams,
       })
     }
 
-    let assetRefs: MediaLibrary.AssetRef[] = []
-
     const newEvents = observationEvent.events.map((event: Record<string, any>) => {
       if (event.id === eventId) {
         const newEvent = cloneDeep(event)
@@ -532,10 +502,6 @@ export const deleteObservation = createAsyncThunk<void, deleteObservationParams,
         newEvent.gatherings[0].units = units.filter((unit: any) =>
           unit.id !== unitId
         )
-
-        const images = units.find((unit: Record<string, any>) => unit.id === unitId)?.images
-        assetRefs = images?.map((image: Record<string, any>) => image.assetId) || []
-
         return newEvent
       } else {
         return event
@@ -558,21 +524,6 @@ export const deleteObservation = createAsyncThunk<void, deleteObservationParams,
     }
 
     dispatch(replaceObservationEvents(newEvents))
-
-    try {
-      await MediaLibrary.deleteAssetsAsync(assetRefs)
-    } catch (error) {
-      captureException(error)
-      log.error({
-        location: '/stores/observation/actions.tsx deleteObservation()',
-        error: error,
-        user_id: credentials.user.id
-      })
-      return rejectWithValue({
-        severity: 'low',
-        message: i18n.t('failed to delete image')
-      })
-    }
   }
 )
 
