@@ -61,15 +61,14 @@ export const createImage = async (useCamera: boolean): Promise<ImageType> => {
     let assetId: string | undefined
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(false, ['photo'])
     if (mediaLibraryPermission.granted) {
-      const asset = await MediaLibrary.createAssetAsync(uri)
-      assetId = asset.id
       const albums = await MediaLibrary.getAlbumsAsync()
       const foundAlbum = albums.find(a => a.title === 'Mobiilivihko')
-      if (foundAlbum) {
-        await MediaLibrary.addAssetsToAlbumAsync([asset], foundAlbum, false)
-      } else {
-        await MediaLibrary.createAlbumAsync('Mobiilivihko', asset, false)
+      if (!foundAlbum) {
+        await MediaLibrary.createAlbumAsync('Mobiilivihko', undefined, false)
       }
+
+      const asset = await MediaLibrary.createAssetAsync(uri, foundAlbum)
+      assetId = asset.id
 
       // re-fetch asset ID since moving to album may assign a new MediaStore ID
       const album = foundAlbum ?? (await MediaLibrary.getAlbumsAsync()).find(a => a.title === 'Mobiilivihko')
