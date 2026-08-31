@@ -16,7 +16,8 @@
     "moduleResolution": "nodenext",
     "noEmit": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["jest"]
   },
   "include": ["src", "**/*.ts", "**/*.tsx", "__tests__"],
   "exclude": [

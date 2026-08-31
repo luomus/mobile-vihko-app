@@ -51,7 +51,7 @@ describe('TripForm', () => {
 
     await waitFor(async () => {await initializeComponent(store)})
 
-    const mapViews = await screen.findAllByTestId('map-view')
+    const mapViews = await screen.findAllByTestId('mock-map-view')
     const mapView1 = mapViews[0]
     expect(mapView1).toBeDefined()
 
@@ -97,15 +97,15 @@ describe('TripForm', () => {
     // Check that all the mock fields of the autocomplete is there
     const varis = await screen.findByText('varis')
     expect(varis).toBeDefined()
-    for (const e of ['vihervarpunen', 'kirjosieppo', 'varpunen', 'kuusitiainen']) {
+    for (const e of ['vari', 'varis', 'variksenmarja', 'variksenmarjanruoste', 'Varicellaria hemisphaerica']) {
       expect(screen.getByText(e)).toBeDefined()
     }
 
-    // Select vihervarpunen
-    fireEvent.press(screen.getByText('vihervarpunen'))
+    // Select varis
+    fireEvent.press(screen.getByText('varis'))
 
     // Check that the display text of the autocomplete is what we selected
-    expect(screen.getByTestId('autocomplete').props.defaultValue).toBe('vihervarpunen')
+    expect(screen.getByTestId('autocomplete').props.defaultValue).toBe('varis')
 
     // Type that we saw 1 and press the green save button
     fireEvent.changeText(screen.getByText(prop.count.title), '1')
@@ -114,15 +114,15 @@ describe('TripForm', () => {
     fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back on the map view and do another long press on the old observation
-    const mapViews2 = await screen.findAllByTestId('map-view')
+    const mapViews2 = await screen.findAllByTestId('mock-map-view')
     const mapView2 = mapViews2[0]
     expect(mapView2).toBeDefined()
     fireEvent(mapView2, 'onLongPress', testPressLocation)
 
     // Check that the 'edit obserrvation' modal pops up, and press the button to edit our observation
     //expect(getByText(fi['edit observations'])).toBeDefined() //TODO: why doesn't this show?
-    expect(screen.getByText('vihervarpunen')).toBeDefined()
-    fireEvent.press(screen.getByText('vihervarpunen'))
+    expect(screen.getByText('varis')).toBeDefined()
+    fireEvent.press(screen.getByText('varis'))
 
     // Check that all the fields are there, and press the green save button
     expect(screen.getByTestId('saveButton')).toBeDefined()
@@ -147,7 +147,7 @@ describe('TripForm', () => {
     fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back at the map view again, and press the stop button
-    const mapViews3 = await screen.findAllByTestId('map-view')
+    const mapViews3 = await screen.findAllByTestId('mock-map-view')
     const mapView3 = mapViews3[0]
     expect(mapView3).toBeDefined()
     expect(screen.getByText(fi['stop'])).toBeDefined()
@@ -159,7 +159,7 @@ describe('TripForm', () => {
     fireEvent.press(screen.getByText(fi['cancel']))
 
     // Check that we are back at the map view again, and press the stop button again
-    const mapViews4 = await screen.findAllByTestId('map-view')
+    const mapViews4 = await screen.findAllByTestId('mock-map-view')
     const mapView4 = mapViews4[0]
     expect(mapView4).toBeDefined()
     expect(screen.getByText(fi['stop'])).toBeDefined()

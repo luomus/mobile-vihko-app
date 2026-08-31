@@ -65,19 +65,17 @@ describe('BirdAtlas', () => {
     expect(screen.getByText(fi['cancel'])).toBeDefined()
     fireEvent.press(screen.getByText(fi['start']))
 
-    // MapComponent
-    expect(await screen.findByTestId('map-view')).toBeDefined()
-
     // ExtendedNavBarComponent
-    expect(screen.getAllByText(fi['stop'])).toBeDefined()
+    expect(await screen.findByText(fi['stop'])).toBeDefined()
     //expect(getByText(fi['to map'])).toBeDefined()
 
-    // Buttons on MapComponent
+    // MapComponent
+    expect(await screen.findByTestId('mock-map-view')).toBeDefined()
     expect(screen.getByTestId('toggle-map-type-btn')).toBeDefined()
     expect(screen.getByTestId('center-map-btn')).toBeDefined()
 
     // Long press on the map, create a new observation
-    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
+    fireEvent(screen.getByTestId('mock-map-view'), 'onLongPress', testPressLocation)
 
     // Buttons from ObservationButtonsComponent
     expect(screen.getByText('+ ' + fi['observation'])).toBeDefined()
@@ -105,18 +103,18 @@ describe('BirdAtlas', () => {
 
     // Check that all the mock fields of the autocomplete is there
     expect(await screen.findByText('varis')).toBeDefined()
-    for (const e of ['vihervarpunen', 'kirjosieppo', 'varpunen', 'kuusitiainen']) {
+    for (const e of ['vari', 'varis', 'variksenmarja', 'variksenmarjanruoste', 'Varicellaria hemisphaerica']) {
       expect(screen.getByText(e)).toBeDefined()
     }
     /*for (let i of ['Empty', '1', '2', '3', '4', '5', '6', '61', '62', '63', '64', '65', '66', '7', '71', '72', '73', '74', '75', '8', '81', '82']) {
       expect(getByText(i)).toBeDefined()
     }*/
 
-    // Select vihervarpunen
-    fireEvent.press(screen.getByText('vihervarpunen'))
+    // Select varis
+    fireEvent.press(screen.getByText('varis'))
 
     // Check that the display text of the autocomplete is what we selected
-    expect(screen.getByTestId('autocomplete').props.defaultValue).toBe('vihervarpunen')
+    expect(screen.getByTestId('autocomplete').props.defaultValue).toBe('varis')
 
     // Type that we saw 1 and press the green save button
     fireEvent.changeText(screen.getByText(prop.count.title), '1')
@@ -125,13 +123,13 @@ describe('BirdAtlas', () => {
     fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back on the map view and do another long press on the old observation
-    expect(await screen.findByTestId('map-view')).toBeDefined()
-    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
+    expect(await screen.findByTestId('mock-map-view')).toBeDefined()
+    fireEvent(screen.getByTestId('mock-map-view'), 'onLongPress', testPressLocation)
 
     // Check that the 'edit observation' modal pops up, and press the button to edit our observation
     //expect(getByText(fi['edit observations'])).toBeDefined() //TODO: why doesn't this show?
-    expect(screen.getByText('vihervarpunen')).toBeDefined()
-    fireEvent.press(screen.getByText('vihervarpunen'))
+    expect(screen.getByText('varis')).toBeDefined()
+    fireEvent.press(screen.getByText('varis'))
 
     // Check that all the fields are there, and press the green save button
     expect(screen.getByTestId('saveButton')).toBeDefined()
@@ -151,7 +149,7 @@ describe('BirdAtlas', () => {
     fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back at the map view again, and press the stop button
-    expect(await screen.findByTestId('map-view')).toBeDefined()
+    expect(await screen.findByTestId('mock-map-view')).toBeDefined()
     expect(screen.getByText(fi['stop'])).toBeDefined()
     fireEvent.press(screen.getByText(fi['stop']))
 
@@ -161,7 +159,7 @@ describe('BirdAtlas', () => {
     fireEvent.press(screen.getByText(fi['cancel']))
 
     // Check that we are back at the map view again, and press the stop button again
-    expect(screen.getByTestId('map-view')).toBeDefined()
+    expect(screen.getByTestId('mock-map-view')).toBeDefined()
     expect(screen.getByText(fi['stop'])).toBeDefined()
     fireEvent.press(screen.getByText(fi['stop']))
 

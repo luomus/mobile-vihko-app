@@ -63,13 +63,13 @@ describe('LoLIFE', () => {
     fireEvent.press(screen.getByText(fi['start']))
 
     // MapComponent
-    expect(await screen.findByTestId('map-view')).toBeDefined()
+    expect(await screen.findByTestId('mock-map-view')).toBeDefined()
 
     // ExtendedNavBarComponent
     expect(screen.getByText(fi['stop'])).toBeDefined()
 
     // Long press on the map, create a new observation
-    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
+    fireEvent(screen.getByTestId('mock-map-view'), 'onLongPress', testPressLocation)
 
     // Expect buttons to show up for all LoLIFE observation categories
     expect(screen.getByText('+ Havainto')).toBeDefined()
@@ -100,8 +100,8 @@ describe('LoLIFE', () => {
     fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back on the map view and do another long press
-    expect(await screen.findByTestId('map-view')).toBeDefined()
-    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
+    expect(await screen.findByTestId('mock-map-view')).toBeDefined()
+    fireEvent(screen.getByTestId('mock-map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the traces form
     fireEvent.press(screen.getByText('+ Jälkihavainto'))
@@ -120,8 +120,8 @@ describe('LoLIFE', () => {
     fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back on the map view and do another long press
-    expect(await screen.findByTestId('map-view')).toBeDefined()
-    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
+    expect(await screen.findByTestId('mock-map-view')).toBeDefined()
+    fireEvent(screen.getByTestId('mock-map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the nest site form
     fireEvent.press(screen.getByText('+ Pesä'))
@@ -143,8 +143,8 @@ describe('LoLIFE', () => {
     fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back on the map view and do another long press
-    expect(await screen.findByTestId('map-view')).toBeDefined()
-    fireEvent(screen.getByTestId('map-view'), 'onLongPress', testPressLocation)
+    expect(await screen.findByTestId('mock-map-view')).toBeDefined()
+    fireEvent(screen.getByTestId('mock-map-view'), 'onLongPress', testPressLocation)
 
     // Open and check the droppings form
     fireEvent.press(screen.getByText('+ Papanahavainto'))
@@ -165,7 +165,7 @@ describe('LoLIFE', () => {
     fireEvent.press(screen.getByTestId('saveButton'))
 
     // Check that we are back at the map view again, and press the stop button again
-    expect(await screen.findByTestId('map-view')).toBeDefined()
+    expect(await screen.findByTestId('mock-map-view')).toBeDefined()
     expect(screen.getAllByText(fi['stop'])).toBeDefined()
     fireEvent.press(screen.getAllByText(fi['stop'])[0])
 
