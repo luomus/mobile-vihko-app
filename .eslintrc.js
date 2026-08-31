@@ -34,11 +34,7 @@ module.exports = {
     'no-undef': 'off',
     'no-async-promise-executor': 'off',
     'react/prop-types': 0,
-    'indent': [
-      'error',
-      2,
-      { 'SwitchCase': 1 }
-    ],
+    'indent': 'off',
     'linebreak-style': [
       'error',
       'unix'

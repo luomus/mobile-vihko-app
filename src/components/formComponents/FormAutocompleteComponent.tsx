@@ -42,7 +42,7 @@ const FormAutocompleteComponent = (props: Props) => {
 
   const { t } = useTranslation()
   const { register, unregister, setValue, formState, clearErrors, setError, setFocus } = useFormContext()
-  const { target, filters, valueField, validation, transform } = props.autocompleteParams
+  const { filters, valueField, validation, transform } = props.autocompleteParams
   let cancel: (() => void) | undefined
 
   useEffect(() => {

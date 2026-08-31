@@ -4,7 +4,6 @@ import { View, Text, ImageBackground, ScrollView, ActivityIndicator } from 'reac
 import { Icon } from 'react-native-elements'
 import RadioForm from 'react-native-simple-radio-button'
 import { useTranslation } from 'react-i18next'
-import * as MediaLibrary from 'expo-media-library'
 import { DispatchType, setMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
@@ -14,7 +13,6 @@ import { createImage, ImageType } from '../../helpers/imageHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
-import { captureException } from '../../helpers/sentry'
 
 interface RadioPropsType {
   label: string,
