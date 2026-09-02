@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Modal, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../stores'
+import { useDispatch, useSelector } from 'react-redux'
+import { DispatchType, RootState, setMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -45,12 +45,15 @@ const FormDateOptionsComponent = (props: Props) => {
   const [selected, setSelected] = useState<boolean>(false)
   const [differentDay, setDifferentDay] = useState<boolean>(true)
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
+  const hasCorrectedFutureDateRef = useRef<boolean>(false)
 
   const date = new Date()
   const dateBegin = watch('gatheringEvent_dateBegin')
   const dateEnd = watch('gatheringEvent_dateEnd')
 
   const observationEvent = useSelector((state: RootState) => state.observationEvent)
+
+  const dispatch: DispatchType = useDispatch()
 
   const { t } = useTranslation()
 
@@ -78,21 +81,28 @@ const FormDateOptionsComponent = (props: Props) => {
       return
     }
 
-    //check if dateEnd time is set to be before dateBegin
-    //if so, set dateEnd to be equal with dateBegin
+    if (Date.parse(combinedDate) > date.getTime()) {
+      combinedDate = parseDateFromDateObjectToDocument(date)
+      // iOS fixes future date on first attempt
+      if (hasCorrectedFutureDateRef.current) {
+        onInvalidDate(t('time cannot be in the future'))
+      } else {
+        hasCorrectedFutureDateRef.current = true
+      }
+    }
+
     if (props.objectTitle.includes('dateEnd') && Date.parse(dateBegin) > Date.parse(combinedDate)) {
       combinedDate = dateBegin
+      onInvalidDate(t('ended before starting'))
     }
-    //check if dateBegin time is set to be after dateEnd
-    //if so, set dateBegin to be equal with dateEnd
+
     if (props.objectTitle.includes('dateBegin') && Date.parse(combinedDate) > Date.parse(dateEnd)) {
       combinedDate = dateEnd
+      onInvalidDate(t('started after ending'))
     }
 
-    //set new value to register
     setValue(props.objectTitle, combinedDate)
 
-    //set combined date as current value (which is shown to user)
     if (combinedDate !== '') {
       setCurrentValue(combinedDate)
     }
@@ -137,6 +147,14 @@ const FormDateOptionsComponent = (props: Props) => {
     setSelected(false)
     setValue(props.objectTitle, '')
   }
+
+  const onInvalidDate = (message: string) => {
+      dispatch(setMessageState({
+        type: 'err',
+        messageContent: message,
+        backdropOpacity: 0.3
+      }))
+    }
 
   return (
     <View style={Cs.formInputContainer}>

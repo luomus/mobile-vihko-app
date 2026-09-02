@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Modal, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../stores'
+import { useDispatch, useSelector } from 'react-redux'
+import { DispatchType, RootState, setMessageState } from '../../stores'
 import Os from '../../styles/OtherStyles'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -42,6 +42,7 @@ const FormDatePickerComponent = (props: Props) => {
   const [currentDate, setCurrentDate] = useState<string>(props.defaultValue)
   const [currentTime, setCurrentTime] = useState<string>(props.defaultValue)
   const [modalVisibility, setModalVisibility] = useState<boolean>(false)
+  const hasCorrectedFutureDateRef = useRef<boolean>(false)
 
   const date = new Date()
   const dateBegin = watch('gatheringEvent_dateBegin')
@@ -50,6 +51,8 @@ const FormDatePickerComponent = (props: Props) => {
   const timeEnd = watch('gatheringEvent_timeEnd')
 
   const singleObservation = useSelector((state: RootState) => state.singleObservation)
+
+  const dispatch: DispatchType = useDispatch()
 
   const { t } = useTranslation()
 
@@ -80,15 +83,27 @@ const FormDatePickerComponent = (props: Props) => {
       combinedDate = ''
     } else if (combinedDate.charAt(combinedDate.length - 1) === 'T') { // missing current time
       combinedDate = combinedDate + date.getHours() + ':' + date.getMinutes()
+    } else if (Date.parse(combinedDate) > date.getTime()) { // time is in the future
+      combinedDate = parseDateFromDateObjectToDocument(date, props.pickerType)
+      // iOS fixes future date on first attempt
+      if (hasCorrectedFutureDateRef.current) {
+        onInvalidDate(t('time cannot be in the future'))
+      } else {
+        hasCorrectedFutureDateRef.current = true
+      }
     } else if (props.objectTitle.includes('dateEnd') && Date.parse(dateBegin) > Date.parse(combinedDate)) { // dateEnd is earlier than dateBegin
       combinedDate = dateBegin
+      onInvalidDate(t('ended before starting'))
     } else if (props.objectTitle.includes('dateBegin') && Date.parse(combinedDate) > Date.parse(dateEnd)) { // dateBegin is later than dateEnd
       combinedDate = dateEnd
+      onInvalidDate(t('started after ending'))
     } else if (props.objectTitle.includes('time') && Date.parse(dateBegin) === Date.parse(dateEnd)) {
       if (props.objectTitle.includes('End') && Date.parse(dateBegin + 'T' + timeStart) > Date.parse(dateEnd + 'T' + combinedDate)) { // timeEnd is earlier than timeStart
         combinedDate = timeStart
+        onInvalidDate(t('ended before starting'))
       } else if (props.objectTitle.includes('Start') && Date.parse(dateBegin + 'T' + combinedDate) > Date.parse(dateEnd + 'T' + timeEnd)) { // timeStart is later than timeEnd
         combinedDate = timeEnd
+        onInvalidDate(t('started after ending'))
       }
     }
 
@@ -121,6 +136,14 @@ const FormDatePickerComponent = (props: Props) => {
     if (date !== undefined) {
       setCurrentTime(parseDateFromDateObjectToDocument(date, props.pickerType))
     }
+  }
+
+  const onInvalidDate = (message: string) => {
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: message,
+      backdropOpacity: 0.3
+    }))
   }
 
   const createParseableTime = () => {

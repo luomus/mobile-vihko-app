@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../stores'
+import { useDispatch, useSelector } from 'react-redux'
+import { DispatchType, RootState, setMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -52,6 +52,8 @@ const FormDateOptionsComponent = (props: Props) => {
 
   const observationEvent = useSelector((state: RootState) => state.observationEvent)
 
+  const dispatch: DispatchType = useDispatch()
+
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -78,21 +80,23 @@ const FormDateOptionsComponent = (props: Props) => {
       return
     }
 
-    //check if dateEnd time is set to be before dateBegin
-    //if so, set dateEnd to be equal with dateBegin
+    if (Date.parse(combinedDate) > date.getTime()) {
+      combinedDate = parseDateFromDateObjectToDocument(date)
+      onInvalidDate(t('time cannot be in the future'))
+    }
+
     if (props.objectTitle.includes('dateEnd') && Date.parse(dateBegin) > Date.parse(combinedDate)) {
       combinedDate = dateBegin
+      onInvalidDate(t('ended before starting'))
     }
-    //check if dateBegin time is set to be after dateEnd
-    //if so, set dateBegin to be equal with dateEnd
+
     if (props.objectTitle.includes('dateBegin') && Date.parse(combinedDate) > Date.parse(dateEnd)) {
       combinedDate = dateEnd
+      onInvalidDate(t('started after ending'))
     }
 
-    //set new value to register
     setValue(props.objectTitle, combinedDate)
 
-    //set combined date as current value (which is shown to user)
     if (combinedDate !== '') {
       setCurrentValue(combinedDate)
     }
@@ -140,6 +144,14 @@ const FormDateOptionsComponent = (props: Props) => {
   const clearDateAndTime = () => {
     setSelected(false)
     setValue(props.objectTitle, '')
+  }
+
+  const onInvalidDate = (message: string) => {
+    dispatch(setMessageState({
+      type: 'err',
+      messageContent: message,
+      backdropOpacity: 0.3
+    }))
   }
 
   return (

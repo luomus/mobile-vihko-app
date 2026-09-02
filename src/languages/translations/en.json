@@ -232,6 +232,7 @@
   "subarctic form": "Subarctic Plants",
   "submit": "Submit",
   "time": "Time",
+  "time cannot be in the future": "Time change canceled: Observation time cannot be in the future.",
   "timestamp": "Now",
   "to map": "To map",
   "tracking": "Tracking on",

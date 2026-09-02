@@ -88,6 +88,9 @@ const FormDatePickerComponent = (props: Props) => {
       combinedDate = ''
     } else if (combinedDate.charAt(combinedDate.length - 1) === 'T') { // missing current time
       combinedDate = combinedDate + date.getHours() + ':' + date.getMinutes()
+    } else if (Date.parse(combinedDate) > date.getTime()) { // time is in the future
+      combinedDate = parseDateFromDateObjectToDocument(date, props.pickerType)
+      onInvalidDate(t('time cannot be in the future'))
     } else if (props.objectTitle.includes('dateEnd') && Date.parse(dateBegin) > Date.parse(combinedDate)) { // dateEnd is earlier than dateBegin
       combinedDate = dateBegin
       onInvalidDate(t('ended before starting'))

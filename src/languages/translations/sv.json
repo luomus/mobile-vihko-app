@@ -232,6 +232,7 @@
   "subarctic form": "Subarktiska växter",
   "submit": "Skicka",
   "time": "Tid",
+  "time cannot be in the future": "Tidsändringen avbruten: Observationstiden får inte ligga i framtiden.",
   "timestamp": "Nu",
   "to map": "Till kartan",
   "tracking": "Spårning",

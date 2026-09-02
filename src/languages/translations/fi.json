@@ -232,6 +232,7 @@
   "subarctic form": "Tunturikasvit",
   "submit": "Lähetä",
   "time": "Aika",
+  "time cannot be in the future": "Ajan muutos peruttu: Havaintoaika ei voi olla tulevaisuudessa.",
   "timestamp": "Nyt",
   "to map": "Kartalle",
   "tracking": "Seurataan",
