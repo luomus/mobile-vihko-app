@@ -7,7 +7,7 @@
       "android",
       "ios"
     ],
-    "version": "1.9.8",
+    "version": "1.9.9",
     "orientation": "portrait",
     "splash": {
       "image": "./assets/splashscreen.png",
@@ -22,7 +22,7 @@
     ],
     "android": {
       "package": "org.luomus.mobi",
-      "versionCode": 133,
+      "versionCode": 134,
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIconAndroid.png",
         "backgroundColor": "#FFFFFF"
@@ -43,7 +43,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.luomus.mobi",
-      "buildNumber": "1.9.8",
+      "buildNumber": "1.9.9",
       "icon": "./assets/appIconIOS.png",
       "supportsTablet": true,
       "infoPlist": {
@@ -51,9 +51,10 @@
           "location",
           "fetch"
         ],
-        "NSLocationWhenInUseUsageDescription": "Mobiilivihko requires permissions to track the user's location while using the app. For example, the user's location is shown on the map, and the traveled path is saved to get more scientific data of the observation site.",
-        "NSCameraUsageDescription": "Mobiilivihko requires permissions to use the camera if the user wants to take pictures of the observed taxa. For example, the user might observe a rare taxon and take a picture of it with the phone camera.",
-        "NSPhotoLibraryUsageDescription": "Mobiilivihko requires permissions to browse the user's image gallery if they want to add images from the gallery to the observation. For example, the user has taken a picture of a rare taxon with their phone camera before launching the app and wants to attach it to an observation.",
+        "NSLocationWhenInUseUsageDescription": "Mobiilivihko requires permissions to track the user's location while using the app. For example, the user's location is shown on the map and the traveled path is saved to calculate observation density.",
+        "NSCameraUsageDescription": "Mobiilivihko requires permissions to use the camera if the user wants to take pictures of the observed taxa.",
+        "NSPhotoLibraryUsageDescription": "Mobiilivihko requires permissions to browse the user's image gallery if they want to add images from the gallery to the observation.",
+        "NSPhotoLibraryAddUsageDescription": "Mobiilivihko requires permissions to add images to the user's image gallery to save backups of observation images to the app's album.",
         "ITSAppUsesNonExemptEncryption": false
       },
       "entitlements": {
@@ -74,10 +75,9 @@
       [
         "expo-media-library",
         {
-          "photosPermission": "Mobiilivihko needs access to your photos to manage observation images.",
-          "savePhotosPermission": "Mobiilivihko needs permission to save and delete observation images.",
-          "isAccessMediaLocationEnabled": true,
-          "granularPermissions": ["photo"]
+          "photosPermission": "Mobiilivihko requires permissions to browse the user's image gallery if they want to add images from the gallery to the observation.",
+          "savePhotosPermission": "Mobiilivihko requires permissions to add images to the user's image gallery to save backups of observation images to the app's album.",
+          "granularPermissions": []
         }
       ],
       "expo-build-properties",

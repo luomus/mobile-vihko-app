@@ -21,7 +21,6 @@ export interface ImageType {
   uri: string;
   fromGallery: boolean;
   keywords: string;
-  assetId: string | undefined;
 }
 
 export const createImage = async (useCamera: boolean): Promise<ImageType> => {
@@ -57,42 +56,16 @@ export const createImage = async (useCamera: boolean): Promise<ImageType> => {
   try {
     const uri = pickerResult.assets[0].uri
 
-    // save image to album and capture asset ID for later deletion
-    let assetId: string | undefined
-    const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(false, ['photo'])
+    const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(true, ['photo'])
+
+    // save the image to the album
     if (mediaLibraryPermission.granted) {
-      const albums = await MediaLibrary.getAlbumsAsync()
-      const foundAlbum = albums.find(a => a.title === 'Mobiilivihko')
-      if (!foundAlbum) {
-        await MediaLibrary.createAlbumAsync('Mobiilivihko', undefined, false)
-      }
-
-      const asset = await MediaLibrary.createAssetAsync(uri, foundAlbum)
-      assetId = asset.id
-
-      // re-fetch asset ID since moving to album may assign a new MediaStore ID
-      const album = foundAlbum ?? (await MediaLibrary.getAlbumsAsync()).find(a => a.title === 'Mobiilivihko')
-      if (album) {
-        const firstPageAssets = await MediaLibrary.getAssetsAsync({ album })
-
-        const allAssets = [...firstPageAssets.assets]
-        let page = firstPageAssets
-
-        while (page.hasNextPage) {
-          page = await MediaLibrary.getAssetsAsync({
-            album,
-            after: page.endCursor,
-          })
-          allAssets.push(...page.assets)
-        }
-
-        const movedAsset = allAssets.find(a => a.filename === asset.filename)
-        if (movedAsset) assetId = movedAsset.id
-      }
+      await MediaLibrary.createAlbumAsync('Mobiilivihko', undefined, false, uri)
     }
 
-    const newImage: ImageType = { uri, fromGallery, keywords: '', assetId }
+    const newImage: ImageType = { uri, fromGallery, keywords: '' }
     return newImage
+
   } catch (error) {
     captureException(error)
     log.error({
