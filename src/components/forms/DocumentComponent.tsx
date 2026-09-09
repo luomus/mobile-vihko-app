@@ -192,7 +192,7 @@ const DocumentComponent = (props: Props) => {
     }
 
     if (event && observationEventId) {
-      let editedEvent = {}
+      let editedEvent: any = {}
 
       Object.keys(data).forEach(key => {
         const target = get(editedEvent, key.split('_'))
@@ -217,7 +217,11 @@ const DocumentComponent = (props: Props) => {
       //replace events with the modified copy
       try {
         await dispatch(replaceObservationEventById({ newEvent: editedEvent, eventId: observationEventId })).unwrap()
-        eventWithGeometry = await dispatch(finishObservationEvent()).unwrap()
+        if (editedEvent.gatherings[0].geometry) {
+          eventWithGeometry = editedEvent
+        } else {
+          eventWithGeometry = await dispatch(finishObservationEvent()).unwrap()
+        }
         setModalVisibility(true)
       } catch (error: any) {
         dispatch(setMessageState({
