@@ -242,7 +242,7 @@ const Form = (
         fieldDefault = get(defaults, key.split('_'))
       }
       if (secondDefaults) {
-        fieldDefault = get(secondDefaults, key.split('_'))
+        fieldDefault = get(secondDefaults, key.split('_')) || fieldDefault
       }
 
       fieldDefault = fieldDefault || defaultValue

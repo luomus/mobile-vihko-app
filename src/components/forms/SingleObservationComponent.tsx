@@ -86,7 +86,7 @@ const SingleObservationComponent = (props: Props) => {
 
   useEffect(() => {
     //initialize only when editing observations
-    if (observationId) {
+    if (observationId || editing.formState) {
       initObservation()
     }
 
@@ -98,14 +98,15 @@ const SingleObservationComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: props.sourcePage
+        originalSourcePage: props.sourcePage,
+        formState: editing.formState
       }))
     }
   }, [])
 
   useEffect(() => {
     onUninitializedForm()
-  }, [lang])
+  }, [lang, observationState, eventState])
 
   useBackHandler(() => {
 
@@ -136,7 +137,8 @@ const SingleObservationComponent = (props: Props) => {
       started: false,
       locChanged: false,
       originalLocation: editing.originalLocation,
-      originalSourcePage: editing.originalSourcePage
+      originalSourcePage: editing.originalSourcePage,
+      formState: undefined
     }))
     dispatch(clearObservationId())
     if (props.sourcePage === 'map') {
@@ -162,14 +164,14 @@ const SingleObservationComponent = (props: Props) => {
     }
 
     //find the correct observation by id
-    const searchedObservation = clone(
+    let searchedObservation = clone(
       searchedEvent.gatherings[0].units.find((observation: Record<string, any>) => {
         return observation.id === observationId
       })
     )
 
-    if (!searchedObservation) {
-      return
+    if (editing.formState) {
+      searchedObservation = merge(cloneDeep(searchedObservation), cloneDeep(editing.formState.unit))
     }
 
     setObservationState(searchedObservation)
@@ -177,9 +179,13 @@ const SingleObservationComponent = (props: Props) => {
 
   const initEvent = () => {
     //find the correct event by id
-    const searchedEvent = observationEvent.events.find(event => {
+    let searchedEvent = observationEvent.events.find(event => {
       return event.id === observationEventId
     })
+
+    if (editing.formState) {
+      searchedEvent = merge(cloneDeep(searchedEvent), cloneDeep(editing.formState.event))
+    }
 
     if (searchedEvent) {
       setEventState(cloneDeep(searchedEvent))
@@ -187,8 +193,7 @@ const SingleObservationComponent = (props: Props) => {
   }
 
   const onUninitializedForm = () => {
-    //if editing observation but observation not yet extracted from observation event
-    if (observationId && (!eventState || !observationState)) {
+    if (observationId && (!observationState || !eventState)) {
       return
     }
 
@@ -207,9 +212,12 @@ const SingleObservationComponent = (props: Props) => {
     const eventSchema = omit(schema[lang]?.schema?.properties, 'gatherings.items.properties.units')
 
     //edit observation
-    if (observationId && eventState && observationState) {
+    if (eventState && observationState) {
       initForm(setForm, observationState, eventState, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, uiSchemaContext, lang, scrollViewRef)
-      //new observation
+      //returning from editing location on map
+    } else if (editing.formState) {
+      initForm(setForm, cloneDeep(editing.formState.unit) || null, cloneDeep(editing.formState.event) || null, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, uiSchemaContext, lang, scrollViewRef)
+      //brand new observation
     } else {
       initForm(setForm, defaultObject, null, observationSchema, eventSchema, null, null, singleObservationFields, overrideSingleObservationFields, additionalSingleObservationFields, singleObservationFieldOrder, uiSchemaContext, lang, scrollViewRef)
     }
@@ -222,7 +230,7 @@ const SingleObservationComponent = (props: Props) => {
 
   const onSubmit = async (data: { [key: string]: any }, sendMode: string) => {
     let event: Record<string, any> | undefined
-    if (!observationState) {
+    if (!observationState || !observationId) {
       event = await submitObservation(data)
     } else {
       await updateObservation(data)
@@ -296,14 +304,19 @@ const SingleObservationComponent = (props: Props) => {
 
     if (!(newUnit.unitGathering.geometry.coordinates[0] === observation?.coordinates[0]
       && newUnit.unitGathering.geometry.coordinates[1] === observation?.coordinates[1])) {
-      newUnit.unitGathering.geometry = observation
+      newUnit.unitGathering.geometry = merge(newUnit.unitGathering.geometry, observation)
     }
 
     //update the event state before saving document fields
     const eventCopy = cloneDeep(eventState)
 
-    if (eventCopy) eventCopy.gatherings[0].units.push(newUnit)
-    // setEventState(cloneDeep(eventCopy))
+    if (eventCopy) {
+      if (!eventCopy.gatherings?.[0]) {
+        set(eventCopy, ['gatherings', 0], { units: [newUnit] })
+      } else {
+        eventCopy.gatherings[0].units.push(newUnit)
+      }
+    }
 
     //add the new observation to latest event, clear location
     try {
@@ -357,7 +370,8 @@ const SingleObservationComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: editing.originalSourcePage
+        originalSourcePage: editing.originalSourcePage,
+        formState: undefined
       }))
     }
 
@@ -394,7 +408,8 @@ const SingleObservationComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: ''
+        originalSourcePage: '',
+        formState: undefined
       }))
 
     } catch (error: any) {
@@ -416,7 +431,8 @@ const SingleObservationComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: editing.originalSourcePage
+        originalSourcePage: editing.originalSourcePage,
+        formState: undefined
       }))
     }
 
@@ -443,8 +459,7 @@ const SingleObservationComponent = (props: Props) => {
         }
       }
 
-      editedEvent = mergeWith(event, editedEvent, customizer)
-
+      editedEvent = mergeWith(cloneDeep(event), cloneDeep(editedEvent), customizer)
       let eventWithGeometry: Record<string, any> = {}
 
       //replace events with the modified copy
@@ -527,12 +542,58 @@ const SingleObservationComponent = (props: Props) => {
 
   //redirects navigator to map for selection of new observation location
   const editObservationLocation = () => {
-    dispatch(setObservationLocation(observation ? observation : eventState?.gatherings[0]?.geometry))
+    dispatch(setObservationLocation(observation ? observation : eventState?.gatherings?.[0]?.geometry))
+
+    const data = methods.getValues()
+    let editedUnit: Record<string, any> = {}
+
+    Object.keys(data).forEach(key => {
+      if (
+        data[key] === undefined || data[key] === null || (!(JX519Fields.includes(key))
+          && (key !== 'unitGathering_geometry')) && (key !== 'unitFact_autocompleteSelectedTaxonID') && (key !== 'informalTaxonGroups') && (key !== 'unitGathering_geometry_radius')
+      ) {
+        return
+      }
+
+      const target = get(editedUnit, key.split('_'))
+
+      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
+        merge(data[key], target)
+      }
+
+      set(editedUnit, key.split('_'), data[key])
+    })
+
+    editedUnit = {
+      ...observationState,
+      ...editedUnit,
+    }
+
+    const editedEvent: Record<string, any> = {}
+
+    Object.keys(data).forEach(key => {
+      if (!(JX519ObservationEventFields.includes(key))) {
+        return
+      }
+
+      const target = get(editedEvent, key.split('_'))
+
+      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
+        merge(data[key], target)
+      }
+
+      set(editedEvent, key.split('_'), data[key])
+    })
+
     dispatch(setEditing({
       started: true,
       locChanged: false,
       originalLocation: observation ? observation : editing.originalLocation,
-      originalSourcePage: editing.originalSourcePage
+      originalSourcePage: editing.originalSourcePage,
+      formState: {
+        event: editedEvent,
+        unit: editedUnit
+      }
     }))
     props.pushToMap()
   }
@@ -603,8 +664,7 @@ const SingleObservationComponent = (props: Props) => {
       <View style={Cs.formContainer}>
         <View style={Cs.formSaveButtonContainer}>
           <ButtonComponent
-            onPressFunction={() =>
-            {
+            onPressFunction={() => {
               if (Platform.OS === 'ios') {
                 onPressOptionsIOS()
               } else {
@@ -629,9 +689,9 @@ const SingleObservationComponent = (props: Props) => {
           />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollViewRef}>
-          {(observation || eventState?.gatherings[0]?.geometry) ?
+          {(observation || (eventState && eventState?.gatherings?.[0]?.geometry)) ?
             <View style={{ width: '95%', alignSelf: 'center' }}>
-              <MiniMapComponent geometry={observation ? observation : eventState?.gatherings[0]?.geometry} color={Colors.observationColor} />
+              <MiniMapComponent geometry={observation ? observation : eventState?.gatherings?.[0]?.geometry} color={Colors.observationColor} />
             </View>
             : null
           }

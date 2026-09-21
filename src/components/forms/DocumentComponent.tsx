@@ -187,7 +187,8 @@ const DocumentComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: editing.originalSourcePage
+        originalSourcePage: editing.originalSourcePage,
+        formState: undefined
       }))
     }
 

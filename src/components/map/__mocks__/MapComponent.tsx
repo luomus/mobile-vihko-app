@@ -79,7 +79,8 @@ const MapComponent = (props: Props) => {
       started: true,
       locChanged: true,
       originalLocation: editing.originalLocation,
-      originalSourcePage: editing.originalSourcePage
+      originalSourcePage: editing.originalSourcePage,
+      formState: editing.formState
     }))
     props.onPressEditing()
   }
@@ -110,7 +111,8 @@ const MapComponent = (props: Props) => {
       started: false,
       locChanged: false,
       originalLocation: editing.originalLocation,
-      originalSourcePage: editing.originalSourcePage
+      originalSourcePage: editing.originalSourcePage,
+      formState: editing.formState
     }))
     props.onPressEditing()
   }

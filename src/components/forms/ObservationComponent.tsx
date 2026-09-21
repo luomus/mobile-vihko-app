@@ -88,7 +88,8 @@ const ObservationComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: props.sourcePage
+        originalSourcePage: props.sourcePage,
+        formState: editing.formState
       }))
     }
   }, [])
@@ -126,7 +127,8 @@ const ObservationComponent = (props: Props) => {
       started: false,
       locChanged: false,
       originalLocation: editing.originalLocation,
-      originalSourcePage: editing.originalSourcePage
+      originalSourcePage: editing.originalSourcePage,
+      formState: undefined
     }))
     dispatch(clearObservationId())
     if (props.sourcePage === 'map') {
@@ -162,7 +164,11 @@ const ObservationComponent = (props: Props) => {
       return
     }
 
-    setObservationState(searchedObservation)
+    if (editing.formState) {
+      setObservationState(editing.formState)
+    } else {
+      setObservationState(searchedObservation)
+    }
   }
 
   const onUninitializedForm = () => {
@@ -273,6 +279,23 @@ const ObservationComponent = (props: Props) => {
     }
   }
 
+  //merges form data into unit, keyed paths use '_' as separator, atlasCode is optionally kept even when empty
+  const mergeFormDataIntoUnit = (unit: Record<string, any>, data: Record<string, any>, keepEmptyAtlasCode: boolean = false) => {
+    Object.keys(data).forEach(key => {
+      if ((data[key] === undefined || data[key] === null) && !(keepEmptyAtlasCode && key === 'atlasCode')) {
+        return
+      }
+
+      const target = get(unit, key.split('_'))
+
+      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
+        merge(data[key], target)
+      }
+
+      set(unit, key.split('_'), data[key])
+    })
+  }
+
   const createNewObservation = async (data: { [key: string]: any }) => {
     setSaving(true)
 
@@ -289,19 +312,7 @@ const ObservationComponent = (props: Props) => {
       set(newUnit, 'rules', props.rules)
     }
 
-    Object.keys(data).forEach(key => {
-      if (data[key] === undefined || data[key] === null) {
-        return
-      }
-
-      const target = get(newUnit, key.split('_'))
-
-      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
-        merge(data[key], target)
-      }
-
-      set(newUnit, key.split('_'), data[key])
-    })
+    mergeFormDataIntoUnit(newUnit, data)
 
     if (Object.values(biomonForms).includes(schema.formID) && newUnit.count === '') {
       set(newUnit, 'count', 'X')
@@ -356,19 +367,7 @@ const ObservationComponent = (props: Props) => {
     //construct new observation (unit) from old observation, data and new location if present from form and images
     let editedUnit: Record<string, any> = {}
 
-    Object.keys(data).forEach(key => {
-      if ((data[key] === undefined || data[key] === null) && key !== 'atlasCode') {
-        return
-      }
-
-      const target = get(editedUnit, key.split('_'))
-
-      if (typeof data[key] === 'object' && !Array.isArray(data[key]) && target) {
-        merge(data[key], target)
-      }
-
-      set(editedUnit, key.split('_'), data[key])
-    })
+    mergeFormDataIntoUnit(editedUnit, data, true)
 
     //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
     if (editing.started && editing.locChanged) {
@@ -401,7 +400,8 @@ const ObservationComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: editing.originalSourcePage
+        originalSourcePage: editing.originalSourcePage,
+        formState: undefined
       }))
     }
 
@@ -441,7 +441,8 @@ const ObservationComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: ''
+        originalSourcePage: '',
+        formState: undefined
       }))
 
     } catch (error: any) {
@@ -458,11 +459,23 @@ const ObservationComponent = (props: Props) => {
   const editObservationLocation = () => {
     if (observationState) {
       dispatch(setObservationLocation(observationState.unitGathering.geometry))
+
+      const data = methods.getValues()
+      let editedUnit: Record<string, any> = {}
+
+      mergeFormDataIntoUnit(editedUnit, data, true)
+
+      editedUnit = {
+        ...observationState,
+        ...editedUnit,
+      }
+
       dispatch(setEditing({
         started: true,
         locChanged: false,
         originalLocation: observation ? observation : editing.originalLocation,
-        originalSourcePage: editing.originalSourcePage
+        originalSourcePage: editing.originalSourcePage,
+        formState: editedUnit
       }))
       props.pushToMap()
     }
@@ -536,7 +549,8 @@ const ObservationComponent = (props: Props) => {
         started: false,
         locChanged: false,
         originalLocation: editing.originalLocation,
-        originalSourcePage: ''
+        originalSourcePage: '',
+        formState: undefined
       }))
     } catch (error: any) {
       dispatch(setMessageState({

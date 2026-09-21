@@ -11,7 +11,8 @@ const initEditingState: EditingType = {
   started: false,
   locChanged: false,
   originalLocation: { 'coordinates': [64.559, 26.840], 'type': 'Point' },
-  originalSourcePage: ''
+  originalSourcePage: '',
+  formState: undefined
 }
 
 const initListOrderState: ListOrderType = {

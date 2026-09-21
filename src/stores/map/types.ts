@@ -4,7 +4,8 @@ export interface EditingType {
   started: boolean,
   locChanged: boolean,
   originalLocation: Point,
-  originalSourcePage: string
+  originalSourcePage: string,
+  formState: Record<string, any> | undefined
 }
 
 export interface ListOrderType {
