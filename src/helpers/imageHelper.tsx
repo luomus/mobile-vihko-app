@@ -58,9 +58,8 @@ export const createImage = async (useCamera: boolean): Promise<ImageType> => {
 
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(true, ['photo'])
 
-    // save the image to the album
     if (mediaLibraryPermission.granted) {
-      await MediaLibrary.createAlbumAsync('Mobiilivihko', undefined, false, uri)
+      await MediaLibrary.saveToLibraryAsync(uri)
     }
 
     const newImage: ImageType = { uri, fromGallery, keywords: '' }
