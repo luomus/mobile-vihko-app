@@ -218,7 +218,7 @@ const DocumentComponent = (props: Props) => {
       //replace events with the modified copy
       try {
         await dispatch(replaceObservationEventById({ newEvent: editedEvent, eventId: observationEventId })).unwrap()
-        if (editedEvent.gatherings[0].geometry) {
+        if (props.sourcePage === 'overview') {
           eventWithGeometry = editedEvent
         } else {
           eventWithGeometry = await dispatch(finishObservationEvent()).unwrap()

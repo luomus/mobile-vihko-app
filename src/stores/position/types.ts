@@ -2,11 +2,11 @@ import { LocationObject } from 'expo-location'
 import { Polygon } from 'geojson'
 
 export type PathPoint = [
-  number,
-  number,
-  number,
-  number,
-  boolean
+  number, // longitude
+  number, // latitude
+  number, // computed velocity
+  number, // timestamp
+  boolean // GPS outlier
 ]
 
 export type GridType = {

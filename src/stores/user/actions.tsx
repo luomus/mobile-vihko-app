@@ -367,7 +367,7 @@ export const logoutUser = createAsyncThunk<void, undefined, { rejectValue: Recor
     }
 
     try {
-      storageService.remove('credentials')
+      await storageService.remove('credentials')
     } catch (error) {
       captureException(error)
       log.error({
@@ -391,6 +391,7 @@ export const logoutUser = createAsyncThunk<void, undefined, { rejectValue: Recor
           error: error,
           user_id: credentialsCopy.user.id
         })
+        dispatch(clearCredentials())
         return rejectWithValue({
           severity: 'low',
           message: `${i18n.t('failed to logout from laji.fi server')} ${error.message}`
