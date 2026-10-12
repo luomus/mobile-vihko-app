@@ -56,10 +56,12 @@ export const createImage = async (useCamera: boolean): Promise<ImageType> => {
   try {
     const uri = pickerResult.assets[0].uri
 
-    const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(true, ['photo'])
+    if (useCamera) {
+      const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(true, ['photo'])
 
-    if (mediaLibraryPermission.granted) {
-      await MediaLibrary.saveToLibraryAsync(uri)
+      if (mediaLibraryPermission.granted) {
+        await MediaLibrary.saveToLibraryAsync(uri)
+      }
     }
 
     const newImage: ImageType = { uri, fromGallery, keywords: '' }
