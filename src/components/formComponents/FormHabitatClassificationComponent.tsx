@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Platform, Text, View } from 'react-native'
 import { useFormContext } from 'react-hook-form'
 import { Picker } from '@react-native-picker/picker'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -278,7 +278,7 @@ const FormHabitatClassificationComponent = (props: Props) => {
             <ButtonComponent onPressFunction={() => addHabitat()} title={t('add')}
               height={40} width={100} buttonStyle={Bs.textAndIconButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'add'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              textStyle={Ts.buttonText} iconName={'plus'} iconSize={22} contentColor={Colors.darkText}
             />
           }
         </View>
@@ -290,9 +290,8 @@ const FormHabitatClassificationComponent = (props: Props) => {
             (currentSelection ? [currentSelection, ...selectedHabitats] : selectedHabitats).map((habitat, idx) => (
               <View key={habitat.key} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
                 <Text>- {habitat.value}</Text>
-                <Icon
+                <MaterialDesignIcons
                   name='delete'
-                  type='material-icons'
                   color={'red'}
                   size={22}
                   onPress={() => {

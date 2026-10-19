@@ -156,7 +156,7 @@ const MapComponent = (props: Props) => {
             gradientColorStart={Colors.primaryButton1}
             gradientColorEnd={Colors.primaryButton2}
             shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22}
+            textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined}
             contentColor={Colors.whiteText}
           />
           {observation ?

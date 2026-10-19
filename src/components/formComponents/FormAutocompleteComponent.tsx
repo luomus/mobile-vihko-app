@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, NativeSyntheticEvent, Platform, Text, TextInput, TextInputFocusEventData, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import { RootState } from '../../stores'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
@@ -268,9 +268,9 @@ const FormAutocompleteComponent = (props: Props) => {
           {loading ?
             <ActivityIndicator size={25} color={Colors.primary5} />
             : selected ?
-              <Icon iconStyle={{ padding: 5, color: Colors.successButton1 }} name='done' type='material-icons' size={25} />
+              <MaterialDesignIcons style={{ padding: 5, color: Colors.successButton1 }} name='check' size={25} />
               : query !== '' ?
-                <Icon iconStyle={{ padding: 5, color: Colors.primary5 }} name='warning' type='material-icons' size={25} />
+                <MaterialDesignIcons style={{ padding: 5, color: Colors.primary5 }} name='alert' size={25} />
                 : null
           }
         </View>

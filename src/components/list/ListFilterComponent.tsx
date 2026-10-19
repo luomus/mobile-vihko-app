@@ -1,6 +1,6 @@
 import React from 'react'
 import { TextInput, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
@@ -26,9 +26,8 @@ const ListFilterComponent = (props: Props) => {
         ref={props.textInput}
         autoCorrect={false}
       />
-      <Icon
-        name='cancel'
-        type='material-icons'
+      <MaterialDesignIcons
+        name='close-circle'
         color={Colors.dangerButton2}
         size={26}
         onPress={() => {
@@ -36,7 +35,7 @@ const ListFilterComponent = (props: Props) => {
           props.setSearch('')
           props.textInput.current?.focus()
         }}
-        iconStyle={Cs.listFilterIcon}
+        style={Cs.listFilterIcon}
       />
     </View>
   )

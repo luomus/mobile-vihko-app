@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleProp, Text, View, ViewStyle } from 'react-native'
 import uuid from 'react-native-uuid'
+import { MaterialDesignIconsIconName } from '@react-native-vector-icons/material-design-icons'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
@@ -31,14 +32,14 @@ const ObservationButtonsComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const createButton = (title: string, buttonStyle: StyleProp<ViewStyle>, onPress: () => void, styleType: string,
-    iconName: string | undefined, iconType: string | undefined, width: number | undefined, textWidth?: number | undefined) => {
+    iconName: MaterialDesignIconsIconName | undefined, width: number | undefined, textWidth?: number | undefined) => {
     return (
       <ButtonComponent onPressFunction={() => onPress()} title={title}
         height={40} width={width} buttonStyle={buttonStyle}
         gradientColorStart={styleType === 'primary' ? Colors.primaryButton1 : Colors.neutralButton}
         gradientColorEnd={styleType === 'primary' ? Colors.primaryButton2 : Colors.neutralButton}
         shadowColor={styleType === 'primary' ? Colors.primaryShadow : Colors.neutralShadow}
-        textStyle={Ts.buttonText} iconName={iconName} iconType={iconType} iconSize={22}
+        textStyle={Ts.buttonText} iconName={iconName} iconSize={22}
         contentColor={styleType === 'primary' ? Colors.whiteText : Colors.darkText}
         textWidth={textWidth} key={uuid.v4().toString()}
       />
@@ -59,7 +60,7 @@ const ObservationButtonsComponent = (props: Props) => {
             haversineNeighbors.length + ' ' + t('observation count'),
             Bs.observationNeighborsButton,
             () => props.openModal(haversineNeighbors),
-            'primary', 'edit', 'material-icons', 150
+            'primary', 'pencil', 150
           )}
         </View>
       )
@@ -77,7 +78,7 @@ const ObservationButtonsComponent = (props: Props) => {
                 typeName.length > 14 ? typeName.substring(0, 12) + '...' : typeName,
                 Bs.observationNeighborsButton,
                 () => props.shiftToEditPage(neighbor.id),
-                'primary', 'edit', 'material-icons', 150
+                'primary', 'pencil', 150
               )
             })}
           </View>
@@ -91,7 +92,7 @@ const ObservationButtonsComponent = (props: Props) => {
                 neighbor.identifications[0].taxon ? neighbor.identifications[0].taxon : neighbor.identifications[0].taxonVerbatim,
                 Bs.observationNeighborsButton,
                 () => props.shiftToEditPage(neighbor.id),
-                'primary', 'edit', 'material-icons', 150, 110,
+                'primary', 'pencil', 150, 110
               )
             )}
           </View>

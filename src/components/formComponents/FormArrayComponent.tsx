@@ -173,14 +173,14 @@ const FormArrayComponent = (props: Props) => {
           <ButtonComponent onPressFunction={() => addInputElement()} title={undefined}
             height={40} width={45} buttonStyle={Bs.iconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'add'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={'plus'} iconSize={22} contentColor={Colors.darkText}
           />
           {inputElements.length > indexOfRemovable
             ?
             <ButtonComponent onPressFunction={() => removeInputElement()} title={undefined}
               height={40} width={45} buttonStyle={Bs.iconButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'remove'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              textStyle={Ts.buttonText} iconName={'delete'} iconSize={22} contentColor={Colors.darkText}
             />
             : null
           }

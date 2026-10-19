@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, Linking, Text, View, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import { RootState } from '../../stores'
 import { gridPreviewUrl, resultServiceUrl } from '../../config/urls'
@@ -25,12 +25,11 @@ const AtlasModalComponent = (props: Props) => {
         <View style={Cs.transparentModalContainer}>
           <TouchableWithoutFeedback>
             <View style={Cs.mapModalContainer}>
-              <Icon
-                type={'material-icons'}
-                name={'cancel'}
+              <MaterialDesignIcons
+                name='close-circle'
                 size={30}
                 color={Colors.dangerButton2}
-                containerStyle={Cs.modalCloseContainer}
+                style={Cs.modalCloseContainer}
                 onPress={() => props.onBackButtonPress()}
               />
               <Text>{t('you have chosen the grid') + ' ' + grid?.n + ':' + grid?.e + ' ' + grid?.name + '. ' + t('grid description')}

@@ -11,7 +11,8 @@ const ButtonStyles = StyleSheet.create({
   },
   iconButton: {
     padding: 5,
-    borderRadius: 5
+    borderRadius: 5,
+    alignItems: 'center'
   },
   textAndIconButton: {
     paddingBottom: 5,
@@ -52,7 +53,8 @@ const ButtonStyles = StyleSheet.create({
   },
   logoutButton: {
     padding: 3,
-    borderRadius: 5
+    borderRadius: 5,
+    alignItems: 'center'
   },
 
   //login component
@@ -128,7 +130,8 @@ const ButtonStyles = StyleSheet.create({
     paddingTop: 2,
     paddingLeft: 5,
     paddingRight: 5,
-    borderRadius: 5
+    borderRadius: 5,
+    alignItems: 'center'
   },
   tileDetailsButton: {
     paddingTop: 2,
@@ -175,7 +178,8 @@ const ButtonStyles = StyleSheet.create({
   },
   datePickerButton: {
     borderRadius: 5,
-    paddingTop: 2
+    paddingTop: 2,
+    alignItems: 'center'
   },
   buttonShadow: {
     shadowOffset: {

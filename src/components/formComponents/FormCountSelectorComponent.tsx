@@ -89,7 +89,7 @@ const FormCountSelectorComponent = (props: Props) => {
                 gradientColorStart={element.color}
                 gradientColorEnd={element.color}
                 shadowColor={Colors.neutralShadow}
-                textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+                textStyle={Ts.selectionButtonText} iconName={undefined} iconSize={undefined}
                 contentColor={Colors.blackText}
               />
           }

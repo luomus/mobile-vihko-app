@@ -578,12 +578,12 @@ const ObservationComponent = (props: Props) => {
           <ButtonComponent onPressFunction={() => showCancel()}
             title={t('cancel')} height={40} width={120} buttonStyle={Bs.defaultButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.darkText}
           />
           <ButtonComponent onPressFunction={methods.handleSubmit(onSubmit, onError)} testID={'saveButton'}
             title={t('save')} height={40} width={120} buttonStyle={Bs.defaultButton}
             gradientColorStart={Colors.successButton1} gradientColorEnd={Colors.successButton2} shadowColor={Colors.successShadow}
-            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+            textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.whiteText}
           />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} keyboardShouldPersistTaps='always' ref={scrollViewRef}>
@@ -594,7 +594,7 @@ const ObservationComponent = (props: Props) => {
               <ButtonComponent onPressFunction={() => editObservationLocation()}
                 title={t('edit location')} height={40} width={150} buttonStyle={Bs.editObservationButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'edit-location'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                textStyle={Ts.buttonText} iconName={'map-marker'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
             : null
@@ -606,7 +606,7 @@ const ObservationComponent = (props: Props) => {
               <ButtonComponent onPressFunction={() => showDelete()}
                 title={t('delete')} height={40} width={150} buttonStyle={Bs.editObservationButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                textStyle={Ts.buttonText} iconName={'delete'} iconSize={22} contentColor={Colors.darkText}
               />
             </View>
             : null

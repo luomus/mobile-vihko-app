@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { FlatList, ListRenderItem, Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import { createFilter } from 'react-native-search-filter'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
@@ -39,9 +39,8 @@ const ZoneFilterPickerComponent = (props: Props) => {
         ref={textInput}
         autoCorrect={false}
       />
-      <Icon
-        name='cancel'
-        type='material-icons'
+      <MaterialDesignIcons
+        name='close-circle'
         color={Colors.dangerButton2}
         size={26}
         onPress={() => {
@@ -49,7 +48,7 @@ const ZoneFilterPickerComponent = (props: Props) => {
           setSearch('')
           textInput.current?.focus()
         }}
-        iconStyle={Cs.listFilterIcon}
+        style={Cs.listFilterIcon}
       />
     </View>
   )
@@ -79,7 +78,7 @@ const ZoneFilterPickerComponent = (props: Props) => {
               <ButtonComponent onPressFunction={() => props.onCancel()} title={t('cancel')}
                 height={40} width={120} buttonStyle={Bs.textAndIconButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+                textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.darkText}
               />
               <FlatList
                 data={filteredZones}

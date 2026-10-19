@@ -395,19 +395,19 @@ const DocumentComponent = (props: Props) => {
             }}
             title={undefined} height={40} width={40} buttonStyle={Bs.mapIconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'more-vert'} iconType={'material-icons'} iconSize={26} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={'dots-vertical'} iconSize={26} contentColor={Colors.darkText}
           />
           <ButtonComponent onPressFunction={() => showCancel()}
             title={t('cancel')} height={40} width={90} buttonStyle={Bs.editObservationButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.darkText}
           />
           <ButtonComponent
             onPressFunction={methods.handleSubmit((data) => onSubmit(data, 'public'), onError)}
             testID={'saveButton'}
             title={t('send public')} height={40} width={160} buttonStyle={Bs.editObservationButton}
             gradientColorStart={Colors.successButton1} gradientColorEnd={Colors.successButton2} shadowColor={Colors.successShadow}
-            textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText}
+            textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.whiteText}
           />
         </View>
         <KeyboardAwareScrollView style={Cs.padding10Container} ref={scrollViewRef}>
@@ -416,7 +416,7 @@ const DocumentComponent = (props: Props) => {
               <ButtonComponent onPressFunction={() => deletePath()}
                 title={t('delete path')} height={40} width={150} buttonStyle={Bs.editObservationButton}
                 gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                textStyle={Ts.buttonText} iconName={'delete'} iconSize={22} contentColor={Colors.whiteText}
               />
             </View>
             : null

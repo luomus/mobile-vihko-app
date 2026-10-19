@@ -76,7 +76,7 @@ const UnfinishedEventComponent = (props: Props) => {
           <ButtonComponent onPressFunction={() => props.onContinueObservationEvent(tracking)} title={t('to map')}
             height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'map-outline'} iconType={'material-community'} iconSize={22} contentColor={Colors.whiteText}
+            textStyle={Ts.buttonText} iconName={'map-outline'} iconSize={22} contentColor={Colors.whiteText}
           />
           {
             observationEvent?.events?.[observationEvent?.events?.length - 1]?.singleObservation
@@ -84,7 +84,7 @@ const UnfinishedEventComponent = (props: Props) => {
               : <ButtonComponent onPressFunction={() => props.stopObserving()} title={t('stop')}
                 height={40} width={120} buttonStyle={Bs.homeTextAndIconButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={'stop'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                textStyle={Ts.buttonText} iconName={'stop'} iconSize={22} contentColor={Colors.darkText}
                 testID={'stopFromHomeComponent'}
               />
           }

@@ -7,7 +7,7 @@ import Os from '../../styles/OtherStyles'
 import Cs from '../../styles/ContainerStyles'
 import Bs from '../../styles/ButtonStyles'
 import Ts from '../../styles/TextStyles'
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import DateTimePicker, { DateTimePickerEvent } from '@expo/ui/community/datetime-picker'
 import { parseDateFromDocumentToUI, parseDateFromDocumentToFullISO, parseDateFromDateObjectToDocument, sameDay } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
 import { useFormContext } from 'react-hook-form'
@@ -164,12 +164,12 @@ const FormDateOptionsComponent = (props: Props) => {
           <ButtonComponent onPressFunction={() => onLockIntoCurrentDate()}
             title={t('timestamp')} height={40} width={120} buttonStyle={Bs.timeButton}
             gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-            textStyle={Ts.buttonText} iconName={'schedule'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+            textStyle={Ts.buttonText} iconName={'clock-outline'} iconSize={22} contentColor={Colors.whiteText}
           />
           <ButtonComponent onPressFunction={() => setModalVisibility(true)}
             title={t('choose time')} height={40} width={120} buttonStyle={Bs.timeButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'restore'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={'clock-edit-outline'} iconSize={22} contentColor={Colors.darkText}
           />
         </View>
         :
@@ -182,7 +182,7 @@ const FormDateOptionsComponent = (props: Props) => {
           <ButtonComponent onPressFunction={() => clearDateAndTime()}
             title={undefined} height={40} width={45} buttonStyle={Bs.iconButton}
             gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-            textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+            textStyle={Ts.buttonText} iconName={'delete'} iconSize={22} contentColor={Colors.darkText}
           />
         </View>
       }
@@ -212,7 +212,7 @@ const FormDateOptionsComponent = (props: Props) => {
                 <ButtonComponent onPressFunction={() => setModalVisibility(false)}
                   title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
                   gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                  textStyle={Ts.buttonText} iconName={'pencil'} iconSize={22} contentColor={Colors.darkText}
                 />
               </View>
             </TouchableWithoutFeedback>

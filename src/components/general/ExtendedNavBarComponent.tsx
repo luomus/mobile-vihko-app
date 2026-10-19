@@ -174,7 +174,7 @@ const ExtendedNavBarComponent = (props: Props) => {
             title={t('cancel')} height={30} width={'100%'} buttonStyle={Bs.stopObservingButton}
             gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2}
             shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
-            iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin
+            iconName={undefined} iconSize={undefined} contentColor={Colors.whiteText} noMargin
           />
         </View>
       </View>
@@ -199,7 +199,7 @@ const ExtendedNavBarComponent = (props: Props) => {
               gradientColorStart={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
               gradientColorEnd={(!changingLocation || grid?.outsideBorders === 'true') ? Colors.neutralButton : Colors.unavailableButton}
               shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
-              iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
+              iconName={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
             />
           </View>
           <View style={{ paddingHorizontal: 2, width: 80 }}>
@@ -209,7 +209,7 @@ const ExtendedNavBarComponent = (props: Props) => {
               gradientColorStart={!changingLocation ? Colors.dangerButton1 : Colors.unavailableButton}
               gradientColorEnd={!changingLocation ? Colors.dangerButton2 : Colors.unavailableButton}
               shadowColor={!changingLocation ? Colors.dangerShadow : Colors.neutralShadow} textStyle={Ts.buttonText}
-              iconName={undefined} iconType={undefined} iconSize={undefined}
+              iconName={undefined} iconSize={undefined}
               contentColor={!changingLocation ? Colors.whiteText : Colors.darkText} noMargin
             />
           </View>
@@ -221,7 +221,7 @@ const ExtendedNavBarComponent = (props: Props) => {
                 gradientColorStart={!changingLocation ? Colors.neutralButton : Colors.unavailableButton}
                 gradientColorEnd={!changingLocation ? Colors.neutralButton : Colors.unavailableButton}
                 shadowColor={Colors.neutralShadow} textStyle={Ts.buttonText}
-                iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
+                iconName={undefined} iconSize={undefined} contentColor={Colors.darkText} noMargin
               />
             </View>
             : null}

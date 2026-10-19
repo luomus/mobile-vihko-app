@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { RootState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import { forms, lolifeObservationTypes } from '../../config/fields'
@@ -32,12 +32,11 @@ const MapModalComponent = (props: Props) => {
         <View style={Cs.transparentModalContainer}>
           <TouchableWithoutFeedback>
             <View style={Cs.mapModalContainer}>
-              <Icon
-                type={'material-icons'}
-                name={'cancel'}
+              <MaterialDesignIcons
+                name='close-circle'
                 size={30}
                 color={Colors.dangerButton2}
-                containerStyle={Cs.modalCloseContainer}
+                style={Cs.modalCloseContainer}
                 onPress={() => props.onBackButtonPress()}
               />
               <ScrollView style={{ width: '100%' }}>
@@ -53,12 +52,12 @@ const MapModalComponent = (props: Props) => {
                     <ButtonComponent onPressFunction={() => props.shiftToEditPage(observation.id)}
                       title={t('edit')} height={40} width={120} buttonStyle={Bs.mapModalButton}
                       gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                      textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                      textStyle={Ts.buttonText} iconName={'pencil'} iconSize={22} contentColor={Colors.whiteText}
                     />
                     <ButtonComponent onPressFunction={() => props.showSubmitDelete(observation.id)}
                       title={t('delete')} height={40} width={120} buttonStyle={Bs.mapModalButton}
                       gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                      textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                      textStyle={Ts.buttonText} iconName={'delete'} iconSize={22} contentColor={Colors.darkText}
                     />
                   </View>
                 )}

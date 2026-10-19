@@ -6,7 +6,7 @@ import Os from '../../styles/OtherStyles'
 import Bs from '../../styles/ButtonStyles'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import DateTimePicker, { DateTimePickerEvent } from '@expo/ui/community/datetime-picker'
 import ButtonComponent from '../general/ButtonComponent'
 import { parseDateFromDocumentToUI, parseDateFromDocumentToFullISO, parseDateFromDateObjectToDocument } from '../../helpers/dateHelper'
 import Colors from '../../styles/Colors'
@@ -173,12 +173,12 @@ const FormDatePickerComponent = (props: Props) => {
         <ButtonComponent onPressFunction={() => initModal()}
           title={undefined} height={40} width={45} buttonStyle={Bs.datePickerButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-          textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          textStyle={Ts.buttonText} iconName={'clock-edit-outline'} iconSize={22} contentColor={Colors.darkText}
         />
         <ButtonComponent onPressFunction={() => clearDatePicker()}
           title={undefined} height={40} width={45} buttonStyle={Bs.datePickerButton}
           gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-          textStyle={Ts.buttonText} iconName={'delete'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+          textStyle={Ts.buttonText} iconName={'delete'} iconSize={22} contentColor={Colors.darkText}
         />
       </View>
       <Modal visible={modalVisibility} onRequestClose={() => { setModalVisibility(false) }}>
@@ -221,7 +221,7 @@ const FormDatePickerComponent = (props: Props) => {
                 <ButtonComponent onPressFunction={() => setModalVisibility(false)}
                   title={t('save')} height={40} width={120} buttonStyle={Bs.textAndIconButton}
                   gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={'edit'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                  textStyle={Ts.buttonText} iconName={'pencil'} iconSize={22} contentColor={Colors.darkText}
                 />
               </View>
             </TouchableWithoutFeedback>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, View, Text, TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { DispatchType, RootState, popMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
 import Cs from '../../styles/ContainerStyles'
@@ -105,7 +105,7 @@ const MessageComponent = () => {
       <ButtonComponent onPressFunction={buttonType === 'check' ? onOk : onCancel} title={label}
         height={40} width={220} buttonStyle={Bs.textAndIconButton}
         gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+        textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.whiteText}
       />
     )
   }
@@ -115,7 +115,7 @@ const MessageComponent = () => {
       <ButtonComponent onPressFunction={buttonType === 'check' ? onOk : onCancel} title={label}
         height={40} width={220} buttonStyle={Bs.textAndIconButton}
         gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+        textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.darkText}
       />
     )
   }
@@ -125,7 +125,7 @@ const MessageComponent = () => {
       <ButtonComponent onPressFunction={buttonType === 'check' ? onOk : onCancel} title={label}
         height={40} width={220} buttonStyle={Bs.textAndIconButton}
         gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-        textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+        textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.whiteText}
       />
     )
   }
@@ -156,9 +156,9 @@ const MessageComponent = () => {
                   1/{message.length}
                 </Text>
               }
-              <View>
+              <View style={Cs.alertIconContainer}>
                 {topMessage?.type === 'err' ?
-                  <Icon type={'material-icons'} name={'report-problem'} color={'red'} size={50} />
+                  <MaterialDesignIcons name='alert' color='red' size={50} />
                   : null
                 }
                 <Text style={Cs.padding5Container}>

@@ -5,7 +5,7 @@ import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
 import { useTranslation } from 'react-i18next'
 import MessageComponent from './MessageComponent'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 type Props = {
   text: string,
   completed?: boolean,
@@ -18,7 +18,7 @@ const LoadingComponent = (props: Props) => {
   return (
     <View style={Cs.loadingContainer}>
       {props.completed
-        ? <Icon iconStyle={{ padding: 5, color: Colors.successButton1 }} name='done' type='material-icons' size={40} />
+        ? <MaterialDesignIcons style={{ padding: 5, color: Colors.successButton1 }} name='check' size={40} />
         : <ActivityIndicator size='large' color={Colors.primary5} />
       }
       <Text style={Ts.loginText}>{t(props.text)}</Text>

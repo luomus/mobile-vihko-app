@@ -449,6 +449,9 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 5
   },
+  alertIconContainer: {
+    alignItems: 'center'
+  },
 
   //info page component
   infoContainer: {

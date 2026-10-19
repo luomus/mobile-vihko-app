@@ -272,7 +272,7 @@ const LoginComponent = (props: Props) => {
               }}
             title={t('cancel')} height={40} width={150} buttonStyle={Bs.loginCancelButton}
             gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-            textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+            textStyle={Ts.buttonText} iconName={'close-circle'} iconSize={22} contentColor={Colors.whiteText}
           />
         </View>
       </LoadingComponent>
@@ -294,7 +294,7 @@ const LoginComponent = (props: Props) => {
             <ButtonComponent onPressFunction={async () => await login()} title={t('login')}
               height={40} width={200} buttonStyle={Bs.loginButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={22} contentColor={Colors.whiteText} testID='login-button'
+              textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.whiteText} testID='login-button'
             />
           </View>
           <View style={Cs.loginLanguageContainer}>

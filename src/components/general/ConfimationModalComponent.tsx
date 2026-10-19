@@ -52,7 +52,7 @@ const ConfirmationModalComponent = (props: Props) => {
                 gradientColorStart={confirmed ? Colors.dangerButton1 : Colors.unavailableButton}
                 gradientColorEnd={confirmed ? Colors.dangerButton2 : Colors.unavailableButton}
                 shadowColor={confirmed ? Colors.dangerShadow : Colors.neutralShadow} textStyle={Ts.buttonText}
-                iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={confirmed ? Colors.whiteText : Colors.darkText}
+                iconName={undefined} iconSize={undefined} contentColor={confirmed ? Colors.whiteText : Colors.darkText}
               />
               <ButtonComponent
                 onPressFunction={
@@ -60,7 +60,7 @@ const ConfirmationModalComponent = (props: Props) => {
                 title={t('cancel')}
                 height={40} width={200} buttonStyle={Bs.sendEventModalButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+                textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.darkText}
               />
             </View>
           </TouchableWithoutFeedback>

@@ -45,7 +45,7 @@ const SendEventModalComponent = (props: Props) => {
                   title={t('send private')}
                   height={40} width={200} buttonStyle={Bs.sendEventModalButton}
                   gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+                  textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.darkText}
                 />
               }
               <ButtonComponent
@@ -57,7 +57,7 @@ const SendEventModalComponent = (props: Props) => {
                 title={props.cancelTitle}
                 height={40} width={200} buttonStyle={Bs.sendEventModalButton}
                 gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.darkText}
+                textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.darkText}
               />
               {observing && observationEvent.events[observationEvent.events.length - 1].id === props.eventId ?
                 <ButtonComponent
@@ -70,7 +70,7 @@ const SendEventModalComponent = (props: Props) => {
                   title={t('end without saving')}
                   height={40} width={200} buttonStyle={Bs.sendEventModalButton}
                   gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2} shadowColor={Colors.dangerShadow}
-                  textStyle={Ts.buttonText} iconName={undefined} iconType={undefined} iconSize={undefined} contentColor={Colors.whiteText}
+                  textStyle={Ts.buttonText} iconName={undefined} iconSize={undefined} contentColor={Colors.whiteText}
                 />
                 : null
               }

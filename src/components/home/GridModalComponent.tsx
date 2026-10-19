@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Linking, Modal, View, Text, ActivityIndicator, TouchableWithoutFeedback } from 'react-native'
 import MapView, { LatLng, MapType, Marker, Region, UrlTile, WMSTile } from 'react-native-maps'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { LocationObject } from 'expo-location'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -187,9 +187,8 @@ const GridModalComponent = (props: Props) => {
       }}
       zIndex={3}
       anchor={{ x: 0.5, y: 0.5 }}>
-      <Icon
-        type={'material-icons'}
-        name={'my-location'}
+      <MaterialDesignIcons
+        name='crosshairs-gps'
         size={50}
       />
     </Marker>
@@ -302,12 +301,12 @@ const GridModalComponent = (props: Props) => {
                       <ButtonComponent testID='toggle-map-type-btn' onPressFunction={() => toggleMapType()} title={undefined}
                         height={50} width={50} buttonStyle={Bs.mapIconButton}
                         gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                        textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+                        textStyle={Ts.buttonText} iconName={'layers'} iconSize={36} contentColor={Colors.whiteText}
                       />
                       <ButtonComponent testID='center-map-btn' onPressFunction={() => centerMapAnim()} title={undefined}
                         height={50} width={50} buttonStyle={Bs.mapIconButton}
                         gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                        textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+                        textStyle={Ts.buttonText} iconName={'crosshairs-gps'} iconSize={36} contentColor={Colors.whiteText}
                       />
                     </View>
                   </View>
@@ -315,19 +314,19 @@ const GridModalComponent = (props: Props) => {
                     <ButtonComponent testID='center-map-btn' onPressFunction={async () => await centerMapAnim()} title={t('locate me')}
                       height={40} width={160} buttonStyle={Bs.locateMeButton}
                       gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                      textStyle={Ts.buttonText} iconName={'person-pin'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                      textStyle={Ts.buttonText} iconName={'map-marker-account-outline'} iconSize={22} contentColor={Colors.whiteText}
                     />
                   </View>
                   <View style={Cs.modalStartButtonContainer}>
                     <ButtonComponent disabled={loading} onPressFunction={async () => await handleStartEvent()} title={t('start')}
                       height={40} width={120} buttonStyle={Bs.beginButton}
                       gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                      textStyle={Ts.buttonText} iconName={'play-arrow'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                      textStyle={Ts.buttonText} iconName={'play'} iconSize={22} contentColor={Colors.whiteText}
                     />
                     <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
                       height={40} width={120} buttonStyle={Bs.beginButton}
                       gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                      textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                      textStyle={Ts.buttonText} iconName={'close-circle'} iconSize={22} contentColor={Colors.darkText}
                     />
                   </View>
                 </View>

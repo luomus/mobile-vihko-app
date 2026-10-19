@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, View, Text, Linking, TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { CommonActions, ParamListBase } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import {
@@ -111,12 +111,11 @@ const UserModalComponent = (props: Props) => {
         <View style={Cs.transparentModalContainer}>
           <TouchableWithoutFeedback>
             <View style={Cs.userModalContainer}>
-              <Icon
-                type={'material-icons'}
-                name={'cancel'}
+              <MaterialDesignIcons
+                name='close-circle'
                 size={30}
                 color={Colors.dangerButton2}
-                containerStyle={Cs.modalCloseContainer}
+                style={Cs.modalCloseContainer}
                 onPress={() => props.onClose()}
               />
               <View style={Cs.userDetailsContainer}>
@@ -129,7 +128,7 @@ const UserModalComponent = (props: Props) => {
                   <ButtonComponent onPressFunction={() => showLogoutDialogue()} title={undefined}
                     height={40} width={40} buttonStyle={Bs.logoutButton}
                     gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                    textStyle={Ts.buttonText} iconName={'logout'} iconType={'material-community'} iconSize={22} contentColor={Colors.darkText} testID='logout-button'
+                    textStyle={Ts.buttonText} iconName={'logout'} iconSize={22} contentColor={Colors.darkText} testID='logout-button'
                   />
                 </View>
                 <MessageComponent />
@@ -151,7 +150,7 @@ const UserModalComponent = (props: Props) => {
                     gradientColorStart={i18n.language === 'fi' ? Colors.primaryButton1 : Colors.neutralButton}
                     gradientColorEnd={i18n.language === 'fi' ? Colors.primaryButton2 : Colors.neutralButton}
                     shadowColor={i18n.language === 'fi' ? Colors.primaryShadow : Colors.neutralShadow}
-                    textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+                    textStyle={Ts.selectionButtonText} iconName={undefined} iconSize={undefined}
                     contentColor={i18n.language === 'fi' ? Colors.whiteText : Colors.darkText}
                   />
                 }
@@ -170,7 +169,7 @@ const UserModalComponent = (props: Props) => {
                     gradientColorStart={i18n.language === 'sv' ? Colors.primaryButton1 : Colors.neutralButton}
                     gradientColorEnd={i18n.language === 'sv' ? Colors.primaryButton2 : Colors.neutralButton}
                     shadowColor={i18n.language === 'sv' ? Colors.primaryShadow : Colors.neutralShadow}
-                    textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+                    textStyle={Ts.selectionButtonText} iconName={undefined} iconSize={undefined}
                     contentColor={i18n.language === 'sv' ? Colors.whiteText : Colors.darkText}
                   />
                 }
@@ -189,7 +188,7 @@ const UserModalComponent = (props: Props) => {
                     gradientColorStart={i18n.language === 'en' ? Colors.primaryButton1 : Colors.neutralButton}
                     gradientColorEnd={i18n.language === 'en' ? Colors.primaryButton2 : Colors.neutralButton}
                     shadowColor={i18n.language === 'en' ? Colors.primaryShadow : Colors.neutralShadow}
-                    textStyle={Ts.selectionButtonText} iconName={undefined} iconType={undefined} iconSize={undefined}
+                    textStyle={Ts.selectionButtonText} iconName={undefined} iconSize={undefined}
                     contentColor={i18n.language === 'en' ? Colors.whiteText : Colors.darkText}
                   />
                 }
@@ -201,7 +200,7 @@ const UserModalComponent = (props: Props) => {
                   title={t('delete')} height={40} width={100} buttonStyle={Bs.textAndIconButton}
                   gradientColorStart={Colors.dangerButton1} gradientColorEnd={Colors.dangerButton2}
                   shadowColor={Colors.dangerShadow} textStyle={Ts.buttonText}
-                  iconName={'delete-forever'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                  iconName={'delete-forever'} iconSize={22} contentColor={Colors.whiteText}
                 />
               </View>
             </View>

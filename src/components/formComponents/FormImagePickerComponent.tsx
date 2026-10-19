@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { View, Text, ImageBackground, ScrollView, ActivityIndicator } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import { DispatchType, setMessageState } from '../../stores'
 import ButtonComponent from '../general/ButtonComponent'
@@ -91,9 +91,8 @@ const ImagePickerComponent = (props: Props) => {
           style={{ width: 150, height: 150 }}
         >
           <View style={Cs.deleteImageIconContainer}>
-            <Icon
+            <MaterialDesignIcons
               name='delete'
-              type='material-icons'
               color={'red'}
               size={22}
               onPress={() => { showDeleteImage(image.uri) }}
@@ -129,12 +128,12 @@ const ImagePickerComponent = (props: Props) => {
             <ButtonComponent onPressFunction={imageFromLibrary}
               title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              textStyle={Ts.buttonText} iconName={'image'} iconSize={22} contentColor={Colors.darkText}
             />
             <ButtonComponent onPressFunction={imageFromCamera}
               title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
               gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-              textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+              textStyle={Ts.buttonText} iconName={'camera-plus'} iconSize={22} contentColor={Colors.darkText}
             />
           </View>
         </View>
@@ -168,12 +167,12 @@ const ImagePickerComponent = (props: Props) => {
                 <ButtonComponent onPressFunction={imageFromLibrary}
                   title={t('choose image')} height={40} width={140} buttonStyle={Bs.addImageButton}
                   gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={'photo-library'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                  textStyle={Ts.buttonText} iconName={'image'} iconSize={22} contentColor={Colors.darkText}
                 />
                 <ButtonComponent onPressFunction={imageFromCamera}
                   title={t('use camera')} height={40} width={140} buttonStyle={Bs.addImageButton}
                   gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                  textStyle={Ts.buttonText} iconName={'add-a-photo'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                  textStyle={Ts.buttonText} iconName={'camera-plus'} iconSize={22} contentColor={Colors.darkText}
                 />
               </View>
             }

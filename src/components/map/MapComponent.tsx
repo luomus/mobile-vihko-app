@@ -4,7 +4,7 @@ import MapView, { MapType, Marker, UrlTile, Region, LatLng, Geojson, WMSTile } f
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { LineString, MultiLineString } from 'geojson'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import {
   convertGC2FC,
   convertLatLngToPoint,
@@ -299,9 +299,8 @@ const MapComponent = (props: Props) => {
       zIndex={3}
       anchor={{ x: 0.5, y: 0.5 }}
     >
-      <Icon
-        name='my-location'
-        type='material-icons'
+      <MaterialDesignIcons
+        name='crosshairs-gps'
         size={50}
       />
     </Marker>
@@ -351,9 +350,8 @@ const MapComponent = (props: Props) => {
     >
       {
         Platform.OS === 'ios' ?
-          <Icon
-            type={'material-icons'}
-            name={'location-pin'}
+          <MaterialDesignIcons
+            name='map-marker'
             size={45}
             color={Colors.mapElementColor}
           />
@@ -441,9 +439,8 @@ const MapComponent = (props: Props) => {
         >
           {
             Platform.OS === 'ios' ?
-              <Icon
-                type={'material-icons'}
-                name={'location-pin'}
+              <MaterialDesignIcons
+                name='map-marker'
                 size={45}
                 color={color}
               />
@@ -503,7 +500,7 @@ const MapComponent = (props: Props) => {
               <ButtonComponent onPressFunction={() => setAtlasModalVisibility(true)} title={grid?.n + ':' + grid?.e}
                 height={35} width={100} buttonStyle={Bs.tileDetailsButton}
                 gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                textStyle={Ts.boldButtonText} iconName={'help'} iconType={'material-icons'} iconSize={20} contentColor={Colors.whiteText}
+                textStyle={Ts.boldButtonText} iconName={'help'} iconSize={20} contentColor={Colors.whiteText}
               />
             </View>
             : null
@@ -516,12 +513,12 @@ const MapComponent = (props: Props) => {
             <ButtonComponent testID='toggle-map-type-btn' onPressFunction={() => toggleMapType()} title={undefined}
               height={50} width={50} buttonStyle={Bs.mapIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.buttonText} iconName={'layers'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+              textStyle={Ts.buttonText} iconName={'layers'} iconSize={36} contentColor={Colors.whiteText}
             />
             <ButtonComponent testID='center-map-btn' onPressFunction={() => centerMapAnim()} title={undefined}
               height={50} width={50} buttonStyle={Bs.mapIconButton}
               gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-              textStyle={Ts.buttonText} iconName={'my-location'} iconType={'material-icons'} iconSize={36} contentColor={Colors.whiteText}
+              textStyle={Ts.buttonText} iconName={'crosshairs-gps'} iconSize={36} contentColor={Colors.whiteText}
             />
           </View>
           {observation ?

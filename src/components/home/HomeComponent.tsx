@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Linking, View, Text, ScrollView, BackHandler, Platform } from 'react-native'
 import ObservationEventListComponent from './EventListElementComponent'
 import { useTranslation } from 'react-i18next'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import {
@@ -461,7 +461,7 @@ const HomeComponent = (props: Props) => {
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'flex-start' }}>
               <Text style={Ts.previousObservationsTitle}>{t('complete lists')}</Text>
-              <Icon onPress={() => { setCompleteListInfoModalVisibility(true) }} name='info' type='material-icons' color={Colors.primary5} size={22} />
+              <MaterialDesignIcons onPress={() => { setCompleteListInfoModalVisibility(true) }} name='information' color={Colors.primary5} size={22} />
             </View>
             <FormLauncherComponent formID={forms.dragonflyForm} setModalVisibility={setDragonflyModalVisibility} />
             <FormLauncherComponent formID={forms.butterflyForm} setModalVisibility={setButterflyModalVisibility} />

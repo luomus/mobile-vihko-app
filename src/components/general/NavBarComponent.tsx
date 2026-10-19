@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ParamListBase, Route } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import { RootState } from '../../stores'
 import i18n from '../../languages/i18n'
@@ -92,17 +92,17 @@ const NavBarComponent = (props: Props) => {
         <Text style={Ts.headerTitle}>{title()}</Text>
       </View>
       <View style={{ flex: 4, flexDirection: 'row', justifyContent: 'flex-end' }}>
-        <Icon iconStyle={Bs.headerButton} name='info' type='material-icons' size={25} onPress={() => setInfoModalVisibility(true)} />
+        <MaterialDesignIcons style={Bs.headerButton} name='information' size={25} onPress={() => setInfoModalVisibility(true)} />
         {['login', 'observation', 'document', 'singleObservation'].includes(props.route.name) ?
-          <Icon iconStyle={Bs.headerUnavailableButton} name='perm-identity' type='material-icons' size={25} onPress={() => null} /> :
-          <Icon iconStyle={Bs.headerButton} name='perm-identity' type='material-icons' size={25} onPress={() => setUserModalVisibility(true)} testID='usermodal-visibility-button' />
+          <MaterialDesignIcons style={Bs.headerUnavailableButton} name='account-outline' size={25} /> :
+          <MaterialDesignIcons style={Bs.headerButton} name='account-outline' size={25} onPress={() => setUserModalVisibility(true)} testID='usermodal-visibility-button' />
         }
         {(props.route.name !== 'login' && props.route.name !== 'home' && props.route.name !== 'observation'
           && props.route.name !== 'document' && props.route.name !== 'singleObservation')
-          ? <Icon iconStyle={Bs.headerButton} name='home' type='material-icons' size={25}
+          ? <MaterialDesignIcons style={Bs.headerButton} name='home' size={25}
             onPress={ () => props.navigation.popTo('home') }
           />
-          : <Icon iconStyle={Bs.headerUnavailableButton} name='home' type='material-icons' size={25} onPress={() => null} testID={'homeButton'} />
+          : <MaterialDesignIcons style={Bs.headerUnavailableButton} name='home' size={25} testID={'homeButton'} />
         }
         <InstructionModalComponent isVisible={infoModalVisibility} screen={props.route.name} onClose={() => setInfoModalVisibility(false)} />
         <UserModalComponent isVisible={userModalVisibility} onClose={() => setUserModalVisibility(false)} navigation={props.navigation} />

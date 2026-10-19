@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, Linking, Modal, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { Trans, useTranslation } from 'react-i18next'
 import Cs from '../../styles/ContainerStyles'
 import Colors from '../../styles/Colors'
@@ -89,12 +89,11 @@ const InstructionModalComponent = (props: Props) => {
           <TouchableWithoutFeedback>
             <View style={Cs.messageModalContainer}>
               <ScrollView style={{ margin: 10 }}>
-                <Icon
-                  type={'material-icons'}
-                  name={'cancel'}
+                <MaterialDesignIcons
+                  name='close-circle'
                   size={30}
                   color={Colors.dangerButton2}
-                  containerStyle={Cs.modalCloseContainer}
+                  style={Cs.modalCloseContainer}
                   onPress={() => props.onClose()}
                 />
                 <Text>

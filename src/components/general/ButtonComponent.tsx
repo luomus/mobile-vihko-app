@@ -1,6 +1,6 @@
 import React from 'react'
 import { DimensionValue, StyleProp, Text, TextStyle, TouchableOpacity, ViewStyle, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons, MaterialDesignIconsIconName } from '@react-native-vector-icons/material-design-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import Bs from '../../styles/ButtonStyles'
 
@@ -16,8 +16,7 @@ type Props = {
   shadowColor: string,
   textStyle: StyleProp<TextStyle>,
   textWidth?: number,
-  iconName: string | undefined,
-  iconType: string | undefined,
+  iconName: MaterialDesignIconsIconName | undefined,
   iconSize: number | undefined,
   contentColor: string,
   noMargin?: boolean,
@@ -37,8 +36,7 @@ const ButtonComponent = (props: Props) => {
           colors={[props.gradientColorStart, props.gradientColorEnd]}
           style={[props.buttonStyle, { width: props.width, height: props.height }]}>
           {props.iconName ?
-            <Icon name={props.iconName} type={props.iconType} color={props.contentColor} size={props.iconSize}
-              containerStyle={{ marginTop: 5 }} />
+            <MaterialDesignIcons name={props.iconName} size={props.iconSize} color={props.contentColor} style={{ marginTop: 5 }} />
             : null
           }
           <Text style={[props.textStyle, { color: props.contentColor }, { width: props.textWidth }]} numberOfLines={1}>{props.title ? ' ' + props.title : ''}</Text>

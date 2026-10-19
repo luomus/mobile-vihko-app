@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ActionSheetIOS, View, Text, TextInput, TouchableOpacity } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
 import { atlasCodeAbbreviations } from '../../config/fields'
@@ -91,9 +91,8 @@ const FormPickerComponent = (props: Props) => {
           onPressOut={() => onPress()}
           multiline
         />
-        <Icon
-          name='arrow-drop-down'
-          type='material-icons'
+        <MaterialDesignIcons
+          name='menu-down'
           color={Colors.neutral7}
           size={22}
         />

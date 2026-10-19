@@ -6,7 +6,7 @@ import { DispatchType, RootState, setListOrder } from '../../stores'
 import Cs from '../../styles/ContainerStyles'
 import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 
 type Props = {
   setObserved: React.Dispatch<React.SetStateAction<any[] | undefined>>,
@@ -107,9 +107,8 @@ const ListSorterComponent = (props: Props) => {
           onPressOut={() => onPress()}
           multiline
         />
-        <Icon
-          name='arrow-drop-down'
-          type='material-icons'
+        <MaterialDesignIcons
+          name='menu-down'
           color={Colors.neutral7}
           size={22}
         />

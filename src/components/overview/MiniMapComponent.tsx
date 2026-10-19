@@ -6,7 +6,7 @@ import Os from '../../styles/OtherStyles'
 import Colors from '../../styles/Colors'
 import { Point } from 'geojson'
 import { View, Text, Platform } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 
 interface Props {
   geometry: Point,
@@ -32,9 +32,8 @@ const MiniMapComponent = (props: Props) => {
       >
         {
           Platform.OS === 'ios' ?
-            <Icon
-              type={'material-icons'}
-              name={'location-pin'}
+            <MaterialDesignIcons
+              name='map-marker'
               size={45}
               color={Colors.observationColor}
             />

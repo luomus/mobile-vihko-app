@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { FlatList, ListRenderItem, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { createFilter } from 'react-native-search-filter'
-import { Icon } from 'react-native-elements'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import {
   RootState,
   DispatchType,
@@ -145,12 +145,11 @@ const ListComponent = (props: Props) => {
               {item.count.length > 8 ? item.count.substring(0, 5) + '...' : item.count}
             </Text>
             : taxaOnMap.includes(getTaxonID(item)) ?
-              <Icon
-                type={'material-icons'}
-                name={'location-pin'}
+              <MaterialDesignIcons
+                name='map-marker'
                 size={30}
                 color={Colors.neutral5}
-                containerStyle={{ paddingRight: 30 }}
+                style={{ paddingRight: 30 }}
               />
               : null
       }

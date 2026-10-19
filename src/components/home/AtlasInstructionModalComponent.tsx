@@ -38,12 +38,12 @@ const AtlasInstructionModalComponent = (props: Props) => {
                   <ButtonComponent onPressFunction={() => props.openNextModal(props.setModalVisibility, props.setGridModalVisibility)}
                     title={t('continue')} height={40} width={120} buttonStyle={Bs.beginButton}
                     gradientColorStart={Colors.primaryButton1} gradientColorEnd={Colors.primaryButton2} shadowColor={Colors.primaryShadow}
-                    textStyle={Ts.buttonText} iconName={'done'} iconType={'material-icons'} iconSize={22} contentColor={Colors.whiteText}
+                    textStyle={Ts.buttonText} iconName={'check'} iconSize={22} contentColor={Colors.whiteText}
                   />
                   <ButtonComponent onPressFunction={() => props.setModalVisibility(false)} title={t('cancel')}
                     height={40} width={120} buttonStyle={Bs.beginButton}
                     gradientColorStart={Colors.neutralButton} gradientColorEnd={Colors.neutralButton} shadowColor={Colors.neutralShadow}
-                    textStyle={Ts.buttonText} iconName={'cancel'} iconType={'material-icons'} iconSize={22} contentColor={Colors.darkText}
+                    textStyle={Ts.buttonText} iconName={'close-circle'} iconSize={22} contentColor={Colors.darkText}
                   />
                 </View>
               </ScrollView>
