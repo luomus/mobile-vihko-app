@@ -60,7 +60,7 @@ export const createImage = async (useCamera: boolean): Promise<ImageType> => {
       const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(true, ['photo'])
 
       if (mediaLibraryPermission.granted) {
-        await MediaLibrary.saveToLibraryAsync(uri)
+        await MediaLibrary.Asset.create(uri)
       }
     }
 

@@ -150,9 +150,13 @@ export const store = configureStore({
     singleObservation: singleObservationReducer,
     tracking: trackingReducer
   },
-  // middleware: getDefaultMiddleware => getDefaultMiddleware({
-  //   serializableCheck: false
-  // })
+  middleware: getDefaultMiddleware => getDefaultMiddleware({
+    //message state intentionally carries onOk/onCancel callbacks, so skip the serializability check for it
+    serializableCheck: {
+      ignoredActions: ['message/setMessageState'],
+      ignoredPaths: ['message']
+    }
+  })
 })
 
 export type RootState = ReturnType<typeof store.getState>

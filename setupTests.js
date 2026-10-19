@@ -18,6 +18,9 @@ jest.mock('react-native-maps', () => {
     WMSTile: mock.WMSTile,
   }
 })
+jest.mock('expo-media-library', () => ({
+  requestPermissionsAsync: jest.fn(() => Promise.resolve({ status: 'granted' }))
+}))
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage)
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
 jest.mock('react-native-keyboard-controller', () => mockKeyboardController)
