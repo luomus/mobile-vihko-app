@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { LogBox } from 'react-native'
 import { Provider } from 'react-redux'
 import * as TaskManager from 'expo-task-manager'
+import type { LocationObject } from 'expo-location'
 import * as Sentry from '@sentry/react-native'
 import Config from './src/config/env'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -22,7 +23,7 @@ Sentry.init({
 
 LogBox.ignoreLogs(['EventEmitter.removeListener'])
 
-TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({ data: { locations } }) => {
+TaskManager.defineTask<{ locations: LocationObject[] }>(LOCATION_BACKGROUND_TASK, async ({ data: { locations } }) => {
   await locationBackgroundTask(locations)
 })
 

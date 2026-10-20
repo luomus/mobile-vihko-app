@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ActionSheetIOS, Platform, ScrollView, View } from 'react-native'
+import { ActionSheetIOS, Platform, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { cloneDeep, mergeWith, omit } from 'lodash'
 import uuid from 'react-native-uuid'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import { KeyboardAwareScrollView, KeyboardAwareScrollViewRef } from 'react-native-keyboard-controller'
 import {
   RootState,
   DispatchType,
@@ -73,7 +73,7 @@ const SingleObservationComponent = (props: Props) => {
   const [showSuccess, setShowSuccess] = useState<boolean>(false)
 
   //reference for scrollView
-  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewRef = useRef<KeyboardAwareScrollViewRef | null>(null)
 
   const editing = useSelector((state: RootState) => state.editing)
   const observation = useSelector((state: RootState) => state.observation)

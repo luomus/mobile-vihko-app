@@ -122,6 +122,10 @@ const gpsOutlierFilter = (path: PathPoint[], locations: LocationObject[]) => {
 
     const mean = math.mean(pathWindow.map(point => point[2]))
     const deviation = math.std(pathWindow.map(point => point[2]))
+    if (typeof mean !== 'number' || typeof deviation !== 'number') {
+      throw new TypeError('Expected numeric velocity statistics')
+    }
+
     const velocity = haversine(coords, [lastPoint[0], lastPoint[1]]) / (location.timestamp - lastPoint[3]) * 1000
     const zScore = (velocity - mean) / deviation
 

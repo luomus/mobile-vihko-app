@@ -104,7 +104,7 @@ export const createHidden = (
 export const createImagePicker = (
   title: string,
   objectTitle: string,
-  defaultValue: Array<Record<string, any>>,
+  defaultValue: ImageType[] | undefined,
 ) => {
   return <FormImagePickerComponent
     key={objectTitle}
@@ -117,7 +117,7 @@ export const createImagePicker = (
 export const createImageKeywordPicker = (
   title: string,
   objectTitle: string,
-  defaultValue: ImageType[],
+  defaultValue: ImageType[] | undefined,
   params: any,
   lang: string,
 ) => {

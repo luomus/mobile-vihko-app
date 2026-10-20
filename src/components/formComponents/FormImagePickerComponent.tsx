@@ -16,10 +16,10 @@ import { ErrorMessage } from '@hookform/error-message'
 type Props = {
   title: string,
   objectTitle: string,
-  defaultValue: ImageType[]
+  defaultValue: ImageType[] | undefined
 }
 
-const ImagePickerComponent = (props: Props) => {
+const FormImagePickerComponent = (props: Props) => {
   const { register, setValue, formState } = useFormContext()
   const [images, setImages] = useState<ImageType[]>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const [loading, setLoading] = useState<boolean>(false)
@@ -183,4 +183,4 @@ const ImagePickerComponent = (props: Props) => {
   }
 }
 
-export default ImagePickerComponent
+export default FormImagePickerComponent

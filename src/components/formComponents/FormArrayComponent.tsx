@@ -29,7 +29,7 @@ const FormArrayComponent = (props: Props) => {
   const indexOfRemovable = props.firstEditable ? 0 : 1
   const { register, setValue, watch, getValues } = useFormContext()
   const [elementDictionary, setElementDictionary] = useState<Record<string, any>>({})
-  const stateRef = useRef<Record<string, any>>()
+  const stateRef = useRef<Record<string, any>>(elementDictionary)
   const arrayRef = useRef<View | null>(null)
   stateRef.current = elementDictionary
 

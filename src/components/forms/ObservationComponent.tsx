@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ScrollView, View } from 'react-native'
+import { View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { omit } from 'lodash'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import { KeyboardAwareScrollView, KeyboardAwareScrollViewRef } from 'react-native-keyboard-controller'
 import {
   RootState,
   DispatchType,
@@ -65,7 +65,7 @@ const ObservationComponent = (props: Props) => {
   const [observationEventState, setObservationEventState] = useState<Record<string, any> | undefined>(undefined)
 
   //reference for scrollView
-  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewRef = useRef<KeyboardAwareScrollViewRef | null>(null)
 
   const editing = useSelector((state: RootState) => state.editing)
   const observation = useSelector((state: RootState) => state.observation)

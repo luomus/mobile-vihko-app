@@ -23,11 +23,11 @@ type Props = {
   title: string,
   params: Record<string, any>,
   objectTitle: string,
-  defaultValue: ImageType[],
+  defaultValue: ImageType[] | undefined,
   lang: string,
 }
 
-const ImagePickerKeywordComponent = (props: Props) => {
+const FormImagePickerKeywordComponent = (props: Props) => {
   const { register, setValue, formState } = useFormContext()
   const [images, setImages] = useState<ImageType[]>(Array.isArray(props.defaultValue) ? props.defaultValue : [])
   const [loading, setLoading] = useState<boolean>(false)
@@ -236,4 +236,4 @@ const ImagePickerKeywordComponent = (props: Props) => {
   }
 }
 
-export default ImagePickerKeywordComponent
+export default FormImagePickerKeywordComponent

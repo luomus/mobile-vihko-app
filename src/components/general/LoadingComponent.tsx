@@ -9,7 +9,7 @@ import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-
 type Props = {
   text: string,
   completed?: boolean,
-  children?: JSX.Element | JSX.Element[]
+  children?: React.JSX.Element | React.JSX.Element[]
 }
 
 const LoadingComponent = (props: Props) => {

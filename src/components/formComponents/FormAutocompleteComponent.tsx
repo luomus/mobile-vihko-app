@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ActivityIndicator, NativeSyntheticEvent, Platform, Text, TextInput, TextInputFocusEventData, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Platform, Text, TextInput, TextInputProps, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useTranslation } from 'react-i18next'
 import { RootState } from '../../stores'
 import { getTaxonAutocomplete } from '../../services/autocompleteService'
-import Autocomplete from 'react-native-autocomplete-input'
+import AutocompleteInput, { AutocompleteInputProps } from 'react-native-autocomplete-input'
 import Cs from '../../styles/ContainerStyles'
 import Ts from '../../styles/TextStyles'
 import Colors from '../../styles/Colors'
@@ -13,6 +13,10 @@ import { get, debounce } from 'lodash'
 import { ErrorMessage } from '@hookform/error-message'
 import { useFormContext } from 'react-hook-form'
 import { convert } from '../../helpers/taxonAutocomplete'
+
+const Autocomplete = AutocompleteInput as <Item>(
+  props: AutocompleteInputProps<Item> & React.RefAttributes<TextInput>
+) => React.ReactElement
 
 export interface AutocompleteParams {
   target: string,
@@ -247,10 +251,10 @@ const FormAutocompleteComponent = (props: Props) => {
   }
 
   const renderTextInput = (
-    onFocus: ((e: NativeSyntheticEvent<TextInputFocusEventData>) => void) | undefined,
-    onBlur: ((e: NativeSyntheticEvent<TextInputFocusEventData>) => void) | undefined,
-    onChangeText: ((text: string) => void) | undefined,
-    defaultValue: string | undefined
+    onFocus: TextInputProps['onFocus'],
+    onBlur: TextInputProps['onBlur'],
+    onChangeText: TextInputProps['onChangeText'],
+    defaultValue: TextInputProps['defaultValue']
   ) => {
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch' }}>

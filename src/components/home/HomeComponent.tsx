@@ -94,7 +94,7 @@ const HomeComponent = (props: Props) => {
   const { t } = useTranslation()
   const dispatch: DispatchType = useDispatch()
 
-  let logTimeout: NodeJS.Timeout | undefined
+  let logTimeout: ReturnType<typeof setTimeout> | undefined
 
   useEffect(() => {
     setLoading(true)

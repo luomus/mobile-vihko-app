@@ -233,7 +233,7 @@ const LoginComponent = (props: Props) => {
   //check that internet can be reached
   const checkNetworkStatus = async (): Promise<boolean> => {
     const delay = (milliseconds: number) => {
-      return new Promise(resolve => setTimeout(resolve, milliseconds))
+      return new Promise<void>(resolve => setTimeout(resolve, milliseconds))
     }
 
     try {
