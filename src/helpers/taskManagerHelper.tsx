@@ -30,6 +30,7 @@ export const locationBackgroundTask = async (locations: Array<LocationObject>) =
       { grid: GridType, observationEvent: ObservationEventType, path: PathType }
 
     const indLast = observationEvent.events.length - 1
+    if (indLast < 0) return
 
     const notOutsideBorders = observationEvent?.events[indLast]?.formID !== forms.birdAtlas
       || !grid || (grid && grid.outsideBorders !== 'true')

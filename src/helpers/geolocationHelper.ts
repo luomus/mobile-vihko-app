@@ -1,5 +1,6 @@
 import * as Location from 'expo-location'
 import { LocationObject } from 'expo-location'
+import { PermissionsAndroid, Platform } from 'react-native'
 import Colors from '../styles/Colors'
 import proj4 from 'proj4'
 import { Polygon } from 'geojson'
@@ -135,6 +136,8 @@ export const watchPositionAsync = async (updateLocation: (location: LocationObje
 }
 
 export const watchBackgroundLocationAsync = async (title: string, body: string) => {
+  await requestNotificationPermissionAsync()
+
   setTimeout(async () => {
     try {
       await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
@@ -152,6 +155,16 @@ export const watchBackgroundLocationAsync = async (title: string, body: string) 
       throw new Error(i18n.t('failed to start location updates'))
     }
   }, 500)
+}
+
+const requestNotificationPermissionAsync = async () => {
+  if (Platform.OS !== 'android' || Platform.Version < 33) return
+
+  try {
+    await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS)
+  } catch (error) {
+    captureException(error)
+  }
 }
 
 export const stopLocationAsync = async () => {
