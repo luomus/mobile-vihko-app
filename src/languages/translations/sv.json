@@ -2,6 +2,7 @@
   "add": "Lägg till",
   "add observation": "Lägg till observation",
   "autocomplete network error": "Automatiska sökfältet kunde inte ladda arter från internet.",
+  "background location battery optimization": "Öppna inställningarna, sök efter batterianvändning och tillåt bakgrundsaktiviteter så att ruttspårningen fungerar mer tillförlitligt i bakgrunden. Optimering av strömförbrukningen kan avbryta ruttspårningen.",
   "bird atlas": "Fågelatlas",
   "bug report": "Felrapport",
   "bug report description": "Här kan du skicka en felrapport om det finns problem med att skicka denna observationsuppsättningen. Vill du skicka en felrapport? Om problemet upprepas, kontakta även mejlet helpdesk@laji.fi.",

@@ -1,6 +1,7 @@
 import * as Location from 'expo-location'
 import { LocationObject } from 'expo-location'
-import { PermissionsAndroid, Platform } from 'react-native'
+import * as IntentLauncher from 'expo-intent-launcher'
+import { Alert, PermissionsAndroid, Platform } from 'react-native'
 import Colors from '../styles/Colors'
 import proj4 from 'proj4'
 import { Polygon } from 'geojson'
@@ -13,6 +14,7 @@ import {
   PATH_MIN_T_INTERVAL,
   PATH_MIN_X_INTERVAL
 } from '../config/location'
+import storageService from '../services/storageService'
 import i18n from '../languages/i18n'
 import { captureException } from './sentry'
 
@@ -135,7 +137,29 @@ export const watchPositionAsync = async (updateLocation: (location: LocationObje
   }
 }
 
+const requestBatteryOptimizationExemptionAsync = async () => {
+  const notFirstLoad = await storageService.fetch('notFirstLoad')
+  if (!notFirstLoad) {
+    if (Platform.OS === 'android') {
+      await new Promise<void>((resolve) => {
+        Alert.alert(
+          i18n.t('gps notification title'),
+          i18n.t('background location battery optimization'),
+          [{ text: i18n.t('continue'), onPress: () => resolve() }],
+          { cancelable: false }
+        )
+      })
+      await IntentLauncher.startActivityAsync(
+        'android.settings.APPLICATION_DETAILS_SETTINGS',
+        { data: 'package:org.luomus.mobi' }
+      )
+    }
+    await storageService.save('notFirstLoad', true)
+  }
+}
+
 export const watchBackgroundLocationAsync = async (title: string, body: string) => {
+  await requestBatteryOptimizationExemptionAsync()
   await requestNotificationPermissionAsync()
 
   setTimeout(async () => {

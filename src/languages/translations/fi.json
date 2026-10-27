@@ -2,6 +2,7 @@
   "add": "Lisää",
   "add observation": "Lisää havainto",
   "autocomplete network error": "Automaattisessa hakukentässä tapahtui verkkovirhe.",
+  "background location battery optimization": "Etsi asetuksista akun käyttö ja salli taustatoiminnot, jotta reitin seuranta toimii taustalla varmemmin. Virrankulutuksen optimointi voi katkaista reitin seurannan.",
   "bird atlas": "Lintuatlas",
   "bug report": "Vikailmoitus",
   "bug report description": "Voit lähettää tästä virheilmoituksen, jos tämän havaintoerän lähetyksessä on ongelmia. Haluatko lähettää virheilmoituksen? Jos ongelma toistuu, ota myös yhteyttä osoitteeseen helpdesk@laji.fi.",
