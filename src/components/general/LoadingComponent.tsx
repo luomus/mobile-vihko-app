@@ -18,7 +18,7 @@ const LoadingComponent = (props: Props) => {
   return (
     <View style={Cs.loadingContainer}>
       {props.completed
-        ? <MaterialDesignIcons style={{ padding: 5, color: Colors.successButton1 }} name='check' size={40} />
+        ? <MaterialDesignIcons style={{ padding: 5, color: Colors.successButton1, alignSelf: 'center' }} name='check' size={40} />
         : <ActivityIndicator size='large' color={Colors.primary5} />
       }
       <Text style={Ts.loginText}>{t(props.text)}</Text>
