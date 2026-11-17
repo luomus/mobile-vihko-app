@@ -150,7 +150,7 @@ export const fetchLocality = async (event: Record<string, any>, credentials: Cre
             if (!countryArray.includes(component.long_name)) {
               countryArray.push(component.long_name)
             }
-          } else if (type === 'administrative_area_level_2' || type === 'administrative_area_level_3') {
+          } else if (type === 'administrative_area_level_3') {
             if (!municipalityArray.includes(component.long_name)) {
               municipalityArray.push(component.long_name)
             }
